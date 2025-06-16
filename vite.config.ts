@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite';
 import path from 'path';
 
 export default defineConfig({
-    base: '/banebooking/',
+    base: '/banebooking-voyager-fe/',
     plugins: [react(), tailwindcss()],
     resolve: {
         alias: {
@@ -23,7 +23,7 @@ export default defineConfig({
         },
     },
     server: {
-        open: '/banebooking/aas-tennisklubb',
+        open: '/banebooking-voyager-fe/aas-tennisklubb',
         proxy: {
             '/api': {
                 target: 'http://localhost:5015',
