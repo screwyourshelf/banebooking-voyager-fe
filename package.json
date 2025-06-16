@@ -8,7 +8,8 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "publish": "npm run build && xcopy dist ..\\wwwroot /E /Y"
+    "publish": "npm run build && xcopy dist ..\\wwwroot /E /Y",
+    "deploy": "npm run build && git add -f dist && git commit -m \"Deploy to gh-pages\" && git subtree push --prefix dist origin gh-pages"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.3.2",
