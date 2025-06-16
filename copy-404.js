@@ -1,6 +1,9 @@
 import fs from 'fs';
-const path = require('path');
+import path from 'path';
 
-const distPath = path.resolve(__dirname, 'dist');
-fs.copyFileSync(path.join(distPath, 'index.html'), path.join(distPath, '404.html'));
+const distDir = path.resolve('dist');
+const indexFile = path.join(distDir, 'index.html');
+const errorFile = path.join(distDir, '404.html');
+
+fs.copyFileSync(indexFile, errorFile);
 console.log('Copied index.html to 404.html');
