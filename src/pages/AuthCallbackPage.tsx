@@ -10,5 +10,5 @@ export default function AuthCallbackPage() {
         navigate(redirectTo, { replace: true });
     }, [navigate]);
 
-    return <div className="p-4 text-center">Logger inn …</div>;
+    return <div className="p-4 text-center">Logger inn â€¦</div>;
 }

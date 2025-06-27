@@ -28,12 +28,13 @@ import {
 } from '@/components/ui/tabs.js';
 import { Button } from '@/components/ui/button.js';
 import { Checkbox } from '@/components/ui/checkbox.js';
-import { Label } from '@/components/ui/label.js';
 import DatoVelger from '../../components/DatoVelger.js';
-import { Input } from '@/components/ui/input.js';
 import { toast } from 'sonner';
 import LoaderSkeleton from '../../components/LoaderSkeleton.js';
 import { Card, CardContent } from '@/components/ui/card.js';
+
+import { FormField } from '@/components/FormField.js';
+import { SelectField } from '@/components/SelectField.js';
 
 export default function ArrangementPage() {
     const { slug } = useParams<{ slug: string }>();
@@ -184,49 +185,39 @@ export default function ArrangementPage() {
                     <TabsContent value="oppsett">
                         <Card>
                             <CardContent className="p-4 space-y-4">
-                                <div>
-                                    <Label>Kategori</Label>
-                                    <select
-                                        className="w-full border rounded text-sm px-3 py-2 mt-1"
-                                        value={kategori}
-                                        onChange={(e) => setKategori(e.target.value)}
-                                    >
-                                        {[
-                                            'Trening',
-                                            'Turnering',
-                                            'Klubbmersterskap',
-                                            'Kurs',
-                                            'Lagkamp',
-                                            'Stigespill',
-                                            'Dugnad',
-                                            'Vedlikehold',
-                                            'Sosialt',
-                                            'Annet',
-                                        ].map((k) => (
-                                            <option key={k} value={k}>
-                                                {k}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
+                                <SelectField
+                                    id="kategori"
+                                    label="Kategori"
+                                    value={kategori}
+                                    onChange={(val) => setKategori(val)}
+                                    options={[
+                                        'Trening',
+                                        'Turnering',
+                                        'Klubbmersterskap',
+                                        'Kurs',
+                                        'Lagkamp',
+                                        'Stigespill',
+                                        'Dugnad',
+                                        'Vedlikehold',
+                                        'Sosialt',
+                                        'Annet',
+                                    ].map((k) => ({ label: k, value: k }))}
+                                />
+
+                                <FormField
+                                    id="beskrivelse"
+                                    label="Beskrivelse"
+                                    value={beskrivelse}
+                                    onChange={(e) => setBeskrivelse(e.target.value)}
+                                />
 
                                 <div>
-                                    <Label>Beskrivelse</Label>
-                                    <Input
-                                        type="text"
-                                        className="w-full text-sm mt-1"
-                                        value={beskrivelse}
-                                        onChange={(e) => setBeskrivelse(e.target.value)}
-                                    />
-                                </div>
-
-                                <div>
-                                    <Label>Fra</Label>
+                                    <label className="text-sm font-medium">Fra</label>
                                     <DatoVelger value={datoFra} onChange={setDatoFra} visNavigering />
                                 </div>
 
                                 <div>
-                                    <Label>Til</Label>
+                                    <label className="text-sm font-medium">Til</label>
                                     <DatoVelger value={datoTil} onChange={setDatoTil} visNavigering />
                                 </div>
 
@@ -237,7 +228,7 @@ export default function ArrangementPage() {
                                             checked={alleBaner}
                                             onCheckedChange={(val) => setAlleBaner(!!val)}
                                         />
-                                        <Label htmlFor="alleBaner">Alle baner</Label>
+                                        <label htmlFor="alleBaner" className="text-sm">Alle baner</label>
                                     </div>
 
                                     <div className="flex flex-wrap gap-2 mt-2">
@@ -262,7 +253,7 @@ export default function ArrangementPage() {
                                             checked={alleUkedager}
                                             onCheckedChange={(val) => setAlleUkedager(!!val)}
                                         />
-                                        <Label htmlFor="alleUkedager">Alle gyldige dager</Label>
+                                        <label htmlFor="alleUkedager" className="text-sm">Alle gyldige dager</label>
                                     </div>
 
                                     <div className="flex flex-wrap gap-2 mt-2">
@@ -290,7 +281,7 @@ export default function ArrangementPage() {
                                             checked={alleTidspunkter}
                                             onCheckedChange={(val) => setAlleTidspunkter(!!val)}
                                         />
-                                        <Label htmlFor="alleTidspunkter">Alle tidspunkter</Label>
+                                        <label htmlFor="alleTidspunkter" className="text-sm">Alle tidspunkter</label>
                                     </div>
 
                                     <div className="flex flex-wrap gap-2 mt-2">
@@ -375,7 +366,6 @@ export default function ArrangementPage() {
                             </CardContent>
                         </Card>
                     </TabsContent>
-
                 </Tabs>
             )}
         </div>

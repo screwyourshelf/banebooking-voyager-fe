@@ -1,11 +1,11 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useMineBookinger } from '../hooks/useMineBookinger.js';
 import { useArrangement } from '../hooks/useArrangement.js';
+import { useMeg } from '../hooks/useMeg.js';
 import { SlugContext } from '../layouts/Layout.js';
 
 import LoaderSkeleton from '@/components/LoaderSkeleton.js';
-
 import {
     Table,
     TableHeader,
@@ -20,29 +20,162 @@ import {
     TabsTrigger,
     TabsContent,
 } from '@/components/ui/tabs.js';
-import { formatDatoKort } from '../utils/datoUtils.js';
 import { Card, CardContent } from '@/components/ui/card.js';
+import { Button } from '@/components/ui/button.js';
+import { FormField } from '@/components/FormField.js';
+import { FieldWrapper } from '@/components/FieldWrapper.js';
+import { formatDatoKort } from '../utils/datoUtils.js';
+
+import SlettMegKnapp from '../components/SlettMegKnapp.js';  // <-- importer SlettMegKnapp
+
+const MAX_LENGTH = 50;
+const NAVN_REGEX = /^[\p{L}\d\s.@'_%+-]{2,}$/u;
 
 export default function MinSidePage() {
     const { slug: slugFraParams } = useParams<{ slug: string }>();
     const slug = useContext(SlugContext) ?? slugFraParams;
 
-    const [tab, setTab] = useState('bookinger');
+    const [tab, setTab] = useState('profil');
+
+    const { bruker, laster: lasterMeg, oppdaterVisningsnavn, slettMeg } = useMeg(slug);
+    const [visningsnavn, setVisningsnavn] = useState('');
+    const [feil, setFeil] = useState<string | null>(null);
 
     const { bookinger, laster: loadingBookinger } = useMineBookinger(slug);
     const { arrangementer, isLoading: loadingArrangementer } = useArrangement(slug);
 
+    useEffect(() => {
+        if (bruker) {
+            setVisningsnavn(bruker.visningsnavn?.trim() || bruker.epost);
+        }
+    }, [bruker]);
+
+    const validerOgLagre = () => {
+        const navn = visningsnavn.trim();
+
+        if (navn.length === 0) {
+            setFeil('Visningsnavn kan ikke være tomt.');
+            return;
+        }
+
+        if (navn.length < 3) {
+            setFeil('Visningsnavn må være minst 3 tegn.');
+            return;
+        }
+
+        if (!NAVN_REGEX.test(navn)) {
+            setFeil('Visningsnavn inneholder ugyldige tegn.');
+            return;
+        }
+
+        if (navn.length > MAX_LENGTH) {
+            setFeil(`Visningsnavn kan ikke være lengre enn ${MAX_LENGTH} tegn.`);
+            return;
+        }
+
+        setFeil(null);
+        oppdaterVisningsnavn(navn);
+    };
+
     return (
-        <div className="max-w-screen-md mx-auto px-1 py-1">
+        <div className="max-w-screen-md mx-auto px-2 py-4">
             <Tabs value={tab} onValueChange={setTab}>
                 <TabsList className="mb-4">
+                    <TabsTrigger value="profil">Min profil</TabsTrigger>
                     <TabsTrigger value="bookinger">Mine bookinger</TabsTrigger>
                     <TabsTrigger value="arrangementer">Arrangementer</TabsTrigger>
                 </TabsList>
 
+                {/* Profil-tab */}
+                <TabsContent value="profil">
+                    <Card>
+                        <CardContent className="p-4 space-y-6">
+                            {lasterMeg || !bruker ? (
+                                <LoaderSkeleton />
+                            ) : (
+                                <>
+                                    <form
+                                        className="space-y-4"
+                                        onSubmit={(e) => {
+                                            e.preventDefault();
+                                            validerOgLagre();
+                                        }}
+                                    >
+                                        <FormField
+                                            id="visningsnavn"
+                                            label="Visningsnavn"
+                                            value={visningsnavn}
+                                            maxLength={MAX_LENGTH}
+                                            placeholder="f.eks. Ola Nordmann"
+                                            onChange={(e) => setVisningsnavn(e.target.value)}
+                                            error={feil}
+                                            helpText="Navnet vises i grensesnittet, og settes automatisk til e-post ved første innlogging. Du kan endre det her. Navnet må være saklig og respektfullt – støtende navn kan føre til at profilen blir sperret."
+                                        />
+                                        <Button type="submit" size="sm">Lagre</Button>
+                                    </form>
+
+                                    <div className="pt-4 border-t mt-4 space-y-4">
+                                        <FieldWrapper id="epost" label="Brukernavn / ID">
+                                            <p className="text-sm text-foreground">{bruker.epost}</p>
+                                        </FieldWrapper>
+
+                                        <FieldWrapper
+                                            id="rolle"
+                                            label="Rolle (i klubben)"
+                                            helpText="Roller tildeles av klubbens administrator og kan ikke endres manuelt."
+                                        >
+                                            <p className="text-sm text-foreground">{bruker.roller.join(', ')}</p>
+                                            </FieldWrapper>
+                                            <FieldWrapper
+                                                id="vilkaar"
+                                                label="Vilkår for bruk"
+                                                helpText="Du aksepterer vilkårene automatisk ved første innlogging."
+                                            >
+                                                {bruker.vilkaarAkseptertDato ? (
+                                                    <p className="text-sm text-foreground">
+                                                        Akseptert {formatDatoKort(bruker.vilkaarAkseptertDato)}{' '}
+                                                        {bruker.vilkaarVersjon && `(versjon ${bruker.vilkaarVersjon})`}
+                                                    </p>
+                                                ) : (
+                                                    <p className="text-sm text-muted-foreground italic">
+                                                        Ikke registrert
+                                                    </p>
+                                                )}
+                                                <p className="text-sm mt-1">
+                                                    <a
+                                                        href={`${import.meta.env.BASE_URL}${slug}/vilkaar`}
+                                                        className="underline text-primary hover:text-primary/80"
+                                                    >
+                                                        Les vilkårene
+                                                    </a>
+                                                </p>
+                                            </FieldWrapper>
+                                    </div>
+
+                                    <div className="pt-4 border-t mt-4 space-y-4">
+                                        <FieldWrapper
+                                            id="slett-bruker"
+                                            label="Slett bruker"
+                                            helpText="Dette sletter brukeren din og all tilknyttet data permanent. Dette kan ikke angres."
+                                        >
+                                            <SlettMegKnapp slettMeg={slettMeg} />
+                                        </FieldWrapper>
+
+                                        <p className="text-sm text-muted-foreground italic mt-2">
+                                            Mulighet for å laste ned dine data kommer senere.
+                                        </p>
+                                    </div>
+
+                                </>
+                            )}
+                        </CardContent>
+                    </Card>
+                </TabsContent>
+
+                {/* Bookinger-tab */}
                 <TabsContent value="bookinger">
                     <Card>
-                        <CardContent className="p-2 space-y-4">
+                        <CardContent className="p-4 space-y-4">
                             {loadingBookinger ? (
                                 <LoaderSkeleton />
                             ) : bookinger.length === 0 ? (
@@ -75,6 +208,7 @@ export default function MinSidePage() {
                     </Card>
                 </TabsContent>
 
+                {/* Arrangementer-tab */}
                 <TabsContent value="arrangementer">
                     <Card>
                         <CardContent className="p-4 space-y-4">
@@ -131,7 +265,6 @@ export default function MinSidePage() {
                         </CardContent>
                     </Card>
                 </TabsContent>
-
             </Tabs>
         </div>
     );

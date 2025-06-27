@@ -4,7 +4,8 @@ export type BookingSlot = {
     dato: string;
     startTid: string;
     sluttTid: string;
-    booketAv?: string | null;
+    booketAv: string | null; // visningsnavn
+    erEier?: boolean;
     arrangementTittel?: string;
     arrangementBeskrivelse?: string;
     kanBookes: boolean;

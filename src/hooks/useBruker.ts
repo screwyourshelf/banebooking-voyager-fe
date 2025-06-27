@@ -1,6 +1,5 @@
-// src/hooks/useBruker.ts
 import { useEffect, useState } from 'react';
-import { hentInnloggetBruker } from '../api/bruker.js';
+import { hentInnloggetBruker, oppdaterVilkaarStatus } from '../api/bruker.js';
 import type { BrukerDto } from '../types/index.js';
 
 export function useBruker(slug?: string) {
@@ -15,10 +14,19 @@ export function useBruker(slug?: string) {
         setLaster(true);
 
         hentInnloggetBruker(slug)
-            .then((data) => {
+            .then(async (data) => {
                 if (!abort.signal.aborted) {
-                    setBruker(data); // `null` hvis ikke innlogget
+                    setBruker(data);
                     setFeil(null);
+
+                    // Kall for å akseptere vilkår hvis det mangler
+                    if (data && !data.vilkaarAkseptertDato) {
+                        try {
+                            await oppdaterVilkaarStatus(slug);
+                        } catch (err) {
+                            console.warn('Feil ved oppdatering av vilkår:', err);
+                        }
+                    }
                 }
             })
             .catch((err) => {

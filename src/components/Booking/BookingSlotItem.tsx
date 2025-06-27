@@ -28,7 +28,7 @@ export default function BookingSlotItem({
     const harHandlinger = slot.kanBookes || slot.kanAvbestille || slot.kanSlette;
     const erInteraktiv = !!currentUser && harHandlinger && !slot.erPassert;
     const harArrangement = !!slot.arrangementTittel;
-    const erMinBooking = slot.booketAv === currentUser?.epost;
+    const erMinBooking = slot.erEier === true;
 
     const className = [
         'border rounded shadow-sm p-2 mb-2',
@@ -71,7 +71,7 @@ export default function BookingSlotItem({
                 }
             }}
         >
-            <BookingSlotItemHeader slot={slot} isOpen={isOpen} erInteraktiv={erInteraktiv} />
+            <BookingSlotItemHeader slot={slot} isOpen={isOpen} erInteraktiv={erInteraktiv} currentUser={currentUser} />
 
             {isOpen && !slot.erPassert && (
                 <BookingSlotItemExpanded

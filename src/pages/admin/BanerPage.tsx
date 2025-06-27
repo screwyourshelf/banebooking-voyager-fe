@@ -1,16 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useBaner } from '../../hooks/useBaner.js';
 import { toast } from 'sonner';
+
 import { Button } from '@/components/ui/button.js';
-import { Input } from '@/components/ui/input.js';
-import { Label } from '@/components/ui/label.js';
-import {
-    Select,
-    SelectContent,
-    SelectTrigger,
-    SelectValue,
-    SelectItem,
-} from '@/components/ui/select.js';
 import { Card, CardContent } from '@/components/ui/card.js';
 import {
     Tabs,
@@ -18,6 +10,9 @@ import {
     TabsTrigger,
     TabsContent,
 } from '@/components/ui/tabs.js';
+
+import { FormField } from '@/components/FormField.js';
+import { SelectField } from '@/components/SelectField.js';
 
 type BaneFormData = {
     navn: string;
@@ -27,7 +22,15 @@ type BaneFormData = {
 const STORAGE_KEY = 'rediger.valgtBaneId';
 
 export default function BanerPage() {
-    const { baner, isLoading, oppdaterBane, opprettBane, deaktiverBane, aktiverBane } = useBaner(true);
+    const {
+        baner,
+        isLoading,
+        oppdaterBane,
+        opprettBane,
+        deaktiverBane,
+        aktiverBane,
+    } = useBaner(true);
+
     const [redigerte, setRedigerte] = useState<Record<string, BaneFormData>>({});
     const [nyBane, setNyBane] = useState<BaneFormData>({ navn: '', beskrivelse: '' });
     const [valgtBaneId, setValgtBaneId] = useState<string | null>(() => {
@@ -122,46 +125,34 @@ export default function BanerPage() {
                     ) : (
                         <Card>
                             <CardContent className="p-4 space-y-4">
-                                <div>
-                                    <Label className="mb-1 block text-sm font-medium">Velg bane</Label>
-                                    <Select
-                                        value={valgtBaneId ?? ''}
-                                        onValueChange={value => setValgtBaneId(value || null)}
-                                    >
-                                        <SelectTrigger>
-                                            <SelectValue placeholder="— Velg bane —" />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            {baner.map(b => (
-                                                <SelectItem key={b.id} value={b.id}>
-                                                    {b.navn} {b.aktiv ? '' : '(inaktiv)'}
-                                                </SelectItem>
-                                            ))}
-                                        </SelectContent>
-                                    </Select>
-                                </div>
+                                <SelectField
+                                    id="velg-bane"
+                                    label="Velg bane"
+                                    value={valgtBaneId ?? ''}
+                                    onChange={(val) => setValgtBaneId(val || null)}
+                                    options={baner.map(b => ({
+                                        label: `${b.navn} ${b.aktiv ? '' : '(inaktiv)'}`,
+                                        value: b.id,
+                                    }))}
+                                />
 
                                 {valgtBane && (
                                     <>
-                                        <div>
-                                            <Label htmlFor="navn" className="block mb-1">Navn</Label>
-                                            <Input
-                                                id="navn"
-                                                value={redigerteVerdier?.navn ?? valgtBane.navn}
-                                                onChange={e => håndterEndring(valgtBane.id, 'navn', e.target.value)}
-                                                disabled={!valgtBane.aktiv}
-                                            />
-                                        </div>
+                                        <FormField
+                                            id="navn"
+                                            label="Navn"
+                                            value={redigerteVerdier?.navn ?? valgtBane.navn}
+                                            onChange={e => håndterEndring(valgtBane.id, 'navn', e.target.value)}
+                                            readOnly={!valgtBane.aktiv}
+                                        />
 
-                                        <div>
-                                            <Label htmlFor="beskrivelse" className="block mb-1">Beskrivelse</Label>
-                                            <Input
-                                                id="beskrivelse"
-                                                value={redigerteVerdier?.beskrivelse ?? valgtBane.beskrivelse}
-                                                onChange={e => håndterEndring(valgtBane.id, 'beskrivelse', e.target.value)}
-                                                disabled={!valgtBane.aktiv}
-                                            />
-                                        </div>
+                                        <FormField
+                                            id="beskrivelse"
+                                            label="Beskrivelse"
+                                            value={redigerteVerdier?.beskrivelse ?? valgtBane.beskrivelse}
+                                            onChange={e => håndterEndring(valgtBane.id, 'beskrivelse', e.target.value)}
+                                            readOnly={!valgtBane.aktiv}
+                                        />
 
                                         <div className="flex justify-between">
                                             {valgtBane.aktiv ? (
@@ -214,28 +205,25 @@ export default function BanerPage() {
                 <TabsContent value="ny">
                     <Card>
                         <CardContent className="p-4 space-y-3">
-                            <div>
-                                <Label htmlFor="ny-navn" className="block mb-1">Navn</Label>
-                                <Input
-                                    id="ny-navn"
-                                    value={nyBane.navn}
-                                    onChange={e => setNyBane(f => ({ ...f, navn: e.target.value }))}
-                                />
-                            </div>
-
-                            <div>
-                                <Label htmlFor="ny-beskrivelse" className="block mb-1">Beskrivelse</Label>
-                                <Input
-                                    id="ny-beskrivelse"
-                                    value={nyBane.beskrivelse}
-                                    onChange={e => setNyBane(f => ({ ...f, beskrivelse: e.target.value }))}
-                                />
-                            </div>
-
-                            <Button size="sm" onClick={e => {
-                                e.preventDefault();
-                                leggTil();
-                            }}>
+                            <FormField
+                                id="ny-navn"
+                                label="Navn"
+                                value={nyBane.navn}
+                                onChange={e => setNyBane(f => ({ ...f, navn: e.target.value }))}
+                            />
+                            <FormField
+                                id="ny-beskrivelse"
+                                label="Beskrivelse"
+                                value={nyBane.beskrivelse}
+                                onChange={e => setNyBane(f => ({ ...f, beskrivelse: e.target.value }))}
+                            />
+                            <Button
+                                size="sm"
+                                onClick={e => {
+                                    e.preventDefault();
+                                    leggTil();
+                                }}
+                            >
                                 Legg til
                             </Button>
                         </CardContent>

@@ -141,6 +141,12 @@ export default function Navbar() {
                         </>
                     ) : (
                         <>
+                            <p className="text-xs text-gray-500 px-2 pb-1">
+                                Ved å logge inn samtykker du til våre{' '}
+                                <Link to={`/${slug}/vilkaar`} className="underline">
+                                    vilkår
+                                </Link>.
+                            </p>
                             <DropdownMenuItem onClick={handleGoogleLogin} disabled={status === 'sending'}>
                                 <FcGoogle size={18} className="mr-2" />Logg inn med Google
                             </DropdownMenuItem>

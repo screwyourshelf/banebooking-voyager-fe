@@ -12,6 +12,7 @@ const ArrangementPage = lazy(() => import('./pages/utvidet/ArrangementPage.js'))
 const ReglementPage = lazy(() => import('./pages/ReglementPage.js'));
 const BrukerePage = lazy(() => import('./pages/admin/BrukerePage.js'));
 const AuthCallbackPage = lazy(() => import('./pages/AuthCallbackPage.js'));
+const VilkaarPage = lazy(() => import('./pages/VilkaarPage.js'));
 
 const Protected = ({ children }: { children: React.ReactNode }) => (
     <ProtectedRoute>{children}</ProtectedRoute>
@@ -29,6 +30,7 @@ export default function App() {
             >
                 <Routes>
                     <Route path=":slug?" element={<Layout />}>
+                        <Route path="vilkaar" element={<VilkaarPage />} />
                         <Route index element={<IndexPage />} />
                         <Route path="minside" element={<Protected><MinSide /></Protected>} />
                         <Route path="reglement" element={<ReglementPage />} />

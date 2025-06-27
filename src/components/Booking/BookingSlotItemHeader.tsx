@@ -6,16 +6,17 @@ type Props = {
     slot: BookingSlot;
     isOpen: boolean;
     erInteraktiv: boolean;
+    currentUser: { epost: string } | null;
 };
 
-export function BookingSlotItemHeader({ slot, isOpen, erInteraktiv }: Props) {
+export function BookingSlotItemHeader({ slot, isOpen, erInteraktiv, currentUser }: Props) {
     const tid = `${slot.startTid.slice(0, 2)}-${slot.sluttTid.slice(0, 2)}`;
     const harArrangement = !!slot.arrangementTittel;
 
     const [erMobil, setErMobil] = useState(false);
 
     useEffect(() => {
-        const sjekkBredde = () => setErMobil(window.innerWidth < 640); // Tailwind breakpoint for "sm"
+        const sjekkBredde = () => setErMobil(window.innerWidth < 640);
         sjekkBredde();
         window.addEventListener('resize', sjekkBredde);
         return () => window.removeEventListener('resize', sjekkBredde);
@@ -47,7 +48,7 @@ export function BookingSlotItemHeader({ slot, isOpen, erInteraktiv }: Props) {
                             draggable={false}
                         />
                     ) : (
-                        <span className="invisible"></span> // eller <div className="invisible w-[16px] h-[16px]" />
+                        <span className="invisible"></span>
                     )}
                 </div>
 
@@ -61,7 +62,13 @@ export function BookingSlotItemHeader({ slot, isOpen, erInteraktiv }: Props) {
                             )}
                         </div>
                     ) : (
-                        <div>{slot.booketAv ?? 'Ledig'}</div>
+                        <div>
+                            {slot.booketAv
+                                ? currentUser
+                                    ? slot.booketAv
+                                    : maskEmail(slot.booketAv)
+                                : 'Ledig'}
+                        </div>
                     )}
                 </div>
 
@@ -81,4 +88,10 @@ export function BookingSlotItemHeader({ slot, isOpen, erInteraktiv }: Props) {
             </div>
         </div>
     );
+}
+
+function maskEmail(epost: string): string {
+    const [name, domain] = epost.split('@');
+    if (!name || !domain) return epost;
+    return `${name[0]}***@${domain}`;
 }

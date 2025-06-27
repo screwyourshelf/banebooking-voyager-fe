@@ -6,18 +6,12 @@ import { useBruker } from '../../hooks/useBruker.js';
 import { useAdminBrukere } from '../../hooks/useAdminBrukere.js';
 import { oppdaterRolle } from '../../api/adminBruker.js';
 
-import { Input } from '@/components/ui/input.js';
-import { Label } from '@/components/ui/label.js';
 import { Button } from '@/components/ui/button.js';
 import { Card, CardContent } from '@/components/ui/card.js';
-import {
-    Select,
-    SelectContent,
-    SelectItem,
-    SelectTrigger,
-    SelectValue,
-} from '@/components/ui/select.js';
 import LoaderSkeleton from '@/components/LoaderSkeleton.js';
+
+import { FormField } from '@/components/FormField.js';
+import { SelectField } from '@/components/SelectField.js';
 
 import type { RolleType } from '../../types/index.js';
 
@@ -67,11 +61,7 @@ export default function BrukerePage() {
                 return ny;
             });
         } catch (err: unknown) {
-            if (err instanceof Error) {
-                toast.error(err.message);
-            } else {
-                toast.error('Ukjent feil ved oppdatering');
-            }
+            toast.error(err instanceof Error ? err.message : 'Ukjent feil ved oppdatering');
         }
     };
 
@@ -93,20 +83,13 @@ export default function BrukerePage() {
         <div className="max-w-screen-sm mx-auto px-2 py-2 space-y-4">
             <Card>
                 <CardContent className="p-4 space-y-4">
-                    <div>
-                        <Label htmlFor="sok">Søk etter bruker</Label>
-                        <Input
-                            id="sok"
-                            placeholder="f.eks. navn eller e-post"
-                            value={query}
-                            onChange={(e) => setQuery(e.target.value)}
-                            onKeyDown={(e) => {
-                                if (e.key === 'Enter') {
-                                    e.preventDefault();
-                                }
-                            }}
-                        />
-                    </div>
+                    <FormField
+                        id="sok"
+                        label="Søk etter bruker"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        helpText="F.eks. navn eller e-post"
+                    />
 
                     {lasterListe && <p>Laster brukere...</p>}
                     {!lasterListe && feil && (
@@ -129,50 +112,38 @@ export default function BrukerePage() {
                                     Nåværende rolle: <strong>{lagret}</strong>
                                 </div>
 
-                                <Label htmlFor={`rolle-${b.id}`} className="text-sm">
-                                    {erMeg
-                                        ? 'Du kan ikke endre din egen rolle'
-                                        : 'Endre rolle'}
-                                </Label>
+                                <SelectField
+                                    id={`rolle-${b.id}`}
+                                    label={erMeg ? 'Du kan ikke endre din egen rolle' : 'Endre rolle'}
+                                    value={valgt}
+                                    onChange={(val) => handleRolleChange(b.id, val as RolleType)}
+                                    disabled={erMeg}
+                                    options={[
+                                        { label: 'Medlem', value: 'Medlem' },
+                                        { label: 'Utvidet', value: 'Utvidet' },
+                                        { label: 'KlubbAdmin', value: 'KlubbAdmin' },
+                                    ]}
+                                />
 
-                                <div className="flex items-center gap-2 flex-wrap">
-                                    <Select
-                                        value={valgt}
-                                        onValueChange={(val) =>
-                                            handleRolleChange(b.id, val as RolleType)
-                                        }
-                                        disabled={erMeg}
-                                    >
-                                        <SelectTrigger id={`rolle-${b.id}`} className="w-[180px]">
-                                            <SelectValue />
-                                        </SelectTrigger>
-                                        <SelectContent>
-                                            <SelectItem value="Medlem">Medlem</SelectItem>
-                                            <SelectItem value="Utvidet">Utvidet</SelectItem>
-                                            <SelectItem value="KlubbAdmin">KlubbAdmin</SelectItem>
-                                        </SelectContent>
-                                    </Select>
-
-                                    {!erMeg && (
-                                        <>
-                                            <Button
-                                                size="sm"
-                                                onClick={() => handleLagre(b.id)}
-                                                disabled={!erEndret}
-                                            >
-                                                Lagre
-                                            </Button>
-                                            <Button
-                                                size="sm"
-                                                variant="ghost"
-                                                onClick={() => handleAvbryt(b.id)}
-                                                disabled={!erEndret}
-                                            >
-                                                Avbryt
-                                            </Button>
-                                        </>
-                                    )}
-                                </div>
+                                {!erMeg && (
+                                    <div className="flex gap-2">
+                                        <Button
+                                            size="sm"
+                                            onClick={() => handleLagre(b.id)}
+                                            disabled={!erEndret}
+                                        >
+                                            Lagre
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            variant="ghost"
+                                            onClick={() => handleAvbryt(b.id)}
+                                            disabled={!erEndret}
+                                        >
+                                            Avbryt
+                                        </Button>
+                                    </div>
+                                )}
                             </div>
                         );
                     })}
