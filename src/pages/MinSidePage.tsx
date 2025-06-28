@@ -50,7 +50,7 @@ export default function MinSidePage() {
             const navn = bruker.visningsnavn?.trim();
             if (!navn || navn === bruker.epost) {
                 setBrukEpostSomVisningsnavn(true);
-                setVisningsnavn("");
+                setVisningsnavn('');
             } else {
                 setVisningsnavn(navn);
                 setBrukEpostSomVisningsnavn(false);
@@ -59,6 +59,14 @@ export default function MinSidePage() {
     }, [bruker]);
 
     const validerOgLagre = () => {
+        if (!bruker) return;
+
+        if (brukEpostSomVisningsnavn) {
+            setFeil(null);
+            oppdaterVisningsnavn(bruker.epost);
+            return;
+        }
+
         const navn = visningsnavn.trim();
 
         if (navn.length === 0) {
@@ -85,6 +93,12 @@ export default function MinSidePage() {
         oppdaterVisningsnavn(navn);
     };
 
+    const kanLagre = bruker
+        ? brukEpostSomVisningsnavn
+            ? bruker.visningsnavn !== bruker.epost
+            : visningsnavn.trim() !== bruker.visningsnavn
+        : false;
+
     return (
         <div className="max-w-screen-md mx-auto px-2 py-4">
             <Tabs value={tab} onValueChange={setTab}>
@@ -94,7 +108,6 @@ export default function MinSidePage() {
                     <TabsTrigger value="arrangementer">Arrangementer</TabsTrigger>
                 </TabsList>
 
-                {/* Profil-tab */}
                 <TabsContent value="profil">
                     <Card>
                         <CardContent className="p-4 space-y-6">
@@ -102,42 +115,44 @@ export default function MinSidePage() {
                                 <LoaderSkeleton />
                             ) : (
                                 <>
-                                        <form
-                                            className="space-y-4"
-                                            onSubmit={(e) => {
-                                                e.preventDefault();
-                                                validerOgLagre();
+                                    <form
+                                        className="space-y-4"
+                                        onSubmit={(e) => {
+                                            e.preventDefault();
+                                            validerOgLagre();
+                                        }}
+                                    >
+                                        <FormField
+                                            id="visningsnavn"
+                                            label="Visningsnavn"
+                                            value={brukEpostSomVisningsnavn ? '' : visningsnavn}
+                                            maxLength={MAX_LENGTH}
+                                            placeholder={bruker?.epost || 'f.eks. Ola Nordmann'}
+                                            onChange={(e) => {
+                                                setVisningsnavn(e.target.value);
+                                                setBrukEpostSomVisningsnavn(false);
                                             }}
-                                        >
-                                            <FormField
-                                                id="visningsnavn"
-                                                label="Visningsnavn"
-                                                value={brukEpostSomVisningsnavn ? "" : visningsnavn}
-                                                maxLength={MAX_LENGTH}
-                                                placeholder={bruker?.epost || "f.eks. Ola Nordmann"}
+                                            disabled={brukEpostSomVisningsnavn}
+                                            error={feil}
+                                            helpText="Navnet vises i grensesnittet, og settes automatisk til e-post ved første innlogging. Du kan endre det her. Eller velg å bruke e-post i stedet."
+                                        />
+
+                                        <label className="flex items-center space-x-2 text-sm">
+                                            <input
+                                                type="checkbox"
+                                                checked={brukEpostSomVisningsnavn}
                                                 onChange={(e) => {
-                                                    setVisningsnavn(e.target.value);
-                                                    setBrukEpostSomVisningsnavn(false);
+                                                    setBrukEpostSomVisningsnavn(e.target.checked);
+                                                    if (e.target.checked) setVisningsnavn('');
                                                 }}
-                                                disabled={brukEpostSomVisningsnavn}
-                                                error={feil}
-                                                helpText="Navnet vises i grensesnittet, og settes automatisk til e-post ved første innlogging. Du kan endre det her. Eller velg å bruke e-post i stedet."
                                             />
+                                            <span>Bruk e-post som visningsnavn</span>
+                                        </label>
 
-                                            <label className="flex items-center space-x-2 text-sm">
-                                                <input
-                                                    type="checkbox"
-                                                    checked={brukEpostSomVisningsnavn}
-                                                    onChange={(e) => {
-                                                        setBrukEpostSomVisningsnavn(e.target.checked);
-                                                        if (e.target.checked) setVisningsnavn("");
-                                                    }}
-                                                />
-                                                <span>Bruk e-post som visningsnavn</span>
-                                            </label>
-
-                                            <Button type="submit" size="sm">Lagre</Button>
-                                        </form>
+                                        <Button type="submit" size="sm" disabled={!kanLagre}>
+                                            Lagre
+                                        </Button>
+                                    </form>
 
                                     <div className="pt-4 border-t mt-4 space-y-4">
                                         <FieldWrapper id="epost" label="Brukernavn / ID">
@@ -151,34 +166,34 @@ export default function MinSidePage() {
                                         >
                                             <p className="text-sm text-foreground">{bruker.roller.join(', ')}</p>
                                         </FieldWrapper>
-                                        
                                     </div>
 
-                                        <div className="pt-4 border-t mt-4 space-y-4">
-                                            <FieldWrapper
-                                                id="vilkaar"
-                                                label="Vilkår for bruk"
-                                                helpText="Du aksepterer vilkårene automatisk ved første innlogging."
-                                            >
-                                                {bruker.vilkaarAkseptertDato ? (
-                                                    <p className="text-sm text-foreground">
-                                                        Akseptert {formatDatoKort(bruker.vilkaarAkseptertDato)}{' '}
-                                                        {bruker.vilkaarVersjon && `(versjon ${bruker.vilkaarVersjon})`}
-                                                    </p>
-                                                ) : (
-                                                    <p className="text-sm text-muted-foreground italic">
-                                                        Ikke registrert
-                                                    </p>
-                                                )}
-                                                <p className="text-sm mt-1">
-                                                    <a
-                                                        href={`${import.meta.env.BASE_URL}${slug}/vilkaar`}
-                                                        className="underline text-primary hover:text-primary/80"
-                                                    >
-                                                        Les vilkårene
-                                                    </a>
+                                    <div className="pt-4 border-t mt-4 space-y-4">
+                                        <FieldWrapper
+                                            id="vilkaar"
+                                            label="Vilkår for bruk"
+                                            helpText="Du aksepterer vilkårene automatisk ved første innlogging."
+                                        >
+                                            {bruker.vilkaarAkseptertDato ? (
+                                                <p className="text-sm text-foreground">
+                                                    Akseptert {formatDatoKort(bruker.vilkaarAkseptertDato)}{' '}
+                                                    {bruker.vilkaarVersjon && `(versjon ${bruker.vilkaarVersjon})`}
                                                 </p>
-                                            </FieldWrapper>
+                                            ) : (
+                                                <p className="text-sm text-muted-foreground italic">
+                                                    Ikke registrert
+                                                </p>
+                                            )}
+                                            <p className="text-sm mt-1">
+                                                <a
+                                                    href={`${import.meta.env.BASE_URL}${slug}/vilkaar`}
+                                                    className="underline text-primary hover:text-primary/80"
+                                                >
+                                                    Les vilkårene
+                                                </a>
+                                            </p>
+                                        </FieldWrapper>
+
                                         <FieldWrapper
                                             id="last-ned-data"
                                             label="Last ned dine data"
@@ -188,6 +203,7 @@ export default function MinSidePage() {
                                                 Last ned data
                                             </Button>
                                         </FieldWrapper>
+
                                         <FieldWrapper
                                             id="slett-bruker"
                                             label="Slett bruker"
@@ -202,7 +218,6 @@ export default function MinSidePage() {
                     </Card>
                 </TabsContent>
 
-                {/* Bookinger-tab */}
                 <TabsContent value="bookinger">
                     <Card>
                         <CardContent className="p-4 space-y-4">
@@ -238,7 +253,6 @@ export default function MinSidePage() {
                     </Card>
                 </TabsContent>
 
-                {/* Arrangementer-tab */}
                 <TabsContent value="arrangementer">
                     <Card>
                         <CardContent className="p-4 space-y-4">

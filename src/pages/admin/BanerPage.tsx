@@ -51,6 +51,12 @@ export default function BanerPage() {
         }
     }, [baner, valgtBaneId]);
 
+    useEffect(() => {
+        if (!valgtBaneId && baner.length > 0) {
+            setValgtBaneId(baner[0].id);
+        }
+    }, [baner, valgtBaneId]);
+
     function håndterEndring(id: string, felt: keyof BaneFormData, verdi: string) {
         setRedigerte(prev => ({
             ...prev,
