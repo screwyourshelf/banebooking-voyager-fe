@@ -1,12 +1,24 @@
 import { useEffect, useState, useCallback } from 'react';
 import { toast } from 'sonner';
-import { hentMeg, oppdaterMeg, slettMeg as slettMegApi } from '../api/meg.js';
+import { hentMeg, oppdaterMeg, slettMeg as slettMegApi, lastNedEgenData as lastNedEgenDataApi } from '../api/meg.js';
 import type { BrukerDto } from '../types/index.js';
 
 export function useMeg(slug?: string) {
     const [bruker, setBruker] = useState<BrukerDto | null>(null);
     const [laster, setLaster] = useState(true);
     const [feil, setFeil] = useState<string | null>(null);
+
+    const lastNedEgenData = useCallback(async () => {
+        if (!slug) return;
+
+        try {
+            await lastNedEgenDataApi(slug);
+            toast.success("Dataen din lastes nå ned");
+        } catch (err) {
+            const message = err instanceof Error ? err.message : "Kunne ikke laste ned data";
+            toast.error(message);
+        }
+    }, [slug]);
 
     const hent = useCallback(async () => {
         if (!slug) return;
@@ -66,5 +78,6 @@ export function useMeg(slug?: string) {
         oppdaterVisningsnavn,
         refetch: hent,
         slettMeg,
+        lastNedEgenData
     }
 }

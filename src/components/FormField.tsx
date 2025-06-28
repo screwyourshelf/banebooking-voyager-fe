@@ -12,6 +12,7 @@ interface FormFieldProps {
     maxLength?: number;
     type?: string;
     placeholder?: string;
+    disabled?: boolean;
 }
 
 export function FormField({
@@ -25,6 +26,7 @@ export function FormField({
     maxLength,
     type = 'text',
     placeholder,
+    disabled = false,
 }: FormFieldProps) {
     return (
         <FieldWrapper id={id} label={label} helpText={helpText} error={error}>
@@ -33,6 +35,7 @@ export function FormField({
                 type={type}
                 value={value}
                 readOnly={readOnly}
+                disabled={disabled}
                 maxLength={maxLength}
                 placeholder={placeholder}
                 onChange={onChange}

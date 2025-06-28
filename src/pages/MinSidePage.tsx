@@ -26,7 +26,7 @@ import { FormField } from '@/components/FormField.js';
 import { FieldWrapper } from '@/components/FieldWrapper.js';
 import { formatDatoKort } from '../utils/datoUtils.js';
 
-import SlettMegKnapp from '../components/SlettMegKnapp.js';  // <-- importer SlettMegKnapp
+import SlettMegKnapp from '../components/SlettMegKnapp.js';
 
 const MAX_LENGTH = 50;
 const NAVN_REGEX = /^[\p{L}\d\s.@'_%+-]{2,}$/u;
@@ -37,16 +37,24 @@ export default function MinSidePage() {
 
     const [tab, setTab] = useState('profil');
 
-    const { bruker, laster: lasterMeg, oppdaterVisningsnavn, slettMeg } = useMeg(slug);
+    const { bruker, laster: lasterMeg, oppdaterVisningsnavn, slettMeg, lastNedEgenData } = useMeg(slug);
     const [visningsnavn, setVisningsnavn] = useState('');
     const [feil, setFeil] = useState<string | null>(null);
 
     const { bookinger, laster: loadingBookinger } = useMineBookinger(slug);
     const { arrangementer, isLoading: loadingArrangementer } = useArrangement(slug);
+    const [brukEpostSomVisningsnavn, setBrukEpostSomVisningsnavn] = useState(false);
 
     useEffect(() => {
         if (bruker) {
-            setVisningsnavn(bruker.visningsnavn?.trim() || bruker.epost);
+            const navn = bruker.visningsnavn?.trim();
+            if (!navn || navn === bruker.epost) {
+                setBrukEpostSomVisningsnavn(true);
+                setVisningsnavn("");
+            } else {
+                setVisningsnavn(navn);
+                setBrukEpostSomVisningsnavn(false);
+            }
         }
     }, [bruker]);
 
@@ -94,25 +102,42 @@ export default function MinSidePage() {
                                 <LoaderSkeleton />
                             ) : (
                                 <>
-                                    <form
-                                        className="space-y-4"
-                                        onSubmit={(e) => {
-                                            e.preventDefault();
-                                            validerOgLagre();
-                                        }}
-                                    >
-                                        <FormField
-                                            id="visningsnavn"
-                                            label="Visningsnavn"
-                                            value={visningsnavn}
-                                            maxLength={MAX_LENGTH}
-                                            placeholder="f.eks. Ola Nordmann"
-                                            onChange={(e) => setVisningsnavn(e.target.value)}
-                                            error={feil}
-                                            helpText="Navnet vises i grensesnittet, og settes automatisk til e-post ved første innlogging. Du kan endre det her. Navnet må være saklig og respektfullt – støtende navn kan føre til at profilen blir sperret."
-                                        />
-                                        <Button type="submit" size="sm">Lagre</Button>
-                                    </form>
+                                        <form
+                                            className="space-y-4"
+                                            onSubmit={(e) => {
+                                                e.preventDefault();
+                                                validerOgLagre();
+                                            }}
+                                        >
+                                            <FormField
+                                                id="visningsnavn"
+                                                label="Visningsnavn"
+                                                value={brukEpostSomVisningsnavn ? "" : visningsnavn}
+                                                maxLength={MAX_LENGTH}
+                                                placeholder={bruker?.epost || "f.eks. Ola Nordmann"}
+                                                onChange={(e) => {
+                                                    setVisningsnavn(e.target.value);
+                                                    setBrukEpostSomVisningsnavn(false);
+                                                }}
+                                                disabled={brukEpostSomVisningsnavn}
+                                                error={feil}
+                                                helpText="Navnet vises i grensesnittet, og settes automatisk til e-post ved første innlogging. Du kan endre det her. Eller velg å bruke e-post i stedet."
+                                            />
+
+                                            <label className="flex items-center space-x-2 text-sm">
+                                                <input
+                                                    type="checkbox"
+                                                    checked={brukEpostSomVisningsnavn}
+                                                    onChange={(e) => {
+                                                        setBrukEpostSomVisningsnavn(e.target.checked);
+                                                        if (e.target.checked) setVisningsnavn("");
+                                                    }}
+                                                />
+                                                <span>Bruk e-post som visningsnavn</span>
+                                            </label>
+
+                                            <Button type="submit" size="sm">Lagre</Button>
+                                        </form>
 
                                     <div className="pt-4 border-t mt-4 space-y-4">
                                         <FieldWrapper id="epost" label="Brukernavn / ID">
@@ -125,7 +150,11 @@ export default function MinSidePage() {
                                             helpText="Roller tildeles av klubbens administrator og kan ikke endres manuelt."
                                         >
                                             <p className="text-sm text-foreground">{bruker.roller.join(', ')}</p>
-                                            </FieldWrapper>
+                                        </FieldWrapper>
+                                        
+                                    </div>
+
+                                        <div className="pt-4 border-t mt-4 space-y-4">
                                             <FieldWrapper
                                                 id="vilkaar"
                                                 label="Vilkår for bruk"
@@ -150,9 +179,15 @@ export default function MinSidePage() {
                                                     </a>
                                                 </p>
                                             </FieldWrapper>
-                                    </div>
-
-                                    <div className="pt-4 border-t mt-4 space-y-4">
+                                        <FieldWrapper
+                                            id="last-ned-data"
+                                            label="Last ned dine data"
+                                            helpText="Du kan laste ned alle registrerte opplysninger og bookinger i JSON-format."
+                                        >
+                                            <Button onClick={lastNedEgenData} size="sm" variant="outline">
+                                                Last ned data
+                                            </Button>
+                                        </FieldWrapper>
                                         <FieldWrapper
                                             id="slett-bruker"
                                             label="Slett bruker"
@@ -160,12 +195,7 @@ export default function MinSidePage() {
                                         >
                                             <SlettMegKnapp slettMeg={slettMeg} />
                                         </FieldWrapper>
-
-                                        <p className="text-sm text-muted-foreground italic mt-2">
-                                            Mulighet for å laste ned dine data kommer senere.
-                                        </p>
                                     </div>
-
                                 </>
                             )}
                         </CardContent>
