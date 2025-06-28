@@ -38,7 +38,7 @@ export default function BookingSlotItem({
             ? 'bg-gradient-to-r from-blue-0 via-blue-50 to-blue-200 border-blue-200'
             : '',
         !slot.erPassert && !harArrangement ? 'bg-white text-gray-900' : '',
-        erMinBooking && !harArrangement
+        currentUser && erMinBooking && !harArrangement
             ? 'animate__animated animate__headShake animate__slow'
             : '',
     ].join(' ');
