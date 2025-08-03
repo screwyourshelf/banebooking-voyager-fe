@@ -37,4 +37,6 @@ export type ArrangementDto = {
     førsteSluttTid: string;
 
     antallBookinger: number;
+
+    kanSlettes: boolean
 };

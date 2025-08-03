@@ -1,9 +1,8 @@
 import { useState, useContext, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { useMineBookinger } from '../hooks/useMineBookinger.js';
-import { useArrangement } from '../hooks/useArrangement.js';
 import { useMeg } from '../hooks/useMeg.js';
-import { SlugContext } from '../layouts/Layout.js';
+import { SlugContext } from '../contexts/SlugContext.js';
 
 import LoaderSkeleton from '@/components/LoaderSkeleton.js';
 import {
@@ -40,9 +39,9 @@ export default function MinSidePage() {
     const { bruker, laster: lasterMeg, oppdaterVisningsnavn, slettMeg, lastNedEgenData } = useMeg(slug);
     const [visningsnavn, setVisningsnavn] = useState('');
     const [feil, setFeil] = useState<string | null>(null);
+    const [visHistoriske, setVisHistoriske] = useState(false);
 
-    const { bookinger, laster: loadingBookinger } = useMineBookinger(slug);
-    const { arrangementer, isLoading: loadingArrangementer } = useArrangement(slug);
+    const { bookinger, laster: loadingBookinger } = useMineBookinger(slug, visHistoriske);
     const [brukEpostSomVisningsnavn, setBrukEpostSomVisningsnavn] = useState(false);
 
     useEffect(() => {
@@ -99,13 +98,17 @@ export default function MinSidePage() {
             : visningsnavn.trim() !== bruker.visningsnavn
         : false;
 
+    const nå = new Date();
+    const visteBookinger = visHistoriske
+        ? bookinger
+        : bookinger.filter(b => new Date(b.dato) >= nå);
+
     return (
         <div className="max-w-screen-md mx-auto px-2 py-4">
             <Tabs value={tab} onValueChange={setTab}>
                 <TabsList className="mb-4">
                     <TabsTrigger value="profil">Min profil</TabsTrigger>
                     <TabsTrigger value="bookinger">Mine bookinger</TabsTrigger>
-                    <TabsTrigger value="arrangementer">Arrangementer</TabsTrigger>
                 </TabsList>
 
                 <TabsContent value="profil">
@@ -223,88 +226,47 @@ export default function MinSidePage() {
                         <CardContent className="p-4 space-y-4">
                             {loadingBookinger ? (
                                 <LoaderSkeleton />
-                            ) : bookinger.length === 0 ? (
-                                <p className="text-sm text-muted-foreground italic">
-                                    Du har ingen kommende bookinger.
-                                </p>
                             ) : (
-                                <div className="overflow-auto max-h-[60vh] border-b border-x rounded-b-md">
-                                    <Table className="text-sm">
-                                        <TableHeader>
-                                            <TableRow>
-                                                <TableHead>Dato</TableHead>
-                                                <TableHead>Tid</TableHead>
-                                                <TableHead>Bane</TableHead>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {bookinger.map((b, idx) => (
-                                                <TableRow key={idx}>
-                                                    <TableCell>{formatDatoKort(b.dato)}</TableCell>
-                                                    <TableCell>{b.startTid}–{b.sluttTid}</TableCell>
-                                                    <TableCell>{b.baneNavn}</TableCell>
-                                                </TableRow>
-                                            ))}
-                                        </TableBody>
-                                    </Table>
-                                </div>
-                            )}
-                        </CardContent>
-                    </Card>
-                </TabsContent>
+                                <>
+                                    <label className="flex items-center space-x-2 text-sm">
+                                        <input
+                                            type="checkbox"
+                                            checked={visHistoriske}
+                                            onChange={(e) => {
+                                                setVisHistoriske(e.target.checked);
+                                            }} />
+                                        <span>Vis også tidligere bookinger</span>
+                                    </label>
 
-                <TabsContent value="arrangementer">
-                    <Card>
-                        <CardContent className="p-4 space-y-4">
-                            {loadingArrangementer ? (
-                                <LoaderSkeleton />
-                            ) : arrangementer.length === 0 ? (
-                                <p className="text-sm text-muted-foreground italic">
-                                    Ingen arrangementer registrert.
-                                </p>
-                            ) : (
-                                <div className="overflow-auto max-h-[60vh] border-b border-x rounded-b-md">
-                                    <Table className="text-sm">
-                                        <TableHeader>
-                                            <TableRow>
-                                                <TableHead className="w-1/3">Hva</TableHead>
-                                                <TableHead className="w-1/3">Når</TableHead>
-                                                <TableHead className="w-1/3">Om</TableHead>
-                                            </TableRow>
-                                        </TableHeader>
-                                        <TableBody>
-                                            {arrangementer.map((arr) => {
-                                                const start = new Date(arr.startDato);
-                                                const today = new Date();
-                                                const dagerIgjen = Math.max(
-                                                    0,
-                                                    Math.ceil((start.getTime() - today.getTime()) / (1000 * 60 * 60 * 24))
-                                                );
-
-                                                return (
-                                                    <TableRow key={arr.id}>
-                                                        <TableCell className="whitespace-normal break-words">
-                                                            <div className="font-medium">{arr.tittel}</div>
-                                                            {arr.beskrivelse && (
-                                                                <div className="text-muted-foreground text-xs whitespace-normal break-words">
-                                                                    {arr.beskrivelse}
-                                                                </div>
-                                                            )}
-                                                        </TableCell>
-                                                        <TableCell className="whitespace-normal break-words text-sm">
-                                                            {arr.startDato === arr.sluttDato
-                                                                ? formatDatoKort(arr.startDato)
-                                                                : `${formatDatoKort(arr.startDato)} - ${formatDatoKort(arr.sluttDato)}`}
-                                                        </TableCell>
-                                                        <TableCell className="whitespace-nowrap">
-                                                            {dagerIgjen} {dagerIgjen === 1 ? 'dag' : 'dager'}
-                                                        </TableCell>
+                                    {visteBookinger.length === 0 ? (
+                                        <p className="text-sm text-muted-foreground italic">
+                                            {visHistoriske
+                                                ? 'Du har ingen registrerte bookinger.'
+                                                : 'Du har ingen kommende bookinger.'}
+                                        </p>
+                                    ) : (
+                                        <div className="overflow-auto max-h-[60vh] border-b border-x rounded-b-md">
+                                            <Table className="text-sm">
+                                                <TableHeader>
+                                                    <TableRow>
+                                                        <TableHead>Dato</TableHead>
+                                                        <TableHead>Tid</TableHead>
+                                                        <TableHead>Bane</TableHead>
                                                     </TableRow>
-                                                );
-                                            })}
-                                        </TableBody>
-                                    </Table>
-                                </div>
+                                                </TableHeader>
+                                                <TableBody>
+                                                    {visteBookinger.map((b, idx) => (
+                                                        <TableRow key={idx}>
+                                                            <TableCell>{formatDatoKort(b.dato)}</TableCell>
+                                                            <TableCell>{b.startTid}–{b.sluttTid}</TableCell>
+                                                            <TableCell>{b.baneNavn}</TableCell>
+                                                        </TableRow>
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </div>
+                                    )}
+                                </>
                             )}
                         </CardContent>
                     </Card>

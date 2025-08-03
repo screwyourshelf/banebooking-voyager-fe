@@ -1,6 +1,6 @@
 import { useEffect, useState, useContext } from 'react';
 import type { Bane, NyBane, OppdaterBane } from '../types/index.js';
-import { SlugContext } from '../layouts/Layout.js';
+import { SlugContext } from '../contexts/SlugContext.js';
 import {
     hentBaner,
     oppdaterBane as apiOppdaterBane,

@@ -16,6 +16,7 @@ const visningsnavn: Record<string, string> = {
     "brukere": "Brukere",
     "klubb": "Klubb",
     "arrangement": "Arrangement",
+    "kommendearrangement": "Kommende arrangementer",
     "": "Book bane"
 };
 

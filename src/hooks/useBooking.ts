@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 import type { BookingSlot } from '../types/index.js';
-import { hentBookinger, opprettBooking, avbestillBooking } from '../api/booking.js';
+import { hentBookinger, opprettBooking, avbestillBooking, slettBooking } from '../api/booking.js';
 
 export function useBooking(slug: string | undefined, valgtDato: string, valgtBaneId: string) {
     const [slots, setSlots] = useState<BookingSlot[]>([]);
@@ -27,6 +27,19 @@ export function useBooking(slug: string | undefined, valgtDato: string, valgtBan
         hent();
     }, [hent]);
 
+    const fjernSlot = (slotToRemove: BookingSlot) => {
+        setSlots((prev) =>
+            prev.filter((s) =>
+                !(
+                    s.baneId === slotToRemove.baneId &&
+                    s.dato === slotToRemove.dato &&
+                    s.startTid === slotToRemove.startTid &&
+                    s.sluttTid === slotToRemove.sluttTid
+                )
+            )
+        );
+    };
+
     const onBook = async (slot: BookingSlot) => {
         if (!slug || !valgtBaneId) return;
 
@@ -36,7 +49,7 @@ export function useBooking(slug: string | undefined, valgtDato: string, valgtBan
             toast.success(`Booket ${tid}`);
             await hent();
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : 'Kunne ikke booke slot.');
+            toast.error(err instanceof Error ? err.message : 'Kunne ikke booke.');
         }
     };
 
@@ -45,10 +58,25 @@ export function useBooking(slug: string | undefined, valgtDato: string, valgtBan
 
         try {
             await avbestillBooking(slug, valgtBaneId, valgtDato, slot.startTid, slot.sluttTid);
+            fjernSlot(slot);
             toast.info('Bookingen er avbestilt.');
             await hent();
         } catch (err) {
-            toast.error(err instanceof Error ? err.message : 'Kunne ikke avbestille slot.');
+            toast.error(err instanceof Error ? err.message : 'Kunne ikke avbestille.');
+        }
+    };
+
+    const onDelete = async (slot: BookingSlot) => {
+        if (!slug) return;
+
+        try {
+            await slettBooking(slug, slot.baneId, slot.dato, slot.startTid, slot.sluttTid);
+            fjernSlot(slot);
+            toast.success('Booking slettet');
+            setApenSlotTid(null);
+            await hent();
+        } catch (err) {
+            toast.error(err instanceof Error ? err.message : 'Kunne ikke slette booking.');
         }
     };
 
@@ -58,6 +86,7 @@ export function useBooking(slug: string | undefined, valgtDato: string, valgtBan
         setApenSlotTid,
         onBook,
         onCancel,
+        onDelete,
         hentBookinger: hent,
         isLoading,
     };

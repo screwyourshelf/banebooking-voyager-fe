@@ -37,7 +37,7 @@ export async function opprettBooking(
         try {
             const error = await res.json();
             msg = error?.melding || msg;
-        } catch { /* empty */ }
+        } catch { /* tom catch */ }
         throw new Error(msg);
     }
 }
@@ -68,12 +68,38 @@ export async function avbestillBooking(
     }
 }
 
-export async function hentMineBookinger(slug: string): Promise<BookingSlot[]> {
+export async function slettBooking(
+    slug: string,
+    baneId: string,
+    dato: string,
+    startTid: string,
+    sluttTid: string
+): Promise<void> {
     const res = await fetchWithAuth(
-        `/api/klubb/${slug}/bookinger/mine`,
-        {},
+        `/api/klubb/${slug}/bookinger/admin`,
+        {
+            method: 'DELETE',
+            body: JSON.stringify({ baneId, dato, startTid, sluttTid }),
+        },
         true
     );
+
+    if (!res.ok) {
+        let msg = 'Kunne ikke slette booking';
+        try {
+            const error = await res.json();
+            msg = error?.melding || msg;
+        } catch {/* empty */ }
+        throw new Error(msg);
+    }
+}
+
+export async function hentMineBookinger(slug: string, inkluderHistoriske = false): Promise<BookingSlot[]> {
+    const url = inkluderHistoriske
+        ? `/api/klubb/${slug}/bookinger/mine?inkluderHistoriske=true`
+        : `/api/klubb/${slug}/bookinger/mine`;
+
+    const res = await fetchWithAuth(url, {}, true);
 
     const data = await res.json();
     return Array.isArray(data) ? data : [];

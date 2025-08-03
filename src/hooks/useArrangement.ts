@@ -1,6 +1,7 @@
-import { useMemo, useState, useEffect } from 'react';
+import { useMemo, useState, useEffect, useCallback } from 'react';
 import { toast } from 'sonner';
 import {
+    slettArrangement as slettArrangementApi,
     forhandsvisArrangement,
     opprettArrangement,
     hentKommendeArrangementer,
@@ -54,7 +55,7 @@ export function useArrangement(slug: string | undefined) {
         return genererTidspunkter(start, slutt, slot);
     }, [klubb]);
 
-    const lastArrangementer = async () => {
+    const lastArrangementer = useCallback(async () => {
         if (!slug) return;
         setLoadingArrangementer(true);
         try {
@@ -66,11 +67,11 @@ export function useArrangement(slug: string | undefined) {
         } finally {
             setLoadingArrangementer(false);
         }
-    };
+    }, [slug]);
 
     useEffect(() => {
         lastArrangementer();
-    }, [slug]);
+    }, [lastArrangementer]);
 
     const forhandsvis = async (dto: OpprettArrangementDto) => {
         if (!slug) return;
@@ -103,17 +104,34 @@ export function useArrangement(slug: string | undefined) {
             setLoadingForhandsvisning(false);
         }
     };
+    const [sletterArrangementId, setSletterArrangementId] = useState<string | null>(null);
+
+    const slettArrangement = async (arrangementId: string) => {
+        if (!slug) return;
+        setSletterArrangementId(arrangementId);
+        try {
+            const result = await slettArrangementApi(slug, arrangementId);
+            toast.success(`Arrangementet ble avlyst – ${result.antallBookingerDeaktivert} bookinger fjernet`);
+            await lastArrangementer(); // re-fetch
+        } catch {
+            toast.error('Kunne ikke slette arrangementet');
+        } finally {
+            setSletterArrangementId(null);
+        }
+    };
 
     return {
         klubb,
         baner,
         isLoading: loadingKlubb || loadingBaner || loadingArrangementer,
         isLoadingForhandsvisning: loadingForhandsvisning,
+        sletterArrangementId,
         tilgjengeligeTidspunkter,
         forhandsvisning,
         setForhandsvisning,
         forhandsvis,
         opprett,
+        slettArrangement,
         arrangementer,
         lastArrangementer,
     };

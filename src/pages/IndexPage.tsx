@@ -6,7 +6,7 @@ import { BookingSlotList } from '../components/Booking/BookingSlotList.js';
 import { useBaner } from '../hooks/useBaner.js';
 import { useBooking } from '../hooks/useBooking.js';
 import { useAuth } from '../hooks/useAuth.js';
-import { SlugContext } from '../layouts/Layout.js';
+import { SlugContext } from '../contexts/SlugContext.js';
 import LoaderSkeleton from '../components/LoaderSkeleton.js';
 
 export default function IndexPage() {
@@ -25,6 +25,7 @@ export default function IndexPage() {
         setApenSlotTid,
         onBook,
         onCancel,
+        onDelete,
         isLoading: loadingBooking,
     } = useBooking(slug, valgtDatoStr, valgtBaneId);
 
@@ -79,7 +80,7 @@ export default function IndexPage() {
                 setApenSlotTid={setApenSlotTid}
                 onBook={onBook}
                 onCancel={onCancel}
-                onDelete={(slot) => console.log('Slett', slot)}
+                onDelete={onDelete}
                 isLoading={loadingBooking}
             />
         </div>

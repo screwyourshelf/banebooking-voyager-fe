@@ -1,14 +1,12 @@
 import { Outlet, useParams } from 'react-router-dom';
 import { Toaster } from 'sonner';
-import React from 'react';
 import Navbar from '../components/Navbar.js';
 import BreadcrumbMedSti from '../components/BreadcrumbMedSti.js';
 import { useFeed } from '../hooks/useFeed.js';
 import FeedAlerts from '../components/Feed/FeedAlerts.js';
 import 'animate.css';
 
-
-export const SlugContext = React.createContext<string | undefined>(undefined);
+import { SlugContext } from '../contexts/SlugContext.js';
 
 export default function Layout() {
     const { slug } = useParams<{ slug: string }>();

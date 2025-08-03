@@ -3,7 +3,7 @@ import { toast } from 'sonner';
 import { hentMineBookinger } from '../api/booking.js';
 import type { BookingSlot } from '../types/index.js';
 
-export function useMineBookinger(slug: string | undefined) {
+export function useMineBookinger(slug: string | undefined, inkluderHistoriske = false) {
     const [bookinger, setBookinger] = useState<BookingSlot[]>([]);
     const [laster, setLaster] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -14,7 +14,7 @@ export function useMineBookinger(slug: string | undefined) {
         try {
             setLaster(true);
             setError(null);
-            const data = await hentMineBookinger(slug);
+            const data = await hentMineBookinger(slug, inkluderHistoriske);
             setBookinger(data);
         } catch (err) {
             const message = err instanceof Error ? err.message : 'Ukjent feil ved henting';
@@ -23,7 +23,7 @@ export function useMineBookinger(slug: string | undefined) {
         } finally {
             setLaster(false);
         }
-    }, [slug]);
+    }, [slug, inkluderHistoriske]);
 
     useEffect(() => {
         hent();
