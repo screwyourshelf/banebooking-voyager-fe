@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 import Layout from './layouts/Layout.js';
 import { ProtectedRoute } from './components/ProtectedRoute.js';
@@ -30,6 +30,8 @@ export default function App() {
                 }
             >
                 <Routes>
+                    <Route path="/" element={<Navigate to="/aas-tennisklubb" replace />} />
+
                     <Route path=":slug?" element={<Layout />}>
                         <Route path="vilkaar" element={<VilkaarPage />} />
                         <Route index element={<IndexPage />} />

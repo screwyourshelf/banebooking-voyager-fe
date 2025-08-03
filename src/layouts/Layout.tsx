@@ -9,7 +9,9 @@ import 'animate.css';
 import { SlugContext } from '../contexts/SlugContext.js';
 
 export default function Layout() {
-    const { slug } = useParams<{ slug: string }>();
+    const { slug: rawSlug } = useParams<{ slug?: string }>();
+    const slug = rawSlug ?? 'aas-tennisklubb'; // fallback
+
     const { feed } = useFeed(slug);
 
     return (
@@ -43,7 +45,6 @@ export default function Layout() {
                     offset={{ top: '35vh' }}
                     duration={1500}
                 />
-
             </div>
         </SlugContext.Provider>
     );
