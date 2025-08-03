@@ -40,6 +40,7 @@ export default function ReglementPage() {
                             <li>Maks {bookingRegel.maksTotalt} aktive bookinger totalt</li>
                             <li>Du kan booke opptil {bookingRegel.dagerFremITid} dager frem i tid</li>
                             <li>Hver booking varer i {bookingRegel.slotLengdeMinutter} minutter</li>
+                            <li>Booking er tillatt mellom kl. {bookingRegel.aapningstid} og {bookingRegel.stengetid}</li>
                         </ul>
                     </FieldWrapper>
 

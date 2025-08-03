@@ -30,6 +30,8 @@ export default function KlubbPage() {
             maksTotalt: 2,
             dagerFremITid: 7,
             slotLengdeMinutter: 60,
+            aapningstid: '07:00',
+            stengetid: '22:00',
         },
     });
 
@@ -49,6 +51,9 @@ export default function KlubbPage() {
                     maksTotalt: klubb.bookingRegel?.maksTotalt ?? 2,
                     dagerFremITid: klubb.bookingRegel?.dagerFremITid ?? 7,
                     slotLengdeMinutter: klubb.bookingRegel?.slotLengdeMinutter ?? 60,
+                    aapningstid: klubb.bookingRegel?.aapningstid ?? '07:00',
+                    stengetid: klubb.bookingRegel?.stengetid ?? '22:00',
+
                 },
             });
         }
@@ -132,6 +137,35 @@ export default function KlubbPage() {
 
                         <div className="space-y-3 pt-2">
                             <h3 className="text-sm font-medium">Bookingregler</h3>
+
+                            <RangeField
+                                id="aapningstid"
+                                label="Åpningstid"
+                                value={parseInt(form.bookingRegel.aapningstid.split(':')[0])}
+                                onChange={val =>
+                                    setForm(f => ({
+                                        ...f,
+                                        bookingRegel: { ...f.bookingRegel, aapningstid: `${val.toString().padStart(2, '0')}:00` },
+                                    }))
+                                }
+                                min={6}
+                                max={23}
+                            />
+
+                            <RangeField
+                                id="stengetid"
+                                label="Stengetid"
+                                value={parseInt(form.bookingRegel.stengetid.split(':')[0])}
+                                onChange={val =>
+                                    setForm(f => ({
+                                        ...f,
+                                        bookingRegel: { ...f.bookingRegel, stengetid: `${val.toString().padStart(2, '0')}:00` },
+                                    }))
+                                }
+                                min={6}
+                                max={23}
+                            />
+
 
                             <RangeField
                                 id="maksPerDag"
