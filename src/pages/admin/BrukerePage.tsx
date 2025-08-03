@@ -149,9 +149,6 @@ export default function BrukerePage() {
                                     })}
                                 </TableBody>
                             </Table>
-
-
-
                         </div>
                     )}
                 </CardContent>
