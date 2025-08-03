@@ -1,43 +1,47 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+import { toast } from 'sonner';
 import type { BrukerDto } from '../types/index.js';
-import { sokEtterBrukere } from '../api/adminBruker.js';
-import { useDebounce } from 'use-debounce';
+import { hentAlleBrukere, oppdaterBruker } from '../api/adminBruker.js';
 
-export function useAdminBrukere(slug?: string, query: string = '') {
+export function useAdminBrukere(slug?: string) {
     const [brukere, setBrukere] = useState<BrukerDto[]>([]);
     const [laster, setLaster] = useState(false);
-    const [feil, setFeil] = useState<string | null>(null);
 
-    // Debounce søket med 300ms
-    const [debouncedQuery] = useDebounce(query.trim(), 300);
+    const hent = useCallback(async () => {
+        if (!slug) return;
+        setLaster(true);
+        try {
+            const data = await hentAlleBrukere(slug);
+            setBrukere(data);
+        } catch (err) {
+            toast.error(err instanceof Error ? err.message : 'Kunne ikke hente brukere.');
+            setBrukere([]);
+        } finally {
+            setLaster(false);
+        }
+    }, [slug]);
 
     useEffect(() => {
-        if (!slug || debouncedQuery.length < 2) return;
+        hent();
+    }, [hent]);
 
-        const abort = new AbortController();
-        setLaster(true);
+    const oppdater = useCallback(
+        async (id: string, data: { rolle: string; visningsnavn: string }) => {
+            if (!slug) return;
+            const toastId = toast.loading('Lagrer endringer...');
+            try {
+                await oppdaterBruker(slug, id, data);
+                toast.success('Bruker oppdatert', { id: toastId });
+                await hent();
+            } catch (err) {
+                toast.error(
+                    err instanceof Error ? err.message : 'Kunne ikke oppdatere bruker',
+                    { id: toastId }
+                );
+            }
+        },
+        [slug, hent]
+    );
 
-        sokEtterBrukere(slug, debouncedQuery)
-            .then((data) => {
-                if (!abort.signal.aborted) {
-                    setBrukere(data);
-                    setFeil(null);
-                }
-            })
-            .catch((err) => {
-                if (!abort.signal.aborted) {
-                    setFeil(err.message);
-                    setBrukere([]);
-                }
-            })
-            .finally(() => {
-                if (!abort.signal.aborted) {
-                    setLaster(false);
-                }
-            });
-
-        return () => abort.abort();
-    }, [slug, debouncedQuery]);
-
-    return { brukere, laster, feil };
+    return { brukere, laster, oppdater, hentBrukere: hent };
 }

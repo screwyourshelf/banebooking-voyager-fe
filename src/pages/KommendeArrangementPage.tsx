@@ -14,26 +14,15 @@ import {
     TableCell,
 } from '@/components/ui/table.js';
 import { formatDatoKort } from '../utils/datoUtils.js';
-import {
-    AlertDialog,
-    AlertDialogTrigger,
-    AlertDialogContent,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogCancel,
-    AlertDialogAction,
-} from '@/components/ui/alert-dialog.js';
 import { Button } from '@/components/ui/button.js';
+import { FaTrashAlt } from 'react-icons/fa';
+import SlettArrangementDialog from '../components/SlettArrangementDialog.js';
 
 export default function KommendeArrangementPage() {
     const { slug: slugFraParams } = useParams<{ slug: string }>();
     const slug = useContext(SlugContext) ?? slugFraParams;
 
-    const { arrangementer, isLoading, slettArrangement, sletterArrangementId } = useArrangement(slug);
-
-    const visHandling = arrangementer.some((arr) => arr.kanSlettes);
+    const { arrangementer, isLoading, slettArrangement } = useArrangement(slug);
 
     return (
         <div className="max-w-screen-md mx-auto px-2 py-4">
@@ -47,18 +36,14 @@ export default function KommendeArrangementPage() {
                             Ingen arrangementer registrert.
                         </p>
                     ) : (
-                        <div className="overflow-auto max-h-[60vh] border-b border-x rounded-b-md">
-                            <Table className="text-sm">
+                        <div className="max-w-full overflow-x-auto border rounded-md">
+                            <Table className="text-sm w-full">
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead className="w-1/3">Hva</TableHead>
                                         <TableHead className="w-1/3">Når</TableHead>
-                                        <TableHead>Om</TableHead>
-                                        {visHandling && (
-                                            <TableHead className="text-right">Handling</TableHead>
-                                        )}
+                                        <TableHead className="w-1/3">Om</TableHead>
                                     </TableRow>
-
                                 </TableHeader>
                                 <TableBody>
                                     {arrangementer.map((arr) => {
@@ -66,60 +51,51 @@ export default function KommendeArrangementPage() {
                                         const iDag = new Date();
                                         const dagerIgjen = Math.max(
                                             0,
-                                            Math.ceil(
-                                                (start.getTime() - iDag.getTime()) / (1000 * 60 * 60 * 24)
-                                            )
+                                            Math.ceil((start.getTime() - iDag.getTime()) / (1000 * 60 * 60 * 24))
                                         );
 
                                         return (
                                             <TableRow key={arr.id}>
                                                 <TableCell className="whitespace-normal break-words">
-                                                    <div className="font-medium">{arr.tittel}</div>
-                                                    {arr.beskrivelse && (
-                                                        <div className="text-muted-foreground text-xs">
-                                                            {arr.beskrivelse}
+                                                    <div className="flex justify-between items-start gap-2">
+                                                        <div className="flex-1">
+                                                            <div className="font-medium">{arr.tittel}</div>
+                                                            {arr.beskrivelse && (
+                                                                <div className="text-muted-foreground text-xs">
+                                                                    {arr.beskrivelse}
+                                                                </div>
+                                                            )}
                                                         </div>
-                                                    )}
+                                                        {arr.kanSlettes && (
+                                                            <SlettArrangementDialog
+                                                                tittel={arr.tittel}
+                                                                onSlett={() => slettArrangement(arr.id)}
+                                                                trigger={
+                                                                    <Button
+                                                                        variant="ghost"
+                                                                        size="icon"
+                                                                        className="text-red-500 hover:bg-red-100"
+                                                                        title="Avlys"
+                                                                    >
+                                                                        <FaTrashAlt className="w-4 h-4" />
+                                                                        <span className="sr-only">Avlys</span>
+                                                                    </Button>
+                                                                }
+                                                            />
+
+                                                        )}
+                                                    </div>
                                                 </TableCell>
-                                                <TableCell className="text-sm">
+
+                                                <TableCell className="whitespace-normal break-words text-sm">
                                                     {arr.startDato === arr.sluttDato
                                                         ? formatDatoKort(arr.startDato)
                                                         : `${formatDatoKort(arr.startDato)} - ${formatDatoKort(arr.sluttDato)}`}
                                                 </TableCell>
+
                                                 <TableCell>
                                                     {dagerIgjen} {dagerIgjen === 1 ? 'dag' : 'dager'}
                                                 </TableCell>
-                                                {visHandling && (
-                                                    <TableCell className="text-right">
-                                                        {arr.kanSlettes && (
-                                                            <AlertDialog>
-                                                                <AlertDialogTrigger asChild>
-                                                                    <Button variant="destructive" size="sm">
-                                                                        Avlys
-                                                                    </Button>
-                                                                </AlertDialogTrigger>
-                                                                <AlertDialogContent>
-                                                                    <AlertDialogHeader>
-                                                                        <AlertDialogTitle>Avlys arrangement</AlertDialogTitle>
-                                                                        <AlertDialogDescription>
-                                                                            Er du sikker på at du vil avlyse «{arr.tittel}»?
-                                                                            Alle tilknyttede bookinger vil slettes.
-                                                                        </AlertDialogDescription>
-                                                                    </AlertDialogHeader>
-                                                                    <AlertDialogFooter>
-                                                                        <AlertDialogCancel>Avbryt</AlertDialogCancel>
-                                                                        <AlertDialogAction
-                                                                            disabled={sletterArrangementId === arr.id}
-                                                                            onClick={() => slettArrangement(arr.id)}
-                                                                        >
-                                                                            {sletterArrangementId === arr.id ? 'Avlyser...' : 'Ja, avlys'}
-                                                                        </AlertDialogAction>
-                                                                    </AlertDialogFooter>
-                                                                </AlertDialogContent>
-                                                            </AlertDialog>
-                                                        )}
-                                                    </TableCell>
-                                                )}
                                             </TableRow>
                                         );
                                     })}

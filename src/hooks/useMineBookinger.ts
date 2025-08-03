@@ -3,6 +3,12 @@ import { toast } from 'sonner';
 import { hentMineBookinger } from '../api/booking.js';
 import type { BookingSlot } from '../types/index.js';
 
+/**
+ * Henter bookinger for innlogget bruker i gitt klubb (slug).
+ *
+ * @param slug - Klubbindentifikator (fra URL eller context)
+ * @param inkluderHistoriske - Om historiske bookinger skal inkluderes
+ */
 export function useMineBookinger(slug: string | undefined, inkluderHistoriske = false) {
     const [bookinger, setBookinger] = useState<BookingSlot[]>([]);
     const [laster, setLaster] = useState(true);
@@ -14,10 +20,11 @@ export function useMineBookinger(slug: string | undefined, inkluderHistoriske = 
         try {
             setLaster(true);
             setError(null);
+
             const data = await hentMineBookinger(slug, inkluderHistoriske);
             setBookinger(data);
         } catch (err) {
-            const message = err instanceof Error ? err.message : 'Ukjent feil ved henting';
+            const message = err instanceof Error ? err.message : 'Ukjent feil ved henting av bookinger';
             setError(message);
             toast.error(message);
         } finally {

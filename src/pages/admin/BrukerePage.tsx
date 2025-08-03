@@ -1,73 +1,75 @@
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { toast } from 'sonner';
-
 import { useBruker } from '../../hooks/useBruker.js';
 import { useAdminBrukere } from '../../hooks/useAdminBrukere.js';
-import { oppdaterRolle } from '../../api/adminBruker.js';
 
 import { Button } from '@/components/ui/button.js';
 import { Card, CardContent } from '@/components/ui/card.js';
 import LoaderSkeleton from '@/components/LoaderSkeleton.js';
-
 import { FormField } from '@/components/FormField.js';
 import { SelectField } from '@/components/SelectField.js';
+import { FaEdit } from 'react-icons/fa';
 
-import type { RolleType } from '../../types/index.js';
+import {
+    Dialog,
+    DialogContent,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+} from '@/components/ui/dialog.js';
+
+import {
+    Table,
+    TableHeader,
+    TableRow,
+    TableHead,
+    TableBody,
+    TableCell,
+} from '@/components/ui/table.js';
+
+import type { RolleType, BrukerDto } from '../../types/index.js';
 
 export default function BrukerePage() {
     const { slug } = useParams<{ slug: string }>();
     const { bruker, laster: lasterBruker } = useBruker(slug);
-    const [query, setQuery] = useState('');
+    const { brukere, laster: lasterListe, oppdater } = useAdminBrukere(slug);
 
-    const { brukere, laster: lasterListe, feil } = useAdminBrukere(slug, query);
-    const [endringer, setEndringer] = useState<Record<string, RolleType>>({});
-    const [lagretRolle, setLagretRolle] = useState<Record<string, RolleType>>({});
+    const [query, setQuery] = useState('');
+    const [aktivBruker, setAktivBruker] = useState<BrukerDto | null>(null);
+    const [redigerRolle, setRedigerRolle] = useState<RolleType>('Medlem');
+    const [redigerVisningsnavn, setRedigerVisningsnavn] = useState('');
+    const [lagrer, setLagrer] = useState(false);
 
     const erKlubbAdmin = bruker?.roller.includes('KlubbAdmin');
 
-    const handleRolleChange = (id: string, valgtRolle: RolleType) => {
-        setEndringer((prev) => ({
-            ...prev,
-            [id]: valgtRolle,
-        }));
+    const filtrerteBrukere = useMemo(() => {
+        const q = query.toLowerCase().trim();
+        return brukere.filter(
+            (b) =>
+                b.epost?.toLowerCase().includes(q) ||
+                b.visningsnavn?.toLowerCase().includes(q)
+        );
+    }, [brukere, query]);
+
+    const åpneRedigering = (b: BrukerDto) => {
+        setAktivBruker(b);
+        setRedigerRolle(b.roller[0] ?? 'Medlem');
+        setRedigerVisningsnavn(b.visningsnavn ?? '');
     };
 
-    const handleAvbryt = (id: string) => {
-        setEndringer((prev) => {
-            const ny = { ...prev };
-            delete ny[id];
-            return ny;
-        });
-    };
-
-    const handleLagre = async (id: string) => {
-        if (!slug) return;
-        const valgtRolle = endringer[id];
-        if (!valgtRolle) return;
-
+    const lagreEndringer = async () => {
+        if (!slug || !aktivBruker) return;
+        setLagrer(true);
         try {
-            await oppdaterRolle(slug, id, valgtRolle);
-            toast.success('Rolle oppdatert');
-
-            setLagretRolle((prev) => ({
-                ...prev,
-                [id]: valgtRolle,
-            }));
-
-            setEndringer((prev) => {
-                const ny = { ...prev };
-                delete ny[id];
-                return ny;
+            await oppdater(aktivBruker.id, {
+                rolle: redigerRolle,
+                visningsnavn: redigerVisningsnavn,
             });
-        } catch (err: unknown) {
-            toast.error(err instanceof Error ? err.message : 'Ukjent feil ved oppdatering');
+            setAktivBruker(null);
+        } finally {
+            setLagrer(false);
         }
     };
-
-    useEffect(() => {
-        setEndringer({});
-    }, [query]);
 
     if (lasterBruker) return <LoaderSkeleton />;
 
@@ -92,63 +94,112 @@ export default function BrukerePage() {
                     />
 
                     {lasterListe && <p>Laster brukere...</p>}
-                    {!lasterListe && feil && (
-                        <p className="text-red-600">{feil}</p>
-                    )}
-                    {!lasterListe && brukere.length === 0 && !feil && (
+                    {!lasterListe && filtrerteBrukere.length === 0 && (
                         <p className="text-muted-foreground">Ingen brukere funnet</p>
                     )}
 
-                    {brukere.map((b) => {
-                        const erMeg = b.id === bruker?.id;
-                        const lagret = lagretRolle[b.id] ?? b.roller[0] ?? 'Medlem';
-                        const valgt = endringer[b.id] ?? lagret;
-                        const erEndret = valgt !== lagret;
+                    {!lasterListe && filtrerteBrukere.length > 0 && (
+                        <div className="max-w-full overflow-x-auto border rounded-md">
 
-                        return (
-                            <div key={b.id} className="border rounded p-3 space-y-2">
-                                <div className="font-medium">{b.epost}</div>
-                                <div className="text-sm text-muted-foreground">
-                                    Nåværende rolle: <strong>{lagret}</strong>
-                                </div>
+                            <Table className="text-sm w-full">
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead className="w-[140px]">Bruker</TableHead>
+                                        <TableHead className="w-2/6">Rolle</TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    {filtrerteBrukere.map((b) => {
+                                        const erMeg = b.id === bruker?.id;
+                                        return (
+                                            <TableRow key={b.id}>
+                                                <TableCell className="whitespace-nowrap max-w-[180px]">
+                                                    <div className="flex justify-between items-start gap-2 overflow-hidden">
+                                                        <div className="flex-1 overflow-hidden">
+                                                            <div className="font-medium truncate" title={b.epost}>
+                                                                {b.epost}
+                                                            </div>
+                                                            {b.visningsnavn && (
+                                                                <div className="text-muted-foreground text-xs truncate" title={b.visningsnavn}>
+                                                                    {b.visningsnavn}
+                                                                </div>
+                                                            )}
+                                                        </div>
+                                                        {!erMeg && (
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                onClick={() => åpneRedigering(b)}
+                                                                title="Rediger"
+                                                                className="text-muted-foreground hover:text-primary"
+                                                            >
+                                                                <FaEdit className="w-4 h-4" />
+                                                                <span className="sr-only">Rediger</span>
+                                                            </Button>
+                                                        )}
+                                                    </div>
+                                                </TableCell>
 
-                                <SelectField
-                                    id={`rolle-${b.id}`}
-                                    label={erMeg ? 'Du kan ikke endre din egen rolle' : 'Endre rolle'}
-                                    value={valgt}
-                                    onChange={(val) => handleRolleChange(b.id, val as RolleType)}
-                                    disabled={erMeg}
-                                    options={[
-                                        { label: 'Medlem', value: 'Medlem' },
-                                        { label: 'Utvidet', value: 'Utvidet' },
-                                        { label: 'KlubbAdmin', value: 'KlubbAdmin' },
-                                    ]}
-                                />
+                                                <TableCell className="whitespace-nowrap">
+                                                    {b.roller[0] ?? 'Medlem'}
+                                                </TableCell>
 
-                                {!erMeg && (
-                                    <div className="flex gap-2">
-                                        <Button
-                                            size="sm"
-                                            onClick={() => handleLagre(b.id)}
-                                            disabled={!erEndret}
-                                        >
-                                            Lagre
-                                        </Button>
-                                        <Button
-                                            size="sm"
-                                            variant="ghost"
-                                            onClick={() => handleAvbryt(b.id)}
-                                            disabled={!erEndret}
-                                        >
-                                            Avbryt
-                                        </Button>
-                                    </div>
-                                )}
-                            </div>
-                        );
-                    })}
+                                            </TableRow>
+                                        );
+                                    })}
+                                </TableBody>
+                            </Table>
+
+
+
+                        </div>
+                    )}
                 </CardContent>
             </Card>
+
+            {aktivBruker && (
+                <Dialog open onOpenChange={() => setAktivBruker(null)}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Rediger bruker</DialogTitle>
+                        </DialogHeader>
+
+                        <div className="space-y-4">
+                            <FormField
+                                id="visningsnavn"
+                                label="Visningsnavn"
+                                value={redigerVisningsnavn}
+                                onChange={(e) => setRedigerVisningsnavn(e.target.value)}
+                            />
+
+                            <SelectField
+                                id="rolle"
+                                label="Rolle"
+                                value={redigerRolle}
+                                onChange={(val) => setRedigerRolle(val as RolleType)}
+                                options={[
+                                    { label: 'Medlem', value: 'Medlem' },
+                                    { label: 'Utvidet', value: 'Utvidet' },
+                                    { label: 'KlubbAdmin', value: 'KlubbAdmin' },
+                                ]}
+                            />
+                        </div>
+
+                        <DialogFooter>
+                            <Button
+                                variant="ghost"
+                                onClick={() => setAktivBruker(null)}
+                                disabled={lagrer}
+                            >
+                                Avbryt
+                            </Button>
+                            <Button onClick={lagreEndringer} disabled={lagrer}>
+                                {lagrer ? 'Lagrer...' : 'Lagre'}
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+            )}
         </div>
     );
 }

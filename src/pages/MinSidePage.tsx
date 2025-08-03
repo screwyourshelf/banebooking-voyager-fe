@@ -25,7 +25,7 @@ import { FormField } from '@/components/FormField.js';
 import { FieldWrapper } from '@/components/FieldWrapper.js';
 import { formatDatoKort } from '../utils/datoUtils.js';
 
-import SlettMegKnapp from '../components/SlettMegKnapp.js';
+import SlettMegDialog from '../components/SlettMegDialog.js';
 
 const MAX_LENGTH = 50;
 const NAVN_REGEX = /^[\p{L}\d\s.@'_%+-]{2,}$/u;
@@ -99,9 +99,14 @@ export default function MinSidePage() {
         : false;
 
     const nå = new Date();
-    const visteBookinger = visHistoriske
+    const visteBookinger = (visHistoriske
         ? bookinger
-        : bookinger.filter(b => new Date(b.dato) >= nå);
+        : bookinger.filter(b => new Date(b.dato) >= nå)
+    ).sort((a, b) => {
+        const datoDiff = new Date(b.dato).getTime() - new Date(a.dato).getTime();
+        if (datoDiff !== 0) return datoDiff;
+        return b.startTid.localeCompare(a.startTid);
+    });
 
     return (
         <div className="max-w-screen-md mx-auto px-2 py-4">
@@ -212,7 +217,7 @@ export default function MinSidePage() {
                                             label="Slett bruker"
                                             helpText="Dette sletter brukeren din og all tilknyttet data permanent. Dette kan ikke angres."
                                         >
-                                            <SlettMegKnapp slettMeg={slettMeg} />
+                                            <SlettMegDialog slettMeg={slettMeg} />
                                         </FieldWrapper>
                                     </div>
                                 </>

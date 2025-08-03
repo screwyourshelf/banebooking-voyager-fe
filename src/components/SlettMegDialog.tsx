@@ -14,11 +14,11 @@ import { Button } from '@/components/ui/button.js';
 import { toast } from 'sonner';
 import { useAuth } from '../hooks/useAuth.js';
 
-interface SlettMegKnappProps {
+interface SlettMegDialogProps {
     slettMeg: () => Promise<void>;
 }
 
-export default function SlettMegKnapp({ slettMeg }: SlettMegKnappProps) {
+export default function SlettMegDialog({ slettMeg }: SlettMegDialogProps) {
     const { signOut } = useAuth();  // Hent signOut funksjonen
     const [open, setOpen] = useState(false);
     const [isDeleting, setIsDeleting] = useState(false);
