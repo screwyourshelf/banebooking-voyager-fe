@@ -98,11 +98,7 @@ export default function MinSidePage() {
             : visningsnavn.trim() !== bruker.visningsnavn
         : false;
 
-    const nå = new Date();
-    const visteBookinger = (visHistoriske
-        ? bookinger
-        : bookinger.filter(b => new Date(b.dato) >= nå)
-    ).sort((a, b) => {
+    const visteBookinger = [...bookinger].sort((a, b) => {
         const datoDiff = new Date(b.dato).getTime() - new Date(a.dato).getTime();
         if (datoDiff !== 0) return datoDiff;
         return b.startTid.localeCompare(a.startTid);
