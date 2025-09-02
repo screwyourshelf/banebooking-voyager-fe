@@ -1,0 +1,1 @@
+import{r as a,j as o}from"./shadcn-DPSgmxN6.js";import{k as s}from"./index-BYC8jElZ.js";import"./react-RGnvvjkK.js";import"./lucide-Uxrg_z7G.js";function u(){const t=s();return a.useEffect(()=>{const e=localStorage.getItem("slug"),r=e?`/${e}`:"/";t(r,{replace:!0})},[t]),o.jsx("div",{className:"p-4 text-center",children:"Logger inn …"})}export{u as default};
