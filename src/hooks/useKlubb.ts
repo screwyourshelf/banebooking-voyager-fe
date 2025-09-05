@@ -1,24 +1,42 @@
-import { useEffect, useState } from 'react';
-import { toast } from 'sonner';
-import type { KlubbDetaljer } from '../types/index.js';
-import { hentKlubb } from '../api/klubb.js';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { hentKlubb, oppdaterKlubb } from "@/api/klubb.js";
+import type { KlubbDetaljer, OppdaterKlubb } from "@/types/index.js";
 
 export function useKlubb(slug?: string) {
-    const [klubb, setKlubb] = useState<KlubbDetaljer | null>(null);
-    const [laster, setLaster] = useState(true);
+  const queryClient = useQueryClient();
 
-    useEffect(() => {
-        if (!slug) return;
+  // Hent klubbinfo
+  const klubbQuery = useQuery<KlubbDetaljer, Error>({
+    queryKey: ["klubb", slug],
+    queryFn: () => hentKlubb(slug!),
+    enabled: !!slug,
+    staleTime: 1000 * 60 * 5, // 5 min cache
+    onError: (err) => {
+      toast.error(err.message ?? "Kunne ikke hente klubb");
+    },
+  });
 
-        setLaster(true);
-        hentKlubb(slug)
-            .then(setKlubb)
-            .catch((err) => {
-                toast.error(err.message);
-                setKlubb(null);
-            })
-            .finally(() => setLaster(false));
-    }, [slug]);
+  // Oppdater klubbinfo
+  const oppdaterKlubbMutation = useMutation<void, Error, OppdaterKlubb>({
+    mutationFn: (data) => oppdaterKlubb(slug!, data),
+    onSuccess: () => {
+      toast.success("Klubb oppdatert");
+      queryClient.invalidateQueries({ queryKey: ["klubb", slug] });
+    },
+    onError: (err) => {
+      toast.error(err.message ?? "Kunne ikke oppdatere klubb");
+    },
+  });
 
-    return { klubb, laster };
+  return {
+    // Query-data
+    data: klubbQuery.data,
+    isLoading: klubbQuery.isLoading,
+    error: klubbQuery.error,
+    refetch: klubbQuery.refetch,
+
+    // Mutasjon
+    oppdaterKlubb: oppdaterKlubbMutation,
+  };
 }

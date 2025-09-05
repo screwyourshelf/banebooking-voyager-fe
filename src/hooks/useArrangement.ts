@@ -34,7 +34,7 @@ function genererTidspunkter(start: string, slutt: string, slotMinutter: number):
 }
 
 export function useArrangement(slug: string | undefined) {
-    const { klubb, laster: loadingKlubb } = useKlubb(slug);
+    const { klubb, isLoading: loadingKlubb } = useKlubb(slug);
     const { baner, isLoading: loadingBaner } = useBaner();
 
     const [loadingArrangementer, setLoadingArrangementer] = useState(false);

@@ -10,7 +10,6 @@ import {
 
 const visningsnavn: Record<string, string> = {
     "minside": "Min side",
-    "reglement": "Reglement",
     "admin": "Admin",
     "baner": "Baner",
     "brukere": "Brukere",

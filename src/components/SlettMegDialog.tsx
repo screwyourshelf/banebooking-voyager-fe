@@ -1,66 +1,63 @@
-import { useState } from 'react';
+import { useState } from "react";
 import {
-    AlertDialog,
-    AlertDialogTrigger,
-    AlertDialogContent,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogCancel,
-    AlertDialogAction,
-} from '@/components/ui/alert-dialog.js';
-import { Button } from '@/components/ui/button.js';
-import { toast } from 'sonner';
-import { useAuth } from '../hooks/useAuth.js';
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+} from "@/components/ui/alert-dialog.js";
+import { Button } from "@/components/ui/button.js";
+import { useAuth } from "../hooks/useAuth.js";
+import type { UseMutationResult } from "@tanstack/react-query";
 
 interface SlettMegDialogProps {
-    slettMeg: () => Promise<void>;
+  slettMeg: UseMutationResult<void, Error, void>;
 }
 
 export default function SlettMegDialog({ slettMeg }: SlettMegDialogProps) {
-    const { signOut } = useAuth();  // Hent signOut funksjonen
-    const [open, setOpen] = useState(false);
-    const [isDeleting, setIsDeleting] = useState(false);
+  const { signOut } = useAuth();
+  const [open, setOpen] = useState(false);
 
-    const handleDelete = async () => {
-        setIsDeleting(true);
-        try {
-            await slettMeg();
-            toast.success('Brukeren er slettet');
-            setOpen(false);
+  const handleDelete = async () => {
+    try {
+      await slettMeg.mutateAsync();
+      setOpen(false);
+      await signOut();
+    } catch {
+      // feil-toast håndteres i useMeg
+    }
+  };
 
-            await signOut();  // Logg ut brukeren etter sletting
-        } catch {
-            toast.error('Noe gikk galt ved sletting');
-        } finally {
-            setIsDeleting(false);
-        }
-    };
-
-    return (
-        <AlertDialog open={open} onOpenChange={setOpen}>
-            <AlertDialogTrigger asChild>
-                <Button variant="destructive">Slett min bruker</Button>
-            </AlertDialogTrigger>
-            <AlertDialogContent>
-                <AlertDialogHeader>
-                    <AlertDialogTitle>Er du sikker?</AlertDialogTitle>
-                    <AlertDialogDescription>
-                        Dette vil slette din bruker og all tilknytning permanent. Denne handlingen kan ikke angres.
-                    </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                    <AlertDialogCancel disabled={isDeleting}>Avbryt</AlertDialogCancel>
-                    <AlertDialogAction
-                        className="bg-red-600 hover:bg-red-700 focus:ring-red-600"
-                        onClick={handleDelete}
-                        disabled={isDeleting}
-                    >
-                        {isDeleting ? 'Sletter...' : 'Slett bruker'}
-                    </AlertDialogAction>
-                </AlertDialogFooter>
-            </AlertDialogContent>
-        </AlertDialog>
-    );
+  return (
+    <AlertDialog open={open} onOpenChange={setOpen}>
+      <AlertDialogTrigger asChild>
+        <Button variant="destructive">Slett min bruker</Button>
+      </AlertDialogTrigger>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Er du sikker?</AlertDialogTitle>
+          <AlertDialogDescription>
+            Dette vil slette din bruker og all tilknytning permanent. Denne
+            handlingen kan ikke angres.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={slettMeg.isPending}>
+            Avbryt
+          </AlertDialogCancel>
+          <AlertDialogAction
+            variant="destructive"
+            onClick={handleDelete}
+            disabled={slettMeg.isPending}
+          >
+            {slettMeg.isPending ? "Sletter..." : "Slett bruker"}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+  );
 }

@@ -1,73 +1,54 @@
-import { useEffect, useState, useContext } from 'react';
-import type { Bane, NyBane, OppdaterBane } from '../types/index.js';
-import { SlugContext } from '../contexts/SlugContext.js';
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import {
-    hentBaner,
-    oppdaterBane as apiOppdaterBane,
-    opprettBane as apiOpprettBane,
-    deaktiverBane as apiDeaktiverBane,
-    aktiverBane as apiAktiverBane
-} from '../api/baner.js';
+  hentBaner,
+  oppdaterBane as apiOppdaterBane,
+  opprettBane as apiOpprettBane,
+} from "@/api/baner.js";
+import type { Bane, NyBane, OppdaterBane } from "@/types";
 
-export function useBaner(inkluderInaktive = false) {
-    const slug = useContext(SlugContext);
-    const [baner, setBaner] = useState<Bane[]>([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+export function useBaner(slug: string, inkluderInaktive = true) {
+  const queryClient = useQueryClient();
 
-    async function lastBaner() {
-        if (!slug) return;
+  function invalidateAll() {
+    queryClient.invalidateQueries({ queryKey: ["baner", slug] });
+    queryClient.invalidateQueries({ queryKey: ["baner", slug, true] });
+    queryClient.invalidateQueries({ queryKey: ["baner", slug, false] });
+  }
 
-        setIsLoading(true);
-        setError(null);
+  const banerQuery = useQuery<Bane[], Error>({
+    queryKey: ["baner", slug, inkluderInaktive],
+    queryFn: () => hentBaner(slug, inkluderInaktive),
+    enabled: !!slug,
+    staleTime: 1000 * 60 * 5,
+    onError: (err) => toast.error(err.message ?? "Kunne ikke hente baner"),
+  });
 
-        try {
-            const data = await hentBaner(slug, inkluderInaktive);
-            setBaner(data);
-        } catch (err) {
-            setError((err as Error).message);
-            setBaner([]);
-        } finally {
-            setIsLoading(false);
-        }
-    }
+  const opprettBane = useMutation<void, Error, NyBane>({
+    mutationFn: (dto) => apiOpprettBane(slug, dto),
+    onSuccess: () => {
+      toast.success("Bane opprettet");
+      invalidateAll();
+    },
+    onError: (err) => toast.error(err.message ?? "Kunne ikke opprette bane"),
+  });
 
-    async function oppdaterBane(id: string, endret: OppdaterBane) {
-        if (!slug) return;
-        await apiOppdaterBane(slug, id, endret);
-        await lastBaner();
-    }
+  const oppdaterBane = useMutation<void, Error, { id: string; dto: OppdaterBane }>({
+    mutationFn: ({ id, dto }) => apiOppdaterBane(slug, id, dto),
+    onSuccess: () => {
+      toast.success("Bane oppdatert");
+      invalidateAll();
+    },
+    onError: (err) => toast.error(err.message ?? "Kunne ikke oppdatere bane"),
+  });
 
-    async function opprettBane(ny: NyBane) {
-        if (!slug) return;
-        await apiOpprettBane(slug, ny);
-        await lastBaner();
-    }
+  return {
+    baner: banerQuery.data ?? [],
+    isLoading: banerQuery.isLoading,
+    error: banerQuery.error,
+    refetch: banerQuery.refetch,
 
-    async function deaktiverBane(id: string) {
-        if (!slug) return;
-        await apiDeaktiverBane(slug, id);
-        await lastBaner();
-    }
-
-    async function aktiverBane(id: string) {
-        if (!slug) return;
-        await apiAktiverBane(slug, id);
-        await lastBaner();
-    }
-
-    useEffect(() => {
-        lastBaner();
-    }, [slug]);
-
-    return {
-        baner,
-        isLoading,
-        error,
-        oppdaterBane,
-        opprettBane,
-        deaktiverBane,
-        aktiverBane,
-        refetch: lastBaner,
-    };
+    opprettBane,
+    oppdaterBane,
+  };
 }

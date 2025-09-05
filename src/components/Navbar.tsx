@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input.js';
 
 import {
     FaUser, FaFacebook, FaSignInAlt, FaSignOutAlt,
-    FaCalendarAlt, FaUserCircle, FaGavel, FaWrench, FaBars
+    FaCalendarAlt, FaUserCircle, FaWrench, FaBars
 } from 'react-icons/fa';
 import { FcGoogle } from 'react-icons/fc';
 
@@ -26,7 +26,7 @@ import LoaderSkeleton from './LoaderSkeleton.js';
 
 export default function Navbar() {
     const { slug } = useParams<{ slug: string }>();
-    const { klubb, laster } = useKlubb(slug);
+    const { data: klubb, isLoading } = useKlubb(slug);
     const { currentUser, signOut } = useAuth();
     const { bruker } = useBruker(slug);
 
@@ -50,7 +50,7 @@ export default function Navbar() {
         <div className="max-w-screen-lg mx-auto flex justify-between items-center px-2 py-1">
             <NavbarBrandMedKlubb
                 slug={slug}
-                klubbnavn={laster ? <LoaderSkeleton /> : klubb?.navn ?? 'Ukjent klubb'}
+                klubbnavn={isLoading ? <LoaderSkeleton /> : klubb?.navn ?? "Ukjent klubb"}
             />
 
             <DropdownMenu>
@@ -95,12 +95,7 @@ export default function Navbar() {
                                         <Link to={`/${slug}`}>
                                             <FaCalendarAlt className="mr-2" />Book bane
                                         </Link>
-                                    </DropdownMenuItem>
-                                    <DropdownMenuItem asChild>
-                                        <Link to={`/${slug}/reglement`}>
-                                            <FaGavel className="mr-2" />Reglement
-                                        </Link>
-                                    </DropdownMenuItem>
+                                    </DropdownMenuItem>                               
                                 </>
                             )}
 

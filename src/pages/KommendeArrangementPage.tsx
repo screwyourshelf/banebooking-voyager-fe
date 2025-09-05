@@ -1,110 +1,104 @@
-import { useContext } from 'react';
-import { SlugContext } from '../contexts/SlugContext.js';
-import { useParams } from 'react-router-dom';
-import { useArrangement } from '../hooks/useArrangement.js';
+import { useArrangement } from "@/hooks/useArrangement.js";
+import { useSlug } from "@/hooks/useSlug.js";
 
-import LoaderSkeleton from '@/components/LoaderSkeleton.js';
-import { Card, CardContent } from '@/components/ui/card.js';
+import LoaderSkeleton from "@/components/LoaderSkeleton.js";
 import {
-    Table,
-    TableHeader,
-    TableRow,
-    TableHead,
-    TableBody,
-    TableCell,
-} from '@/components/ui/table.js';
-import { formatDatoKort } from '../utils/datoUtils.js';
-import { Button } from '@/components/ui/button.js';
-import { FaTrashAlt } from 'react-icons/fa';
-import SlettArrangementDialog from '../components/SlettArrangementDialog.js';
+  Table,
+  TableHeader,
+  TableRow,
+  TableHead,
+  TableBody,
+  TableCell,
+} from "@/components/ui/table.js";
+import { formatDatoKort } from "@/utils/datoUtils.js";
+import { Button } from "@/components/ui/button.js";
+import { FaTrashAlt } from "react-icons/fa";
+import SlettArrangementDialog from "@/components/SlettArrangementDialog.js";
+import Page from "@/components/Page.js";
 
 export default function KommendeArrangementPage() {
-    const { slug: slugFraParams } = useParams<{ slug: string }>();
-    const slug = useContext(SlugContext) ?? slugFraParams;
+  const slug = useSlug();
+  const { arrangementer, isLoading, slettArrangement } = useArrangement(slug);
 
-    const { arrangementer, isLoading, slettArrangement } = useArrangement(slug);
+  return (
+    <Page>
+        {isLoading ? (
+          <LoaderSkeleton />
+        ) : arrangementer.length === 0 ? (
+          <p className="text-sm text-muted-foreground italic">
+            Ingen arrangementer registrert.
+          </p>
+        ) : (
+          <div className="max-w-full overflow-x-auto border rounded-md">
+            <Table className="text-sm w-full">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-1/3">Hva</TableHead>
+                  <TableHead className="w-1/3">Når</TableHead>
+                  <TableHead className="w-1/3">Om</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {arrangementer.map((arr) => {
+                  const start = new Date(arr.startDato);
+                  const iDag = new Date();
+                  const dagerIgjen = Math.max(
+                    0,
+                    Math.ceil(
+                      (start.getTime() - iDag.getTime()) / (1000 * 60 * 60 * 24)
+                    )
+                  );
 
-    return (
-        <div className="max-w-screen-md mx-auto px-2 py-4">
-            <h1 className="text-xl font-semibold mb-4">Kommende arrangementer</h1>
-            <Card>
-                <CardContent className="p-4 space-y-4">
-                    {isLoading ? (
-                        <LoaderSkeleton />
-                    ) : arrangementer.length === 0 ? (
-                        <p className="text-sm text-muted-foreground italic">
-                            Ingen arrangementer registrert.
-                        </p>
-                    ) : (
-                        <div className="max-w-full overflow-x-auto border rounded-md">
-                            <Table className="text-sm w-full">
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead className="w-1/3">Hva</TableHead>
-                                        <TableHead className="w-1/3">Når</TableHead>
-                                        <TableHead className="w-1/3">Om</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {arrangementer.map((arr) => {
-                                        const start = new Date(arr.startDato);
-                                        const iDag = new Date();
-                                        const dagerIgjen = Math.max(
-                                            0,
-                                            Math.ceil((start.getTime() - iDag.getTime()) / (1000 * 60 * 60 * 24))
-                                        );
-
-                                        return (
-                                            <TableRow key={arr.id}>
-                                                <TableCell className="whitespace-normal break-words">
-                                                    <div className="flex justify-between items-start gap-2">
-                                                        <div className="flex-1">
-                                                            <div className="font-medium">{arr.tittel}</div>
-                                                            {arr.beskrivelse && (
-                                                                <div className="text-muted-foreground text-xs">
-                                                                    {arr.beskrivelse}
-                                                                </div>
-                                                            )}
-                                                        </div>
-                                                        {arr.kanSlettes && (
-                                                            <SlettArrangementDialog
-                                                                tittel={arr.tittel}
-                                                                onSlett={() => slettArrangement(arr.id)}
-                                                                trigger={
-                                                                    <Button
-                                                                        variant="ghost"
-                                                                        size="icon"
-                                                                        className="text-red-500 hover:bg-red-100"
-                                                                        title="Avlys"
-                                                                    >
-                                                                        <FaTrashAlt className="w-4 h-4" />
-                                                                        <span className="sr-only">Avlys</span>
-                                                                    </Button>
-                                                                }
-                                                            />
-
-                                                        )}
-                                                    </div>
-                                                </TableCell>
-
-                                                <TableCell className="whitespace-normal break-words text-sm">
-                                                    {arr.startDato === arr.sluttDato
-                                                        ? formatDatoKort(arr.startDato)
-                                                        : `${formatDatoKort(arr.startDato)} - ${formatDatoKort(arr.sluttDato)}`}
-                                                </TableCell>
-
-                                                <TableCell>
-                                                    {dagerIgjen} {dagerIgjen === 1 ? 'dag' : 'dager'}
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableBody>
-                            </Table>
+                  return (
+                    <TableRow key={arr.id}>
+                      <TableCell className="whitespace-normal break-words">
+                        <div className="flex justify-between items-start gap-2">
+                          <div className="flex-1">
+                            <div className="font-medium">{arr.tittel}</div>
+                            {arr.beskrivelse && (
+                              <div className="text-muted-foreground text-xs">
+                                {arr.beskrivelse}
+                              </div>
+                            )}
+                          </div>
+                          {arr.kanSlettes && (
+                            <SlettArrangementDialog
+                              tittel={arr.tittel}
+                              onSlett={() => slettArrangement(arr.id)}
+                              trigger={
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  className="text-red-500 hover:bg-red-100"
+                                  title="Avlys"
+                                >
+                                  <FaTrashAlt className="w-4 h-4" />
+                                  <span className="sr-only">Avlys</span>
+                                </Button>
+                              }
+                            />
+                          )}
                         </div>
-                    )}
-                </CardContent>
-            </Card>
-        </div>
-    );
+                      </TableCell>
+
+                      <TableCell className="whitespace-normal break-words text-sm">
+                        {arr.startDato === arr.sluttDato
+                          ? formatDatoKort(arr.startDato)
+                          : `${formatDatoKort(arr.startDato)} - ${formatDatoKort(
+                              arr.sluttDato
+                            )}`}
+                      </TableCell>
+
+                      <TableCell>
+                        {dagerIgjen} {dagerIgjen === 1 ? "dag" : "dager"}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
+          </div>
+        )}
+    </Page>
+  );
 }

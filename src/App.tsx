@@ -10,7 +10,6 @@ const KlubbPage = lazy(() => import('./pages/admin/KlubbPage.js'));
 const BanerPage = lazy(() => import('./pages/admin/BanerPage.js'));
 const ArrangementPage = lazy(() => import('./pages/utvidet/ArrangementPage.js'));
 const KommendeArrangementPage = lazy(() => import('./pages/KommendeArrangementPage.js'));
-const ReglementPage = lazy(() => import('./pages/ReglementPage.js'));
 const BrukerePage = lazy(() => import('./pages/admin/BrukerePage.js'));
 const AuthCallbackPage = lazy(() => import('./pages/AuthCallbackPage.js'));
 const VilkaarPage = lazy(() => import('./pages/VilkaarPage.js'));
@@ -37,7 +36,6 @@ export default function App() {
                         <Route index element={<IndexPage />} />
                         <Route path="minside" element={<Protected><MinSide /></Protected>} />
                         <Route path="kommendeArrangement" element={<Protected><KommendeArrangementPage /></Protected>} />
-                        <Route path="reglement" element={<ReglementPage />} />
                         <Route path="arrangement" element={<Protected><ArrangementPage /></Protected>} />
                         <Route path="admin/klubb" element={<Protected><KlubbPage /></Protected>} />
                         <Route path="admin/baner" element={<Protected><BanerPage /></Protected>} />
