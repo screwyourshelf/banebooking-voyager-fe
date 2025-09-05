@@ -9,7 +9,7 @@ import PersondataTab from "@/pages/minside/PersondataTab";
 import MineBookingerTab from "@/pages/minside/MineBookingerTab";
 
 export default function MinSidePage() {
-  const [tab, setTab] = useState("persondata");
+  const [tab, setTab] = useState("bookinger");
   const slug = useSlug();
 
   return (

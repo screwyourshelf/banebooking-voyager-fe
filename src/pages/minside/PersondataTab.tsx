@@ -11,6 +11,7 @@ type Props = { slug: string };
 
 export default function PersondataTab({ slug }: Props) {
   const { bruker, laster, lastNedEgenData, slettMeg } = useMeg(slug);
+  const { isPending } = slettMeg;
 
   if (laster || !bruker) {
     return <LoaderSkeleton />;
@@ -35,14 +36,14 @@ export default function PersondataTab({ slug }: Props) {
           </p>
         )}
         <p className="text-sm mt-1">
-         <Link
-          to={`/${slug}/vilkaar`}
-          className="underline text-primary hover:text-primary/80"
-          target="_blank"
-          rel="noopener noreferrer"
-            >
-          Les vilkårene
-        </Link>
+          <Link
+            to={`/${slug}/vilkaar`}
+            className="underline text-primary hover:text-primary/80"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Les vilkårene
+          </Link>
         </p>
       </FieldWrapper>
 
@@ -51,8 +52,13 @@ export default function PersondataTab({ slug }: Props) {
         label="Last ned dine data"
         helpText="Du kan laste ned alle registrerte opplysninger og bookinger i JSON-format."
       >
-        <Button onClick={lastNedEgenData} size="sm" variant="outline">
-          Last ned data
+        <Button
+          onClick={lastNedEgenData}
+          size="sm"
+          variant="outline"
+          disabled={isPending}
+        >
+          {isPending ? "Laster ned..." : "Last ned data"}
         </Button>
       </FieldWrapper>
 

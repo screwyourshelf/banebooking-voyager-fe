@@ -3,66 +3,82 @@ import { toast } from "sonner";
 import {
   hentMeg,
   oppdaterMeg,
-  slettMeg as slettMegApi,
-  lastNedEgenData as lastNedEgenDataApi,
-} from "../api/meg.js";
-import type { BrukerDto } from "../types/index.js";
+  lastNedEgenData,
+  slettMeg,
+} from "@/api/meg";
+import type { BrukerDto } from "@/types/index.js";
 
-export function useMeg(slug?: string) {
+export function useMeg(slug: string | undefined) {
   const queryClient = useQueryClient();
 
-  // Hent bruker
-  const brukerQuery = useQuery<BrukerDto, Error>({
+  // Hent brukerinfo
+  const {
+    data: bruker,
+    isLoading: laster,
+    error,
+    refetch,
+  } = useQuery<BrukerDto, Error>({
     queryKey: ["meg", slug],
     queryFn: () => hentMeg(slug!),
     enabled: !!slug,
-    staleTime: 1000 * 60 * 1, // 1 minutt
-    onError: (err) => toast.error(err.message ?? "Kunne ikke hente brukerdata"),
-  });
-
-  // Oppdater visningsnavn
-  const oppdaterVisningsnavn = useMutation<void, Error, string>({
-    mutationFn: (visningsnavn) => oppdaterMeg(slug!, { visningsnavn }),
-    onSuccess: (_, visningsnavn) => {
-      queryClient.setQueryData<BrukerDto>(["meg", slug], (old) =>
-        old ? { ...old, visningsnavn } : old
-      );
-      toast.success("Visningsnavn lagret");
+    staleTime: 60_000,
+    onError: (err) => {
+      toast.error(err.message ?? "Kunne ikke hente brukerinfo");
     },
-    onError: (err) =>
-      toast.error(err.message ?? "Kunne ikke lagre visningsnavn"),
   });
 
-  // Slett bruker
-  const slettMeg = useMutation<void, Error>({
-    mutationFn: () => slettMegApi(slug!),
+  // Oppdater visningsnavn eller andre brukerdata
+  const oppdaterVisningsnavn = useMutation({
+    mutationFn: (visningsnavn: string) =>
+      oppdaterMeg(slug!, { visningsnavn }),
     onSuccess: () => {
-      queryClient.removeQueries({ queryKey: ["meg", slug] });
-      toast.success("Brukeren er slettet");
+      toast.success("Visningsnavn oppdatert");
+      queryClient.invalidateQueries({ queryKey: ["meg", slug] });
     },
-    onError: (err) => toast.error(err.message ?? "Kunne ikke slette bruker"),
+    onError: (err: unknown) => {
+      toast.error(
+        err instanceof Error
+          ? err.message
+          : "Kunne ikke oppdatere visningsnavn"
+      );
+    },
   });
 
   // Last ned egen data
-  const lastNedEgenData = async () => {
-    if (!slug) return;
+  const lastNedData = async () => {
     try {
-      await lastNedEgenDataApi(slug);
-      toast.success("Dataen din lastes nå ned");
+      await lastNedEgenData(slug!);
+      toast.success("Data lastet ned");
     } catch (err) {
-      const message =
-        err instanceof Error ? err.message : "Kunne ikke laste ned data";
-      toast.error(message);
+      toast.error(
+        err instanceof Error
+          ? err.message
+          : "Kunne ikke laste ned data"
+      );
     }
   };
 
+  // Slett bruker
+  const slett = useMutation({
+    mutationFn: () => slettMeg(slug!),
+    onSuccess: () => {
+      toast.success("Brukeren er slettet");
+      queryClient.removeQueries({ queryKey: ["meg", slug] });
+    },
+    onError: (err: unknown) => {
+      toast.error(
+        err instanceof Error ? err.message : "Kunne ikke slette bruker"
+      );
+    },
+  });
+
   return {
-    bruker: brukerQuery.data,
-    laster: brukerQuery.isLoading,
-    feil: brukerQuery.error,
-    refetch: brukerQuery.refetch,
+    bruker,
+    laster,
+    error,
+    refetch,
     oppdaterVisningsnavn,
-    slettMeg, // 👉 nå returnerer vi hele mutation-objektet
-    lastNedEgenData,
+    lastNedEgenData: lastNedData,
+    slettMeg: slett.mutate,
   };
 }

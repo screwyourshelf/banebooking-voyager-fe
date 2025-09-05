@@ -28,14 +28,16 @@ export default function SlettMegDialog({ slettMeg }: SlettMegDialogProps) {
       setOpen(false);
       await signOut();
     } catch {
-      // feil-toast håndteres i useMeg
+      // Feil-toast håndteres i useMeg
     }
   };
 
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive">Slett min bruker</Button>
+        <Button variant="destructive" disabled={slettMeg.isPending}>
+          {slettMeg.isPending ? "Sletter..." : "Slett min bruker"}
+        </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

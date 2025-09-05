@@ -1,93 +1,87 @@
-import { useState, useEffect, useCallback } from 'react';
-import { toast } from 'sonner';
-import type { BookingSlot } from '../types/index.js';
-import { hentBookinger, opprettBooking, avbestillBooking, slettBooking } from '../api/booking.js';
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
+import type { BookingSlot } from "../types/index.js";
+import {
+  hentBookinger,
+  opprettBooking,
+  avbestillBooking,
+  slettBooking,
+} from "../api/booking.js";
 
-export function useBooking(slug: string | undefined, valgtDato: string, valgtBaneId: string) {
-    const [slots, setSlots] = useState<BookingSlot[]>([]);
-    const [apenSlotTid, setApenSlotTid] = useState<string | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+export function useBooking(
+  slug: string | undefined,
+  dato: string,
+  baneId: string
+) {
+  const queryClient = useQueryClient();
+  const [apenSlotTid, setApenSlotTid] = useState<string | null>(null);
 
-    const hent = useCallback(async () => {
-        if (!slug || !valgtBaneId) return;
+  const queryKey = ["bookinger", slug ?? "", baneId ?? "", dato ?? ""];
 
-        setIsLoading(true);
-        try {
-            const data = await hentBookinger(slug, valgtBaneId, valgtDato);
-            setSlots(data);
-        } catch {
-            setSlots([]);
-            toast.error('Kunne ikke hente bookinger.');
-        } finally {
-            setIsLoading(false);
-        }
-    }, [slug, valgtDato, valgtBaneId]);
+  const {
+    data: slots = [],
+    isLoading,
+    refetch,
+  } = useQuery<BookingSlot[], Error>({
+    queryKey,
+    queryFn: () => hentBookinger(slug!, baneId, dato),
+    enabled: !!slug && !!baneId && !!dato,
+    refetchInterval: 60_000,        // auto-refresh hvert 60 sek
+    staleTime: 60_000,              // data regnes som "fersk" i 1 minutt
+    refetchOnWindowFocus: false,    // ikke spam-fetch ved tabbing
+    onError: (err) =>
+      toast.error(err.message ?? "Kunne ikke hente bookinger"),
+  });
 
-    useEffect(() => {
-        hent();
-    }, [hent]);
+  const invalidateAll = () => {
+    queryClient.invalidateQueries({ queryKey });
+    queryClient.invalidateQueries({ queryKey: ["mineBookinger", slug] });
+  };
 
-    const fjernSlot = (slotToRemove: BookingSlot) => {
-        setSlots((prev) =>
-            prev.filter((s) =>
-                !(
-                    s.baneId === slotToRemove.baneId &&
-                    s.dato === slotToRemove.dato &&
-                    s.startTid === slotToRemove.startTid &&
-                    s.sluttTid === slotToRemove.sluttTid
-                )
-            )
-        );
-    };
+  const bookMutation = useMutation({
+    mutationFn: (slot: BookingSlot) =>
+      opprettBooking(slug!, baneId, dato, slot.startTid, slot.sluttTid),
+    onSuccess: (_, slot) => {
+      const tid = `${slot.startTid.slice(0, 2)}-${slot.sluttTid.slice(0, 2)}`;
+      toast.success(`Booket ${tid}`);
+      invalidateAll();
+    },
+    onError: (err: unknown) =>
+      toast.error(err instanceof Error ? err.message : "Kunne ikke booke."),
+  });
 
-    const onBook = async (slot: BookingSlot) => {
-        if (!slug || !valgtBaneId) return;
+  const cancelMutation = useMutation({
+    mutationFn: (slot: BookingSlot) =>
+      avbestillBooking(slug!, baneId, dato, slot.startTid, slot.sluttTid),
+    onSuccess: () => {
+      toast.info("Bookingen er avbestilt.");
+      invalidateAll();
+    },
+    onError: (err: unknown) =>
+      toast.error(err instanceof Error ? err.message : "Kunne ikke avbestille."),
+  });
 
-        try {
-            await opprettBooking(slug, valgtBaneId, valgtDato, slot.startTid, slot.sluttTid);
-            const tid = `${slot.startTid.slice(0, 2)}-${slot.sluttTid.slice(0, 2)}`;
-            toast.success(`Booket ${tid}`);
-            await hent();
-        } catch (err) {
-            toast.error(err instanceof Error ? err.message : 'Kunne ikke booke.');
-        }
-    };
+  const deleteMutation = useMutation({
+    mutationFn: (slot: BookingSlot) =>
+      slettBooking(slug!, slot.baneId, slot.dato, slot.startTid, slot.sluttTid),
+    onSuccess: () => {
+      toast.success("Booking slettet");
+      setApenSlotTid(null);
+      invalidateAll();
+    },
+    onError: (err: unknown) =>
+      toast.error(err instanceof Error ? err.message : "Kunne ikke slette booking."),
+  });
 
-    const onCancel = async (slot: BookingSlot) => {
-        if (!slug || !valgtBaneId) return;
-
-        try {
-            await avbestillBooking(slug, valgtBaneId, valgtDato, slot.startTid, slot.sluttTid);
-            fjernSlot(slot);
-            toast.info('Bookingen er avbestilt.');
-            await hent();
-        } catch (err) {
-            toast.error(err instanceof Error ? err.message : 'Kunne ikke avbestille.');
-        }
-    };
-
-    const onDelete = async (slot: BookingSlot) => {
-        if (!slug) return;
-
-        try {
-            await slettBooking(slug, slot.baneId, slot.dato, slot.startTid, slot.sluttTid);
-            fjernSlot(slot);
-            toast.success('Booking slettet');
-            setApenSlotTid(null);
-            await hent();
-        } catch (err) {
-            toast.error(err instanceof Error ? err.message : 'Kunne ikke slette booking.');
-        }
-    };
-
-    return {
-        slots,
-        apenSlotTid,
-        setApenSlotTid,
-        onBook,
-        onCancel,
-        onDelete,
-        hentBookinger: hent,
-        isLoading,
-    };
+  return {
+    slots,
+    isLoading,
+    apenSlotTid,
+    setApenSlotTid,
+    onBook: bookMutation.mutate,
+    onCancel: cancelMutation.mutate,
+    onDelete: deleteMutation.mutate,
+    hentBookinger: refetch,
+  };
 }

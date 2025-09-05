@@ -15,6 +15,7 @@ type Props = {
 
 export default function MinProfilTab({ slug }: Props) {
   const { bruker, laster: lasterMeg, oppdaterVisningsnavn } = useMeg(slug);
+  const { mutateAsync, isPending } = oppdaterVisningsnavn;
 
   const [visningsnavn, setVisningsnavn] = useState("");
   const [brukEpostSomVisningsnavn, setBrukEpostSomVisningsnavn] =
@@ -39,7 +40,7 @@ export default function MinProfilTab({ slug }: Props) {
 
     if (brukEpostSomVisningsnavn) {
       setFeil(null);
-      await oppdaterVisningsnavn.mutateAsync(bruker.epost);
+      await mutateAsync(bruker.epost);
       return;
     }
 
@@ -49,24 +50,21 @@ export default function MinProfilTab({ slug }: Props) {
       setFeil("Visningsnavn kan ikke være tomt.");
       return;
     }
-
     if (navn.length < 3) {
       setFeil("Visningsnavn må være minst 3 tegn.");
       return;
     }
-
     if (!NAVN_REGEX.test(navn)) {
       setFeil("Visningsnavn inneholder ugyldige tegn.");
       return;
     }
-
     if (navn.length > MAX_LENGTH) {
       setFeil(`Visningsnavn kan ikke være lengre enn ${MAX_LENGTH} tegn.`);
       return;
     }
 
     setFeil(null);
-    await oppdaterVisningsnavn.mutateAsync(navn);
+    await mutateAsync(navn);
   };
 
   const kanLagre = bruker
@@ -116,12 +114,8 @@ export default function MinProfilTab({ slug }: Props) {
           <span>Bruk e-post som visningsnavn</span>
         </label>
 
-        <Button
-          type="submit"
-          size="sm"
-          disabled={!kanLagre || oppdaterVisningsnavn.isPending}
-        >
-          {oppdaterVisningsnavn.isPending ? "Lagrer..." : "Lagre"}
+        <Button type="submit" size="sm" disabled={!kanLagre || isPending}>
+          {isPending ? "Lagrer..." : "Lagre"}
         </Button>
       </form>
 
@@ -136,9 +130,7 @@ export default function MinProfilTab({ slug }: Props) {
           label="Rolle (i klubben)"
           helpText="Roller tildeles av klubbens administrator og kan ikke endres manuelt."
         >
-          <p className="text-sm text-foreground">
-            {bruker.roller.join(", ")}
-          </p>
+          <p className="text-sm text-foreground">{bruker.roller.join(", ")}</p>
         </FieldWrapper>
       </PageSection>
     </>

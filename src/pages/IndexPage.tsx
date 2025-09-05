@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import { format } from "date-fns";
 import { HelpCircle } from "lucide-react";
 
@@ -21,7 +21,12 @@ export default function IndexPage() {
   const [valgtDato, setValgtDato] = useState<Date | null>(new Date());
 
   const { currentUser } = useAuth();
-  const valgtDatoStr = valgtDato ? format(valgtDato, "yyyy-MM-dd") : "";
+
+  // Stabil dato-streng (endres kun når valgtDato endres)
+  const valgtDatoStr = useMemo(
+    () => (valgtDato ? format(valgtDato, "yyyy-MM-dd") : ""),
+    [valgtDato]
+  );
 
   const {
     slots,
@@ -33,22 +38,26 @@ export default function IndexPage() {
     isLoading: loadingBooking,
   } = useBooking(slug, valgtDatoStr, valgtBaneId);
 
+  // Sett default bane
   useEffect(() => {
     if (!valgtBaneId && baner.length > 0) {
       setValgtBaneId(baner[0].id);
     }
   }, [baner, valgtBaneId]);
 
+  // Lukk slot-popup når bane/dato endres
   useEffect(() => {
     setApenSlotTid(null);
   }, [valgtDato, valgtBaneId, setApenSlotTid]);
 
+  // Lukk slot-popup når bruker logger ut
   useEffect(() => {
     if (!currentUser) {
       setApenSlotTid(null);
     }
   }, [currentUser, setApenSlotTid]);
 
+  // Husk valgtDato i localStorage
   useEffect(() => {
     if (valgtDato) {
       localStorage.setItem("valgtDato", valgtDato.toISOString());
@@ -62,8 +71,7 @@ export default function IndexPage() {
   return (
     <Page>
       <div className="flex justify-between items-center mb-2">
-        
-       <ReglementDialog>
+        <ReglementDialog>
           <Button
             variant="ghost"
             size="icon"
@@ -73,13 +81,12 @@ export default function IndexPage() {
             <HelpCircle className="w-5 h-5" />
           </Button>
         </ReglementDialog>
-      <DatoVelger
+
+        <DatoVelger
           value={valgtDato}
           onChange={(date) => setValgtDato(date ?? null)}
           visNavigering={true}
         />
-
-       
       </div>
 
       <SimpleTabsLazy
