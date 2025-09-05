@@ -11,7 +11,7 @@ export function useKlubb(slug?: string) {
     queryKey: ["klubb", slug],
     queryFn: () => hentKlubb(slug!),
     enabled: !!slug,
-    staleTime: 1000 * 60 * 5, // 5 min cache
+    staleTime: 1000 * 60 * 5, // 5 minutter cache
     onError: (err) => {
       toast.error(err.message ?? "Kunne ikke hente klubb");
     },
@@ -22,7 +22,10 @@ export function useKlubb(slug?: string) {
     mutationFn: (data) => oppdaterKlubb(slug!, data),
     onSuccess: () => {
       toast.success("Klubb oppdatert");
+
+      // Invalider både klubb og feed når klubbdata endres
       queryClient.invalidateQueries({ queryKey: ["klubb", slug] });
+      queryClient.invalidateQueries({ queryKey: ["feed", slug] });
     },
     onError: (err) => {
       toast.error(err.message ?? "Kunne ikke oppdatere klubb");

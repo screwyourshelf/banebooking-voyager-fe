@@ -7,6 +7,7 @@ export type KlubbDetaljer = {
     latitude?: number;
     longitude?: number;
     feedUrl?: string;
+    feedSynligAntallDager: number;
     bookingRegel: {
         maksPerDag: number;
         maksTotalt: number;
