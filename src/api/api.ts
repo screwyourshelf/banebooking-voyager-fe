@@ -3,10 +3,12 @@ import { supabase } from "@/supabase";
 import { signOutAndRedirect } from "@/utils/authUtils.js";
 import { toast } from "sonner";
 
+const rawBase = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+
 const baseURL =
     import.meta.env.MODE === "development"
         ? "/api"
-        : import.meta.env.VITE_API_BASE_URL || "";
+        : `${rawBase}/api`;
 
 declare module "axios" {
     export interface AxiosRequestConfig {
@@ -14,7 +16,7 @@ declare module "axios" {
     }
 }
 
-const api = axios.create({ baseURL });
+const api = axios.create({ baseURL, timeout: 20_000 });
 
 api.interceptors.request.use(async (config) => {
     if (!config.requireAuth) return config;
