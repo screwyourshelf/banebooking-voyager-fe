@@ -1,138 +1,164 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button.js";
 import LoaderSkeleton from "@/components/LoaderSkeleton.js";
-import { FormField } from "@/components/FormField.js";
+import SettingsList from "@/components/SettingsList";
+import SettingsRow from "@/components/SettingsRow";
 import { FieldWrapper } from "@/components/FieldWrapper.js";
+import { Input } from "@/components/ui/input.js";
 import { useMeg } from "@/hooks/useMeg.js";
-import PageSection from "@/components/PageSection.js";
+import SettingsSection from "../../components/SettingsSection";
 
 const MAX_LENGTH = 50;
 const NAVN_REGEX = /^[\p{L}\d\s.@'_%+-]{2,}$/u;
 
 type Props = {
-  slug: string;
+    slug: string;
 };
 
+type Mode = "epost" | "navn";
+
 export default function MinProfilTab({ slug }: Props) {
-  const { bruker, laster: lasterMeg, oppdaterVisningsnavn } = useMeg(slug);
-  const { mutateAsync, isPending } = oppdaterVisningsnavn;
+    const { bruker, laster: lasterMeg, oppdaterVisningsnavn } = useMeg(slug);
+    const { mutateAsync, isPending } = oppdaterVisningsnavn;
 
-  const [visningsnavn, setVisningsnavn] = useState("");
-  const [brukEpostSomVisningsnavn, setBrukEpostSomVisningsnavn] =
-    useState(false);
-  const [feil, setFeil] = useState<string | null>(null);
+    const [mode, setMode] = useState<Mode>("epost");
+    const [visningsnavn, setVisningsnavn] = useState("");
+    const [feil, setFeil] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (bruker) {
-      const navn = bruker.visningsnavn?.trim();
-      if (!navn || navn === bruker.epost) {
-        setBrukEpostSomVisningsnavn(true);
-        setVisningsnavn("");
-      } else {
-        setVisningsnavn(navn);
-        setBrukEpostSomVisningsnavn(false);
-      }
+    useEffect(() => {
+        if (!bruker) return;
+
+        const navn = bruker.visningsnavn?.trim();
+        if (!navn || navn === bruker.epost) {
+            setMode("epost");
+            setVisningsnavn("");
+        } else {
+            setMode("navn");
+            setVisningsnavn(navn);
+        }
+    }, [bruker]);
+
+    const kanLagre = useMemo(() => {
+        if (!bruker) return false;
+        if (mode === "epost") return bruker.visningsnavn !== bruker.epost;
+        return visningsnavn.trim() !== (bruker.visningsnavn ?? "").trim();
+    }, [bruker, mode, visningsnavn]);
+
+    const validerOgLagre = async () => {
+        if (!bruker) return;
+
+        if (mode === "epost") {
+            setFeil(null);
+            await mutateAsync({ visningsnavn: bruker.epost });
+            return;
+        }
+
+        const navn = visningsnavn.trim();
+
+        if (navn.length === 0) return setFeil("Visningsnavn kan ikke være tomt.");
+        if (navn.length < 3) return setFeil("Visningsnavn må være minst 3 tegn.");
+        if (!NAVN_REGEX.test(navn)) return setFeil("Visningsnavn inneholder ugyldige tegn.");
+        if (navn.length > MAX_LENGTH)
+            return setFeil(`Visningsnavn kan ikke være lengre enn ${MAX_LENGTH} tegn.`);
+
+        setFeil(null);
+        await mutateAsync({ visningsnavn: navn });
+    };
+
+    if (lasterMeg || !bruker) {
+        return <LoaderSkeleton />;
     }
-  }, [bruker]);
 
-  const validerOgLagre = async () => {
-    if (!bruker) return;
+    return (
+        <div className="space-y-4">
+            <SettingsSection
+                title="Min profil"
+                description="Velg hva som vises som navnet ditt i appen."
+            >
 
-    if (brukEpostSomVisningsnavn) {
-      setFeil(null);
-      await mutateAsync({ visningsnavn: bruker.epost });
-      return;
-    }
+                {/* Visningsnavn */}
+                <SettingsList>
+                    <SettingsRow
+                        title="Visningsnavn"
+                        description="Velg e-post eller et eget navn."
+                    >
+                        <div className="space-y-2">
+                            <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
+                                <input
+                                    type="radio"
+                                    name="visningsnavn-mode"
+                                    checked={mode === "epost"}
+                                    onChange={() => {
+                                        setMode("epost");
+                                        setFeil(null);
+                                        setVisningsnavn("");
+                                    }}
+                                />
+                                <span>E-post ({bruker.epost})</span>
+                            </label>
 
-    const navn = visningsnavn.trim();
+                            <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
+                                <input
+                                    type="radio"
+                                    name="visningsnavn-mode"
+                                    checked={mode === "navn"}
+                                    onChange={() => {
+                                        setMode("navn");
+                                        setFeil(null);
+                                    }}
+                                />
+                                <span>Eget navn</span>
+                            </label>
+                        </div>
+                    </SettingsRow>
 
-    if (navn.length === 0) {
-      setFeil("Visningsnavn kan ikke være tomt.");
-      return;
-    }
-    if (navn.length < 3) {
-      setFeil("Visningsnavn må være minst 3 tegn.");
-      return;
-    }
-    if (!NAVN_REGEX.test(navn)) {
-      setFeil("Visningsnavn inneholder ugyldige tegn.");
-      return;
-    }
-    if (navn.length > MAX_LENGTH) {
-      setFeil(`Visningsnavn kan ikke være lengre enn ${MAX_LENGTH} tegn.`);
-      return;
-    }
+                    <SettingsRow
+                        title="Eget navn"
+                        description={`Maks ${MAX_LENGTH} tegn.`}
+                        right={
+                            <Button
+                                type="button"
+                                size="sm"
+                                disabled={!kanLagre || isPending}
+                                onClick={() => void validerOgLagre()}
+                            >
+                                {isPending ? "Lagrer..." : "Lagre"}
+                            </Button>
+                        }
+                        className={mode === "navn" ? "" : "opacity-50"}
+                    >
+                        <FieldWrapper id="visningsnavn" label="" error={feil} className="space-y-0">
+                            <Input
+                                id="visningsnavn"
+                                value={mode === "navn" ? visningsnavn : ""}
+                                maxLength={MAX_LENGTH}
+                                placeholder="f.eks. Ola Nordmann"
+                                onChange={(e) => setVisningsnavn(e.target.value)}
+                                disabled={mode !== "navn"}
+                                className={feil ? "border-destructive" : ""}
+                            />
+                        </FieldWrapper>
+                    </SettingsRow>
+                </SettingsList>
+            </SettingsSection>
 
-    setFeil(null);
-    await mutateAsync({ visningsnavn: navn });
-  };
+            {/* Konto */}
+            <SettingsSection
+                title="Konto"
+                description="Denne informasjonen kan bare endres av klubbadministrator."
+            >
 
-  const kanLagre = bruker
-    ? brukEpostSomVisningsnavn
-      ? bruker.visningsnavn !== bruker.epost
-      : visningsnavn.trim() !== bruker.visningsnavn
-    : false;
+                <SettingsList>
+                    <SettingsRow title="Brukernavn / ID">
+                        <div className="text-sm text-foreground">{bruker.epost}</div>
+                    </SettingsRow>
 
-  if (lasterMeg || !bruker) {
-    return <LoaderSkeleton />;
-  }
+                    <SettingsRow title="Rolle (i klubben)">
+                        <div className="text-sm text-foreground">{bruker.roller.join(", ")}</div>
+                    </SettingsRow>
+                </SettingsList>
+            </SettingsSection>
 
-  return (
-    <>
-      {/* Skjema for visningsnavn */}
-      <form
-        className="space-y-4"
-        onSubmit={(e) => {
-          e.preventDefault();
-          void validerOgLagre();
-        }}
-      >
-        <FormField
-          id="visningsnavn"
-          label="Visningsnavn"
-          value={brukEpostSomVisningsnavn ? "" : visningsnavn}
-          maxLength={MAX_LENGTH}
-          placeholder={bruker?.epost || "f.eks. Ola Nordmann"}
-          onChange={(e) => {
-            setVisningsnavn(e.target.value);
-            setBrukEpostSomVisningsnavn(false);
-          }}
-          disabled={brukEpostSomVisningsnavn}
-          error={feil}
-          helpText="Navnet vises i grensesnittet, og settes automatisk til e-post ved første innlogging."
-        />
-
-        <label className="flex items-center space-x-2 text-sm">
-          <input
-            type="checkbox"
-            checked={brukEpostSomVisningsnavn}
-            onChange={(e) => {
-              setBrukEpostSomVisningsnavn(e.target.checked);
-              if (e.target.checked) setVisningsnavn("");
-            }}
-          />
-          <span>Bruk e-post som visningsnavn</span>
-        </label>
-
-        <Button type="submit" size="sm" disabled={!kanLagre || isPending}>
-          {isPending ? "Lagrer..." : "Lagre"}
-        </Button>
-      </form>
-
-      {/* Brukerinfo */}
-      <PageSection bordered className="space-y-4">
-        <FieldWrapper id="epost" label="Brukernavn / ID">
-          <p className="text-sm text-foreground">{bruker.epost}</p>
-        </FieldWrapper>
-
-        <FieldWrapper
-          id="rolle"
-          label="Rolle (i klubben)"
-          helpText="Roller tildeles av klubbens administrator og kan ikke endres manuelt."
-        >
-          <p className="text-sm text-foreground">{bruker.roller.join(", ")}</p>
-        </FieldWrapper>
-      </PageSection>
-    </>
-  );
+        </div>
+    );
 }

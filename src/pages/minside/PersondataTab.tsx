@@ -1,8 +1,9 @@
 import { Button } from "@/components/ui/button.js";
-import { FieldWrapper } from "@/components/FieldWrapper.js";
+import SettingsList from "@/components/SettingsList";
+import SettingsRow from "@/components/SettingsRow";
+import SettingsSection from "@/components/SettingsSection";
 import SlettMegDialog from "@/components/SlettMegDialog.js";
 import { formatDatoKort } from "@/utils/datoUtils.js";
-import PageSection from "@/components/PageSection.js";
 import { useMeg } from "@/hooks/useMeg.js";
 import LoaderSkeleton from "@/components/LoaderSkeleton.js";
 import { Link } from "react-router-dom";
@@ -10,65 +11,71 @@ import { Link } from "react-router-dom";
 type Props = { slug: string };
 
 export default function PersondataTab({ slug }: Props) {
-  const { bruker, laster, lastNedEgenData, slettMeg } = useMeg(slug);
-  const { isPending } = slettMeg;
+    const { bruker, laster, lastNedEgenData, slettMeg } = useMeg(slug);
+    const { isPending } = slettMeg;
 
-  if (laster || !bruker) {
-    return <LoaderSkeleton />;
-  }
+    if (laster || !bruker) {
+        return <LoaderSkeleton />;
+    }
 
-  return (
-    <PageSection bordered className="space-y-4">
-      <FieldWrapper
-        id="vilkaar"
-        label="Vilkår for bruk"
-        helpText="Du aksepterer vilkårene automatisk ved første innlogging."
-      >
-        {bruker.vilkaarAkseptertDato ? (
-          <p className="text-sm text-foreground">
-            Akseptert {formatDatoKort(bruker.vilkaarAkseptertDato)}{" "}
-            {bruker.vilkaarVersjon &&
-              `(versjon ${bruker.vilkaarVersjon})`}
-          </p>
-        ) : (
-          <p className="text-sm text-muted-foreground italic">
-            Ikke registrert
-          </p>
-        )}
-        <p className="text-sm mt-1">
-          <Link
-            to={`/${slug}/vilkaar`}
-            className="underline text-primary hover:text-primary/80"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Les vilkårene
-          </Link>
-        </p>
-      </FieldWrapper>
+    const vilkarStatus = bruker.vilkaarAkseptertDato
+        ? `Akseptert ${formatDatoKort(bruker.vilkaarAkseptertDato)}${bruker.vilkaarVersjon ? ` (versjon ${bruker.vilkaarVersjon})` : ""
+        }`
+        : "Ikke registrert";
 
-      <FieldWrapper
-        id="last-ned-data"
-        label="Last ned dine data"
-        helpText="Du kan laste ned alle registrerte opplysninger og bookinger i JSON-format."
-      >
-        <Button
-          onClick={lastNedEgenData}
-          size="sm"
-          variant="outline"
-          disabled={isPending}
-        >
-          {isPending ? "Laster ned..." : "Last ned data"}
-        </Button>
-      </FieldWrapper>
+    return (
+        <div className="space-y-4">
+            <SettingsSection
+                title="Persondata"
+                description="Her kan du se vilkår og laste ned egne data."
+            >
+                <SettingsList>
+                    <SettingsRow
+                        title="Vilkår"
+                        description="Vilkårene aksepteres automatisk ved første innlogging."
+                    >
+                        <div className="text-sm text-foreground">{vilkarStatus}</div>
+                        <div className="mt-2">
+                            <Link
+                                to={`/${slug}/vilkaar`}
+                                className="text-sm underline text-primary hover:text-primary/80"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                            >
+                                Les vilkårene
+                            </Link>
+                        </div>
+                    </SettingsRow>
 
-      <FieldWrapper
-        id="slett-bruker"
-        label="Slett bruker"
-        helpText="Dette sletter brukeren din og all tilknyttet data permanent."
-      >
-        <SlettMegDialog slettMeg={slettMeg} />
-      </FieldWrapper>
-    </PageSection>
-  );
+                    <SettingsRow
+                        title="Last ned dine data"
+                        description="JSON med registrerte opplysninger og bookinger."
+                        right={
+                            <Button
+                                onClick={lastNedEgenData}
+                                size="sm"
+                                variant="outline"
+                                disabled={isPending}
+                            >
+                                {isPending ? "Laster..." : "Last ned"}
+                            </Button>
+                        }
+                    />
+                </SettingsList>
+            </SettingsSection>
+
+            <SettingsSection
+                title="Slett bruker"
+                description="Sletter bruker og all tilknyttet data permanent."
+            >
+                <SettingsList>
+                    <SettingsRow
+                        title=""
+                        description="Dette kan ikke angres."
+                        right={<SlettMegDialog slettMeg={slettMeg} />}
+                    />
+                </SettingsList>
+            </SettingsSection>
+        </div>
+    );
 }
