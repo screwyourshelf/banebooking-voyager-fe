@@ -1,21 +1,35 @@
-import { useQuery } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
 import { toast } from "sonner";
-import { hentMineBookinger } from "../api/booking.js";
-import type { BookingSlot } from "../types/index.js";
+import { useApiQuery } from "@/hooks/useApiQuery";
+import type { BookingSlot } from "@/types";
 
 export function useMineBookinger(
-  slug: string | undefined,
-  inkluderHistoriske = false
+    slug: string | undefined,
+    inkluderHistoriske = false
 ) {
-  return useQuery<BookingSlot[], Error>({
-    queryKey: ["mineBookinger", slug, inkluderHistoriske],
-    queryFn: async () => {
-      if (!slug) return [];
-      return await hentMineBookinger(slug, inkluderHistoriske);
-    },
-    enabled: !!slug,
-    staleTime: 60_000,
-    onError: (err) =>
-      toast.error(err.message ?? "Ukjent feil ved henting av bookinger"),
-  });
+    const query = useApiQuery<BookingSlot[]>(
+        ["mineBookinger", slug, inkluderHistoriske],
+        `/klubb/${slug}/bookinger/mine${inkluderHistoriske ? "?inkluderHistoriske=true" : ""
+        }`,
+        {
+            requireAuth: true,
+            enabled: !!slug,
+            staleTime: 60_000,
+        }
+    );
+
+    // Toast feil (én gang per feil)
+    const errorToastetRef = useRef(false);
+    useEffect(() => {
+        if (!query.error) {
+            errorToastetRef.current = false;
+            return;
+        }
+        if (errorToastetRef.current) return;
+
+        toast.error(query.error.message ?? "Ukjent feil ved henting av bookinger");
+        errorToastetRef.current = true;
+    }, [query.error]);
+
+    return query;
 }

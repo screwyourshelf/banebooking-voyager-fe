@@ -1,14 +1,14 @@
-import { useState, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
-import { useBruker } from '../../hooks/useBruker.js';
-import { useAdminBrukere } from '../../hooks/useAdminBrukere.js';
+import { useState, useMemo } from "react";
+import { useParams } from "react-router-dom";
+import { useBruker } from "../../hooks/useBruker.js";
+import { useAdminBrukere } from "../../hooks/useAdminBrukere.js";
 
-import { Button } from '@/components/ui/button.js';
-import { Card, CardContent } from '@/components/ui/card.js';
-import LoaderSkeleton from '@/components/LoaderSkeleton.js';
-import { FormField } from '@/components/FormField.js';
-import { SelectField } from '@/components/SelectField.js';
-import { FaEdit } from 'react-icons/fa';
+import { Button } from "@/components/ui/button.js";
+import { Card, CardContent } from "@/components/ui/card.js";
+import LoaderSkeleton from "@/components/LoaderSkeleton.js";
+import { FormField } from "@/components/FormField.js";
+import { SelectField } from "@/components/SelectField.js";
+import { FaEdit } from "react-icons/fa";
 
 import {
     Dialog,
@@ -16,7 +16,7 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from '@/components/ui/dialog.js';
+} from "@/components/ui/dialog.js";
 
 import {
     Table,
@@ -25,22 +25,29 @@ import {
     TableHead,
     TableBody,
     TableCell,
-} from '@/components/ui/table.js';
+} from "@/components/ui/table.js";
 
-import type { RolleType, BrukerDto } from '../../types/index.js';
+import type { RolleType, BrukerDto } from "../../types/index.js";
+import { FieldWrapper } from "../../components/FieldWrapper.js";
 
 export default function BrukerePage() {
     const { slug } = useParams<{ slug: string }>();
     const { bruker, laster: lasterBruker } = useBruker(slug);
-    const { brukere, laster: lasterListe, oppdater } = useAdminBrukere(slug);
 
-    const [query, setQuery] = useState('');
+    const {
+        brukere,
+        laster: lasterListe,
+        oppdater,
+        oppdaterLaster,
+        // error, // hvis du har den i hooken
+    } = useAdminBrukere(slug);
+
+    const [query, setQuery] = useState("");
     const [aktivBruker, setAktivBruker] = useState<BrukerDto | null>(null);
-    const [redigerRolle, setRedigerRolle] = useState<RolleType>('Medlem');
-    const [redigerVisningsnavn, setRedigerVisningsnavn] = useState('');
-    const [lagrer, setLagrer] = useState(false);
+    const [redigerRolle, setRedigerRolle] = useState<RolleType>("Medlem");
+    const [redigerVisningsnavn, setRedigerVisningsnavn] = useState("");
 
-    const erKlubbAdmin = bruker?.roller.includes('KlubbAdmin');
+    const erKlubbAdmin = bruker?.roller.includes("KlubbAdmin");
 
     const filtrerteBrukere = useMemo(() => {
         const q = query.toLowerCase().trim();
@@ -53,22 +60,19 @@ export default function BrukerePage() {
 
     const åpneRedigering = (b: BrukerDto) => {
         setAktivBruker(b);
-        setRedigerRolle(b.roller[0] ?? 'Medlem');
-        setRedigerVisningsnavn(b.visningsnavn ?? '');
+        setRedigerRolle((b.roller[0] ?? "Medlem") as RolleType);
+        setRedigerVisningsnavn(b.visningsnavn ?? "");
     };
 
     const lagreEndringer = async () => {
         if (!slug || !aktivBruker) return;
-        setLagrer(true);
-        try {
-            await oppdater(aktivBruker.id, {
-                rolle: redigerRolle,
-                visningsnavn: redigerVisningsnavn,
-            });
-            setAktivBruker(null);
-        } finally {
-            setLagrer(false);
-        }
+
+        await oppdater(aktivBruker.id, {
+            rolle: redigerRolle,
+            visningsnavn: redigerVisningsnavn,
+        });
+
+        setAktivBruker(null);
     };
 
     if (lasterBruker) return <LoaderSkeleton />;
@@ -100,7 +104,6 @@ export default function BrukerePage() {
 
                     {!lasterListe && filtrerteBrukere.length > 0 && (
                         <div className="max-w-full overflow-x-auto border rounded-md">
-
                             <Table className="text-sm w-full">
                                 <TableHeader>
                                     <TableRow>
@@ -120,11 +123,15 @@ export default function BrukerePage() {
                                                                 {b.epost}
                                                             </div>
                                                             {b.visningsnavn && (
-                                                                <div className="text-muted-foreground text-xs truncate" title={b.visningsnavn}>
+                                                                <div
+                                                                    className="text-muted-foreground text-xs truncate"
+                                                                    title={b.visningsnavn}
+                                                                >
                                                                     {b.visningsnavn}
                                                                 </div>
                                                             )}
                                                         </div>
+
                                                         {!erMeg && (
                                                             <Button
                                                                 variant="ghost"
@@ -141,9 +148,8 @@ export default function BrukerePage() {
                                                 </TableCell>
 
                                                 <TableCell className="whitespace-nowrap">
-                                                    {b.roller[0] ?? 'Medlem'}
+                                                    {b.roller[0] ?? "Medlem"}
                                                 </TableCell>
-
                                             </TableRow>
                                         );
                                     })}
@@ -155,11 +161,20 @@ export default function BrukerePage() {
             </Card>
 
             {aktivBruker && (
-                <Dialog open onOpenChange={() => setAktivBruker(null)}>
+                <Dialog
+                    open
+                    onOpenChange={(open) => {
+                        if (!open) setAktivBruker(null);
+                    }}
+                >
                     <DialogContent>
                         <DialogHeader>
                             <DialogTitle>Rediger bruker</DialogTitle>
                         </DialogHeader>
+
+                        <FieldWrapper id="epost" label="Brukernavn / ID">
+                            <p className="text-sm text-foreground">{aktivBruker.epost}</p>
+                        </FieldWrapper>
 
                         <div className="space-y-4">
                             <FormField
@@ -175,23 +190,19 @@ export default function BrukerePage() {
                                 value={redigerRolle}
                                 onChange={(val) => setRedigerRolle(val as RolleType)}
                                 options={[
-                                    { label: 'Medlem', value: 'Medlem' },
-                                    { label: 'Utvidet', value: 'Utvidet' },
-                                    { label: 'KlubbAdmin', value: 'KlubbAdmin' },
+                                    { label: "Medlem", value: "Medlem" },
+                                    { label: "Utvidet", value: "Utvidet" },
+                                    { label: "KlubbAdmin", value: "KlubbAdmin" },
                                 ]}
                             />
                         </div>
 
                         <DialogFooter>
-                            <Button
-                                variant="ghost"
-                                onClick={() => setAktivBruker(null)}
-                                disabled={lagrer}
-                            >
+                            <Button variant="ghost" onClick={() => setAktivBruker(null)} disabled={oppdaterLaster}>
                                 Avbryt
                             </Button>
-                            <Button onClick={lagreEndringer} disabled={lagrer}>
-                                {lagrer ? 'Lagrer...' : 'Lagre'}
+                            <Button onClick={lagreEndringer} disabled={oppdaterLaster}>
+                                {oppdaterLaster ? "Lagrer..." : "Lagre"}
                             </Button>
                         </DialogFooter>
                     </DialogContent>

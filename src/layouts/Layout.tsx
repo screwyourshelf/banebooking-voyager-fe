@@ -11,7 +11,7 @@ import { SlugContext } from "../contexts/SlugContext.js";
 export default function Layout() {
   const { slug: rawSlug } = useParams<{ slug?: string }>();
   const slug = rawSlug ?? "aas-tennisklubb"; // fallback
-  const { data: feed = [], isLoading } = useFeed(slug);
+  const { feed = [], isLoading } = useFeed(slug);
 
   return (
     <SlugContext.Provider value={slug}>

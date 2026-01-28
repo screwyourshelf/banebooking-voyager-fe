@@ -43,8 +43,8 @@ export default function Navbar() {
         verifyOtp
     } = useLogin(slug);
 
-    const erAdmin = bruker?.roller.includes('KlubbAdmin') ?? false;
-    const harUtvidetTilgang = bruker?.roller.includes('Utvidet') ?? false;
+    const erAdmin = bruker?.roller?.includes("KlubbAdmin") ?? false;
+    const harUtvidetTilgang = bruker?.roller?.includes("Utvidet") ?? false;
 
     return (
         <div className="max-w-screen-lg mx-auto flex justify-between items-center px-2 py-1">

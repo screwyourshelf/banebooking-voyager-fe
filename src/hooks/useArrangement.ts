@@ -1,23 +1,21 @@
-import { useMemo, useState, useEffect, useCallback } from 'react';
-import { toast } from 'sonner';
-import {
-    slettArrangement as slettArrangementApi,
-    forhandsvisArrangement,
-    opprettArrangement,
-    hentKommendeArrangementer,
-} from '../api/arrangement.js';
-import { useKlubb } from './useKlubb.js';
-import { useBaner } from './useBaner.js';
-import type { BookingDto, OpprettArrangementDto, ArrangementDto } from '../types/index.js';
+import { useMemo, useState } from "react";
+import { toast } from "sonner";
+import { useQueryClient } from "@tanstack/react-query";
+import { useApiQuery } from "@/hooks/useApiQuery";
+import { useApiMutation } from "@/hooks/useApiMutation";
+import { useApiPostQuery } from "@/hooks/useApiPostQuery";
+import { useKlubb } from "@/hooks/useKlubb";
+import { useBaner } from "@/hooks/useBaner";
+import type { BookingDto, OpprettArrangementDto, ArrangementDto } from "@/types";
 
 function parseTimeToMinutes(tid: string) {
-    const [h, m] = tid.split(':').map(Number);
+    const [h, m] = tid.split(":").map(Number);
     return h * 60 + m;
 }
 
 function minutesToTime(mins: number): string {
-    const h = String(Math.floor(mins / 60)).padStart(2, '0');
-    const m = String(mins % 60).padStart(2, '0');
+    const h = String(Math.floor(mins / 60)).padStart(2, "0");
+    const m = String(mins % 60).padStart(2, "0");
     return `${h}:${m}`;
 }
 
@@ -33,106 +31,188 @@ function genererTidspunkter(start: string, slutt: string, slotMinutter: number):
     return result;
 }
 
+type ForhandsvisResultat = {
+    ledige: BookingDto[];
+    konflikter: BookingDto[];
+};
+
+type OpprettResultat = {
+    opprettet: BookingDto[];
+    konflikter: {
+        dato: string;
+        tid: string;
+        baneId: string;
+        feilmelding: string;
+    }[];
+};
+
+type SlettResultat = {
+    arrangementId: string;
+    antallBookingerDeaktivert: number;
+};
+
+const tomForhandsvisning: ForhandsvisResultat = { ledige: [], konflikter: [] };
+
+// Litt mer “stabil” nøkkel: sorter arrays som ikke er semantisk ordnet
+function dtoKey(dto: OpprettArrangementDto) {
+    const stable: OpprettArrangementDto = {
+        ...dto,
+        ukedager: [...dto.ukedager].sort(),
+        tidspunkter: [...dto.tidspunkter].sort(),
+        baneIder: [...dto.baneIder].sort(),
+    };
+    return JSON.stringify(stable);
+}
+
 export function useArrangement(slug: string | undefined) {
-    const { klubb, isLoading: loadingKlubb } = useKlubb(slug);
-    const { baner, isLoading: loadingBaner } = useBaner();
+    const queryClient = useQueryClient();
 
-    const [loadingArrangementer, setLoadingArrangementer] = useState(false);
-    const [loadingForhandsvisning, setLoadingForhandsvisning] = useState(false);
-
-    const [forhandsvisning, setForhandsvisning] = useState<{
-        ledige: BookingDto[];
-        konflikter: BookingDto[];
-    }>({ ledige: [], konflikter: [] });
-
-    const [arrangementer, setArrangementer] = useState<ArrangementDto[]>([]);
+    const { data: klubb, isLoading: loadingKlubb } = useKlubb(slug);
+    const { baner, isLoading: loadingBaner } = useBaner(slug);
 
     const tilgjengeligeTidspunkter = useMemo(() => {
         if (!klubb?.bookingRegel) return [];
-        const start = klubb.bookingRegel.aapningstid || '08:00';
-        const slutt = klubb.bookingRegel.stengetid || '22:00';
+        const start = klubb.bookingRegel.aapningstid || "08:00";
+        const slutt = klubb.bookingRegel.stengetid || "22:00";
         const slot = klubb.bookingRegel.slotLengdeMinutter || 60;
         return genererTidspunkter(start, slutt, slot);
     }, [klubb]);
 
-    const lastArrangementer = useCallback(async () => {
-        if (!slug) return;
-        setLoadingArrangementer(true);
-        try {
-            const result = await hentKommendeArrangementer(slug);
-            const sortert = result.sort((a, b) => a.startDato.localeCompare(b.startDato));
-            setArrangementer(sortert);
-        } catch {
-            toast.error('Feil ved henting av arrangementer');
-        } finally {
-            setLoadingArrangementer(false);
+    const arrangementerKey = useMemo(() => ["arrangementer", slug] as const, [slug]);
+
+    const arrangementerQuery = useApiQuery<ArrangementDto[]>(
+        arrangementerKey,
+        `/klubb/${slug}/arrangement/kommende`,
+        {
+            enabled: !!slug,
+            requireAuth: true,
+            staleTime: 30_000,
+            select: (arr) => [...arr].sort((a, b) => a.startDato.localeCompare(b.startDato)),
         }
-    }, [slug]);
+    );
 
-    useEffect(() => {
-        lastArrangementer();
-    }, [lastArrangementer]);
+    // Trigger for forhåndsvisningen (POST-query)
+    const [sisteForhandsvisDto, setSisteForhandsvisDto] = useState<OpprettArrangementDto | null>(null);
 
+    const forhandsvisKey = useMemo(() => {
+        if (!slug || !sisteForhandsvisDto) return ["arrangement-forhandsvis", "disabled"] as const;
+        return ["arrangement-forhandsvis", slug, dtoKey(sisteForhandsvisDto)] as const;
+    }, [slug, sisteForhandsvisDto]);
+
+    const forhandsvisQuery = useApiPostQuery<ForhandsvisResultat, OpprettArrangementDto>(
+        forhandsvisKey,
+        `/klubb/${slug}/arrangement/forhandsvis`,
+        slug ? sisteForhandsvisDto : null,
+        {
+            requireAuth: true,
+            enabled: !!slug && !!sisteForhandsvisDto,
+            staleTime: 60_000,
+            retry: false,
+            // timeout + abort (via signal) ligger i useApiPostQuery (eller kan overstyres der)
+        }
+    );
+
+    const forhandsvisning = forhandsvisQuery.data ?? tomForhandsvisning;
+    const isLoadingForhandsvisning = forhandsvisQuery.isFetching;
+
+    // “Imperativ” trigger (UI kaller denne)
     const forhandsvis = async (dto: OpprettArrangementDto) => {
-        if (!slug) return;
-        setLoadingForhandsvisning(true);
-        try {
-            const data = await forhandsvisArrangement(slug, dto);
-            setForhandsvisning(data);
-            return { success: true };
-        } catch {
-            toast.error('Feil ved forhåndsvisning');
-            return { success: false };
-        } finally {
-            setLoadingForhandsvisning(false);
+        if (!slug) return { success: false as const };
+        setSisteForhandsvisDto(dto);
+        return { success: true as const };
+    };
+
+    const clearForhandsvisning = () => {
+        setSisteForhandsvisDto(null);
+
+        if (slug) {
+            // Avbryt evt hengende request + fjern cache for preview
+            queryClient.cancelQueries({ queryKey: ["arrangement-forhandsvis", slug] });
+            queryClient.removeQueries({ queryKey: ["arrangement-forhandsvis", slug] });
         }
     };
+
+    const opprettMutation = useApiMutation<OpprettArrangementDto, OpprettResultat>(
+        "post",
+        `/klubb/${slug}/arrangement`,
+        {
+            onSuccess: async (result) => {
+                clearForhandsvisning();
+                toast.success(`${result.opprettet.length} bookinger opprettet`);
+                await queryClient.invalidateQueries({ queryKey: arrangementerKey });
+            },
+            onError: (err) => toast.error(err.message ?? "Feil ved oppretting"),
+            retry: false,
+        }
+    );
 
     const opprett = async (dto: OpprettArrangementDto) => {
-        if (!slug) return;
-        setLoadingForhandsvisning(true);
-        try {
-            const result = await opprettArrangement(slug, dto);
-            setForhandsvisning({ ledige: [], konflikter: [] });
-            toast.success(`${result.opprettet.length} bookinger opprettet`);
-            await lastArrangementer();
-            return { success: true, result };
-        } catch {
-            toast.error('Feil ved oppretting');
-            return { success: false };
-        } finally {
-            setLoadingForhandsvisning(false);
-        }
+        if (!slug) return { success: false as const };
+        const result = await opprettMutation.mutateAsync(dto);
+        return { success: true as const, result };
     };
-    const [sletterArrangementId, setSletterArrangementId] = useState<string | null>(null);
+
+    type SlettContext = { previous?: ArrangementDto[] };
+
+    const slettMutation = useApiMutation<{ arrangementId: string }, SlettResultat, SlettContext>(
+        "delete",
+        ({ arrangementId }) => `/klubb/${slug}/arrangement/${arrangementId}`,
+        {
+            onMutate: async ({ arrangementId }) => {
+                if (!slug) return {};
+
+                await queryClient.cancelQueries({ queryKey: arrangementerKey });
+
+                const previous = queryClient.getQueryData<ArrangementDto[]>(arrangementerKey);
+
+                queryClient.setQueryData<ArrangementDto[]>(
+                    arrangementerKey,
+                    (old) => (old ?? []).filter((a) => a.id !== arrangementId)
+                );
+
+                return { previous };
+            },
+            onError: (err, _vars, ctx) => {
+                toast.error(err.message ?? "Kunne ikke slette arrangementet");
+                if (ctx?.previous) {
+                    queryClient.setQueryData(arrangementerKey, ctx.previous);
+                }
+            },
+            onSuccess: (result) => {
+                toast.success(`Arrangementet ble avlyst – ${result.antallBookingerDeaktivert} bookinger fjernet`);
+            },
+            onSettled: async () => {
+                if (!slug) return;
+                await queryClient.invalidateQueries({ queryKey: arrangementerKey });
+            },
+            retry: false,
+        }
+    );
 
     const slettArrangement = async (arrangementId: string) => {
         if (!slug) return;
-        setSletterArrangementId(arrangementId);
-        try {
-            const result = await slettArrangementApi(slug, arrangementId);
-            toast.success(`Arrangementet ble avlyst – ${result.antallBookingerDeaktivert} bookinger fjernet`);
-            await lastArrangementer(); // re-fetch
-        } catch {
-            toast.error('Kunne ikke slette arrangementet');
-        } finally {
-            setSletterArrangementId(null);
-        }
+        await slettMutation.mutateAsync({ arrangementId });
     };
 
     return {
         klubb,
         baner,
-        isLoading: loadingKlubb || loadingBaner || loadingArrangementer,
-        isLoadingForhandsvisning: loadingForhandsvisning,
-        sletterArrangementId,
         tilgjengeligeTidspunkter,
+
+        arrangementer: arrangementerQuery.data ?? [],
+
         forhandsvisning,
-        setForhandsvisning,
         forhandsvis,
+        clearForhandsvisning,
         opprett,
         slettArrangement,
-        arrangementer,
-        lastArrangementer,
+        refetchArrangementer: arrangementerQuery.refetch,
+
+        // Hvis du vil vise error i dialogen:
+        // forhandsvisError: forhandsvisQuery.error?.message ?? null,
+
+        isLoading: loadingKlubb || loadingBaner || arrangementerQuery.isLoading,
+        isLoadingForhandsvisning,
+        sletterArrangementId: slettMutation.variables?.arrangementId ?? null,
     };
 }

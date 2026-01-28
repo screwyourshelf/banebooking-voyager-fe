@@ -2,122 +2,137 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button.js";
 import LoaderSkeleton from "@/components/LoaderSkeleton.js";
 import { FormField } from "@/components/FormField.js";
-import { TextareaField } from "@/components/TextareaField.js";
-import { useKlubb } from "@/hooks/useKlubb.js";
+import { FieldWrapper } from "@/components/FieldWrapper.js";
+import { useMeg } from "@/hooks/useMeg.js";
+import PageSection from "@/components/PageSection.js";
 
-type Props = { slug: string };
+const MAX_LENGTH = 50;
+const NAVN_REGEX = /^[\p{L}\d\s.@'_%+-]{2,}$/u;
 
-export default function KlubbInfoTab({ slug }: Props) {
-  const { data: klubb, isLoading, oppdaterKlubb } = useKlubb(slug);
+type Props = {
+  slug: string;
+};
 
-  const [form, setForm] = useState({
-    navn: "",
-    kontaktEpost: "",
-    banereglement: "",
-    latitude: "",
-    longitude: "",
-    feedUrl: "",
-    feedSynligAntallDager: "50", // 👈 nytt felt
-  });
+export default function MinProfilTab({ slug }: Props) {
+  const { bruker, laster: lasterMeg, oppdaterVisningsnavn } = useMeg(slug);
+  const { mutateAsync, isPending } = oppdaterVisningsnavn;
+
+  const [visningsnavn, setVisningsnavn] = useState("");
+  const [brukEpostSomVisningsnavn, setBrukEpostSomVisningsnavn] =
+    useState(false);
+  const [feil, setFeil] = useState<string | null>(null);
 
   useEffect(() => {
-    if (klubb) {
-      setForm({
-        navn: klubb.navn ?? "",
-        kontaktEpost: klubb.kontaktEpost ?? "",
-        banereglement: klubb.banereglement ?? "",
-        latitude: klubb.latitude?.toString() ?? "",
-        longitude: klubb.longitude?.toString() ?? "",
-        feedUrl: klubb.feedUrl ?? "",
-        feedSynligAntallDager: klubb.feedSynligAntallDager?.toString() ?? "50",
-      });
+    if (bruker) {
+      const navn = bruker.visningsnavn?.trim();
+      if (!navn || navn === bruker.epost) {
+        setBrukEpostSomVisningsnavn(true);
+        setVisningsnavn("");
+      } else {
+        setVisningsnavn(navn);
+        setBrukEpostSomVisningsnavn(false);
+      }
     }
-  }, [klubb]);
+  }, [bruker]);
 
-  if (isLoading || !klubb) return <LoaderSkeleton />;
+  const validerOgLagre = async () => {
+    if (!bruker) return;
+
+    if (brukEpostSomVisningsnavn) {
+      setFeil(null);
+      await mutateAsync({ visningsnavn: bruker.epost });
+      return;
+    }
+
+    const navn = visningsnavn.trim();
+
+    if (navn.length === 0) {
+      setFeil("Visningsnavn kan ikke være tomt.");
+      return;
+    }
+    if (navn.length < 3) {
+      setFeil("Visningsnavn må være minst 3 tegn.");
+      return;
+    }
+    if (!NAVN_REGEX.test(navn)) {
+      setFeil("Visningsnavn inneholder ugyldige tegn.");
+      return;
+    }
+    if (navn.length > MAX_LENGTH) {
+      setFeil(`Visningsnavn kan ikke være lengre enn ${MAX_LENGTH} tegn.`);
+      return;
+    }
+
+    setFeil(null);
+    await mutateAsync({ visningsnavn: navn });
+  };
+
+  const kanLagre = bruker
+    ? brukEpostSomVisningsnavn
+      ? bruker.visningsnavn !== bruker.epost
+      : visningsnavn.trim() !== bruker.visningsnavn
+    : false;
+
+  if (lasterMeg || !bruker) {
+    return <LoaderSkeleton />;
+  }
 
   return (
-    <form
-      className="space-y-4"
-      onSubmit={(e) => {
-        e.preventDefault();
+    <>
+      {/* Skjema for visningsnavn */}
+      <form
+        className="space-y-4"
+        onSubmit={(e) => {
+          e.preventDefault();
+          void validerOgLagre();
+        }}
+      >
+        <FormField
+          id="visningsnavn"
+          label="Visningsnavn"
+          value={brukEpostSomVisningsnavn ? "" : visningsnavn}
+          maxLength={MAX_LENGTH}
+          placeholder={bruker?.epost || "f.eks. Ola Nordmann"}
+          onChange={(e) => {
+            setVisningsnavn(e.target.value);
+            setBrukEpostSomVisningsnavn(false);
+          }}
+          disabled={brukEpostSomVisningsnavn}
+          error={feil}
+          helpText="Navnet vises i grensesnittet, og settes automatisk til e-post ved første innlogging."
+        />
 
-        oppdaterKlubb.mutate({
-          ...klubb, // behold bookingRegel og annet
-          navn: form.navn,
-          kontaktEpost: form.kontaktEpost,
-          banereglement: form.banereglement,
-          latitude: parseFloat(form.latitude),
-          longitude: parseFloat(form.longitude),
-          feedUrl: form.feedUrl,
-          feedSynligAntallDager: parseInt(form.feedSynligAntallDager, 10),
-        });
-      }}
-    >
-      <FormField
-        id="navn"
-        label="Klubbnavn"
-        value={form.navn}
-        onChange={(e) => setForm((f) => ({ ...f, navn: e.target.value }))}
-        helpText="Navnet på klubben slik det vises utad i Banebooking."
-      />
+        <label className="flex items-center space-x-2 text-sm">
+          <input
+            type="checkbox"
+            checked={brukEpostSomVisningsnavn}
+            onChange={(e) => {
+              setBrukEpostSomVisningsnavn(e.target.checked);
+              if (e.target.checked) setVisningsnavn("");
+            }}
+          />
+          <span>Bruk e-post som visningsnavn</span>
+        </label>
 
-      <FormField
-        id="kontaktEpost"
-        label="Kontakt-e-post"
-        type="email"
-        value={form.kontaktEpost}
-        onChange={(e) => setForm((f) => ({ ...f, kontaktEpost: e.target.value }))}
-        helpText="E-postadresse som vises på klubbens infoside. Brukes til henvendelser fra medlemmer og gjester."
-      />
+        <Button type="submit" size="sm" disabled={!kanLagre || isPending}>
+          {isPending ? "Lagrer..." : "Lagre"}
+        </Button>
+      </form>
 
-      <TextareaField
-        id="banereglement"
-        label="Banereglement"
-        value={form.banereglement}
-        onChange={(e) => setForm((f) => ({ ...f, banereglement: e.target.value }))}
-        helpText="Tekst som beskriver klubbens regler for bruk av banene. Vises til brukere når de booker."
-      />
+      {/* Brukerinfo */}
+      <PageSection bordered className="space-y-4">
+        <FieldWrapper id="epost" label="Brukernavn / ID">
+          <p className="text-sm text-foreground">{bruker.epost}</p>
+        </FieldWrapper>
 
-      <FormField
-        id="latitude"
-        label="Latitude (breddegrad)"
-        value={form.latitude}
-        onChange={(e) => setForm((f) => ({ ...f, latitude: e.target.value }))}
-        helpText="Breddegrad for klubbens beliggenhet. Brukes til kartvisning."
-      />
-
-      <FormField
-        id="longitude"
-        label="Longitude (lengdegrad)"
-        value={form.longitude}
-        onChange={(e) => setForm((f) => ({ ...f, longitude: e.target.value }))}
-        helpText="Lengdegrad for klubbens beliggenhet. Brukes til kartvisning."
-      />
-
-      <FormField
-        id="feedUrl"
-        label="RSS-feed (valgfritt)"
-        value={form.feedUrl}
-        onChange={(e) => setForm((f) => ({ ...f, feedUrl: e.target.value }))}
-        helpText="URL til klubbens RSS-feed (f.eks. nyheter). Hvis satt, hentes og vises de nyeste innleggene i appen."
-      />
-
-      <FormField
-        id="feedSynligAntallDager"
-        label="Aldergrense for feedinnslag (dager)"
-        type="number"
-        min={0}
-        value={form.feedSynligAntallDager}
-        onChange={(e) =>
-          setForm((f) => ({ ...f, feedSynligAntallDager: e.target.value }))
-        }
-        helpText="Bestemmer hvor mange dager gamle innslag fra klubbens RSS-feed som skal vises. Sett til 0 for å inkludere alle."
-      />
-
-      <Button type="submit" size="sm" disabled={oppdaterKlubb.isPending}>
-        {oppdaterKlubb.isPending ? "Lagrer..." : "Lagre endringer"}
-      </Button>
-    </form>
+        <FieldWrapper
+          id="rolle"
+          label="Rolle (i klubben)"
+          helpText="Roller tildeles av klubbens administrator og kan ikke endres manuelt."
+        >
+          <p className="text-sm text-foreground">{bruker.roller.join(", ")}</p>
+        </FieldWrapper>
+      </PageSection>
+    </>
   );
 }

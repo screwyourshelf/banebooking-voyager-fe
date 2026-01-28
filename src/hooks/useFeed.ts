@@ -1,21 +1,23 @@
-import { useQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { hentFeed } from "@/api/feed.js";
-import type { FeedItemDto } from "@/types/index.js";
+import { useApiQuery } from "@/hooks/useApiQuery";
+import type { FeedItemDto } from "@/types";
 
 /**
- * Hook for å hente feed-oppføringer for en gitt klubb.
- *
- * @param slug Klubbindentifikator (fra URL eller context)
+ * Hook for å hente feed via React Query + Axios.
  */
-export function useFeed(slug: string | undefined) {
-  return useQuery<FeedItemDto[], Error>({
-    queryKey: ["feed", slug],
-    queryFn: () => hentFeed(slug!),
-    enabled: !!slug,
-    staleTime: 60_000, // 1 minutt: regnes som "fersk" før den hentes på nytt
-    onError: (err) => {
-      toast.error(err.message ?? "Kunne ikke hente feed");
-    },
-  });
+export function useFeed(slug: string) {
+  const query = useApiQuery<FeedItemDto[]>(
+    ["feed", slug],
+    `/klubb/${slug}/feed`,
+    {
+      requireAuth: true,
+      staleTime: 60_000,
+    }
+  );
+
+  return {
+    feed: query.data ?? [],
+    isLoading: query.isLoading,
+    error: query.error,
+    refetch: query.refetch,
+  };
 }

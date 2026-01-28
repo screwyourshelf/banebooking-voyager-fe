@@ -1,48 +1,73 @@
-import { useEffect, useState } from 'react';
-import { hentInnloggetBruker, oppdaterVilkaarStatus } from '../api/bruker.js';
-import type { BrukerDto } from '../types/index.js';
+import { useEffect, useRef } from "react";
+import { toast } from "sonner";
+import { useApiQuery } from "@/hooks/useApiQuery";
+import { useApiMutation } from "@/hooks/useApiMutation";
+import type { BrukerDto } from "@/types";
+import { AKTIV_VILKAAR } from "@/lib/vilkaar";
+import { useAuth } from "@/hooks/useAuth";
+
 
 export function useBruker(slug?: string) {
-    const [bruker, setBruker] = useState<BrukerDto | null>(null);
-    const [laster, setLaster] = useState(true);
-    const [feil, setFeil] = useState<string | null>(null);
+    const { currentUser } = useAuth();
+    const authKey = currentUser?.id ?? "anon";
+
+    const brukerQuery = useApiQuery<BrukerDto | null>(
+        ["bruker", slug, authKey],
+        `/klubb/${slug}/bruker`,
+        {
+            enabled: !!slug,
+            staleTime: 60_000,
+            requireAuth: true,
+        }
+    );
+
+    const vilkaarMutation = useApiMutation<{ versjon: string }, void>(
+        "post",
+        `/klubb/${slug}/bruker/vilkaar`,
+        {
+            onError: (err) => {
+                console.warn("Feil ved oppdatering av vilkår:", err);
+            },
+            onSettled: () => {
+                void brukerQuery.refetch();
+            },
+        }
+    );
+
+    const harForsoktVilkaarRef = useRef(false);
 
     useEffect(() => {
         if (!slug) return;
+        if (!brukerQuery.data) return;
+        if (brukerQuery.isLoading) return;
 
-        const abort = new AbortController();
-        setLaster(true);
+        if (brukerQuery.data.vilkaarAkseptertDato) {
+            harForsoktVilkaarRef.current = false;
+            return;
+        }
 
-        hentInnloggetBruker(slug)
-            .then(async (data) => {
-                if (!abort.signal.aborted) {
-                    setBruker(data);
-                    setFeil(null);
+        if (!harForsoktVilkaarRef.current && !vilkaarMutation.isPending) {
+            harForsoktVilkaarRef.current = true;
+            vilkaarMutation.mutate({ versjon: AKTIV_VILKAAR.versjon });
+        }
+    }, [slug, brukerQuery.data, brukerQuery.isLoading, vilkaarMutation]);
 
-                    // Kall for å akseptere vilkår hvis det mangler
-                    if (data && !data.vilkaarAkseptertDato) {
-                        try {
-                            await oppdaterVilkaarStatus(slug);
-                        } catch (err) {
-                            console.warn('Feil ved oppdatering av vilkår:', err);
-                        }
-                    }
-                }
-            })
-            .catch((err) => {
-                if (!abort.signal.aborted) {
-                    setFeil(err.message);
-                    setBruker(null);
-                }
-            })
-            .finally(() => {
-                if (!abort.signal.aborted) {
-                    setLaster(false);
-                }
-            });
+    const toastetFeilRef = useRef(false);
+    useEffect(() => {
+        if (!brukerQuery.error) {
+            toastetFeilRef.current = false;
+            return;
+        }
+        if (toastetFeilRef.current) return;
 
-        return () => abort.abort();
-    }, [slug]);
+        toast.error(brukerQuery.error.message ?? "Kunne ikke hente bruker");
+        toastetFeilRef.current = true;
+    }, [brukerQuery.error]);
 
-    return { bruker, laster, feil };
+    return {
+        bruker: brukerQuery.data ?? null,
+        laster: brukerQuery.isLoading,
+        feil: brukerQuery.error ? brukerQuery.error.message : null,
+        refetch: brukerQuery.refetch,
+    };
 }

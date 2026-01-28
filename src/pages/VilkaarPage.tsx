@@ -2,6 +2,7 @@ import { useParams } from "react-router-dom";
 import { useKlubb } from "@/hooks/useKlubb.js";
 import LoaderSkeleton from "@/components/LoaderSkeleton.js";
 import Page from "@/components/Page.js";
+import { AKTIV_VILKAAR } from "@/lib/vilkaar";
 
 export default function VilkaarPage() {
   const { slug } = useParams();
@@ -19,10 +20,12 @@ export default function VilkaarPage() {
 
   return (
     <Page>
-        <header>
-          <h1 className="text-xl font-semibold">Vilkår for bruk</h1>
-          <p className="text-xs text-muted-foreground">Oppdatert: 27. juni 2025</p>
-        </header>
+          <header>
+              <h1 className="text-xl font-semibold">Vilkår for bruk</h1>
+              <p className="text-xs text-muted-foreground">
+                  Oppdatert: {AKTIV_VILKAAR.visningsDato}
+              </p>
+          </header>
 
         <p className="text-sm text-muted-foreground">
           Disse vilkårene gjelder for bruk av banebooking i{" "}
