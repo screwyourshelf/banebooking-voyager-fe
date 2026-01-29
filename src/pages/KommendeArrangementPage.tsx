@@ -1,5 +1,4 @@
 import { useArrangement } from "@/hooks/useArrangement.js";
-import { useSlug } from "@/hooks/useSlug.js";
 
 import LoaderSkeleton from "@/components/LoaderSkeleton.js";
 import {
@@ -17,8 +16,7 @@ import SlettArrangementDialog from "@/components/SlettArrangementDialog.js";
 import Page from "@/components/Page.js";
 
 export default function KommendeArrangementPage() {
-  const slug = useSlug();
-  const { arrangementer, isLoading, slettArrangement } = useArrangement(slug);
+  const { arrangementer, isLoading, slettArrangement } = useArrangement();
 
   return (
     <Page>

@@ -1,26 +1,21 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
 import { BellRing, XIcon } from "lucide-react";
 
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert.js";
 import { useFeed } from "@/hooks/useFeed.js";
+import { useSlug } from "@/hooks/useSlug";
 
 const DISMISS_DURATION_MS = 24 * 60 * 60 * 1000; // 24 timer
 
 export default function FeedAlerts() {
-    const { slug } = useParams<{ slug: string }>();
-    const { feed = [], isLoading } = useFeed(slug!);
-
-   
-
+    const slug = useSlug();
+    const { feed = [], isLoading } = useFeed();
 
     const [dismissedItems, setDismissedItems] = useState<Record<string, number>>(
         {}
     );
 
     useEffect(() => {
-        if (!slug || !feed) return;
-
         const key = `feed-dismissed-${slug}`;
         const stored = localStorage.getItem(key);
         const parsed: Record<string, number> = stored ? JSON.parse(stored) : {};
@@ -34,15 +29,13 @@ export default function FeedAlerts() {
 
         setDismissedItems(valid);
         localStorage.setItem(key, JSON.stringify(valid)); // rydder gamle
-    }, [slug, feed]);
+    }, [slug]);
 
     function dismissItem(id: string) {
         const now = Date.now();
         const updated = { ...dismissedItems, [id]: now };
         setDismissedItems(updated);
-        if (slug) {
-            localStorage.setItem(`feed-dismissed-${slug}`, JSON.stringify(updated));
-        }
+        localStorage.setItem(`feed-dismissed-${slug}`, JSON.stringify(updated));
     }
 
     if (isLoading || feed.length === 0) return null;

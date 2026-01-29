@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import type { BrukerDto } from "@/types";
+import { useSlug } from "@/hooks/useSlug";
 
 type OppdaterBrukerPayload = {
     brukerId: string;
@@ -10,7 +11,8 @@ type OppdaterBrukerPayload = {
     visningsnavn: string;
 };
 
-export function useAdminBrukere(slug?: string) {
+export function useAdminBrukere() {
+    const slug = useSlug();
     const queryClient = useQueryClient();
 
     const brukereKey = ["admin-brukere", slug] as const;
@@ -20,7 +22,6 @@ export function useAdminBrukere(slug?: string) {
         brukereKey,
         `/klubb/${slug}/bruker/admin/bruker`,
         {
-            enabled: !!slug,
             requireAuth: true,
             staleTime: 30_000,
         }
@@ -44,8 +45,6 @@ export function useAdminBrukere(slug?: string) {
         brukerId: string,
         data: { rolle: string; visningsnavn: string }
     ) => {
-        if (!slug) return;
-
         await oppdaterMutation.mutateAsync({
             brukerId,
             rolle: data.rolle,
@@ -56,13 +55,9 @@ export function useAdminBrukere(slug?: string) {
     return {
         brukere: brukereQuery.data ?? [],
         laster: brukereQuery.isLoading,
-
-        // kan brukes til å disable lagre-knapp per rad etc.
         oppdaterLaster: oppdaterMutation.isPending,
-
         oppdater,
         hentBrukere: brukereQuery.refetch,
-
         error: brukereQuery.error?.message ?? null,
     };
 }

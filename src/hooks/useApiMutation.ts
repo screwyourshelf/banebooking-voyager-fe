@@ -14,17 +14,28 @@ export function useApiMutation<TPayload = unknown, TResult = void, TContext = un
         mutationFn: async (payload: TPayload) => {
             const resolvedUrl = typeof url === "function" ? url(payload) : url;
 
+            // Default: requireAuth = true, men allow override fra caller via axiosConfig
             const cfg: AxiosRequestConfig = { requireAuth: true, ...axiosConfig };
 
             if (method === "delete") {
-                const res = await api.delete<TResult>(resolvedUrl, { ...cfg, data: payload });
+                // Send body bare hvis payload faktisk finnes
+                const hasBody = payload !== undefined && payload !== null;
+
+                const res = await api.delete<TResult>(
+                    resolvedUrl,
+                    hasBody ? { ...cfg, data: payload } : cfg
+                );
+
                 return res.data;
             }
 
             const res = await api[method]<TResult>(resolvedUrl, payload, cfg);
             return res.data;
         },
-        ...options,
+
+        // Viktig: caller sin options skal kunne overstyre retry hvis ønskelig.
+        // Default: retry false
         retry: false,
+        ...options,
     });
 }

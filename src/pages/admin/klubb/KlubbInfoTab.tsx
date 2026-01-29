@@ -5,13 +5,10 @@ import SettingsSection from "@/components/SettingsSection";
 import SettingsList from "@/components/SettingsList";
 import SettingsRow from "@/components/SettingsRow";
 import SettingsInput from "@/components/SettingsInput";
-import SettingsTextarea from "@/components/SettingsTextarea";
 import { useKlubb } from "@/hooks/useKlubb";
 
-type Props = { slug: string };
-
-export default function KlubbInfoTab({ slug }: Props) {
-    const { data: klubb, isLoading, oppdaterKlubb } = useKlubb(slug);
+export default function KlubbInfoTab() {
+    const { data: klubb, isLoading, oppdaterKlubb } = useKlubb();
 
     const [form, setForm] = useState({
         navn: "",
@@ -76,12 +73,11 @@ export default function KlubbInfoTab({ slug }: Props) {
                     kontaktEpost: form.kontaktEpost,
                     banereglement: form.banereglement,
 
-                    // ✅ ikke send null/undefined inn i number-felt: behold eksisterende hvis tom/ugyldig
-                    latitude: lat ?? klubb.latitude,
-                    longitude: lon ?? klubb.longitude,
+                    latitude: (lat ?? klubb.latitude ?? null),
+                    longitude: (lon ?? klubb.longitude ?? null),
 
                     feedUrl: form.feedUrl,
-                    feedSynligAntallDager: (feedDays ?? klubb.feedSynligAntallDager ?? 50) as number,
+                    feedSynligAntallDager: feedDays ?? klubb.feedSynligAntallDager ?? 50,
                 });
             }}
         >

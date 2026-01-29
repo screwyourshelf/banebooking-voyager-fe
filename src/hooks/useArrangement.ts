@@ -6,6 +6,7 @@ import { useApiMutation } from "@/hooks/useApiMutation";
 import { useApiPostQuery } from "@/hooks/useApiPostQuery";
 import { useKlubb } from "@/hooks/useKlubb";
 import { useBaner } from "@/hooks/useBaner";
+import { useSlug } from "@/hooks/useSlug";
 import type { BookingDto, OpprettArrangementDto, ArrangementDto } from "@/types";
 
 function parseTimeToMinutes(tid: string) {
@@ -53,7 +54,7 @@ type SlettResultat = {
 
 const tomForhandsvisning: ForhandsvisResultat = { ledige: [], konflikter: [] };
 
-// Litt mer “stabil” nøkkel: sorter arrays som ikke er semantisk ordnet
+// Stabil nøkkel: sorter arrays som ikke er semantisk ordnet
 function dtoKey(dto: OpprettArrangementDto) {
     const stable: OpprettArrangementDto = {
         ...dto,
@@ -64,11 +65,12 @@ function dtoKey(dto: OpprettArrangementDto) {
     return JSON.stringify(stable);
 }
 
-export function useArrangement(slug: string | undefined) {
+export function useArrangement() {
+    const slug = useSlug();
     const queryClient = useQueryClient();
 
-    const { data: klubb, isLoading: loadingKlubb } = useKlubb(slug);
-    const { baner, isLoading: loadingBaner } = useBaner(slug);
+    const { data: klubb, isLoading: loadingKlubb } = useKlubb();
+    const { baner, isLoading: loadingBaner } = useBaner();
 
     const tilgjengeligeTidspunkter = useMemo(() => {
         if (!klubb?.bookingRegel) return [];
@@ -76,15 +78,14 @@ export function useArrangement(slug: string | undefined) {
         const slutt = klubb.bookingRegel.stengetid || "22:00";
         const slot = klubb.bookingRegel.slotLengdeMinutter || 60;
         return genererTidspunkter(start, slutt, slot);
-    }, [klubb]);
+    }, [klubb?.bookingRegel]);
 
-    const arrangementerKey = useMemo(() => ["arrangementer", slug] as const, [slug]);
+    const arrangementerKey = ["arrangementer", slug] as const;
 
     const arrangementerQuery = useApiQuery<ArrangementDto[]>(
         arrangementerKey,
         `/klubb/${slug}/arrangement/kommende`,
         {
-            enabled: !!slug,
             requireAuth: true,
             staleTime: 30_000,
             select: (arr) => [...arr].sort((a, b) => a.startDato.localeCompare(b.startDato)),
@@ -92,32 +93,30 @@ export function useArrangement(slug: string | undefined) {
     );
 
     // Trigger for forhåndsvisningen (POST-query)
-    const [sisteForhandsvisDto, setSisteForhandsvisDto] = useState<OpprettArrangementDto | null>(null);
+    const [sisteForhandsvisDto, setSisteForhandsvisDto] =
+        useState<OpprettArrangementDto | null>(null);
 
-    const forhandsvisKey = useMemo(() => {
-        if (!slug || !sisteForhandsvisDto) return ["arrangement-forhandsvis", "disabled"] as const;
-        return ["arrangement-forhandsvis", slug, dtoKey(sisteForhandsvisDto)] as const;
-    }, [slug, sisteForhandsvisDto]);
+    const forhandsvisKey = sisteForhandsvisDto
+        ? (["arrangement-forhandsvis", slug, dtoKey(sisteForhandsvisDto)] as const)
+        : (["arrangement-forhandsvis", slug, "empty"] as const);
 
     const forhandsvisQuery = useApiPostQuery<ForhandsvisResultat, OpprettArrangementDto>(
         forhandsvisKey,
         `/klubb/${slug}/arrangement/forhandsvis`,
-        slug ? sisteForhandsvisDto : null,
+        sisteForhandsvisDto, // null => ingen request
         {
             requireAuth: true,
-            enabled: !!slug && !!sisteForhandsvisDto,
+            enabled: !!sisteForhandsvisDto,
             staleTime: 60_000,
             retry: false,
-            // timeout + abort (via signal) ligger i useApiPostQuery (eller kan overstyres der)
         }
     );
 
     const forhandsvisning = forhandsvisQuery.data ?? tomForhandsvisning;
     const isLoadingForhandsvisning = forhandsvisQuery.isFetching;
 
-    // “Imperativ” trigger (UI kaller denne)
+    // UI trigger
     const forhandsvis = async (dto: OpprettArrangementDto) => {
-        if (!slug) return { success: false as const };
         setSisteForhandsvisDto(dto);
         return { success: true as const };
     };
@@ -125,11 +124,9 @@ export function useArrangement(slug: string | undefined) {
     const clearForhandsvisning = () => {
         setSisteForhandsvisDto(null);
 
-        if (slug) {
-            // Avbryt evt hengende request + fjern cache for preview
-            queryClient.cancelQueries({ queryKey: ["arrangement-forhandsvis", slug] });
-            queryClient.removeQueries({ queryKey: ["arrangement-forhandsvis", slug] });
-        }
+        // Avbryt evt hengende request + fjern cache for preview
+        void queryClient.cancelQueries({ queryKey: ["arrangement-forhandsvis", slug] });
+        queryClient.removeQueries({ queryKey: ["arrangement-forhandsvis", slug] });
     };
 
     const opprettMutation = useApiMutation<OpprettArrangementDto, OpprettResultat>(
@@ -147,7 +144,6 @@ export function useArrangement(slug: string | undefined) {
     );
 
     const opprett = async (dto: OpprettArrangementDto) => {
-        if (!slug) return { success: false as const };
         const result = await opprettMutation.mutateAsync(dto);
         return { success: true as const, result };
     };
@@ -159,8 +155,6 @@ export function useArrangement(slug: string | undefined) {
         ({ arrangementId }) => `/klubb/${slug}/arrangement/${arrangementId}`,
         {
             onMutate: async ({ arrangementId }) => {
-                if (!slug) return {};
-
                 await queryClient.cancelQueries({ queryKey: arrangementerKey });
 
                 const previous = queryClient.getQueryData<ArrangementDto[]>(arrangementerKey);
@@ -179,10 +173,11 @@ export function useArrangement(slug: string | undefined) {
                 }
             },
             onSuccess: (result) => {
-                toast.success(`Arrangementet ble avlyst – ${result.antallBookingerDeaktivert} bookinger fjernet`);
+                toast.success(
+                    `Arrangementet ble avlyst – ${result.antallBookingerDeaktivert} bookinger fjernet`
+                );
             },
             onSettled: async () => {
-                if (!slug) return;
                 await queryClient.invalidateQueries({ queryKey: arrangementerKey });
             },
             retry: false,
@@ -190,7 +185,6 @@ export function useArrangement(slug: string | undefined) {
     );
 
     const slettArrangement = async (arrangementId: string) => {
-        if (!slug) return;
         await slettMutation.mutateAsync({ arrangementId });
     };
 
@@ -207,9 +201,6 @@ export function useArrangement(slug: string | undefined) {
         opprett,
         slettArrangement,
         refetchArrangementer: arrangementerQuery.refetch,
-
-        // Hvis du vil vise error i dialogen:
-        // forhandsvisError: forhandsvisQuery.error?.message ?? null,
 
         isLoading: loadingKlubb || loadingBaner || arrangementerQuery.isLoading,
         isLoadingForhandsvisning,

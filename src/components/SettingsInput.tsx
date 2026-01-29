@@ -11,7 +11,6 @@ type Props = {
     disabled?: boolean;
     className?: string;
 
-    // valgfritt
     min?: number;
     max?: number;
     step?: number;
@@ -42,7 +41,11 @@ export default function SettingsInput({
             min={min}
             max={max}
             step={step}
-            className={cn("w-full", className)}
+            className={cn(
+                "w-full bg-background border border-input shadow-sm",
+                "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background",
+                className
+            )}
         />
     );
 }

@@ -4,15 +4,19 @@ import { toast } from "sonner";
 import type { BookingSlot } from "@/types";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
+import { useSlug } from "@/hooks/useSlug";
 
 type SlotVars = { baneId: string; dato: string; startTid: string; sluttTid: string };
 type OptimisticContext = { previous?: BookingSlot[] };
 
-export function useBooking(slug: string | undefined, dato: string, baneId: string) {
+export function useBooking(dato: string, baneId: string) {
+    const slug = useSlug();
     const queryClient = useQueryClient();
     const [apenSlotTid, setApenSlotTid] = useState<string | null>(null);
 
-    const queryKey = ["bookinger", slug ?? "", baneId ?? "", dato ?? ""] as const;
+    const queryKey = ["bookinger", slug, baneId, dato] as const;
+
+    const enabled = Boolean(baneId) && Boolean(dato);
 
     // GET slots
     const bookingerQuery = useApiQuery<BookingSlot[]>(
@@ -20,7 +24,7 @@ export function useBooking(slug: string | undefined, dato: string, baneId: strin
         `/klubb/${slug}/bookinger?baneId=${baneId}&dato=${dato}`,
         {
             requireAuth: true,
-            enabled: !!slug && !!baneId && !!dato,
+            enabled,
             staleTime: 0,
             refetchInterval: 30_000,
             refetchOnWindowFocus: true,
@@ -43,8 +47,8 @@ export function useBooking(slug: string | undefined, dato: string, baneId: strin
     }, [bookingerQuery.error]);
 
     const invalidateAll = () => {
-        queryClient.invalidateQueries({ queryKey });
-        queryClient.invalidateQueries({ queryKey: ["mineBookinger", slug] }); // prefix matcher begge historiske-varianter
+        void queryClient.invalidateQueries({ queryKey });
+        void queryClient.invalidateQueries({ queryKey: ["mineBookinger", slug] }); // prefix matcher begge varianter
     };
 
     const erSammeSlot = (s: BookingSlot, v: { startTid: string; sluttTid: string }) =>
@@ -65,7 +69,7 @@ export function useBooking(slug: string | undefined, dato: string, baneId: strin
                         erSammeSlot(s, vars)
                             ? {
                                 ...s,
-                                booketAv: "Du", // midlertidig; refetch gir riktig visningsnavn
+                                booketAv: "Du",
                                 erEier: true,
                                 kanBookes: false,
                                 kanAvbestille: true,
@@ -177,7 +181,6 @@ export function useBooking(slug: string | undefined, dato: string, baneId: strin
         apenSlotTid,
         setApenSlotTid,
 
-        // behold samme API som før:
         onBook: (slot: BookingSlot) =>
             bookMutation.mutate({
                 baneId,

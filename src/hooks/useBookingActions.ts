@@ -1,6 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useApiMutation } from "@/hooks/useApiMutation";
+import { useSlug } from "@/hooks/useSlug";
 
 export type BookingSlotKey = {
     baneId: string;
@@ -9,16 +10,16 @@ export type BookingSlotKey = {
     sluttTid: string; // HH:mm
 };
 
-export function useBookingActions(slug: string | undefined) {
+export function useBookingActions() {
+    const slug = useSlug();
     const queryClient = useQueryClient();
-    const slugKey = slug ?? "";
 
     const invalidateAll = () => {
         // mine bookinger (begge varianter inkl historiske)
-        queryClient.invalidateQueries({ queryKey: ["mineBookinger", slugKey] });
+        void queryClient.invalidateQueries({ queryKey: ["mineBookinger", slug] });
 
         // alle "bookinger" queries (index/baner/dato)
-        queryClient.invalidateQueries({ queryKey: ["bookinger", slugKey] });
+        void queryClient.invalidateQueries({ queryKey: ["bookinger", slug] });
     };
 
     const cancelMutation = useApiMutation<BookingSlotKey, void>(
@@ -38,18 +39,10 @@ export function useBookingActions(slug: string | undefined) {
     );
 
     const avbestill = (key: BookingSlotKey) => {
-        if (!slug) {
-            toast.error("Mangler klubb (slug).");
-            return;
-        }
         cancelMutation.mutate(key);
     };
 
     const avbestillAsync = async (key: BookingSlotKey) => {
-        if (!slug) {
-            toast.error("Mangler klubb (slug).");
-            return;
-        }
         return cancelMutation.mutateAsync(key);
     };
 

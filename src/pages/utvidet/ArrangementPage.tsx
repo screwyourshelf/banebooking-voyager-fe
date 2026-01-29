@@ -1,5 +1,4 @@
 import { useState, useMemo, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import {
     ukedager,
     dagNavnTilEnum,
@@ -37,8 +36,6 @@ import {
 } from "@/components/ui/dialog.js";
 
 export default function ArrangementPage() {
-    const { slug } = useParams<{ slug: string }>();
-
     const {
         baner,
         tilgjengeligeTidspunkter,
@@ -50,7 +47,7 @@ export default function ArrangementPage() {
         isLoadingForhandsvisning,
         // valgfritt hvis du la til dette:
         // forhandsvisError,
-    } = useArrangement(slug);
+    } = useArrangement();
 
     const [valgteBaner, setValgteBaner] = useState<string[]>([]);
     const [valgteUkedager, setValgteUkedager] = useState<string[]>([]);

@@ -8,15 +8,13 @@ import { useBaner } from "../hooks/useBaner.js";
 import { useBooking } from "../hooks/useBooking.js";
 import { useAuth } from "../hooks/useAuth.js";
 import LoaderSkeleton from "../components/LoaderSkeleton.js";
-import { useSlug } from "@/hooks/useSlug.js";
 import Page from "@/components/Page.js";
 import SimpleTabsLazy from "@/components/SimpleTabsLazy.js";
 import ReglementDialog from "@/components/ReglementDialog.js";
 import { Button } from "@/components/ui/button.js";
 
 export default function IndexPage() {
-  const slug = useSlug();
-  const { baner, isLoading: loadingBaner } = useBaner(slug, false);
+  const { baner, isLoading: loadingBaner } = useBaner(false);
   const [valgtBaneId, setValgtBaneId] = useState("");
   const [valgtDato, setValgtDato] = useState<Date | null>(new Date());
 
@@ -36,7 +34,7 @@ export default function IndexPage() {
     onCancel,
     onDelete,
     isLoading: loadingBooking,
-  } = useBooking(slug, valgtDatoStr, valgtBaneId);
+  } = useBooking(valgtDatoStr, valgtBaneId);
 
   // Sett default bane
   useEffect(() => {

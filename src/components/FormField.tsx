@@ -12,7 +12,6 @@ interface FormFieldProps {
     error?: string | null;
     hideLabel?: boolean;
 
-    /** Ekstra props sendes rett til <Input /> */
     inputProps?: Omit<
         InputHTMLAttributes<HTMLInputElement>,
         "id" | "value" | "onChange"
@@ -29,6 +28,8 @@ export function FormField({
     hideLabel = false,
     inputProps,
 }: FormFieldProps) {
+    const errorId = `${id}-error`;
+
     return (
         <FieldWrapper
             id={id}
@@ -41,13 +42,17 @@ export function FormField({
                 id={id}
                 value={value}
                 onChange={onChange}
+                aria-invalid={!!error}
+                aria-describedby={error ? errorId : undefined}
                 {...inputProps}
                 className={cn(
                     "bg-background",
-                    error && "border-destructive",
+                    error && "border-destructive focus-visible:ring-destructive",
                     inputProps?.className
                 )}
             />
+            {/* Skjult “kobling” for a11y. Visuell tekst rendres allerede i FieldWrapper */}
+            {error ? <span id={errorId} className="sr-only">{error}</span> : null}
         </FieldWrapper>
     );
 }

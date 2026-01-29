@@ -1,23 +1,23 @@
 import { useApiQuery } from "@/hooks/useApiQuery";
 import type { FeedItemDto } from "@/types";
+import { useSlug } from "@/hooks/useSlug";
 
-/**
- * Hook for å hente feed via React Query + Axios.
- */
-export function useFeed(slug: string) {
-  const query = useApiQuery<FeedItemDto[]>(
-    ["feed", slug],
-    `/klubb/${slug}/feed`,
-    {
-      requireAuth: true,
-      staleTime: 60_000,
-    }
-  );
+export function useFeed() {
+    const slug = useSlug();
 
-  return {
-    feed: query.data ?? [],
-    isLoading: query.isLoading,
-    error: query.error,
-    refetch: query.refetch,
-  };
+    const query = useApiQuery<FeedItemDto[]>(
+        ["feed", slug],
+        `/klubb/${slug}/feed`,
+        {
+            requireAuth: true,
+            staleTime: 60_000,
+        }
+    );
+
+    return {
+        feed: query.data ?? [],
+        isLoading: query.isLoading,
+        error: query.error,
+        refetch: query.refetch,
+    };
 }

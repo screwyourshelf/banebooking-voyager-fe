@@ -5,22 +5,22 @@ import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import api from "@/api/api";
 import type { Bane, NyBane, OppdaterBane } from "@/types";
+import { useSlug } from "@/hooks/useSlug";
 
-export function useBaner(slug?: string, inkluderInaktive = true) {
+export function useBaner(inkluderInaktive = true) {
+    const slug = useSlug();
     const queryClient = useQueryClient();
 
     const invalidateAll = () => {
-        if (!slug) return;
-        queryClient.invalidateQueries({ queryKey: ["baner", slug] });
-        queryClient.invalidateQueries({ queryKey: ["baner", slug, true] });
-        queryClient.invalidateQueries({ queryKey: ["baner", slug, false] });
+        void queryClient.invalidateQueries({ queryKey: ["baner", slug] });
+        void queryClient.invalidateQueries({ queryKey: ["baner", slug, true] });
+        void queryClient.invalidateQueries({ queryKey: ["baner", slug, false] });
     };
 
     const banerQuery = useApiQuery<Bane[]>(
         ["baner", slug, inkluderInaktive],
         `/klubb/${slug}/baner${inkluderInaktive ? "?inkluderInaktive=true" : ""}`,
         {
-            enabled: !!slug,
             staleTime: 1000 * 60 * 5,
             requireAuth: false,
         }
@@ -50,16 +50,11 @@ export function useBaner(slug?: string, inkluderInaktive = true) {
         }
     );
 
-    // Oppdater bane: her trenger vi fortsatt id i URL.
-    // Enten:
-    // A) behold custom mutationFn (som nå)
-    // B) eller oppgrader useApiMutation til å støtte url som funksjon.
     const oppdaterBane = useApiMutation<{ id: string; dto: OppdaterBane }, void>(
         "put",
         "/",
         {
             mutationFn: async ({ id, dto }) => {
-                if (!slug) return;
                 await api.put<void>(`/klubb/${slug}/baner/${id}`, dto, { requireAuth: true });
             },
             onSuccess: () => {

@@ -14,11 +14,10 @@ type BaneFormData = {
     aktiv: boolean;
 };
 
-type Props = { slug: string };
 const STORAGE_KEY = "rediger.valgtBaneId";
 
-export default function RedigerBaneTab({ slug }: Props) {
-    const { baner, isLoading, oppdaterBane } = useBaner(slug, true);
+export default function RedigerBaneTab() {
+    const { baner, isLoading, oppdaterBane } = useBaner(true);
 
     const [redigerte, setRedigerte] = useState<Record<string, BaneFormData>>({});
     const [valgtBaneId, setValgtBaneId] = useState<string | null>(() => {

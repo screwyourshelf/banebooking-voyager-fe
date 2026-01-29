@@ -1,26 +1,26 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
+import { useSlug } from "@/hooks/useSlug";
 
 type Props = {
-    slug?: string;
     klubbnavn: React.ReactNode;
 };
 
-export default function NavbarBrandMedKlubb({ slug, klubbnavn }: Props) {
-    const base = import.meta.env.BASE_URL;
+export default function NavbarBrandMedKlubb({ klubbnavn }: Props) {
+    const slug = useSlug();
+    const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
 
-    const logoSrc = slug
-        ? `${base}klubber/${slug}/img/logo.webp`
-        : `${base}klubber/default/img/logo.webp`;
+    const logoSrc = `${base}/klubber/${slug}/img/logo.webp`;
+    const fallbackLogo = `${base}/klubber/default/img/logo.webp`;
 
     return (
         <Link
-            to={slug ? `/${slug}` : '/'}
+            to={`/${slug}`}
             className="flex items-center gap-2 text-base font-semibold text-gray-800 hover:text-black"
         >
             <img
                 src={logoSrc}
                 onError={(e) => {
-                    e.currentTarget.src = `${base}klubber/default/img/logo.webp`;
+                    e.currentTarget.src = fallbackLogo;
                 }}
                 alt="Logo"
                 width={32}

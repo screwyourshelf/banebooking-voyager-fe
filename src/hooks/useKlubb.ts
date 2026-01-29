@@ -4,8 +4,10 @@ import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import type { KlubbDetaljer, OppdaterKlubb } from "@/types/index.js";
+import { useSlug } from "@/hooks/useSlug";
 
-export function useKlubb(slug?: string) {
+export function useKlubb() {
+    const slug = useSlug();
     const queryClient = useQueryClient();
 
     // GET klubb
@@ -14,12 +16,11 @@ export function useKlubb(slug?: string) {
         `/klubb/${slug}`,
         {
             requireAuth: false,
-            enabled: !!slug,
             staleTime: 1000 * 60 * 5, // 5 min
         }
     );
 
-    // Toast på query-feil (v5 pattern)
+    // Toast på query-feil
     const toastetFeilRef = useRef(false);
     useEffect(() => {
         if (!klubbQuery.error) {
@@ -32,16 +33,15 @@ export function useKlubb(slug?: string) {
         toastetFeilRef.current = true;
     }, [klubbQuery.error]);
 
-    // PUT/PATCH klubb (bruker det endepunktet dere har i api/klubb)
-    // Hvis backend krever auth: sett requireAuth: true i api/klubb.ts eller her via mutationFn.
+    // PUT klubb
     const oppdaterKlubb = useApiMutation<OppdaterKlubb, void>(
         "put",
         `/klubb/${slug}`,
         {
             onSuccess: () => {
                 toast.success("Klubb oppdatert");
-                queryClient.invalidateQueries({ queryKey: ["klubb", slug] });
-                queryClient.invalidateQueries({ queryKey: ["feed", slug] });
+                void queryClient.invalidateQueries({ queryKey: ["klubb", slug] });
+                void queryClient.invalidateQueries({ queryKey: ["feed", slug] });
             },
             onError: (err) => {
                 toast.error(err.message ?? "Kunne ikke oppdatere klubb");

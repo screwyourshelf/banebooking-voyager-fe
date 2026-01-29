@@ -11,11 +11,10 @@ import { FormField } from "../../components/FormField";
 const MAX_LENGTH = 50;
 const NAVN_REGEX = /^[\p{L}\d\s.@'_%+-]{2,}$/u;
 
-type Props = { slug: string };
 type Mode = "epost" | "navn";
 
-export default function MinProfilTab({ slug }: Props) {
-    const { bruker, laster: lasterMeg, oppdaterVisningsnavn } = useMeg(slug);
+export default function MinProfilTab() {
+    const { bruker, laster: lasterMeg, oppdaterVisningsnavn } = useMeg();
     const { mutateAsync, isPending } = oppdaterVisningsnavn;
 
     const [mode, setMode] = useState<Mode>("epost");

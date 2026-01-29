@@ -3,18 +3,20 @@ import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import type { BrukerDto } from "@/types";
+import { useSlug } from "@/hooks/useSlug";
 
 type OppdaterMegDto = {
     visningsnavn?: string;
 };
 
-export function useMeg(slug: string | undefined) {
+export function useMeg() {
+    const slug = useSlug();
+
     const megQuery = useApiQuery<BrukerDto>(
         ["meg", slug],
         `/klubb/${slug}/bruker/meg`,
         {
             requireAuth: true,
-            enabled: !!slug,
             staleTime: 60_000,
         }
     );
@@ -43,32 +45,39 @@ export function useMeg(slug: string | undefined) {
     );
 
     const lastNedEgenData = async () => {
-        if (!slug) return;
+        try {
+            const res = await api.get(`/klubb/${slug}/bruker/meg/egen-data`, {
+                requireAuth: true,
+                responseType: "blob",
+            });
 
-        const res = await api.get(`/klubb/${slug}/bruker/meg/egen-data`, {
-            requireAuth: true,
-            responseType: "blob",
-        });
+            const blob = res.data as Blob;
 
-        const blob = res.data as Blob;
+            // prøv å hente filnavn fra Content-Disposition (backend setter filename)
+            const disposition = res.headers?.["content-disposition"] as string | undefined;
+            const match = disposition?.match(/filename\*=UTF-8''([^;]+)|filename="?([^"]+)"?/i);
+            const fileNameFromHeader = decodeURIComponent(match?.[1] ?? match?.[2] ?? "");
+            const fileName =
+                fileNameFromHeader || `banebooking-data-${new Date().toISOString().slice(0, 10)}.json`;
 
-        // prøv å hente filnavn fra Content-Disposition (backend setter filename)
-        const disposition = res.headers?.["content-disposition"] as string | undefined;
-        const match = disposition?.match(/filename\*=UTF-8''([^;]+)|filename="?([^"]+)"?/i);
-        const fileNameFromHeader = decodeURIComponent(match?.[1] ?? match?.[2] ?? "");
-        const fileName =
-            fileNameFromHeader || `banebooking-data-${new Date().toISOString().slice(0, 10)}.json`;
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = fileName;
 
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = fileName;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
 
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
+            URL.revokeObjectURL(url);
+        } catch (err: unknown) {
+            const message =
+                err instanceof Error
+                    ? err.message
+                    : "Kunne ikke laste ned egen data";
 
-        URL.revokeObjectURL(url);
+            toast.error(message);
+        }
     };
 
     return {

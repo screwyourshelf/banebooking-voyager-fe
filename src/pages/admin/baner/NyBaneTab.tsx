@@ -10,10 +10,8 @@ type BaneFormData = {
     beskrivelse: string;
 };
 
-type Props = { slug: string };
-
-export default function NyBaneTab({ slug }: Props) {
-    const { opprettBane } = useBaner(slug);
+export default function NyBaneTab() {
+    const { opprettBane } = useBaner();
 
     const [nyBane, setNyBane] = useState<BaneFormData>({
         navn: "",

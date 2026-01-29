@@ -7,7 +7,6 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog.js";
 import { useKlubb } from "@/hooks/useKlubb.js";
-import { useSlug } from "@/hooks/useSlug.js";
 import { ReactNode } from "react";
 
 type Props = {
@@ -15,8 +14,7 @@ type Props = {
 };
 
 export default function ReglementDialog({ children }: Props) {
-  const slug = useSlug();
-  const { data: klubb, isLoading } = useKlubb(slug);
+  const { data: klubb, isLoading } = useKlubb();
 
   if (isLoading || !klubb) {
     return null;

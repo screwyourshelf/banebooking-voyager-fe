@@ -1,12 +1,10 @@
-import { useParams } from "react-router-dom";
 import { useKlubb } from "@/hooks/useKlubb.js";
 import LoaderSkeleton from "@/components/LoaderSkeleton.js";
 import Page from "@/components/Page.js";
 import { AKTIV_VILKAAR } from "@/lib/vilkaar";
 
 export default function VilkaarPage() {
-  const { slug } = useParams();
-  const { data: klubb, isLoading } = useKlubb(slug);
+  const { data: klubb, isLoading } = useKlubb();
 
   if (isLoading || !klubb) {
     return (

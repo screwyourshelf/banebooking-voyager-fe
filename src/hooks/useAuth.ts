@@ -2,14 +2,14 @@
 import { supabase } from "@/supabase.js";
 import type { User } from "@supabase/supabase-js";
 
-function buildRedirectUrl(slug?: string) {
-    const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, ""); // fjerner trailing /
-    const cleanSlug = (slug ?? localStorage.getItem("slug") ?? "").replace(/^\/+|\/+$/g, "");
+function buildRedirectUrl() {
+    const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
+    const storedSlug = (localStorage.getItem("slug") ?? "").replace(/^\/+|\/+$/g, "");
 
-    // hvis ingen slug -> gå til base-root
-    if (!cleanSlug) return `${window.location.origin}${base || "/"}`;
+    // Hvis ingen slug -> gå til base-root
+    if (!storedSlug) return `${window.location.origin}${base || "/"}`;
 
-    return `${window.location.origin}${base}/${cleanSlug}`;
+    return `${window.location.origin}${base}/${storedSlug}`;
 }
 
 export function useAuth() {
@@ -18,13 +18,14 @@ export function useAuth() {
     useEffect(() => {
         let alive = true;
 
-        // init: les session uten /user-kall
         supabase.auth.getSession().then(({ data }) => {
             if (!alive) return;
             setCurrentUser(data.session?.user ?? null);
         });
 
-        const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
+        const {
+            data: { subscription },
+        } = supabase.auth.onAuthStateChange((_event, session) => {
             if (!alive) return;
             setCurrentUser(session?.user ?? null);
         });
@@ -35,13 +36,11 @@ export function useAuth() {
         };
     }, []);
 
-    const signOut = useCallback(async (redirectSlug?: string) => {
-        const redirectTo = buildRedirectUrl(redirectSlug);
+    const signOut = useCallback(async () => {
+        const redirectTo = buildRedirectUrl();
 
         await supabase.auth.signOut();
 
-        // Ikke sett state manuelt her – onAuthStateChange tar den.
-        // Hard redirect er ok hvis dere vil “reset” hele appen etter logout.
         window.location.assign(redirectTo);
     }, []);
 

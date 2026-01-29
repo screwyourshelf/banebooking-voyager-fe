@@ -1,19 +1,24 @@
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { toast } from "sonner";
+
 import { Button } from "@/components/ui/button.js";
 import SettingsList from "@/components/SettingsList";
 import SettingsRow from "@/components/SettingsRow";
 import SettingsSection from "@/components/SettingsSection";
 import InfoRow from "@/components/InfoRow";
 import SlettMegDialog from "@/components/SlettMegDialog.js";
+import LoaderSkeleton from "@/components/LoaderSkeleton.js";
+
 import { formatDatoKort } from "@/utils/datoUtils.js";
 import { useMeg } from "@/hooks/useMeg.js";
-import LoaderSkeleton from "@/components/LoaderSkeleton.js";
-import { Link } from "react-router-dom";
+import { useSlug } from "@/hooks/useSlug";
 
-type Props = { slug: string };
+export default function PersondataTab() {
+    const slug = useSlug();
+    const { bruker, laster, lastNedEgenData, slettMeg } = useMeg();
 
-export default function PersondataTab({ slug }: Props) {
-    const { bruker, laster, lastNedEgenData, slettMeg } = useMeg(slug);
-    const { isPending } = slettMeg;
+    const [lasterNed, setLasterNed] = useState(false);
 
     if (laster || !bruker) {
         return <LoaderSkeleton />;
@@ -23,6 +28,22 @@ export default function PersondataTab({ slug }: Props) {
         ? `Akseptert ${formatDatoKort(bruker.vilkaarAkseptertDato)}${bruker.vilkaarVersjon ? ` (versjon ${bruker.vilkaarVersjon})` : ""
         }`
         : "Ikke registrert";
+
+    const handleLastNed = async () => {
+        if (lasterNed) return;
+
+        try {
+            setLasterNed(true);
+            await lastNedEgenData();
+        } catch (err: unknown) {
+            // lastNedEgenData har allerede toast, men dette er en trygg fallback
+            const message =
+                err instanceof Error ? err.message : "Kunne ikke laste ned egen data";
+            toast.error(message);
+        } finally {
+            setLasterNed(false);
+        }
+    };
 
     return (
         <div className="space-y-4">
@@ -57,12 +78,12 @@ export default function PersondataTab({ slug }: Props) {
                         description="JSON med registrerte opplysninger og bookinger."
                         right={
                             <Button
-                                onClick={lastNedEgenData}
+                                onClick={handleLastNed}
                                 size="sm"
                                 variant="outline"
-                                disabled={isPending}
+                                disabled={lasterNed || slettMeg.isPending}
                             >
-                                {isPending ? "Laster..." : "Last ned"}
+                                {lasterNed ? "Laster..." : "Last ned"}
                             </Button>
                         }
                     />

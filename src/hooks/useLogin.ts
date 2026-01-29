@@ -1,82 +1,122 @@
-import { useState, useEffect } from 'react';
-import { supabase } from '../supabase.js';
-import { toast } from 'sonner';
+import { useMemo, useState } from "react";
+import { supabase } from "../supabase.js";
+import { toast } from "sonner";
 
-export function useLogin(slug?: string) {
-    const [email, setEmail] = useState('');
-    const [otp, setOtp] = useState('');
-    const [step, setStep] = useState<'input' | 'verify'>('input');
-    const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'verifying' | 'done' | 'error'>('idle');
+type Step = "input" | "verify";
+type Status = "idle" | "sending" | "sent" | "verifying" | "done" | "error";
 
-    // Fjerner trailing slash fra BASE_URL
-    const base = import.meta.env.BASE_URL.replace(/\/$/, '');
-    const redirectTo = `${window.location.origin}${base}/auth/callback`;
+export function useLogin() {
+    const [email, setEmail] = useState("");
+    const [otp, setOtp] = useState("");
+    const [step, setStep] = useState<Step>("input");
+    const [status, setStatus] = useState<Status>("idle");
 
-    useEffect(() => {
-        if (slug) {
-            localStorage.setItem('slug', slug);
-        }
-    }, [slug]);
+    const erBusy = useMemo(
+        () => status === "sending" || status === "verifying",
+        [status]
+    );
+
+    const redirectTo = useMemo(() => {
+        const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
+        return `${window.location.origin}${base}/auth/callback`;
+    }, []);
 
     const handleGoogleLogin = async () => {
+        if (erBusy) return;
+
         const { error } = await supabase.auth.signInWithOAuth({
-            provider: 'google',
+            provider: "google",
             options: {
                 redirectTo,
-                queryParams: { access_type: 'offline' },
-                scopes: 'openid email',
+                queryParams: { access_type: "offline" },
+                scopes: "openid email",
             },
         });
+
         if (error) toast.error(error.message);
     };
 
     const handleFacebookLogin = async () => {
+        if (erBusy) return;
+
         const { error } = await supabase.auth.signInWithOAuth({
-            provider: 'facebook',
+            provider: "facebook",
             options: {
                 redirectTo,
-                scopes: 'email',
+                scopes: "email",
             },
         });
+
         if (error) toast.error(error.message);
     };
 
-    const sendOtp = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setStatus('sending');
+    const sendOtp = async () => {
+        if (erBusy) return;
+
+        const epost = email.trim();
+        if (!epost) {
+            setStatus("error");
+            toast.error("E-post mangler");
+            return;
+        }
+
+        setStatus("sending");
+
         const { error } = await supabase.auth.signInWithOtp({
-            email,
+            email: epost,
             options: {
                 shouldCreateUser: true,
                 emailRedirectTo: redirectTo,
             },
         });
+
         if (error) {
-            toast.error('Kunne ikke sende kode: ' + error.message);
-            setStatus('error');
-        } else {
-            toast.success('Kode sendt – sjekk e-posten din');
-            setStep('verify');
-            setStatus('idle');
+            toast.error("Kunne ikke sende kode: " + error.message);
+            setStatus("error");
+            return;
         }
+
+        toast.success("Kode sendt – sjekk e-posten din");
+        setStep("verify");
+        setStatus("idle");
     };
 
-    const verifyOtp = async (e: React.FormEvent) => {
-        e.preventDefault();
-        setStatus('verifying');
-        const { error } = await supabase.auth.verifyOtp({
-            email,
-            token: otp,
-            type: 'email',
-        });
-        if (error) {
-            toast.error('Feil kode: ' + error.message);
-            setStatus('error');
-        } else {
-            toast.success('Innlogging fullført!');
-            setStatus('done');
-            window.location.reload();
+    const verifyOtp = async () => {
+        if (erBusy) return;
+
+        const epost = email.trim();
+        const token = otp.trim();
+
+        if (!epost || !token) {
+            setStatus("error");
+            toast.error("Mangler e-post eller kode");
+            return;
         }
+
+        setStatus("verifying");
+
+        const { error } = await supabase.auth.verifyOtp({
+            email: epost,
+            token,
+            type: "email",
+        });
+
+        if (error) {
+            toast.error("Feil kode: " + error.message);
+            setStatus("error");
+            return;
+        }
+
+        toast.success("Innlogging fullført!");
+        setStatus("done");
+        window.location.reload();
+    };
+
+    const reset = () => {
+        setEmail("");
+        setOtp("");
+        setStep("input");
+        setStatus("idle");
     };
 
     return {
@@ -88,9 +128,11 @@ export function useLogin(slug?: string) {
         setStatus,
         step,
         setStep,
+        erBusy,
         handleGoogleLogin,
         handleFacebookLogin,
         sendOtp,
         verifyOtp,
+        reset,
     };
 }

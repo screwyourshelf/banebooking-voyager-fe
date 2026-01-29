@@ -9,12 +9,10 @@ import type { BookingSlot } from "@/types";
 import BookingSlotItem from "@/components/Booking/BookingSlotItem.js";
 import "animate.css";
 
-type Props = { slug: string };
-
-export default function MineBookingerTab({ slug }: Props) {
+export default function MineBookingerTab() {
     const [visHistoriske, setVisHistoriske] = useState(false);
-    const { data: bookinger = [], isLoading } = useMineBookinger(slug, visHistoriske);
-    const { avbestillAsync, isPending } = useBookingActions(slug);
+    const { data: bookinger = [], isLoading } = useMineBookinger(visHistoriske);
+    const { avbestillAsync, isPending } = useBookingActions();
 
     const [openKey, setOpenKey] = useState<string | null>(null);
 

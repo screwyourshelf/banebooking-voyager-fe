@@ -1,14 +1,13 @@
-import { useState, useMemo } from "react";
-import { useParams } from "react-router-dom";
-import { useBruker } from "../../hooks/useBruker.js";
-import { useAdminBrukere } from "../../hooks/useAdminBrukere.js";
+import { useMemo, useState } from "react";
+import LoaderSkeleton from "@/components/LoaderSkeleton";
+import SettingsSection from "@/components/SettingsSection";
+import SettingsList from "@/components/SettingsList";
+import SettingsRow from "@/components/SettingsRow";
+import SettingsInput from "@/components/SettingsInput";
 
-import { Button } from "@/components/ui/button.js";
-import { Card, CardContent } from "@/components/ui/card.js";
-import LoaderSkeleton from "@/components/LoaderSkeleton.js";
-import { FormField } from "@/components/FormField.js";
-import { SelectField } from "@/components/SelectField.js";
-import { FaEdit } from "react-icons/fa";
+import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 
 import {
     Dialog,
@@ -16,64 +15,88 @@ import {
     DialogFooter,
     DialogHeader,
     DialogTitle,
-} from "@/components/ui/dialog.js";
+} from "@/components/ui/dialog";
 
-import {
-    Table,
-    TableHeader,
-    TableRow,
-    TableHead,
-    TableBody,
-    TableCell,
-} from "@/components/ui/table.js";
+import { useBruker } from "@/hooks/useBruker";
+import { useAdminBrukere } from "@/hooks/useAdminBrukere";
 
-import type { RolleType, BrukerDto } from "../../types/index.js";
-import { FieldWrapper } from "../../components/FieldWrapper.js";
+import type { RolleType, BrukerDto } from "@/types";
+
+type EditState = {
+    rolle: RolleType;
+    visningsnavn: string;
+};
+
+const ROLLER: RolleType[] = ["Medlem", "Utvidet", "KlubbAdmin"];
+
+function erSlettetEpost(epost?: string | null) {
+    if (!epost) return false;
+    return epost.toLowerCase().startsWith("slettet_");
+}
 
 export default function BrukerePage() {
-    const { slug } = useParams<{ slug: string }>();
-    const { bruker, laster: lasterBruker } = useBruker(slug);
+    const { bruker, laster: lasterBruker } = useBruker();
 
-    const {
-        brukere,
-        laster: lasterListe,
-        oppdater,
-        oppdaterLaster,
-        // error, // hvis du har den i hooken
-    } = useAdminBrukere(slug);
-
-    const [query, setQuery] = useState("");
-    const [aktivBruker, setAktivBruker] = useState<BrukerDto | null>(null);
-    const [redigerRolle, setRedigerRolle] = useState<RolleType>("Medlem");
-    const [redigerVisningsnavn, setRedigerVisningsnavn] = useState("");
+    const { brukere, laster: lasterListe, oppdater, oppdaterLaster } =
+        useAdminBrukere();
 
     const erKlubbAdmin = bruker?.roller.includes("KlubbAdmin");
 
+    // Filters
+    const [query, setQuery] = useState("");
+    const [visSlettede, setVisSlettede] = useState(false);
+    const [rolleFilter, setRolleFilter] = useState<RolleType[]>([]); // tom = alle
+
+    // Dialog
+    const [aktivBruker, setAktivBruker] = useState<BrukerDto | null>(null);
+    const [edit, setEdit] = useState<EditState>({ rolle: "Medlem", visningsnavn: "" });
+
     const filtrerteBrukere = useMemo(() => {
         const q = query.toLowerCase().trim();
-        return brukere.filter(
-            (b) =>
-                b.epost?.toLowerCase().includes(q) ||
-                b.visningsnavn?.toLowerCase().includes(q)
-        );
-    }, [brukere, query]);
 
-    const åpneRedigering = (b: BrukerDto) => {
+        return brukere
+            .filter((b) => {
+                if (!visSlettede && erSlettetEpost(b.epost)) return false;
+                return true;
+            })
+            .filter((b) => {
+                if (rolleFilter.length === 0) return true;
+                const rolle = (b.roller?.[0] ?? "Medlem") as RolleType;
+                return rolleFilter.includes(rolle);
+            })
+            .filter((b) => {
+                if (!q) return true;
+                return (
+                    b.epost?.toLowerCase().includes(q) ||
+                    b.visningsnavn?.toLowerCase().includes(q)
+                );
+            });
+    }, [brukere, query, visSlettede, rolleFilter]);
+
+    const åpenRedigering = (b: BrukerDto) => {
         setAktivBruker(b);
-        setRedigerRolle((b.roller[0] ?? "Medlem") as RolleType);
-        setRedigerVisningsnavn(b.visningsnavn ?? "");
+        setEdit({
+            rolle: ((b.roller?.[0] ?? "Medlem") as RolleType) ?? "Medlem",
+            visningsnavn: b.visningsnavn ?? "",
+        });
     };
 
     const lagreEndringer = async () => {
-        if (!slug || !aktivBruker) return;
+        if (!aktivBruker) return;
 
         await oppdater(aktivBruker.id, {
-            rolle: redigerRolle,
-            visningsnavn: redigerVisningsnavn,
+            rolle: edit.rolle,
+            visningsnavn: edit.visningsnavn,
         });
 
         setAktivBruker(null);
     };
+
+    function toggleRolle(r: RolleType) {
+        setRolleFilter((prev) =>
+            prev.includes(r) ? prev.filter((x) => x !== r) : [...prev, r]
+        );
+    }
 
     if (lasterBruker) return <LoaderSkeleton />;
 
@@ -86,81 +109,119 @@ export default function BrukerePage() {
     }
 
     return (
-        <div className="max-w-screen-sm mx-auto px-2 py-2 space-y-4">
-            <Card>
-                <CardContent className="p-4 space-y-4">
-                    <FormField
-                        id="sok"
-                        label="Søk etter bruker"
-                        value={query}
-                        onChange={(e) => setQuery(e.target.value)}
-                        helpText="F.eks. navn eller e-post"
+        <div className="space-y-4">
+            <SettingsSection
+                title="Brukere"
+                description="Søk etter brukere og endre rolle eller visningsnavn."
+            >
+                {/* FILTER (samme prinsipp som KlubbInfoTab: SettingsList + SettingsRow) */}
+                <SettingsList>
+                  
+                    <SettingsRow title="Filter på rolle" description="">
+                        <div className="flex flex-wrap gap-2">
+                            {ROLLER.map((r) => {
+                                const aktiv = rolleFilter.includes(r);
+                                return (
+                                    <Button
+                                        key={r}
+                                        type="button"
+                                        size="sm"
+                                        variant={aktiv ? "default" : "outline"}
+                                        onClick={() => toggleRolle(r)}
+                                        className="h-8 px-3"
+                                    >
+                                        {r}
+                                    </Button>
+                                );
+                            })}
+                        </div>
+
+                        {rolleFilter.length > 0 ? (
+                            <div className="mt-2">
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => setRolleFilter([])}
+                                    className="h-8 px-2 text-muted-foreground"
+                                >
+                                    Nullstill filter
+                                </Button>
+                            </div>
+                        ) : null}
+                    </SettingsRow>
+
+                    <SettingsRow
+                        title="Vis slettede brukere"
+                        description="Inkluder brukere som er anonymisert eller slettet."
+                        right={
+                            <div className="pt-0.5">
+                                <Switch checked={visSlettede} onCheckedChange={setVisSlettede} />
+                            </div>
+                        }
                     />
 
-                    {lasterListe && <p>Laster brukere...</p>}
-                    {!lasterListe && filtrerteBrukere.length === 0 && (
-                        <p className="text-muted-foreground">Ingen brukere funnet</p>
+                    <SettingsRow title="Søk" description="">
+                        <SettingsInput
+                            value={query}
+                            onChange={setQuery}
+                            placeholder="Søk på e-post eller visningsnavn…"
+                            inputMode="search"
+                            className="bg-background"
+                        />
+                    </SettingsRow>
+                </SettingsList>
+
+                {/* RESULTATLISTE */}
+                <div className="mt-4">
+                    {lasterListe ? (
+                        <p className="text-sm text-muted-foreground">Laster brukere…</p>
+                    ) : filtrerteBrukere.length === 0 ? (
+                        <p className="text-sm text-muted-foreground italic">Ingen brukere funnet.</p>
+                    ) : (
+                        <SettingsList>
+                            {filtrerteBrukere.map((b) => {
+                                const erMeg = b.id === bruker?.id;
+                                const slettet = erSlettetEpost(b.epost);
+                                const rolle = (b.roller?.[0] ?? "Medlem") as RolleType;
+
+                                return (
+                                    <SettingsRow
+                                        key={b.id}
+                                        title={b.epost ?? "Ukjent bruker"}
+                                        description={b.visningsnavn || (slettet ? "Slettet/anonymisert" : "")}
+                                        right={
+                                            !erMeg && !slettet ? (
+                                                // samme “knapp-look” som ellers (booking/avbestill)
+                                                <Button
+                                                    type="button"
+                                                    size="sm"
+                                                    variant="outline"
+                                                    onClick={() => åpenRedigering(b)}
+                                                >
+                                                    Rediger
+                                                </Button>
+                                            ) : null
+                                        }
+                                        className={cn(slettet && "opacity-70")}
+                                    >
+                                        <div className="text-sm text-foreground">
+                                            <span className="text-muted-foreground">Rolle: </span>
+                                            {rolle}
+                                            {slettet ? (
+                                                <span className="text-muted-foreground"> (slettet)</span>
+                                            ) : null}
+                                        </div>
+                                    </SettingsRow>
+                                );
+                            })}
+                        </SettingsList>
                     )}
+                </div>
+            </SettingsSection>
 
-                    {!lasterListe && filtrerteBrukere.length > 0 && (
-                        <div className="max-w-full overflow-x-auto border rounded-md">
-                            <Table className="text-sm w-full">
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead className="w-[140px]">Bruker</TableHead>
-                                        <TableHead className="w-2/6">Rolle</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {filtrerteBrukere.map((b) => {
-                                        const erMeg = b.id === bruker?.id;
-                                        return (
-                                            <TableRow key={b.id}>
-                                                <TableCell className="whitespace-nowrap max-w-[180px]">
-                                                    <div className="flex justify-between items-start gap-2 overflow-hidden">
-                                                        <div className="flex-1 overflow-hidden">
-                                                            <div className="font-medium truncate" title={b.epost}>
-                                                                {b.epost}
-                                                            </div>
-                                                            {b.visningsnavn && (
-                                                                <div
-                                                                    className="text-muted-foreground text-xs truncate"
-                                                                    title={b.visningsnavn}
-                                                                >
-                                                                    {b.visningsnavn}
-                                                                </div>
-                                                            )}
-                                                        </div>
-
-                                                        {!erMeg && (
-                                                            <Button
-                                                                variant="ghost"
-                                                                size="icon"
-                                                                onClick={() => åpneRedigering(b)}
-                                                                title="Rediger"
-                                                                className="text-muted-foreground hover:text-primary"
-                                                            >
-                                                                <FaEdit className="w-4 h-4" />
-                                                                <span className="sr-only">Rediger</span>
-                                                            </Button>
-                                                        )}
-                                                    </div>
-                                                </TableCell>
-
-                                                <TableCell className="whitespace-nowrap">
-                                                    {b.roller[0] ?? "Medlem"}
-                                                </TableCell>
-                                            </TableRow>
-                                        );
-                                    })}
-                                </TableBody>
-                            </Table>
-                        </div>
-                    )}
-                </CardContent>
-            </Card>
-
-            {aktivBruker && (
+            {/* DIALOG */}
+            {aktivBruker ? (
                 <Dialog
                     open
                     onOpenChange={(open) => {
@@ -172,33 +233,46 @@ export default function BrukerePage() {
                             <DialogTitle>Rediger bruker</DialogTitle>
                         </DialogHeader>
 
-                        <FieldWrapper id="epost" label="Brukernavn / ID">
-                            <p className="text-sm text-foreground">{aktivBruker.epost}</p>
-                        </FieldWrapper>
-
                         <div className="space-y-4">
-                            <FormField
-                                id="visningsnavn"
-                                label="Visningsnavn"
-                                value={redigerVisningsnavn}
-                                onChange={(e) => setRedigerVisningsnavn(e.target.value)}
-                            />
+                            <div className="space-y-1">
+                                <div className="text-xs text-muted-foreground">Bruker</div>
+                                <div className="text-sm font-medium break-words">
+                                    {aktivBruker.epost}
+                                </div>
+                            </div>
 
-                            <SelectField
-                                id="rolle"
-                                label="Rolle"
-                                value={redigerRolle}
-                                onChange={(val) => setRedigerRolle(val as RolleType)}
-                                options={[
-                                    { label: "Medlem", value: "Medlem" },
-                                    { label: "Utvidet", value: "Utvidet" },
-                                    { label: "KlubbAdmin", value: "KlubbAdmin" },
-                                ]}
-                            />
+                            <div className="space-y-2">
+                                <div className="text-sm font-medium">Visningsnavn</div>
+                                <SettingsInput
+                                    value={edit.visningsnavn}
+                                    onChange={(visningsnavn) => setEdit((s) => ({ ...s, visningsnavn }))}
+                                    placeholder="Valgfritt"
+                                    className="bg-background"
+                                />
+                            </div>
+
+                            <div className="space-y-2">
+                                <div className="text-sm font-medium">Rolle</div>
+                                <select
+                                    className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                    value={edit.rolle}
+                                    onChange={(e) =>
+                                        setEdit((s) => ({ ...s, rolle: e.target.value as RolleType }))
+                                    }
+                                >
+                                    <option value="Medlem">Medlem</option>
+                                    <option value="Utvidet">Utvidet</option>
+                                    <option value="KlubbAdmin">KlubbAdmin</option>
+                                </select>
+                            </div>
                         </div>
 
                         <DialogFooter>
-                            <Button variant="ghost" onClick={() => setAktivBruker(null)} disabled={oppdaterLaster}>
+                            <Button
+                                variant="ghost"
+                                onClick={() => setAktivBruker(null)}
+                                disabled={oppdaterLaster}
+                            >
                                 Avbryt
                             </Button>
                             <Button onClick={lagreEndringer} disabled={oppdaterLaster}>
@@ -207,7 +281,7 @@ export default function BrukerePage() {
                         </DialogFooter>
                     </DialogContent>
                 </Dialog>
-            )}
+            ) : null}
         </div>
     );
 }

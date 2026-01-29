@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useSlug } from "@/hooks/useSlug.js";
 import Page from "@/components/Page.js";
 import SimpleTabsLazy from "@/components/SimpleTabsLazy.js";
 
@@ -8,7 +7,6 @@ import NyBaneTab from "@/pages/admin/baner/NyBaneTab.js";
 
 export default function BanerPage() {
   const [tab, setTab] = useState("rediger");
-  const slug = useSlug();
 
   return (
     <Page>
@@ -17,12 +15,12 @@ export default function BanerPage() {
           {
             value: "rediger",
             label: "Rediger bane",
-            content: <RedigerBaneTab slug={slug} />,
+            content: <RedigerBaneTab />,
           },
           {
             value: "ny",
             label: "Ny bane",
-            content: <NyBaneTab slug={slug} />,
+            content: <NyBaneTab />,
           },
         ]}
         value={tab}

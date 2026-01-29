@@ -7,6 +7,7 @@ type Props = {
     onCheckedChange: (checked: boolean) => void;
     disabled?: boolean;
     className?: string;
+    variant?: "card" | "flat";
 };
 
 export default function SwitchRow({
@@ -16,27 +17,27 @@ export default function SwitchRow({
     onCheckedChange,
     disabled = false,
     className = "",
+    variant = "card",
 }: Props) {
     return (
         <div
-            className={`flex items-start justify-between gap-3 rounded-md border bg-background p-3 ${className}`}
+            className={[
+                "flex items-start justify-between gap-3",
+                variant === "card" ? "rounded-md border bg-background p-3" : "p-0",
+                className,
+            ].join(" ")}
         >
             <div className="min-w-0">
                 <div className="text-sm font-medium leading-5">{title}</div>
                 {description ? (
-                    <div className="text-xs text-muted-foreground mt-1 leading-4">
-                        {description}
-                    </div>
+                    <div className="text-xs text-muted-foreground mt-1 leading-4">{description}</div>
                 ) : null}
             </div>
 
             <div className="shrink-0 pt-0.5">
-                <Switch
-                    checked={checked}
-                    onCheckedChange={onCheckedChange}
-                    disabled={disabled}
-                />
+                <Switch checked={checked} onCheckedChange={onCheckedChange} disabled={disabled} />
             </div>
         </div>
     );
 }
+

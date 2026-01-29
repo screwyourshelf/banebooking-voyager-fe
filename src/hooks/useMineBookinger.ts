@@ -2,18 +2,17 @@ import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import type { BookingSlot } from "@/types";
+import { useSlug } from "@/hooks/useSlug";
 
-export function useMineBookinger(
-    slug: string | undefined,
-    inkluderHistoriske = false
-) {
+export function useMineBookinger(inkluderHistoriske = false) {
+    const slug = useSlug();
+
     const query = useApiQuery<BookingSlot[]>(
         ["mineBookinger", slug, inkluderHistoriske],
         `/klubb/${slug}/bookinger/mine${inkluderHistoriske ? "?inkluderHistoriske=true" : ""
         }`,
         {
             requireAuth: true,
-            enabled: !!slug,
             staleTime: 60_000,
         }
     );

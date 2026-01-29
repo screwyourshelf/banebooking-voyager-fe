@@ -1,13 +1,14 @@
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import type { BrukerDto } from "@/types";
 import { AKTIV_VILKAAR } from "@/lib/vilkaar";
 import { useAuth } from "@/hooks/useAuth";
+import { useSlug } from "@/hooks/useSlug";
 
-
-export function useBruker(slug?: string) {
+export function useBruker() {
+    const slug = useSlug();
     const { currentUser } = useAuth();
     const authKey = currentUser?.id ?? "anon";
 
@@ -15,7 +16,6 @@ export function useBruker(slug?: string) {
         ["bruker", slug, authKey],
         `/klubb/${slug}/bruker`,
         {
-            enabled: !!slug,
             staleTime: 60_000,
             requireAuth: true,
         }
@@ -36,31 +36,42 @@ export function useBruker(slug?: string) {
 
     const harForsoktVilkaarRef = useRef(false);
 
+    const mutateVilkaar = useCallback(() => {
+        vilkaarMutation.mutate({ versjon: AKTIV_VILKAAR.versjon });
+    }, [vilkaarMutation]);
+
     useEffect(() => {
-        if (!slug) return;
-        if (!brukerQuery.data) return;
+        const data = brukerQuery.data;
+        if (!data) return;
         if (brukerQuery.isLoading) return;
 
-        if (brukerQuery.data.vilkaarAkseptertDato) {
+        if (data.vilkaarAkseptertDato) {
             harForsoktVilkaarRef.current = false;
             return;
         }
 
         if (!harForsoktVilkaarRef.current && !vilkaarMutation.isPending) {
             harForsoktVilkaarRef.current = true;
-            vilkaarMutation.mutate({ versjon: AKTIV_VILKAAR.versjon });
+            mutateVilkaar();
         }
-    }, [slug, brukerQuery.data, brukerQuery.isLoading, vilkaarMutation]);
+    }, [
+        brukerQuery.data,
+        brukerQuery.isLoading,
+        vilkaarMutation.isPending,
+        mutateVilkaar,
+    ]);
 
     const toastetFeilRef = useRef(false);
+
     useEffect(() => {
-        if (!brukerQuery.error) {
+        const err = brukerQuery.error;
+        if (!err) {
             toastetFeilRef.current = false;
             return;
         }
         if (toastetFeilRef.current) return;
 
-        toast.error(brukerQuery.error.message ?? "Kunne ikke hente bruker");
+        toast.error(err.message ?? "Kunne ikke hente bruker");
         toastetFeilRef.current = true;
     }, [brukerQuery.error]);
 

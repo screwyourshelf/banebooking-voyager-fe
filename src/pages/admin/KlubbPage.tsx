@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useSlug } from "@/hooks/useSlug.js";
 
 import Page from "@/components/Page.js";
 import SimpleTabsLazy from "@/components/SimpleTabsLazy.js";
@@ -9,7 +8,6 @@ import KlubbBookingTab from "@/pages/admin/klubb/KlubbBookingTab.js";
 
 export default function KlubbPage() {
   const [tab, setTab] = useState("info");
-  const slug = useSlug();
 
   return (
     <Page>
@@ -17,13 +15,13 @@ export default function KlubbPage() {
         items={[
           {
             value: "info",
-            label: "Informasjon",
-            content: <KlubbInfoTab slug={slug} />,
+            label: "Klubbinnstillinger",
+            content: <KlubbInfoTab />,
           },
           {
             value: "booking",
-            label: "Bookingregler",
-            content: <KlubbBookingTab slug={slug} />,
+            label: "Bookinginnstillinger",
+            content: <KlubbBookingTab />,
           },
         ]}
         value={tab}
