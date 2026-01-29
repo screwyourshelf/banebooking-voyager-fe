@@ -1,18 +1,22 @@
-﻿import { Input } from './ui/input.js';
-import { FieldWrapper } from './FieldWrapper.js';
+﻿import type { ChangeEvent, InputHTMLAttributes } from "react";
+import { Input } from "./ui/input.js";
+import { FieldWrapper } from "./FieldWrapper.js";
+import { cn } from "@/lib/utils";
 
 interface FormFieldProps {
     id: string;
     label: string;
     value: string;
-    onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
     helpText?: string;
     error?: string | null;
-    readOnly?: boolean;
-    maxLength?: number;
-    type?: string;
-    placeholder?: string;
-    disabled?: boolean;
+    hideLabel?: boolean;
+
+    /** Ekstra props sendes rett til <Input /> */
+    inputProps?: Omit<
+        InputHTMLAttributes<HTMLInputElement>,
+        "id" | "value" | "onChange"
+    >;
 }
 
 export function FormField({
@@ -22,24 +26,27 @@ export function FormField({
     onChange,
     helpText,
     error,
-    readOnly = false,
-    maxLength,
-    type = 'text',
-    placeholder,
-    disabled = false,
+    hideLabel = false,
+    inputProps,
 }: FormFieldProps) {
     return (
-        <FieldWrapper id={id} label={label} helpText={helpText} error={error}>
+        <FieldWrapper
+            id={id}
+            label={label}
+            hideLabel={hideLabel}
+            helpText={helpText}
+            error={error}
+        >
             <Input
                 id={id}
-                type={type}
                 value={value}
-                readOnly={readOnly}
-                disabled={disabled}
-                maxLength={maxLength}
-                placeholder={placeholder}
                 onChange={onChange}
-                className={error ? 'border-destructive' : ''}
+                {...inputProps}
+                className={cn(
+                    "bg-background",
+                    error && "border-destructive",
+                    inputProps?.className
+                )}
             />
         </FieldWrapper>
     );

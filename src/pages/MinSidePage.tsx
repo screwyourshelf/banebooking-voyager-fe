@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useSlug } from "@/hooks/useSlug.js";
 
 import Page from "@/components/Page.js";
-import PageSection from "@/components/PageSection.js";
 import SimpleTabsLazy from "@/components/SimpleTabsLazy.js";
 
 import MinProfilTab from "@/pages/minside/MinProfilTab";
@@ -15,29 +14,15 @@ export default function MinSidePage() {
 
     return (
         <Page>
-            <PageSection>
-                <SimpleTabsLazy
-                    items={[
-                        {
-                            value: "bookinger",
-                            label: "Mine bookinger",
-                            content: <MineBookingerTab slug={slug} />,
-                        },
-                        {
-                            value: "profil",
-                            label: "Min profil",
-                            content: <MinProfilTab slug={slug} />,
-                        },
-                        {
-                            value: "persondata",
-                            label: "Persondata",
-                            content: <PersondataTab slug={slug} />,
-                        },
-                    ]}
-                    value={tab}
-                    onValueChange={setTab}
-                />
-            </PageSection>
+            <SimpleTabsLazy
+                items={[
+                    { value: "bookinger", label: "Mine bookinger", content: <MineBookingerTab slug={slug} /> },
+                    { value: "profil", label: "Min profil", content: <MinProfilTab slug={slug} /> },
+                    { value: "persondata", label: "Persondata", content: <PersondataTab slug={slug} /> },
+                ]}
+                value={tab}
+                onValueChange={setTab}
+            />
         </Page>
     );
 }

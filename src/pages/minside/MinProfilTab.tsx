@@ -3,18 +3,15 @@ import { Button } from "@/components/ui/button.js";
 import LoaderSkeleton from "@/components/LoaderSkeleton.js";
 import SettingsList from "@/components/SettingsList";
 import SettingsRow from "@/components/SettingsRow";
-import { FieldWrapper } from "@/components/FieldWrapper.js";
-import { Input } from "@/components/ui/input.js";
+import InfoRow from "@/components/InfoRow";
 import { useMeg } from "@/hooks/useMeg.js";
-import SettingsSection from "../../components/SettingsSection";
+import SettingsSection from "@/components/SettingsSection";
+import { FormField } from "../../components/FormField";
 
 const MAX_LENGTH = 50;
 const NAVN_REGEX = /^[\p{L}\d\s.@'_%+-]{2,}$/u;
 
-type Props = {
-    slug: string;
-};
-
+type Props = { slug: string };
 type Mode = "epost" | "navn";
 
 export default function MinProfilTab({ slug }: Props) {
@@ -36,38 +33,53 @@ export default function MinProfilTab({ slug }: Props) {
             setMode("navn");
             setVisningsnavn(navn);
         }
+        setFeil(null);
     }, [bruker]);
+
+    const valgtVisningsnavn = useMemo(() => {
+        if (!bruker) return "";
+        return mode === "epost" ? bruker.epost : visningsnavn.trim();
+    }, [bruker, mode, visningsnavn]);
+
+    // ✅ ren validering som memo (ingen funksjons-avhengighet)
+    const valideringsFeil = useMemo((): string | null => {
+        if (!bruker) return "Ukjent feil.";
+        if (mode === "epost") return null;
+
+        const navn = visningsnavn.trim();
+        if (navn.length === 0) return "Visningsnavn kan ikke være tomt.";
+        if (navn.length < 3) return "Visningsnavn må være minst 3 tegn.";
+        if (!NAVN_REGEX.test(navn)) return "Visningsnavn inneholder ugyldige tegn.";
+        if (navn.length > MAX_LENGTH)
+            return `Visningsnavn kan ikke være lengre enn ${MAX_LENGTH} tegn.`;
+        return null;
+    }, [bruker, mode, visningsnavn]);
 
     const kanLagre = useMemo(() => {
         if (!bruker) return false;
-        if (mode === "epost") return bruker.visningsnavn !== bruker.epost;
-        return visningsnavn.trim() !== (bruker.visningsnavn ?? "").trim();
-    }, [bruker, mode, visningsnavn]);
 
-    const validerOgLagre = async () => {
+        const ny = valgtVisningsnavn;
+        const gammel = (bruker.visningsnavn ?? "").trim();
+
+        if (ny.length === 0) return false;
+        if (ny === gammel) return false;
+
+        // hvis eget navn: må være valid
+        if (mode === "navn") return !valideringsFeil;
+
+        return true;
+    }, [bruker, valgtVisningsnavn, mode, valideringsFeil]);
+
+    async function lagreVisningsnavn() {
         if (!bruker) return;
 
-        if (mode === "epost") {
-            setFeil(null);
-            await mutateAsync({ visningsnavn: bruker.epost });
-            return;
-        }
+        setFeil(valideringsFeil);
+        if (valideringsFeil) return;
 
-        const navn = visningsnavn.trim();
-
-        if (navn.length === 0) return setFeil("Visningsnavn kan ikke være tomt.");
-        if (navn.length < 3) return setFeil("Visningsnavn må være minst 3 tegn.");
-        if (!NAVN_REGEX.test(navn)) return setFeil("Visningsnavn inneholder ugyldige tegn.");
-        if (navn.length > MAX_LENGTH)
-            return setFeil(`Visningsnavn kan ikke være lengre enn ${MAX_LENGTH} tegn.`);
-
-        setFeil(null);
-        await mutateAsync({ visningsnavn: navn });
-    };
-
-    if (lasterMeg || !bruker) {
-        return <LoaderSkeleton />;
+        await mutateAsync({ visningsnavn: valgtVisningsnavn });
     }
+
+    if (lasterMeg || !bruker) return <LoaderSkeleton />;
 
     return (
         <div className="space-y-4">
@@ -75,8 +87,6 @@ export default function MinProfilTab({ slug }: Props) {
                 title="Min profil"
                 description="Velg hva som vises som navnet ditt i appen."
             >
-
-                {/* Visningsnavn */}
                 <SettingsList>
                     <SettingsRow
                         title="Visningsnavn"
@@ -91,7 +101,6 @@ export default function MinProfilTab({ slug }: Props) {
                                     onChange={() => {
                                         setMode("epost");
                                         setFeil(null);
-                                        setVisningsnavn("");
                                     }}
                                 />
                                 <span>E-post ({bruker.epost})</span>
@@ -112,53 +121,56 @@ export default function MinProfilTab({ slug }: Props) {
                         </div>
                     </SettingsRow>
 
+                    {mode === "navn" ? (
+                        <SettingsRow title="Eget navn" description={`Maks ${MAX_LENGTH} tegn.`}>
+                            <FormField
+                                id="visningsnavn"
+                                label="Eget navn"
+                                hideLabel
+                                value={visningsnavn}
+                                error={feil}
+                                onChange={(e) => {
+                                    setVisningsnavn(e.target.value);
+                                    if (feil) setFeil(null);
+                                }}
+                                inputProps={{
+                                    placeholder: "f.eks. Ola Nordmann",
+                                    maxLength: MAX_LENGTH,
+                                }}
+                            />
+                        </SettingsRow>
+                    ) : null}
+
                     <SettingsRow
-                        title="Eget navn"
-                        description={`Maks ${MAX_LENGTH} tegn.`}
+                        title="Dette vil lagres"
+                        description="Slik vil navnet ditt vises."
                         right={
                             <Button
                                 type="button"
                                 size="sm"
                                 disabled={!kanLagre || isPending}
-                                onClick={() => void validerOgLagre()}
+                                onClick={() => void lagreVisningsnavn()}
                             >
                                 {isPending ? "Lagrer..." : "Lagre"}
                             </Button>
                         }
-                        className={mode === "navn" ? "" : "opacity-50"}
                     >
-                        <FieldWrapper id="visningsnavn" label="" error={feil} className="space-y-0">
-                            <Input
-                                id="visningsnavn"
-                                value={mode === "navn" ? visningsnavn : ""}
-                                maxLength={MAX_LENGTH}
-                                placeholder="f.eks. Ola Nordmann"
-                                onChange={(e) => setVisningsnavn(e.target.value)}
-                                disabled={mode !== "navn"}
-                                className={feil ? "border-destructive" : ""}
-                            />
-                        </FieldWrapper>
+                        <div className="text-sm text-foreground break-words">
+                            {valgtVisningsnavn}
+                        </div>
                     </SettingsRow>
                 </SettingsList>
             </SettingsSection>
 
-            {/* Konto */}
             <SettingsSection
                 title="Konto"
                 description="Denne informasjonen kan bare endres av klubbadministrator."
             >
-
                 <SettingsList>
-                    <SettingsRow title="Brukernavn / ID">
-                        <div className="text-sm text-foreground">{bruker.epost}</div>
-                    </SettingsRow>
-
-                    <SettingsRow title="Rolle (i klubben)">
-                        <div className="text-sm text-foreground">{bruker.roller.join(", ")}</div>
-                    </SettingsRow>
+                    <InfoRow label="Brukernavn / ID" value={bruker.epost} />
+                    <InfoRow label="Tilgang" value={bruker.roller.join(", ")} />
                 </SettingsList>
             </SettingsSection>
-
         </div>
     );
 }

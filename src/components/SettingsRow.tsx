@@ -4,7 +4,7 @@ type Props = {
     title: string;
     description?: string;
     right?: ReactNode;
-    children?: ReactNode; // for value lines / links under
+    children?: ReactNode;
     className?: string;
 };
 
@@ -30,7 +30,11 @@ export default function SettingsRow({
                 {right ? <div className="shrink-0">{right}</div> : null}
             </div>
 
-            {children ? <div className="mt-2">{children}</div> : null}
+            {children ? (
+                <div className="mt-2 min-w-0 text-sm text-foreground">
+                    {children}
+                </div>
+            ) : null}
         </div>
     );
 }

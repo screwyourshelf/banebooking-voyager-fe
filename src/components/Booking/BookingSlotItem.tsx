@@ -1,7 +1,7 @@
-import { useBookingActions } from '../../hooks/useBookingActions.js';
-import { BookingSlotItemHeader } from './BookingSlotItemHeader.js';
-import { BookingSlotItemExpanded } from './BookingSlotItemExpanded.js';
-import type { BookingSlot } from '../../types/index.js';
+import { useState } from "react";
+import { BookingSlotItemHeader } from "./BookingSlotItemHeader.js";
+import { BookingSlotItemExpanded } from "./BookingSlotItemExpanded.js";
+import type { BookingSlot } from "../../types/index.js";
 
 type Props = {
     slot: BookingSlot;
@@ -22,7 +22,9 @@ export default function BookingSlotItem({
     onCancel = () => { },
     onDelete = () => { },
 }: Props) {
-    const { erBekreftet, setErBekreftet, reset } = useBookingActions();
+    // UI-state for "bekreft" i expanded view
+    const [erBekreftet, setErBekreftet] = useState(false);
+    const reset = () => setErBekreftet(false);
 
     const tid = `${slot.startTid.slice(0, 2)}-${slot.sluttTid.slice(0, 2)}`;
     const harHandlinger = slot.kanBookes || slot.kanAvbestille || slot.kanSlette;
@@ -31,17 +33,17 @@ export default function BookingSlotItem({
     const erMinBooking = slot.erEier === true;
 
     const className = [
-        'border rounded shadow-sm p-2 mb-2',
-        'transition-colors duration-300 ease-in-out',
-        slot.erPassert ? 'bg-gray-100 text-gray-400' : '',
+        "border rounded shadow-sm p-2 mb-2",
+        "transition-colors duration-300 ease-in-out",
+        slot.erPassert ? "bg-gray-100 text-gray-400" : "",
         !slot.erPassert && harArrangement
-            ? 'bg-gradient-to-r from-blue-0 via-blue-50 to-blue-200 border-blue-200'
-            : '',
-        !slot.erPassert && !harArrangement ? 'bg-white text-gray-900' : '',
+            ? "bg-gradient-to-r from-blue-0 via-blue-50 to-blue-200 border-blue-200"
+            : "",
+        !slot.erPassert && !harArrangement ? "bg-white text-gray-900" : "",
         currentUser && erMinBooking && !harArrangement
-            ? 'animate__animated animate__headShake animate__slow'
-            : '',
-    ].join(' ');
+            ? "animate__animated animate__headShake animate__slow"
+            : "",
+    ].join(" ");
 
     const handleToggle = () => {
         if (erInteraktiv && onToggle) {
@@ -54,24 +56,29 @@ export default function BookingSlotItem({
         <div
             className={className}
             style={{
-                cursor: erInteraktiv ? 'pointer' : 'default',
+                cursor: erInteraktiv ? "pointer" : "default",
                 opacity: slot.erPassert ? 0.5 : 1,
             }}
             onClick={(e) => {
                 const target = e.target as HTMLElement;
-                if (target.closest('button, input, label')) return;
+                if (target.closest("button, input, label")) return;
                 handleToggle();
             }}
-            role={erInteraktiv ? 'button' : undefined}
+            role={erInteraktiv ? "button" : undefined}
             tabIndex={erInteraktiv ? 0 : undefined}
             onKeyDown={(e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
+                if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
                     handleToggle();
                 }
             }}
         >
-            <BookingSlotItemHeader slot={slot} isOpen={isOpen} erInteraktiv={erInteraktiv} currentUser={currentUser} />
+            <BookingSlotItemHeader
+                slot={slot}
+                isOpen={isOpen}
+                erInteraktiv={erInteraktiv}
+                currentUser={currentUser}
+            />
 
             {isOpen && !slot.erPassert && (
                 <BookingSlotItemExpanded

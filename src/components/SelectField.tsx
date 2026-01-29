@@ -1,11 +1,13 @@
+import type { ReactNode } from "react";
 import {
     Select,
     SelectContent,
     SelectItem,
     SelectTrigger,
     SelectValue,
-} from './ui/select.js';
-import { FieldWrapper } from './FieldWrapper.js';
+} from "./ui/select.js";
+import { FieldWrapper } from "./FieldWrapper.js";
+import { cn } from "@/lib/utils";
 
 interface SelectFieldProps {
     id: string;
@@ -16,6 +18,15 @@ interface SelectFieldProps {
     helpText?: string;
     error?: string | null;
     disabled?: boolean;
+
+    /** Matcher FormField */
+    hideLabel?: boolean;
+
+    /** Ekstra klasser på trigger */
+    triggerClassName?: string;
+
+    /** Placeholder hvis value er tom */
+    placeholder?: ReactNode;
 }
 
 export function SelectField({
@@ -27,16 +38,30 @@ export function SelectField({
     helpText,
     error,
     disabled = false,
+    hideLabel = false,
+    triggerClassName,
+    placeholder,
 }: SelectFieldProps) {
     return (
-        <FieldWrapper id={id} label={label} helpText={helpText} error={error}>
+        <FieldWrapper
+            id={id}
+            label={label}
+            hideLabel={hideLabel}
+            helpText={helpText}
+            error={error}
+        >
             <Select value={value} onValueChange={onChange} disabled={disabled}>
                 <SelectTrigger
                     id={id}
-                    className={error ? 'border-destructive' : ''}
+                    className={cn(
+                        "bg-background",
+                        error && "border-destructive",
+                        triggerClassName
+                    )}
                 >
-                    <SelectValue />
+                    <SelectValue placeholder={placeholder ?? "Velg..."} />
                 </SelectTrigger>
+
                 <SelectContent>
                     {options.map((opt) => (
                         <SelectItem key={opt.value} value={opt.value}>

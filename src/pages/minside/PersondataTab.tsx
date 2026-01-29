@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button.js";
 import SettingsList from "@/components/SettingsList";
 import SettingsRow from "@/components/SettingsRow";
 import SettingsSection from "@/components/SettingsSection";
+import InfoRow from "@/components/InfoRow";
 import SlettMegDialog from "@/components/SlettMegDialog.js";
 import { formatDatoKort } from "@/utils/datoUtils.js";
 import { useMeg } from "@/hooks/useMeg.js";
@@ -30,22 +31,26 @@ export default function PersondataTab({ slug }: Props) {
                 description="Her kan du se vilkår og laste ned egne data."
             >
                 <SettingsList>
-                    <SettingsRow
-                        title="Vilkår"
+                    <InfoRow
+                        label="Vilkår"
                         description="Vilkårene aksepteres automatisk ved første innlogging."
-                    >
-                        <div className="text-sm text-foreground">{vilkarStatus}</div>
-                        <div className="mt-2">
+                        value={vilkarStatus}
+                    />
+
+                    <SettingsRow
+                        title="Les vilkårene"
+                        description="Åpnes i ny fane."
+                        right={
                             <Link
                                 to={`/${slug}/vilkaar`}
                                 className="text-sm underline text-primary hover:text-primary/80"
                                 target="_blank"
                                 rel="noopener noreferrer"
                             >
-                                Les vilkårene
+                                Åpne
                             </Link>
-                        </div>
-                    </SettingsRow>
+                        }
+                    />
 
                     <SettingsRow
                         title="Last ned dine data"
