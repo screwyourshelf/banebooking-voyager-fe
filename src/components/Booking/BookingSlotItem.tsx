@@ -11,6 +11,11 @@ type Props = {
     onBook?: (slot: BookingSlot) => void;
     onCancel?: (slot: BookingSlot) => void;
     onDelete?: (slot: BookingSlot) => void;
+
+    // NYTT: brukes av Mine bookinger
+    headerOverrideTitle?: React.ReactNode;
+    headerLeftPrefix?: React.ReactNode;
+    erInteraktivOverride?: boolean;
 };
 
 export default function BookingSlotItem({
@@ -21,14 +26,20 @@ export default function BookingSlotItem({
     onBook = () => { },
     onCancel = () => { },
     onDelete = () => { },
+
+    headerOverrideTitle,
+    headerLeftPrefix,
+    erInteraktivOverride,
 }: Props) {
-    // UI-state for "bekreft" i expanded view
     const [erBekreftet, setErBekreftet] = useState(false);
     const reset = () => setErBekreftet(false);
 
     const tid = `${slot.startTid.slice(0, 2)}-${slot.sluttTid.slice(0, 2)}`;
     const harHandlinger = slot.kanBookes || slot.kanAvbestille || slot.kanSlette;
-    const erInteraktiv = !!currentUser && harHandlinger && !slot.erPassert;
+
+    const erInteraktiv =
+        erInteraktivOverride ?? (!!currentUser && harHandlinger && !slot.erPassert);
+
     const harArrangement = !!slot.arrangementTittel;
     const erMinBooking = slot.erEier === true;
 
@@ -67,6 +78,7 @@ export default function BookingSlotItem({
             role={erInteraktiv ? "button" : undefined}
             tabIndex={erInteraktiv ? 0 : undefined}
             onKeyDown={(e) => {
+                if (!erInteraktiv) return;
                 if (e.key === "Enter" || e.key === " ") {
                     e.preventDefault();
                     handleToggle();
@@ -78,6 +90,8 @@ export default function BookingSlotItem({
                 isOpen={isOpen}
                 erInteraktiv={erInteraktiv}
                 currentUser={currentUser}
+                overrideTitle={headerOverrideTitle}
+                leftPrefix={headerLeftPrefix}
             />
 
             {isOpen && !slot.erPassert && (

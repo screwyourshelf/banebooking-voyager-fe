@@ -1,123 +1,181 @@
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button.js";
-import LoaderSkeleton from "@/components/LoaderSkeleton.js";
-import { FormField } from "@/components/FormField.js";
-import { TextareaField } from "@/components/TextareaField.js";
-import { useKlubb } from "@/hooks/useKlubb.js";
+import { useEffect, useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
+import LoaderSkeleton from "@/components/LoaderSkeleton";
+import SettingsSection from "@/components/SettingsSection";
+import SettingsList from "@/components/SettingsList";
+import SettingsRow from "@/components/SettingsRow";
+import SettingsInput from "@/components/SettingsInput";
+import SettingsTextarea from "@/components/SettingsTextarea";
+import { useKlubb } from "@/hooks/useKlubb";
 
 type Props = { slug: string };
 
 export default function KlubbInfoTab({ slug }: Props) {
-  const { data: klubb, isLoading, oppdaterKlubb } = useKlubb(slug);
+    const { data: klubb, isLoading, oppdaterKlubb } = useKlubb(slug);
 
-  const [form, setForm] = useState({
-    navn: "",
-    kontaktEpost: "",
-    banereglement: "",
-    latitude: "",
-    longitude: "",
-    feedUrl: "",
-    feedSynligAntallDager: "7",
-  });
+    const [form, setForm] = useState({
+        navn: "",
+        kontaktEpost: "",
+        banereglement: "",
+        latitude: "",
+        longitude: "",
+        feedUrl: "",
+        feedSynligAntallDager: "",
+    });
 
-  useEffect(() => {
-    if (klubb) {
-      setForm({
-        navn: klubb.navn ?? "",
-        kontaktEpost: klubb.kontaktEpost ?? "",
-        banereglement: klubb.banereglement ?? "",
-        latitude: klubb.latitude?.toString() ?? "",
-        longitude: klubb.longitude?.toString() ?? "",
-        feedUrl: klubb.feedUrl ?? "",
-        feedSynligAntallDager: klubb.feedSynligAntallDager?.toString() ?? "50",
-      });
-    }
-  }, [klubb]);
+    useEffect(() => {
+        if (!klubb) return;
 
-  if (isLoading || !klubb) return <LoaderSkeleton />;
-
-  return (
-    <form
-      className="space-y-4"
-      onSubmit={(e) => {
-        e.preventDefault();
-
-        oppdaterKlubb.mutate({
-          ...klubb, // behold bookingRegel og annet
-          navn: form.navn,
-          kontaktEpost: form.kontaktEpost,
-          banereglement: form.banereglement,
-          latitude: parseFloat(form.latitude),
-          longitude: parseFloat(form.longitude),
-          feedUrl: form.feedUrl,
-          feedSynligAntallDager: parseInt(form.feedSynligAntallDager, 10),
+        setForm({
+            navn: klubb.navn ?? "",
+            kontaktEpost: klubb.kontaktEpost ?? "",
+            banereglement: klubb.banereglement ?? "",
+            latitude: klubb.latitude?.toString() ?? "",
+            longitude: klubb.longitude?.toString() ?? "",
+            feedUrl: klubb.feedUrl ?? "",
+            feedSynligAntallDager: (klubb.feedSynligAntallDager ?? 50).toString(),
         });
-      }}
-    >
-      <FormField
-        id="navn"
-        label="Klubbnavn"
-        value={form.navn}
-        onChange={(e) => setForm((f) => ({ ...f, navn: e.target.value }))}
-        helpText="Navnet på klubben slik det vises utad i Banebooking."
-      />
+    }, [klubb]);
 
-      <FormField
-        id="kontaktEpost"
-        label="Kontakt-e-post"
-        type="email"
-        value={form.kontaktEpost}
-        onChange={(e) => setForm((f) => ({ ...f, kontaktEpost: e.target.value }))}
-        helpText="E-postadresse som vises på klubbens infoside. Brukes til henvendelser fra medlemmer og gjester."
-      />
+    const canSubmit = useMemo(() => {
+        if (!klubb) return false;
+        // enkel “dirty check” – kan forbedres senere
+        return (
+            (form.navn ?? "") !== (klubb.navn ?? "") ||
+            (form.kontaktEpost ?? "") !== (klubb.kontaktEpost ?? "") ||
+            (form.banereglement ?? "") !== (klubb.banereglement ?? "") ||
+            (form.latitude ?? "") !== (klubb.latitude?.toString() ?? "") ||
+            (form.longitude ?? "") !== (klubb.longitude?.toString() ?? "") ||
+            (form.feedUrl ?? "") !== (klubb.feedUrl ?? "") ||
+            (form.feedSynligAntallDager ?? "") !== ((klubb.feedSynligAntallDager ?? 50).toString())
+        );
+    }, [klubb, form]);
 
-      <TextareaField
-        id="banereglement"
-        label="Banereglement"
-        value={form.banereglement}
-        onChange={(e) => setForm((f) => ({ ...f, banereglement: e.target.value }))}
-        helpText="Tekst som beskriver klubbens regler for bruk av banene. Vises til brukere når de booker."
-      />
+    if (isLoading || !klubb) return <LoaderSkeleton />;
 
-      <FormField
-        id="latitude"
-        label="Latitude (breddegrad)"
-        value={form.latitude}
-        onChange={(e) => setForm((f) => ({ ...f, latitude: e.target.value }))}
-        helpText="Breddegrad for klubbens beliggenhet. Brukes til kartvisning."
-      />
+    function parseOptionalNumber(text: string): number | undefined {
+        const t = text.trim();
+        if (!t) return undefined;
+        const n = Number(t.replace(",", "."));
+        return Number.isFinite(n) ? n : undefined;
+    }
 
-      <FormField
-        id="longitude"
-        label="Longitude (lengdegrad)"
-        value={form.longitude}
-        onChange={(e) => setForm((f) => ({ ...f, longitude: e.target.value }))}
-        helpText="Lengdegrad for klubbens beliggenhet. Brukes til kartvisning."
-      />
+    return (
+        <form
+            className="space-y-4"
+            onSubmit={(e) => {
+                e.preventDefault();
 
-      <FormField
-        id="feedUrl"
-        label="RSS-feed (valgfritt)"
-        value={form.feedUrl}
-        onChange={(e) => setForm((f) => ({ ...f, feedUrl: e.target.value }))}
-        helpText="URL til klubbens RSS-feed (f.eks. nyheter). Hvis satt, hentes og vises de nyeste innleggene i appen."
-      />
+                const lat = parseOptionalNumber(form.latitude);
+                const lon = parseOptionalNumber(form.longitude);
+                const feedDays = parseOptionalNumber(form.feedSynligAntallDager);
 
-      <FormField
-        id="feedSynligAntallDager"
-        label="Aldergrense for feedinnslag (dager)"
-        type="number"
-        min={0}
-        value={form.feedSynligAntallDager}
-        onChange={(e) =>
-          setForm((f) => ({ ...f, feedSynligAntallDager: e.target.value }))
-        }
-        helpText="Bestemmer hvor mange dager gamle innslag fra klubbens RSS-feed som skal vises. Sett til 0 for å inkludere alle."
-      />
+                oppdaterKlubb.mutate({
+                    ...klubb,
+                    navn: form.navn,
+                    kontaktEpost: form.kontaktEpost,
+                    banereglement: form.banereglement,
 
-      <Button type="submit" size="sm" disabled={oppdaterKlubb.isPending}>
-        {oppdaterKlubb.isPending ? "Lagrer..." : "Lagre endringer"}
-      </Button>
-    </form>
-  );
+                    // ✅ ikke send null/undefined inn i number-felt: behold eksisterende hvis tom/ugyldig
+                    latitude: lat ?? klubb.latitude,
+                    longitude: lon ?? klubb.longitude,
+
+                    feedUrl: form.feedUrl,
+                    feedSynligAntallDager: (feedDays ?? klubb.feedSynligAntallDager ?? 50) as number,
+                });
+            }}
+        >
+            <SettingsSection title="Grunninfo" description="Informasjon som vises utad i Banebooking.">
+                <SettingsList>
+                    <SettingsRow
+                        title="Klubbnavn"
+                        description="Navnet på klubben slik det vises utad i Banebooking."
+                    >
+                        <SettingsInput
+                            value={form.navn}
+                            onChange={(navn) => setForm((f) => ({ ...f, navn }))}
+                            placeholder="Ås tennisklubb"
+                            autoComplete="organization"
+                        />
+                    </SettingsRow>
+
+                    <SettingsRow
+                        title="Kontakt-e-post"
+                        description="Vises på klubbens infoside. Brukes til henvendelser fra medlemmer og gjester."
+                    >
+                        <SettingsInput
+                            value={form.kontaktEpost}
+                            onChange={(kontaktEpost) => setForm((f) => ({ ...f, kontaktEpost }))}
+                            placeholder="post@klubb.no"
+                            type="email"
+                            inputMode="email"
+                            autoComplete="email"
+                        />
+                    </SettingsRow>
+                </SettingsList>
+            </SettingsSection>
+
+            <SettingsSection title="Kart" description="Valgfrie innstillinger for innhenting av værinformasjon.">
+                <SettingsList>
+                    <SettingsRow title="Latitude (breddegrad)" description="">
+                        <SettingsInput
+                            value={form.latitude}
+                            onChange={(latitude) => setForm((f) => ({ ...f, latitude }))}
+                            placeholder="f.eks. 59.6552"
+                            inputMode="decimal"
+                        />
+                    </SettingsRow>
+
+                    <SettingsRow title="Longitude (lengdegrad)" description="">
+                        <SettingsInput
+                            value={form.longitude}
+                            onChange={(longitude) => setForm((f) => ({ ...f, longitude }))}
+                            placeholder="f.eks. 10.7769"
+                            inputMode="decimal"
+                        />
+                    </SettingsRow>
+
+                </SettingsList>
+            </SettingsSection>
+
+            <SettingsSection title="Feed" description="Valgfrie innstillinger for innhenting nyheter fra klubbens RSS-feed.">
+                <SettingsList>
+                    <SettingsRow
+                        title="RSS-feed"
+                        description="URL til klubbens RSS-feed (f.eks. nyheter). Hvis satt, hentes og vises de nyeste innleggene i appen."
+                    >
+                        <SettingsInput
+                            value={form.feedUrl}
+                            onChange={(feedUrl) => setForm((f) => ({ ...f, feedUrl }))}
+                            placeholder="https://www.aastk.no/?feed=rss2"
+                            inputMode="url"
+                            type="url"
+                        />
+                    </SettingsRow>
+
+                    <SettingsRow
+                        title="Aldergrense for feedinnslag (dager)"
+                        description="Hvor mange dager gamle innslag som vises. Sett til 0 for å inkludere alle."
+                    >
+                        <SettingsInput
+                            value={form.feedSynligAntallDager}
+                            onChange={(feedSynligAntallDager) =>
+                                setForm((f) => ({ ...f, feedSynligAntallDager }))
+                            }
+                            type="number"
+                            inputMode="numeric"
+                            min={0}
+                            step={1}
+                        />
+                    </SettingsRow>
+                </SettingsList>
+            </SettingsSection>
+
+            <div className="flex justify-end">
+                <Button type="submit" size="sm" disabled={!canSubmit || oppdaterKlubb.isPending}>
+                    {oppdaterKlubb.isPending ? "Lagrer..." : "Lagre endringer"}
+                </Button>
+            </div>
+        </form>
+    );
 }

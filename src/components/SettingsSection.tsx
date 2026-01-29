@@ -6,7 +6,6 @@ type Props = {
     description?: string;
     children: ReactNode;
     className?: string;
-    tone?: "soft" | "plain";
     intent?: "default" | "danger";
 };
 
@@ -15,32 +14,42 @@ export default function SettingsSection({
     description,
     children,
     className,
-    tone = "soft",
     intent = "default",
 }: Props) {
+    const gradient =
+        intent === "danger"
+            ? "bg-gradient-to-b from-destructive/12 via-destructive/6 to-background"
+            : "bg-gradient-to-b from-muted/90 via-muted/55 to-muted/20";
+
     return (
         <section
             className={cn(
-                "rounded-lg p-3 space-y-3",
-                tone === "soft" && "bg-muted/40",
-                intent === "danger" && "border border-destructive/20 bg-destructive/5",
+                "rounded-xl border shadow-sm overflow-hidden",
+                intent === "danger" ? "border-destructive/20" : "border-border/60",
                 className
             )}
         >
-            {title || description ? (
-                <div>
-                    {title ? (
-                        <div className="text-sm font-semibold">{title}</div>
-                    ) : null}
-                    {description ? (
-                        <div className="text-sm text-muted-foreground mt-1">
-                            {description}
-                        </div>
-                    ) : null}
-                </div>
-            ) : null}
+            {/* Gradient wrapper */}
+            <div className={cn("py-4", gradient)}>
+                {(title || description) && (
+                    <div className="px-4 mb-3">
+                        {title && (
+                            <div className="text-xs font-semibold tracking-wider uppercase text-foreground/80">
+                                {title}
+                            </div>
+                        )}
 
-            {children}
+                        {description && (
+                            <div className="mt-1 text-sm text-muted-foreground max-w-prose">
+                                {description}
+                            </div>
+                        )}
+                    </div>
+                )}
+
+                {/* Innhold: “bredere” enn header */}
+                <div className="space-y-3 -mx-2 px-3">{children}</div>
+            </div>
         </section>
     );
 }
