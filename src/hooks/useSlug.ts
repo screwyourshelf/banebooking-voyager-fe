@@ -1,8 +1,10 @@
 import { useContext } from "react";
-import { SlugContext } from "@/contexts/SlugContext.js";
+import { SlugContext } from "@/contexts/SlugContext";
 
 export function useSlug(): string {
     const slug = useContext(SlugContext);
-    if (!slug) throw new Error("useSlug må brukes under <SlugContext.Provider> (Layout)");
+    if (!slug) {
+        throw new Error("useSlug må brukes under <SlugProvider>");
+    }
     return slug;
 }

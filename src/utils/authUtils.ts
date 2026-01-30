@@ -1,10 +1,9 @@
 ﻿import { supabase } from "@/supabase.js";
-
-const DEFAULT_SLUG = "aas-tennisklubb";
+import { config } from "@/config";
 
 function buildRedirectUrl() {
     const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
-    const slug = (localStorage.getItem("slug") || DEFAULT_SLUG).replace(/^\/+|\/+$/g, "");
+    const slug = (localStorage.getItem("slug") || config.defaultSlug).replace(/^\/+|\/+$/g, "");
 
     return base
         ? `${window.location.origin}${base}/${slug}`

@@ -1,20 +1,24 @@
-import { BrowserRouter, Navigate, Routes, Route } from 'react-router-dom';
-import { lazy, Suspense } from 'react';
-import Layout from './layouts/Layout.js';
-import { ProtectedRoute } from './components/ProtectedRoute.js';
-import LoaderSkeleton from './components/LoaderSkeleton.js';
+import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import type { ReactNode } from "react";
 
-const IndexPage = lazy(() => import('./pages/IndexPage.js'));
-const MinSide = lazy(() => import('./pages/MinSidePage.js'));
-const KlubbPage = lazy(() => import('./pages/admin/KlubbPage.js'));
-const BanerPage = lazy(() => import('./pages/admin/BanerPage.js'));
-const ArrangementPage = lazy(() => import('./pages/utvidet/ArrangementPage.js'));
-const KommendeArrangementPage = lazy(() => import('./pages/KommendeArrangementPage.js'));
-const BrukerePage = lazy(() => import('./pages/admin/BrukerePage.js'));
-const AuthCallbackPage = lazy(() => import('./pages/AuthCallbackPage.js'));
-const VilkaarPage = lazy(() => import('./pages/VilkaarPage.js'));
+import LoaderSkeleton from "./components/LoaderSkeleton";
+import SlugGate from "@/routes/SlugGate";
+import AppBoot from "@/app/AppBoot";
+import AppShell from "@/app/AppShell";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
-const Protected = ({ children }: { children: React.ReactNode }) => (
+const IndexPage = lazy(() => import("./pages/IndexPage"));
+const MinSide = lazy(() => import("./pages/MinSidePage"));
+const KlubbPage = lazy(() => import("./pages/admin/KlubbPage"));
+const BanerPage = lazy(() => import("./pages/admin/BanerPage"));
+const ArrangementPage = lazy(() => import("./pages/utvidet/ArrangementPage"));
+const KommendeArrangementPage = lazy(() => import("./pages/KommendeArrangementPage"));
+const BrukerePage = lazy(() => import("./pages/admin/BrukerePage"));
+const AuthCallbackPage = lazy(() => import("./pages/AuthCallbackPage"));
+const VilkaarPage = lazy(() => import("./pages/VilkaarPage"));
+
+const Protected = ({ children }: { children: ReactNode }) => (
     <ProtectedRoute>{children}</ProtectedRoute>
 );
 
@@ -31,16 +35,19 @@ export default function App() {
                 <Routes>
                     <Route path="/" element={<Navigate to="/aas-tennisklubb" replace />} />
 
-                    <Route path=":slug?" element={<Layout />}>
-                        <Route path="vilkaar" element={<VilkaarPage />} />
-                        <Route index element={<IndexPage />} />
-                        <Route path="minside" element={<Protected><MinSide /></Protected>} />
-                        <Route path="kommendeArrangement" element={<Protected><KommendeArrangementPage /></Protected>} />
-                        <Route path="arrangement" element={<Protected><ArrangementPage /></Protected>} />
-                        <Route path="admin/klubb" element={<Protected><KlubbPage /></Protected>} />
-                        <Route path="admin/baner" element={<Protected><BanerPage /></Protected>} />
-                        <Route path="admin/brukere" element={<Protected><BrukerePage /></Protected>} />
+                    <Route path=":slug?" element={<SlugGate />}>
+                        <Route element={<AppBoot><AppShell /></AppBoot>}>
+                            <Route path="vilkaar" element={<VilkaarPage />} />
+                            <Route index element={<IndexPage />} />
+                            <Route path="minside" element={<Protected><MinSide /></Protected>} />
+                            <Route path="kommendeArrangement" element={<Protected><KommendeArrangementPage /></Protected>} />
+                            <Route path="arrangement" element={<Protected><ArrangementPage /></Protected>} />
+                            <Route path="admin/klubb" element={<Protected><KlubbPage /></Protected>} />
+                            <Route path="admin/baner" element={<Protected><BanerPage /></Protected>} />
+                            <Route path="admin/brukere" element={<Protected><BrukerePage /></Protected>} />
+                        </Route>
                     </Route>
+
                     <Route path="auth/callback" element={<AuthCallbackPage />} />
                     <Route path="*" element={<div className="p-4 text-center">404 – Fant ikke siden</div>} />
                 </Routes>

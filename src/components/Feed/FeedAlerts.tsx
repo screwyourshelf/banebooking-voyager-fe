@@ -1,42 +1,46 @@
 import { useEffect, useState } from "react";
 import { BellRing, XIcon } from "lucide-react";
-
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert.js";
 import { useFeed } from "@/hooks/useFeed.js";
 import { useSlug } from "@/hooks/useSlug";
-
-const DISMISS_DURATION_MS = 24 * 60 * 60 * 1000; // 24 timer
+import { config } from "@/config";
 
 export default function FeedAlerts() {
     const slug = useSlug();
     const { feed = [], isLoading } = useFeed();
 
-    const [dismissedItems, setDismissedItems] = useState<Record<string, number>>(
-        {}
-    );
+    const [dismissedItems, setDismissedItems] = useState<Record<string, number>>({});
 
     useEffect(() => {
         const key = `feed-dismissed-${slug}`;
         const stored = localStorage.getItem(key);
-        const parsed: Record<string, number> = stored ? JSON.parse(stored) : {};
+
+        let parsed: Record<string, number> = {};
+        try {
+            parsed = stored ? (JSON.parse(stored) as Record<string, number>) : {};
+        } catch {
+            parsed = {};
+        }
 
         const now = Date.now();
         const valid = Object.fromEntries(
-            Object.entries(parsed).filter(
-                ([, timestamp]) => now - timestamp < DISMISS_DURATION_MS
-            )
+            Object.entries(parsed).filter(([, ts]) => now - ts < config.feedDismissDurationMs)
         );
 
         setDismissedItems(valid);
-        localStorage.setItem(key, JSON.stringify(valid)); // rydder gamle
+        localStorage.setItem(key, JSON.stringify(valid));
     }, [slug]);
 
-    function dismissItem(id: string) {
+    const dismissItem = (id: string) => {
+        const key = `feed-dismissed-${slug}`;
         const now = Date.now();
-        const updated = { ...dismissedItems, [id]: now };
-        setDismissedItems(updated);
-        localStorage.setItem(`feed-dismissed-${slug}`, JSON.stringify(updated));
-    }
+
+        setDismissedItems((prev) => {
+            const updated = { ...prev, [id]: now };
+            localStorage.setItem(key, JSON.stringify(updated));
+            return updated;
+        });
+    };
 
     if (isLoading || feed.length === 0) return null;
 

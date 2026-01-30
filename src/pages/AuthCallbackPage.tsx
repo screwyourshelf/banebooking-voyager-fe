@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { config } from "@/config";
 
-const DEFAULT_SLUG = "aas-tennisklubb";
 
 function cleanSlug(raw: string | null): string {
     const s = (raw ?? "").trim();
@@ -10,7 +10,7 @@ function cleanSlug(raw: string | null): string {
     const noHashQuery = s.split("#")[0].split("?")[0];
     const trimmed = noHashQuery.replace(/^\/+|\/+$/g, "");
 
-    return trimmed || DEFAULT_SLUG;
+    return trimmed || config.defaultSlug;
 }
 
 export default function AuthCallbackPage() {
@@ -21,5 +21,5 @@ export default function AuthCallbackPage() {
         navigate(`/${slug}`, { replace: true });
     }, [navigate]);
 
-    return <div className="p-4 text-center">Logger inn …</div>;
+    return <div className="p-4 text-center">Logger inn ...</div>;
 }
