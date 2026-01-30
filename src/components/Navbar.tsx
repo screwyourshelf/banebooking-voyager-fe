@@ -28,7 +28,6 @@ import { useKlubb } from "../hooks/useKlubb.js";
 import { useBruker } from "../hooks/useBruker.js";
 import NavbarBrandMedKlubb from "./NavbarBrandMedKlubb.js";
 import Spinner from "./ui/spinner.js";
-import LoaderSkeleton from "./LoaderSkeleton.js";
 import { useSlug } from "@/hooks/useSlug";
 
 
@@ -39,7 +38,7 @@ function erGyldigEpost(v: string) {
 export default function Navbar() {
     const slug = useSlug();
 
-    const { data: klubb, isLoading } = useKlubb();
+    const { data: klubb } = useKlubb();
     const { currentUser, signOut } = useAuth();
     const { bruker } = useBruker();
 
@@ -120,9 +119,7 @@ export default function Navbar() {
 
     return (
         <div className="w-full flex justify-between items-center px-2 py-1">
-            <NavbarBrandMedKlubb
-                klubbnavn={isLoading ? <LoaderSkeleton /> : klubb?.navn ?? "Ukjent klubb"}
-            />
+            <NavbarBrandMedKlubb klubbnavn={klubb?.navn ?? "\u00A0"} />
 
             <DropdownMenu>
                 <DropdownMenuTrigger asChild>

@@ -2,7 +2,6 @@ import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import type { ReactNode } from "react";
 
-import LoaderSkeleton from "./components/LoaderSkeleton";
 import SlugGate from "@/routes/SlugGate";
 import AppBoot from "@/app/AppBoot";
 import AppShell from "@/app/AppShell";
@@ -25,13 +24,7 @@ const Protected = ({ children }: { children: ReactNode }) => (
 export default function App() {
     return (
         <BrowserRouter basename={import.meta.env.BASE_URL}>
-            <Suspense
-                fallback={
-                    <div className="max-w-screen-sm mx-auto px-4 py-4">
-                        <LoaderSkeleton />
-                    </div>
-                }
-            >
+            <Suspense fallback={null}>
                 <Routes>
                     <Route path="/" element={<Navigate to="/aas-tennisklubb" replace />} />
 

@@ -3,16 +3,10 @@ import { Toaster } from "sonner";
 import Navbar from "@/components/Navbar";
 import BreadcrumbMedSti from "@/components/BreadcrumbMedSti";
 import FeedAlerts from "@/components/Feed/FeedAlerts";
-import "animate.css";
-
-import bgUrl from "@/assets/backgrounds/bg.webp";
 
 export default function AppShell() {
     return (
-        <div
-            className="w-full min-h-screen bg-cover bg-center bg-fixed"
-            style={{ backgroundImage: `url(${bgUrl})` }}
-        >
+        <div className="w-full min-h-screen">
             <div className="w-full max-w-screen-sm mx-auto px-4 py-4 overflow-x-hidden">
                 <div className="bg-white rounded-md shadow-sm overflow-hidden">
                     <header className="bg-gradient-to-b from-gray-200 to-white border-b border-gray-300 shadow-sm">

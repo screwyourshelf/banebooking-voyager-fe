@@ -1,32 +1,31 @@
-import { useEffect, useState } from 'react';
-import type { ReactNode } from 'react';
-import { Navigate } from 'react-router-dom';
-import { supabase } from '../supabase.js';
-import type { User } from '@supabase/supabase-js';
-import LoaderSkeleton from './LoaderSkeleton.js';
+import { useEffect, useState } from "react";
+import type { ReactNode } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { supabase } from "../supabase.js";
+import type { User } from "@supabase/supabase-js";
 
 export function ProtectedRoute({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<User | null>(null);
-    const [loading, setLoading] = useState(true);
+    const [ready, setReady] = useState(false);
+    const location = useLocation();
 
     useEffect(() => {
-        supabase.auth.getUser().then(({ data: { user } }) => {
-            setUser(user);
-            setLoading(false);
+        supabase.auth.getSession().then(({ data }) => {
+            setUser(data.session?.user ?? null);
+            setReady(true);
         });
 
-        const { data: listener } = supabase.auth.onAuthStateChange((_event, session) => {
+        const { data: sub } = supabase.auth.onAuthStateChange((_event, session) => {
             setUser(session?.user ?? null);
-            setLoading(false);
+            setReady(true);
         });
 
-        return () => {
-            listener.subscription.unsubscribe();
-        };
+        return () => sub.subscription.unsubscribe();
     }, []);
 
-    if (loading) return <LoaderSkeleton />;
-    if (!user) return <Navigate to="/" replace />;
+    if (!ready) return null;
+
+    if (!user) return <Navigate to="/" replace state={{ from: location }} />;
 
     return <>{children}</>;
 }
