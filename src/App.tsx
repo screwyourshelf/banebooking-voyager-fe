@@ -5,6 +5,7 @@ import type { ReactNode } from "react";
 import SlugGate from "@/routes/SlugGate";
 import AppBoot from "@/app/AppBoot";
 import AppShell from "@/app/AppShell";
+import AppFrameSkeleton from "@/components/AppFrameSkeleton";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const IndexPage = lazy(() => import("./pages/IndexPage"));
@@ -24,7 +25,7 @@ const Protected = ({ children }: { children: ReactNode }) => (
 export default function App() {
     return (
         <BrowserRouter basename={import.meta.env.BASE_URL}>
-            <Suspense fallback={null}>
+            <Suspense fallback={<AppFrameSkeleton />}>
                 <Routes>
                     <Route path="/" element={<Navigate to="/aas-tennisklubb" replace />} />
 

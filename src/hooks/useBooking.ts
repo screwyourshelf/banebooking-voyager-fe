@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type { BookingSlot } from "@/types";
 import { useApiQuery } from "@/hooks/useApiQuery";
@@ -29,7 +29,7 @@ export function useBooking(dato: string, baneId: string) {
             refetchInterval: 30_000,
             refetchOnWindowFocus: true,
             refetchIntervalInBackground: false,
-            placeholderData: [],
+            placeholderData: keepPreviousData, 
         }
     );
 
@@ -178,6 +178,7 @@ export function useBooking(dato: string, baneId: string) {
     return {
         slots: bookingerQuery.data ?? [],
         isLoading: bookingerQuery.isLoading,
+        isFetching: bookingerQuery.isFetching,
         apenSlotTid,
         setApenSlotTid,
 

@@ -34,6 +34,7 @@ export default function IndexPage() {
     onCancel,
     onDelete,
     isLoading: loadingBooking,
+    isFetching
   } = useBooking(valgtDatoStr, valgtBaneId);
 
   // Sett default bane

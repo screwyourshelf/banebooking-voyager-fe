@@ -5,98 +5,38 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Banebooking</title>
 
-    <link rel="preload" as="image" href="/backgrounds/bg.webp" />
+    <!-- Preload bakgrunn (base-aware) -->
+    <link rel="preload" as="image" href="%BASE_URL%backgrounds/bg.webp" />
 
+    <!-- Bakgrunn før React (hindrer hvit flash) -->
     <style>
-        html,
-        body {
+        html, body {
             height: 100%;
             margin: 0;
         }
 
         body {
-            background-image: url("/backgrounds/bg.webp");
+            background-image: url("%BASE_URL%backgrounds/bg.webp");
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
             background-color: #0b3a4a;
         }
-
-        /* "Pre-React frame" (matcher AppShell-ramma di) */
-        #app-preload {
-            max-width: 640px;
-            margin: 0 auto;
-            padding: 16px;
-        }
-
-        #app-card {
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
-            overflow: hidden;
-            min-height: 50vh;
-        }
-
-        #app-header {
-            height: 44px;
-            background: linear-gradient(to bottom, #e5e7eb, #ffffff);
-            border-bottom: 1px solid #d1d5db;
-        }
-
-        #app-body {
-            padding: 12px;
-        }
-
-        .skeleton {
-            height: 12px;
-            border-radius: 6px;
-            background: #e5e7eb;
-            margin: 10px 0;
-            opacity: 0.9;
-        }
-
-            .skeleton.w60 {
-                width: 60%;
-            }
-
-            .skeleton.w80 {
-                width: 80%;
-            }
-
-            .skeleton.w40 {
-                width: 40%;
-            }
     </style>
 
-    <link rel="icon" href="/favicon.ico" />
-    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
-    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="icon" href="%BASE_URL%favicon.ico" />
+    <link rel="icon" type="image/png" sizes="32x32" href="%BASE_URL%favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="%BASE_URL%favicon-16x16.png" />
+    <link rel="apple-touch-icon" href="%BASE_URL%apple-touch-icon.png" />
+    <link rel="manifest" href="%BASE_URL%site.webmanifest" />
     <meta name="theme-color" content="#ffffff" />
-    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+    <link rel="mask-icon" href="%BASE_URL%safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
-    <meta name="msapplication-config" content="/browserconfig.xml" />
+    <meta name="msapplication-config" content="%BASE_URL%browserconfig.xml" />
 </head>
 
 <body>
-    <div id="root">
-        <!-- vises kun før React tar over -->
-        <div id="app-preload">
-            <div id="app-card">
-                <div id="app-header"></div>
-                <div id="app-body">
-                    <div class="skeleton w60"></div>
-                    <div class="skeleton w80"></div>
-                    <div class="skeleton w40"></div>
-                    <div class="skeleton w80"></div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Må være absolutt /src/... i dev.
-         I prod blir dette skrevet om av Vite build uansett. -->
+    <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
 </body>
 </html>

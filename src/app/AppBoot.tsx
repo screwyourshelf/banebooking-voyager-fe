@@ -3,12 +3,13 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useSlug } from "@/hooks/useSlug";
 import api from "@/api/api";
 import { useKlubb } from "@/hooks/useKlubb";
+import AppFrameSkeleton from "@/components/AppFrameSkeleton";
 
 export default function AppBoot({ children }: { children: React.ReactNode }) {
     const slug = useSlug();
     const qc = useQueryClient();
 
-    const { isLoading: loadingKlubb } = useKlubb();
+    const { data: klubb, isLoading: loadingKlubb } = useKlubb();
 
     useEffect(() => {
         localStorage.setItem("slug", slug);
@@ -20,7 +21,8 @@ export default function AppBoot({ children }: { children: React.ReactNode }) {
         });
     }, [slug, qc]);
 
-    if (loadingKlubb) return null;
+    if (loadingKlubb) return <AppFrameSkeleton />;
+    if (!klubb) return <div className="p-4">Fant ikke klubb.</div>;
 
     return <>{children}</>;
 }
