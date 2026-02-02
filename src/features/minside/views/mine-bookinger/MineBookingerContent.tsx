@@ -1,6 +1,6 @@
 import PageSection from "@/components/sections/PageSection";
-import { FieldGroup, FieldList } from "@/components/fields";
-import SwitchRow from "@/components/fields/SwitchRow";
+import { RowPanel, RowList, Row } from "@/components/rows";
+import SwitchRow from "@/components/rows/SwitchRow";
 import BookingSlotItem from "@/components/Booking/BookingSlotItem";
 import type { BookingSlot } from "@/types";
 
@@ -29,14 +29,19 @@ export default function MineBookingerContent({
     onToggleOpenKey,
     onAvbestill,
 }: Props) {
+    const hasBookinger = bookinger.length > 0;
+
+    const tomTekst = visHistoriske
+        ? "Du har ingen registrerte bookinger."
+        : "Du har ingen kommende bookinger.";
+
     return (
         <PageSection
             title="Bookinger"
             description="Se kommende bookinger og velg om du vil inkludere tidligere."
         >
-            {/* Gruppe 1: controls + status */}
-            <FieldGroup>
-                <FieldList>
+            <RowPanel>
+                <RowList>
                     <SwitchRow
                         title="Vis også tidligere bookinger"
                         description="Inkluder bookinger som allerede er gjennomført."
@@ -44,20 +49,17 @@ export default function MineBookingerContent({
                         onCheckedChange={onToggleVisHistoriske}
                     />
 
-                    {bookinger.length === 0 ? (
-                        // Tomtilstand som en “rad”
-                        <div className="px-3 py-2 text-sm text-muted-foreground italic">
-                            {visHistoriske
-                                ? "Du har ingen registrerte bookinger."
-                                : "Du har ingen kommende bookinger."}
-                        </div>
+                    {!hasBookinger ? (
+                        <Row
+                            title="Ingen bookinger"
+                            description={tomTekst}
+                        />
                     ) : null}
-                </FieldList>
-            </FieldGroup>
+                </RowList>
+            </RowPanel>
 
-            {/* Gruppe 2: booking-kort */}
-            {bookinger.length > 0 ? (
-                <div className={isPending ? "pointer-events-none opacity-60" : ""}>
+            {hasBookinger ? (
+                <div className={isPending ? "pointer-events-none opacity-60 mt-4" : "mt-4"}>
                     {bookinger.map((b) => {
                         const key = buildBookingKey(b);
                         const isOpen = openKey === key;

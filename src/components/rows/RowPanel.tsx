@@ -7,7 +7,7 @@ type Props = {
     intent?: "default" | "danger";
 };
 
-export default function FieldGroup({ children, className, intent = "default" }: Props) {
+export default function RowPanel({ children, className, intent = "default" }: Props) {
     return (
         <div
             className={cn(

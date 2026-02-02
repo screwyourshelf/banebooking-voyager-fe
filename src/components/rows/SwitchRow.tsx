@@ -1,6 +1,5 @@
-import FieldRow from "./FieldRow";
+import Row from "./Row";
 import { Switch } from "@/components/ui/switch";
-import { cn } from "@/lib/utils";
 
 type Props = {
     title: string;
@@ -22,7 +21,7 @@ export default function SwitchRow({
     density = "compact",
 }: Props) {
     return (
-        <FieldRow
+        <Row
             title={title}
             description={description}
             density={density}
@@ -32,7 +31,6 @@ export default function SwitchRow({
                     checked={checked}
                     onCheckedChange={onCheckedChange}
                     disabled={disabled}
-                    className={cn(disabled && "opacity-60")}
                 />
             }
         />

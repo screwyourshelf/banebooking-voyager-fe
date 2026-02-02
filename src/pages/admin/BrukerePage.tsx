@@ -1,11 +1,12 @@
 import { useMemo, useState } from "react";
 import LoaderSkeleton from "@/components/LoaderSkeleton";
 import PageSection from "@/components/sections/PageSection";
-import { FieldGroup, FieldList, FieldRow } from "@/components/fields";
-import { TextField } from "@/components/forms";
+import { RowPanel, RowList, Row } from "@/components/rows";
 
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { Input } from "@/components/ui/input";
+import { Field } from "@/components/ui/field";
 import { cn } from "@/lib/utils";
 
 import {
@@ -109,14 +110,10 @@ export default function BrukerePage() {
 
     return (
         <div className="space-y-4">
-            <PageSection
-                title="Brukere"
-                description="Søk etter brukere og endre rolle eller visningsnavn."
-            >
-                <FieldGroup>
-                    <FieldList>
-
-                        <FieldRow title="Filter på rolle" description="">
+            <PageSection title="Brukere" description="Søk etter brukere og endre rolle eller visningsnavn.">
+                <RowPanel>
+                    <RowList>
+                        <Row title="Filter på rolle" description="">
                             <div className="flex flex-wrap gap-2">
                                 {ROLLER.map((r) => {
                                     const aktiv = rolleFilter.includes(r);
@@ -148,34 +145,30 @@ export default function BrukerePage() {
                                     </Button>
                                 </div>
                             ) : null}
-                        </FieldRow>
+                        </Row>
 
-                        <FieldRow
+                        <Row
                             title="Vis slettede brukere"
                             description="Inkluder brukere som er anonymisert eller slettet."
                             right={
-                                <div className="pt-0.5">
-                                    <Switch checked={visSlettede} onCheckedChange={setVisSlettede} />
-                                </div>
+                                <Switch checked={visSlettede} onCheckedChange={setVisSlettede} />
                             }
                         />
 
-                        <FieldRow title="Søk" description="">
-                            <TextField
-                                id="brukersok"
-                                label="Søk"
-                                hideLabel
-                                value={query}
-                                onValueChange={setQuery}
-                                inputProps={{
-                                    placeholder: "Søk på e-post eller visningsnavn…",
-                                    inputMode: "search",
-                                    className: "bg-background",
-                                }}
-                            />
-                        </FieldRow>
-                    </FieldList>
-                </FieldGroup>
+                        <Row title="Søk" description="">
+                            <Field>
+                                <Input
+                                    id="brukersok"
+                                    value={query}
+                                    onChange={(e) => setQuery(e.target.value)}
+                                    placeholder="Søk på e-post eller visningsnavn…"
+                                    inputMode="search"
+                                    className="bg-background"
+                                />
+                            </Field>
+                        </Row>
+                    </RowList>
+                </RowPanel>
 
                 {/* RESULTATLISTE */}
                 <div className="mt-4">
@@ -184,21 +177,20 @@ export default function BrukerePage() {
                     ) : filtrerteBrukere.length === 0 ? (
                         <p className="text-sm text-muted-foreground italic">Ingen brukere funnet.</p>
                     ) : (
-                        <FieldGroup>
-                            <FieldList>
+                        <RowPanel>
+                            <RowList>
                                 {filtrerteBrukere.map((b) => {
                                     const erMeg = b.id === bruker?.id;
                                     const slettet = erSlettetEpost(b.epost);
                                     const rolle = (b.roller?.[0] ?? "Medlem") as RolleType;
 
                                     return (
-                                        <FieldRow
+                                        <Row
                                             key={b.id}
                                             title={b.epost ?? "Ukjent bruker"}
                                             description={b.visningsnavn || (slettet ? "Slettet/anonymisert" : "")}
                                             right={
                                                 !erMeg && !slettet ? (
-                                                    // samme “knapp-look” som ellers (booking/avbestill)
                                                     <Button
                                                         type="button"
                                                         size="sm"
@@ -218,11 +210,11 @@ export default function BrukerePage() {
                                                     <span className="text-muted-foreground"> (slettet)</span>
                                                 ) : null}
                                             </div>
-                                        </FieldRow>
+                                        </Row>
                                     );
                                 })}
-                            </FieldList>
-                        </FieldGroup>
+                            </RowList>
+                        </RowPanel>
                     )}
                 </div>
             </PageSection>
@@ -243,27 +235,23 @@ export default function BrukerePage() {
                         <div className="space-y-4">
                             <div className="space-y-1">
                                 <div className="text-xs text-muted-foreground">Bruker</div>
-                                <div className="text-sm font-medium break-words">
-                                    {aktivBruker.epost}
-                                </div>
+                                <div className="text-sm font-medium break-words">{aktivBruker.epost}</div>
                             </div>
 
                             <div className="space-y-2">
                                 <div className="text-sm font-medium">Visningsnavn</div>
 
-                                <TextField
-                                    id="visningsnavn"
-                                    label="Visningsnavn"
-                                    hideLabel
-                                    value={edit.visningsnavn}
-                                    onValueChange={(visningsnavn) =>
-                                        setEdit((s) => ({ ...s, visningsnavn }))
-                                    }
-                                    inputProps={{
-                                        placeholder: "Valgfritt",
-                                        className: "bg-background",
-                                    }}
-                                />
+                                <Field>
+                                    <Input
+                                        id="visningsnavn"
+                                        value={edit.visningsnavn}
+                                        onChange={(e) =>
+                                            setEdit((s) => ({ ...s, visningsnavn: e.target.value }))
+                                        }
+                                        placeholder="Valgfritt"
+                                        className="bg-background"
+                                    />
+                                </Field>
                             </div>
 
                             <div className="space-y-2">

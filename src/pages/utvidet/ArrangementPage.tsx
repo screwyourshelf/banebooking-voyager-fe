@@ -25,7 +25,8 @@ import DatoVelger from "../../components/DatoVelger";
 import { toast } from "sonner";
 import LoaderSkeleton from "../../components/LoaderSkeleton";
 import { Card, CardContent } from "@/components/ui/card";
-import { TextField, SelectField } from "@/components/forms";
+import { Field, FieldLabel } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import {
     Dialog,
     DialogContent,
@@ -33,6 +34,14 @@ import {
     DialogTitle,
     DialogFooter,
 } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 export default function ArrangementPage() {
     const {
@@ -162,37 +171,51 @@ export default function ArrangementPage() {
         await forhandsvis(dto); // trigger useApiPostQuery (POST-query)
     };
 
+    const KATEGORIER = [
+        "Trening",
+        "Turnering",
+        "Klubbmersterskap",
+        "Kurs",
+        "Lagkamp",
+        "Stigespill",
+        "Dugnad",
+        "Vedlikehold",
+        "Sosialt",
+        "Annet",
+    ] as const;
+
     if (isLoading) return <LoaderSkeleton />;
 
     return (
         <div className="max-w-screen-md mx-auto px-1 py-1">
             <Card>
                 <CardContent className="p-4 space-y-4">
-                    <SelectField
-                        id="kategori"
-                        label="Kategori"
-                        value={kategori}
-                        onChange={setKategori}
-                        options={[
-                            "Trening",
-                            "Turnering",
-                            "Klubbmersterskap",
-                            "Kurs",
-                            "Lagkamp",
-                            "Stigespill",
-                            "Dugnad",
-                            "Vedlikehold",
-                            "Sosialt",
-                            "Annet",
-                        ].map((k) => ({ label: k, value: k }))}
-                    />
+                    <Field>
+                        <Label htmlFor="kategori">Kategori</Label>
 
-                    <TextField
-                        id="beskrivelse"
-                        label="Beskrivelse"
-                        value={beskrivelse}
-                        onValueChange={setBeskrivelse}
-                    />
+                        <Select value={kategori} onValueChange={setKategori}>
+                            <SelectTrigger id="kategori">
+                                <SelectValue placeholder="Velg kategori..." />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                                {KATEGORIER.map((k) => (
+                                    <SelectItem key={k} value={k}>
+                                        {k}
+                                    </SelectItem>
+                                ))}
+                            </SelectContent>
+                        </Select>
+                    </Field>
+
+                    <Field>
+                        <FieldLabel htmlFor="beskrivelse">Beskrivelse</FieldLabel>
+                        <Input
+                            id="beskrivelse"
+                            value={beskrivelse}
+                            onChange={(e) => setBeskrivelse(e.target.value)}
+                        />
+                    </Field>
 
                     <div>
                         <label className="text-sm font-medium">Fra</label>

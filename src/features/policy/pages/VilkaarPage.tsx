@@ -1,7 +1,7 @@
 import { useKlubb } from "@/hooks/useKlubb";
 import LoaderSkeleton from "@/components/LoaderSkeleton";
 import Page from "@/components/Page";
-import { AKTIV_VILKAAR } from "@/lib/vilkaar";
+import { AKTIV_VILKAAR } from "./vilkaar";
 
 export default function VilkaarPage() {
   const { data: klubb, isLoading } = useKlubb();

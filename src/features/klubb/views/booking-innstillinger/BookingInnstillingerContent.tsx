@@ -1,6 +1,15 @@
 import PageSection from "@/components/sections/PageSection";
-import { FieldGroup, FieldList, FieldRow } from "@/components/fields";
-import { FormSubmitButton, FormLayout, FormActions, RangeField, SelectField } from "@/components/forms";
+import { RowPanel, RowList, Row } from "@/components/rows";
+import { FormSubmitButton, FormLayout, FormActions } from "@/components/forms";
+
+import { Field } from "@/components/ui/field";
+import {
+    Select,
+    SelectContent,
+    SelectItem,
+    SelectTrigger,
+    SelectValue,
+} from "@/components/ui/select";
 
 type Props = {
     aapningHour: number;
@@ -50,138 +59,126 @@ export default function BookingInnstillingerContent({
                 onSubmit();
             }}
         >
-            <PageSection
-                title="Bookinginnstillinger"
-                description="Styr åpningstider og bookinggrenser."
-            >
-                <FieldGroup>
-                    <FieldList>
-                        <FieldRow
+            <PageSection title="Bookinginnstillinger" description="Styr åpningstider og bookinggrenser.">
+                <RowPanel>
+                    <RowList>
+                        <Row
                             title="Åpningstid"
                             description="Tidligste starttidspunkt."
-                            right={
-                                <div className="text-sm font-medium tabular-nums">
-                                    {hourLabel(aapningHour)}
-                                </div>
-                            }
+                            right={<div className="text-sm font-medium tabular-nums">{hourLabel(aapningHour)}</div>}
                         >
-                            <RangeField
-                                id="aapningstid"
-                                label="Åpningstid"
-                                hideLabel
-                                value={aapningHour}
-                                min={6}
-                                max={23}
-                                step={1}
-                                onValueChange={onChangeAapningHour}
-                            />
-                        </FieldRow>
+                            <Field>
+                                <input
+                                    id="aapningstid"
+                                    type="range"
+                                    value={aapningHour}
+                                    min={6}
+                                    max={23}
+                                    step={1}
+                                    onChange={(e) => onChangeAapningHour(Number(e.target.value))}
+                                    className="w-full accent-primary"
+                                />
+                            </Field>
+                        </Row>
 
-                        <FieldRow
+                        <Row
                             title="Stengetid"
                             description="Seneste starttidspunkt."
-                            right={
-                                <div className="text-sm font-medium tabular-nums">
-                                    {hourLabel(stengeHour)}
-                                </div>
-                            }
+                            right={<div className="text-sm font-medium tabular-nums">{hourLabel(stengeHour)}</div>}
                         >
-                            <RangeField
-                                id="stengetid"
-                                label="Stengetid"
-                                hideLabel
-                                value={stengeHour}
-                                min={6}
-                                max={23}
-                                step={1}
-                                onValueChange={onChangeStengeHour}
-                            />
-                        </FieldRow>
+                            <Field>
+                                <input
+                                    id="stengetid"
+                                    type="range"
+                                    value={stengeHour}
+                                    min={6}
+                                    max={23}
+                                    step={1}
+                                    onChange={(e) => onChangeStengeHour(Number(e.target.value))}
+                                    className="w-full accent-primary"
+                                />
+                            </Field>
+                        </Row>
 
-                        <FieldRow
+                        <Row
                             title="Maks bookinger per dag"
                             description="Per bruker."
-                            right={
-                                <div className="text-sm font-medium tabular-nums">
-                                    {booking.maksPerDag}
-                                </div>
-                            }
+                            right={<div className="text-sm font-medium tabular-nums">{booking.maksPerDag}</div>}
                         >
-                            <RangeField
-                                id="maksPerDag"
-                                label="Maks bookinger per dag"
-                                hideLabel
-                                value={booking.maksPerDag}
-                                min={0}
-                                max={5}
-                                step={1}
-                                onValueChange={onChangeMaksPerDag}
-                            />
-                        </FieldRow>
+                            <Field>
+                                <input
+                                    id="maksPerDag"
+                                    type="range"
+                                    value={booking.maksPerDag}
+                                    min={0}
+                                    max={5}
+                                    step={1}
+                                    onChange={(e) => onChangeMaksPerDag(Number(e.target.value))}
+                                    className="w-full accent-primary"
+                                />
+                            </Field>
+                        </Row>
 
-                        <FieldRow
+                        <Row
                             title="Maks aktive bookinger"
                             description="Per bruker (totalt)."
-                            right={
-                                <div className="text-sm font-medium tabular-nums">
-                                    {booking.maksTotalt}
-                                </div>
-                            }
+                            right={<div className="text-sm font-medium tabular-nums">{booking.maksTotalt}</div>}
                         >
-                            <RangeField
-                                id="maksTotalt"
-                                label="Maks aktive bookinger"
-                                hideLabel
-                                value={booking.maksTotalt}
-                                min={0}
-                                max={10}
-                                step={1}
-                                onValueChange={onChangeMaksTotalt}
-                            />
-                        </FieldRow>
+                            <Field>
+                                <input
+                                    id="maksTotalt"
+                                    type="range"
+                                    value={booking.maksTotalt}
+                                    min={0}
+                                    max={10}
+                                    step={1}
+                                    onChange={(e) => onChangeMaksTotalt(Number(e.target.value))}
+                                    className="w-full accent-primary"
+                                />
+                            </Field>
+                        </Row>
 
-                        <FieldRow
+                        <Row
                             title="Hvor langt frem du kan booke"
                             description="Antall dager frem i tid."
-                            right={
-                                <div className="text-sm font-medium tabular-nums">
-                                    {booking.dagerFremITid}
-                                </div>
-                            }
+                            right={<div className="text-sm font-medium tabular-nums">{booking.dagerFremITid}</div>}
                         >
-                            <RangeField
-                                id="dagerFremITid"
-                                label="Hvor langt frem du kan booke"
-                                hideLabel
-                                value={booking.dagerFremITid}
-                                min={1}
-                                max={14}
-                                step={1}
-                                onValueChange={onChangeDagerFremITid}
-                            />
-                        </FieldRow>
+                            <Field>
+                                <input
+                                    id="dagerFremITid"
+                                    type="range"
+                                    value={booking.dagerFremITid}
+                                    min={1}
+                                    max={14}
+                                    step={1}
+                                    onChange={(e) => onChangeDagerFremITid(Number(e.target.value))}
+                                    className="w-full accent-primary"
+                                />
+                            </Field>
+                        </Row>
 
-                        <FieldRow
-                            title="Slot-lengde"
-                            description="Låst i denne versjonen."
-                        >
-                            <SelectField
-                                id="slotLengdeMinutter"
-                                label="Slot-lengde"
-                                hideLabel
-                                value={booking.slotLengdeMinutter.toString()}
-                                onChange={onChangeSlotLengdeMinutter}
-                                options={[
-                                    { label: "30 minutter", value: "30" },
-                                    { label: "45 minutter", value: "45" },
-                                    { label: "60 minutter", value: "60" },
-                                    { label: "90 minutter", value: "90" },
-                                ]}
-                                disabled
-                            />
-                        </FieldRow>
-                    </FieldList>
-                </FieldGroup>
+                        <Row title="Slot-lengde" description="Låst i denne versjonen.">
+                            <Field>
+                                <Select
+                                    value={booking.slotLengdeMinutter.toString()}
+                                    onValueChange={onChangeSlotLengdeMinutter}
+                                    disabled
+                                >
+                                    <SelectTrigger id="slotLengdeMinutter">
+                                        <SelectValue placeholder="Velg slot-lengde" />
+                                    </SelectTrigger>
+
+                                    <SelectContent>
+                                        <SelectItem value="30">30 minutter</SelectItem>
+                                        <SelectItem value="45">45 minutter</SelectItem>
+                                        <SelectItem value="60">60 minutter</SelectItem>
+                                        <SelectItem value="90">90 minutter</SelectItem>
+                                    </SelectContent>
+                                </Select>
+                            </Field>
+                        </Row>
+                    </RowList>
+                </RowPanel>
             </PageSection>
 
             <FormActions variant="sticky">

@@ -10,7 +10,7 @@ type Props = {
     density?: "default" | "compact";
 };
 
-export default function FieldRow({
+export default function Row({
     title,
     description,
     right,

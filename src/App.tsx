@@ -11,12 +11,12 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 const IndexPage = lazy(() => import("./pages/IndexPage"));
 const MinSide = lazy(() => import("./features/minside/pages/MinSidePage"));
 const KlubbPage = lazy(() => import("./features/klubb/pages/KlubbPage"));
-const BanerPage = lazy(() => import("./pages/admin/BanerPage"));
+const BanerPage = lazy(() => import("./features/baner/pages/BanerPage"));
 const ArrangementPage = lazy(() => import("./pages/utvidet/ArrangementPage"));
 const KommendeArrangementPage = lazy(() => import("./pages/KommendeArrangementPage"));
 const BrukerePage = lazy(() => import("./pages/admin/BrukerePage"));
 const AuthCallbackPage = lazy(() => import("./pages/AuthCallbackPage"));
-const VilkaarPage = lazy(() => import("./pages/VilkaarPage"));
+const VilkaarPage = lazy(() => import("./features/policy/pages/VilkaarPage"));
 
 const Protected = ({ children }: { children: ReactNode }) => (
     <ProtectedRoute>{children}</ProtectedRoute>

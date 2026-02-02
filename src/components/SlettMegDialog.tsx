@@ -11,16 +11,27 @@ import {
     AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
-import { useAuth } from "../hooks/useAuth";
 import type { UseMutationResult } from "@tanstack/react-query";
+import { cn } from "@/lib/utils";
+import { useAuth } from "../hooks/useAuth";
 
-interface SlettMegDialogProps {
+type Props = {
     slettMeg: UseMutationResult<void, Error, void>;
-}
+    fullWidth?: boolean;
+    disabled?: boolean;
+    className?: string;
+};
 
-export default function SlettMegDialog({ slettMeg }: SlettMegDialogProps) {
+export default function SlettMegDialog({
+    slettMeg,
+    fullWidth = false,
+    disabled = false,
+    className,
+}: Props) {
     const { signOut } = useAuth();
     const [open, setOpen] = useState(false);
+
+    const isBusy = slettMeg.isPending;
 
     const handleDelete = async () => {
         try {
@@ -35,29 +46,33 @@ export default function SlettMegDialog({ slettMeg }: SlettMegDialogProps) {
     return (
         <AlertDialog open={open} onOpenChange={setOpen}>
             <AlertDialogTrigger asChild>
-                <Button variant="destructive" disabled={slettMeg.isPending}>
-                    {slettMeg.isPending ? "Sletter..." : "Slett min bruker"}
+                <Button
+                    variant="destructive"
+                    disabled={disabled || isBusy}
+                    className={cn(fullWidth && "w-full", className)}
+                >
+                    {isBusy ? "Sletter..." : "Slett min bruker"}
                 </Button>
             </AlertDialogTrigger>
+
             <AlertDialogContent>
                 <AlertDialogHeader>
                     <AlertDialogTitle>Er du sikker?</AlertDialogTitle>
                     <AlertDialogDescription>
-                        Dette vil slette din bruker og all tilknytning permanent. Denne
-                        handlingen kan ikke angres.
+                        Dette vil slette din bruker og all tilknytning permanent. Denne handlingen kan ikke angres.
                     </AlertDialogDescription>
                 </AlertDialogHeader>
+
                 <AlertDialogFooter>
-                    <AlertDialogCancel disabled={slettMeg.isPending}>
-                        Avbryt
-                    </AlertDialogCancel>
+                    <AlertDialogCancel disabled={isBusy}>Avbryt</AlertDialogCancel>
+
                     <AlertDialogAction asChild>
                         <Button
                             variant="destructive"
                             onClick={handleDelete}
-                            disabled={slettMeg.isPending}
+                            disabled={isBusy}
                         >
-                            {slettMeg.isPending ? "Sletter..." : "Slett bruker"}
+                            {isBusy ? "Sletter..." : "Slett bruker"}
                         </Button>
                     </AlertDialogAction>
                 </AlertDialogFooter>

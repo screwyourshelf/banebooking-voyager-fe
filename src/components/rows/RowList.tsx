@@ -8,7 +8,7 @@ type Props = {
     density?: "default" | "compact";
 };
 
-export default function FieldList({
+export default function RowList({
     children,
     className,
     divided = true,

@@ -8,7 +8,9 @@ import {
     DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { FormLayout, FormActions, FormSubmitButton, TextField } from "@/components/forms";
+import { FormLayout, FormActions, FormSubmitButton } from "@/components/forms";
+import { Field, FieldError } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 
 import {
     FaUser,
@@ -233,53 +235,60 @@ export default function Navbar() {
 
                             {step === "input" ? (
                                 <FormLayout density="compact" className="px-2 w-full" onSubmit={submitSendOtp}>
-                                    <TextField
-                                        id="email"
-                                        label="Logg inn med e-post"
-                                        value={email}
-                                        error={feilEmail}
-                                        onValueChange={(v) => {
-                                            setEmail(v);
-                                            if (feilEmail) setFeilEmail(null);
-                                        }}
-                                        inputProps={emailInputProps}
-                                    />
+                                    <div className="space-y-1">
+                                        <div className="text-sm font-medium">Logg inn med e-post</div>
+
+                                        <Field data-invalid={!!feilEmail}>
+                                            <Input
+                                                id="email"
+                                                value={email}
+                                                onChange={(e) => {
+                                                    const v = e.target.value;
+                                                    setEmail(v);
+                                                    if (feilEmail) setFeilEmail(null);
+                                                }}
+                                                aria-invalid={!!feilEmail}
+                                                {...emailInputProps}
+                                            />
+                                            {feilEmail ? <FieldError>{feilEmail}</FieldError> : null}
+                                        </Field>
+                                    </div>
 
                                     <FormActions align="left" spaced={false} className="w-full">
-                                        <FormSubmitButton
-                                            fullWidth
-                                            isLoading={status === "sending"}
-                                            loadingText="Sender..."
-                                        >
+                                        <FormSubmitButton fullWidth isLoading={status === "sending"} loadingText="Sender...">
                                             Send kode
                                         </FormSubmitButton>
                                     </FormActions>
                                 </FormLayout>
                             ) : (
                                 <FormLayout density="compact" className="px-2 w-full" onSubmit={submitVerifyOtp}>
-                                    <TextField
-                                        id="otp"
-                                        label="Skriv inn koden fra e-posten"
-                                        value={otp}
-                                        error={feilOtp}
-                                        onValueChange={(raw) => {
-                                            const v = raw.replace(/\D/g, "").slice(0, 6);
-                                            setOtp(v);
-                                            if (feilOtp) setFeilOtp(null);
-                                        }}
-                                        inputProps={otpInputProps}
-                                    />
+                                    <div className="space-y-1">
+                                        <div className="text-sm font-medium">Skriv inn koden fra e-posten</div>
+
+                                        <Field data-invalid={!!feilOtp}>
+                                            <Input
+                                                id="otp"
+                                                value={otp}
+                                                onChange={(e) => {
+                                                    const raw = e.target.value;
+                                                    const v = raw.replace(/\D/g, "").slice(0, 6);
+                                                    setOtp(v);
+                                                    if (feilOtp) setFeilOtp(null);
+                                                }}
+                                                aria-invalid={!!feilOtp}
+                                                {...otpInputProps}
+                                            />
+                                            {feilOtp ? <FieldError>{feilOtp}</FieldError> : null}
+                                        </Field>
+                                    </div>
 
                                     <FormActions align="left" spaced={false} className="w-full">
-                                        <FormSubmitButton
-                                            fullWidth
-                                            isLoading={status === "verifying"}
-                                            loadingText="Verifiserer..."
-                                        >
+                                        <FormSubmitButton fullWidth isLoading={status === "verifying"} loadingText="Verifiserer...">
                                             Verifiser kode
                                         </FormSubmitButton>
                                     </FormActions>
                                 </FormLayout>
+
                             )}
                         </>
                     )}

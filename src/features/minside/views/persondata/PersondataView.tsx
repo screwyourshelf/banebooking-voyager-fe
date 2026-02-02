@@ -4,9 +4,8 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import PageSection from "@/components/sections/PageSection";
-import { FieldGroup, FieldList, FieldRow, InfoRow } from "@/components/fields";
+import { RowPanel, RowList, Row, InfoRow } from "@/components/rows";
 import LoaderSkeleton from "@/components/LoaderSkeleton";
-import SlettMegDialog from "@/components/SlettMegDialog";
 
 import { formatDatoKort } from "@/utils/datoUtils";
 import { useMeg } from "@/hooks/useMeg";
@@ -18,14 +17,12 @@ export default function PersondataView() {
 
     const [lasterNed, setLasterNed] = useState(false);
 
-    if (laster || !bruker) {
-        return <LoaderSkeleton />;
-    }
+    if (laster || !bruker) return <LoaderSkeleton />;
 
-    const vilkarStatus = bruker.vilkaarAkseptertDato
-        ? `Akseptert ${formatDatoKort(bruker.vilkaarAkseptertDato)}${bruker.vilkaarVersjon ? ` (versjon ${bruker.vilkaarVersjon})` : ""
-        }`
-        : "Ikke registrert";
+    const vilkarStatus = !bruker.vilkaarAkseptertDato
+        ? "Ikke registrert"
+        : `Akseptert ${formatDatoKort(bruker.vilkaarAkseptertDato)}${bruker.vilkaarVersjon ? ` (versjon ${bruker.vilkaarVersjon})` : ""
+        }`;
 
     const handleLastNed = async () => {
         if (lasterNed) return;
@@ -42,17 +39,17 @@ export default function PersondataView() {
     };
 
     return (
-        <div className="space-y-4">
+        <div>
             <PageSection title="Persondata" description="Her kan du se vilkår og laste ned egne data.">
-                <FieldGroup>
-                    <FieldList>
+                <RowPanel>
+                    <RowList>
                         <InfoRow
                             label="Vilkår"
                             description="Vilkårene aksepteres automatisk ved første innlogging."
                             value={vilkarStatus}
                         />
 
-                        <FieldRow
+                        <Row
                             title="Les vilkårene"
                             description="Åpnes i ny fane."
                             right={
@@ -67,7 +64,7 @@ export default function PersondataView() {
                             }
                         />
 
-                        <FieldRow
+                        <Row
                             title="Last ned dine data"
                             description="JSON med registrerte opplysninger og bookinger."
                             right={
@@ -81,14 +78,8 @@ export default function PersondataView() {
                                 </Button>
                             }
                         />
-                    </FieldList>
-                </FieldGroup>
-            </PageSection>
-
-            <PageSection title="Slett bruker" description="Sletter bruker og all tilknyttet data permanent.">
-                <FieldList>
-                    <FieldRow title="" description="Dette kan ikke angres." right={<SlettMegDialog slettMeg={slettMeg} />} />
-                </FieldList>
+                    </RowList>
+                </RowPanel>
             </PageSection>
         </div>
     );

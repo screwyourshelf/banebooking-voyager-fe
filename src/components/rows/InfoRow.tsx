@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import FieldRow from "@/components/fields/FieldRow";
+import Row from "@/components/rows/Row";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -18,13 +18,13 @@ export default function InfoRow({
     density = "default",
 }: Props) {
     return (
-        <FieldRow
+        <Row
             title={label}
             description={description}
             density={density}
             className={className}
         >
-            <div className={cn("text-sm text-foreground break-words")}>{value}</div>
-        </FieldRow>
+            <div className={cn("text-sm text-muted-foreground break-words")}>{value}</div>
+        </Row>
     );
 }
