@@ -6,9 +6,9 @@ import {
     DropdownMenuContent,
     DropdownMenuItem,
     DropdownMenuSeparator,
-} from "@/components/ui/dropdown-menu.js";
-import { Button } from "@/components/ui/button.js";
-import { FormField } from "@/components/FormField.js";
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
+import { FormLayout, FormActions, FormSubmitButton, TextField } from "@/components/forms";
 
 import {
     FaUser,
@@ -22,12 +22,11 @@ import {
 } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
-import { useAuth } from "../hooks/useAuth.js";
-import { useLogin } from "../hooks/useLogin.js";
-import { useKlubb } from "../hooks/useKlubb.js";
-import { useBruker } from "../hooks/useBruker.js";
-import NavbarBrandMedKlubb from "./NavbarBrandMedKlubb.js";
-import Spinner from "./ui/spinner.js";
+import { useAuth } from "../hooks/useAuth";
+import { useLogin } from "../hooks/useLogin";
+import { useKlubb } from "../hooks/useKlubb";
+import { useBruker } from "../hooks/useBruker";
+import NavbarBrandMedKlubb from "./NavbarBrandMedKlubb";
 import { useSlug } from "@/hooks/useSlug";
 
 
@@ -233,56 +232,54 @@ export default function Navbar() {
                             <DropdownMenuSeparator />
 
                             {step === "input" ? (
-                                <form noValidate className="space-y-2 px-2 w-full" onSubmit={submitSendOtp}>
-                                    <FormField
+                                <FormLayout density="compact" className="px-2 w-full" onSubmit={submitSendOtp}>
+                                    <TextField
                                         id="email"
                                         label="Logg inn med e-post"
                                         value={email}
                                         error={feilEmail}
-                                        onChange={(e) => {
-                                            setEmail(e.target.value);
+                                        onValueChange={(v) => {
+                                            setEmail(v);
                                             if (feilEmail) setFeilEmail(null);
                                         }}
                                         inputProps={emailInputProps}
                                     />
 
-                                    <Button type="submit" size="sm" disabled={status === "sending"} className="w-full h-8 text-sm">
-                                        {status === "sending" ? (
-                                            <>
-                                                <Spinner />
-                                                <span className="ml-2">Sender...</span>
-                                            </>
-                                        ) : (
-                                            "Send kode"
-                                        )}
-                                    </Button>
-                                </form>
+                                    <FormActions align="left" spaced={false} className="w-full">
+                                        <FormSubmitButton
+                                            fullWidth
+                                            isLoading={status === "sending"}
+                                            loadingText="Sender..."
+                                        >
+                                            Send kode
+                                        </FormSubmitButton>
+                                    </FormActions>
+                                </FormLayout>
                             ) : (
-                                <form noValidate className="space-y-2 px-2 w-full" onSubmit={submitVerifyOtp}>
-                                    <FormField
+                                <FormLayout density="compact" className="px-2 w-full" onSubmit={submitVerifyOtp}>
+                                    <TextField
                                         id="otp"
                                         label="Skriv inn koden fra e-posten"
                                         value={otp}
                                         error={feilOtp}
-                                        onChange={(e) => {
-                                            const v = e.target.value.replace(/\D/g, "").slice(0, 6);
+                                        onValueChange={(raw) => {
+                                            const v = raw.replace(/\D/g, "").slice(0, 6);
                                             setOtp(v);
                                             if (feilOtp) setFeilOtp(null);
                                         }}
                                         inputProps={otpInputProps}
                                     />
 
-                                    <Button type="submit" size="sm" disabled={status === "verifying"} className="w-full h-8 text-sm">
-                                        {status === "verifying" ? (
-                                            <>
-                                                <Spinner />
-                                                <span className="ml-2">Verifiserer...</span>
-                                            </>
-                                        ) : (
-                                            "Verifiser kode"
-                                        )}
-                                    </Button>
-                                </form>
+                                    <FormActions align="left" spaced={false} className="w-full">
+                                        <FormSubmitButton
+                                            fullWidth
+                                            isLoading={status === "verifying"}
+                                            loadingText="Verifiserer..."
+                                        >
+                                            Verifiser kode
+                                        </FormSubmitButton>
+                                    </FormActions>
+                                </FormLayout>
                             )}
                         </>
                     )}

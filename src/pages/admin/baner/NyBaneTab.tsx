@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { useBaner } from "@/hooks/useBaner.js";
+import { useBaner } from "@/hooks/useBaner";
 
-import { Button } from "@/components/ui/button.js";
-import { FormField } from "@/components/FormField.js";
-import SettingsSection from "@/components/SettingsSection";
+import { Button } from "@/components/ui/button";
+import { TextField } from "@/components/forms";
+import PageSection from "@/components/sections/PageSection";
 
 type BaneFormData = {
     navn: string;
@@ -40,7 +40,7 @@ export default function NyBaneTab() {
     }
 
     return (
-        <SettingsSection title="Ny bane" description="Legg til en ny bane i klubben.">
+        <PageSection title="Ny bane" description="Legg til en ny bane i klubben.">
             <form
                 className="space-y-3"
                 onSubmit={(e) => {
@@ -48,7 +48,7 @@ export default function NyBaneTab() {
                     void leggTil();
                 }}
             >
-                <FormField
+                <TextField
                     id="ny-navn"
                     label="Navn"
                     value={nyBane.navn}
@@ -60,7 +60,7 @@ export default function NyBaneTab() {
                     }}
                 />
 
-                <FormField
+                <TextField
                     id="ny-beskrivelse"
                     label="Beskrivelse"
                     value={nyBane.beskrivelse}
@@ -73,6 +73,6 @@ export default function NyBaneTab() {
                     {opprettBane.isPending ? "Legger til..." : "Legg til"}
                 </Button>
             </form>
-        </SettingsSection>
+        </PageSection>
     );
 }

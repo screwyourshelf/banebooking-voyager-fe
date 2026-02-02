@@ -10,7 +10,7 @@ import {
     AlertDialogFooter,
     AlertDialogCancel,
     AlertDialogAction,
-} from "@/components/ui/alert-dialog.js";
+} from "@/components/ui/alert-dialog";
 
 interface SlettArrangementDialogProps {
     tittel: string;

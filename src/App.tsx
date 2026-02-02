@@ -9,8 +9,8 @@ import AppFrameSkeleton from "@/components/AppFrameSkeleton";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const IndexPage = lazy(() => import("./pages/IndexPage"));
-const MinSide = lazy(() => import("./pages/MinSidePage"));
-const KlubbPage = lazy(() => import("./pages/admin/KlubbPage"));
+const MinSide = lazy(() => import("./features/minside/pages/MinSidePage"));
+const KlubbPage = lazy(() => import("./features/klubb/pages/KlubbPage"));
 const BanerPage = lazy(() => import("./pages/admin/BanerPage"));
 const ArrangementPage = lazy(() => import("./pages/utvidet/ArrangementPage"));
 const KommendeArrangementPage = lazy(() => import("./pages/KommendeArrangementPage"));

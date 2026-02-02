@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
-import type { KlubbDetaljer, OppdaterKlubb } from "@/types/index.js";
+import type { KlubbDetaljer, OppdaterKlubb } from "@/types/index";
 import { useSlug } from "@/hooks/useSlug";
 
 export function useKlubb() {

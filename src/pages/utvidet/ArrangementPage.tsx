@@ -7,9 +7,9 @@ import {
     dagIndexTilBackendUkedag,
     finnUkedagerIDatoPeriode,
     formatDatoKort,
-} from "../../utils/datoUtils.js";
-import { useArrangement } from "../../hooks/useArrangement.js";
-import type { OpprettArrangementDto } from "../../types/index.js";
+} from "../../utils/datoUtils";
+import { useArrangement } from "../../hooks/useArrangement";
+import type { OpprettArrangementDto } from "../../types/index";
 
 import {
     Table,
@@ -18,22 +18,21 @@ import {
     TableHead,
     TableBody,
     TableCell,
-} from "@/components/ui/table.js";
-import { Button } from "@/components/ui/button.js";
-import { Checkbox } from "@/components/ui/checkbox.js";
-import DatoVelger from "../../components/DatoVelger.js";
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import DatoVelger from "../../components/DatoVelger";
 import { toast } from "sonner";
-import LoaderSkeleton from "../../components/LoaderSkeleton.js";
-import { Card, CardContent } from "@/components/ui/card.js";
-import { FormField } from "@/components/FormField.js";
-import { SelectField } from "@/components/SelectField.js";
+import LoaderSkeleton from "../../components/LoaderSkeleton";
+import { Card, CardContent } from "@/components/ui/card";
+import { TextField, SelectField } from "@/components/forms";
 import {
     Dialog,
     DialogContent,
     DialogHeader,
     DialogTitle,
     DialogFooter,
-} from "@/components/ui/dialog.js";
+} from "@/components/ui/dialog";
 
 export default function ArrangementPage() {
     const {
@@ -173,7 +172,7 @@ export default function ArrangementPage() {
                         id="kategori"
                         label="Kategori"
                         value={kategori}
-                        onChange={(val) => setKategori(val)}
+                        onChange={setKategori}
                         options={[
                             "Trening",
                             "Turnering",
@@ -188,11 +187,11 @@ export default function ArrangementPage() {
                         ].map((k) => ({ label: k, value: k }))}
                     />
 
-                    <FormField
+                    <TextField
                         id="beskrivelse"
                         label="Beskrivelse"
                         value={beskrivelse}
-                        onChange={(e) => setBeskrivelse(e.target.value)}
+                        onValueChange={setBeskrivelse}
                     />
 
                     <div>

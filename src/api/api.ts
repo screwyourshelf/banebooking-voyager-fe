@@ -4,7 +4,7 @@ import axios, {
     type InternalAxiosRequestConfig,
 } from "axios";
 import { supabase } from "@/supabase";
-import { signOutAndRedirect } from "@/utils/authUtils.js";
+import { signOutAndRedirect } from "@/utils/authUtils";
 import { toast } from "sonner";
 
 const rawBase = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");

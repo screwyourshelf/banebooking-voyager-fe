@@ -1,6 +1,6 @@
-import { useArrangement } from "@/hooks/useArrangement.js";
+import { useArrangement } from "@/hooks/useArrangement";
 
-import LoaderSkeleton from "@/components/LoaderSkeleton.js";
+import LoaderSkeleton from "@/components/LoaderSkeleton";
 import {
   Table,
   TableHeader,
@@ -8,12 +8,12 @@ import {
   TableHead,
   TableBody,
   TableCell,
-} from "@/components/ui/table.js";
-import { formatDatoKort } from "@/utils/datoUtils.js";
-import { Button } from "@/components/ui/button.js";
+} from "@/components/ui/table";
+import { formatDatoKort } from "@/utils/datoUtils";
+import { Button } from "@/components/ui/button";
 import { FaTrashAlt } from "react-icons/fa";
-import SlettArrangementDialog from "@/components/SlettArrangementDialog.js";
-import Page from "@/components/Page.js";
+import SlettArrangementDialog from "@/components/SlettArrangementDialog";
+import Page from "@/components/Page";
 
 export default function KommendeArrangementPage() {
   const { arrangementer, isLoading, slettArrangement } = useArrangement();

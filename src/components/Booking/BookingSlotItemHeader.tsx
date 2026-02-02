@@ -1,5 +1,5 @@
 import { FaChevronDown } from "react-icons/fa";
-import type { BookingSlot } from "../../types/index.js";
+import type { BookingSlot } from "../../types/index";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 

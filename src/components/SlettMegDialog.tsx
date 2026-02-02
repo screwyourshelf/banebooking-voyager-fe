@@ -9,9 +9,9 @@ import {
     AlertDialogFooter,
     AlertDialogCancel,
     AlertDialogAction,
-} from "@/components/ui/alert-dialog.js";
-import { Button } from "@/components/ui/button.js";
-import { useAuth } from "../hooks/useAuth.js";
+} from "@/components/ui/alert-dialog";
+import { Button } from "@/components/ui/button";
+import { useAuth } from "../hooks/useAuth";
 import type { UseMutationResult } from "@tanstack/react-query";
 
 interface SlettMegDialogProps {

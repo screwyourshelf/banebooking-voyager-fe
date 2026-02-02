@@ -6,7 +6,7 @@ import {
     BreadcrumbLink,
     BreadcrumbPage,
     BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb.js";
+} from "@/components/ui/breadcrumb";
 
 const visningsnavn: Record<string, string> = {
     "minside": "Min side",

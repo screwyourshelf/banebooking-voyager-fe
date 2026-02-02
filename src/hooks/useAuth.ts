@@ -1,5 +1,5 @@
 ﻿import { useEffect, useState, useCallback } from "react";
-import { supabase } from "@/supabase.js";
+import { supabase } from "@/supabase";
 import type { User } from "@supabase/supabase-js";
 
 function buildRedirectUrl() {

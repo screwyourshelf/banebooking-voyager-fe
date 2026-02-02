@@ -1,4 +1,4 @@
-﻿import { supabase } from "@/supabase.js";
+﻿import { supabase } from "@/supabase";
 import { config } from "@/config";
 
 function buildRedirectUrl() {

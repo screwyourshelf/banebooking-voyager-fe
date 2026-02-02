@@ -1,12 +1,11 @@
 import { useState, useEffect } from "react";
-import { useBaner } from "@/hooks/useBaner.js";
+import { useBaner } from "@/hooks/useBaner";
 
-import { Button } from "@/components/ui/button.js";
-import { FormField } from "@/components/FormField.js";
-import { SelectField } from "@/components/SelectField.js";
-import SwitchRow from "@/components/SwitchRow";
+import { Button } from "@/components/ui/button";
+import { SelectField, TextField } from "@/components/forms";
+import SwitchRow from "@/components/fields/SwitchRow";
 
-import SettingsSection from "@/components/SettingsSection";
+import PageSection from "@/components/sections/PageSection";
 
 type BaneFormData = {
     navn: string;
@@ -94,7 +93,7 @@ export default function RedigerBaneTab() {
     }
 
     return (
-        <SettingsSection
+        <PageSection
             title="Rediger bane"
             description="Velg en bane og oppdater informasjon."
         >
@@ -118,7 +117,7 @@ export default function RedigerBaneTab() {
 
                 {valgtBane ? (
                     <>
-                        <FormField
+                        <TextField
                             id="navn"
                             label="Navn"
                             value={redigerteVerdier?.navn ?? valgtBane.navn}
@@ -127,7 +126,7 @@ export default function RedigerBaneTab() {
                             }
                         />
 
-                        <FormField
+                        <TextField
                             id="beskrivelse"
                             label="Beskrivelse"
                             value={redigerteVerdier?.beskrivelse ?? valgtBane.beskrivelse}
@@ -155,6 +154,6 @@ export default function RedigerBaneTab() {
                     </p>
                 )}
             </form>
-        </SettingsSection>
+        </PageSection>
     );
 }

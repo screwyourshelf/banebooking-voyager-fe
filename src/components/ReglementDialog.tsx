@@ -5,8 +5,8 @@ import {
   DialogTitle,
   DialogTrigger,
   DialogDescription,
-} from "@/components/ui/dialog.js";
-import { useKlubb } from "@/hooks/useKlubb.js";
+} from "@/components/ui/dialog";
+import { useKlubb } from "@/hooks/useKlubb";
 import { ReactNode } from "react";
 
 type Props = {

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { BellRing, XIcon } from "lucide-react";
-import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert.js";
-import { useFeed } from "@/hooks/useFeed.js";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { useFeed } from "@/hooks/useFeed";
 import { useSlug } from "@/hooks/useSlug";
 import { config } from "@/config";
 

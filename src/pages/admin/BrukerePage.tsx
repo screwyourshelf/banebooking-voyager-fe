@@ -1,9 +1,8 @@
 import { useMemo, useState } from "react";
 import LoaderSkeleton from "@/components/LoaderSkeleton";
-import SettingsSection from "@/components/SettingsSection";
-import SettingsList from "@/components/SettingsList";
-import SettingsRow from "@/components/SettingsRow";
-import SettingsInput from "@/components/SettingsInput";
+import PageSection from "@/components/sections/PageSection";
+import { FieldGroup, FieldList, FieldRow } from "@/components/fields";
+import { TextField } from "@/components/forms";
 
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -110,67 +109,73 @@ export default function BrukerePage() {
 
     return (
         <div className="space-y-4">
-            <SettingsSection
+            <PageSection
                 title="Brukere"
                 description="Søk etter brukere og endre rolle eller visningsnavn."
             >
-                {/* FILTER (samme prinsipp som KlubbInfoTab: SettingsList + SettingsRow) */}
-                <SettingsList>
-                  
-                    <SettingsRow title="Filter på rolle" description="">
-                        <div className="flex flex-wrap gap-2">
-                            {ROLLER.map((r) => {
-                                const aktiv = rolleFilter.includes(r);
-                                return (
+                <FieldGroup>
+                    <FieldList>
+
+                        <FieldRow title="Filter på rolle" description="">
+                            <div className="flex flex-wrap gap-2">
+                                {ROLLER.map((r) => {
+                                    const aktiv = rolleFilter.includes(r);
+                                    return (
+                                        <Button
+                                            key={r}
+                                            type="button"
+                                            size="sm"
+                                            variant={aktiv ? "default" : "outline"}
+                                            onClick={() => toggleRolle(r)}
+                                            className="h-8 px-3"
+                                        >
+                                            {r}
+                                        </Button>
+                                    );
+                                })}
+                            </div>
+
+                            {rolleFilter.length > 0 ? (
+                                <div className="mt-2">
                                     <Button
-                                        key={r}
                                         type="button"
                                         size="sm"
-                                        variant={aktiv ? "default" : "outline"}
-                                        onClick={() => toggleRolle(r)}
-                                        className="h-8 px-3"
+                                        variant="ghost"
+                                        onClick={() => setRolleFilter([])}
+                                        className="h-8 px-2 text-muted-foreground"
                                     >
-                                        {r}
+                                        Nullstill filter
                                     </Button>
-                                );
-                            })}
-                        </div>
+                                </div>
+                            ) : null}
+                        </FieldRow>
 
-                        {rolleFilter.length > 0 ? (
-                            <div className="mt-2">
-                                <Button
-                                    type="button"
-                                    size="sm"
-                                    variant="ghost"
-                                    onClick={() => setRolleFilter([])}
-                                    className="h-8 px-2 text-muted-foreground"
-                                >
-                                    Nullstill filter
-                                </Button>
-                            </div>
-                        ) : null}
-                    </SettingsRow>
-
-                    <SettingsRow
-                        title="Vis slettede brukere"
-                        description="Inkluder brukere som er anonymisert eller slettet."
-                        right={
-                            <div className="pt-0.5">
-                                <Switch checked={visSlettede} onCheckedChange={setVisSlettede} />
-                            </div>
-                        }
-                    />
-
-                    <SettingsRow title="Søk" description="">
-                        <SettingsInput
-                            value={query}
-                            onChange={setQuery}
-                            placeholder="Søk på e-post eller visningsnavn…"
-                            inputMode="search"
-                            className="bg-background"
+                        <FieldRow
+                            title="Vis slettede brukere"
+                            description="Inkluder brukere som er anonymisert eller slettet."
+                            right={
+                                <div className="pt-0.5">
+                                    <Switch checked={visSlettede} onCheckedChange={setVisSlettede} />
+                                </div>
+                            }
                         />
-                    </SettingsRow>
-                </SettingsList>
+
+                        <FieldRow title="Søk" description="">
+                            <TextField
+                                id="brukersok"
+                                label="Søk"
+                                hideLabel
+                                value={query}
+                                onValueChange={setQuery}
+                                inputProps={{
+                                    placeholder: "Søk på e-post eller visningsnavn…",
+                                    inputMode: "search",
+                                    className: "bg-background",
+                                }}
+                            />
+                        </FieldRow>
+                    </FieldList>
+                </FieldGroup>
 
                 {/* RESULTATLISTE */}
                 <div className="mt-4">
@@ -179,46 +184,48 @@ export default function BrukerePage() {
                     ) : filtrerteBrukere.length === 0 ? (
                         <p className="text-sm text-muted-foreground italic">Ingen brukere funnet.</p>
                     ) : (
-                        <SettingsList>
-                            {filtrerteBrukere.map((b) => {
-                                const erMeg = b.id === bruker?.id;
-                                const slettet = erSlettetEpost(b.epost);
-                                const rolle = (b.roller?.[0] ?? "Medlem") as RolleType;
+                        <FieldGroup>
+                            <FieldList>
+                                {filtrerteBrukere.map((b) => {
+                                    const erMeg = b.id === bruker?.id;
+                                    const slettet = erSlettetEpost(b.epost);
+                                    const rolle = (b.roller?.[0] ?? "Medlem") as RolleType;
 
-                                return (
-                                    <SettingsRow
-                                        key={b.id}
-                                        title={b.epost ?? "Ukjent bruker"}
-                                        description={b.visningsnavn || (slettet ? "Slettet/anonymisert" : "")}
-                                        right={
-                                            !erMeg && !slettet ? (
-                                                // samme “knapp-look” som ellers (booking/avbestill)
-                                                <Button
-                                                    type="button"
-                                                    size="sm"
-                                                    variant="outline"
-                                                    onClick={() => åpenRedigering(b)}
-                                                >
-                                                    Rediger
-                                                </Button>
-                                            ) : null
-                                        }
-                                        className={cn(slettet && "opacity-70")}
-                                    >
-                                        <div className="text-sm text-foreground">
-                                            <span className="text-muted-foreground">Rolle: </span>
-                                            {rolle}
-                                            {slettet ? (
-                                                <span className="text-muted-foreground"> (slettet)</span>
-                                            ) : null}
-                                        </div>
-                                    </SettingsRow>
-                                );
-                            })}
-                        </SettingsList>
+                                    return (
+                                        <FieldRow
+                                            key={b.id}
+                                            title={b.epost ?? "Ukjent bruker"}
+                                            description={b.visningsnavn || (slettet ? "Slettet/anonymisert" : "")}
+                                            right={
+                                                !erMeg && !slettet ? (
+                                                    // samme “knapp-look” som ellers (booking/avbestill)
+                                                    <Button
+                                                        type="button"
+                                                        size="sm"
+                                                        variant="outline"
+                                                        onClick={() => åpenRedigering(b)}
+                                                    >
+                                                        Rediger
+                                                    </Button>
+                                                ) : null
+                                            }
+                                            className={cn(slettet && "opacity-70")}
+                                        >
+                                            <div className="text-sm text-foreground">
+                                                <span className="text-muted-foreground">Rolle: </span>
+                                                {rolle}
+                                                {slettet ? (
+                                                    <span className="text-muted-foreground"> (slettet)</span>
+                                                ) : null}
+                                            </div>
+                                        </FieldRow>
+                                    );
+                                })}
+                            </FieldList>
+                        </FieldGroup>
                     )}
                 </div>
-            </SettingsSection>
+            </PageSection>
 
             {/* DIALOG */}
             {aktivBruker ? (
@@ -243,11 +250,19 @@ export default function BrukerePage() {
 
                             <div className="space-y-2">
                                 <div className="text-sm font-medium">Visningsnavn</div>
-                                <SettingsInput
+
+                                <TextField
+                                    id="visningsnavn"
+                                    label="Visningsnavn"
+                                    hideLabel
                                     value={edit.visningsnavn}
-                                    onChange={(visningsnavn) => setEdit((s) => ({ ...s, visningsnavn }))}
-                                    placeholder="Valgfritt"
-                                    className="bg-background"
+                                    onValueChange={(visningsnavn) =>
+                                        setEdit((s) => ({ ...s, visningsnavn }))
+                                    }
+                                    inputProps={{
+                                        placeholder: "Valgfritt",
+                                        className: "bg-background",
+                                    }}
                                 />
                             </div>
 
