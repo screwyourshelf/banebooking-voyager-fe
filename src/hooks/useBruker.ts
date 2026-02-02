@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import type { BrukerDto } from "@/types";
-import { AKTIV_VILKAAR } from "@/lib/vilkaar";
+import { AKTIV_VILKAAR } from "@/features/policy/pages/vilkaar";
 import { useAuth } from "@/hooks/useAuth";
 import { useSlug } from "@/hooks/useSlug";
 
