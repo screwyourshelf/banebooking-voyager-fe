@@ -9,7 +9,7 @@ export default function VilkaarPage() {
   if (isLoading || !klubb) {
     return (
       <Page>
-        <div className="p-4">
+        <div className="p-3">
           <LoaderSkeleton />
         </div> 
       </Page>
