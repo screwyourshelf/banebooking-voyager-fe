@@ -11,7 +11,7 @@ export default function VilkaarPage() {
       <Page>
         <div className="p-4">
           <LoaderSkeleton />
-        </div>
+        </div> 
       </Page>
     );
   }
