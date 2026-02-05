@@ -12,7 +12,7 @@ const IndexPage = lazy(() => import("./pages/IndexPage"));
 const MinSide = lazy(() => import("./features/minside/pages/MinSidePage"));
 const KlubbPage = lazy(() => import("./features/klubb/pages/KlubbPage"));
 const BanerPage = lazy(() => import("./features/baner/pages/BanerPage"));
-const ArrangementPage = lazy(() => import("./pages/utvidet/ArrangementPage"));
+const ArrangementPage = lazy(() => import("./features/arrangement/pages/ArrangementPage"));
 const KommendeArrangementPage = lazy(() => import("./pages/KommendeArrangementPage"));
 const BrukerePage = lazy(() => import("./pages/admin/BrukerePage"));
 const AuthCallbackPage = lazy(() => import("./pages/AuthCallbackPage"));

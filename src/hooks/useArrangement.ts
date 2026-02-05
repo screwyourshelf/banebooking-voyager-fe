@@ -70,7 +70,7 @@ export function useArrangement() {
     const queryClient = useQueryClient();
 
     const { data: klubb, isLoading: loadingKlubb } = useKlubb();
-    const { baner, isLoading: loadingBaner } = useBaner();
+    const { baner, isLoading: loadingBaner } = useBaner(false);
 
     const tilgjengeligeTidspunkter = useMemo(() => {
         if (!klubb?.bookingRegel) return [];
