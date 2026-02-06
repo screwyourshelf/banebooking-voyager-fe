@@ -17,34 +17,24 @@ import {
 import DatoVelger from "@/components/DatoVelger";
 import ForhandsvisningDialog from "./ForhandsvisningDialog";
 
-type Bane = { id: string; navn: string };
+import type { ArrangementKategori } from "@/types";
+import type { UkedagKortNorsk } from "@/types/dato";
+import type { ArrangementForhandsvisningDto, BaneDto } from "../../types";
 
-type Slot = {
-    dato: string;
-    startTid: string;
-    sluttTid: string;
-    baneId: string;
-};
-
-type Forhandsvis = {
-    ledige: Slot[];
-    konflikter: Slot[];
-};
-
-type Props<K extends string> = {
-    kategorier: readonly K[];
-    kategori: K;
+type Props = {
+    kategorier: readonly ArrangementKategori[];
+    kategori: ArrangementKategori;
     beskrivelse: string;
 
     datoFra: Date;
     datoTil: Date;
 
-    baner: Bane[];
-    tilgjengeligeUkedager: string[];
+    baner: BaneDto[];
+    tilgjengeligeUkedager: UkedagKortNorsk[];
     tilgjengeligeTidspunkter: string[];
 
     valgteBaner: string[];
-    valgteUkedager: string[];
+    valgteUkedager: UkedagKortNorsk[];
     valgteTidspunkter: string[];
 
     alleBaner: boolean;
@@ -52,10 +42,10 @@ type Props<K extends string> = {
     alleTidspunkter: boolean;
 
     dialogOpen: boolean;
-    forhandsvisning: Forhandsvis;
+    forhandsvisning: ArrangementForhandsvisningDto;
     isLoadingForhandsvisning: boolean;
 
-    onChangeKategori: (v: K) => void;
+    onChangeKategori: (v: ArrangementKategori) => void;
     onChangeBeskrivelse: (v: string) => void;
     onChangeDatoFra: (d: Date) => void;
     onChangeDatoTil: (d: Date) => void;
@@ -65,7 +55,7 @@ type Props<K extends string> = {
     onToggleAlleTidspunkter: (v: boolean) => void;
 
     onToggleBane: (id: string) => void;
-    onToggleUkedag: (dag: string) => void;
+    onToggleUkedag: (dag: UkedagKortNorsk) => void;
     onToggleTidspunkt: (tid: string) => void;
 
     onOpenPreview: () => void;
@@ -73,10 +63,17 @@ type Props<K extends string> = {
     onDialogOpenChange: (open: boolean) => void;
 };
 
+const ukedagKnappRekkefølge: readonly UkedagKortNorsk[] = [
+    "Man",
+    "Tir",
+    "Ons",
+    "Tor",
+    "Fre",
+    "Lør",
+    "Søn",
+];
 
-const ukedagKnappRekkefølge = ["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"] as const;
-
-export default function ArrangementContent<K extends string>(props: Props<K>) {
+export default function ArrangementContent(props: Props) {
     const {
         kategorier,
         kategori,
@@ -127,11 +124,7 @@ export default function ArrangementContent<K extends string>(props: Props<K>) {
                     onOpenPreview();
                 }}
             >
-                {/* ───────────── 1) Type ───────────── */}
-                <PageSection
-                    title="Type"
-                    description="Kategori og beskrivelse for arrangementet."
-                >
+                <PageSection title="Type" description="Kategori og beskrivelse for arrangementet.">
                     <RowPanel>
                         <RowList>
                             <Row title="Kategori" description="Velg type arrangement.">
@@ -156,17 +149,12 @@ export default function ArrangementContent<K extends string>(props: Props<K>) {
                                 </Field>
                             </Row>
 
-                            <Row
-                                title="Beskrivelse"
-                                description="Vises på bookingene."
-                            >
+                            <Row title="Beskrivelse" description="Vises på bookingene.">
                                 <Field>
                                     <Input
                                         id="beskrivelse"
                                         value={beskrivelse}
-                                        onChange={(e) =>
-                                            onChangeBeskrivelse(e.target.value)
-                                        }
+                                        onChange={(e) => onChangeBeskrivelse(e.target.value)}
                                     />
                                 </Field>
                             </Row>
@@ -174,7 +162,6 @@ export default function ArrangementContent<K extends string>(props: Props<K>) {
                     </RowPanel>
                 </PageSection>
 
-                {/* ───────────── 2) Periode ───────────── */}
                 <PageSection
                     title="Periode"
                     description="Velg dato-intervallet og hvilke ukedager som gjelder."
@@ -182,19 +169,11 @@ export default function ArrangementContent<K extends string>(props: Props<K>) {
                     <RowPanel>
                         <RowList>
                             <Row title="Fra" description="Startdato.">
-                                <DatoVelger
-                                    value={datoFra}
-                                    onChange={onChangeDatoFra}
-                                    visNavigering
-                                />
+                                <DatoVelger value={datoFra} onChange={onChangeDatoFra} visNavigering />
                             </Row>
 
                             <Row title="Til" description="Sluttdato.">
-                                <DatoVelger
-                                    value={datoTil}
-                                    onChange={onChangeDatoTil}
-                                    visNavigering
-                                />
+                                <DatoVelger value={datoTil} onChange={onChangeDatoTil} visNavigering />
                             </Row>
 
                             <SwitchRow
@@ -204,26 +183,16 @@ export default function ArrangementContent<K extends string>(props: Props<K>) {
                                 onCheckedChange={onToggleAlleUkedager}
                             />
 
-                            <Row
-                                title="Ukedager"
-                                description="Bare dager som finnes i perioden er aktive."
-                            >
+                            <Row title="Ukedager" description="Bare dager som finnes i perioden er aktive.">
                                 <div className="flex flex-wrap gap-2">
                                     {ukedagKnappRekkefølge.map((dag) => (
                                         <Button
                                             key={dag}
                                             type="button"
-                                            variant={
-                                                valgteUkedager.includes(dag)
-                                                    ? "default"
-                                                    : "outline"
-                                            }
+                                            variant={valgteUkedager.includes(dag) ? "default" : "outline"}
                                             size="sm"
                                             onClick={() => onToggleUkedag(dag)}
-                                            disabled={
-                                                alleUkedager ||
-                                                !tilgjengeligeUkedager.includes(dag)
-                                            }
+                                            disabled={alleUkedager || !tilgjengeligeUkedager.includes(dag)}
                                         >
                                             {dag}
                                         </Button>
@@ -234,7 +203,6 @@ export default function ArrangementContent<K extends string>(props: Props<K>) {
                     </RowPanel>
                 </PageSection>
 
-                {/* ───────────── 3) Baner og tid ───────────── */}
                 <PageSection
                     title="Baner og tid"
                     description="Velg hvilke baner og tidspunkter som skal reserveres."
@@ -287,8 +255,6 @@ export default function ArrangementContent<K extends string>(props: Props<K>) {
                                 </div>
                             </Row>
                         </RowList>
-
-
                     </RowPanel>
                 </PageSection>
 
@@ -306,7 +272,6 @@ export default function ArrangementContent<K extends string>(props: Props<K>) {
             <ForhandsvisningDialog
                 open={dialogOpen}
                 onOpenChange={onDialogOpenChange}
-                baner={baner}
                 beskrivelse={beskrivelse}
                 forhandsvisning={forhandsvisning}
                 isLoading={isLoadingForhandsvisning}

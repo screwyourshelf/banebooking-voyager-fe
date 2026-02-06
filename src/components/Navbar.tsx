@@ -153,13 +153,6 @@ export default function Navbar() {
                             </DropdownMenuItem>
 
                             <DropdownMenuItem asChild>
-                                <Link to={`/${slug}/kommendeArrangement`}>
-                                    <FaCalendarAlt className="mr-2" />
-                                    Kommende arrangementer
-                                </Link>
-                            </DropdownMenuItem>
-
-                            <DropdownMenuItem asChild>
                                 <Link to={`/${slug}`}>
                                     <FaCalendarAlt className="mr-2" />
                                     Book bane

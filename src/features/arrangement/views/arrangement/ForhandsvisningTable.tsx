@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
     Table,
     TableHeader,
@@ -6,29 +7,42 @@ import {
     TableBody,
     TableCell,
 } from "@/components/ui/table";
-
+import { cn } from "@/lib/utils";
 import { formatDatoKort } from "@/utils/datoUtils";
 
-type Bane = { id: string; navn: string };
-type Slot = { dato: string; startTid: string; sluttTid: string; baneId: string };
+import type { ArrangementForhandsvisningDto, ArrangementSlotDto } from "../../types";
 
 type Props = {
-    baner: Bane[];
     beskrivelse: string;
-    forhandsvisning: { ledige: Slot[]; konflikter: Slot[] };
+    forhandsvisning: ArrangementForhandsvisningDto;
 };
 
-export default function ForhandsvisningTable({ baner, beskrivelse, forhandsvisning }: Props) {
-    const alleSlots = [...forhandsvisning.ledige, ...forhandsvisning.konflikter].sort(
-        (a, b) =>
-            a.dato.localeCompare(b.dato) ||
-            a.startTid.localeCompare(b.startTid) ||
-            a.baneId.localeCompare(b.baneId)
+function slotKey(s: ArrangementSlotDto) {
+    return `${s.dato}|${s.baneId}|${s.startTid}|${s.sluttTid}`;
+}
+
+export default function ForhandsvisningTable({ beskrivelse, forhandsvisning }: Props) {
+    const konfliktKeys = useMemo(
+        () => new Set(forhandsvisning.konflikter.map(slotKey)),
+        [forhandsvisning.konflikter]
     );
 
+    const alleSlots = useMemo(() => {
+        const merged = [...forhandsvisning.ledige, ...forhandsvisning.konflikter];
+
+        merged.sort(
+            (a, b) =>
+                a.dato.localeCompare(b.dato) ||
+                a.startTid.localeCompare(b.startTid) ||
+                a.baneId.localeCompare(b.baneId)
+        );
+
+        return merged;
+    }, [forhandsvisning.ledige, forhandsvisning.konflikter]);
+
     return (
-        <div className="overflow-auto max-h-[60vh] border rounded-md">
-            <Table className="text-sm">
+        <div className="max-h-[60vh] overflow-auto rounded-md border">
+            <Table>
                 <TableHeader>
                     <TableRow>
                         <TableHead>Dato</TableHead>
@@ -40,29 +54,30 @@ export default function ForhandsvisningTable({ baner, beskrivelse, forhandsvisni
 
                 <TableBody>
                     {alleSlots.map((slot) => {
-                        const bane = baner.find((b) => b.id === slot.baneId);
-                        const erKonflikt = forhandsvisning.konflikter.some(
-                            (k) =>
-                                k.baneId === slot.baneId &&
-                                k.dato === slot.dato &&
-                                k.startTid === slot.startTid &&
-                                k.sluttTid === slot.sluttTid
-                        );
+                        const erKonflikt = konfliktKeys.has(slotKey(slot));
+                        const baneNavn = slot.baneNavn?.trim() || "(ukjent bane)";
 
                         return (
                             <TableRow
-                                key={`${slot.dato}-${slot.baneId}-${slot.startTid}`}
-                                className={erKonflikt ? "bg-yellow-100" : ""}
+                                key={slotKey(slot)}
+                                className={cn("hover:bg-muted/50", erKonflikt && "bg-muted/40")}
                             >
-                                <TableCell>{formatDatoKort(slot.dato)}</TableCell>
-                                <TableCell>
+                                <TableCell className="align-top whitespace-nowrap">
+                                    {formatDatoKort(slot.dato)}
+                                </TableCell>
+
+                                <TableCell className="align-top whitespace-nowrap">
                                     {slot.startTid} – {slot.sluttTid}
                                 </TableCell>
-                                <TableCell>{bane?.navn ?? "(ukjent bane)"}</TableCell>
-                                <TableCell>
+
+                                <TableCell className="align-top whitespace-nowrap">
+                                    {baneNavn}
+                                </TableCell>
+
+                                <TableCell className="align-top">
                                     {beskrivelse}
                                     {erKonflikt && (
-                                        <span className="ml-2 text-yellow-700 text-xs italic">
+                                        <span className="ml-2 text-xs text-muted-foreground">
                                             (Konflikt)
                                         </span>
                                     )}

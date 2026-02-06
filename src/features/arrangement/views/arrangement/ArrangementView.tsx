@@ -2,10 +2,13 @@ import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
 import LoaderSkeleton from "@/components/LoaderSkeleton";
-import { useArrangement } from "@/hooks/useArrangement";
+import { useArrangement } from "../../hooks/useArrangement";
 
 import ArrangementContent from "./ArrangementContent";
 import { byggDto, finnTilgjengeligeUkedager } from "./arrangementUtils";
+
+import type { ArrangementKategori } from "@/types";
+import type { UkedagKortNorsk } from "@/types/dato";
 
 const KATEGORIER = [
     "Trening",
@@ -18,7 +21,11 @@ const KATEGORIER = [
     "Vedlikehold",
     "Sosialt",
     "Annet",
-] as const;
+] as const satisfies readonly ArrangementKategori[];
+
+function toggleItem<T>(item: T, set: React.Dispatch<React.SetStateAction<T[]>>) {
+    set((prev) => (prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]));
+}
 
 export default function ArrangementView() {
     const {
@@ -32,19 +39,18 @@ export default function ArrangementView() {
         isLoadingForhandsvisning,
     } = useArrangement();
 
-    // DatoVelger.onChange tar Date (ikke null), så vi gjør disse non-null her.
     const [datoFra, setDatoFra] = useState<Date>(new Date());
     const [datoTil, setDatoTil] = useState<Date>(new Date());
 
     const [valgteBaner, setValgteBaner] = useState<string[]>([]);
-    const [valgteUkedager, setValgteUkedager] = useState<string[]>([]);
+    const [valgteUkedager, setValgteUkedager] = useState<UkedagKortNorsk[]>([]);
     const [valgteTidspunkter, setValgteTidspunkter] = useState<string[]>([]);
 
     const [alleBaner, setAlleBaner] = useState(false);
     const [alleUkedager, setAlleUkedager] = useState(false);
     const [alleTidspunkter, setAlleTidspunkter] = useState(false);
 
-    const [kategori, setKategori] = useState<(typeof KATEGORIER)[number]>("Annet");
+    const [kategori, setKategori] = useState<ArrangementKategori>("Annet");
     const [beskrivelse, setBeskrivelse] = useState("");
 
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -70,12 +76,7 @@ export default function ArrangementView() {
     // Når dato-periode endres: fjern ukedager som ikke lenger er gyldige
     useEffect(() => {
         setValgteUkedager((prev) => prev.filter((d) => tilgjengeligeUkedager.includes(d)));
-        // Hvis "alleUkedager" er på, settes den i sync-effekten over.
     }, [tilgjengeligeUkedager]);
-
-    const toggle = (item: string, set: React.Dispatch<React.SetStateAction<string[]>>) => {
-        set((prev) => (prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]));
-    };
 
     const dtoOrNull = () =>
         byggDto({
@@ -134,9 +135,9 @@ export default function ArrangementView() {
             onToggleAlleBaner={setAlleBaner}
             onToggleAlleUkedager={setAlleUkedager}
             onToggleAlleTidspunkter={setAlleTidspunkter}
-            onToggleBane={(id) => toggle(id, setValgteBaner)}
-            onToggleUkedag={(dag) => toggle(dag, setValgteUkedager)}
-            onToggleTidspunkt={(tid) => toggle(tid, setValgteTidspunkter)}
+            onToggleBane={(id) => toggleItem(id, setValgteBaner)}
+            onToggleUkedag={(dag) => toggleItem(dag, setValgteUkedager)}
+            onToggleTidspunkt={(tid) => toggleItem(tid, setValgteTidspunkter)}
             onOpenPreview={åpneForhandsvisning}
             onCreate={håndterOpprett}
             onDialogOpenChange={(open) => {

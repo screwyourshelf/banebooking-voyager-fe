@@ -8,18 +8,15 @@ import {
 import { Button } from "@/components/ui/button";
 
 import ForhandsvisningTable from "./ForhandsvisningTable";
-
-type Bane = { id: string; navn: string };
-type Slot = { dato: string; startTid: string; sluttTid: string; baneId: string };
+import type { ArrangementForhandsvisningDto } from "../../types";
 
 type Props = {
     open: boolean;
     onOpenChange: (open: boolean) => void;
 
-    baner: Bane[];
     beskrivelse: string;
 
-    forhandsvisning: { ledige: Slot[]; konflikter: Slot[] };
+    forhandsvisning: ArrangementForhandsvisningDto;
     isLoading: boolean;
 
     onCreate: () => void;
@@ -28,13 +25,14 @@ type Props = {
 export default function ForhandsvisningDialog({
     open,
     onOpenChange,
-    baner,
     beskrivelse,
     forhandsvisning,
     isLoading,
     onCreate,
 }: Props) {
-    const harSlots = forhandsvisning.ledige.length + forhandsvisning.konflikter.length > 0;
+    const antallLedige = forhandsvisning.ledige.length;
+    const antallKonflikter = forhandsvisning.konflikter.length;
+    const harSlots = antallLedige + antallKonflikter > 0;
 
     return (
         <Dialog open={open} onOpenChange={onOpenChange}>
@@ -45,22 +43,21 @@ export default function ForhandsvisningDialog({
 
                 {isLoading ? (
                     <p className="text-muted-foreground italic">Laster forhåndsvisning…</p>
-                ) : harSlots ? (
+                ) : !harSlots ? (
+                    <p className="text-muted-foreground italic">Ingen bookinger å vise.</p>
+                ) : (
                     <>
                         <ForhandsvisningTable
-                            baner={baner}
                             beskrivelse={beskrivelse}
                             forhandsvisning={forhandsvisning}
                         />
 
                         <DialogFooter className="mt-3">
-                            <Button type="button" onClick={onCreate} disabled={isLoading}>
-                                Opprett {forhandsvisning.ledige.length} bookinger
+                            <Button type="button" onClick={onCreate}>
+                                Opprett {antallLedige} bookinger
                             </Button>
                         </DialogFooter>
                     </>
-                ) : (
-                    <p className="text-muted-foreground italic">Ingen bookinger å vise.</p>
                 )}
             </DialogContent>
         </Dialog>

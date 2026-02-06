@@ -1,144 +1,80 @@
-﻿// utils/datoUtils.ts
+import type { UkedagIso, UkedagKortNorsk } from "@/types/dato";
 
-/**
- * Norsk ukedagsrekkefølge som brukes i frontend-GUI.
- * Brukes bl.a. for rendering av ukedagsvalg og i knappetiketter.
- */
-export const ukedager = ['Man', 'Tir', 'Ons', 'Tor', 'Fre', 'Lør', 'Søn'];
+export const ukedager: readonly UkedagKortNorsk[] = ["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"];
 
-/**
- * Mapping fra norsk kortform til .NET/DayOfWeek-navn (brukes mot backend).
- * F.eks. 'Man' → 'Monday'
- */
-export const dagNavnTilEnum: Record<string, string> = {
-    Man: 'Monday',
-    Tir: 'Tuesday',
-    Ons: 'Wednesday',
-    Tor: 'Thursday',
-    Fre: 'Friday',
-    Lør: 'Saturday',
-    Søn: 'Sunday',
+export const ukedagKortTilIso: Record<UkedagKortNorsk, UkedagIso> = {
+    Man: 1,
+    Tir: 2,
+    Ons: 3,
+    Tor: 4,
+    Fre: 5,
+    Lør: 6,
+    Søn: 7,
 };
 
-/**
- * Mapping fra .NET/DayOfWeek-navn tilbake til norsk kortform.
- * F.eks. 'Monday' → 'Man'
- */
-export const enumTilDagNavn: Record<string, string> = {
-    Monday: 'Man',
-    Tuesday: 'Tir',
-    Wednesday: 'Ons',
-    Thursday: 'Tor',
-    Friday: 'Fre',
-    Saturday: 'Lør',
-    Sunday: 'Søn',
+export const ukedagIsoTilKort: Record<UkedagIso, UkedagKortNorsk> = {
+    1: "Man",
+    2: "Tir",
+    3: "Ons",
+    4: "Tor",
+    5: "Fre",
+    6: "Lør",
+    7: "Søn",
 };
 
-/**
- * Mapping fra Date.getDay() (0–6) til backend-vennlig DayOfWeek-verdi.
- * 0 = søndag, 1 = mandag, ..., 6 = lørdag.
- */
-export const dagIndexTilBackendUkedag: Record<number, string> = {
-    0: 'Sunday',
-    1: 'Monday',
-    2: 'Tuesday',
-    3: 'Wednesday',
-    4: 'Thursday',
-    5: 'Friday',
-    6: 'Saturday',
-};
-
-/**
- * Mapping fra Date.getDay() (0–6) til norsk kortform.
- */
-export const dagIndexTilKortNorskUkedag: Record<number, string> = {
-    0: 'Søn',
-    1: 'Man',
-    2: 'Tir',
-    3: 'Ons',
-    4: 'Tor',
-    5: 'Fre',
-    6: 'Lør',
-};
-
-/**
- * Mapping fra Date.getDay() (0–6) til norsk langform.
- */
-export const dagIndexTilLangNorskUkedag: Record<number, string> = {
-    0: 'Søndag',
-    1: 'Mandag',
-    2: 'Tirsdag',
-    3: 'Onsdag',
-    4: 'Torsdag',
-    5: 'Fredag',
-    6: 'Lørdag',
-};
-
-/**
- * Konverterer en JavaScript Date til tekst på formen 'YYYY-MM-DD'.
- * Dette er trygt for bruk mot backend som forventer DateOnly i ISO-format.
- *
- * @param dato JavaScript Date-objekt
- * @returns En streng på formen '2025-09-14'
- */
-export function tilDatoTekst(dato: Date): string {
-    const år = dato.getFullYear();
-    const måned = String(dato.getMonth() + 1).padStart(2, '0');
-    const dag = String(dato.getDate()).padStart(2, '0');
-    return `${år}-${måned}-${dag}`;
+export function ukedagTilLangNorsk(d: UkedagIso): string {
+    switch (d) {
+        case 1: return "Mandag";
+        case 2: return "Tirsdag";
+        case 3: return "Onsdag";
+        case 4: return "Torsdag";
+        case 5: return "Fredag";
+        case 6: return "Lørdag";
+        case 7: return "Søndag";
+    }
 }
 
-/**
- * Returnerer en Set med backend-ukedager (f.eks. 'Monday', 'Tuesday') for dato-intervall.
- *
- * @param fra Startdato (inkludert)
- * @param til Sluttdato (inkludert)
- * @returns Set med backend-ukedager i perioden
- */
-export function finnUkedagerIDatoPeriode(fra: Date, til: Date): Set<string> {
-    const dager = new Set<string>();
+export function sorterUkedager<T extends UkedagIso>(dager: T[]): T[] {
+    return [...dager].sort((a, b) => a - b);
+}
+
+export function formatUkedagerLangNorsk(dager: UkedagIso[] | undefined): string {
+    if (!dager?.length) return "—";
+    return sorterUkedager(dager).map(ukedagTilLangNorsk).join(", ");
+}
+
+/** Date.getDay(): 0=søn..6=lør  => ISO: 1=man..7=søn */
+export function dateTilUkedagIso(d: Date): UkedagIso {
+    const js = d.getDay(); // 0..6
+    return (js === 0 ? 7 : js) as UkedagIso;
+}
+
+/** Finn hvilke ISO-ukedager som faktisk finnes i et intervall */
+export function finnUkedagerIDatoPeriode(fra: Date, til: Date): Set<UkedagIso> {
+    const dager = new Set<UkedagIso>();
     const start = new Date(fra.getFullYear(), fra.getMonth(), fra.getDate());
     const slutt = new Date(til.getFullYear(), til.getMonth(), til.getDate());
 
     for (let d = new Date(start); d <= slutt; d.setDate(d.getDate() + 1)) {
-        const dayIndex = d.getDay(); // 0–6
-        const backendUkedag = dagIndexTilBackendUkedag[dayIndex];
-        dager.add(backendUkedag);
+        dager.add(dateTilUkedagIso(d));
     }
 
     return dager;
 }
 
-/** Konverterer Day.getDay()-verdi til norsk kortform. */
-export function getKortUkedagFraDate(dato: Date): string {
-    return dagIndexTilKortNorskUkedag[dato.getDay()];
+export function tilDatoTekst(dato: Date): string {
+    const år = dato.getFullYear();
+    const måned = String(dato.getMonth() + 1).padStart(2, "0");
+    const dag = String(dato.getDate()).padStart(2, "0");
+    return `${år}-${måned}-${dag}`;
 }
 
-/** Konverterer Day.getDay()-verdi til backend-ukedag. */
-export function getBackendUkedagFraDate(dato: Date): string {
-    return dagIndexTilBackendUkedag[dato.getDay()];
-}
-
-/** Viser dato som 'dd.MM.yyyy' – f.eks. '01.06.2025' */
 export function formatDatoKort(datoInput: string | Date): string {
     const dato = new Date(datoInput);
-    return dato.toLocaleDateString('nb-NO', {
-        day: '2-digit',
-        month: '2-digit',
-        year: 'numeric',
-    });
+    return dato.toLocaleDateString("nb-NO", { day: "2-digit", month: "2-digit", year: "numeric" });
 }
 
-/** Viser dato som 'd. MMMM yyyy' – f.eks. '1. juni 2025' */
 export function formatDatoLang(datoStr: string): string {
     const dato = new Date(`${datoStr}T00:00:00`);
-    return dato.toLocaleDateString('nb-NO', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-    });
+    return dato.toLocaleDateString("nb-NO", { day: "numeric", month: "long", year: "numeric" });
 }
-
-
-
-

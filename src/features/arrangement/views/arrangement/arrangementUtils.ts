@@ -1,39 +1,40 @@
 import {
     ukedager,
-    dagNavnTilEnum,
+    ukedagKortTilIso,
     tilDatoTekst,
-    enumTilDagNavn,
-    dagIndexTilBackendUkedag,
     finnUkedagerIDatoPeriode,
 } from "@/utils/datoUtils";
 
-import type { OpprettArrangementDto } from "@/types";
+import type { UkedagKortNorsk, UkedagIso } from "@/types/dato";
+import type { OpprettArrangementDto, ArrangementKategori } from "@/types";
 
-export function finnTilgjengeligeUkedager(datoFra: Date, datoTil: Date): string[] {
-    const dager = new Set<string>();
-    const fra = new Date(datoFra);
-    const til = new Date(datoTil);
+export function finnTilgjengeligeUkedager(datoFra: Date, datoTil: Date): UkedagKortNorsk[] {
+    const faktiske = finnUkedagerIDatoPeriode(datoFra, datoTil); // Set<UkedagIso>
 
-    for (let d = new Date(fra); d <= til; d.setDate(d.getDate() + 1)) {
-        const idx = d.getDay();
-        const backendUkedag = dagIndexTilBackendUkedag[idx];
-        const norskKort = enumTilDagNavn[backendUkedag];
-        if (norskKort) dager.add(norskKort);
+    const tilgjengeligeKort = new Set<UkedagKortNorsk>();
+    for (const iso of faktiske) {
+        // iso -> kort norsk (via reverse mapping)
+        // enklest: finn key ved å bruke ukedager + ukedagKortTilIso
+        // (for 7 elementer er dette helt ok)
+        const kort = ukedager.find((k) => ukedagKortTilIso[k] === iso);
+        if (kort) tilgjengeligeKort.add(kort);
     }
 
-    return ukedager.filter((d) => dager.has(d));
+    return ukedager.filter((d) => tilgjengeligeKort.has(d));
 }
 
-export function byggDto(args: {
+type ByggDtoArgs = {
     datoFra: Date;
     datoTil: Date;
     valgteBaner: string[];
-    valgteUkedager: string[];
+    valgteUkedager: UkedagKortNorsk[];
     valgteTidspunkter: string[];
-    kategori: string;
+    kategori: ArrangementKategori;
     beskrivelse: string;
     onWarning: (msg: string) => void;
-}): OpprettArrangementDto | null {
+};
+
+export function byggDto(args: ByggDtoArgs): OpprettArrangementDto | null {
     const {
         datoFra,
         datoTil,
@@ -45,40 +46,25 @@ export function byggDto(args: {
         onWarning,
     } = args;
 
-    if (!datoFra || !datoTil) {
-        onWarning("Du må velge start- og sluttdato");
-        return null;
-    }
-    if (valgteBaner.length === 0) {
-        onWarning("Du må velge minst én bane");
-        return null;
-    }
-    if (valgteTidspunkter.length === 0) {
-        onWarning("Du må velge minst ett tidspunkt");
-        return null;
-    }
-    if (valgteUkedager.length === 0) {
-        onWarning("Du må velge minst én ukedag");
-        return null;
-    }
+    if (valgteBaner.length === 0) return onWarning("Du må velge minst én bane"), null;
+    if (valgteTidspunkter.length === 0) return onWarning("Du må velge minst ett tidspunkt"), null;
+    if (valgteUkedager.length === 0) return onWarning("Du må velge minst én ukedag"), null;
 
-    const faktiskeUkedager = finnUkedagerIDatoPeriode(datoFra, datoTil);
-    const backendUkedager = valgteUkedager
-        .map((d) => dagNavnTilEnum[d])
-        .filter((d) => faktiskeUkedager.has(d));
+    const faktiskeIso = finnUkedagerIDatoPeriode(datoFra, datoTil); // Set<UkedagIso>
 
-    if (backendUkedager.length === 0) {
-        onWarning("Ingen av de valgte ukedagene finnes i datointervallet");
-        return null;
-    }
+    const isoUkedager: UkedagIso[] = valgteUkedager
+        .map((k) => ukedagKortTilIso[k])
+        .filter((iso) => faktiskeIso.has(iso));
+
+    if (isoUkedager.length === 0) return onWarning("Ingen av de valgte ukedagene finnes i datointervallet"), null;
 
     return {
         tittel: kategori,
-        beskrivelse,
-        kategori: kategori as OpprettArrangementDto["kategori"],
+        beskrivelse: beskrivelse?.trim() ? beskrivelse : undefined,
+        kategori,
         startDato: tilDatoTekst(datoFra),
         sluttDato: tilDatoTekst(datoTil),
-        ukedager: backendUkedager,
+        ukedager: isoUkedager,
         tidspunkter: valgteTidspunkter,
         baneIder: valgteBaner,
     };
