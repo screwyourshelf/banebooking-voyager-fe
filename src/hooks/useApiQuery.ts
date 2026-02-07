@@ -1,4 +1,4 @@
-﻿import { useQuery, type UseQueryOptions, type QueryKey } from "@tanstack/react-query";
+import { useQuery, type UseQueryOptions, type QueryKey } from "@tanstack/react-query";
 import type { AxiosRequestConfig } from "axios";
 import api from "@/api/api";
 

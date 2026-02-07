@@ -1,4 +1,4 @@
-﻿import { useMutation, type UseMutationOptions } from "@tanstack/react-query";
+import { useMutation, type UseMutationOptions } from "@tanstack/react-query";
 import type { AxiosRequestConfig } from "axios";
 import api from "@/api/api";
 

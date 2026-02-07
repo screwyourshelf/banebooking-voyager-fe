@@ -1,4 +1,4 @@
-﻿import type { FormHTMLAttributes, ReactNode } from "react";
+import type { FormHTMLAttributes, ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 type Props = Omit<FormHTMLAttributes<HTMLFormElement>, "children"> & {
