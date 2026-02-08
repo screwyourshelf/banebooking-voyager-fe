@@ -3,6 +3,7 @@ import {
     ukedagKortTilIso,
     tilDatoTekst,
     finnUkedagerIDatoPeriode,
+    isoTilDayOfWeeks,
 } from "@/utils/datoUtils";
 
 import type { UkedagKortNorsk, UkedagIso } from "@/types/dato";
@@ -52,7 +53,7 @@ export function byggDto(args: ByggDtoArgs): OpprettArrangementDto | null {
 
     const faktiskeIso = finnUkedagerIDatoPeriode(datoFra, datoTil); // Set<UkedagIso>
 
-    const isoUkedager: UkedagIso[] = valgteUkedager
+    const isoUkedager = valgteUkedager
         .map((k) => ukedagKortTilIso[k])
         .filter((iso) => faktiskeIso.has(iso));
 
@@ -64,7 +65,7 @@ export function byggDto(args: ByggDtoArgs): OpprettArrangementDto | null {
         kategori,
         startDato: tilDatoTekst(datoFra),
         sluttDato: tilDatoTekst(datoTil),
-        ukedager: isoUkedager,
+        ukedager: isoTilDayOfWeeks(isoUkedager),
         tidspunkter: valgteTidspunkter,
         baneIder: valgteBaner,
     };

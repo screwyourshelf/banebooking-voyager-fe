@@ -45,7 +45,7 @@ export default function FeedAlerts() {
     if (isLoading || feed.length === 0) return null;
 
     const activeFeed = feed.filter((item) => {
-        const itemId = item.link || item.title;
+        const itemId = item.lenke || item.tittel;
         return !dismissedItems[itemId];
     });
 
@@ -54,7 +54,7 @@ export default function FeedAlerts() {
     return (
         <div className="max-w-screen-sm mx-auto space-y-2">
             {activeFeed.map((item) => {
-                const itemId = item.link || item.title;
+                const itemId = item.lenke || item.tittel;
 
                 return (
                     <Alert
@@ -64,11 +64,11 @@ export default function FeedAlerts() {
                         <BellRing className="text-pink-600 w-5 h-5 animate__animated animate__swing animate__slower" />
                         <div>
                             <AlertTitle className="font-semibold text-pink-800">
-                                {item.title}
+                                {item.tittel}
                             </AlertTitle>
                             <AlertDescription>
                                 <a
-                                    href={item.link}
+                                    href={item.lenke}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     className="underline text-sm text-pink-700"

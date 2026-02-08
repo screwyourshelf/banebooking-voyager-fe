@@ -26,7 +26,7 @@ export function useBruker() {
         `/klubb/${slug}/bruker/vilkaar`,
         {
             onError: (err) => {
-                console.warn("Feil ved oppdatering av vilk�r:", err);
+                console.warn("Feil ved oppdatering av vilkår:", err);
             },
             onSettled: () => {
                 void brukerQuery.refetch();
@@ -45,7 +45,7 @@ export function useBruker() {
         if (!data) return;
         if (brukerQuery.isLoading) return;
 
-        if (data.vilkaarAkseptertDato) {
+        if (data.vilkårAkseptertDato) {
             harForsoktVilkaarRef.current = false;
             return;
         }

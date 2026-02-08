@@ -17,20 +17,15 @@ export type ArrangementForhandsvisningDto = {
 };
 
 export type ArrangementKonfliktDto = {
-    dato: string;       // yyyy-MM-dd
-    tid: string;        // HH:mm
-    baneId: string;     // GUID
-    feilmelding: string;
+  dato: string;       // yyyy-MM-dd
+  baneId: string;     // GUID
+  startTid: string;   // HH:mm
+  sluttTid: string;   // HH:mm
+  feilmelding: string;
 };
 
 export type OpprettArrangementResponsDto = {
-    opprettet: {
-        id: string;
-        baneId: string;
-        dato: string;
-        startTid: string;
-        sluttTid: string;
-        aktiv: boolean;
-    }[];
-    konflikter: ArrangementKonfliktDto[];
+  arrangementId: string;
+  antallOpprettet: number;
+  konflikter: ArrangementKonfliktDto[];
 };

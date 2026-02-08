@@ -110,7 +110,7 @@ export function useArrangement() {
         {
             onSuccess: async (result) => {
                 clearForhandsvisning();
-                toast.success(`${result.opprettet.length} bookinger opprettet`);
+                toast.success(`${result.antallOpprettet} bookinger opprettet`);
 
                 // Hvis du har en liste over "kommende arrangementer", invalidér den her:
                 // await queryClient.invalidateQueries({ queryKey: ["kommende-arrangementer", slug] });

@@ -1,49 +1,53 @@
 // src/types/arrangement.ts
 
 export type ArrangementKategori =
-    | "Trening"
-    | "Turnering"
-    | "Klubbmersterskap"
-    | "Kurs"
-    | "Lagkamp"
-    | "Stigespill"
-    | "Dugnad"
-    | "Vedlikehold"
-    | "Sosialt"
-    | "Annet";
+  | "Trening"
+  | "Turnering"
+  | "Klubbmersterskap"
+  | "Kurs"
+  | "Lagkamp"
+  | "Stigespill"
+  | "Dugnad"
+  | "Vedlikehold"
+  | "Sosialt"
+  | "Annet";
+
+/** .NET DayOfWeek som string */
+export type DayOfWeek =
+  | "Sunday"
+  | "Monday"
+  | "Tuesday"
+  | "Wednesday"
+  | "Thursday"
+  | "Friday"
+  | "Saturday";
 
 /**
- * ISO-kontrakt mot backend
- * (mapper direkte til C# OpprettArrangementDto)
+ * Request til backend for å opprette arrangement.
+ * Matcher C# OpprettArrangementForespørsel.
  */
 export type OpprettArrangementDto = {
-    tittel: string;
-    beskrivelse?: string;
-    kategori: ArrangementKategori;
-
-    startDato: string;   // yyyy-MM-dd
-    sluttDato: string;   // yyyy-MM-dd
-
-    ukedager: number[];  // DayOfWeek (0=Sunday ... 6=Saturday)
-    tidspunkter: string[]; // HH:mm (TimeOnly)
-    baneIder: string[];  // Guid
+  tittel: string;
+  beskrivelse?: string;
+  kategori: ArrangementKategori;
+  startDato: string;   // yyyy-MM-dd
+  sluttDato: string;   // yyyy-MM-dd
+  ukedager: DayOfWeek[];
+  tidspunkter: string[]; // HH:mm (TimeOnly)
+  baneIder: string[];  // Guid
 };
 
 
 export type ArrangementDto = {
-    id: string;
-    tittel: string;
-    beskrivelse?: string;
-    kategori: ArrangementKategori;
-
-    startDato: string;
-    sluttDato: string;
-
-    førsteBane: string;
-    førsteStartTid: string;
-    førsteSluttTid: string;
-
-    antallBookinger: number;
-
-    kanSlettes: boolean
+  id: string;
+  tittel: string;
+  beskrivelse?: string;
+  kategori: ArrangementKategori;
+  startDato: string;
+  sluttDato: string;
+  førsteBane: string;
+  førsteStartTid: string;
+  førsteSluttTid: string;
+  antallBookinger: number;
+  kanSlettes: boolean;
 };

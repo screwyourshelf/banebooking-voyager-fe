@@ -1,22 +1,19 @@
 export type BookingRegelDto = {
-    maksPerDag: number;
-    maksTotalt: number;
-    dagerFremITid: number;
-    slotLengdeMinutter: number;
-    aapningstid: string; // "07:00"
-    stengetid: string;   // "22:00"
+  aapningstid: string; // "07:00"
+  stengetid: string;   // "22:00"
+  maksPerDag: number;
+  maksTotalt: number;
+  dagerFremITid: number;
+  slotLengdeMinutter: number;
 };
 
 export type OppdaterKlubb = {
-    navn: string;
-    kontaktEpost: string;
-    banereglement: string;
-
-    latitude: number | null;
-    longitude: number | null;
-
-    feedUrl?: string | null;
-    feedSynligAntallDager: number;
-
-    bookingRegel: BookingRegelDto;
+  navn: string;
+  kontaktEpost?: string;
+  banereglement?: string;
+  latitude?: number;
+  longitude?: number;
+  feedUrl?: string;
+  feedSynligAntallDager: number;
+  bookingRegel: BookingRegelDto;
 };

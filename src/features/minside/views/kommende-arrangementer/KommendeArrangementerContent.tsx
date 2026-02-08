@@ -8,7 +8,7 @@ import {
     TableBody,
     TableCell,
 } from "@/components/ui/table";
-import { formatDatoKort, formatUkedagerLangNorsk, sorterUkedager } from "@/utils/datoUtils";
+import { formatDatoKort, formatDayOfWeeksLangNorsk } from "@/utils/datoUtils";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { KommendeArrangementDto } from "./types";
@@ -154,9 +154,7 @@ export default function KommendeArrangementerContent({ arrangementer }: Props) {
                                                                     Ukedager
                                                                 </div>
                                                                 <div className="text-sm break-words">
-                                                                    {formatUkedagerLangNorsk(
-                                                                        sorterUkedager(arr.ukedager ?? [])
-                                                                    )}
+                                                                    {formatDayOfWeeksLangNorsk(arr.ukedager)}
                                                                 </div>
                                                             </div>
 

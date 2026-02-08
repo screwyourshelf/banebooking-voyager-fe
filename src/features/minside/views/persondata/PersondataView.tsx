@@ -19,9 +19,9 @@ export default function PersondataView() {
 
     if (laster || !bruker) return <LoaderSkeleton />;
 
-    const vilkarStatus = !bruker.vilkaarAkseptertDato
+    const vilkarStatus = !bruker.vilkårAkseptertDato
         ? "Ikke registrert"
-        : `Akseptert ${formatDatoKort(bruker.vilkaarAkseptertDato)}${bruker.vilkaarVersjon ? ` (versjon ${bruker.vilkaarVersjon})` : ""
+        : `Akseptert ${formatDatoKort(bruker.vilkårAkseptertDato)}${bruker.vilkårVersjon ? ` (versjon ${bruker.vilkårVersjon})` : ""
         }`;
 
     const handleLastNed = async () => {
