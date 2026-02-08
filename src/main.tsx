@@ -7,22 +7,20 @@ import App from "./App";
 import "./index.css";
 
 const queryClient = new QueryClient({
-    defaultOptions: {
-        queries: {
-            staleTime: 15_000,
-            refetchOnWindowFocus: false,
-            retry: false,
-        },
+  defaultOptions: {
+    queries: {
+      staleTime: 15_000,
+      refetchOnWindowFocus: false,
+      retry: false,
     },
+  },
 });
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
       <App />
-      {import.meta.env.MODE === "development" && (
-        <ReactQueryDevtools initialIsOpen={false} />
-      )}
+      {import.meta.env.MODE === "development" && <ReactQueryDevtools initialIsOpen={false} />}
     </QueryClientProvider>
   </StrictMode>
 );

@@ -1,6 +1,7 @@
 # Copilot Instructions
 
 ## Project Guidelines
+
 - Frontend-utvikler retningslinjer for React (Vite + TypeScript):
 
 GRUNNPRINSIPP: All frontend-kode skal være konsistent i struktur, ansvar og "feel". Ikke introduser nye varianter eller mønstre hvis tilsvarende allerede finnes.
@@ -8,6 +9,7 @@ GRUNNPRINSIPP: All frontend-kode skal være konsistent i struktur, ansvar og "fe
 KONSISTENS: Samme type side/komponent/hook skal løses likt overalt. Finn eksisterende kode som gjør "samme sak" og kopier mønsteret. Favoriser eksisterende praksis fremfor nye forbedringer.
 
 FRONTEND-SOLID:
+
 - S: Komponenter gjør én ting. Container/page henter data, holder state, kobler hooks og UI. Presentational components rendrer UI uten datahenting/sideeffekter. Hooks har én bekymring.
 - O: Utvid ved å legge til nye komponenter/hooks. Bruk komposisjon fremfor conditionals.
 - L: Props skal være konsistente og forutsigbare.

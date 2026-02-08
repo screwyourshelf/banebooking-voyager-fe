@@ -4,108 +4,107 @@ import { BookingSlotItemExpanded } from "./BookingSlotItemExpanded";
 import type { BookingSlotRespons } from "../../types/index";
 
 type Props = {
-    slot: BookingSlotRespons;
-    currentUser: { epost: string } | null;
-    isOpen?: boolean;
-    onToggle?: () => void;
-    onBook?: (slot: BookingSlotRespons) => void;
-    onCancel?: (slot: BookingSlotRespons) => void;
-    onDelete?: (slot: BookingSlotRespons) => void;
+  slot: BookingSlotRespons;
+  currentUser: { epost: string } | null;
+  isOpen?: boolean;
+  onToggle?: () => void;
+  onBook?: (slot: BookingSlotRespons) => void;
+  onCancel?: (slot: BookingSlotRespons) => void;
+  onDelete?: (slot: BookingSlotRespons) => void;
 
-    // NYTT: brukes av Mine bookinger
-    headerOverrideTitle?: React.ReactNode;
-    headerLeftPrefix?: React.ReactNode;
-    erInteraktivOverride?: boolean;
+  // NYTT: brukes av Mine bookinger
+  headerOverrideTitle?: React.ReactNode;
+  headerLeftPrefix?: React.ReactNode;
+  erInteraktivOverride?: boolean;
 };
 
 export default function BookingSlotItem({
-    slot,
-    currentUser,
-    isOpen = false,
-    onToggle,
-    onBook = () => { },
-    onCancel = () => { },
-    onDelete = () => { },
+  slot,
+  currentUser,
+  isOpen = false,
+  onToggle,
+  onBook = () => {},
+  onCancel = () => {},
+  onDelete = () => {},
 
-    headerOverrideTitle,
-    headerLeftPrefix,
-    erInteraktivOverride,
+  headerOverrideTitle,
+  headerLeftPrefix,
+  erInteraktivOverride,
 }: Props) {
-    const [erBekreftet, setErBekreftet] = useState(false);
-    const reset = () => setErBekreftet(false);
+  const [erBekreftet, setErBekreftet] = useState(false);
+  const reset = () => setErBekreftet(false);
 
-    const tid = `${slot.startTid.slice(0, 2)}-${slot.sluttTid.slice(0, 2)}`;
-    const harHandlinger = slot.kanBookes || slot.kanAvbestille || slot.kanSlette;
+  const tid = `${slot.startTid.slice(0, 2)}-${slot.sluttTid.slice(0, 2)}`;
+  const harHandlinger = slot.kanBookes || slot.kanAvbestille || slot.kanSlette;
 
-    const erInteraktiv =
-        erInteraktivOverride ?? (!!currentUser && harHandlinger && !slot.erPassert);
+  const erInteraktiv = erInteraktivOverride ?? (!!currentUser && harHandlinger && !slot.erPassert);
 
-    const harArrangement = !!slot.arrangementTittel;
-    const erMinBooking = slot.erEier === true;
+  const harArrangement = !!slot.arrangementTittel;
+  const erMinBooking = slot.erEier === true;
 
-    const className = [
-        "border rounded shadow-sm p-2 mb-2",
-        "transition-colors duration-300 ease-in-out",
-        slot.erPassert ? "bg-gray-100 text-gray-400" : "",
-        !slot.erPassert && harArrangement
-            ? "bg-gradient-to-r from-blue-0 via-blue-50 to-blue-200 border-blue-200"
-            : "",
-        !slot.erPassert && !harArrangement ? "bg-white text-gray-900" : "",
-        currentUser && erMinBooking && !harArrangement
-            ? "animate__animated animate__headShake animate__slow"
-            : "",
-    ].join(" ");
+  const className = [
+    "border rounded shadow-sm p-2 mb-2",
+    "transition-colors duration-300 ease-in-out",
+    slot.erPassert ? "bg-gray-100 text-gray-400" : "",
+    !slot.erPassert && harArrangement
+      ? "bg-gradient-to-r from-blue-0 via-blue-50 to-blue-200 border-blue-200"
+      : "",
+    !slot.erPassert && !harArrangement ? "bg-white text-gray-900" : "",
+    currentUser && erMinBooking && !harArrangement
+      ? "animate__animated animate__headShake animate__slow"
+      : "",
+  ].join(" ");
 
-    const handleToggle = () => {
-        if (erInteraktiv && onToggle) {
-            onToggle();
-            setErBekreftet(false);
+  const handleToggle = () => {
+    if (erInteraktiv && onToggle) {
+      onToggle();
+      setErBekreftet(false);
+    }
+  };
+
+  return (
+    <div
+      className={className}
+      style={{
+        cursor: erInteraktiv ? "pointer" : "default",
+        opacity: slot.erPassert ? 0.5 : 1,
+      }}
+      onClick={(e) => {
+        const target = e.target as HTMLElement;
+        if (target.closest("button, input, label")) return;
+        handleToggle();
+      }}
+      role={erInteraktiv ? "button" : undefined}
+      tabIndex={erInteraktiv ? 0 : undefined}
+      onKeyDown={(e) => {
+        if (!erInteraktiv) return;
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          handleToggle();
         }
-    };
+      }}
+    >
+      <BookingSlotItemHeader
+        slot={slot}
+        isOpen={isOpen}
+        erInteraktiv={erInteraktiv}
+        currentUser={currentUser}
+        overrideTitle={headerOverrideTitle}
+        leftPrefix={headerLeftPrefix}
+      />
 
-    return (
-        <div
-            className={className}
-            style={{
-                cursor: erInteraktiv ? "pointer" : "default",
-                opacity: slot.erPassert ? 0.5 : 1,
-            }}
-            onClick={(e) => {
-                const target = e.target as HTMLElement;
-                if (target.closest("button, input, label")) return;
-                handleToggle();
-            }}
-            role={erInteraktiv ? "button" : undefined}
-            tabIndex={erInteraktiv ? 0 : undefined}
-            onKeyDown={(e) => {
-                if (!erInteraktiv) return;
-                if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    handleToggle();
-                }
-            }}
-        >
-            <BookingSlotItemHeader
-                slot={slot}
-                isOpen={isOpen}
-                erInteraktiv={erInteraktiv}
-                currentUser={currentUser}
-                overrideTitle={headerOverrideTitle}
-                leftPrefix={headerLeftPrefix}
-            />
-
-            {isOpen && !slot.erPassert && (
-                <BookingSlotItemExpanded
-                    slot={slot}
-                    time={tid}
-                    erBekreftet={erBekreftet}
-                    setErBekreftet={setErBekreftet}
-                    onBook={onBook}
-                    onCancel={onCancel}
-                    onDelete={onDelete}
-                    reset={reset}
-                />
-            )}
-        </div>
-    );
+      {isOpen && !slot.erPassert && (
+        <BookingSlotItemExpanded
+          slot={slot}
+          time={tid}
+          erBekreftet={erBekreftet}
+          setErBekreftet={setErBekreftet}
+          onBook={onBook}
+          onCancel={onCancel}
+          onDelete={onDelete}
+          reset={reset}
+        />
+      )}
+    </div>
+  );
 }

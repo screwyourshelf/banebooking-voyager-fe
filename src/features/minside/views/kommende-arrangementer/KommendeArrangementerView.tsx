@@ -4,9 +4,9 @@ import { useKommendeArrangementer } from "./useKommendeArrangementer";
 import KommendeArrangementerContent from "./KommendeArrangementerContent";
 
 export default function KommendeArrangementerView() {
-    const { data: arrangementer = [], isLoading } = useKommendeArrangementer();
+  const { data: arrangementer = [], isLoading } = useKommendeArrangementer();
 
-    if (isLoading) return <LoaderSkeleton />;
+  if (isLoading) return <LoaderSkeleton />;
 
-    return <KommendeArrangementerContent arrangementer={arrangementer} />;
+  return <KommendeArrangementerContent arrangementer={arrangementer} />;
 }

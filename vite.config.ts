@@ -4,55 +4,51 @@ import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig(({ mode }) => ({
-    // GH Pages prod ligger under /banebooking-voyager-fe/
-    // Dev/preview lokalt skal være /
-    base: mode === "production" ? "/banebooking-voyager-fe/" : "/",
+  // GH Pages prod ligger under /banebooking-voyager-fe/
+  // Dev/preview lokalt skal vï¿½re /
+  base: mode === "production" ? "/banebooking-voyager-fe/" : "/",
 
-    plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss()],
 
-    resolve: {
-        alias: {
-            "@": fileURLToPath(new URL("./src", import.meta.url)),
-        },
+  resolve: {
+    alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
     },
+  },
 
-    build: {
-        rollupOptions: {
-            output: {
-                manualChunks: {
-                    react: ["react", "react-dom"],
-                    shadcn: [
-                        "@radix-ui/react-slot",
-                        "@radix-ui/react-tabs",
-                        "@radix-ui/react-popover",
-                    ],
-                    lucide: ["lucide-react"],
-                },
-            },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          react: ["react", "react-dom"],
+          shadcn: ["@radix-ui/react-slot", "@radix-ui/react-tabs", "@radix-ui/react-popover"],
+          lucide: ["lucide-react"],
         },
+      },
     },
+  },
 
-    server: {
-        // Vite dev server: åpne riktig startside (uten /banebooking-voyager-fe/)
-        open: "/aas-tennisklubb",
-        proxy: {
-            "/api": {
-                target: "http://localhost:5015",
-                changeOrigin: true,
-                secure: false,
-            },
-        },
+  server: {
+    // Vite dev server: ï¿½pne riktig startside (uten /banebooking-voyager-fe/)
+    open: "/aas-tennisklubb",
+    proxy: {
+      "/api": {
+        target: "http://localhost:5015",
+        changeOrigin: true,
+        secure: false,
+      },
     },
+  },
 
-    preview: {
-        // vite preview kjører også "lokalt", så start på /
-        open: "/aas-tennisklubb",
-        proxy: {
-            "/api": {
-                target: "http://localhost:5015",
-                changeOrigin: true,
-                secure: false,
-            },
-        },
+  preview: {
+    // vite preview kjï¿½rer ogsï¿½ "lokalt", sï¿½ start pï¿½ /
+    open: "/aas-tennisklubb",
+    proxy: {
+      "/api": {
+        target: "http://localhost:5015",
+        changeOrigin: true,
+        secure: false,
+      },
     },
+  },
 }));

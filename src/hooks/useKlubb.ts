@@ -7,53 +7,49 @@ import type { KlubbRespons, OppdaterKlubbForespørsel } from "@/types/index";
 import { useSlug } from "@/hooks/useSlug";
 
 export function useKlubb() {
-    const slug = useSlug();
-    const queryClient = useQueryClient();
+  const slug = useSlug();
+  const queryClient = useQueryClient();
 
-    // GET klubb
-    const klubbQuery = useApiQuery<KlubbRespons>(
-        ["klubb", slug],
-        `/klubb/${slug}`,
-        {
-            requireAuth: false,
-            staleTime: 1000 * 60 * 5, // 5 min
-        }
-    );
+  // GET klubb
+  const klubbQuery = useApiQuery<KlubbRespons>(["klubb", slug], `/klubb/${slug}`, {
+    requireAuth: false,
+    staleTime: 1000 * 60 * 5, // 5 min
+  });
 
-    // Toast p� query-feil
-    const toastetFeilRef = useRef(false);
-    useEffect(() => {
-        if (!klubbQuery.error) {
-            toastetFeilRef.current = false;
-            return;
-        }
-        if (toastetFeilRef.current) return;
+  // Toast p� query-feil
+  const toastetFeilRef = useRef(false);
+  useEffect(() => {
+    if (!klubbQuery.error) {
+      toastetFeilRef.current = false;
+      return;
+    }
+    if (toastetFeilRef.current) return;
 
-        toast.error(klubbQuery.error.message ?? "Kunne ikke hente klubb");
-        toastetFeilRef.current = true;
-    }, [klubbQuery.error]);
+    toast.error(klubbQuery.error.message ?? "Kunne ikke hente klubb");
+    toastetFeilRef.current = true;
+  }, [klubbQuery.error]);
 
-    // PUT klubb
-    const OppdaterKlubbForespørsel = useApiMutation<OppdaterKlubbForespørsel, void>(
-        "put",
-        `/klubb/${slug}`,
-        {
-            onSuccess: () => {
-                toast.success("Klubb oppdatert");
-                void queryClient.invalidateQueries({ queryKey: ["klubb", slug] });
-                void queryClient.invalidateQueries({ queryKey: ["feed", slug] });
-            },
-            onError: (err) => {
-                toast.error(err.message ?? "Kunne ikke oppdatere klubb");
-            },
-        }
-    );
+  // PUT klubb
+  const OppdaterKlubbForespørsel = useApiMutation<OppdaterKlubbForespørsel, void>(
+    "put",
+    `/klubb/${slug}`,
+    {
+      onSuccess: () => {
+        toast.success("Klubb oppdatert");
+        void queryClient.invalidateQueries({ queryKey: ["klubb", slug] });
+        void queryClient.invalidateQueries({ queryKey: ["feed", slug] });
+      },
+      onError: (err) => {
+        toast.error(err.message ?? "Kunne ikke oppdatere klubb");
+      },
+    }
+  );
 
-    return {
-        data: klubbQuery.data,
-        isLoading: klubbQuery.isLoading,
-        error: klubbQuery.error,
-        refetch: klubbQuery.refetch,
-        OppdaterKlubbForespørsel,
-    };
+  return {
+    data: klubbQuery.data,
+    isLoading: klubbQuery.isLoading,
+    error: klubbQuery.error,
+    refetch: klubbQuery.refetch,
+    OppdaterKlubbForespørsel,
+  };
 }

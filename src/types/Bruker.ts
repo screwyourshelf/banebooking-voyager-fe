@@ -1,4 +1,4 @@
-export type RolleType = 'Medlem' | 'Utvidet' | 'KlubbAdmin';
+export type RolleType = "Medlem" | "Utvidet" | "KlubbAdmin";
 
 // Response
 export interface BrukerRespons {

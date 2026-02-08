@@ -1,0 +1,9 @@
+dist
+node_modules
+.git
+*.min.js
+*.min.css
+package-lock.json
+
+# shadcn/ui components - do not modify
+src/components/ui

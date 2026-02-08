@@ -9,43 +9,43 @@ import MineBookingerContent from "./MineBookingerContent";
 import { sortBookingerNyesteFoerst } from "./bookingSort";
 
 export default function MineBookingerTab() {
-    const [visHistoriske, setVisHistoriske] = useState(false);
-    const [openKey, setOpenKey] = useState<string | null>(null);
+  const [visHistoriske, setVisHistoriske] = useState(false);
+  const [openKey, setOpenKey] = useState<string | null>(null);
 
-    const { data: bookinger = [], isLoading } = useMineBookinger(visHistoriske);
-    const { avbestillAsync, isPending } = useBookingActions();
+  const { data: bookinger = [], isLoading } = useMineBookinger(visHistoriske);
+  const { avbestillAsync, isPending } = useBookingActions();
 
-    const visteBookinger = useMemo(() => {
-        return sortBookingerNyesteFoerst(bookinger);
-    }, [bookinger]);
+  const visteBookinger = useMemo(() => {
+    return sortBookingerNyesteFoerst(bookinger);
+  }, [bookinger]);
 
-    async function handleAvbestill(slot: BookingSlotRespons) {
-        if (isPending) return;
+  async function handleAvbestill(slot: BookingSlotRespons) {
+    if (isPending) return;
 
-        await avbestillAsync({
-            baneId: slot.baneId,
-            dato: slot.dato,
-            startTid: slot.startTid,
-            sluttTid: slot.sluttTid,
-        });
+    await avbestillAsync({
+      baneId: slot.baneId,
+      dato: slot.dato,
+      startTid: slot.startTid,
+      sluttTid: slot.sluttTid,
+    });
 
+    setOpenKey(null);
+  }
+
+  if (isLoading) return <LoaderSkeleton />;
+
+  return (
+    <MineBookingerContent
+      visHistoriske={visHistoriske}
+      onToggleVisHistoriske={(v) => {
+        setVisHistoriske(v);
         setOpenKey(null);
-    }
-
-    if (isLoading) return <LoaderSkeleton />;
-
-    return (
-        <MineBookingerContent
-            visHistoriske={visHistoriske}
-            onToggleVisHistoriske={(v) => {
-                setVisHistoriske(v);
-                setOpenKey(null);
-            }}
-            bookinger={visteBookinger}
-            isPending={isPending}
-            openKey={openKey}
-            onToggleOpenKey={setOpenKey}
-            onAvbestill={handleAvbestill}
-        />
-    );
+      }}
+      bookinger={visteBookinger}
+      isPending={isPending}
+      openKey={openKey}
+      onToggleOpenKey={setOpenKey}
+      onAvbestill={handleAvbestill}
+    />
+  );
 }

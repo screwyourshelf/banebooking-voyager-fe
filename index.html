@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="no">
-<head>
+  <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Banebooking</title>
@@ -10,18 +10,19 @@
 
     <!-- Bakgrunn før React (hindrer hvit flash) -->
     <style>
-        html, body {
-            height: 100%;
-            margin: 0;
-        }
+      html,
+      body {
+        height: 100%;
+        margin: 0;
+      }
 
-        body {
-            background-image: url("%BASE_URL%backgrounds/bg.webp");
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            background-color: #0b3a4a;
-        }
+      body {
+        background-image: url("%BASE_URL%backgrounds/bg.webp");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-color: #0b3a4a;
+      }
     </style>
 
     <link rel="icon" href="%BASE_URL%favicon.ico" />
@@ -33,10 +34,10 @@
     <link rel="mask-icon" href="%BASE_URL%safari-pinned-tab.svg" color="#5bbad5" />
     <meta name="msapplication-TileColor" content="#da532c" />
     <meta name="msapplication-config" content="%BASE_URL%browserconfig.xml" />
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
-</body>
+  </body>
 </html>

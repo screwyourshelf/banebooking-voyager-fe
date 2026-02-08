@@ -39,8 +39,7 @@ export default function ReglementDialog({ children }: Props) {
             <li>Opptil {bookingRegel.dagerFremITid} dager frem i tid</li>
             <li>{bookingRegel.slotLengdeMinutter} minutter per booking</li>
             <li>
-              Tillatt mellom {bookingRegel.aapningstid}–
-              {bookingRegel.stengetid}
+              Tillatt mellom {bookingRegel.aapningstid}–{bookingRegel.stengetid}
             </li>
           </ul>
         </div>
