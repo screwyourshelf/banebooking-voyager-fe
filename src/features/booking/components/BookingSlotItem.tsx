@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { BookingSlotItemHeader } from "./BookingSlotItemHeader";
 import { BookingSlotItemExpanded } from "./BookingSlotItemExpanded";
-import type { BookingSlotRespons } from "../../types/index";
+import type { BookingSlotRespons } from "@/types";
 
 type Props = {
   slot: BookingSlotRespons;

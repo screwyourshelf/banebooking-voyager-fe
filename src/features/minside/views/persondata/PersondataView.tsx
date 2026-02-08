@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList, Row, InfoRow } from "@/components/rows";
-import LoaderSkeleton from "@/components/LoaderSkeleton";
+import { LoaderSkeleton } from "@/components/loading";
 
 import { formatDatoKort } from "@/utils/datoUtils";
 import { useMeg } from "@/hooks/useMeg";

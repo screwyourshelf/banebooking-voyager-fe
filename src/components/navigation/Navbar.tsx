@@ -24,10 +24,10 @@ import {
 } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 
-import { useAuth } from "../hooks/useAuth";
-import { useLogin } from "../hooks/useLogin";
-import { useKlubb } from "../hooks/useKlubb";
-import { useBruker } from "../hooks/useBruker";
+import { useAuth } from "@/hooks/useAuth";
+import { useLogin } from "@/hooks/useLogin";
+import { useKlubb } from "@/hooks/useKlubb";
+import { useBruker } from "@/hooks/useBruker";
 import NavbarBrandMedKlubb from "./NavbarBrandMedKlubb";
 import { useSlug } from "@/hooks/useSlug";
 

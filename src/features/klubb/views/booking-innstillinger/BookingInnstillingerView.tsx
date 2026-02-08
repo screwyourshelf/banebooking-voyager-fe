@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import LoaderSkeleton from "@/components/LoaderSkeleton";
+import { LoaderSkeleton } from "@/components/loading";
 import { useKlubb } from "@/hooks/useKlubb";
 
 import BookingInnstillingerContent from "./BookingInnstillingerContent";

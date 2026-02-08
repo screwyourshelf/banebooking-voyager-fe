@@ -1,5 +1,5 @@
-import { BookingActions } from "./BookingActions.js";
-import type { BookingSlotRespons } from "../../types/index.js";
+import { BookingActions } from "./BookingActions";
+import type { BookingSlotRespons } from "@/types";
 
 type Props = {
   slot: BookingSlotRespons;

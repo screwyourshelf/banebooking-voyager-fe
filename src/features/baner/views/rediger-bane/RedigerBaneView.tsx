@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useBaner } from "@/hooks/useBaner";
 
-import LoaderSkeleton from "@/components/LoaderSkeleton";
+import { LoaderSkeleton } from "@/components/loading";
 import RedigerBaneContent from "./RedigerBaneContent";
 import { loadValgtBaneId, saveValgtBaneId } from "./storage";
 import type { BaneRespons } from "@/types";

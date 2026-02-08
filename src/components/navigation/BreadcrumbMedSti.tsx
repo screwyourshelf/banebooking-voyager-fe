@@ -7,26 +7,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-
-const visningsnavn: Record<string, string> = {
-  minside: "Min side",
-  admin: "Admin",
-  baner: "Baner",
-  brukere: "Brukere",
-  klubb: "Klubb",
-  arrangement: "Arrangement",
-  kommendearrangement: "Kommende arrangementer",
-  "": "Book bane",
-};
-
-function oversettSegment(segment: string): string {
-  const lower = segment.toLowerCase();
-  return visningsnavn[lower] ?? capitalize(segment);
-}
-
-function capitalize(s: string) {
-  return s.charAt(0).toUpperCase() + s.slice(1);
-}
+import { getBreadcrumbName } from "@/routes/routeConfig";
 
 export default function BreadcrumbMedSti() {
   const location = useLocation();
@@ -56,10 +37,10 @@ export default function BreadcrumbMedSti() {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               {idx === pathSegments.length - 1 || siste.segment === "admin" ? (
-                <BreadcrumbPage>{oversettSegment(siste.segment)}</BreadcrumbPage>
+                <BreadcrumbPage>{getBreadcrumbName(siste.segment)}</BreadcrumbPage>
               ) : (
                 <BreadcrumbLink asChild>
-                  <Link to={siste.url}>{oversettSegment(siste.segment)}</Link>
+                  <Link to={siste.url}>{getBreadcrumbName(siste.segment)}</Link>
                 </BreadcrumbLink>
               )}
             </BreadcrumbItem>

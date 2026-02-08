@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-import LoaderSkeleton from "@/components/LoaderSkeleton";
-import SlettMegDialog from "@/components/SlettMegDialog";
+import { LoaderSkeleton } from "@/components/loading";
+import { SlettMegDialog } from "@/features/minside/components";
 import { useMeg } from "@/hooks/useMeg";
 
 import MinProfilContent, { type Mode } from "./MinProfilContent";

@@ -1,5 +1,5 @@
 import { useKlubb } from "@/hooks/useKlubb";
-import LoaderSkeleton from "@/components/LoaderSkeleton";
+import { LoaderSkeleton } from "@/components/loading";
 import Page from "@/components/Page";
 import { AKTIV_VILKAAR } from "./vilkaar";
 

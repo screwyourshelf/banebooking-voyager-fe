@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import type { UseMutationResult } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
-import { useAuth } from "../hooks/useAuth";
+import { useAuth } from "@/hooks/useAuth";
 
 type Props = {
   slettMeg: UseMutationResult<void, Error, void>;

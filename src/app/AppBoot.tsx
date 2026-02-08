@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useSlug } from "@/hooks/useSlug";
 import api from "@/api/api";
 import { useKlubb } from "@/hooks/useKlubb";
-import AppFrameSkeleton from "@/components/AppFrameSkeleton";
+import { AppFrameSkeleton } from "@/components/loading";
 
 export default function AppBoot({ children }: { children: React.ReactNode }) {
   const slug = useSlug();

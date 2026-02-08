@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { format } from "date-fns";
 
-import LoaderSkeleton from "@/components/LoaderSkeleton";
+import { LoaderSkeleton } from "@/components/loading";
 import { useBaner } from "@/hooks/useBaner";
 import { useBooking } from "@/features/booking/hooks/useBooking";
 import { useAuth } from "@/hooks/useAuth";

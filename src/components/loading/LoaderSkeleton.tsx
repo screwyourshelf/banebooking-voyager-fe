@@ -1,4 +1,4 @@
-import { Skeleton } from "@/components/ui/skeleton.js";
+import { Skeleton } from "@/components/ui/skeleton";
 
 export default function LoaderSkeleton() {
   return (

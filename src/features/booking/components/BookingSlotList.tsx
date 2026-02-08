@@ -1,6 +1,6 @@
-import type { BookingSlotRespons } from "../../types/index.js";
-import BookingSlotItem from "./BookingSlotItem.js";
-import LoaderSkeleton from "@/components/LoaderSkeleton.js";
+import type { BookingSlotRespons } from "@/types";
+import BookingSlotItem from "./BookingSlotItem";
+import LoaderSkeleton from "@/components/loading/LoaderSkeleton";
 
 type Props = {
   slots: BookingSlotRespons[];

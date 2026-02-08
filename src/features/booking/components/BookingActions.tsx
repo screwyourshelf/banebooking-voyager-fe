@@ -1,7 +1,7 @@
-import { Button } from "@/components/ui/button.js";
-import { Checkbox } from "@/components/ui/checkbox.js";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import { FaCalendarPlus, FaTimesCircle, FaTrashAlt } from "react-icons/fa";
-import type { BookingSlotRespons } from "../../types/index.js";
+import type { BookingSlotRespons } from "@/types";
 
 type Props = {
   slot: BookingSlotRespons;

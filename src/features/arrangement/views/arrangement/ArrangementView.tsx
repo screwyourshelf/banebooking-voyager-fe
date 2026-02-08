@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
-import LoaderSkeleton from "@/components/LoaderSkeleton";
+import { LoaderSkeleton } from "@/components/loading";
 import { useArrangement } from "../../hooks/useArrangement";
 
 import ArrangementContent from "./ArrangementContent";

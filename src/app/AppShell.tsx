@@ -1,8 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { Toaster } from "sonner";
-import Navbar from "@/components/Navbar";
-import BreadcrumbMedSti from "@/components/BreadcrumbMedSti";
-import FeedAlerts from "@/components/Feed/FeedAlerts";
+import { Navbar, BreadcrumbMedSti } from "@/components/navigation";
+import { FeedAlerts } from "@/features/feed/components";
 import "animate.css";
 
 export default function AppShell() {

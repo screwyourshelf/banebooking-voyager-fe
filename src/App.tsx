@@ -1,25 +1,17 @@
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
-import type { ReactNode } from "react";
 
 import SlugGate from "@/routes/SlugGate";
+import { routeConfig, flattenRoutes } from "@/routes/routeConfig";
 import AppBoot from "@/app/AppBoot";
 import AppShell from "@/app/AppShell";
-import AppFrameSkeleton from "@/components/AppFrameSkeleton";
-import { ProtectedRoute } from "./components/ProtectedRoute";
+import { AppFrameSkeleton } from "@/components/loading";
+import { ProtectedRoute } from "@/routes/ProtectedRoute";
 
-const BookingPage = lazy(() => import("./features/booking/pages/BookingPage"));
-const MinSide = lazy(() => import("./features/minside/pages/MinSidePage"));
-const KlubbPage = lazy(() => import("./features/klubb/pages/KlubbPage"));
-const BanerPage = lazy(() => import("./features/baner/pages/BanerPage"));
-const ArrangementPage = lazy(() => import("./features/arrangement/pages/ArrangementPage"));
-const BrukerePage = lazy(() => import("./features/brukere/pages/BrukerePage"));
 const AuthCallbackPage = lazy(() => import("./app/AuthCallbackPage"));
-const VilkaarPage = lazy(() => import("./features/policy/pages/VilkaarPage"));
 
-const Protected = ({ children }: { children: ReactNode }) => (
-  <ProtectedRoute>{children}</ProtectedRoute>
-);
+// Generer flate ruter fra config
+const appRoutes = flattenRoutes(routeConfig).filter((r) => r.component);
 
 export default function App() {
   return (
@@ -36,48 +28,22 @@ export default function App() {
                 </AppBoot>
               }
             >
-              <Route path="vilkaar" element={<VilkaarPage />} />
-              <Route index element={<BookingPage />} />
-              <Route
-                path="minside"
-                element={
-                  <Protected>
-                    <MinSide />
-                  </Protected>
-                }
-              />
-              <Route
-                path="arrangement"
-                element={
-                  <Protected>
-                    <ArrangementPage />
-                  </Protected>
-                }
-              />
-              <Route
-                path="admin/klubb"
-                element={
-                  <Protected>
-                    <KlubbPage />
-                  </Protected>
-                }
-              />
-              <Route
-                path="admin/baner"
-                element={
-                  <Protected>
-                    <BanerPage />
-                  </Protected>
-                }
-              />
-              <Route
-                path="admin/brukere"
-                element={
-                  <Protected>
-                    <BrukerePage />
-                  </Protected>
-                }
-              />
+              {appRoutes.map((route) => {
+                const Component = route.component!;
+                const element = route.protected ? (
+                  <ProtectedRoute>
+                    <Component />
+                  </ProtectedRoute>
+                ) : (
+                  <Component />
+                );
+
+                return route.index ? (
+                  <Route key="index" index element={element} />
+                ) : (
+                  <Route key={route.fullPath} path={route.fullPath} element={element} />
+                );
+              })}
             </Route>
           </Route>
 

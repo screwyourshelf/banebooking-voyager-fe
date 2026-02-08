@@ -1,7 +1,7 @@
 import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList, Row } from "@/components/rows";
 import SwitchRow from "@/components/rows/SwitchRow";
-import BookingSlotItem from "@/components/Booking/BookingSlotItem";
+import { BookingSlotItem } from "@/features/booking/components";
 import type { BookingSlotRespons } from "@/types";
 
 import BookingSlotHeaderLeft from "./BookingSlotHeaderLeft";

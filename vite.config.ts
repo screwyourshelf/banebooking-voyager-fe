@@ -19,10 +19,16 @@ export default defineConfig(({ mode }) => ({
   build: {
     rollupOptions: {
       output: {
-        manualChunks: {
-          react: ["react", "react-dom"],
-          shadcn: ["@radix-ui/react-slot", "@radix-ui/react-tabs", "@radix-ui/react-popover"],
-          lucide: ["lucide-react"],
+        manualChunks(id) {
+          if (id.includes("node_modules/react-dom") || id.includes("node_modules/react/")) {
+            return "react";
+          }
+          if (id.includes("node_modules/@radix-ui")) {
+            return "shadcn";
+          }
+          if (id.includes("node_modules/lucide-react")) {
+            return "lucide";
+          }
         },
       },
     },

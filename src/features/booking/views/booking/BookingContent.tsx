@@ -1,9 +1,8 @@
 import { HelpCircle } from "lucide-react";
 
 import DatoVelger from "@/components/DatoVelger";
-import { BookingSlotList } from "@/components/Booking/BookingSlotList";
+import { BookingSlotList, ReglementDialog } from "@/features/booking/components";
 import { TabsLazyMount } from "@/components/navigation";
-import ReglementDialog from "@/components/ReglementDialog";
 import { Button } from "@/components/ui/button";
 
 import type { BookingSlotRespons, BaneRespons } from "@/types";

@@ -1,4 +1,4 @@
-import LoaderSkeleton from "@/components/LoaderSkeleton";
+import LoaderSkeleton from "@/components/loading/LoaderSkeleton";
 
 export default function AppFrameSkeleton() {
   return (
