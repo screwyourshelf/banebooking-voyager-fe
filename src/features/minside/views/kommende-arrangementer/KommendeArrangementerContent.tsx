@@ -11,10 +11,10 @@ import {
 import { formatDatoKort, formatDayOfWeeksLangNorsk } from "@/utils/datoUtils";
 import { ChevronDown } from "lucide-react";
 import { cn } from "@/lib/utils";
-import type { KommendeArrangementDto } from "./types";
+import type { KommendeArrangementRespons } from "./types";
 
 type Props = {
-    arrangementer: KommendeArrangementDto[];
+    arrangementer: KommendeArrangementRespons[];
 };
 
 function dagerIgjenFra(startDatoIso: string) {
@@ -28,7 +28,7 @@ function dagerIgjenFra(startDatoIso: string) {
     return Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
 }
 
-function datoTekst(arr: KommendeArrangementDto) {
+function datoTekst(arr: KommendeArrangementRespons) {
     return arr.startDato === arr.sluttDato
         ? formatDatoKort(arr.startDato)
         : `${formatDatoKort(arr.startDato)} – ${formatDatoKort(arr.sluttDato)}`;

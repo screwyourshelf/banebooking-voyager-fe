@@ -1,11 +1,11 @@
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useSlug } from "@/hooks/useSlug";
-import type { KommendeArrangementDto } from "./types";
+import type { KommendeArrangementRespons } from "./types";
 
 export function useKommendeArrangementer() {
     const slug = useSlug();
 
-    return useApiQuery<KommendeArrangementDto[]>(
+    return useApiQuery<KommendeArrangementRespons[]>(
         ["kommende-arrangementer", slug],
         `/klubb/${slug}/arrangement/kommende`,
         {

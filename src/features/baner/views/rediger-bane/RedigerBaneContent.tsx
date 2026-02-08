@@ -27,11 +27,11 @@ type BaneFormData = {
 };
 
 type Props = {
-    baner: Bane[];
+    baner: BaneRespons[];
     valgtBaneId: string | null;
     onChangeValgtBaneId: (id: string | null) => void;
 
-    valgtBane: Bane | null;
+    valgtBane: BaneRespons | null;
     redigerteVerdier: BaneFormData | null;
 
     onChangeFelt: (felt: keyof BaneFormData, verdi: string | boolean) => void;

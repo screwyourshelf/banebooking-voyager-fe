@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import LoaderSkeleton from "@/components/LoaderSkeleton";
 import { useMineBookinger } from "@/hooks/useMineBookinger";
 import { useBookingActions } from "@/hooks/useBookingActions";
-import type { BookingSlot } from "@/types";
+import type { BookingSlotRespons } from "@/types";
 import "animate.css";
 
 import MineBookingerContent from "./MineBookingerContent";
@@ -19,7 +19,7 @@ export default function MineBookingerTab() {
         return sortBookingerNyesteFoerst(bookinger);
     }, [bookinger]);
 
-    async function handleAvbestill(slot: BookingSlot) {
+    async function handleAvbestill(slot: BookingSlotRespons) {
         if (isPending) return;
 
         await avbestillAsync({

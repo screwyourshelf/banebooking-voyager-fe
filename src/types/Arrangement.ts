@@ -1,4 +1,4 @@
-// src/types/arrangement.ts
+// src/types/Arrangement.ts
 
 export type ArrangementKategori =
   | "Trening"
@@ -22,32 +22,18 @@ export type DayOfWeek =
   | "Friday"
   | "Saturday";
 
-/**
- * Request til backend for å opprette arrangement.
- * Matcher C# OpprettArrangementForespørsel.
- */
-export type OpprettArrangementDto = {
-  tittel: string;
-  beskrivelse?: string;
-  kategori: ArrangementKategori;
-  startDato: string;   // yyyy-MM-dd
-  sluttDato: string;   // yyyy-MM-dd
-  ukedager: DayOfWeek[];
-  tidspunkter: string[]; // HH:mm (TimeOnly)
-  baneIder: string[];  // Guid
-};
-
-
-export type ArrangementDto = {
-  id: string;
+// Request
+export type OpprettArrangementForespørsel = {
   tittel: string;
   beskrivelse?: string;
   kategori: ArrangementKategori;
   startDato: string;
   sluttDato: string;
-  førsteBane: string;
-  førsteStartTid: string;
-  førsteSluttTid: string;
-  antallBookinger: number;
-  kanSlettes: boolean;
+  ukedager: DayOfWeek[];
+  tidspunkter: string[];
+  baneIder: string[];
+};
+
+export type SlettArrangementForespørsel = {
+  arrangementId: string;
 };

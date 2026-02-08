@@ -1,10 +1,10 @@
 import { FaChevronDown } from "react-icons/fa";
-import type { BookingSlot } from "../../types/index";
+import type { BookingSlotRespons } from "../../types/index";
 import { useEffect, useState } from "react";
 import type { ReactNode } from "react";
 
 type Props = {
-    slot: BookingSlot;
+    slot: BookingSlotRespons;
     isOpen: boolean;
     erInteraktiv: boolean;
     currentUser: { epost: string } | null;

@@ -8,9 +8,9 @@ import { useKlubb } from "@/hooks/useKlubb";
 import { useBaner } from "@/hooks/useBaner";
 import { useSlug } from "@/hooks/useSlug";
 
-import type { OpprettArrangementDto } from "@/types";
+import type { OpprettArrangementForespørsel } from "@/types";
 
-import type { OpprettArrangementResponsDto, ArrangementForhandsvisningDto } from "../types";
+import type { OpprettArrangementRespons, ArrangementForhåndsvisningRespons } from "../types";
 
 function parseTimeToMinutes(tid: string) {
     const [h, m] = tid.split(":").map(Number);
@@ -35,11 +35,11 @@ function genererTidspunkter(start: string, slutt: string, slotMinutter: number):
     return result;
 }
 
-const tomForhandsvisning: ArrangementForhandsvisningDto = { ledige: [], konflikter: [] };
+const tomForhandsvisning: ArrangementForhåndsvisningRespons = { ledige: [], konflikter: [] };
 
 // Stabil nøkkel: sorter arrays som ikke er semantisk ordnet
-function dtoKey(dto: OpprettArrangementDto) {
-    const stable: OpprettArrangementDto = {
+function dtoKey(dto: OpprettArrangementForespørsel) {
+    const stable: OpprettArrangementForespørsel = {
         ...dto,
         // ukedager er number[] (DayOfWeek 0-6) -> sorter numerisk
         ukedager: [...dto.ukedager].sort((a, b) => a - b),
@@ -69,7 +69,7 @@ export function useArrangement() {
     }, [klubb?.bookingRegel]);
 
     // ───────── Preview (POST-query) ─────────
-    const [sisteForhandsvisDto, setSisteForhandsvisDto] = useState<OpprettArrangementDto | null>(
+    const [sisteForhandsvisDto, setSisteForhandsvisDto] = useState<OpprettArrangementForespørsel | null>(
         null
     );
 
@@ -77,7 +77,7 @@ export function useArrangement() {
         ? (["arrangement-forhandsvis", slug, dtoKey(sisteForhandsvisDto)] as const)
         : (["arrangement-forhandsvis", slug, "empty"] as const);
 
-    const forhandsvisQuery = useApiPostQuery<ArrangementForhandsvisningDto, OpprettArrangementDto>(
+    const forhandsvisQuery = useApiPostQuery<ArrangementForhåndsvisningRespons, OpprettArrangementForespørsel>(
         forhandsvisKey,
         `/klubb/${slug}/arrangement/forhandsvis`,
         sisteForhandsvisDto,
@@ -92,7 +92,7 @@ export function useArrangement() {
     const forhandsvisning = forhandsvisQuery.data ?? tomForhandsvisning;
     const isLoadingForhandsvisning = forhandsvisQuery.isFetching;
 
-    const forhandsvis = async (dto: OpprettArrangementDto) => {
+    const forhandsvis = async (dto: OpprettArrangementForespørsel) => {
         setSisteForhandsvisDto(dto);
         return { success: true as const };
     };
@@ -104,7 +104,7 @@ export function useArrangement() {
     };
 
     // ───────── Opprett ─────────
-    const opprettMutation = useApiMutation<OpprettArrangementDto, OpprettArrangementResponsDto>(
+    const opprettMutation = useApiMutation<OpprettArrangementForespørsel, OpprettArrangementRespons>(
         "post",
         `/klubb/${slug}/arrangement`,
         {
@@ -122,7 +122,7 @@ export function useArrangement() {
         }
     );
 
-    const opprett = async (dto: OpprettArrangementDto) => {
+    const opprett = async (dto: OpprettArrangementForespørsel) => {
         const result = await opprettMutation.mutateAsync(dto);
         return { success: true as const, result };
     };

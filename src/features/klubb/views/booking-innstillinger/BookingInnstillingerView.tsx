@@ -24,7 +24,7 @@ function hourToTime(h: number): string {
 }
 
 export default function BookingInnstillingerView() {
-    const { data: klubb, isLoading, oppdaterKlubb } = useKlubb();
+    const { data: klubb, isLoading, OppdaterKlubbForespørsel } = useKlubb();
 
     const [booking, setBooking] = useState<BookingRegelForm>({
         maksPerDag: 1,
@@ -76,7 +76,7 @@ export default function BookingInnstillingerView() {
     if (isLoading || !klubb) return <LoaderSkeleton />;
 
     const submit = () => {
-        oppdaterKlubb.mutate({
+        OppdaterKlubbForespørsel.mutate({
             navn: klubb.navn ?? "",
             kontaktEpost: klubb.kontaktEpost ?? "",
             banereglement: klubb.banereglement ?? "",
@@ -126,7 +126,7 @@ export default function BookingInnstillingerView() {
                 setBooking((b) => ({ ...b, slotLengdeMinutter: parseInt(val, 10) }))
             }
             canSubmit={canSubmit}
-            isSaving={oppdaterKlubb.isPending}
+            isSaving={OppdaterKlubbForespørsel.isPending}
             onSubmit={submit}
         />
     );

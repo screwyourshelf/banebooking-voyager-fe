@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useSlug } from "@/hooks/useSlug";
 
-export type BookingSlotKey = {
+export type BookingSlotResponsKey = {
     baneId: string;
     dato: string; // yyyy-MM-dd
     startTid: string; // HH:mm
@@ -22,7 +22,7 @@ export function useBookingActions() {
         void queryClient.invalidateQueries({ queryKey: ["bookinger", slug] });
     };
 
-    const cancelMutation = useApiMutation<BookingSlotKey, void>(
+    const cancelMutation = useApiMutation<BookingSlotResponsKey, void>(
         "delete",
         `/klubb/${slug}/bookinger`,
         {
@@ -38,11 +38,11 @@ export function useBookingActions() {
         }
     );
 
-    const avbestill = (key: BookingSlotKey) => {
+    const avbestill = (key: BookingSlotResponsKey) => {
         cancelMutation.mutate(key);
     };
 
-    const avbestillAsync = async (key: BookingSlotKey) => {
+    const avbestillAsync = async (key: BookingSlotResponsKey) => {
         return cancelMutation.mutateAsync(key);
     };
 

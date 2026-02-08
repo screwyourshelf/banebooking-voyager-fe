@@ -1,4 +1,14 @@
-export type KlubbDetaljer = {
+// Response
+export type BookingRegelRespons = {
+  aapningstid: string;
+  stengetid: string;
+  maksPerDag: number;
+  maksTotalt: number;
+  dagerFremITid: number;
+  slotLengdeMinutter: number;
+};
+
+export type KlubbRespons = {
   slug: string;
   navn: string;
   kontaktEpost?: string;
@@ -7,12 +17,5 @@ export type KlubbDetaljer = {
   longitude?: number;
   feedUrl?: string;
   feedSynligAntallDager: number;
-  bookingRegel: {
-    aapningstid: string;
-    stengetid: string;
-    maksPerDag: number;
-    maksTotalt: number;
-    dagerFremITid: number;
-    slotLengdeMinutter: number;
-  };
+  bookingRegel: BookingRegelRespons;
 };

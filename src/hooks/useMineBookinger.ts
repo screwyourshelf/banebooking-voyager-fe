@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
-import type { BookingSlot } from "@/types";
+import type { BookingSlotRespons } from "@/types";
 import { useSlug } from "@/hooks/useSlug";
 
 export function useMineBookinger(inkluderHistoriske = false) {
     const slug = useSlug();
 
-    const query = useApiQuery<BookingSlot[]>(
+    const query = useApiQuery<BookingSlotRespons[]>(
         ["mineBookinger", slug, inkluderHistoriske],
         `/klubb/${slug}/bookinger/mine${inkluderHistoriske ? "?inkluderHistoriske=true" : ""
         }`,
@@ -17,7 +17,7 @@ export function useMineBookinger(inkluderHistoriske = false) {
         }
     );
 
-    // Toast feil (én gang per feil)
+    // Toast feil (ï¿½n gang per feil)
     const errorToastetRef = useRef(false);
     useEffect(() => {
         if (!query.error) {

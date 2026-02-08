@@ -7,7 +7,7 @@ import {
 } from "@/utils/datoUtils";
 
 import type { UkedagKortNorsk, UkedagIso } from "@/types/dato";
-import type { OpprettArrangementDto, ArrangementKategori } from "@/types";
+import type { OpprettArrangementForespørsel, ArrangementKategori } from "@/types";
 
 export function finnTilgjengeligeUkedager(datoFra: Date, datoTil: Date): UkedagKortNorsk[] {
     const faktiske = finnUkedagerIDatoPeriode(datoFra, datoTil); // Set<UkedagIso>
@@ -35,7 +35,7 @@ type ByggDtoArgs = {
     onWarning: (msg: string) => void;
 };
 
-export function byggDto(args: ByggDtoArgs): OpprettArrangementDto | null {
+export function byggDto(args: ByggDtoArgs): OpprettArrangementForespørsel | null {
     const {
         datoFra,
         datoTil,

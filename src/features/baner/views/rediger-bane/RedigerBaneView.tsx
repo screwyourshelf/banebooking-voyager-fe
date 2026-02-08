@@ -27,7 +27,7 @@ function validateNavn(navn: string): string | null {
 }
 
 export default function RedigerBaneView() {
-    const { baner, isLoading, oppdaterBane } = useBaner(true);
+    const { baner, isLoading, OppdaterBaneForespørsel } = useBaner(true);
 
     const [redigerte, setRedigerte] = useState<Record<string, BaneFormData>>({});
     const [valgtBaneId, setValgtBaneId] = useState<string | null>(() => loadValgtBaneId());
@@ -36,7 +36,7 @@ export default function RedigerBaneView() {
     const [touched, setTouched] = useState<Record<string, TouchedState>>({});
     const [submitAttempted, setSubmitAttempted] = useState(false);
 
-    const valgtBane: Bane | null = useMemo(
+    const valgtBane: BaneRespons | null = useMemo(
         () => baner.find((b) => b.id === valgtBaneId) ?? null,
         [baner, valgtBaneId]
     );
@@ -138,7 +138,7 @@ export default function RedigerBaneView() {
         if (!dto) return;
 
         try {
-            await oppdaterBane.mutateAsync({ id: valgtBaneId, dto });
+            await OppdaterBaneForespørsel.mutateAsync({ id: valgtBaneId, dto });
 
             // Etter lagring: fjern draft for valgt bane
             setRedigerte((prev) => {
@@ -174,7 +174,7 @@ export default function RedigerBaneView() {
                 håndterEndring(valgtBane.id, felt, verdi);
             }}
             canSubmit={canSubmit}
-            isSaving={oppdaterBane.isPending}
+            isSaving={OppdaterBaneForespørsel.isPending}
             onSubmit={() => void onSubmit()}
             navnError={navnError}
             onBlurNavn={() => {

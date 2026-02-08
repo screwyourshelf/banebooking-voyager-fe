@@ -20,7 +20,7 @@ import {
 import { useBruker } from "@/hooks/useBruker";
 import { useAdminBrukere } from "@/hooks/useAdminBrukere";
 
-import type { RolleType, BrukerDto } from "@/types";
+import type { RolleType, BrukerRespons } from "@/types";
 
 type EditState = {
     rolle: RolleType;
@@ -48,7 +48,7 @@ export default function BrukerePage() {
     const [rolleFilter, setRolleFilter] = useState<RolleType[]>([]); // tom = alle
 
     // Dialog
-    const [aktivBruker, setAktivBruker] = useState<BrukerDto | null>(null);
+    const [aktivBruker, setAktivBruker] = useState<BrukerRespons | null>(null);
     const [edit, setEdit] = useState<EditState>({ rolle: "Medlem", visningsnavn: "" });
 
     const filtrerteBrukere = useMemo(() => {
@@ -73,7 +73,7 @@ export default function BrukerePage() {
             });
     }, [brukere, query, visSlettede, rolleFilter]);
 
-    const åpenRedigering = (b: BrukerDto) => {
+    const åpenRedigering = (b: BrukerRespons) => {
         setAktivBruker(b);
         setEdit({
             rolle: ((b.roller?.[0] ?? "Medlem") as RolleType) ?? "Medlem",

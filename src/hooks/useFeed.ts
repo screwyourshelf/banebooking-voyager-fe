@@ -1,11 +1,11 @@
 import { useApiQuery } from "@/hooks/useApiQuery";
-import type { FeedItemDto } from "@/types";
+import type { FeedItemRespons } from "@/types";
 import { useSlug } from "@/hooks/useSlug";
 
 export function useFeed() {
     const slug = useSlug();
 
-    const query = useApiQuery<FeedItemDto[]>(
+    const query = useApiQuery<FeedItemRespons[]>(
         ["feed", slug],
         `/klubb/${slug}/feed`,
         {

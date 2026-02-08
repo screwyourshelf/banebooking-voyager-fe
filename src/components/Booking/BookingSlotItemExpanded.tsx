@@ -1,14 +1,14 @@
 import { BookingActions } from './BookingActions.js';
-import type { BookingSlot } from '../../types/index.js';
+import type { BookingSlotRespons } from '../../types/index.js';
 
 type Props = {
-    slot: BookingSlot;
+    slot: BookingSlotRespons;
     time: string;
     erBekreftet: boolean;
     setErBekreftet: (val: boolean) => void;
-    onBook: (slot: BookingSlot) => void;
-    onCancel: (slot: BookingSlot) => void;
-    onDelete: (slot: BookingSlot) => void;
+    onBook: (slot: BookingSlotRespons) => void;
+    onCancel: (slot: BookingSlotRespons) => void;
+    onDelete: (slot: BookingSlotRespons) => void;
     reset: () => void;
 };
 

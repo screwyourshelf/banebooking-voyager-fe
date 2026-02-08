@@ -1,7 +1,7 @@
 import { formatDatoKort } from "@/utils/datoUtils";
-import type { BookingSlot } from "@/types";
+import type { BookingSlotRespons } from "@/types";
 
-type Props = { slot: BookingSlot };
+type Props = { slot: BookingSlotRespons };
 
 export default function BookingSlotHeaderLeft({ slot }: Props) {
     const harTemp = typeof slot.temperatur === "number";

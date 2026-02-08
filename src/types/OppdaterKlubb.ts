@@ -1,13 +1,14 @@
-export type BookingRegelDto = {
-  aapningstid: string; // "07:00"
-  stengetid: string;   // "22:00"
+// Request types for Klubb
+export type OppdaterBookingRegelForespørsel = {
+  aapningstid: string;
+  stengetid: string;
   maksPerDag: number;
   maksTotalt: number;
   dagerFremITid: number;
   slotLengdeMinutter: number;
 };
 
-export type OppdaterKlubb = {
+export type OppdaterKlubbForespørsel = {
   navn: string;
   kontaktEpost?: string;
   banereglement?: string;
@@ -15,5 +16,5 @@ export type OppdaterKlubb = {
   longitude?: number;
   feedUrl?: string;
   feedSynligAntallDager: number;
-  bookingRegel: BookingRegelDto;
+  bookingRegel: OppdaterBookingRegelForespørsel;
 };

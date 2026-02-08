@@ -1,31 +1,32 @@
-export type BaneDto = {
-    id: string;
-    navn: string;
+// Responses for Arrangement
+export type ArrangementSlotRespons = {
+  dato: string;
+  startTid: string;
+  sluttTid: string;
+  baneNavn: string;
+  baneId: string;
 };
 
-export type ArrangementSlotDto = {
-    dato: string;     // yyyy-MM-dd
-    startTid: string; // HH:mm
-    sluttTid: string; // HH:mm
-    baneId: string;   // GUID
-    baneNavn: string;
+export type ArrangementForhåndsvisningRespons = {
+  ledige: ArrangementSlotRespons[];
+  konflikter: ArrangementSlotRespons[];
 };
 
-export type ArrangementForhandsvisningDto = {
-    ledige: ArrangementSlotDto[];
-    konflikter: ArrangementSlotDto[];
-};
-
-export type ArrangementKonfliktDto = {
-  dato: string;       // yyyy-MM-dd
-  baneId: string;     // GUID
-  startTid: string;   // HH:mm
-  sluttTid: string;   // HH:mm
+export type ArrangementKonfliktRespons = {
+  dato: string;
+  baneId: string;
+  startTid: string;
+  sluttTid: string;
   feilmelding: string;
 };
 
-export type OpprettArrangementResponsDto = {
+export type OpprettArrangementRespons = {
   arrangementId: string;
   antallOpprettet: number;
-  konflikter: ArrangementKonfliktDto[];
+  konflikter: ArrangementKonfliktRespons[];
+};
+
+export type SlettArrangementRespons = {
+  arrangementId: string;
+  antallBookingerDeaktivert: number;
 };

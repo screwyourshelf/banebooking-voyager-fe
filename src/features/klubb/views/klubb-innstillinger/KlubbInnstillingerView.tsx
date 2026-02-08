@@ -46,7 +46,7 @@ function parseOptionalNumber(text: string): number | undefined {
 }
 
 export default function KlubbInnstillingerView() {
-    const { data: klubb, isLoading, oppdaterKlubb } = useKlubb();
+    const { data: klubb, isLoading, OppdaterKlubbForespørsel } = useKlubb();
 
     const [form, setForm] = useState<FormState>({
         navn: "",
@@ -142,7 +142,7 @@ export default function KlubbInnstillingerView() {
         const lon = parseOptionalNumber(form.longitude);
         const feedDays = parseOptionalNumber(form.feedSynligAntallDager);
 
-        oppdaterKlubb.mutate({
+        OppdaterKlubbForespørsel.mutate({
             ...klubb,
             navn: form.navn.trim(),
             kontaktEpost: form.kontaktEpost.trim(),
@@ -162,7 +162,7 @@ export default function KlubbInnstillingerView() {
             onChange={onChange}
             // canSubmit betyr nå: dirty + valid
             canSubmit={canSubmit}
-            isSaving={oppdaterKlubb.isPending}
+            isSaving={OppdaterKlubbForespørsel.isPending}
             onSubmit={onSubmit}
             // NYTT:
             touched={touched}

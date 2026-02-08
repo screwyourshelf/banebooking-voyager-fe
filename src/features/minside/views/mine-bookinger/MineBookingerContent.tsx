@@ -2,7 +2,7 @@ import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList, Row } from "@/components/rows";
 import SwitchRow from "@/components/rows/SwitchRow";
 import BookingSlotItem from "@/components/Booking/BookingSlotItem";
-import type { BookingSlot } from "@/types";
+import type { BookingSlotRespons } from "@/types";
 
 import BookingSlotHeaderLeft from "./BookingSlotHeaderLeft";
 import { buildBookingKey } from "./bookingSort";
@@ -11,13 +11,13 @@ type Props = {
     visHistoriske: boolean;
     onToggleVisHistoriske: (value: boolean) => void;
 
-    bookinger: BookingSlot[];
+    bookinger: BookingSlotRespons[];
     isPending: boolean;
 
     openKey: string | null;
     onToggleOpenKey: (key: string | null) => void;
 
-    onAvbestill: (slot: BookingSlot) => void;
+    onAvbestill: (slot: BookingSlotRespons) => void;
 };
 
 export default function MineBookingerContent({

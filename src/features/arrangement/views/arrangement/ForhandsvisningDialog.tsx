@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 import ForhandsvisningTable from "./ForhandsvisningTable";
-import type { ArrangementForhandsvisningDto } from "../../types";
+import type { ArrangementForhåndsvisningRespons } from "../../types";
 
 type Props = {
     open: boolean;
@@ -16,7 +16,7 @@ type Props = {
 
     beskrivelse: string;
 
-    forhandsvisning: ArrangementForhandsvisningDto;
+    forhandsvisning: ArrangementForhåndsvisningRespons;
     isLoading: boolean;
 
     onCreate: () => void;

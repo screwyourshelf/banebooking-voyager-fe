@@ -4,7 +4,7 @@ import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import api from "@/api/api";
-import type { Bane, NyBane, OppdaterBane } from "@/types";
+import type { Bane, OpprettBaneForespørsel, OppdaterBaneForespørsel } from "@/types";
 import { useSlug } from "@/hooks/useSlug";
 
 export function useBaner(inkluderInaktive = true) {
@@ -17,7 +17,7 @@ export function useBaner(inkluderInaktive = true) {
         void queryClient.invalidateQueries({ queryKey: ["baner", slug, false] });
     };
 
-    const banerQuery = useApiQuery<Bane[]>(
+    const banerQuery = useApiQuery<BaneRespons[]>(
         ["baner", slug, inkluderInaktive],
         `/klubb/${slug}/baner${inkluderInaktive ? "?inkluderInaktive=true" : ""}`,
         {
@@ -38,7 +38,7 @@ export function useBaner(inkluderInaktive = true) {
         errorToastetRef.current = true;
     }, [banerQuery.error]);
 
-    const opprettBane = useApiMutation<NyBane, void>(
+    const opprettBane = useApiMutation<OpprettBaneForespørsel, void>(
         "post",
         `/klubb/${slug}/baner`,
         {
@@ -50,7 +50,7 @@ export function useBaner(inkluderInaktive = true) {
         }
     );
 
-    const oppdaterBane = useApiMutation<{ id: string; dto: OppdaterBane }, void>(
+    const OppdaterBaneForespørsel = useApiMutation<{ id: string; dto: OppdaterBaneForespørsel }, void>(
         "put",
         "/",
         {
@@ -72,6 +72,6 @@ export function useBaner(inkluderInaktive = true) {
         refetch: banerQuery.refetch,
 
         opprettBane,
-        oppdaterBane,
+        OppdaterBaneForespørsel,
     };
 }

@@ -10,11 +10,11 @@ import {
 import { cn } from "@/lib/utils";
 import { formatDatoKort } from "@/utils/datoUtils";
 
-import type { ArrangementForhandsvisningDto, ArrangementSlotDto } from "../../types";
+import type { ArrangementForhåndsvisningRespons, ArrangementSlotDto } from "../../types";
 
 type Props = {
     beskrivelse: string;
-    forhandsvisning: ArrangementForhandsvisningDto;
+    forhandsvisning: ArrangementForhåndsvisningRespons;
 };
 
 function slotKey(s: ArrangementSlotDto) {

@@ -1,17 +1,19 @@
-export type Bane = {
+// Response
+export type BaneRespons = {
   id: string;
   navn: string;
   beskrivelse: string;
   aktiv: boolean;
 };
 
-export type NyBane = {
+// Requests
+export type OpprettBaneForespørsel = {
   navn: string;
-  beskrivelse: string;
+  beskrivelse?: string;
 };
 
-export type OppdaterBane = {
+export type OppdaterBaneForespørsel = {
   navn: string;
-  beskrivelse: string;
+  beskrivelse?: string;
   aktiv: boolean;
 };

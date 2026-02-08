@@ -1,13 +1,13 @@
 import { useEffect, useRef, useState } from "react";
 import { keepPreviousData, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import type { BookingSlot } from "@/types";
+import type { BookingSlotRespons } from "@/types";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useSlug } from "@/hooks/useSlug";
 
 type SlotVars = { baneId: string; dato: string; startTid: string; sluttTid: string };
-type OptimisticContext = { previous?: BookingSlot[] };
+type OptimisticContext = { previous?: BookingSlotRespons[] };
 
 export function useBooking(dato: string, baneId: string) {
     const slug = useSlug();
@@ -19,7 +19,7 @@ export function useBooking(dato: string, baneId: string) {
     const enabled = Boolean(baneId) && Boolean(dato);
 
     // GET slots
-    const bookingerQuery = useApiQuery<BookingSlot[]>(
+    const bookingerQuery = useApiQuery<BookingSlotRespons[]>(
         queryKey,
         `/klubb/${slug}/bookinger?baneId=${baneId}&dato=${dato}`,
         {
@@ -33,7 +33,7 @@ export function useBooking(dato: string, baneId: string) {
         }
     );
 
-    // Query-feil toast (én gang per feil)
+    // Query-feil toast (ï¿½n gang per feil)
     const errorToastetRef = useRef(false);
     useEffect(() => {
         if (!bookingerQuery.error) {
@@ -51,7 +51,7 @@ export function useBooking(dato: string, baneId: string) {
         void queryClient.invalidateQueries({ queryKey: ["mineBookinger", slug] }); // prefix matcher begge varianter
     };
 
-    const erSammeSlot = (s: BookingSlot, v: { startTid: string; sluttTid: string }) =>
+    const erSammeSlot = (s: BookingSlotRespons, v: { startTid: string; sluttTid: string }) =>
         s.startTid === v.startTid && s.sluttTid === v.sluttTid;
 
     // POST booking (optimistic)
@@ -62,9 +62,9 @@ export function useBooking(dato: string, baneId: string) {
             onMutate: async (vars) => {
                 await queryClient.cancelQueries({ queryKey });
 
-                const previous = queryClient.getQueryData<BookingSlot[]>(queryKey);
+                const previous = queryClient.getQueryData<BookingSlotRespons[]>(queryKey);
 
-                queryClient.setQueryData<BookingSlot[]>(queryKey, (old = []) =>
+                queryClient.setQueryData<BookingSlotRespons[]>(queryKey, (old = []) =>
                     old.map((s) =>
                         erSammeSlot(s, vars)
                             ? {
@@ -102,9 +102,9 @@ export function useBooking(dato: string, baneId: string) {
             onMutate: async (vars) => {
                 await queryClient.cancelQueries({ queryKey });
 
-                const previous = queryClient.getQueryData<BookingSlot[]>(queryKey);
+                const previous = queryClient.getQueryData<BookingSlotRespons[]>(queryKey);
 
-                queryClient.setQueryData<BookingSlot[]>(queryKey, (old = []) =>
+                queryClient.setQueryData<BookingSlotRespons[]>(queryKey, (old = []) =>
                     old.map((s) =>
                         erSammeSlot(s, vars)
                             ? {
@@ -142,9 +142,9 @@ export function useBooking(dato: string, baneId: string) {
             onMutate: async (vars) => {
                 await queryClient.cancelQueries({ queryKey });
 
-                const previous = queryClient.getQueryData<BookingSlot[]>(queryKey);
+                const previous = queryClient.getQueryData<BookingSlotRespons[]>(queryKey);
 
-                queryClient.setQueryData<BookingSlot[]>(queryKey, (old = []) =>
+                queryClient.setQueryData<BookingSlotRespons[]>(queryKey, (old = []) =>
                     old.map((s) =>
                         erSammeSlot(s, vars)
                             ? {
@@ -182,7 +182,7 @@ export function useBooking(dato: string, baneId: string) {
         apenSlotTid,
         setApenSlotTid,
 
-        onBook: (slot: BookingSlot) =>
+        onBook: (slot: BookingSlotRespons) =>
             bookMutation.mutate({
                 baneId,
                 dato,
@@ -190,7 +190,7 @@ export function useBooking(dato: string, baneId: string) {
                 sluttTid: slot.sluttTid,
             }),
 
-        onCancel: (slot: BookingSlot) =>
+        onCancel: (slot: BookingSlotRespons) =>
             cancelMutation.mutate({
                 baneId,
                 dato,
@@ -198,7 +198,7 @@ export function useBooking(dato: string, baneId: string) {
                 sluttTid: slot.sluttTid,
             }),
 
-        onDelete: (slot: BookingSlot) =>
+        onDelete: (slot: BookingSlotRespons) =>
             deleteMutation.mutate({
                 baneId: slot.baneId ?? baneId,
                 dato: slot.dato ?? dato,

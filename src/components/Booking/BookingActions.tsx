@@ -1,13 +1,13 @@
 import { Button } from '@/components/ui/button.js';
 import { Checkbox } from '@/components/ui/checkbox.js';
 import { FaCalendarPlus, FaTimesCircle, FaTrashAlt } from 'react-icons/fa';
-import type { BookingSlot } from '../../types/index.js';
+import type { BookingSlotRespons } from '../../types/index.js';
 
 type Props = {
-    slot: BookingSlot;
-    onBook?: (slot: BookingSlot) => void;
-    onCancel?: (slot: BookingSlot) => void;
-    onDelete?: (slot: BookingSlot) => void;
+    slot: BookingSlotRespons;
+    onBook?: (slot: BookingSlotRespons) => void;
+    onCancel?: (slot: BookingSlotRespons) => void;
+    onDelete?: (slot: BookingSlotRespons) => void;
     time?: string;
     erBekreftet?: boolean;
     setErBekreftet?: (val: boolean) => void;

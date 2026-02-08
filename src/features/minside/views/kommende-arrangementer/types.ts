@@ -1,14 +1,14 @@
 import type { ArrangementKategori, DayOfWeek } from "@/types/Arrangement";
 
-export type KommendeArrangementDto = {
+export type KommendeArrangementRespons = {
   id: string;
   tittel: string;
   beskrivelse?: string;
   kategori: ArrangementKategori;
-  startDato: string; // yyyy-MM-dd
-  sluttDato: string; // yyyy-MM-dd
+  startDato: string;
+  sluttDato: string;
   baner: string[];
   ukedager: DayOfWeek[];
-  tidspunkter: string[]; // HH:mm
+  tidspunkter: string[];
   slotLengdeMinutter: number;
 };

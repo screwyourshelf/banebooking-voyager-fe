@@ -20,7 +20,7 @@ export default function IndexPage() {
 
     const { currentUser } = useAuth();
 
-    // Stabil dato-streng (endres kun når valgtDato endres)
+    // Stabil dato-streng (endres kun nï¿½r valgtDato endres)
     const valgtDatoStr = useMemo(
         () => (valgtDato ? format(valgtDato, "yyyy-MM-dd") : ""),
         [valgtDato]
@@ -43,12 +43,12 @@ export default function IndexPage() {
         }
     }, [baner, valgtBaneId]);
 
-    // Lukk slot-popup når bane/dato endres
+    // Lukk slot-popup nï¿½r bane/dato endres
     useEffect(() => {
         setApenSlotTid(null);
     }, [valgtDato, valgtBaneId, setApenSlotTid]);
 
-    // Lukk slot-popup når bruker logger ut
+    // Lukk slot-popup nï¿½r bruker logger ut
     useEffect(() => {
         if (!currentUser) {
             setApenSlotTid(null);
@@ -89,8 +89,8 @@ export default function IndexPage() {
 
             <TabsLazyMount
                 items={baner.map((bane) => ({
-                    value: bane.id,
-                    label: bane.navn,
+                    value: BaneRespons.id,
+                    label: BaneRespons.navn,
                     content: (
                         <BookingSlotList
                             slots={slots}

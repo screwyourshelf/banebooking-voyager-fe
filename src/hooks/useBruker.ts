@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
-import type { BrukerDto } from "@/types";
+import type { BrukerRespons } from "@/types";
 import { AKTIV_VILKAAR } from "@/features/policy/pages/vilkaar";
 import { useAuth } from "@/hooks/useAuth";
 import { useSlug } from "@/hooks/useSlug";
@@ -12,7 +12,7 @@ export function useBruker() {
     const { currentUser } = useAuth();
     const authKey = currentUser?.id ?? "anon";
 
-    const brukerQuery = useApiQuery<BrukerDto | null>(
+    const brukerQuery = useApiQuery<BrukerRespons | null>(
         ["bruker", slug, authKey],
         `/klubb/${slug}/bruker`,
         {

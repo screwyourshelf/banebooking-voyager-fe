@@ -2,7 +2,7 @@ import api from "@/api/api";
 import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
-import type { BrukerDto } from "@/types";
+import type { BrukerRespons } from "@/types";
 import { useSlug } from "@/hooks/useSlug";
 
 type OppdaterMegDto = {
@@ -12,7 +12,7 @@ type OppdaterMegDto = {
 export function useMeg() {
     const slug = useSlug();
 
-    const megQuery = useApiQuery<BrukerDto>(
+    const megQuery = useApiQuery<BrukerRespons>(
         ["meg", slug],
         `/klubb/${slug}/bruker/meg`,
         {
@@ -53,7 +53,7 @@ export function useMeg() {
 
             const blob = res.data as Blob;
 
-            // prøv å hente filnavn fra Content-Disposition (backend setter filename)
+            // prï¿½v ï¿½ hente filnavn fra Content-Disposition (backend setter filename)
             const disposition = res.headers?.["content-disposition"] as string | undefined;
             const match = disposition?.match(/filename\*=UTF-8''([^;]+)|filename="?([^"]+)"?/i);
             const fileNameFromHeader = decodeURIComponent(match?.[1] ?? match?.[2] ?? "");

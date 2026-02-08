@@ -1,16 +1,16 @@
 import { useState } from "react";
 import { BookingSlotItemHeader } from "./BookingSlotItemHeader";
 import { BookingSlotItemExpanded } from "./BookingSlotItemExpanded";
-import type { BookingSlot } from "../../types/index";
+import type { BookingSlotRespons } from "../../types/index";
 
 type Props = {
-    slot: BookingSlot;
+    slot: BookingSlotRespons;
     currentUser: { epost: string } | null;
     isOpen?: boolean;
     onToggle?: () => void;
-    onBook?: (slot: BookingSlot) => void;
-    onCancel?: (slot: BookingSlot) => void;
-    onDelete?: (slot: BookingSlot) => void;
+    onBook?: (slot: BookingSlotRespons) => void;
+    onCancel?: (slot: BookingSlotRespons) => void;
+    onDelete?: (slot: BookingSlotRespons) => void;
 
     // NYTT: brukes av Mine bookinger
     headerOverrideTitle?: React.ReactNode;

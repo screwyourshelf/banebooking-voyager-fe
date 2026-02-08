@@ -2,7 +2,7 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
-import type { BrukerDto } from "@/types";
+import type { BrukerRespons } from "@/types";
 import { useSlug } from "@/hooks/useSlug";
 
 type OppdaterBrukerPayload = {
@@ -18,7 +18,7 @@ export function useAdminBrukere() {
     const brukereKey = ["admin-brukere", slug] as const;
 
     // GET: hent alle brukere (admin)
-    const brukereQuery = useApiQuery<BrukerDto[]>(
+    const brukereQuery = useApiQuery<BrukerRespons[]>(
         brukereKey,
         `/klubb/${slug}/bruker/admin/bruker`,
         {

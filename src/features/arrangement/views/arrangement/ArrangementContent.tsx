@@ -19,7 +19,7 @@ import ForhandsvisningDialog from "./ForhandsvisningDialog";
 
 import type { ArrangementKategori } from "@/types";
 import type { UkedagKortNorsk } from "@/types/dato";
-import type { ArrangementForhandsvisningDto, BaneDto } from "../../types";
+import type { ArrangementForhåndsvisningRespons, BaneDto } from "../../types";
 
 type Props = {
     kategorier: readonly ArrangementKategori[];
@@ -42,7 +42,7 @@ type Props = {
     alleTidspunkter: boolean;
 
     dialogOpen: boolean;
-    forhandsvisning: ArrangementForhandsvisningDto;
+    forhandsvisning: ArrangementForhåndsvisningRespons;
     isLoadingForhandsvisning: boolean;
 
     onChangeKategori: (v: ArrangementKategori) => void;
