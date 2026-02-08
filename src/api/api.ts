@@ -64,7 +64,7 @@ api.interceptors.response.use(
     // ingen response => nettverk/CORS/timeout
     if (!error.response) {
       const msg =
-        (error.code === "ECONNABORTED" && "Foresp�rselen tok for lang tid") ||
+        (error.code === "ECONNABORTED" && "Forespørselen tok for lang tid") ||
         error.message ||
         "Nettverksfeil";
       return Promise.reject(new Error(msg));

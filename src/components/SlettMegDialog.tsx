@@ -39,7 +39,7 @@ export default function SlettMegDialog({
       setOpen(false);
       await signOut();
     } catch {
-      // Feil-toast h�ndteres i useMeg
+      // Feil-toast håndteres i useMeg
     }
   };
 

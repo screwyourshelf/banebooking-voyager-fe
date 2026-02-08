@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import LoaderSkeleton from "@/components/LoaderSkeleton";
-import { useMineBookinger } from "@/hooks/useMineBookinger";
-import { useBookingActions } from "@/hooks/useBookingActions";
+import { useMineBookinger } from "@/features/minside/hooks/useMineBookinger";
+import { useBookingActions } from "@/features/minside/hooks/useBookingActions";
 import type { BookingSlotRespons } from "@/types";
 import "animate.css";
 

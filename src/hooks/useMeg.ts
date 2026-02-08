@@ -45,7 +45,7 @@ export function useMeg() {
 
       const blob = res.data as Blob;
 
-      // pr�v � hente filnavn fra Content-Disposition (backend setter filename)
+      // præv å hente filnavn fra Content-Disposition (backend setter filename)
       const disposition = res.headers?.["content-disposition"] as string | undefined;
       const match = disposition?.match(/filename\*=UTF-8''([^;]+)|filename="?([^"]+)"?/i);
       const fileNameFromHeader = decodeURIComponent(match?.[1] ?? match?.[2] ?? "");

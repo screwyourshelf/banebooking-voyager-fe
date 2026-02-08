@@ -31,7 +31,7 @@ export default function Tabs({
 
   const resolvedDefault = defaultValue ?? first.value;
 
-  // Hvis value finnes men er ugyldig: la Radix h�ndtere default (ikke l�s til ugyldig)
+  // Hvis value finnes men er ugyldig: la Radix håndtere default (ikke lås til ugyldig)
   const resolvedValue = value && items.some((i) => i.value === value) ? value : undefined;
 
   return (

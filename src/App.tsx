@@ -8,13 +8,13 @@ import AppShell from "@/app/AppShell";
 import AppFrameSkeleton from "@/components/AppFrameSkeleton";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
-const IndexPage = lazy(() => import("./pages/IndexPage"));
+const BookingPage = lazy(() => import("./features/booking/pages/BookingPage"));
 const MinSide = lazy(() => import("./features/minside/pages/MinSidePage"));
 const KlubbPage = lazy(() => import("./features/klubb/pages/KlubbPage"));
 const BanerPage = lazy(() => import("./features/baner/pages/BanerPage"));
 const ArrangementPage = lazy(() => import("./features/arrangement/pages/ArrangementPage"));
-const BrukerePage = lazy(() => import("./pages/admin/BrukerePage"));
-const AuthCallbackPage = lazy(() => import("./pages/AuthCallbackPage"));
+const BrukerePage = lazy(() => import("./features/brukere/pages/BrukerePage"));
+const AuthCallbackPage = lazy(() => import("./app/AuthCallbackPage"));
 const VilkaarPage = lazy(() => import("./features/policy/pages/VilkaarPage"));
 
 const Protected = ({ children }: { children: ReactNode }) => (
@@ -37,7 +37,7 @@ export default function App() {
               }
             >
               <Route path="vilkaar" element={<VilkaarPage />} />
-              <Route index element={<IndexPage />} />
+              <Route index element={<BookingPage />} />
               <Route
                 path="minside"
                 element={

@@ -20,7 +20,7 @@ export default function TabsLazyMount({
   onValueChange,
   className = "",
 }: SimpleTabsProps) {
-  // Finn valgt tab, eller fallback til f�rste hvis value er ugyldig
+  // Finn valgt tab, eller fallback til første hvis value er ugyldig
   const activeItem = items.find((item) => item.value === value) ?? items[0];
 
   return (

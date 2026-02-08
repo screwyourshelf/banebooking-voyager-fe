@@ -16,7 +16,7 @@ export function useMineBookinger(inkluderHistoriske = false) {
     }
   );
 
-  // Toast feil (�n gang per feil)
+  // Toast feil (én gang per feil)
   const errorToastetRef = useRef(false);
   useEffect(() => {
     if (!query.error) {

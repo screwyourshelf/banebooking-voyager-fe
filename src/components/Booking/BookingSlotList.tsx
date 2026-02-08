@@ -28,7 +28,7 @@ export function BookingSlotList({
   if (slots.length === 0) {
     return (
       <div className="text-muted text-sm italic py-4 text-center">
-        Ingen bookinger eller slots � vise.
+        Ingen bookinger eller slots å vise.
       </div>
     );
   }

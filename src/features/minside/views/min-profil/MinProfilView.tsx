@@ -42,7 +42,7 @@ export default function MinProfilView() {
   const canSubmit = ny.length > 0 && ny !== gammel && (mode === "epost" || !valideringsFeil);
 
   async function lagreVisningsnavn() {
-    // Sett error kun n�r bruker trykker lagre
+    // Sett error kun når bruker trykker lagre
     setError(valideringsFeil);
     if (valideringsFeil) return;
 
@@ -69,7 +69,7 @@ export default function MinProfilView() {
       isSaving={isPending}
       onSubmit={() => void lagreVisningsnavn()}
       deleteAction={<SlettMegDialog slettMeg={slettMeg} />}
-      isDeleteDisabled={isPending} // valgfritt: l�s sletting mens vi lagrer navn
+      isDeleteDisabled={isPending} // valgfritt: lås sletting mens vi lagrer navn
     />
   );
 }

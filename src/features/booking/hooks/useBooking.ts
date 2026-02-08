@@ -33,7 +33,7 @@ export function useBooking(dato: string, baneId: string) {
     }
   );
 
-  // Query-feil toast (�n gang per feil)
+  // Query-feil toast (én gang per feil)
   const errorToastetRef = useRef(false);
   useEffect(() => {
     if (!bookingerQuery.error) {
@@ -48,7 +48,7 @@ export function useBooking(dato: string, baneId: string) {
 
   const invalidateAll = () => {
     void queryClient.invalidateQueries({ queryKey });
-    void queryClient.invalidateQueries({ queryKey: ["mineBookinger", slug] }); // prefix matcher begge varianter
+    void queryClient.invalidateQueries({ queryKey: ["mineBookinger", slug] });
   };
 
   const erSammeSlot = (s: BookingSlotRespons, v: { startTid: string; sluttTid: string }) =>

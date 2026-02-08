@@ -5,7 +5,7 @@ import { fileURLToPath, URL } from "node:url";
 
 export default defineConfig(({ mode }) => ({
   // GH Pages prod ligger under /banebooking-voyager-fe/
-  // Dev/preview lokalt skal v�re /
+  // Dev/preview lokalt skal være /
   base: mode === "production" ? "/banebooking-voyager-fe/" : "/",
 
   plugins: [react(), tailwindcss()],
@@ -29,7 +29,7 @@ export default defineConfig(({ mode }) => ({
   },
 
   server: {
-    // Vite dev server: �pne riktig startside (uten /banebooking-voyager-fe/)
+    // Vite dev server: åpne riktig startside (uten /banebooking-voyager-fe/)
     open: "/aas-tennisklubb",
     proxy: {
       "/api": {
@@ -41,7 +41,7 @@ export default defineConfig(({ mode }) => ({
   },
 
   preview: {
-    // vite preview kj�rer ogs� "lokalt", s� start p� /
+    // vite preview kjører også "lokalt", så start på /
     open: "/aas-tennisklubb",
     proxy: {
       "/api": {

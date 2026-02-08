@@ -19,7 +19,7 @@ const {
   }
 });
 
-// Viktig i Vite dev/HMR: unng� multiple subscriptions
+// Viktig i Vite dev/HMR: unngå multiple subscriptions
 if (import.meta.hot) {
   import.meta.hot.dispose(() => {
     subscription.unsubscribe();

@@ -16,7 +16,7 @@ export function useKlubb() {
     staleTime: 1000 * 60 * 5, // 5 min
   });
 
-  // Toast p� query-feil
+  // Toast på query-feil
   const toastetFeilRef = useRef(false);
   useEffect(() => {
     if (!klubbQuery.error) {
