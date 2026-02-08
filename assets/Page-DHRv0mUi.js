@@ -1,1 +1,0 @@
-import{j as e}from"./shadcn-CGWS6Fka.js";import{f as n}from"./index-CCQsaDNR.js";const o={md:"max-w-screen-md",lg:"max-w-screen-lg",full:"max-w-none"};function x({children:m,className:s,width:a="md"}){return e.jsx("div",{className:n(o[a],"mx-auto px-1 py-2",s),children:m})}export{x as P};
