@@ -104,11 +104,16 @@ export function BookingSlotListAccordion({
                   <Badge variant={statusVariant} className="text-xs">
                     {statusTekst}
                   </Badge>
-                  {currentUser && (erMinBooking || (harArrangement && slot.tillaterPaamelding && slot.erPaameldt)) && (
-                    <span className="text-green-600" title={erMinBooking ? "Din booking" : "Du er påmeldt"}>
-                      <UserCheck className="size-4" />
-                    </span>
-                  )}
+                  {currentUser &&
+                    (erMinBooking ||
+                      (harArrangement && slot.tillaterPaamelding && slot.erPaameldt)) && (
+                      <span
+                        className="text-green-600"
+                        title={erMinBooking ? "Din booking" : "Du er påmeldt"}
+                      >
+                        <UserCheck className="size-4" />
+                      </span>
+                    )}
                 </div>
                 {harArrangement && slot.arrangementBeskrivelse && (
                   <span className="text-xs text-muted-foreground line-clamp-1">
@@ -141,7 +146,11 @@ export function BookingSlotListAccordion({
                   )}
 
                   {harArrangement && slot.tillaterPaamelding && slot.arrangementId && (
-                    <AccordionDetailRow icon={Users} label="Påmeldte" iconClassName={currentUser && slot.erPaameldt ? "text-green-600" : undefined}>
+                    <AccordionDetailRow
+                      icon={Users}
+                      label="Påmeldte"
+                      iconClassName={currentUser && slot.erPaameldt ? "text-green-600" : undefined}
+                    >
                       {currentUser ? (
                         <PaameldteDialog
                           arrangementId={slot.arrangementId}

@@ -136,7 +136,11 @@ export default function KommendeArrangementerContent({
                         </AccordionDetailRow>
                       )}
                       {arr.tillaterPaamelding && (
-                        <AccordionDetailRow icon={Users} label="Påmeldte" iconClassName={arr.erPaameldt ? "text-green-600" : undefined}>
+                        <AccordionDetailRow
+                          icon={Users}
+                          label="Påmeldte"
+                          iconClassName={arr.erPaameldt ? "text-green-600" : undefined}
+                        >
                           <PaameldteDialog arrangementId={arr.id} tittel={arr.tittel}>
                             <button
                               type="button"
