@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { LoaderSkeleton } from "@/components/loading";
+import { FormSkeleton } from "@/components/loading";
 import { useKlubb } from "@/hooks/useKlubb";
 
 import KlubbInnstillingerContent from "./KlubbInnstillingerContent";
@@ -106,7 +106,7 @@ export default function KlubbInnstillingerView() {
 
   const canSubmit = isDirty && isValid;
 
-  if (isLoading || !klubb) return <LoaderSkeleton />;
+  if (isLoading || !klubb) return <FormSkeleton />;
 
   const onChange = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((f) => ({ ...f, [key]: value }));

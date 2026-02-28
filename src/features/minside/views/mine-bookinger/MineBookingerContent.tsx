@@ -87,84 +87,84 @@ export default function MineBookingerContent({
             collapsible
             className={`space-y-2 mt-4 ${isPending ? "pointer-events-none opacity-60" : ""}`}
           >
-          {synligeBookinger.map((b) => {
-            const key = buildBookingKey(b);
-            const tid = `${b.startTid.slice(0, 5)} – ${b.sluttTid.slice(0, 5)}`;
-            const kanAvbestille = b.kanAvbestille && !b.erPassert;
-            const dagerIgjen = b.erPassert ? null : dagerIgjenFra(b.dato);
+            {synligeBookinger.map((b) => {
+              const key = buildBookingKey(b);
+              const tid = `${b.startTid.slice(0, 5)} – ${b.sluttTid.slice(0, 5)}`;
+              const kanAvbestille = b.kanAvbestille && !b.erPassert;
+              const dagerIgjen = b.erPassert ? null : dagerIgjenFra(b.dato);
 
-            const [startH, startM] = b.startTid.split(":").map(Number);
-            const [sluttH, sluttM] = b.sluttTid.split(":").map(Number);
-            const varighet = sluttH * 60 + sluttM - (startH * 60 + startM);
+              const [startH, startM] = b.startTid.split(":").map(Number);
+              const [sluttH, sluttM] = b.sluttTid.split(":").map(Number);
+              const varighet = sluttH * 60 + sluttM - (startH * 60 + startM);
 
-            return (
-              <AccordionItem
-                key={key}
-                value={key}
-                className={`rounded-md border bg-background px-4 last:border-b shadow-sm ${b.erPassert ? "opacity-50" : ""}`}
-              >
-                <AccordionTrigger className="hover:no-underline">
-                  <div className="flex flex-col items-start gap-1.5">
-                    <div className="flex items-center gap-2">
-                      <span className="font-medium">{b.baneNavn}</span>
-                      {b.erPassert ? (
-                        <Badge variant="outline" className="text-xs">
-                          Gjennomført
-                        </Badge>
-                      ) : (
-                        <Badge variant="secondary" className="text-xs">
-                          {dagerIgjen} {dagerIgjen === 1 ? "dag" : "dager"}
-                        </Badge>
-                      )}
+              return (
+                <AccordionItem
+                  key={key}
+                  value={key}
+                  className={`rounded-md border bg-background px-4 last:border-b shadow-sm ${b.erPassert ? "opacity-50" : ""}`}
+                >
+                  <AccordionTrigger className="hover:no-underline">
+                    <div className="flex flex-col items-start gap-1.5">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{b.baneNavn}</span>
+                        {b.erPassert ? (
+                          <Badge variant="outline" className="text-xs">
+                            Gjennomført
+                          </Badge>
+                        ) : (
+                          <Badge variant="secondary" className="text-xs">
+                            {dagerIgjen} {dagerIgjen === 1 ? "dag" : "dager"}
+                          </Badge>
+                        )}
+                      </div>
+                      <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                        <span>{formatDatoKort(b.dato)}</span>
+                        <span>·</span>
+                        <span>{tid}</span>
+                        <WeatherInfo
+                          værSymbol={b.værSymbol}
+                          temperatur={b.temperatur}
+                          vind={b.vind}
+                        />
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2 text-xs text-muted-foreground">
-                      <span>{formatDatoKort(b.dato)}</span>
-                      <span>·</span>
-                      <span>{tid}</span>
-                      <WeatherInfo
-                        værSymbol={b.værSymbol}
-                        temperatur={b.temperatur}
-                        vind={b.vind}
-                      />
-                    </div>
-                  </div>
-                </AccordionTrigger>
+                  </AccordionTrigger>
 
-                <AccordionContent>
-                  <div className="space-y-4">
-                    <AccordionDetailGrid>
-                      <AccordionDetailRow icon={Timer} label="Varighet">
-                        {varighet} min
-                      </AccordionDetailRow>
-
-                      {b.booketAv && (
-                        <AccordionDetailRow icon={User} label="Booket av">
-                          {b.booketAv}
+                  <AccordionContent>
+                    <div className="space-y-4">
+                      <AccordionDetailGrid>
+                        <AccordionDetailRow icon={Timer} label="Varighet">
+                          {varighet} min
                         </AccordionDetailRow>
-                      )}
-                    </AccordionDetailGrid>
 
-                    {kanAvbestille && (
-                      <AccordionActions>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onAvbestill(b);
-                          }}
-                          className="flex items-center gap-2 text-sm"
-                        >
-                          <FaTimesCircle />
-                          Avbestill
-                        </Button>
-                      </AccordionActions>
-                    )}
-                  </div>
-                </AccordionContent>
-              </AccordionItem>
-            );
-          })}
+                        {b.booketAv && (
+                          <AccordionDetailRow icon={User} label="Booket av">
+                            {b.booketAv}
+                          </AccordionDetailRow>
+                        )}
+                      </AccordionDetailGrid>
+
+                      {kanAvbestille && (
+                        <AccordionActions>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onAvbestill(b);
+                            }}
+                            className="flex items-center gap-2 text-sm"
+                          >
+                            <FaTimesCircle />
+                            Avbestill
+                          </Button>
+                        </AccordionActions>
+                      )}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              );
+            })}
           </Accordion>
 
           {harFlere && (

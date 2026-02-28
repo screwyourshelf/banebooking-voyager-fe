@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList, Row, InfoRow } from "@/components/rows";
-import { LoaderSkeleton } from "@/components/loading";
+import { FormSkeleton } from "@/components/loading";
 
 import { formatDatoKort } from "@/utils/datoUtils";
 import { useMeg } from "@/hooks/useMeg";
@@ -17,7 +17,7 @@ export default function PersondataView() {
 
   const [lasterNed, setLasterNed] = useState(false);
 
-  if (laster || !bruker) return <LoaderSkeleton />;
+  if (laster || !bruker) return <FormSkeleton />;
 
   const vilkarStatus = !bruker.vilkårAkseptertDato
     ? "Ikke registrert"

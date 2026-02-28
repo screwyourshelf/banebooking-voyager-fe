@@ -118,85 +118,85 @@ export default function BrukereListeContent({
             <p className="text-sm text-muted-foreground italic">Ingen brukere funnet.</p>
           ) : (
             <>
-            <Accordion type="single" collapsible className="space-y-1">
-              {synligeBrukere.map((b) => {
-                const slettet = erSlettetEpost(b.epost);
-                const rolle = (b.roller?.[0] ?? "Medlem") as RolleType;
-                const kanRedigere = b.id !== currentBrukerId && !slettet;
+              <Accordion type="single" collapsible className="space-y-1">
+                {synligeBrukere.map((b) => {
+                  const slettet = erSlettetEpost(b.epost);
+                  const rolle = (b.roller?.[0] ?? "Medlem") as RolleType;
+                  const kanRedigere = b.id !== currentBrukerId && !slettet;
 
-                return (
-                  <AccordionItem
-                    key={b.id}
-                    value={b.id}
-                    className={`rounded-md border bg-background px-4 last:border-b shadow-sm ${slettet ? "opacity-60" : ""}`}
-                  >
-                    <AccordionTrigger className="hover:no-underline">
-                      <div className="flex flex-col items-start gap-1.5">
-                        <div className="flex items-center gap-2">
-                          <span className="font-medium">{b.epost ?? "Ukjent bruker"}</span>
-                          {slettet && (
-                            <Badge variant="outline" className="text-xs">
-                              Slettet
-                            </Badge>
+                  return (
+                    <AccordionItem
+                      key={b.id}
+                      value={b.id}
+                      className={`rounded-md border bg-background px-4 last:border-b shadow-sm ${slettet ? "opacity-60" : ""}`}
+                    >
+                      <AccordionTrigger className="hover:no-underline">
+                        <div className="flex flex-col items-start gap-1.5">
+                          <div className="flex items-center gap-2">
+                            <span className="font-medium">{b.epost ?? "Ukjent bruker"}</span>
+                            {slettet && (
+                              <Badge variant="outline" className="text-xs">
+                                Slettet
+                              </Badge>
+                            )}
+                          </div>
+                          {b.visningsnavn && (
+                            <span className="text-xs text-muted-foreground">{b.visningsnavn}</span>
                           )}
                         </div>
-                        {b.visningsnavn && (
-                          <span className="text-xs text-muted-foreground">{b.visningsnavn}</span>
-                        )}
-                      </div>
-                    </AccordionTrigger>
+                      </AccordionTrigger>
 
-                    <AccordionContent>
-                      <div className="space-y-4">
-                        <AccordionDetailGrid>
-                          <AccordionDetailRow icon={Mail} label="E-post">
-                            {b.epost ?? "Ukjent"}
-                          </AccordionDetailRow>
+                      <AccordionContent>
+                        <div className="space-y-4">
+                          <AccordionDetailGrid>
+                            <AccordionDetailRow icon={Mail} label="E-post">
+                              {b.epost ?? "Ukjent"}
+                            </AccordionDetailRow>
 
-                          <AccordionDetailRow icon={User} label="Visningsnavn">
-                            {b.visningsnavn || (
-                              <span className="text-muted-foreground italic">Ikke satt</span>
-                            )}
-                          </AccordionDetailRow>
+                            <AccordionDetailRow icon={User} label="Visningsnavn">
+                              {b.visningsnavn || (
+                                <span className="text-muted-foreground italic">Ikke satt</span>
+                              )}
+                            </AccordionDetailRow>
 
-                          <AccordionDetailRow icon={Shield} label="Rolle" colSpan={2}>
-                            {rolle}
-                          </AccordionDetailRow>
-                        </AccordionDetailGrid>
+                            <AccordionDetailRow icon={Shield} label="Rolle" colSpan={2}>
+                              {rolle}
+                            </AccordionDetailRow>
+                          </AccordionDetailGrid>
 
-                        {kanRedigere && (
-                          <AccordionActions>
-                            <Button
-                              type="button"
-                              size="sm"
-                              variant="outline"
-                              onClick={(e) => {
-                                e.stopPropagation();
-                                onRedigerBruker(b);
-                              }}
-                            >
-                              Rediger
-                            </Button>
-                          </AccordionActions>
-                        )}
-                      </div>
-                    </AccordionContent>
-                  </AccordionItem>
-                );
-              })}
-            </Accordion>
+                          {kanRedigere && (
+                            <AccordionActions>
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="outline"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  onRedigerBruker(b);
+                                }}
+                              >
+                                Rediger
+                              </Button>
+                            </AccordionActions>
+                          )}
+                        </div>
+                      </AccordionContent>
+                    </AccordionItem>
+                  );
+                })}
+              </Accordion>
 
-            {harFlere && (
-              <div className="flex justify-center mt-4">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setSynligAntall((prev) => prev + PAGE_SIZE)}
-                >
-                  Vis flere ({filtrerteBrukere.length - synligAntall} gjenstår)
-                </Button>
-              </div>
-            )}
+              {harFlere && (
+                <div className="flex justify-center mt-4">
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setSynligAntall((prev) => prev + PAGE_SIZE)}
+                  >
+                    Vis flere ({filtrerteBrukere.length - synligAntall} gjenstår)
+                  </Button>
+                </div>
+              )}
             </>
           )}
         </div>

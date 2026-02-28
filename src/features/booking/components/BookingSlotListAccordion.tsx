@@ -10,7 +10,7 @@ import WeatherInfo from "@/components/WeatherInfo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import LoaderSkeleton from "@/components/loading/LoaderSkeleton";
+import SlotListSkeleton from "@/components/loading/SlotListSkeleton";
 import { User, Calendar, Timer, Users } from "lucide-react";
 import { FaCalendarPlus, FaTimesCircle, FaTrashAlt } from "react-icons/fa";
 import PaameldteDialog from "@/features/minside/views/kommende-arrangementer/PaameldteDialog";
@@ -39,7 +39,7 @@ export function BookingSlotListAccordion({
 }: Props) {
   const [bekreftetSlotKey, setBekreftetSlotKey] = useState<string | null>(null);
 
-  if (isLoading) return <LoaderSkeleton />;
+  if (isLoading) return <SlotListSkeleton />;
 
   if (slots.length === 0) {
     return (

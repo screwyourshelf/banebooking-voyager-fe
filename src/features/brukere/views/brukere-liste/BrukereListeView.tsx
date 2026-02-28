@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { LoaderSkeleton } from "@/components/loading";
+import { ListSkeleton } from "@/components/loading";
 
 import { useBruker } from "@/hooks/useBruker";
 import { useAdminBrukere } from "@/features/brukere/hooks/useAdminBrukere";
@@ -71,7 +71,7 @@ export default function BrukereListeView() {
     setRolleFilter((prev) => (prev.includes(r) ? prev.filter((x) => x !== r) : [...prev, r]));
   }
 
-  if (lasterBruker) return <LoaderSkeleton />;
+  if (lasterBruker) return <ListSkeleton />;
 
   if (!erKlubbAdmin) {
     return (

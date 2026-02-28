@@ -1,7 +1,7 @@
 import { useEffect, useState, useMemo } from "react";
 import { format } from "date-fns";
 
-import { LoaderSkeleton } from "@/components/loading";
+import { ListSkeleton } from "@/components/loading";
 import { useBaner } from "@/hooks/useBaner";
 import { useBooking } from "@/features/booking/hooks/useBooking";
 import { useSlotArrangementPaamelding } from "@/features/booking/hooks/useSlotArrangementPaamelding";
@@ -47,7 +47,7 @@ export default function BookingView() {
   }, [valgtDato]);
 
   if (loadingBaner || !valgtBaneId) {
-    return <LoaderSkeleton />;
+    return <ListSkeleton />;
   }
 
   return (

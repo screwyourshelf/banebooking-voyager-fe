@@ -1,4 +1,4 @@
-import { LoaderSkeleton } from "@/components/loading";
+import { ListSkeleton } from "@/components/loading";
 import { useSearchParams } from "react-router-dom";
 import { useKommendeArrangementer } from "./useKommendeArrangementer";
 import { useArrangementPaamelding } from "./useArrangementPaamelding";
@@ -12,7 +12,7 @@ export default function KommendeArrangementerView() {
   const { onMeldPaa, onMeldAv } = useArrangementPaamelding();
   const { onAvlys } = useAvlysArrangement();
 
-  if (isLoading) return <LoaderSkeleton />;
+  if (isLoading) return <ListSkeleton />;
 
   const defaultArrangementId = searchParams.get("arrangement") ?? undefined;
 

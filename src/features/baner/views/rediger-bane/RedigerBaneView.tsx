@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useBaner } from "@/hooks/useBaner";
 
-import { LoaderSkeleton } from "@/components/loading";
+import { FormSkeleton } from "@/components/loading";
 import RedigerBaneContent from "./RedigerBaneContent";
 import { loadValgtBaneId, saveValgtBaneId } from "./storage";
 import type { BaneRespons } from "@/types";
@@ -155,7 +155,7 @@ export default function RedigerBaneView() {
     }
   }
 
-  if (isLoading) return <LoaderSkeleton />;
+  if (isLoading) return <FormSkeleton />;
 
   return (
     <RedigerBaneContent

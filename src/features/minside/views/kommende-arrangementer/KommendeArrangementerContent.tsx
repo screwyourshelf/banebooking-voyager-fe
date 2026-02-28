@@ -66,7 +66,12 @@ export default function KommendeArrangementerContent({
       {arrangementer.length === 0 ? (
         <p className="text-sm text-muted-foreground italic">Ingen arrangementer registrert.</p>
       ) : (
-        <Accordion type="single" collapsible className="space-y-1" defaultValue={defaultArrangementId}>
+        <Accordion
+          type="single"
+          collapsible
+          className="space-y-1"
+          defaultValue={defaultArrangementId}
+        >
           {arrangementer.map((arr) => {
             const dagerIgjen = dagerIgjenFra(arr.startDato);
             const beskrivelse = arr.beskrivelse?.trim() ?? "";
@@ -76,7 +81,11 @@ export default function KommendeArrangementerContent({
             const harTidspunkter = (arr.tidspunkter?.length ?? 0) > 0;
 
             return (
-              <AccordionItem key={arr.id} value={arr.id} className="rounded-md border bg-background px-4 last:border-b shadow-sm">
+              <AccordionItem
+                key={arr.id}
+                value={arr.id}
+                className="rounded-md border bg-background px-4 last:border-b shadow-sm"
+              >
                 <AccordionTrigger className="hover:no-underline">
                   <div className="flex flex-col items-start gap-1.5">
                     <div className="flex items-center gap-2">

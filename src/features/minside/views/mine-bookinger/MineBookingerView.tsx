@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { LoaderSkeleton } from "@/components/loading";
+import { ListSkeleton } from "@/components/loading";
 import { useMineBookinger } from "@/features/minside/hooks/useMineBookinger";
 import { useBookingActions } from "@/features/minside/hooks/useBookingActions";
 import type { BookingSlotRespons } from "@/types";
@@ -29,7 +29,7 @@ export default function MineBookingerTab() {
     });
   }
 
-  if (isLoading) return <LoaderSkeleton />;
+  if (isLoading) return <ListSkeleton />;
 
   return (
     <MineBookingerContent

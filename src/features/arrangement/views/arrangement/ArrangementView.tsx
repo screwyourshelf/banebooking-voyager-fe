@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 
-import { LoaderSkeleton } from "@/components/loading";
+import { FormSkeleton } from "@/components/loading";
 import { useArrangement } from "../../hooks/useArrangement";
 
 import ArrangementContent from "./ArrangementContent";
@@ -108,7 +108,7 @@ export default function ArrangementView() {
     setDialogOpen(false);
   };
 
-  if (isLoading) return <LoaderSkeleton />;
+  if (isLoading) return <FormSkeleton />;
 
   return (
     <ArrangementContent

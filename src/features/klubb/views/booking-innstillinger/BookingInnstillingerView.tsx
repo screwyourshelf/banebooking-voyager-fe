@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { LoaderSkeleton } from "@/components/loading";
+import { FormSkeleton } from "@/components/loading";
 import { useKlubb } from "@/hooks/useKlubb";
 
 import BookingInnstillingerContent from "./BookingInnstillingerContent";
@@ -73,7 +73,7 @@ export default function BookingInnstillingerView() {
     );
   }, [klubb, booking]);
 
-  if (isLoading || !klubb) return <LoaderSkeleton />;
+  if (isLoading || !klubb) return <FormSkeleton />;
 
   const submit = () => {
     OppdaterKlubbForespørsel.mutate({

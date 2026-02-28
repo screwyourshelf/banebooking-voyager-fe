@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { LoaderSkeleton } from "@/components/loading";
+import { FormSkeleton } from "@/components/loading";
 import { SlettMegDialog } from "@/features/minside/components";
 import { useMeg } from "@/hooks/useMeg";
 
@@ -30,7 +30,7 @@ export default function MinProfilView() {
     setError(null);
   }, [bruker]);
 
-  if (lasterMeg || !bruker) return <LoaderSkeleton />;
+  if (lasterMeg || !bruker) return <FormSkeleton />;
 
   const valgtVisningsnavn = mode === "epost" ? bruker.epost : visningsnavn.trim();
 
