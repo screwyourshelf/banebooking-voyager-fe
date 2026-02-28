@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList, Row } from "@/components/rows";
 import {
@@ -52,6 +53,16 @@ export default function BrukereListeContent({
   currentBrukerId,
   onRedigerBruker,
 }: Props) {
+  const PAGE_SIZE = 20;
+  const [synligAntall, setSynligAntall] = useState(PAGE_SIZE);
+
+  useEffect(() => {
+    setSynligAntall(PAGE_SIZE);
+  }, [query, visSlettede, rolleFilter]);
+
+  const synligeBrukere = filtrerteBrukere.slice(0, synligAntall);
+  const harFlere = synligAntall < filtrerteBrukere.length;
+
   return (
     <div className="space-y-4">
       <PageSection
@@ -71,7 +82,6 @@ export default function BrukereListeContent({
                       size="sm"
                       variant={aktiv ? "default" : "outline"}
                       onClick={() => onToggleRolle(r)}
-                      className="h-8 px-3"
                     >
                       {r}
                     </Button>
@@ -107,8 +117,9 @@ export default function BrukereListeContent({
           ) : filtrerteBrukere.length === 0 ? (
             <p className="text-sm text-muted-foreground italic">Ingen brukere funnet.</p>
           ) : (
-            <Accordion type="single" collapsible className="rounded-md border bg-background">
-              {filtrerteBrukere.map((b) => {
+            <>
+            <Accordion type="single" collapsible className="space-y-1">
+              {synligeBrukere.map((b) => {
                 const slettet = erSlettetEpost(b.epost);
                 const rolle = (b.roller?.[0] ?? "Medlem") as RolleType;
                 const kanRedigere = b.id !== currentBrukerId && !slettet;
@@ -117,7 +128,7 @@ export default function BrukereListeContent({
                   <AccordionItem
                     key={b.id}
                     value={b.id}
-                    className={`px-4 ${slettet ? "opacity-60" : ""}`}
+                    className={`rounded-md border bg-background px-4 last:border-b shadow-sm ${slettet ? "opacity-60" : ""}`}
                   >
                     <AccordionTrigger className="hover:no-underline">
                       <div className="flex flex-col items-start gap-1.5">
@@ -174,6 +185,19 @@ export default function BrukereListeContent({
                 );
               })}
             </Accordion>
+
+            {harFlere && (
+              <div className="flex justify-center mt-4">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setSynligAntall((prev) => prev + PAGE_SIZE)}
+                >
+                  Vis flere ({filtrerteBrukere.length - synligAntall} gjenstår)
+                </Button>
+              </div>
+            )}
+            </>
           )}
         </div>
       </PageSection>

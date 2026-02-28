@@ -96,13 +96,6 @@ export default function MinProfilContent({
             ) : null}
           </RowList>
         </RowPanel>
-
-        {/* Lagre inne i seksjonen */}
-        <FormActions align="left" spaced={false} className="w-full mt-4">
-          <FormSubmitButton isLoading={isSaving} disabled={!canSubmit} fullWidth>
-            Lagre endringer
-          </FormSubmitButton>
-        </FormActions>
       </PageSection>
 
       <PageSection
@@ -127,6 +120,17 @@ export default function MinProfilContent({
           </RowList>
         </RowPanel>
       </PageSection>
+
+      <FormActions variant="sticky" align="left" spaced={false} className="w-full">
+        <FormSubmitButton
+          isLoading={isSaving}
+          disabled={!canSubmit}
+          fullWidth
+          loadingText="Lagrer..."
+        >
+          Lagre endringer
+        </FormSubmitButton>
+      </FormActions>
     </FormLayout>
   );
 }

@@ -12,6 +12,7 @@ export function useAvlysArrangement() {
 
   const invalidate = () => {
     void queryClient.invalidateQueries({ queryKey: ["kommende-arrangementer", slug] });
+    void queryClient.invalidateQueries({ queryKey: ["paameldte", slug] });
   };
 
   const avlysMutation = useApiMutation<AvlysVars, SlettArrangementRespons>(

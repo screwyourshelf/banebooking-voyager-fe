@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { BellRing, XIcon } from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { Button } from "@/components/ui/button";
 import { useFeed } from "@/hooks/useFeed";
 import { useSlug } from "@/hooks/useSlug";
 import { config } from "@/config";
@@ -75,13 +76,15 @@ export default function FeedAlerts() {
                 </a>
               </AlertDescription>
             </div>
-            <button
-              className="absolute top-2 right-2 text-pink-400 hover:text-pink-700 transition-colors"
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute top-2 right-2 size-6 text-pink-400 hover:text-pink-700"
               onClick={() => dismissItem(itemId)}
               aria-label="Lukk melding"
             >
               <XIcon className="w-4 h-4" />
-            </button>
+            </Button>
           </Alert>
         );
       })}

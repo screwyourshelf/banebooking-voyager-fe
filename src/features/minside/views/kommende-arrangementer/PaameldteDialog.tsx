@@ -31,9 +31,7 @@ export default function PaameldteDialog({ arrangementId, tittel, children }: Pro
           </DialogDescription>
         </DialogHeader>
 
-        {isLoading && (
-          <p className="text-muted-foreground italic">Henter påmeldte…</p>
-        )}
+        {isLoading && <p className="text-muted-foreground italic">Henter påmeldte…</p>}
 
         {data && data.paameldte.length === 0 && (
           <p className="text-muted-foreground italic">Ingen påmeldte ennå.</p>

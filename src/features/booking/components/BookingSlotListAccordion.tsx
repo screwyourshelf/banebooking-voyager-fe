@@ -50,7 +50,7 @@ export function BookingSlotListAccordion({
   }
 
   return (
-    <Accordion type="single" collapsible className="rounded-md border bg-background">
+    <Accordion type="single" collapsible className="space-y-1">
       {slots.map((slot) => {
         const slotKey = `${slot.dato}-${slot.startTid}-${slot.baneId}`;
         const tid = `${slot.startTid.slice(0, 5)} – ${slot.sluttTid.slice(0, 5)}`;
@@ -60,7 +60,9 @@ export function BookingSlotListAccordion({
         const erMinBooking = slot.erEier === true;
         const erBekreftet = bekreftetSlotKey === slotKey;
 
-        const harHandlinger = slot.kanBookes || slot.kanAvbestille || slot.kanSlette;
+        const kanMeldePåAv = harArrangement && !!slot.tillaterPaamelding;
+        const harHandlinger =
+          slot.kanBookes || slot.kanAvbestille || slot.kanSlette || kanMeldePåAv;
         const kanUtføreHandling = !!currentUser && harHandlinger && !slot.erPassert;
 
         const harVaer =
@@ -92,7 +94,7 @@ export function BookingSlotListAccordion({
           <AccordionItem
             key={slotKey}
             value={slotKey}
-            className={`px-4 ${slot.erPassert ? "opacity-50" : ""}`}
+            className={`rounded-md border bg-background px-4 last:border-b shadow-sm ${slot.erPassert ? "opacity-50" : ""}`}
           >
             <AccordionTrigger className="hover:no-underline">
               <div className="flex flex-col items-start gap-1.5">
@@ -176,7 +178,7 @@ export function BookingSlotListAccordion({
                 </AccordionDetailGrid>
 
                 {/* Actions */}
-                {(kanUtføreHandling || (harArrangement && slot.tillaterPaamelding && !slot.erPassert)) && (
+                {kanUtføreHandling && (
                   <div className="space-y-2 pt-2 border-t">
                     {slot.kanBookes && (
                       <>
@@ -246,8 +248,8 @@ export function BookingSlotListAccordion({
                         </Button>
                       )}
 
-                      {harArrangement && slot.tillaterPaamelding && !slot.erPassert && (
-                        slot.erPaameldt ? (
+                      {kanMeldePåAv &&
+                        (slot.erPaameldt ? (
                           <Button
                             variant="outline"
                             size="sm"
@@ -273,8 +275,7 @@ export function BookingSlotListAccordion({
                             <FaCalendarPlus />
                             Meld meg på
                           </Button>
-                        )
-                      )}
+                        ))}
                     </div>
                   </div>
                 )}

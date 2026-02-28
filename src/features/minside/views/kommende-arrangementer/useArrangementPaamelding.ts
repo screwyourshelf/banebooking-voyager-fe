@@ -12,6 +12,7 @@ export function useArrangementPaamelding() {
 
   const invalidate = () => {
     void queryClient.invalidateQueries({ queryKey: ["kommende-arrangementer", slug] });
+    void queryClient.invalidateQueries({ queryKey: ["paameldte", slug] });
   };
 
   const meldPaaMutation = useApiMutation<PaameldingVars, ArrangementPaameldingRespons>(

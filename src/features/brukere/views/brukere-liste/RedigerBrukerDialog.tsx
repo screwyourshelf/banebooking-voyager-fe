@@ -76,7 +76,7 @@ export default function RedigerBrukerDialog({
         </div>
 
         <DialogFooter>
-          <Button variant="ghost" onClick={onClose} disabled={isSaving}>
+          <Button variant="outline" onClick={onClose} disabled={isSaving}>
             Avbryt
           </Button>
           <Button onClick={onSave} disabled={isSaving}>

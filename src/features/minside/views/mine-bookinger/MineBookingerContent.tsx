@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList } from "@/components/rows";
 import SwitchRow from "@/components/rows/SwitchRow";
@@ -12,11 +13,22 @@ import WeatherInfo from "@/components/WeatherInfo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDatoKort } from "@/utils/datoUtils";
-import { Calendar, Clock, MapPin } from "lucide-react";
+import { Timer, User } from "lucide-react";
 import { FaTimesCircle } from "react-icons/fa";
 import type { BookingSlotRespons } from "@/types";
 
 import { buildBookingKey } from "./bookingSort";
+
+function dagerIgjenFra(datoIso: string) {
+  const start = new Date(datoIso);
+  const iDag = new Date();
+
+  const startMidnatt = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+  const iDagMidnatt = new Date(iDag.getFullYear(), iDag.getMonth(), iDag.getDate());
+
+  const diffMs = startMidnatt.getTime() - iDagMidnatt.getTime();
+  return Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+}
 
 type Props = {
   visHistoriske: boolean;
@@ -35,7 +47,16 @@ export default function MineBookingerContent({
   isPending,
   onAvbestill,
 }: Props) {
+  const PAGE_SIZE = 10;
+  const [synligAntall, setSynligAntall] = useState(PAGE_SIZE);
+
+  useEffect(() => {
+    setSynligAntall(PAGE_SIZE);
+  }, [visHistoriske]);
+
   const hasBookinger = bookinger.length > 0;
+  const synligeBookinger = bookinger.slice(0, synligAntall);
+  const harFlere = synligAntall < bookinger.length;
 
   const tomTekst = visHistoriske
     ? "Du har ingen registrerte bookinger."
@@ -50,9 +71,9 @@ export default function MineBookingerContent({
         <RowList>
           <SwitchRow
             title="Vis også tidligere bookinger"
-            description="Inkluder bookinger som allerede er gjennomført."
             checked={visHistoriske}
             onCheckedChange={onToggleVisHistoriske}
+            density="compact"
           />
         </RowList>
       </RowPanel>
@@ -60,34 +81,46 @@ export default function MineBookingerContent({
       {!hasBookinger ? (
         <p className="text-sm text-muted-foreground italic mt-4">{tomTekst}</p>
       ) : (
-        <Accordion
-          type="single"
-          collapsible
-          className={`rounded-md border bg-background mt-4 ${isPending ? "pointer-events-none opacity-60" : ""}`}
-        >
-          {bookinger.map((b) => {
+        <>
+          <Accordion
+            type="single"
+            collapsible
+            className={`space-y-2 mt-4 ${isPending ? "pointer-events-none opacity-60" : ""}`}
+          >
+          {synligeBookinger.map((b) => {
             const key = buildBookingKey(b);
             const tid = `${b.startTid.slice(0, 5)} – ${b.sluttTid.slice(0, 5)}`;
             const kanAvbestille = b.kanAvbestille && !b.erPassert;
+            const dagerIgjen = b.erPassert ? null : dagerIgjenFra(b.dato);
+
+            const [startH, startM] = b.startTid.split(":").map(Number);
+            const [sluttH, sluttM] = b.sluttTid.split(":").map(Number);
+            const varighet = sluttH * 60 + sluttM - (startH * 60 + startM);
 
             return (
               <AccordionItem
                 key={key}
                 value={key}
-                className={`px-4 ${b.erPassert ? "opacity-50" : ""}`}
+                className={`rounded-md border bg-background px-4 last:border-b shadow-sm ${b.erPassert ? "opacity-50" : ""}`}
               >
                 <AccordionTrigger className="hover:no-underline">
                   <div className="flex flex-col items-start gap-1.5">
                     <div className="flex items-center gap-2">
                       <span className="font-medium">{b.baneNavn}</span>
-                      {b.erPassert && (
+                      {b.erPassert ? (
                         <Badge variant="outline" className="text-xs">
                           Gjennomført
+                        </Badge>
+                      ) : (
+                        <Badge variant="secondary" className="text-xs">
+                          {dagerIgjen} {dagerIgjen === 1 ? "dag" : "dager"}
                         </Badge>
                       )}
                     </div>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <span>{formatDatoKort(b.dato)}</span>
+                      <span>·</span>
+                      <span>{tid}</span>
                       <WeatherInfo
                         værSymbol={b.værSymbol}
                         temperatur={b.temperatur}
@@ -100,17 +133,15 @@ export default function MineBookingerContent({
                 <AccordionContent>
                   <div className="space-y-4">
                     <AccordionDetailGrid>
-                      <AccordionDetailRow icon={MapPin} label="Bane">
-                        {b.baneNavn}
+                      <AccordionDetailRow icon={Timer} label="Varighet">
+                        {varighet} min
                       </AccordionDetailRow>
 
-                      <AccordionDetailRow icon={Calendar} label="Dato">
-                        {formatDatoKort(b.dato)}
-                      </AccordionDetailRow>
-
-                      <AccordionDetailRow icon={Clock} label="Tidspunkt" colSpan={2}>
-                        {tid}
-                      </AccordionDetailRow>
+                      {b.booketAv && (
+                        <AccordionDetailRow icon={User} label="Booket av">
+                          {b.booketAv}
+                        </AccordionDetailRow>
+                      )}
                     </AccordionDetailGrid>
 
                     {kanAvbestille && (
@@ -134,7 +165,20 @@ export default function MineBookingerContent({
               </AccordionItem>
             );
           })}
-        </Accordion>
+          </Accordion>
+
+          {harFlere && (
+            <div className="flex justify-center mt-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setSynligAntall((prev) => prev + PAGE_SIZE)}
+              >
+                Vis flere ({bookinger.length - synligAntall} gjenstår)
+              </Button>
+            </div>
+          )}
+        </>
       )}
     </PageSection>
   );
