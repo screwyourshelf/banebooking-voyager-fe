@@ -8,8 +8,8 @@ export default function AppShell() {
   return (
     <div className="w-full min-h-screen flex flex-col">
       <div className="w-full max-w-screen-sm mx-auto px-4 py-4 flex-1 flex">
-        <div className="bg-white rounded-md shadow-sm overflow-hidden w-full flex flex-col">
-          <header className="bg-gradient-to-b from-gray-200 to-white border-b border-gray-300 shadow-sm">
+        <div className="bg-card rounded-md shadow-sm overflow-hidden w-full flex flex-col">
+          <header className="bg-gradient-to-b from-muted to-card border-b border-border shadow-sm">
             <Navbar />
           </header>
 

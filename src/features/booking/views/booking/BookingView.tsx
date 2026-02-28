@@ -23,8 +23,6 @@ export default function BookingView() {
 
   const {
     slots,
-    apenSlotTid,
-    setApenSlotTid,
     onBook,
     onCancel,
     onDelete,
@@ -37,18 +35,6 @@ export default function BookingView() {
       setValgtBaneId(baner[0].id);
     }
   }, [baner, valgtBaneId]);
-
-  // Lukk slot-popup når bane/dato endres
-  useEffect(() => {
-    setApenSlotTid(null);
-  }, [valgtDato, valgtBaneId, setApenSlotTid]);
-
-  // Lukk slot-popup når bruker logger ut
-  useEffect(() => {
-    if (!currentUser) {
-      setApenSlotTid(null);
-    }
-  }, [currentUser, setApenSlotTid]);
 
   // Husk valgtDato i localStorage
   useEffect(() => {
@@ -71,8 +57,6 @@ export default function BookingView() {
       slots={slots}
       isLoading={loadingBooking}
       currentUser={currentUser}
-      apenSlotTid={apenSlotTid}
-      setApenSlotTid={setApenSlotTid}
       onBook={onBook}
       onCancel={onCancel}
       onDelete={onDelete}

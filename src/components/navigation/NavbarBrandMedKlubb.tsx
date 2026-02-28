@@ -15,7 +15,7 @@ export default function NavbarBrandMedKlubb({ klubbnavn }: Props) {
   return (
     <Link
       to={`/${slug}`}
-      className="flex items-center gap-2 text-base font-semibold text-gray-800 hover:text-black"
+      className="flex items-center gap-2 text-base font-semibold text-foreground hover:text-foreground/80"
     >
       <img
         src={logoSrc}

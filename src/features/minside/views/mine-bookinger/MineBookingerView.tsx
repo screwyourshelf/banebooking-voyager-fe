@@ -10,7 +10,6 @@ import { sortBookingerNyesteFoerst } from "./bookingSort";
 
 export default function MineBookingerTab() {
   const [visHistoriske, setVisHistoriske] = useState(false);
-  const [openKey, setOpenKey] = useState<string | null>(null);
 
   const { data: bookinger = [], isLoading } = useMineBookinger(visHistoriske);
   const { avbestillAsync, isPending } = useBookingActions();
@@ -28,8 +27,6 @@ export default function MineBookingerTab() {
       startTid: slot.startTid,
       sluttTid: slot.sluttTid,
     });
-
-    setOpenKey(null);
   }
 
   if (isLoading) return <LoaderSkeleton />;
@@ -37,14 +34,9 @@ export default function MineBookingerTab() {
   return (
     <MineBookingerContent
       visHistoriske={visHistoriske}
-      onToggleVisHistoriske={(v) => {
-        setVisHistoriske(v);
-        setOpenKey(null);
-      }}
+      onToggleVisHistoriske={setVisHistoriske}
       bookinger={visteBookinger}
       isPending={isPending}
-      openKey={openKey}
-      onToggleOpenKey={setOpenKey}
       onAvbestill={handleAvbestill}
     />
   );

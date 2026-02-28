@@ -90,7 +90,6 @@ export default function BrukereListeView() {
         onVisSlettedeChange={setVisSlettede}
         rolleFilter={rolleFilter}
         onToggleRolle={toggleRolle}
-        onNullstillRolleFilter={() => setRolleFilter([])}
         filtrerteBrukere={filtrerteBrukere}
         lasterListe={lasterListe}
         currentBrukerId={bruker?.id}

@@ -81,7 +81,7 @@ export function BookingSlotItemHeader({
               <div className="min-w-0">
                 <div className="font-medium truncate">{slot.arrangementTittel}</div>
                 {beskrivelse ? (
-                  <div className="text-xs text-gray-600 truncate">{beskrivelse}</div>
+                  <div className="text-xs text-muted-foreground truncate">{beskrivelse}</div>
                 ) : null}
               </div>
             ) : (
@@ -97,10 +97,7 @@ export function BookingSlotItemHeader({
           <div className="p-1 shrink-0">
             <FaChevronDown
               size={12}
-              style={{
-                transform: isOpen ? "rotate(180deg)" : "rotate(0deg)",
-                transition: "transform 0.2s",
-              }}
+              className={`transition-transform duration-200 ${isOpen ? "rotate-180" : "rotate-0"}`}
               aria-hidden="true"
             />
           </div>

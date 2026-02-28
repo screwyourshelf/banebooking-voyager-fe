@@ -1,7 +1,7 @@
 import { HelpCircle } from "lucide-react";
 
 import DatoVelger from "@/components/DatoVelger";
-import { BookingSlotList, ReglementDialog } from "@/features/booking/components";
+import { BookingSlotListAccordion, ReglementDialog } from "@/features/booking/components";
 import { TabsLazyMount } from "@/components/navigation";
 import { Button } from "@/components/ui/button";
 
@@ -20,8 +20,6 @@ type Props = {
   isLoading: boolean;
 
   currentUser: User | null;
-  apenSlotTid: string | null;
-  setApenSlotTid: (tid: string | null) => void;
 
   onBook: (slot: BookingSlotRespons) => void;
   onCancel: (slot: BookingSlotRespons) => void;
@@ -37,8 +35,6 @@ export default function BookingContent({
   slots,
   isLoading,
   currentUser,
-  apenSlotTid,
-  setApenSlotTid,
   onBook,
   onCancel,
   onDelete,
@@ -64,16 +60,26 @@ export default function BookingContent({
           value: bane.id,
           label: bane.navn,
           content: (
-            <BookingSlotList
+            // ACCORDION-VERSJON (ny)
+            <BookingSlotListAccordion
               slots={slots}
               currentUser={currentUser ? { epost: currentUser.email ?? "" } : null}
-              apenSlotTid={apenSlotTid}
-              setApenSlotTid={setApenSlotTid}
               onBook={onBook}
               onCancel={onCancel}
               onDelete={onDelete}
               isLoading={isLoading}
             />
+            // ORIGINAL VERSJON (kommenter inn denne og kommenter ut Accordion for å bytte tilbake):
+            // <BookingSlotList
+            //   slots={slots}
+            //   currentUser={currentUser ? { epost: currentUser.email ?? "" } : null}
+            //   apenSlotTid={apenSlotTid}
+            //   setApenSlotTid={setApenSlotTid}
+            //   onBook={onBook}
+            //   onCancel={onCancel}
+            //   onDelete={onDelete}
+            //   isLoading={isLoading}
+            // />
           ),
         }))}
         value={valgtBaneId}

@@ -18,11 +18,11 @@ export default function Row({
   className,
   density = "default",
 }: Props) {
-  const py = density === "compact" ? "py-2" : "py-3";
+  const py = density === "compact" ? "py-1" : "py-2";
   const hasHeader = !!title || !!description || !!right;
 
   return (
-    <div className={cn("px-3", py, className)}>
+    <div className={cn("px-2", py, className)}>
       {hasHeader ? (
         <div className="flex items-start justify-between gap-2">
           <div className="min-w-0">

@@ -19,10 +19,10 @@ export default function PageSection({
   actions,
   children,
   className,
-  density = "default",
+  density = "compact",
   tone = "soft",
 }: Props) {
-  const gap = density === "compact" ? "space-y-2" : "space-y-3";
+  const gap = density === "compact" ? "space-y-1" : "space-y-2";
   const showHeader = !!title || !!description || !!actions;
 
   return (
@@ -31,12 +31,12 @@ export default function PageSection({
         "rounded-xl",
         tone === "soft" && "bg-gradient-to-b from-muted/60 via-muted/25 to-transparent",
         // litt "kort-padding" uten border/shadow
-        tone === "soft" && (density === "compact" ? "py-3" : "py-4"),
+        tone === "soft" && (density === "compact" ? "py-1" : "py-2"),
         className
       )}
     >
       {showHeader ? (
-        <div className="px-4">
+        <div className="px-2">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               {title ? (
@@ -55,7 +55,7 @@ export default function PageSection({
         </div>
       ) : null}
 
-      <div className={cn("px-4", showHeader ? "mt-3" : "", gap)}>{children}</div>
+      <div className={cn("px-2", showHeader ? "mt-3" : "", gap)}>{children}</div>
     </section>
   );
 }

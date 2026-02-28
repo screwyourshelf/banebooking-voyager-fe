@@ -5,23 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Banebooking</title>
 
-    <!-- Preload bakgrunn (base-aware) -->
-    <link rel="preload" as="image" href="%BASE_URL%backgrounds/bg.webp" />
-
     <!-- Bakgrunn før React (hindrer hvit flash) -->
     <style>
       html,
       body {
         height: 100%;
         margin: 0;
-      }
-
-      body {
-        background-image: url("%BASE_URL%backgrounds/bg.webp");
-        background-size: cover;
-        background-position: center;
-        background-attachment: fixed;
-        background-color: #0b3a4a;
       }
     </style>
 

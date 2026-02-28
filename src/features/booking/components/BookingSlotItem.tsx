@@ -43,13 +43,13 @@ export default function BookingSlotItem({
   const erMinBooking = slot.erEier === true;
 
   const className = [
-    "border rounded shadow-sm p-2 mb-2",
+    "rounded shadow-sm p-2 mb-2",
     "transition-colors duration-300 ease-in-out",
-    slot.erPassert ? "bg-gray-100 text-gray-400" : "",
+    slot.erPassert ? "bg-muted text-muted-foreground border border-border" : "",
     !slot.erPassert && harArrangement
-      ? "bg-gradient-to-r from-blue-0 via-blue-50 to-blue-200 border-blue-200"
+      ? "bg-card text-foreground border-l-4 border-l-primary border-y border-r border-border"
       : "",
-    !slot.erPassert && !harArrangement ? "bg-white text-gray-900" : "",
+    !slot.erPassert && !harArrangement ? "bg-card text-card-foreground border border-border" : "",
     currentUser && erMinBooking && !harArrangement
       ? "animate__animated animate__headShake animate__slow"
       : "",
@@ -64,11 +64,7 @@ export default function BookingSlotItem({
 
   return (
     <div
-      className={className}
-      style={{
-        cursor: erInteraktiv ? "pointer" : "default",
-        opacity: slot.erPassert ? 0.5 : 1,
-      }}
+      className={`${className} ${erInteraktiv ? "cursor-pointer" : "cursor-default"} ${slot.erPassert ? "opacity-50" : "opacity-100"}`}
       onClick={(e) => {
         const target = e.target as HTMLElement;
         if (target.closest("button, input, label")) return;

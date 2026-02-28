@@ -12,7 +12,7 @@ export default function RowList({
   children,
   className,
   divided = true,
-  density = "default",
+  density = "compact",
 }: Props) {
   return (
     <div

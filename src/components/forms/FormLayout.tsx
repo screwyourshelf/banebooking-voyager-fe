@@ -29,8 +29,8 @@ export default function FormLayout({
   onKeyDown,
   ...props
 }: Props) {
-  const gap = density === "compact" ? "space-y-2" : "space-y-4";
-  const px = inset === "sm" ? "px-2" : inset === "md" ? "px-4" : "";
+  const gap = density === "compact" ? "space-y-1" : "space-y-2";
+  const px = inset === "sm" ? "px-1" : inset === "md" ? "px-2" : "";
 
   return (
     <form

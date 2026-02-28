@@ -124,16 +124,16 @@ export default function Navbar() {
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" className="h-8 px-2 flex items-center gap-2 sm:text-xs sm:px-2">
-            <FaBars className="text-gray-600 sm:hidden" />
+            <FaBars className="text-muted-foreground sm:hidden" />
             <span className="hidden sm:inline-flex items-center gap-2">
               {currentUser ? (
                 <>
-                  <FaUser className="text-gray-500" />
+                  <FaUser className="text-muted-foreground" />
                   {currentUser.email}
                 </>
               ) : (
                 <>
-                  <FaSignInAlt className="text-gray-500" />
+                  <FaSignInAlt className="text-muted-foreground" />
                   Logg inn
                 </>
               )}
@@ -205,7 +205,7 @@ export default function Navbar() {
             </>
           ) : (
             <>
-              <p className="text-xs text-gray-500 px-2 pb-1">
+              <p className="text-xs text-muted-foreground px-2 pb-1">
                 Ved å logge inn samtykker du til våre{" "}
                 <Link to={`/${slug}/vilkaar`} className="underline">
                   vilkår
