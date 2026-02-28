@@ -11,7 +11,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import SlotListSkeleton from "@/components/loading/SlotListSkeleton";
-import { User, Calendar, Timer, Users } from "lucide-react";
+import { User, Calendar, Timer, Users, UserCheck } from "lucide-react";
 import { FaCalendarPlus, FaTimesCircle, FaTrashAlt } from "react-icons/fa";
 import PaameldteDialog from "@/features/minside/views/kommende-arrangementer/PaameldteDialog";
 import type { BookingSlotRespons } from "@/types";
@@ -104,6 +104,11 @@ export function BookingSlotListAccordion({
                   <Badge variant={statusVariant} className="text-xs">
                     {statusTekst}
                   </Badge>
+                  {currentUser && (erMinBooking || (harArrangement && slot.tillaterPaamelding && slot.erPaameldt)) && (
+                    <span className="text-green-600" title={erMinBooking ? "Din booking" : "Du er påmeldt"}>
+                      <UserCheck className="size-4" />
+                    </span>
+                  )}
                 </div>
                 {harArrangement && slot.arrangementBeskrivelse && (
                   <span className="text-xs text-muted-foreground line-clamp-1">
@@ -136,18 +141,22 @@ export function BookingSlotListAccordion({
                   )}
 
                   {harArrangement && slot.tillaterPaamelding && slot.arrangementId && (
-                    <AccordionDetailRow icon={Users} label="Påmeldte">
-                      <PaameldteDialog
-                        arrangementId={slot.arrangementId}
-                        tittel={slot.arrangementTittel ?? "Arrangement"}
-                      >
-                        <button
-                          type="button"
-                          className="underline underline-offset-2 hover:text-foreground transition-colors"
+                    <AccordionDetailRow icon={Users} label="Påmeldte" iconClassName={currentUser && slot.erPaameldt ? "text-green-600" : undefined}>
+                      {currentUser ? (
+                        <PaameldteDialog
+                          arrangementId={slot.arrangementId}
+                          tittel={slot.arrangementTittel ?? "Arrangement"}
                         >
-                          {slot.antallPaameldte ?? 0} påmeldt
-                        </button>
-                      </PaameldteDialog>
+                          <button
+                            type="button"
+                            className="underline underline-offset-2 hover:text-foreground transition-colors"
+                          >
+                            {slot.antallPaameldte ?? 0} påmeldt
+                          </button>
+                        </PaameldteDialog>
+                      ) : (
+                        <span className="text-sm">{slot.antallPaameldte ?? 0} påmeldt</span>
+                      )}
                     </AccordionDetailRow>
                   )}
 

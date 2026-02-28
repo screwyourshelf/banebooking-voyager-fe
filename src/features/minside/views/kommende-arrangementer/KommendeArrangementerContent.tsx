@@ -9,7 +9,7 @@ import { AccordionDetailGrid, AccordionDetailRow } from "@/components/accordion"
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDatoKort, formatDayOfWeeksLangNorsk } from "@/utils/datoUtils";
-import { Calendar, Clock, Link, MapPin, Users } from "lucide-react";
+import { Calendar, Clock, Link, MapPin, Users, UserCheck } from "lucide-react";
 import { FaCalendarPlus, FaTimesCircle, FaBan } from "react-icons/fa";
 import { SlettArrangementDialog } from "@/features/arrangement/components";
 import PaameldteDialog from "./PaameldteDialog";
@@ -93,6 +93,11 @@ export default function KommendeArrangementerContent({
                       <Badge variant="secondary" className="text-xs">
                         {dagerIgjen} {dagerIgjen === 1 ? "dag" : "dager"}
                       </Badge>
+                      {arr.tillaterPaamelding && arr.erPaameldt && (
+                        <span className="text-green-600" title="Du er påmeldt">
+                          <UserCheck className="size-4" />
+                        </span>
+                      )}
                     </div>
                     <span className="text-xs text-muted-foreground">{datoTekst(arr)}</span>
                   </div>
@@ -131,7 +136,7 @@ export default function KommendeArrangementerContent({
                         </AccordionDetailRow>
                       )}
                       {arr.tillaterPaamelding && (
-                        <AccordionDetailRow icon={Users} label="Påmeldte">
+                        <AccordionDetailRow icon={Users} label="Påmeldte" iconClassName={arr.erPaameldt ? "text-green-600" : undefined}>
                           <PaameldteDialog arrangementId={arr.id} tittel={arr.tittel}>
                             <button
                               type="button"

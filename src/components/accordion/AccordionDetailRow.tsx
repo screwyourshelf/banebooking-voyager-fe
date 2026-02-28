@@ -7,6 +7,7 @@ type Props = {
   children: React.ReactNode;
   colSpan?: 2;
   className?: string;
+  iconClassName?: string;
 };
 
 export default function AccordionDetailRow({
@@ -15,10 +16,11 @@ export default function AccordionDetailRow({
   children,
   colSpan,
   className,
+  iconClassName,
 }: Props) {
   return (
     <div className={cn("flex items-start gap-2", colSpan === 2 && "sm:col-span-2", className)}>
-      <Icon className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
+      <Icon className={cn("h-4 w-4 text-muted-foreground mt-0.5 shrink-0", iconClassName)} />
       <div>
         <div className="text-xs font-medium text-muted-foreground">{label}</div>
         <div className="text-sm">{children}</div>
