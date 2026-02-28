@@ -6,6 +6,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { AccordionDetailGrid, AccordionDetailRow, AccordionActions } from "@/components/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
@@ -136,42 +137,24 @@ export default function BrukereListeContent({
 
                     <AccordionContent>
                       <div className="space-y-4">
-                        <div className="grid gap-3 sm:grid-cols-2">
-                          <div className="flex items-start gap-2">
-                            <Mail className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                            <div>
-                              <div className="text-xs font-medium text-muted-foreground">
-                                E-post
-                              </div>
-                              <div className="text-sm">{b.epost ?? "Ukjent"}</div>
-                            </div>
-                          </div>
+                        <AccordionDetailGrid>
+                          <AccordionDetailRow icon={Mail} label="E-post">
+                            {b.epost ?? "Ukjent"}
+                          </AccordionDetailRow>
 
-                          <div className="flex items-start gap-2">
-                            <User className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                            <div>
-                              <div className="text-xs font-medium text-muted-foreground">
-                                Visningsnavn
-                              </div>
-                              <div className="text-sm">
-                                {b.visningsnavn || (
-                                  <span className="text-muted-foreground italic">Ikke satt</span>
-                                )}
-                              </div>
-                            </div>
-                          </div>
+                          <AccordionDetailRow icon={User} label="Visningsnavn">
+                            {b.visningsnavn || (
+                              <span className="text-muted-foreground italic">Ikke satt</span>
+                            )}
+                          </AccordionDetailRow>
 
-                          <div className="flex items-start gap-2 sm:col-span-2">
-                            <Shield className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                            <div>
-                              <div className="text-xs font-medium text-muted-foreground">Rolle</div>
-                              <div className="text-sm">{rolle}</div>
-                            </div>
-                          </div>
-                        </div>
+                          <AccordionDetailRow icon={Shield} label="Rolle" colSpan={2}>
+                            {rolle}
+                          </AccordionDetailRow>
+                        </AccordionDetailGrid>
 
                         {kanRedigere && (
-                          <div className="flex justify-end pt-2 border-t">
+                          <AccordionActions>
                             <Button
                               type="button"
                               size="sm"
@@ -183,7 +166,7 @@ export default function BrukereListeContent({
                             >
                               Rediger
                             </Button>
-                          </div>
+                          </AccordionActions>
                         )}
                       </div>
                     </AccordionContent>

@@ -18,6 +18,7 @@ type ByggDtoArgs = {
   valgteTidspunkter: string[];
   kategori: ArrangementKategori;
   beskrivelse: string;
+  tillaterPaamelding: boolean;
   onWarning: (msg: string) => void;
 };
 
@@ -52,5 +53,6 @@ export function byggDto(args: ByggDtoArgs): OpprettArrangementForespørsel | nul
     ukedager: gyldigeUkedager,
     tidspunkter: valgteTidspunkter,
     baneIder: valgteBaner,
+    tillaterPaamelding: args.tillaterPaamelding,
   };
 }

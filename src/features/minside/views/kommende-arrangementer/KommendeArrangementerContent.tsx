@@ -5,10 +5,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { AccordionDetailGrid, AccordionDetailRow } from "@/components/accordion";
 import { Badge } from "@/components/ui/badge";
 import { formatDatoKort, formatDayOfWeeksLangNorsk } from "@/utils/datoUtils";
 import { Calendar, Clock, MapPin } from "lucide-react";
 import type { KommendeArrangementRespons } from "@/types";
+import PaameldingKnapp from "./PaameldingKnapp";
 
 type Props = {
   arrangementer: KommendeArrangementRespons[];
@@ -71,49 +73,39 @@ export default function KommendeArrangementerContent({ arrangementer }: Props) {
                       </p>
                     )}
 
-                    <div className="grid gap-3 sm:grid-cols-2">
+                    <AccordionDetailGrid>
                       {harBaner && (
-                        <div className="flex items-start gap-2">
-                          <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                          <div>
-                            <div className="text-xs font-medium text-muted-foreground">Baner</div>
-                            <div className="text-sm">{arr.baner?.join(", ")}</div>
-                          </div>
-                        </div>
+                        <AccordionDetailRow icon={MapPin} label="Baner">
+                          {arr.baner?.join(", ")}
+                        </AccordionDetailRow>
                       )}
 
                       {harUkedager && (
-                        <div className="flex items-start gap-2">
-                          <Calendar className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                          <div>
-                            <div className="text-xs font-medium text-muted-foreground">
-                              Ukedager
-                            </div>
-                            <div className="text-sm">{formatDayOfWeeksLangNorsk(arr.ukedager)}</div>
-                          </div>
-                        </div>
+                        <AccordionDetailRow icon={Calendar} label="Ukedager">
+                          {formatDayOfWeeksLangNorsk(arr.ukedager)}
+                        </AccordionDetailRow>
                       )}
 
                       {harTidspunkter && (
-                        <div className="flex items-start gap-2 sm:col-span-2">
-                          <Clock className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                          <div>
-                            <div className="text-xs font-medium text-muted-foreground">
-                              Tidspunkter
-                            </div>
-                            <div className="text-sm">
-                              {arr.tidspunkter?.join(", ")}
-                              {arr.slotLengdeMinutter && (
-                                <span className="text-muted-foreground">
-                                  {" "}
-                                  ({arr.slotLengdeMinutter} min)
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </div>
+                        <AccordionDetailRow icon={Clock} label="Tidspunkter" colSpan={2}>
+                          {arr.tidspunkter?.join(", ")}
+                          {arr.slotLengdeMinutter && (
+                            <span className="text-muted-foreground">
+                              {" "}
+                              ({arr.slotLengdeMinutter} min)
+                            </span>
+                          )}
+                        </AccordionDetailRow>
                       )}
-                    </div>
+                    </AccordionDetailGrid>
+
+                    {arr.tillaterPaamelding && (
+                      <PaameldingKnapp
+                        arrangementId={arr.id}
+                        erPaameldt={arr.erPaameldt}
+                        antallPaameldte={arr.antallPaameldte}
+                      />
+                    )}
                   </div>
                 </AccordionContent>
               </AccordionItem>

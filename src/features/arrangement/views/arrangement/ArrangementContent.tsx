@@ -47,6 +47,8 @@ type Props = {
 
   onChangeKategori: (v: ArrangementKategori) => void;
   onChangeBeskrivelse: (v: string) => void;
+  tillaterPaamelding: boolean;
+  onChangeTillaterPaamelding: (v: boolean) => void;
   onChangeDatoFra: (d: Date) => void;
   onChangeDatoTil: (d: Date) => void;
 
@@ -100,6 +102,8 @@ export default function ArrangementContent(props: Props) {
 
     onChangeKategori,
     onChangeBeskrivelse,
+    tillaterPaamelding,
+    onChangeTillaterPaamelding,
     onChangeDatoFra,
     onChangeDatoTil,
 
@@ -158,6 +162,13 @@ export default function ArrangementContent(props: Props) {
                   />
                 </Field>
               </Row>
+
+              <SwitchRow
+                title="Tillat påmelding"
+                description="Lar medlemmer melde seg på arrangementet."
+                checked={tillaterPaamelding}
+                onCheckedChange={onChangeTillaterPaamelding}
+              />
             </RowList>
           </RowPanel>
         </PageSection>

@@ -7,6 +7,8 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { AccordionDetailGrid, AccordionDetailRow, AccordionActions } from "@/components/accordion";
+import WeatherInfo from "@/components/WeatherInfo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDatoKort } from "@/utils/datoUtils";
@@ -68,9 +70,6 @@ export default function MineBookingerContent({
             const tid = `${b.startTid.slice(0, 5)} – ${b.sluttTid.slice(0, 5)}`;
             const kanAvbestille = b.kanAvbestille && !b.erPassert;
 
-            const harVaer =
-              !!b.værSymbol || typeof b.temperatur === "number" || typeof b.vind === "number";
-
             return (
               <AccordionItem
                 key={key}
@@ -89,56 +88,33 @@ export default function MineBookingerContent({
                     </div>
                     <div className="flex items-center gap-2 text-xs text-muted-foreground">
                       <span>{formatDatoKort(b.dato)}</span>
-                      {harVaer && (
-                        <span className="flex items-center gap-1">
-                          {b.værSymbol && (
-                            <img
-                              src={`${import.meta.env.BASE_URL}weather-symbols/svg/${b.værSymbol}.svg`}
-                              alt={b.værSymbol}
-                              width={16}
-                              height={16}
-                              className="select-none"
-                              draggable={false}
-                            />
-                          )}
-                          {typeof b.temperatur === "number" && <span>{b.temperatur}°</span>}
-                          {typeof b.vind === "number" && <span>{b.vind} m/s</span>}
-                        </span>
-                      )}
+                      <WeatherInfo
+                        værSymbol={b.værSymbol}
+                        temperatur={b.temperatur}
+                        vind={b.vind}
+                      />
                     </div>
                   </div>
                 </AccordionTrigger>
 
                 <AccordionContent>
                   <div className="space-y-4">
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      <div className="flex items-start gap-2">
-                        <MapPin className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                        <div>
-                          <div className="text-xs font-medium text-muted-foreground">Bane</div>
-                          <div className="text-sm">{b.baneNavn}</div>
-                        </div>
-                      </div>
+                    <AccordionDetailGrid>
+                      <AccordionDetailRow icon={MapPin} label="Bane">
+                        {b.baneNavn}
+                      </AccordionDetailRow>
 
-                      <div className="flex items-start gap-2">
-                        <Calendar className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                        <div>
-                          <div className="text-xs font-medium text-muted-foreground">Dato</div>
-                          <div className="text-sm">{formatDatoKort(b.dato)}</div>
-                        </div>
-                      </div>
+                      <AccordionDetailRow icon={Calendar} label="Dato">
+                        {formatDatoKort(b.dato)}
+                      </AccordionDetailRow>
 
-                      <div className="flex items-start gap-2 sm:col-span-2">
-                        <Clock className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                        <div>
-                          <div className="text-xs font-medium text-muted-foreground">Tidspunkt</div>
-                          <div className="text-sm">{tid}</div>
-                        </div>
-                      </div>
-                    </div>
+                      <AccordionDetailRow icon={Clock} label="Tidspunkt" colSpan={2}>
+                        {tid}
+                      </AccordionDetailRow>
+                    </AccordionDetailGrid>
 
                     {kanAvbestille && (
-                      <div className="flex justify-end pt-2 border-t">
+                      <AccordionActions>
                         <Button
                           variant="outline"
                           size="sm"
@@ -151,7 +127,7 @@ export default function MineBookingerContent({
                           <FaTimesCircle />
                           Avbestill
                         </Button>
-                      </div>
+                      </AccordionActions>
                     )}
                   </div>
                 </AccordionContent>

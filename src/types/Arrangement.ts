@@ -33,6 +33,7 @@ export type OpprettArrangementForespørsel = {
   ukedager: DayOfWeek[];
   tidspunkter: string[];
   baneIder: string[];
+  tillaterPaamelding: boolean;
 };
 
 export type SlettArrangementForespørsel = {
@@ -65,6 +66,7 @@ export type ArrangementKonfliktRespons = {
 export type OpprettArrangementRespons = {
   arrangementId: string;
   antallOpprettet: number;
+  tillaterPaamelding: boolean;
   konflikter: ArrangementKonfliktRespons[];
 };
 
@@ -84,4 +86,26 @@ export type KommendeArrangementRespons = {
   ukedager: DayOfWeek[];
   tidspunkter: string[];
   slotLengdeMinutter: number;
+  tillaterPaamelding: boolean;
+  antallPaameldte: number;
+  erPaameldt: boolean;
+};
+
+export type ArrangementPaameldingRespons = {
+  arrangementId: string;
+  antallPaameldte: number;
+  erPaameldt: boolean;
+};
+
+export type PaameldtBrukerRespons = {
+  brukerId: string;
+  visningsnavn: string;
+  paameldtTid: string;
+};
+
+export type ArrangementPaameldtListeRespons = {
+  arrangementId: string;
+  tillaterPaamelding: boolean;
+  antallPaameldte: number;
+  paameldte: PaameldtBrukerRespons[];
 };

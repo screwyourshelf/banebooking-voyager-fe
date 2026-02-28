@@ -5,11 +5,13 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { AccordionDetailGrid, AccordionDetailRow } from "@/components/accordion";
+import WeatherInfo from "@/components/WeatherInfo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import LoaderSkeleton from "@/components/loading/LoaderSkeleton";
-import { Clock, User, Calendar } from "lucide-react";
+import { User, Calendar, Timer } from "lucide-react";
 import { FaCalendarPlus, FaTimesCircle, FaTrashAlt } from "react-icons/fa";
 import type { BookingSlotRespons } from "@/types";
 
@@ -77,6 +79,10 @@ export function BookingSlotListAccordion({
           statusVariant = "outline";
         }
 
+        const [startH, startM] = slot.startTid.split(":").map(Number);
+        const [sluttH, sluttM] = slot.sluttTid.split(":").map(Number);
+        const varighet = sluttH * 60 + sluttM - (startH * 60 + startM);
+
         return (
           <AccordionItem
             key={slotKey}
@@ -87,16 +93,7 @@ export function BookingSlotListAccordion({
               <div className="flex flex-col items-start gap-1.5">
                 <div className="flex items-center gap-2">
                   <span className="font-medium">{tid}</span>
-                  {slot.værSymbol && (
-                    <img
-                      src={`${import.meta.env.BASE_URL}weather-symbols/svg/${slot.værSymbol}.svg`}
-                      alt={slot.værSymbol}
-                      width={18}
-                      height={18}
-                      className="select-none"
-                      draggable={false}
-                    />
-                  )}
+                  <WeatherInfo værSymbol={slot.værSymbol} iconOnly />
                   <Badge variant={statusVariant} className="text-xs">
                     {statusTekst}
                   </Badge>
@@ -114,35 +111,21 @@ export function BookingSlotListAccordion({
 
             <AccordionContent>
               <div className="space-y-4">
-                <div className="grid gap-3 sm:grid-cols-2">
-                  <div className="flex items-start gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                    <div>
-                      <div className="text-xs font-medium text-muted-foreground">Tidspunkt</div>
-                      <div className="text-sm">{tid}</div>
-                    </div>
-                  </div>
+                <AccordionDetailGrid>
+                  <AccordionDetailRow icon={Timer} label="Varighet">
+                    {varighet} min
+                  </AccordionDetailRow>
 
                   {erBooket && (
-                    <div className="flex items-start gap-2">
-                      <User className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                      <div>
-                        <div className="text-xs font-medium text-muted-foreground">Booket av</div>
-                        <div className="text-sm">{slot.booketAv}</div>
-                      </div>
-                    </div>
+                    <AccordionDetailRow icon={User} label="Booket av">
+                      {slot.booketAv}
+                    </AccordionDetailRow>
                   )}
 
                   {harArrangement && slot.arrangementBeskrivelse && (
-                    <div className="flex items-start gap-2 sm:col-span-2">
-                      <Calendar className="h-4 w-4 text-muted-foreground mt-0.5 shrink-0" />
-                      <div>
-                        <div className="text-xs font-medium text-muted-foreground">Arrangement</div>
-                        <div className="text-sm whitespace-pre-wrap">
-                          {slot.arrangementBeskrivelse}
-                        </div>
-                      </div>
-                    </div>
+                    <AccordionDetailRow icon={Calendar} label="Arrangement" colSpan={2}>
+                      <span className="whitespace-pre-wrap">{slot.arrangementBeskrivelse}</span>
+                    </AccordionDetailRow>
                   )}
 
                   {harVaer && (
@@ -169,7 +152,7 @@ export function BookingSlotListAccordion({
                       </div>
                     </div>
                   )}
-                </div>
+                </AccordionDetailGrid>
 
                 {/* Actions */}
                 {kanUtføreHandling && (

@@ -51,6 +51,7 @@ export default function ArrangementView() {
 
   const [kategori, setKategori] = useState<ArrangementKategori>("Annet");
   const [beskrivelse, setBeskrivelse] = useState("");
+  const [tillaterPaamelding, setTillaterPaamelding] = useState(false);
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -86,6 +87,7 @@ export default function ArrangementView() {
       valgteTidspunkter,
       kategori,
       beskrivelse,
+      tillaterPaamelding,
       onWarning: (msg) => toast.warning(msg),
     });
 
@@ -129,6 +131,8 @@ export default function ArrangementView() {
       isLoadingForhandsvisning={isLoadingForhandsvisning}
       onChangeKategori={setKategori}
       onChangeBeskrivelse={setBeskrivelse}
+      tillaterPaamelding={tillaterPaamelding}
+      onChangeTillaterPaamelding={setTillaterPaamelding}
       onChangeDatoFra={setDatoFra}
       onChangeDatoTil={setDatoTil}
       onToggleAlleBaner={setAlleBaner}
