@@ -12,6 +12,7 @@ import { formatDatoKort, formatDayOfWeeksLangNorsk } from "@/utils/datoUtils";
 import { Calendar, Clock, MapPin, Users } from "lucide-react";
 import { FaCalendarPlus, FaTimesCircle, FaBan } from "react-icons/fa";
 import { SlettArrangementDialog } from "@/features/arrangement/components";
+import PaameldteDialog from "./PaameldteDialog";
 import type { KommendeArrangementRespons } from "@/types";
 
 type Props = {
@@ -109,7 +110,14 @@ export default function KommendeArrangementerContent({
                       )}
                       {arr.tillaterPaamelding && (
                         <AccordionDetailRow icon={Users} label="Påmeldte">
-                          {arr.antallPaameldte} påmeldt
+                          <PaameldteDialog arrangementId={arr.id} tittel={arr.tittel}>
+                            <button
+                              type="button"
+                              className="underline underline-offset-2 hover:text-foreground transition-colors"
+                            >
+                              {arr.antallPaameldte} påmeldt
+                            </button>
+                          </PaameldteDialog>
                         </AccordionDetailRow>
                       )}
                     </AccordionDetailGrid>

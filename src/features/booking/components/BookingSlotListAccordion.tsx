@@ -11,8 +11,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import LoaderSkeleton from "@/components/loading/LoaderSkeleton";
-import { User, Calendar, Timer } from "lucide-react";
+import { User, Calendar, Timer, Users } from "lucide-react";
 import { FaCalendarPlus, FaTimesCircle, FaTrashAlt } from "react-icons/fa";
+import PaameldteDialog from "@/features/minside/views/kommende-arrangementer/PaameldteDialog";
 import type { BookingSlotRespons } from "@/types";
 
 type Props = {
@@ -21,6 +22,8 @@ type Props = {
   onBook?: (slot: BookingSlotRespons) => void;
   onCancel?: (slot: BookingSlotRespons) => void;
   onDelete?: (slot: BookingSlotRespons) => void;
+  onMeldPaa?: (slot: BookingSlotRespons) => void;
+  onMeldAv?: (slot: BookingSlotRespons) => void;
   isLoading?: boolean;
 };
 
@@ -30,6 +33,8 @@ export function BookingSlotListAccordion({
   onBook,
   onCancel,
   onDelete,
+  onMeldPaa,
+  onMeldAv,
   isLoading = false,
 }: Props) {
   const [bekreftetSlotKey, setBekreftetSlotKey] = useState<string | null>(null);
@@ -128,6 +133,22 @@ export function BookingSlotListAccordion({
                     </AccordionDetailRow>
                   )}
 
+                  {harArrangement && slot.tillaterPaamelding && slot.arrangementId && (
+                    <AccordionDetailRow icon={Users} label="Påmeldte">
+                      <PaameldteDialog
+                        arrangementId={slot.arrangementId}
+                        tittel={slot.arrangementTittel ?? "Arrangement"}
+                      >
+                        <button
+                          type="button"
+                          className="underline underline-offset-2 hover:text-foreground transition-colors"
+                        >
+                          {slot.antallPaameldte ?? 0} påmeldt
+                        </button>
+                      </PaameldteDialog>
+                    </AccordionDetailRow>
+                  )}
+
                   {harVaer && (
                     <div className="flex items-start gap-2 sm:col-span-2">
                       {slot.værSymbol && (
@@ -155,8 +176,8 @@ export function BookingSlotListAccordion({
                 </AccordionDetailGrid>
 
                 {/* Actions */}
-                {kanUtføreHandling && (
-                  <div className="flex flex-col items-end gap-2 pt-2 border-t">
+                {(kanUtføreHandling || (harArrangement && slot.tillaterPaamelding && !slot.erPassert)) && (
+                  <div className="space-y-2 pt-2 border-t">
                     {slot.kanBookes && (
                       <>
                         <div className="flex items-center space-x-2 text-sm">
@@ -175,52 +196,86 @@ export function BookingSlotListAccordion({
                             {new Date().getFullYear()}
                           </label>
                         </div>
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          disabled={!erBekreftet}
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onBook?.(slot);
-                            setBekreftetSlotKey(null);
-                          }}
-                          className="flex items-center gap-2 text-sm"
-                        >
-                          <FaCalendarPlus />
-                          Book
-                        </Button>
+                        <div className="flex justify-end">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            disabled={!erBekreftet}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onBook?.(slot);
+                              setBekreftetSlotKey(null);
+                            }}
+                            className="flex items-center gap-2 text-sm"
+                          >
+                            <FaCalendarPlus />
+                            Book
+                          </Button>
+                        </div>
                       </>
                     )}
 
-                    {slot.kanAvbestille && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onCancel?.(slot);
-                        }}
-                        className="flex items-center gap-2 text-sm"
-                      >
-                        <FaTimesCircle />
-                        Avbestill
-                      </Button>
-                    )}
+                    <div className="flex items-center justify-end gap-2">
+                      {slot.kanAvbestille && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onCancel?.(slot);
+                          }}
+                          className="flex items-center gap-2 text-sm"
+                        >
+                          <FaTimesCircle />
+                          Avbestill
+                        </Button>
+                      )}
 
-                    {slot.kanSlette && (
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onDelete?.(slot);
-                        }}
-                        className="flex items-center gap-2 text-sm"
-                      >
-                        <FaTrashAlt />
-                        Slett
-                      </Button>
-                    )}
+                      {slot.kanSlette && (
+                        <Button
+                          variant="destructive"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            onDelete?.(slot);
+                          }}
+                          className="flex items-center gap-2 text-sm"
+                        >
+                          <FaTrashAlt />
+                          Slett
+                        </Button>
+                      )}
+
+                      {harArrangement && slot.tillaterPaamelding && !slot.erPassert && (
+                        slot.erPaameldt ? (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onMeldAv?.(slot);
+                            }}
+                            className="flex items-center gap-2 text-sm"
+                          >
+                            <FaTimesCircle />
+                            Meld meg av
+                          </Button>
+                        ) : (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onMeldPaa?.(slot);
+                            }}
+                            className="flex items-center gap-2 text-sm"
+                          >
+                            <FaCalendarPlus />
+                            Meld meg på
+                          </Button>
+                        )
+                      )}
+                    </div>
                   </div>
                 )}
               </div>

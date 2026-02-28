@@ -4,6 +4,7 @@ import { format } from "date-fns";
 import { LoaderSkeleton } from "@/components/loading";
 import { useBaner } from "@/hooks/useBaner";
 import { useBooking } from "@/features/booking/hooks/useBooking";
+import { useSlotArrangementPaamelding } from "@/features/booking/hooks/useSlotArrangementPaamelding";
 import { useAuth } from "@/hooks/useAuth";
 
 import BookingContent from "./BookingContent";
@@ -28,6 +29,8 @@ export default function BookingView() {
     onDelete,
     isLoading: loadingBooking,
   } = useBooking(valgtDatoStr, valgtBaneId);
+
+  const { onMeldPaa, onMeldAv } = useSlotArrangementPaamelding(valgtDatoStr, valgtBaneId);
 
   // Sett default bane
   useEffect(() => {
@@ -60,6 +63,8 @@ export default function BookingView() {
       onBook={onBook}
       onCancel={onCancel}
       onDelete={onDelete}
+      onMeldPaa={onMeldPaa}
+      onMeldAv={onMeldAv}
     />
   );
 }

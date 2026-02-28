@@ -3,6 +3,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -39,6 +40,9 @@ export default function ForhandsvisningDialog({
       <DialogContent className="max-w-3xl">
         <DialogHeader>
           <DialogTitle>Forhåndsvis bookingene</DialogTitle>
+          <DialogDescription className="sr-only">
+            Forhåndsvisning av bookinger som vil bli opprettet
+          </DialogDescription>
         </DialogHeader>
 
         {isLoading ? (

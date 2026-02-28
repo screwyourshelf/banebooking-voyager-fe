@@ -24,6 +24,8 @@ type Props = {
   onBook: (slot: BookingSlotRespons) => void;
   onCancel: (slot: BookingSlotRespons) => void;
   onDelete: (slot: BookingSlotRespons) => void;
+  onMeldPaa: (slot: BookingSlotRespons) => void;
+  onMeldAv: (slot: BookingSlotRespons) => void;
 };
 
 export default function BookingContent({
@@ -38,6 +40,8 @@ export default function BookingContent({
   onBook,
   onCancel,
   onDelete,
+  onMeldPaa,
+  onMeldAv,
 }: Props) {
   return (
     <>
@@ -66,6 +70,8 @@ export default function BookingContent({
               onBook={onBook}
               onCancel={onCancel}
               onDelete={onDelete}
+              onMeldPaa={onMeldPaa}
+              onMeldAv={onMeldAv}
               isLoading={isLoading}
             />
           ),

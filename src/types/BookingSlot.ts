@@ -8,6 +8,10 @@ export type BookingSlotRespons = {
   erEier?: boolean;
   arrangementTittel?: string;
   arrangementBeskrivelse?: string;
+  arrangementId?: string;
+  tillaterPaamelding?: boolean;
+  erPaameldt?: boolean;
+  antallPaameldte?: number;
   kanBookes: boolean;
   kanAvbestille: boolean;
   kanSlette: boolean;
