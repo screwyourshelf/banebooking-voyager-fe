@@ -1,27 +1,50 @@
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useSlug } from "@/hooks/useSlug";
 import { useQueryClient } from "@tanstack/react-query";
-import type { ArrangementPaameldingRespons } from "@/types";
+import { toast } from "sonner";
+import type { ArrangementPaameldingRespons, KommendeArrangementRespons } from "@/types";
 
-export function useArrangementPaamelding(arrangementId: string) {
+type PaameldingVars = { arrangementId: string };
+
+export function useArrangementPaamelding() {
   const slug = useSlug();
   const queryClient = useQueryClient();
 
-  const invalidate = async () => {
-    await queryClient.invalidateQueries({ queryKey: ["kommende-arrangementer", slug] });
+  const invalidate = () => {
+    void queryClient.invalidateQueries({ queryKey: ["kommende-arrangementer", slug] });
   };
 
-  const meldPaa = useApiMutation<void, ArrangementPaameldingRespons>(
+  const meldPaaMutation = useApiMutation<PaameldingVars, ArrangementPaameldingRespons>(
     "post",
-    `/klubb/${slug}/arrangement/${arrangementId}/paamelding`,
-    { onSuccess: invalidate }
+    ({ arrangementId }) => `/klubb/${slug}/arrangement/${arrangementId}/paamelding`,
+    {
+      onSuccess: () => {
+        toast.success("Du er påmeldt!");
+      },
+      onError: (err) => {
+        toast.error(err.message ?? "Kunne ikke melde på.");
+      },
+      onSettled: invalidate,
+    }
   );
 
-  const meldAv = useApiMutation<void, ArrangementPaameldingRespons>(
+  const meldAvMutation = useApiMutation<PaameldingVars, ArrangementPaameldingRespons>(
     "delete",
-    `/klubb/${slug}/arrangement/${arrangementId}/paamelding`,
-    { onSuccess: invalidate }
+    ({ arrangementId }) => `/klubb/${slug}/arrangement/${arrangementId}/paamelding`,
+    {
+      onSuccess: () => {
+        toast.success("Du er avmeldt.");
+      },
+      onError: (err) => {
+        toast.error(err.message ?? "Kunne ikke melde av.");
+      },
+      onSettled: invalidate,
+    }
   );
 
-  return { meldPaa, meldAv };
+  return {
+    onMeldPaa: (arr: KommendeArrangementRespons) =>
+      meldPaaMutation.mutate({ arrangementId: arr.id }),
+    onMeldAv: (arr: KommendeArrangementRespons) => meldAvMutation.mutate({ arrangementId: arr.id }),
+  };
 }

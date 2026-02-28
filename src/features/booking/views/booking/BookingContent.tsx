@@ -60,7 +60,6 @@ export default function BookingContent({
           value: bane.id,
           label: bane.navn,
           content: (
-            // ACCORDION-VERSJON (ny)
             <BookingSlotListAccordion
               slots={slots}
               currentUser={currentUser ? { epost: currentUser.email ?? "" } : null}
@@ -69,17 +68,6 @@ export default function BookingContent({
               onDelete={onDelete}
               isLoading={isLoading}
             />
-            // ORIGINAL VERSJON (kommenter inn denne og kommenter ut Accordion for å bytte tilbake):
-            // <BookingSlotList
-            //   slots={slots}
-            //   currentUser={currentUser ? { epost: currentUser.email ?? "" } : null}
-            //   apenSlotTid={apenSlotTid}
-            //   setApenSlotTid={setApenSlotTid}
-            //   onBook={onBook}
-            //   onCancel={onCancel}
-            //   onDelete={onDelete}
-            //   isLoading={isLoading}
-            // />
           ),
         }))}
         value={valgtBaneId}

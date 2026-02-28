@@ -7,13 +7,18 @@ import {
 } from "@/components/ui/accordion";
 import { AccordionDetailGrid, AccordionDetailRow } from "@/components/accordion";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { formatDatoKort, formatDayOfWeeksLangNorsk } from "@/utils/datoUtils";
-import { Calendar, Clock, MapPin } from "lucide-react";
+import { Calendar, Clock, MapPin, Users } from "lucide-react";
+import { FaCalendarPlus, FaTimesCircle, FaBan } from "react-icons/fa";
+import { SlettArrangementDialog } from "@/features/arrangement/components";
 import type { KommendeArrangementRespons } from "@/types";
-import PaameldingKnapp from "./PaameldingKnapp";
 
 type Props = {
   arrangementer: KommendeArrangementRespons[];
+  onMeldPaa: (arr: KommendeArrangementRespons) => void;
+  onMeldAv: (arr: KommendeArrangementRespons) => void;
+  onAvlys: (arr: KommendeArrangementRespons) => Promise<unknown>;
 };
 
 function dagerIgjenFra(startDatoIso: string) {
@@ -33,7 +38,12 @@ function datoTekst(arr: KommendeArrangementRespons) {
     : `${formatDatoKort(arr.startDato)} – ${formatDatoKort(arr.sluttDato)}`;
 }
 
-export default function KommendeArrangementerContent({ arrangementer }: Props) {
+export default function KommendeArrangementerContent({
+  arrangementer,
+  onMeldPaa,
+  onMeldAv,
+  onAvlys,
+}: Props) {
   return (
     <PageSection
       title="Kommende arrangementer"
@@ -97,14 +107,54 @@ export default function KommendeArrangementerContent({ arrangementer }: Props) {
                           )}
                         </AccordionDetailRow>
                       )}
+                      {arr.tillaterPaamelding && (
+                        <AccordionDetailRow icon={Users} label="Påmeldte">
+                          {arr.antallPaameldte} påmeldt
+                        </AccordionDetailRow>
+                      )}
                     </AccordionDetailGrid>
 
-                    {arr.tillaterPaamelding && (
-                      <PaameldingKnapp
-                        arrangementId={arr.id}
-                        erPaameldt={arr.erPaameldt}
-                        antallPaameldte={arr.antallPaameldte}
-                      />
+                    {(arr.tillaterPaamelding || arr.kanAvlyse) && (
+                      <div className="flex items-center justify-end gap-2 pt-2 border-t">
+                        {arr.kanAvlyse && (
+                          <SlettArrangementDialog
+                            tittel={arr.tittel}
+                            onSlett={() => onAvlys(arr).then(() => {})}
+                            trigger={
+                              <Button
+                                variant="destructive"
+                                size="sm"
+                                className="flex items-center gap-2 text-sm"
+                              >
+                                <FaBan />
+                                Avlys
+                              </Button>
+                            }
+                          />
+                        )}
+                        {arr.tillaterPaamelding &&
+                          (arr.erPaameldt ? (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => onMeldAv(arr)}
+                              className="flex items-center gap-2 text-sm"
+                            >
+                              <FaTimesCircle />
+                              Meld meg av
+                            </Button>
+                          ) : (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => onMeldPaa(arr)}
+                              className="flex items-center gap-2 text-sm"
+                            >
+                              <FaCalendarPlus />
+                              Meld meg på
+                            </Button>
+                          ))}
+                      </div>
                     )}
                   </div>
                 </AccordionContent>
