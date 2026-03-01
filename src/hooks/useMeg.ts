@@ -4,6 +4,7 @@ import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import type { BrukerRespons } from "@/types";
 import { useSlug } from "@/hooks/useSlug";
+import { useAuth } from "@/hooks/useAuth";
 
 type OppdaterMegDto = {
   visningsnavn?: string;
@@ -11,10 +12,12 @@ type OppdaterMegDto = {
 
 export function useMeg() {
   const slug = useSlug();
+  const { currentUser } = useAuth();
 
   const megQuery = useApiQuery<BrukerRespons>(["meg", slug], `/klubb/${slug}/bruker/meg`, {
     requireAuth: true,
     staleTime: 60_000,
+    enabled: !!currentUser,
   });
 
   const oppdaterVisningsnavn = useApiMutation<OppdaterMegDto, void>(
