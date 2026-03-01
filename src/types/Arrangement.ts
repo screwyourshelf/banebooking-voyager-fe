@@ -98,6 +98,14 @@ export type ArrangementPaameldingRespons = {
   erPaameldt: boolean;
 };
 
+export type AktivtArrangementRespons = {
+  id: string;
+  tittel: string;
+  beskrivelse?: string;
+  kategori: ArrangementKategori;
+  tillaterPaamelding: boolean;
+};
+
 export type PaameldtBrukerRespons = {
   brukerId: string;
   visningsnavn: string;

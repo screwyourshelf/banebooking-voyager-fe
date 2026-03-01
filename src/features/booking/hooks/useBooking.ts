@@ -6,7 +6,13 @@ import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useSlug } from "@/hooks/useSlug";
 
-type SlotVars = { baneId: string; dato: string; startTid: string; sluttTid: string };
+type SlotVars = {
+  baneId: string;
+  dato: string;
+  startTid: string;
+  sluttTid: string;
+  arrangementId?: string;
+};
 type OptimisticContext = { previous?: BookingSlotRespons[] };
 
 export function useBooking(dato: string, baneId: string) {
@@ -182,12 +188,13 @@ export function useBooking(dato: string, baneId: string) {
     apenSlotTid,
     setApenSlotTid,
 
-    onBook: (slot: BookingSlotRespons) =>
+    onBook: (slot: BookingSlotRespons, arrangementId?: string) =>
       bookMutation.mutate({
         baneId,
         dato,
         startTid: slot.startTid,
         sluttTid: slot.sluttTid,
+        arrangementId,
       }),
 
     onCancel: (slot: BookingSlotRespons) =>

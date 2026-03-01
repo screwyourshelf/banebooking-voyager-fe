@@ -6,6 +6,7 @@ import { useBaner } from "@/hooks/useBaner";
 import { useBooking } from "@/features/booking/hooks/useBooking";
 import { useSlotArrangementPaamelding } from "@/features/booking/hooks/useSlotArrangementPaamelding";
 import { useAuth } from "@/hooks/useAuth";
+import { useMeg } from "@/hooks/useMeg";
 
 import BookingContent from "./BookingContent";
 
@@ -15,6 +16,9 @@ export default function BookingView() {
   const [valgtDato, setValgtDato] = useState<Date | null>(new Date());
 
   const { currentUser } = useAuth();
+  const { bruker } = useMeg();
+  const kanKobleTilArrangement =
+    bruker?.roller.some((r) => r === "KlubbAdmin" || r === "Utvidet") ?? false;
 
   // Stabil dato-streng (endres kun når valgtDato endres)
   const valgtDatoStr = useMemo(
@@ -65,6 +69,7 @@ export default function BookingView() {
       onDelete={onDelete}
       onMeldPaa={onMeldPaa}
       onMeldAv={onMeldAv}
+      kanKobleTilArrangement={kanKobleTilArrangement}
     />
   );
 }

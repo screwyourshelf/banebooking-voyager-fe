@@ -35,6 +35,10 @@ export default function VilkaarPage() {
             Banebooking er et verktøy for reservasjon av baner i <strong>{klubb.navn}</strong>. For
             å kunne booke baner må du være medlem, eller ha fått tilgang av klubbens administrator.
           </p>
+          <p className="mt-2">
+            Ved å gjennomføre en booking bekrefter du at du og eventuelle medspillere har gyldig
+            betalt medlemskap for inneværende år.
+          </p>
         </div>
 
         <div>

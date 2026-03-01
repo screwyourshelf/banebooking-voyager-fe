@@ -154,7 +154,7 @@ export default function KommendeArrangementerContent({
                     </AccordionDetailGrid>
 
                     {(arr.tillaterPaamelding || arr.kanAvlyse) && (
-                      <div className="flex items-center justify-end gap-2 pt-2 border-t">
+                      <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t">
                         {arr.kanAvlyse && (
                           <Button
                             variant="outline"

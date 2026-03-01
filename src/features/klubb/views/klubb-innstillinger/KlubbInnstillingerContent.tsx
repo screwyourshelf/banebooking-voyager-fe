@@ -24,7 +24,11 @@ type Props = {
   onSubmit: () => void;
 
   touched: { navn: boolean; kontaktEpost: boolean; feedSynligAntallDager: boolean };
-  errors: { navn: string | null; kontaktEpost: string | null; feedSynligAntallDager: string | null };
+  errors: {
+    navn: string | null;
+    kontaktEpost: string | null;
+    feedSynligAntallDager: string | null;
+  };
   onBlurField: (key: "navn" | "kontaktEpost" | "feedSynligAntallDager") => void;
 };
 
@@ -40,7 +44,9 @@ export default function KlubbInnstillingerContent({
 }: Props) {
   const navnError = touched.navn ? errors.navn : null;
   const kontaktEpostError = touched.kontaktEpost ? errors.kontaktEpost : null;
-  const feedSynligAntallDagerError = touched.feedSynligAntallDager ? errors.feedSynligAntallDager : null;
+  const feedSynligAntallDagerError = touched.feedSynligAntallDager
+    ? errors.feedSynligAntallDager
+    : null;
 
   return (
     <FormLayout
@@ -166,7 +172,9 @@ export default function KlubbInnstillingerContent({
                   onBlur={() => onBlurField("feedSynligAntallDager")}
                   aria-invalid={!!feedSynligAntallDagerError}
                 />
-                {feedSynligAntallDagerError ? <FieldError>{feedSynligAntallDagerError}</FieldError> : null}
+                {feedSynligAntallDagerError ? (
+                  <FieldError>{feedSynligAntallDagerError}</FieldError>
+                ) : null}
               </Field>
             </Row>
           </RowList>
