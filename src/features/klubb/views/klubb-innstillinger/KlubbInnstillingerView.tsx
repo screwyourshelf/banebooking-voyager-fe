@@ -17,6 +17,7 @@ type FormState = {
 type TouchedState = {
   navn: boolean;
   kontaktEpost: boolean;
+  feedSynligAntallDager: boolean;
 };
 
 const MAX_KLUBBNAVN = 60;
@@ -34,6 +35,14 @@ function validateKontaktEpost(epost: string): string | null {
   const v = epost.trim();
   if (!v) return "Kontakt-e-post kan ikke være tom.";
   if (!EMAIL_REGEX.test(v)) return "Skriv inn en gyldig e-postadresse.";
+  return null;
+}
+
+function validateFeedSynligAntallDager(value: string): string | null {
+  const t = value.trim();
+  if (!t) return null;
+  const n = Number(t);
+  if (!Number.isInteger(n) || n < 1 || n > 30) return "Antall dager må være mellom 1 og 30.";
   return null;
 }
 
@@ -60,6 +69,7 @@ export default function KlubbInnstillingerView() {
   const [touched, setTouched] = useState<TouchedState>({
     navn: false,
     kontaktEpost: false,
+    feedSynligAntallDager: false,
   });
 
   useEffect(() => {
@@ -76,15 +86,16 @@ export default function KlubbInnstillingerView() {
     });
 
     // Reset touched når vi laster inn fra server (slik at vi ikke viser feil med en gang)
-    setTouched({ navn: false, kontaktEpost: false });
+    setTouched({ navn: false, kontaktEpost: false, feedSynligAntallDager: false });
   }, [klubb]);
 
   const errors = useMemo(() => {
     return {
       navn: validateKlubbnavn(form.navn),
       kontaktEpost: validateKontaktEpost(form.kontaktEpost),
+      feedSynligAntallDager: validateFeedSynligAntallDager(form.feedSynligAntallDager),
     };
-  }, [form.navn, form.kontaktEpost]);
+  }, [form.navn, form.kontaktEpost, form.feedSynligAntallDager]);
 
   const isDirty = useMemo(() => {
     if (!klubb) return false;
@@ -101,7 +112,7 @@ export default function KlubbInnstillingerView() {
   }, [klubb, form]);
 
   const isValid = useMemo(() => {
-    return !errors.navn && !errors.kontaktEpost;
+    return !errors.navn && !errors.kontaktEpost && !errors.feedSynligAntallDager;
   }, [errors]);
 
   const canSubmit = isDirty && isValid;
@@ -132,7 +143,7 @@ export default function KlubbInnstillingerView() {
 
   const onSubmit = () => {
     // Vis valideringsfeil hvis de finnes
-    touchMany(["navn", "kontaktEpost"]);
+    touchMany(["navn", "kontaktEpost", "feedSynligAntallDager"]);
 
     if (!isValid) return;
 
@@ -158,11 +169,9 @@ export default function KlubbInnstillingerView() {
     <KlubbInnstillingerContent
       form={form}
       onChange={onChange}
-      // canSubmit betyr nå: dirty + valid
       canSubmit={canSubmit}
       isSaving={OppdaterKlubbForespørsel.isPending}
       onSubmit={onSubmit}
-      // NYTT:
       touched={touched}
       errors={errors}
       onBlurField={touchField}

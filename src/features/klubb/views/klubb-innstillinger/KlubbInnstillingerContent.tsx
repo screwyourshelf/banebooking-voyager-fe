@@ -23,9 +23,9 @@ type Props = {
   isSaving: boolean;
   onSubmit: () => void;
 
-  touched: { navn: boolean; kontaktEpost: boolean };
-  errors: { navn: string | null; kontaktEpost: string | null };
-  onBlurField: (key: "navn" | "kontaktEpost") => void;
+  touched: { navn: boolean; kontaktEpost: boolean; feedSynligAntallDager: boolean };
+  errors: { navn: string | null; kontaktEpost: string | null; feedSynligAntallDager: string | null };
+  onBlurField: (key: "navn" | "kontaktEpost" | "feedSynligAntallDager") => void;
 };
 
 export default function KlubbInnstillingerContent({
@@ -40,6 +40,7 @@ export default function KlubbInnstillingerContent({
 }: Props) {
   const navnError = touched.navn ? errors.navn : null;
   const kontaktEpostError = touched.kontaktEpost ? errors.kontaktEpost : null;
+  const feedSynligAntallDagerError = touched.feedSynligAntallDager ? errors.feedSynligAntallDager : null;
 
   return (
     <FormLayout
@@ -150,18 +151,22 @@ export default function KlubbInnstillingerContent({
 
             <Row
               title="Aldergrense for feedinnslag (dager)"
-              description="Hvor mange dager gamle innslag som vises. Sett til 0 for å inkludere alle."
+              description="Hvor mange dager gamle innslag som vises."
             >
-              <Field>
+              <Field data-invalid={!!feedSynligAntallDagerError}>
                 <Input
                   id="feedSynligAntallDager"
                   value={form.feedSynligAntallDager}
                   onChange={(e) => onChange("feedSynligAntallDager", e.target.value)}
                   type="number"
                   inputMode="numeric"
-                  min={0}
+                  min={1}
+                  max={30}
                   step={1}
+                  onBlur={() => onBlurField("feedSynligAntallDager")}
+                  aria-invalid={!!feedSynligAntallDagerError}
                 />
+                {feedSynligAntallDagerError ? <FieldError>{feedSynligAntallDagerError}</FieldError> : null}
               </Field>
             </Row>
           </RowList>

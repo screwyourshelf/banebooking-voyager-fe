@@ -105,7 +105,7 @@ export function BookingSlotListAccordion({
                     {statusTekst}
                   </Badge>
                   {currentUser &&
-                    (erMinBooking ||
+                    ((!harArrangement && erMinBooking) ||
                       (harArrangement && slot.tillaterPaamelding && slot.erPaameldt)) && (
                       <span
                         className="text-green-600"

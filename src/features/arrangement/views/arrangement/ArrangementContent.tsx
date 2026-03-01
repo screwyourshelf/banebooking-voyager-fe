@@ -3,7 +3,7 @@ import { RowPanel, RowList, Row, SwitchRow } from "@/components/rows";
 import { FormActions, FormLayout, FormSubmitButton } from "@/components/forms";
 
 import { Field } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import {
@@ -155,10 +155,11 @@ export default function ArrangementContent(props: Props) {
 
               <Row title="Beskrivelse" description="Vises på bookingene.">
                 <Field>
-                  <Input
+                  <Textarea
                     id="beskrivelse"
                     value={beskrivelse}
                     onChange={(e) => onChangeBeskrivelse(e.target.value)}
+                    className="resize-none"
                   />
                 </Field>
               </Row>
