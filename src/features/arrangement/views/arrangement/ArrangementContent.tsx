@@ -63,6 +63,8 @@ type Props = {
   onOpenPreview: () => void;
   onCreate: () => void;
   onDialogOpenChange: (open: boolean) => void;
+  bekreftTekst?: string;
+  advarsel?: string;
 };
 
 const UKEDAGER_REKKEFOLGE: readonly DayOfWeek[] = [
@@ -118,6 +120,8 @@ export default function ArrangementContent(props: Props) {
     onOpenPreview,
     onCreate,
     onDialogOpenChange,
+    bekreftTekst,
+    advarsel,
   } = props;
 
   return (
@@ -288,6 +292,8 @@ export default function ArrangementContent(props: Props) {
         forhandsvisning={forhandsvisning}
         isLoading={isLoadingForhandsvisning}
         onCreate={onCreate}
+        bekreftTekst={bekreftTekst}
+        advarsel={advarsel}
       />
     </>
   );

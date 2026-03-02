@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { Toaster } from "sonner";
 import { Navbar, BreadcrumbMedSti } from "@/components/navigation";
-import { FeedAlerts } from "@/features/feed/components";
 import "animate.css";
 
 export default function AppShell() {
@@ -14,10 +13,6 @@ export default function AppShell() {
           </header>
 
           <BreadcrumbMedSti />
-
-          <div className="mx-1">
-            <FeedAlerts />
-          </div>
 
           {/* Viktig: flex-1 så main fyller resten av høyden */}
           <main className="py-1 px-1 flex-1 min-h-0">

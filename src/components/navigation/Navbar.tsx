@@ -29,6 +29,7 @@ import { useLogin } from "@/hooks/useLogin";
 import { useKlubb } from "@/hooks/useKlubb";
 import { useBruker } from "@/hooks/useBruker";
 import NavbarBrandMedKlubb from "./NavbarBrandMedKlubb";
+import { NotifikasjonDrawer } from "@/features/feed/components";
 import { useSlug } from "@/hooks/useSlug";
 
 function erGyldigEpost(v: string) {
@@ -121,178 +122,185 @@ export default function Navbar() {
     <div className="w-full flex justify-between items-center px-2 py-1">
       <NavbarBrandMedKlubb klubbnavn={klubb?.navn ?? "\u00A0"} />
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="outline" className="h-8 px-2 flex items-center gap-2 sm:text-xs sm:px-2">
-            <FaBars className="text-muted-foreground sm:hidden" />
-            <span className="hidden sm:inline-flex items-center gap-2">
-              {currentUser ? (
-                <>
-                  <FaUser className="text-muted-foreground" />
-                  {currentUser.email}
-                </>
-              ) : (
-                <>
-                  <FaSignInAlt className="text-muted-foreground" />
-                  Logg inn
-                </>
-              )}
-            </span>
-          </Button>
-        </DropdownMenuTrigger>
+      <div className="flex items-center gap-1">
+        {currentUser && <NotifikasjonDrawer />}
 
-        <DropdownMenuContent align="end" className="w-64 space-y-0.5">
-          {currentUser ? (
-            <>
-              <DropdownMenuItem asChild>
-                <Link to={`/${slug}/minside`}>
-                  <FaUserCircle className="mr-2" />
-                  Min side
-                </Link>
-              </DropdownMenuItem>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button
+              variant="outline"
+              className="h-8 px-2 flex items-center gap-2 sm:text-xs sm:px-2"
+            >
+              <FaBars className="text-muted-foreground sm:hidden" />
+              <span className="hidden sm:inline-flex items-center gap-2">
+                {currentUser ? (
+                  <>
+                    <FaUser className="text-muted-foreground" />
+                    {currentUser.email}
+                  </>
+                ) : (
+                  <>
+                    <FaSignInAlt className="text-muted-foreground" />
+                    Logg inn
+                  </>
+                )}
+              </span>
+            </Button>
+          </DropdownMenuTrigger>
 
-              <DropdownMenuItem asChild>
-                <Link to={`/${slug}`}>
-                  <FaCalendarAlt className="mr-2" />
-                  Book bane
-                </Link>
-              </DropdownMenuItem>
+          <DropdownMenuContent align="end" className="w-64 space-y-0.5">
+            {currentUser ? (
+              <>
+                <DropdownMenuItem asChild>
+                  <Link to={`/${slug}/minside`}>
+                    <FaUserCircle className="mr-2" />
+                    Min side
+                  </Link>
+                </DropdownMenuItem>
 
-              {(erAdmin || harUtvidetTilgang) && (
-                <>
-                  <DropdownMenuSeparator />
-                  <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">
-                    {erAdmin ? "Admin" : "Utvidet tilgang"}
-                  </div>
+                <DropdownMenuItem asChild>
+                  <Link to={`/${slug}`}>
+                    <FaCalendarAlt className="mr-2" />
+                    Book bane
+                  </Link>
+                </DropdownMenuItem>
 
-                  {erAdmin && (
-                    <>
-                      <DropdownMenuItem asChild>
-                        <Link to={`/${slug}/admin/klubb`}>
-                          <FaWrench className="mr-2" />
-                          Klubb
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link to={`/${slug}/admin/baner`}>
-                          <FaWrench className="mr-2" />
-                          Baner
-                        </Link>
-                      </DropdownMenuItem>
-                      <DropdownMenuItem asChild>
-                        <Link to={`/${slug}/admin/brukere`}>
-                          <FaWrench className="mr-2" />
-                          Brukere
-                        </Link>
-                      </DropdownMenuItem>
-                    </>
-                  )}
+                {(erAdmin || harUtvidetTilgang) && (
+                  <>
+                    <DropdownMenuSeparator />
+                    <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">
+                      {erAdmin ? "Admin" : "Utvidet tilgang"}
+                    </div>
 
-                  <DropdownMenuItem asChild>
-                    <Link to={`/${slug}/arrangement`}>
-                      <FaCalendarAlt className="mr-2" />
-                      Arrangement
-                    </Link>
-                  </DropdownMenuItem>
-                </>
-              )}
+                    {erAdmin && (
+                      <>
+                        <DropdownMenuItem asChild>
+                          <Link to={`/${slug}/admin/klubb`}>
+                            <FaWrench className="mr-2" />
+                            Klubb
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to={`/${slug}/admin/baner`}>
+                            <FaWrench className="mr-2" />
+                            Baner
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to={`/${slug}/admin/brukere`}>
+                            <FaWrench className="mr-2" />
+                            Brukere
+                          </Link>
+                        </DropdownMenuItem>
+                      </>
+                    )}
 
-              <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={() => signOut()} disabled={erBusy}>
-                <FaSignOutAlt className="mr-2" />
-                Logg ut
-              </DropdownMenuItem>
-            </>
-          ) : (
-            <>
-              <p className="text-xs text-muted-foreground px-2 pb-1">
-                Ved å logge inn samtykker du til våre{" "}
-                <Link to={`/${slug}/vilkaar`} className="underline">
-                  vilkår
-                </Link>
-                .
-              </p>
+                    <DropdownMenuItem asChild>
+                      <Link to={`/${slug}/arrangement`}>
+                        <FaCalendarAlt className="mr-2" />
+                        Arrangement
+                      </Link>
+                    </DropdownMenuItem>
+                  </>
+                )}
 
-              <DropdownMenuItem onClick={handleGoogleLogin} disabled={erBusy}>
-                <FcGoogle size={18} className="mr-2" />
-                Logg inn med Google
-              </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={() => signOut()} disabled={erBusy}>
+                  <FaSignOutAlt className="mr-2" />
+                  Logg ut
+                </DropdownMenuItem>
+              </>
+            ) : (
+              <>
+                <p className="text-xs text-muted-foreground px-2 pb-1">
+                  Ved å logge inn samtykker du til våre{" "}
+                  <Link to={`/${slug}/vilkaar`} className="underline">
+                    vilkår
+                  </Link>
+                  .
+                </p>
 
-              <DropdownMenuItem onClick={handleFacebookLogin} disabled={erBusy}>
-                <FaFacebook size={18} className="mr-2" />
-                Logg inn med Facebook
-              </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleGoogleLogin} disabled={erBusy}>
+                  <FcGoogle size={18} className="mr-2" />
+                  Logg inn med Google
+                </DropdownMenuItem>
 
-              <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleFacebookLogin} disabled={erBusy}>
+                  <FaFacebook size={18} className="mr-2" />
+                  Logg inn med Facebook
+                </DropdownMenuItem>
 
-              {step === "input" ? (
-                <FormLayout density="compact" className="px-2 w-full" onSubmit={submitSendOtp}>
-                  <div className="space-y-1">
-                    <div className="text-sm font-medium">Logg inn med e-post</div>
+                <DropdownMenuSeparator />
 
-                    <Field data-invalid={!!feilEmail}>
-                      <Input
-                        id="email"
-                        value={email}
-                        onChange={(e) => {
-                          const v = e.target.value;
-                          setEmail(v);
-                          if (feilEmail) setFeilEmail(null);
-                        }}
-                        aria-invalid={!!feilEmail}
-                        {...emailInputProps}
-                      />
-                      {feilEmail ? <FieldError>{feilEmail}</FieldError> : null}
-                    </Field>
-                  </div>
+                {step === "input" ? (
+                  <FormLayout density="compact" className="px-2 w-full" onSubmit={submitSendOtp}>
+                    <div className="space-y-1">
+                      <div className="text-sm font-medium">Logg inn med e-post</div>
 
-                  <FormActions align="left" spaced={false} className="w-full">
-                    <FormSubmitButton
-                      fullWidth
-                      isLoading={status === "sending"}
-                      loadingText="Sender..."
-                    >
-                      Send kode
-                    </FormSubmitButton>
-                  </FormActions>
-                </FormLayout>
-              ) : (
-                <FormLayout density="compact" className="px-2 w-full" onSubmit={submitVerifyOtp}>
-                  <div className="space-y-1">
-                    <div className="text-sm font-medium">Skriv inn koden fra e-posten</div>
+                      <Field data-invalid={!!feilEmail}>
+                        <Input
+                          id="email"
+                          value={email}
+                          onChange={(e) => {
+                            const v = e.target.value;
+                            setEmail(v);
+                            if (feilEmail) setFeilEmail(null);
+                          }}
+                          aria-invalid={!!feilEmail}
+                          {...emailInputProps}
+                        />
+                        {feilEmail ? <FieldError>{feilEmail}</FieldError> : null}
+                      </Field>
+                    </div>
 
-                    <Field data-invalid={!!feilOtp}>
-                      <Input
-                        id="otp"
-                        value={otp}
-                        onChange={(e) => {
-                          const raw = e.target.value;
-                          const v = raw.replace(/\D/g, "").slice(0, 6);
-                          setOtp(v);
-                          if (feilOtp) setFeilOtp(null);
-                        }}
-                        aria-invalid={!!feilOtp}
-                        {...otpInputProps}
-                      />
-                      {feilOtp ? <FieldError>{feilOtp}</FieldError> : null}
-                    </Field>
-                  </div>
+                    <FormActions align="left" spaced={false} className="w-full">
+                      <FormSubmitButton
+                        fullWidth
+                        isLoading={status === "sending"}
+                        loadingText="Sender..."
+                      >
+                        Send kode
+                      </FormSubmitButton>
+                    </FormActions>
+                  </FormLayout>
+                ) : (
+                  <FormLayout density="compact" className="px-2 w-full" onSubmit={submitVerifyOtp}>
+                    <div className="space-y-1">
+                      <div className="text-sm font-medium">Skriv inn koden fra e-posten</div>
 
-                  <FormActions align="left" spaced={false} className="w-full">
-                    <FormSubmitButton
-                      fullWidth
-                      isLoading={status === "verifying"}
-                      loadingText="Verifiserer..."
-                    >
-                      Verifiser kode
-                    </FormSubmitButton>
-                  </FormActions>
-                </FormLayout>
-              )}
-            </>
-          )}
-        </DropdownMenuContent>
-      </DropdownMenu>
+                      <Field data-invalid={!!feilOtp}>
+                        <Input
+                          id="otp"
+                          value={otp}
+                          onChange={(e) => {
+                            const raw = e.target.value;
+                            const v = raw.replace(/\D/g, "").slice(0, 6);
+                            setOtp(v);
+                            if (feilOtp) setFeilOtp(null);
+                          }}
+                          aria-invalid={!!feilOtp}
+                          {...otpInputProps}
+                        />
+                        {feilOtp ? <FieldError>{feilOtp}</FieldError> : null}
+                      </Field>
+                    </div>
+
+                    <FormActions align="left" spaced={false} className="w-full">
+                      <FormSubmitButton
+                        fullWidth
+                        isLoading={status === "verifying"}
+                        loadingText="Verifiserer..."
+                      >
+                        Verifiser kode
+                      </FormSubmitButton>
+                    </FormActions>
+                  </FormLayout>
+                )}
+              </>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </div>
   );
 }

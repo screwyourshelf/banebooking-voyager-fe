@@ -167,7 +167,7 @@ export default function KlubbInnstillingerContent({
                   type="number"
                   inputMode="numeric"
                   min={1}
-                  max={30}
+                  max={150}
                   step={1}
                   onBlur={() => onBlurField("feedSynligAntallDager")}
                   aria-invalid={!!feedSynligAntallDagerError}

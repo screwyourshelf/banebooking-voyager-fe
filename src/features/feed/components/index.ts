@@ -1,1 +1,1 @@
-export { default as FeedAlerts } from "./FeedAlerts";
+export { default as NotifikasjonDrawer } from "./NotifikasjonDrawer";

@@ -7,6 +7,8 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { TriangleAlert } from "lucide-react";
 
 import ForhandsvisningTable from "./ForhandsvisningTable";
 import type { ArrangementForhåndsvisningRespons } from "@/types";
@@ -21,6 +23,8 @@ type Props = {
   isLoading: boolean;
 
   onCreate: () => void;
+  bekreftTekst?: string;
+  advarsel?: string;
 };
 
 export default function ForhandsvisningDialog({
@@ -30,6 +34,8 @@ export default function ForhandsvisningDialog({
   forhandsvisning,
   isLoading,
   onCreate,
+  bekreftTekst,
+  advarsel,
 }: Props) {
   const antallLedige = forhandsvisning.ledige.length;
   const antallKonflikter = forhandsvisning.konflikter.length;
@@ -51,11 +57,18 @@ export default function ForhandsvisningDialog({
           <p className="text-muted-foreground italic">Ingen bookinger å vise.</p>
         ) : (
           <>
+            {advarsel && (
+              <Alert className="border-amber-200 bg-amber-50 text-amber-700 [&>svg]:text-amber-700">
+                <TriangleAlert />
+                <AlertDescription>{advarsel}</AlertDescription>
+              </Alert>
+            )}
+
             <ForhandsvisningTable beskrivelse={beskrivelse} forhandsvisning={forhandsvisning} />
 
             <DialogFooter className="mt-3">
               <Button type="button" onClick={onCreate}>
-                Opprett {antallLedige} bookinger
+                {bekreftTekst ?? `Opprett ${antallLedige} bookinger`}
               </Button>
             </DialogFooter>
           </>

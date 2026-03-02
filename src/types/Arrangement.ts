@@ -118,3 +118,25 @@ export type ArrangementPaameldtListeRespons = {
   antallPaameldte: number;
   paameldte: PaameldtBrukerRespons[];
 };
+
+export type ArrangementForRedigeringRespons = {
+  id: string;
+  tittel: string;
+  beskrivelse?: string;
+  kategori: ArrangementKategori;
+  startDato: string;
+  sluttDato: string;
+  baneIder: string[];
+  ukedager: DayOfWeek[];
+  tidspunkter: string[];
+  tillaterPaamelding: boolean;
+  antallPaameldte: number;
+};
+
+export type ErstattArrangementRespons = {
+  arrangementId: string;
+  antallOpprettet: number;
+  antallPaameldingFjernet: number;
+  tillaterPaamelding: boolean;
+  konflikter: ArrangementKonfliktRespons[];
+};

@@ -42,7 +42,7 @@ function validateFeedSynligAntallDager(value: string): string | null {
   const t = value.trim();
   if (!t) return null;
   const n = Number(t);
-  if (!Number.isInteger(n) || n < 1 || n > 30) return "Antall dager må være mellom 1 og 30.";
+  if (!Number.isInteger(n) || n < 1 || n > 150) return "Antall dager må være mellom 1 og 150.";
   return null;
 }
 
