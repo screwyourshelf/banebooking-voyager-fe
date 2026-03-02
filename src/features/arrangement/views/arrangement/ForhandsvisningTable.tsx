@@ -41,48 +41,55 @@ export default function ForhandsvisningTable({ beskrivelse, forhandsvisning }: P
   }, [forhandsvisning.ledige, forhandsvisning.konflikter]);
 
   return (
-    <div className="max-h-[60vh] overflow-auto rounded-md border">
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Dato</TableHead>
-            <TableHead>Klokkeslett</TableHead>
-            <TableHead>Bane</TableHead>
-            <TableHead>Beskrivelse</TableHead>
-          </TableRow>
-        </TableHeader>
+    <div className="space-y-2">
+      <p className="text-sm text-muted-foreground">
+        {beskrivelse}
+      </p>
 
-        <TableBody>
-          {alleSlots.map((slot) => {
-            const erKonflikt = konfliktKeys.has(slotKey(slot));
-            const baneNavn = slot.baneNavn?.trim() || "(ukjent bane)";
+      <div className="max-h-[60vh] overflow-auto rounded-md border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Dato</TableHead>
+              <TableHead>Klokkeslett</TableHead>
+              <TableHead>Bane</TableHead>
+              <TableHead>Status</TableHead>
+            </TableRow>
+          </TableHeader>
 
-            return (
-              <TableRow
-                key={slotKey(slot)}
-                className={cn("hover:bg-muted/50", erKonflikt && "bg-muted/40")}
-              >
-                <TableCell className="align-top whitespace-nowrap">
-                  {formatDatoKort(slot.dato)}
-                </TableCell>
+          <TableBody>
+            {alleSlots.map((slot) => {
+              const erKonflikt = konfliktKeys.has(slotKey(slot));
+              const baneNavn = slot.baneNavn?.trim() || "(ukjent bane)";
 
-                <TableCell className="align-top whitespace-nowrap">
-                  {slot.startTid} – {slot.sluttTid}
-                </TableCell>
+              return (
+                <TableRow
+                  key={slotKey(slot)}
+                  className={cn("hover:bg-muted/50", erKonflikt && "bg-muted/40")}
+                >
+                  <TableCell className="align-top whitespace-nowrap">
+                    {formatDatoKort(slot.dato)}
+                  </TableCell>
 
-                <TableCell className="align-top whitespace-nowrap">{baneNavn}</TableCell>
+                  <TableCell className="align-top whitespace-nowrap">
+                    {slot.startTid} – {slot.sluttTid}
+                  </TableCell>
 
-                <TableCell className="align-top">
-                  {beskrivelse}
-                  {erKonflikt && (
-                    <span className="ml-2 text-xs text-muted-foreground">(Konflikt)</span>
-                  )}
-                </TableCell>
-              </TableRow>
-            );
-          })}
-        </TableBody>
-      </Table>
+                  <TableCell className="align-top whitespace-nowrap">{baneNavn}</TableCell>
+
+                  <TableCell className="align-top">
+                    {erKonflikt ? (
+                      <span className="text-xs text-muted-foreground">Konflikt</span>
+                    ) : (
+                      <span className="text-xs text-muted-foreground">Ledig</span>
+                    )}
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   );
 }
