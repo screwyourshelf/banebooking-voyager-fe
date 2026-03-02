@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -39,6 +40,9 @@ export default function KobleTilArrangementDialog({ valgtId, onVelg, children }:
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Koble til arrangement</DialogTitle>
+          <DialogDescription className="sr-only">
+            Velg et arrangement å knytte bookingen til
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">

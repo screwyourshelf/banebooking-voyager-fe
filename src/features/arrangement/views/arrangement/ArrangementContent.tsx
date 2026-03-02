@@ -192,9 +192,7 @@ export default function ArrangementContent(props: Props) {
 
               <Row
                 title="Ukedager"
-                right={
-                  <Switch checked={alleUkedager} onCheckedChange={onToggleAlleUkedager} />
-                }
+                right={<Switch checked={alleUkedager} onCheckedChange={onToggleAlleUkedager} />}
               >
                 <div className="flex flex-wrap gap-2">
                   {UKEDAGER_REKKEFOLGE.map((dag) => (
@@ -220,9 +218,7 @@ export default function ArrangementContent(props: Props) {
             <RowList>
               <Row
                 title="Baner"
-                right={
-                  <Switch checked={alleBaner} onCheckedChange={onToggleAlleBaner} />
-                }
+                right={<Switch checked={alleBaner} onCheckedChange={onToggleAlleBaner} />}
               >
                 <div className="flex flex-wrap gap-2">
                   {baner.map((b) => (
@@ -243,10 +239,7 @@ export default function ArrangementContent(props: Props) {
               <Row
                 title="Tidspunkter"
                 right={
-                  <Switch
-                    checked={alleTidspunkter}
-                    onCheckedChange={onToggleAlleTidspunkter}
-                  />
+                  <Switch checked={alleTidspunkter} onCheckedChange={onToggleAlleTidspunkter} />
                 }
               >
                 <div className="flex flex-wrap gap-2">

@@ -5,6 +5,7 @@ import { Field } from "@/components/ui/field";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle,
@@ -39,6 +40,9 @@ export default function RedigerBrukerDialog({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Rediger bruker</DialogTitle>
+          <DialogDescription className="sr-only">
+            Endre visningsnavn og rolle for bruker
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-4">
