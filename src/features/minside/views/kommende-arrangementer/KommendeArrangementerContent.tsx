@@ -9,7 +9,17 @@ import { AccordionDetailGrid, AccordionDetailRow } from "@/components/accordion"
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDatoKort, formatDayOfWeeksLangNorsk } from "@/utils/datoUtils";
-import { Calendar, Clock, Link, MapPin, Users, UserCheck, CalendarPlus, XCircle, Ban } from "lucide-react";
+import {
+  Calendar,
+  Clock,
+  Link,
+  MapPin,
+  Users,
+  UserCheck,
+  CalendarPlus,
+  XCircle,
+  Ban,
+} from "lucide-react";
 import { SlettArrangementDialog } from "@/features/arrangement/components";
 import PaameldteDialog from "./PaameldteDialog";
 import { useSlug } from "@/hooks/useSlug";

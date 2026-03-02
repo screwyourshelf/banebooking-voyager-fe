@@ -9,7 +9,17 @@ import WeatherInfo from "@/components/WeatherInfo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import SlotListSkeleton from "@/components/loading/SlotListSkeleton";
-import { User, Calendar, Timer, Users, UserCheck, Link2, CalendarPlus, XCircle, Trash2 } from "lucide-react";
+import {
+  User,
+  Calendar,
+  Timer,
+  Users,
+  UserCheck,
+  Link2,
+  CalendarPlus,
+  XCircle,
+  Trash2,
+} from "lucide-react";
 import PaameldteDialog from "@/features/minside/views/kommende-arrangementer/PaameldteDialog";
 import KobleTilArrangementDialog from "./KobleTilArrangementDialog";
 import { harHandling } from "@/utils/handlingUtils";

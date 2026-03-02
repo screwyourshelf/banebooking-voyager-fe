@@ -42,9 +42,7 @@ export default function ForhandsvisningTable({ beskrivelse, forhandsvisning }: P
 
   return (
     <div className="space-y-2">
-      <p className="text-sm text-muted-foreground">
-        {beskrivelse}
-      </p>
+      <p className="text-sm text-muted-foreground">{beskrivelse}</p>
 
       <div className="max-h-[60vh] overflow-auto rounded-md border">
         <Table>

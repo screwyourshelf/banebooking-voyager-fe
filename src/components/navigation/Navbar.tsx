@@ -12,15 +12,7 @@ import { FormLayout, FormActions, FormSubmitButton } from "@/components/forms";
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
-import {
-  User,
-  LogIn,
-  LogOut,
-  Calendar,
-  CircleUser,
-  Wrench,
-  Menu,
-} from "lucide-react";
+import { User, LogIn, LogOut, Calendar, CircleUser, Wrench, Menu } from "lucide-react";
 import { GoogleIcon, FacebookIcon } from "@/components/icons";
 
 import { useAuth } from "@/hooks/useAuth";

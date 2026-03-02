@@ -50,7 +50,10 @@ export default function App() {
             </Route>
 
             <Route path="auth/callback" element={<AuthCallbackPage />} />
-            <Route path="*" element={<div className="p-4 text-center">404 – Fant ikke siden</div>} />
+            <Route
+              path="*"
+              element={<div className="p-4 text-center">404 – Fant ikke siden</div>}
+            />
           </Routes>
         </Suspense>
       </BrowserRouter>
