@@ -9,8 +9,7 @@ import WeatherInfo from "@/components/WeatherInfo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import SlotListSkeleton from "@/components/loading/SlotListSkeleton";
-import { User, Calendar, Timer, Users, UserCheck, Link2 } from "lucide-react";
-import { FaCalendarPlus, FaTimesCircle, FaTrashAlt } from "react-icons/fa";
+import { User, Calendar, Timer, Users, UserCheck, Link2, CalendarPlus, XCircle, Trash2 } from "lucide-react";
 import PaameldteDialog from "@/features/minside/views/kommende-arrangementer/PaameldteDialog";
 import KobleTilArrangementDialog from "./KobleTilArrangementDialog";
 import { harHandling } from "@/utils/handlingUtils";
@@ -227,7 +226,7 @@ export function BookingSlotListAccordion({
                         }}
                         className="flex items-center gap-2 text-sm"
                       >
-                        <FaCalendarPlus />
+                        <CalendarPlus className="size-4" />
                         Book
                       </Button>
                     )}
@@ -242,7 +241,7 @@ export function BookingSlotListAccordion({
                         }}
                         className="flex items-center gap-2 text-sm"
                       >
-                        <FaTimesCircle />
+                        <XCircle className="size-4" />
                         Avbestill
                       </Button>
                     )}
@@ -257,7 +256,7 @@ export function BookingSlotListAccordion({
                         }}
                         className="flex items-center gap-2 text-sm"
                       >
-                        <FaTrashAlt />
+                        <Trash2 className="size-4" />
                         Slett
                       </Button>
                     )}
@@ -272,7 +271,7 @@ export function BookingSlotListAccordion({
                         }}
                         className="flex items-center gap-2 text-sm"
                       >
-                        <FaTimesCircle />
+                        <XCircle className="size-4" />
                         Meld meg av
                       </Button>
                     )}
@@ -287,7 +286,7 @@ export function BookingSlotListAccordion({
                         }}
                         className="flex items-center gap-2 text-sm"
                       >
-                        <FaCalendarPlus />
+                        <CalendarPlus className="size-4" />
                         Meld meg på
                       </Button>
                     )}

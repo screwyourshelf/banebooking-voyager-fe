@@ -9,8 +9,7 @@ import { AccordionDetailGrid, AccordionDetailRow } from "@/components/accordion"
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDatoKort, formatDayOfWeeksLangNorsk } from "@/utils/datoUtils";
-import { Calendar, Clock, Link, MapPin, Users, UserCheck } from "lucide-react";
-import { FaCalendarPlus, FaTimesCircle, FaBan } from "react-icons/fa";
+import { Calendar, Clock, Link, MapPin, Users, UserCheck, CalendarPlus, XCircle, Ban } from "lucide-react";
 import { SlettArrangementDialog } from "@/features/arrangement/components";
 import PaameldteDialog from "./PaameldteDialog";
 import { useSlug } from "@/hooks/useSlug";
@@ -177,7 +176,7 @@ export default function KommendeArrangementerContent({
                                 size="sm"
                                 className="flex items-center gap-2 text-sm"
                               >
-                                <FaBan />
+                                <Ban className="size-4" />
                                 Avlys
                               </Button>
                             }
@@ -190,7 +189,7 @@ export default function KommendeArrangementerContent({
                             onClick={() => onMeldAv(arr)}
                             className="flex items-center gap-2 text-sm"
                           >
-                            <FaTimesCircle />
+                            <XCircle className="size-4" />
                             Meld meg av
                           </Button>
                         )}
@@ -201,7 +200,7 @@ export default function KommendeArrangementerContent({
                             onClick={() => onMeldPaa(arr)}
                             className="flex items-center gap-2 text-sm"
                           >
-                            <FaCalendarPlus />
+                            <CalendarPlus className="size-4" />
                             Meld meg på
                           </Button>
                         )}

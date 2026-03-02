@@ -13,8 +13,7 @@ import WeatherInfo from "@/components/WeatherInfo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDatoKort } from "@/utils/datoUtils";
-import { Timer, User } from "lucide-react";
-import { FaTimesCircle } from "react-icons/fa";
+import { Timer, User, XCircle } from "lucide-react";
 import type { BookingSlotRespons } from "@/types";
 import { harHandling } from "@/utils/handlingUtils";
 
@@ -156,7 +155,7 @@ export default function MineBookingerContent({
                             }}
                             className="flex items-center gap-2 text-sm"
                           >
-                            <FaTimesCircle />
+                            <XCircle className="size-4" />
                             Avbestill
                           </Button>
                         </AccordionActions>

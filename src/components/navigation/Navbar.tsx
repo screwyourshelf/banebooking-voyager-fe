@@ -13,16 +13,15 @@ import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
 import {
-  FaUser,
-  FaFacebook,
-  FaSignInAlt,
-  FaSignOutAlt,
-  FaCalendarAlt,
-  FaUserCircle,
-  FaWrench,
-  FaBars,
-} from "react-icons/fa";
-import { FcGoogle } from "react-icons/fc";
+  User,
+  LogIn,
+  LogOut,
+  Calendar,
+  CircleUser,
+  Wrench,
+  Menu,
+} from "lucide-react";
+import { GoogleIcon, FacebookIcon } from "@/components/icons";
 
 import { useAuth } from "@/hooks/useAuth";
 import { useLogin } from "@/hooks/useLogin";
@@ -30,6 +29,7 @@ import { useKlubb } from "@/hooks/useKlubb";
 import { useBruker } from "@/hooks/useBruker";
 import { harHandling } from "@/utils/handlingUtils";
 import NavbarBrandMedKlubb from "./NavbarBrandMedKlubb";
+import ModeToggle from "./ModeToggle";
 import { NotifikasjonDrawer } from "@/features/feed/components";
 import { useSlug } from "@/hooks/useSlug";
 
@@ -129,6 +129,7 @@ export default function Navbar() {
       <NavbarBrandMedKlubb klubbnavn={klubb?.navn ?? "\u00A0"} />
 
       <div className="flex items-center gap-1">
+        <ModeToggle />
         {currentUser && <NotifikasjonDrawer />}
 
         <DropdownMenu>
@@ -137,16 +138,16 @@ export default function Navbar() {
               variant="outline"
               className="h-8 px-2 flex items-center gap-2 sm:text-xs sm:px-2"
             >
-              <FaBars className="text-muted-foreground sm:hidden" />
+              <Menu className="size-4 text-muted-foreground sm:hidden" />
               <span className="hidden sm:inline-flex items-center gap-2">
                 {currentUser ? (
                   <>
-                    <FaUser className="text-muted-foreground" />
+                    <User className="size-4 text-muted-foreground" />
                     {currentUser.email}
                   </>
                 ) : (
                   <>
-                    <FaSignInAlt className="text-muted-foreground" />
+                    <LogIn className="size-4 text-muted-foreground" />
                     Logg inn
                   </>
                 )}
@@ -159,14 +160,14 @@ export default function Navbar() {
               <>
                 <DropdownMenuItem asChild>
                   <Link to={`/${slug}/minside`}>
-                    <FaUserCircle className="mr-2" />
+                    <CircleUser className="mr-2 size-4" />
                     Min side
                   </Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild>
                   <Link to={`/${slug}`}>
-                    <FaCalendarAlt className="mr-2" />
+                    <Calendar className="mr-2 size-4" />
                     Book bane
                   </Link>
                 </DropdownMenuItem>
@@ -181,7 +182,7 @@ export default function Navbar() {
                     {harHandling(h, "klubb:admin") && (
                       <DropdownMenuItem asChild>
                         <Link to={`/${slug}/admin/klubb`}>
-                          <FaWrench className="mr-2" />
+                          <Wrench className="mr-2 size-4" />
                           Klubb
                         </Link>
                       </DropdownMenuItem>
@@ -189,7 +190,7 @@ export default function Navbar() {
                     {harHandling(h, "baner:admin") && (
                       <DropdownMenuItem asChild>
                         <Link to={`/${slug}/admin/baner`}>
-                          <FaWrench className="mr-2" />
+                          <Wrench className="mr-2 size-4" />
                           Baner
                         </Link>
                       </DropdownMenuItem>
@@ -197,7 +198,7 @@ export default function Navbar() {
                     {harHandling(h, "brukere:admin") && (
                       <DropdownMenuItem asChild>
                         <Link to={`/${slug}/admin/brukere`}>
-                          <FaWrench className="mr-2" />
+                          <Wrench className="mr-2 size-4" />
                           Brukere
                         </Link>
                       </DropdownMenuItem>
@@ -206,7 +207,7 @@ export default function Navbar() {
                     {harHandling(h, "arrangement:se") && (
                       <DropdownMenuItem asChild>
                         <Link to={`/${slug}/arrangement`}>
-                          <FaCalendarAlt className="mr-2" />
+                          <Calendar className="mr-2 size-4" />
                           Arrangement
                         </Link>
                       </DropdownMenuItem>
@@ -216,7 +217,7 @@ export default function Navbar() {
 
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={() => signOut()} disabled={erBusy}>
-                  <FaSignOutAlt className="mr-2" />
+                  <LogOut className="mr-2 size-4" />
                   Logg ut
                 </DropdownMenuItem>
               </>
@@ -231,12 +232,12 @@ export default function Navbar() {
                 </p>
 
                 <DropdownMenuItem onClick={handleGoogleLogin} disabled={erBusy}>
-                  <FcGoogle size={18} className="mr-2" />
+                  <GoogleIcon className="mr-2 size-5" />
                   Logg inn med Google
                 </DropdownMenuItem>
 
                 <DropdownMenuItem onClick={handleFacebookLogin} disabled={erBusy}>
-                  <FaFacebook size={18} className="mr-2" />
+                  <FacebookIcon className="mr-2 size-5" />
                   Logg inn med Facebook
                 </DropdownMenuItem>
 
