@@ -77,8 +77,7 @@ export function useBooking(dato: string, baneId: string) {
                   ...s,
                   booketAv: "Du",
                   erEier: true,
-                  kanBookes: false,
-                  kanAvbestille: true,
+                  tillattHandlinger: ["booking:avbestill"],
                 }
               : s
           )
@@ -117,9 +116,7 @@ export function useBooking(dato: string, baneId: string) {
                   ...s,
                   booketAv: null,
                   erEier: false,
-                  kanBookes: true,
-                  kanAvbestille: false,
-                  kanSlette: false,
+                  tillattHandlinger: ["booking:book"],
                 }
               : s
           )
@@ -157,9 +154,7 @@ export function useBooking(dato: string, baneId: string) {
                   ...s,
                   booketAv: null,
                   erEier: false,
-                  kanBookes: true,
-                  kanAvbestille: false,
-                  kanSlette: false,
+                  tillattHandlinger: ["booking:book"],
                 }
               : s
           )

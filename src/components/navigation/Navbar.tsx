@@ -28,6 +28,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useLogin } from "@/hooks/useLogin";
 import { useKlubb } from "@/hooks/useKlubb";
 import { useBruker } from "@/hooks/useBruker";
+import { harHandling } from "@/utils/handlingUtils";
 import NavbarBrandMedKlubb from "./NavbarBrandMedKlubb";
 import { NotifikasjonDrawer } from "@/features/feed/components";
 import { useSlug } from "@/hooks/useSlug";
@@ -65,8 +66,13 @@ export default function Navbar() {
     setFeilOtp(null);
   }, [step]);
 
-  const erAdmin = bruker?.roller?.includes("KlubbAdmin") ?? false;
-  const harUtvidetTilgang = bruker?.roller?.includes("Utvidet") ?? false;
+  const h = bruker?.tillattHandlinger ?? [];
+  const erAdmin = harHandling(h, "klubb:admin");
+  const harAdminSeksjon =
+    harHandling(h, "klubb:admin") ||
+    harHandling(h, "baner:admin") ||
+    harHandling(h, "brukere:admin") ||
+    harHandling(h, "arrangement:se");
 
   const stoppDropdownKeybindings = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key.length === 1) e.stopPropagation();
@@ -165,42 +171,46 @@ export default function Navbar() {
                   </Link>
                 </DropdownMenuItem>
 
-                {(erAdmin || harUtvidetTilgang) && (
+                {harAdminSeksjon && (
                   <>
                     <DropdownMenuSeparator />
                     <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">
                       {erAdmin ? "Admin" : "Utvidet tilgang"}
                     </div>
 
-                    {erAdmin && (
-                      <>
-                        <DropdownMenuItem asChild>
-                          <Link to={`/${slug}/admin/klubb`}>
-                            <FaWrench className="mr-2" />
-                            Klubb
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link to={`/${slug}/admin/baner`}>
-                            <FaWrench className="mr-2" />
-                            Baner
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link to={`/${slug}/admin/brukere`}>
-                            <FaWrench className="mr-2" />
-                            Brukere
-                          </Link>
-                        </DropdownMenuItem>
-                      </>
+                    {harHandling(h, "klubb:admin") && (
+                      <DropdownMenuItem asChild>
+                        <Link to={`/${slug}/admin/klubb`}>
+                          <FaWrench className="mr-2" />
+                          Klubb
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+                    {harHandling(h, "baner:admin") && (
+                      <DropdownMenuItem asChild>
+                        <Link to={`/${slug}/admin/baner`}>
+                          <FaWrench className="mr-2" />
+                          Baner
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+                    {harHandling(h, "brukere:admin") && (
+                      <DropdownMenuItem asChild>
+                        <Link to={`/${slug}/admin/brukere`}>
+                          <FaWrench className="mr-2" />
+                          Brukere
+                        </Link>
+                      </DropdownMenuItem>
                     )}
 
-                    <DropdownMenuItem asChild>
-                      <Link to={`/${slug}/arrangement`}>
-                        <FaCalendarAlt className="mr-2" />
-                        Arrangement
-                      </Link>
-                    </DropdownMenuItem>
+                    {harHandling(h, "arrangement:se") && (
+                      <DropdownMenuItem asChild>
+                        <Link to={`/${slug}/arrangement`}>
+                          <FaCalendarAlt className="mr-2" />
+                          Arrangement
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
                   </>
                 )}
 

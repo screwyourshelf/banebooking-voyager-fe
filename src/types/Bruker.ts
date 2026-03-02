@@ -8,6 +8,7 @@ export interface BrukerRespons {
   roller: RolleType[];
   vilkårAkseptertDato?: string | null;
   vilkårVersjon?: string | null;
+  tillattHandlinger: string[];
 }
 
 // Requests

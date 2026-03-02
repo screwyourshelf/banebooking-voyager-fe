@@ -13,6 +13,7 @@ import { User, Calendar, Timer, Users, UserCheck, Link2 } from "lucide-react";
 import { FaCalendarPlus, FaTimesCircle, FaTrashAlt } from "react-icons/fa";
 import PaameldteDialog from "@/features/minside/views/kommende-arrangementer/PaameldteDialog";
 import KobleTilArrangementDialog from "./KobleTilArrangementDialog";
+import { harHandling } from "@/utils/handlingUtils";
 import type { BookingSlotRespons } from "@/types";
 
 type Props = {
@@ -24,7 +25,6 @@ type Props = {
   onMeldPaa?: (slot: BookingSlotRespons) => void;
   onMeldAv?: (slot: BookingSlotRespons) => void;
   isLoading?: boolean;
-  kanKobleTilArrangement?: boolean;
 };
 
 export function BookingSlotListAccordion({
@@ -36,7 +36,6 @@ export function BookingSlotListAccordion({
   onMeldPaa,
   onMeldAv,
   isLoading = false,
-  kanKobleTilArrangement = false,
 }: Props) {
   if (isLoading) return <SlotListSkeleton />;
 
@@ -63,10 +62,9 @@ export function BookingSlotListAccordion({
         const erBooket = !!slot.booketAv;
         const erMinBooking = slot.erEier === true;
 
-        const kanMeldePåAv = harArrangement && !!slot.tillaterPaamelding;
-        const harHandlinger =
-          slot.kanBookes || slot.kanAvbestille || slot.kanSlette || kanMeldePåAv;
-        const kanUtføreHandling = !!currentUser && harHandlinger && !slot.erPassert;
+        const kan = (h: string) => harHandling(slot.tillattHandlinger, h);
+        const harHandlinger = slot.tillattHandlinger.length > 0;
+        const kanUtføreHandling = !!currentUser && harHandlinger;
 
         const harVaer =
           !!slot.værSymbol || typeof slot.temperatur === "number" || typeof slot.vind === "number";
@@ -201,7 +199,7 @@ export function BookingSlotListAccordion({
                 {/* Actions */}
                 {kanUtføreHandling && (
                   <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t">
-                    {kanKobleTilArrangement && !harArrangement && slot.kanBookes && (
+                    {kan("booking:kobleTilArrangement") && (
                       <KobleTilArrangementDialog
                         valgtId={null}
                         onVelg={(id) => {
@@ -219,7 +217,7 @@ export function BookingSlotListAccordion({
                       </KobleTilArrangementDialog>
                     )}
 
-                    {slot.kanBookes && (
+                    {kan("booking:book") && (
                       <Button
                         variant="outline"
                         size="sm"
@@ -234,7 +232,7 @@ export function BookingSlotListAccordion({
                       </Button>
                     )}
 
-                    {slot.kanAvbestille && (
+                    {kan("booking:avbestill") && (
                       <Button
                         variant="outline"
                         size="sm"
@@ -249,7 +247,7 @@ export function BookingSlotListAccordion({
                       </Button>
                     )}
 
-                    {slot.kanSlette && (
+                    {kan("booking:slett") && (
                       <Button
                         variant="destructive"
                         size="sm"
@@ -264,34 +262,35 @@ export function BookingSlotListAccordion({
                       </Button>
                     )}
 
-                    {kanMeldePåAv &&
-                      (slot.erPaameldt ? (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onMeldAv?.(slot);
-                          }}
-                          className="flex items-center gap-2 text-sm"
-                        >
-                          <FaTimesCircle />
-                          Meld meg av
-                        </Button>
-                      ) : (
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            onMeldPaa?.(slot);
-                          }}
-                          className="flex items-center gap-2 text-sm"
-                        >
-                          <FaCalendarPlus />
-                          Meld meg på
-                        </Button>
-                      ))}
+                    {kan("booking:meldAv") && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onMeldAv?.(slot);
+                        }}
+                        className="flex items-center gap-2 text-sm"
+                      >
+                        <FaTimesCircle />
+                        Meld meg av
+                      </Button>
+                    )}
+
+                    {kan("booking:meldPaa") && (
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onMeldPaa?.(slot);
+                        }}
+                        className="flex items-center gap-2 text-sm"
+                      >
+                        <FaCalendarPlus />
+                        Meld meg på
+                      </Button>
+                    )}
                   </div>
                 )}
               </div>

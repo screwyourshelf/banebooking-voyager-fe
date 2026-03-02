@@ -89,7 +89,7 @@ export type KommendeArrangementRespons = {
   tillaterPaamelding: boolean;
   antallPaameldte: number;
   erPaameldt: boolean;
-  kanAvlyse: boolean;
+  tillattHandlinger: string[];
 };
 
 export type ArrangementPaameldingRespons = {

@@ -26,7 +26,6 @@ type Props = {
   onDelete: (slot: BookingSlotRespons) => void;
   onMeldPaa: (slot: BookingSlotRespons) => void;
   onMeldAv: (slot: BookingSlotRespons) => void;
-  kanKobleTilArrangement?: boolean;
 };
 
 export default function BookingContent({
@@ -43,7 +42,6 @@ export default function BookingContent({
   onDelete,
   onMeldPaa,
   onMeldAv,
-  kanKobleTilArrangement = false,
 }: Props) {
   return (
     <>
@@ -75,7 +73,6 @@ export default function BookingContent({
               onMeldPaa={onMeldPaa}
               onMeldAv={onMeldAv}
               isLoading={isLoading}
-              kanKobleTilArrangement={kanKobleTilArrangement}
             />
           ),
         }))}

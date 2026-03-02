@@ -12,13 +12,11 @@ export type BookingSlotRespons = {
   tillaterPaamelding?: boolean;
   erPaameldt?: boolean;
   antallPaameldte?: number;
-  kanBookes: boolean;
-  kanAvbestille: boolean;
-  kanSlette: boolean;
   erPassert: boolean;
   værSymbol?: string;
   temperatur?: number;
   vind?: number;
+  tillattHandlinger: string[];
 };
 
 // Requests

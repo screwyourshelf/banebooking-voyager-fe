@@ -14,6 +14,7 @@ import { FaCalendarPlus, FaTimesCircle, FaBan } from "react-icons/fa";
 import { SlettArrangementDialog } from "@/features/arrangement/components";
 import PaameldteDialog from "./PaameldteDialog";
 import { useSlug } from "@/hooks/useSlug";
+import { harHandling } from "@/utils/handlingUtils";
 import { toast } from "sonner";
 import type { KommendeArrangementRespons } from "@/types";
 
@@ -153,9 +154,9 @@ export default function KommendeArrangementerContent({
                       )}
                     </AccordionDetailGrid>
 
-                    {(arr.tillaterPaamelding || arr.kanAvlyse) && (
+                    {arr.tillattHandlinger.length > 0 && (
                       <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t">
-                        {arr.kanAvlyse && (
+                        {harHandling(arr.tillattHandlinger, "arrangement:kopierLenke") && (
                           <Button
                             variant="outline"
                             size="sm"
@@ -166,7 +167,7 @@ export default function KommendeArrangementerContent({
                             Kopier lenke
                           </Button>
                         )}
-                        {arr.kanAvlyse && (
+                        {harHandling(arr.tillattHandlinger, "arrangement:avlys") && (
                           <SlettArrangementDialog
                             tittel={arr.tittel}
                             onSlett={() => onAvlys(arr).then(() => {})}
@@ -182,28 +183,28 @@ export default function KommendeArrangementerContent({
                             }
                           />
                         )}
-                        {arr.tillaterPaamelding &&
-                          (arr.erPaameldt ? (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => onMeldAv(arr)}
-                              className="flex items-center gap-2 text-sm"
-                            >
-                              <FaTimesCircle />
-                              Meld meg av
-                            </Button>
-                          ) : (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => onMeldPaa(arr)}
-                              className="flex items-center gap-2 text-sm"
-                            >
-                              <FaCalendarPlus />
-                              Meld meg på
-                            </Button>
-                          ))}
+                        {harHandling(arr.tillattHandlinger, "arrangement:meldAv") && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => onMeldAv(arr)}
+                            className="flex items-center gap-2 text-sm"
+                          >
+                            <FaTimesCircle />
+                            Meld meg av
+                          </Button>
+                        )}
+                        {harHandling(arr.tillattHandlinger, "arrangement:meldPaa") && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => onMeldPaa(arr)}
+                            className="flex items-center gap-2 text-sm"
+                          >
+                            <FaCalendarPlus />
+                            Meld meg på
+                          </Button>
+                        )}
                       </div>
                     )}
                   </div>

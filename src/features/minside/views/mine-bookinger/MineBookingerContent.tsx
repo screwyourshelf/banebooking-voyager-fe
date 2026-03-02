@@ -16,6 +16,7 @@ import { formatDatoKort } from "@/utils/datoUtils";
 import { Timer, User } from "lucide-react";
 import { FaTimesCircle } from "react-icons/fa";
 import type { BookingSlotRespons } from "@/types";
+import { harHandling } from "@/utils/handlingUtils";
 
 import { buildBookingKey } from "./bookingSort";
 
@@ -90,7 +91,7 @@ export default function MineBookingerContent({
             {synligeBookinger.map((b) => {
               const key = buildBookingKey(b);
               const tid = `${b.startTid.slice(0, 5)} – ${b.sluttTid.slice(0, 5)}`;
-              const kanAvbestille = b.kanAvbestille && !b.erPassert;
+              const kanAvbestille = harHandling(b.tillattHandlinger, "booking:avbestill");
               const dagerIgjen = b.erPassert ? null : dagerIgjenFra(b.dato);
 
               const [startH, startM] = b.startTid.split(":").map(Number);

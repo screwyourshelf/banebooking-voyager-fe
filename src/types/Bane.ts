@@ -4,6 +4,7 @@ export type BaneRespons = {
   navn: string;
   beskrivelse: string;
   aktiv: boolean;
+  tillattHandlinger: string[];
 };
 
 // Requests
