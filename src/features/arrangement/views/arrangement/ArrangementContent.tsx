@@ -6,6 +6,7 @@ import { Field } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -132,10 +133,10 @@ export default function ArrangementContent(props: Props) {
           onOpenPreview();
         }}
       >
-        <PageSection title="Type" description="Kategori og beskrivelse for arrangementet.">
+        <PageSection title="Type">
           <RowPanel>
             <RowList>
-              <Row title="Kategori" description="Velg type arrangement.">
+              <Row title="Kategori">
                 <Field>
                   <Label htmlFor="kategori" className="sr-only">
                     Kategori
@@ -157,7 +158,7 @@ export default function ArrangementContent(props: Props) {
                 </Field>
               </Row>
 
-              <Row title="Beskrivelse" description="Vises på bookingene.">
+              <Row title="Beskrivelse">
                 <Field>
                   <Textarea
                     id="beskrivelse"
@@ -178,28 +179,23 @@ export default function ArrangementContent(props: Props) {
           </RowPanel>
         </PageSection>
 
-        <PageSection
-          title="Periode"
-          description="Velg dato-intervallet og hvilke ukedager som gjelder."
-        >
+        <PageSection title="Periode">
           <RowPanel>
             <RowList>
-              <Row title="Fra" description="Startdato.">
+              <Row title="Fra">
                 <DatoVelger value={datoFra} onChange={onChangeDatoFra} visNavigering />
               </Row>
 
-              <Row title="Til" description="Sluttdato.">
+              <Row title="Til">
                 <DatoVelger value={datoTil} onChange={onChangeDatoTil} visNavigering />
               </Row>
 
-              <SwitchRow
-                title="Alle gyldige dager"
-                description="Velger automatisk alle dager som finnes i perioden."
-                checked={alleUkedager}
-                onCheckedChange={onToggleAlleUkedager}
-              />
-
-              <Row title="Ukedager" description="Bare dager som finnes i perioden er aktive.">
+              <Row
+                title="Ukedager"
+                right={
+                  <Switch checked={alleUkedager} onCheckedChange={onToggleAlleUkedager} />
+                }
+              >
                 <div className="flex flex-wrap gap-2">
                   {UKEDAGER_REKKEFOLGE.map((dag) => (
                     <Button
@@ -219,19 +215,15 @@ export default function ArrangementContent(props: Props) {
           </RowPanel>
         </PageSection>
 
-        <PageSection
-          title="Baner og tid"
-          description="Velg hvilke baner og tidspunkter som skal reserveres."
-        >
+        <PageSection title="Baner og tid">
           <RowPanel>
             <RowList>
-              <SwitchRow
-                title="Velg alle baner"
-                checked={alleBaner}
-                onCheckedChange={onToggleAlleBaner}
-              />
-
-              <Row title="Baner" description="Velg hvilke baner arrangementet gjelder.">
+              <Row
+                title="Baner"
+                right={
+                  <Switch checked={alleBaner} onCheckedChange={onToggleAlleBaner} />
+                }
+              >
                 <div className="flex flex-wrap gap-2">
                   {baner.map((b) => (
                     <Button
@@ -248,13 +240,15 @@ export default function ArrangementContent(props: Props) {
                 </div>
               </Row>
 
-              <SwitchRow
-                title="Velg alle tidspunkter"
-                checked={alleTidspunkter}
-                onCheckedChange={onToggleAlleTidspunkter}
-              />
-
-              <Row title="Tidspunkter" description="Velg start-tidspunkt for bookingene.">
+              <Row
+                title="Tidspunkter"
+                right={
+                  <Switch
+                    checked={alleTidspunkter}
+                    onCheckedChange={onToggleAlleTidspunkter}
+                  />
+                }
+              >
                 <div className="flex flex-wrap gap-2">
                   {tilgjengeligeTidspunkter.map((tid) => (
                     <Button
