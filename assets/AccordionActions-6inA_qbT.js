@@ -1,1 +1,0 @@
-import{j as t}from"./react-B_IJOSZv.js";import{f as s}from"./index-BvwjKk76.js";function e({children:o,className:r}){return t.jsx("div",{className:s("flex justify-end pt-2 border-t",r),children:o})}export{e as A};
