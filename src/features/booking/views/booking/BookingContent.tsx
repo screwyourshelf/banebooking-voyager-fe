@@ -43,7 +43,6 @@ export default function BookingContent({
   return (
     <>
       <div className="flex justify-between items-center mb-2">
-        
         <DatoVelger
           value={valgtDato}
           onChange={(date) => onDatoChange(date ?? null)}

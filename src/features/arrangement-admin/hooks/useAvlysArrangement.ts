@@ -18,7 +18,7 @@ export function useAvlysArrangement() {
     {
       onSuccess: (result) => {
         toast.success(
-          `Arrangement avlyst – ${result.antallBookingerDeaktivert} bookinger fjernet.`
+          `Arrangement avlyst – ${result.antallBookingerSlettet} bookinger fjernet.`
         );
         void queryClient.invalidateQueries({ queryKey: ["aktiveArrangementer", slug] });
       },

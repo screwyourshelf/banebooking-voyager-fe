@@ -72,7 +72,7 @@ export type OpprettArrangementRespons = {
 
 export type SlettArrangementRespons = {
   arrangementId: string;
-  antallBookingerDeaktivert: number;
+  antallBookingerSlettet: number;
 };
 
 export type ArrangementRespons = {

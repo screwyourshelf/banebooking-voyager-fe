@@ -26,7 +26,12 @@ export const routeConfig: RouteConfig[] = [
   { path: "", breadcrumb: "Book bane", index: true, component: BookingPage },
   { path: "vilkaar", breadcrumb: "Vilkår", component: VilkaarPage },
   { path: "minside", breadcrumb: "Min side", protected: true, component: MinSidePage },
-  { path: "bookinger", breadcrumb: "Mine bookinger", protected: true, component: MineBookingerPage },
+  {
+    path: "bookinger",
+    breadcrumb: "Mine bookinger",
+    protected: true,
+    component: MineBookingerPage,
+  },
   {
     path: "arrangementer",
     breadcrumb: "Arrangementer",
