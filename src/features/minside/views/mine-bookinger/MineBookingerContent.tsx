@@ -12,24 +12,13 @@ import { AccordionDetailGrid, AccordionDetailRow, AccordionActions } from "@/com
 import WeatherInfo from "@/components/WeatherInfo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { formatDatoKort } from "@/utils/datoUtils";
+import { formatDatoKort, dagerIgjenTekst } from "@/utils/datoUtils";
 import { Timer, User, XCircle } from "lucide-react";
 import type { BookingSlotRespons } from "@/types";
 import { harHandling } from "@/utils/handlingUtils";
 import { grupperSlots } from "@/utils/bookingUtils";
 
 import { buildBookingKey } from "./bookingSort";
-
-function dagerIgjenFra(datoIso: string) {
-  const start = new Date(datoIso);
-  const iDag = new Date();
-
-  const startMidnatt = new Date(start.getFullYear(), start.getMonth(), start.getDate());
-  const iDagMidnatt = new Date(iDag.getFullYear(), iDag.getMonth(), iDag.getDate());
-
-  const diffMs = startMidnatt.getTime() - iDagMidnatt.getTime();
-  return Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
-}
 
 type Props = {
   visHistoriske: boolean;
@@ -95,7 +84,6 @@ export default function MineBookingerContent({
               const effSluttTid = b.bookingSluttTid ?? b.sluttTid;
               const tid = `${effStartTid.slice(0, 5)} – ${effSluttTid.slice(0, 5)}`;
               const kanAvbestille = harHandling(b.tillattHandlinger, "booking:avbestill");
-              const dagerIgjen = b.erPassert ? null : dagerIgjenFra(b.dato);
 
               const [startH, startM] = effStartTid.split(":").map(Number);
               const [sluttH, sluttM] = effSluttTid.split(":").map(Number);
@@ -117,7 +105,7 @@ export default function MineBookingerContent({
                           </Badge>
                         ) : (
                           <Badge variant="secondary" className="text-xs">
-                            {dagerIgjen} {dagerIgjen === 1 ? "dag" : "dager"}
+                            {dagerIgjenTekst(b.dato)}
                           </Badge>
                         )}
                       </div>

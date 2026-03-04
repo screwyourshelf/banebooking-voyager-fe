@@ -12,9 +12,12 @@ export interface RouteConfig {
 // Lazy-loadede komponenter
 const BookingPage = lazy(() => import("@/features/booking/pages/BookingPage"));
 const MinSidePage = lazy(() => import("@/features/minside/pages/MinSidePage"));
+const ArrangementerPage = lazy(() => import("@/features/arrangementer/pages/ArrangementerPage"));
 const KlubbPage = lazy(() => import("@/features/klubb/pages/KlubbPage"));
 const BanerPage = lazy(() => import("@/features/baner/pages/BanerPage"));
-const ArrangementPage = lazy(() => import("@/features/arrangement/pages/ArrangementPage"));
+const ArrangementAdminPage = lazy(
+  () => import("@/features/arrangement-admin/pages/ArrangementPage")
+);
 const BrukerePage = lazy(() => import("@/features/brukere/pages/BrukerePage"));
 const VilkaarPage = lazy(() => import("@/features/policy/pages/VilkaarPage"));
 
@@ -22,7 +25,18 @@ export const routeConfig: RouteConfig[] = [
   { path: "", breadcrumb: "Book bane", index: true, component: BookingPage },
   { path: "vilkaar", breadcrumb: "Vilkår", component: VilkaarPage },
   { path: "minside", breadcrumb: "Min side", protected: true, component: MinSidePage },
-  { path: "arrangement", breadcrumb: "Arrangement", protected: true, component: ArrangementPage },
+  {
+    path: "arrangementer",
+    breadcrumb: "Arrangementer",
+    protected: true,
+    component: ArrangementerPage,
+  },
+  {
+    path: "arrangement",
+    breadcrumb: "Arrangement",
+    protected: true,
+    component: ArrangementAdminPage,
+  },
   {
     path: "admin",
     breadcrumb: "Admin",

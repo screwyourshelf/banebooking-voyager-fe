@@ -75,7 +75,7 @@ export type SlettArrangementRespons = {
   antallBookingerDeaktivert: number;
 };
 
-export type KommendeArrangementRespons = {
+export type ArrangementRespons = {
   id: string;
   tittel: string;
   beskrivelse?: string;
@@ -89,6 +89,7 @@ export type KommendeArrangementRespons = {
   tillaterPaamelding: boolean;
   antallPaameldte: number;
   erPaameldt: boolean;
+  erPassert: boolean;
   tillattHandlinger: string[];
 };
 

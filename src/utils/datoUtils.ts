@@ -160,3 +160,18 @@ export function finnDayOfWeeksIPeriode(fra: Date, til: Date): DayOfWeek[] {
   const dager = finnUkedagerIDatoPeriode(fra, til);
   return isoTilDayOfWeeks([...dager].sort((a, b) => a - b));
 }
+
+export function dagerIgjenTekst(datoIso: string): string {
+  const start = new Date(datoIso);
+  const iDag = new Date();
+
+  const startMidnatt = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+  const iDagMidnatt = new Date(iDag.getFullYear(), iDag.getMonth(), iDag.getDate());
+
+  const diffMs = startMidnatt.getTime() - iDagMidnatt.getTime();
+  const dager = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+
+  if (dager === 0) return "I dag";
+  if (dager === 1) return "I morgen";
+  return `Om ${dager} dager`;
+}

@@ -45,9 +45,9 @@ export default function VilkaarPage() {
           <h2 className="font-semibold">2. Brukerkonto og innlogging</h2>
           <p>
             Innlogging i tjenesten skjer via e-post eller tredjepartsleverandører for autentisering
-            (for eksempel Google eller Facebook). For å holde brukeren innlogget mellom økter
-            benyttes lokal lagring (localStorage) i nettleseren. Tjenesten benytter ikke
-            informasjonskapsler (cookies) til sporing eller analyse.
+            (for eksempel Google). For å holde brukeren innlogget mellom økter benyttes lokal
+            lagring (localStorage) i nettleseren. Tjenesten benytter ikke informasjonskapsler
+            (cookies) til sporing eller analyse.
           </p>
         </div>
 

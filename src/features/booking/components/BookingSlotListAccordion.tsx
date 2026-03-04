@@ -20,7 +20,7 @@ import {
   XCircle,
   Trash2,
 } from "lucide-react";
-import PaameldteDialog from "@/features/minside/views/kommende-arrangementer/PaameldteDialog";
+import PaameldteDialog from "@/features/arrangementer/views/arrangementer/PaameldteDialog";
 import KobleTilArrangementDialog from "./KobleTilArrangementDialog";
 import { harHandling } from "@/utils/handlingUtils";
 import { grupperSlots } from "@/utils/bookingUtils";

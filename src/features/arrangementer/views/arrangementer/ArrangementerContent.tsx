@@ -1,0 +1,268 @@
+import { useState, useEffect } from "react";
+import PageSection from "@/components/sections/PageSection";
+import { RowPanel, RowList } from "@/components/rows";
+import SwitchRow from "@/components/rows/SwitchRow";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { AccordionDetailGrid, AccordionDetailRow } from "@/components/accordion";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { formatDatoKort, formatDayOfWeeksLangNorsk, dagerIgjenTekst } from "@/utils/datoUtils";
+import {
+  Calendar,
+  Clock,
+  Link,
+  MapPin,
+  Users,
+  UserCheck,
+  CalendarPlus,
+  XCircle,
+  Ban,
+} from "lucide-react";
+import { SlettArrangementDialog } from "@/features/arrangement-admin/components";
+import PaameldteDialog from "./PaameldteDialog";
+import { useSlug } from "@/hooks/useSlug";
+import { harHandling } from "@/utils/handlingUtils";
+import { toast } from "sonner";
+import type { ArrangementRespons } from "@/types";
+
+type Props = {
+  visHistoriske: boolean;
+  onToggleVisHistoriske: (value: boolean) => void;
+
+  arrangementer: ArrangementRespons[];
+  onMeldPaa: (arr: ArrangementRespons) => void;
+  onMeldAv: (arr: ArrangementRespons) => void;
+  onAvlys: (arr: ArrangementRespons) => Promise<unknown>;
+  defaultArrangementId?: string;
+};
+
+function datoTekst(arr: ArrangementRespons) {
+  return arr.startDato === arr.sluttDato
+    ? formatDatoKort(arr.startDato)
+    : `${formatDatoKort(arr.startDato)} – ${formatDatoKort(arr.sluttDato)}`;
+}
+
+export default function ArrangementerContent({
+  visHistoriske,
+  onToggleVisHistoriske,
+  arrangementer,
+  onMeldPaa,
+  onMeldAv,
+  onAvlys,
+  defaultArrangementId,
+}: Props) {
+  const slug = useSlug();
+  const PAGE_SIZE = 10;
+  const [synligAntall, setSynligAntall] = useState(PAGE_SIZE);
+
+  useEffect(() => {
+    setSynligAntall(PAGE_SIZE);
+  }, [visHistoriske]);
+
+  function kopierLenke(arrangementId: string) {
+    const url = `${window.location.origin}/${slug}/arrangementer?arrangement=${arrangementId}`;
+    void navigator.clipboard.writeText(url).then(() => {
+      toast.success("Lenke kopiert til utklippstavle");
+    });
+  }
+
+  const synligeArrangementer = arrangementer.slice(0, synligAntall);
+  const harFlere = synligAntall < arrangementer.length;
+
+  const tomTekst = visHistoriske
+    ? "Ingen arrangementer registrert."
+    : "Ingen kommende arrangementer.";
+
+  return (
+    <PageSection
+      title="Arrangementer"
+      description="Se kommende arrangementer og velg om du vil inkludere tidligere."
+    >
+      <RowPanel>
+        <RowList>
+          <SwitchRow
+            title="Vis også tidligere arrangementer"
+            checked={visHistoriske}
+            onCheckedChange={onToggleVisHistoriske}
+            density="compact"
+          />
+        </RowList>
+      </RowPanel>
+
+      {arrangementer.length === 0 ? (
+        <p className="text-sm text-muted-foreground italic mt-4">{tomTekst}</p>
+      ) : (
+        <>
+          <Accordion
+            type="single"
+            collapsible
+            className="space-y-2 mt-4"
+            defaultValue={defaultArrangementId}
+          >
+            {synligeArrangementer.map((arr) => {
+              const beskrivelse = arr.beskrivelse?.trim() ?? "";
+              const harBeskrivelse = beskrivelse.length > 0;
+              const harBaner = (arr.baner?.length ?? 0) > 0;
+              const harUkedager = (arr.ukedager?.length ?? 0) > 0;
+              const harTidspunkter = (arr.tidspunkter?.length ?? 0) > 0;
+
+              return (
+                <AccordionItem
+                  key={arr.id}
+                  value={arr.id}
+                  className={`rounded-md border bg-background px-4 last:border-b shadow-sm ${arr.erPassert ? "opacity-50" : ""}`}
+                >
+                  <AccordionTrigger className="hover:no-underline">
+                    <div className="flex flex-col items-start gap-1.5">
+                      <div className="flex items-center gap-2">
+                        <span className="font-medium">{arr.tittel}</span>
+                        {arr.erPassert ? (
+                          <Badge variant="outline" className="text-xs">
+                            Gjennomført
+                          </Badge>
+                        ) : (
+                          <Badge variant="secondary" className="text-xs">
+                            {dagerIgjenTekst(arr.startDato)}
+                          </Badge>
+                        )}
+                        {arr.tillaterPaamelding && arr.erPaameldt && (
+                          <span className="text-green-600" title="Du er påmeldt">
+                            <UserCheck className="size-4" />
+                          </span>
+                        )}
+                      </div>
+                      <span className="text-xs text-muted-foreground">{datoTekst(arr)}</span>
+                    </div>
+                  </AccordionTrigger>
+
+                  <AccordionContent>
+                    <div className="space-y-4">
+                      {harBeskrivelse && (
+                        <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                          {beskrivelse}
+                        </p>
+                      )}
+
+                      <AccordionDetailGrid>
+                        {harBaner && (
+                          <AccordionDetailRow icon={MapPin} label="Baner">
+                            {arr.baner?.join(", ")}
+                          </AccordionDetailRow>
+                        )}
+
+                        {harUkedager && (
+                          <AccordionDetailRow icon={Calendar} label="Ukedager">
+                            {formatDayOfWeeksLangNorsk(arr.ukedager)}
+                          </AccordionDetailRow>
+                        )}
+
+                        {harTidspunkter && (
+                          <AccordionDetailRow icon={Clock} label="Tidspunkter" colSpan={2}>
+                            {arr.tidspunkter?.join(", ")}
+                            {arr.slotLengdeMinutter && (
+                              <span className="text-muted-foreground">
+                                {" "}
+                                ({arr.slotLengdeMinutter} min)
+                              </span>
+                            )}
+                          </AccordionDetailRow>
+                        )}
+                        {arr.tillaterPaamelding && (
+                          <AccordionDetailRow
+                            icon={Users}
+                            label="Påmeldte"
+                            iconClassName={arr.erPaameldt ? "text-green-600" : undefined}
+                          >
+                            <PaameldteDialog arrangementId={arr.id} tittel={arr.tittel}>
+                              <button
+                                type="button"
+                                className="underline underline-offset-2 hover:text-foreground transition-colors"
+                              >
+                                {arr.antallPaameldte} påmeldt
+                              </button>
+                            </PaameldteDialog>
+                          </AccordionDetailRow>
+                        )}
+                      </AccordionDetailGrid>
+
+                      {!arr.erPassert && arr.tillattHandlinger.length > 0 && (
+                        <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t">
+                          {harHandling(arr.tillattHandlinger, "arrangement:kopierLenke") && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => kopierLenke(arr.id)}
+                              className="flex items-center gap-2 text-sm"
+                            >
+                              <Link className="h-4 w-4" />
+                              Kopier lenke
+                            </Button>
+                          )}
+                          {harHandling(arr.tillattHandlinger, "arrangement:avlys") && (
+                            <SlettArrangementDialog
+                              tittel={arr.tittel}
+                              onSlett={() => onAvlys(arr).then(() => {})}
+                              trigger={
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  className="flex items-center gap-2 text-sm"
+                                >
+                                  <Ban className="size-4" />
+                                  Avlys
+                                </Button>
+                              }
+                            />
+                          )}
+                          {harHandling(arr.tillattHandlinger, "arrangement:meldAv") && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => onMeldAv(arr)}
+                              className="flex items-center gap-2 text-sm"
+                            >
+                              <XCircle className="size-4" />
+                              Meld meg av
+                            </Button>
+                          )}
+                          {harHandling(arr.tillattHandlinger, "arrangement:meldPaa") && (
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              onClick={() => onMeldPaa(arr)}
+                              className="flex items-center gap-2 text-sm"
+                            >
+                              <CalendarPlus className="size-4" />
+                              Meld meg på
+                            </Button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  </AccordionContent>
+                </AccordionItem>
+              );
+            })}
+          </Accordion>
+
+          {harFlere && (
+            <div className="flex justify-center mt-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setSynligAntall((prev) => prev + PAGE_SIZE)}
+              >
+                Vis flere ({arrangementer.length - synligAntall} gjenstår)
+              </Button>
+            </div>
+          )}
+        </>
+      )}
+    </PageSection>
+  );
+}

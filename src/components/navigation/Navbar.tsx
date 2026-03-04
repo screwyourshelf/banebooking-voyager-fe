@@ -13,7 +13,7 @@ import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
 import { User, LogIn, LogOut, Calendar, CircleUser, Wrench, Menu } from "lucide-react";
-import { GoogleIcon, FacebookIcon } from "@/components/icons";
+import { GoogleIcon } from "@/components/icons";
 
 import { useAuth } from "@/hooks/useAuth";
 import { useLogin } from "@/hooks/useLogin";
@@ -45,7 +45,6 @@ export default function Navbar() {
     step,
     erBusy,
     handleGoogleLogin,
-    handleFacebookLogin,
     sendOtp,
     verifyOtp,
   } = useLogin();
@@ -158,6 +157,13 @@ export default function Navbar() {
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild>
+                  <Link to={`/${slug}/arrangementer`}>
+                    <Calendar className="mr-2 size-4" />
+                    Arrangementer
+                  </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuItem asChild>
                   <Link to={`/${slug}`}>
                     <Calendar className="mr-2 size-4" />
                     Book bane
@@ -222,19 +228,11 @@ export default function Navbar() {
                   </Link>
                   .
                 </p>
-
                 <DropdownMenuItem onClick={handleGoogleLogin} disabled={erBusy}>
                   <GoogleIcon className="mr-2 size-5" />
                   Logg inn med Google
                 </DropdownMenuItem>
-
-                <DropdownMenuItem onClick={handleFacebookLogin} disabled={erBusy}>
-                  <FacebookIcon className="mr-2 size-5" />
-                  Logg inn med Facebook
-                </DropdownMenuItem>
-
                 <DropdownMenuSeparator />
-
                 {step === "input" ? (
                   <FormLayout density="compact" className="px-2 w-full" onSubmit={submitSendOtp}>
                     <div className="space-y-1">
