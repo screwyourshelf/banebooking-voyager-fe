@@ -5,7 +5,12 @@ import { FormSkeleton } from "@/components/loading";
 import { useArrangement } from "../../hooks/useArrangement";
 
 import ArrangementContent from "./ArrangementContent";
-import { byggDto, finnTilgjengeligeUkedager } from "./arrangementUtils";
+import {
+  byggDto,
+  finnTilgjengeligeUkedager,
+  beregnTidspunkterForBaner,
+  grupperBanerEtterSlotLengde,
+} from "./arrangementUtils";
 
 import type { ArrangementKategori, DayOfWeek } from "@/types";
 
@@ -29,7 +34,7 @@ function toggleItem<T>(item: T, set: React.Dispatch<React.SetStateAction<T[]>>) 
 export default function ArrangementView() {
   const {
     baner,
-    tilgjengeligeTidspunkter,
+    tilgjengeligeTidspunkter: standardTidspunkter,
     forhandsvisning,
     forhandsvis,
     clearForhandsvisning,
@@ -55,10 +60,36 @@ export default function ArrangementView() {
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
+  // ───────── Per-gruppe state (brukes når baner har ulike slot-lengder) ─────────
+  const [tidspunkterPerGruppe, setTidspunkterPerGruppe] = useState<Record<number, string[]>>({});
+  const [allePerGruppe, setAllePerGruppe] = useState<Record<number, boolean>>({});
+
   const tilgjengeligeUkedager = useMemo(
     () => finnTilgjengeligeUkedager(datoFra, datoTil),
     [datoFra, datoTil]
   );
+
+  // Flat tidspunkter (brukes når alle baner har lik slot-lengde)
+  const tidspunktResultat = useMemo(() => {
+    if (valgteBaner.length === 0) {
+      return {
+        tidspunkter: standardTidspunkter,
+        harUlikSlotLengde: false,
+        advarselTekst: undefined,
+      };
+    }
+    return beregnTidspunkterForBaner(baner, valgteBaner);
+  }, [baner, valgteBaner, standardTidspunkter]);
+
+  const tilgjengeligeTidspunkter = tidspunktResultat.tidspunkter;
+  const slotLengdeAdvarsel = tidspunktResultat.advarselTekst;
+
+  // Slot-grupper (gruppering etter slot-lengde)
+  const slotGrupper = useMemo(
+    () => grupperBanerEtterSlotLengde(baner, valgteBaner),
+    [baner, valgteBaner]
+  );
+  const erGruppert = slotGrupper.length > 1;
 
   // Sync "alle X" → valgte lister
   useEffect(() => {
@@ -70,31 +101,90 @@ export default function ArrangementView() {
   }, [alleUkedager, tilgjengeligeUkedager]);
 
   useEffect(() => {
-    if (alleTidspunkter) setValgteTidspunkter(tilgjengeligeTidspunkter);
-  }, [alleTidspunkter, tilgjengeligeTidspunkter]);
+    if (!erGruppert && alleTidspunkter) setValgteTidspunkter(tilgjengeligeTidspunkter);
+  }, [erGruppert, alleTidspunkter, tilgjengeligeTidspunkter]);
 
   // Når dato-periode endres: fjern ukedager som ikke lenger er gyldige
   useEffect(() => {
     setValgteUkedager((prev) => prev.filter((d) => tilgjengeligeUkedager.includes(d)));
   }, [tilgjengeligeUkedager]);
 
+  // Fjern flat-tidspunkter som ikke lenger er tilgjengelige
+  useEffect(() => {
+    if (!erGruppert) {
+      setValgteTidspunkter((prev) => prev.filter((t) => tilgjengeligeTidspunkter.includes(t)));
+    }
+  }, [erGruppert, tilgjengeligeTidspunkter]);
+
+  // ───────── Per-gruppe effekter ─────────
+
+  // Opprydding: hold per-gruppe-state i sync med aktive grupper
+  useEffect(() => {
+    if (!erGruppert) return;
+
+    setTidspunkterPerGruppe((prev) => {
+      const next: Record<number, string[]> = {};
+      for (const gruppe of slotGrupper) {
+        const sl = gruppe.slotLengdeMinutter;
+        next[sl] = (prev[sl] ?? []).filter((t) => gruppe.tidspunkter.includes(t));
+      }
+      return next;
+    });
+
+    setAllePerGruppe((prev) => {
+      const next: Record<number, boolean> = {};
+      for (const gruppe of slotGrupper) {
+        next[gruppe.slotLengdeMinutter] = prev[gruppe.slotLengdeMinutter] ?? false;
+      }
+      return next;
+    });
+  }, [erGruppert, slotGrupper]);
+
+  // Sync "alle" → valgte tidspunkter per gruppe
+  useEffect(() => {
+    if (!erGruppert) return;
+
+    setTidspunkterPerGruppe((prev) => {
+      const next = { ...prev };
+      for (const gruppe of slotGrupper) {
+        const sl = gruppe.slotLengdeMinutter;
+        if (allePerGruppe[sl]) {
+          next[sl] = gruppe.tidspunkter;
+        }
+      }
+      return next;
+    });
+  }, [erGruppert, allePerGruppe, slotGrupper]);
+
+  // ───────── DTO-bygging ─────────
+
+  const byggBaneGrupper = () => {
+    if (erGruppert) {
+      return slotGrupper.map((g) => ({
+        baneIder: g.baneIder,
+        tidspunkter: tidspunkterPerGruppe[g.slotLengdeMinutter] ?? [],
+      }));
+    }
+    return [{ baneIder: valgteBaner, tidspunkter: valgteTidspunkter }];
+  };
+
   const dtoOrNull = () =>
     byggDto({
       datoFra,
       datoTil,
-      valgteBaner,
+      baneGrupper: byggBaneGrupper(),
       valgteUkedager,
-      valgteTidspunkter,
       kategori,
       beskrivelse,
       tillaterPaamelding,
       onWarning: (msg) => toast.warning(msg),
     });
 
+  // ───────── Forhåndsvisning & opprett ─────────
+
   const åpneForhandsvisning = async () => {
     const dto = dtoOrNull();
     if (!dto) return;
-
     setDialogOpen(true);
     await forhandsvis(dto);
   };
@@ -102,10 +192,24 @@ export default function ArrangementView() {
   const håndterOpprett = async () => {
     const dto = dtoOrNull();
     if (!dto) return;
-
     await opprett(dto);
     clearForhandsvisning();
     setDialogOpen(false);
+  };
+
+  // ───────── Per-gruppe toggle-handlers ─────────
+
+  const toggleTidspunktForGruppe = (slotLengde: number, tid: string) => {
+    setTidspunkterPerGruppe((prev) => ({
+      ...prev,
+      [slotLengde]: prev[slotLengde]?.includes(tid)
+        ? prev[slotLengde].filter((t) => t !== tid)
+        : [...(prev[slotLengde] ?? []), tid],
+    }));
+  };
+
+  const toggleAlleForGruppe = (slotLengde: number, v: boolean) => {
+    setAllePerGruppe((prev) => ({ ...prev, [slotLengde]: v }));
   };
 
   if (isLoading) return <FormSkeleton />;
@@ -147,6 +251,12 @@ export default function ArrangementView() {
         setDialogOpen(open);
         if (!open) clearForhandsvisning();
       }}
+      slotLengdeAdvarsel={slotLengdeAdvarsel}
+      slotGrupper={erGruppert ? slotGrupper : undefined}
+      tidspunkterPerGruppe={erGruppert ? tidspunkterPerGruppe : undefined}
+      allePerGruppe={erGruppert ? allePerGruppe : undefined}
+      onToggleAlleForGruppe={erGruppert ? toggleAlleForGruppe : undefined}
+      onToggleTidspunktForGruppe={erGruppert ? toggleTidspunktForGruppe : undefined}
     />
   );
 }

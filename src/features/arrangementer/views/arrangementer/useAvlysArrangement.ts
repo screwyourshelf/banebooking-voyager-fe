@@ -20,9 +20,7 @@ export function useAvlysArrangement() {
     ({ arrangementId }) => `/klubb/${slug}/arrangement/${arrangementId}`,
     {
       onSuccess: (result) => {
-        toast.success(
-          `Arrangement avlyst – ${result.antallBookingerSlettet} bookinger fjernet.`
-        );
+        toast.success(`Arrangement avlyst – ${result.antallBookingerSlettet} bookinger fjernet.`);
       },
       onError: (err) => {
         toast.error(err.message ?? "Kunne ikke avlyse arrangement.");

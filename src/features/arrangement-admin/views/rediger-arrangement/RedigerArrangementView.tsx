@@ -15,12 +15,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useAktiveArrangementer } from "@/features/booking/hooks/useAktiveArrangementer";
 import { useRedigerArrangement } from "../../hooks/useRedigerArrangement";
 import { useAvlysArrangement } from "../../hooks/useAvlysArrangement";
 import { SlettArrangementDialog } from "../../components";
 import ArrangementContent from "../arrangement/ArrangementContent";
-import { byggDto, finnTilgjengeligeUkedager } from "../arrangement/arrangementUtils";
+import {
+  byggDto,
+  finnTilgjengeligeUkedager,
+  beregnTidspunkterForBaner,
+  grupperBanerEtterSlotLengde,
+} from "../arrangement/arrangementUtils";
 
 import type { ArrangementKategori, DayOfWeek } from "@/types";
 
@@ -49,18 +53,17 @@ function parseDatoString(s: string): Date {
 export default function RedigerArrangementView() {
   const [valgtId, setValgtId] = useState<string>("");
 
-  const { data: arrangementer, isLoading: loadingArrangementer } = useAktiveArrangementer(true);
-
   const {
+    arrangementer,
     arrangement,
     baner,
-    tilgjengeligeTidspunkter,
+    tilgjengeligeTidspunkter: standardTidspunkter,
     forhandsvisning,
     forhandsvis,
     clearForhandsvisning,
     erstatt,
     isLoading,
-    isLoadingArrangement,
+    isLoadingArrangementer,
     isLoadingForhandsvisning,
   } = useRedigerArrangement(valgtId || null);
 
@@ -84,6 +87,10 @@ export default function RedigerArrangementView() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [prefyltId, setPrefyltId] = useState<string | null>(null);
 
+  // ───────── Per-gruppe state (brukes når baner har ulike slot-lengder) ─────────
+  const [tidspunkterPerGruppe, setTidspunkterPerGruppe] = useState<Record<number, string[]>>({});
+  const [allePerGruppe, setAllePerGruppe] = useState<Record<number, boolean>>({});
+
   // Pre-fyll skjema når arrangementdata lastes
   useEffect(() => {
     if (!arrangement) {
@@ -95,20 +102,68 @@ export default function RedigerArrangementView() {
     setTillaterPaamelding(arrangement.tillaterPaamelding);
     setDatoFra(parseDatoString(arrangement.startDato));
     setDatoTil(parseDatoString(arrangement.sluttDato));
-    setValgteBaner(arrangement.baneIder);
+
+    const alleBaneIder = arrangement.baneGrupper.flatMap((g) => g.baneIder);
+    setValgteBaner(alleBaneIder);
     setValgteUkedager(arrangement.ukedager);
-    setValgteTidspunkter(arrangement.tidspunkter);
+    setValgteTidspunkter([...new Set(arrangement.baneGrupper.flatMap((g) => g.tidspunkter))]);
+
+    // Pre-fyll per-gruppe-state fra arrangement.baneGrupper
+    const grupper = grupperBanerEtterSlotLengde(baner, alleBaneIder);
+    if (grupper.length > 1) {
+      const baneIdTilTider = new Map<string, string[]>();
+      for (const g of arrangement.baneGrupper) {
+        for (const id of g.baneIder) {
+          baneIdTilTider.set(id, g.tidspunkter);
+        }
+      }
+      const perGruppe: Record<number, string[]> = {};
+      const alleFlags: Record<number, boolean> = {};
+      for (const computed of grupper) {
+        perGruppe[computed.slotLengdeMinutter] = baneIdTilTider.get(computed.baneIder[0]) ?? [];
+        alleFlags[computed.slotLengdeMinutter] = false;
+      }
+      setTidspunkterPerGruppe(perGruppe);
+      setAllePerGruppe(alleFlags);
+    } else {
+      setTidspunkterPerGruppe({});
+      setAllePerGruppe({});
+    }
+
     setAlleBaner(false);
     setAlleUkedager(false);
     setAlleTidspunkter(false);
     setPrefyltId(arrangement.id);
-  }, [arrangement]);
+  }, [arrangement, baner]);
 
   const tilgjengeligeUkedager = useMemo(
     () => finnTilgjengeligeUkedager(datoFra, datoTil),
     [datoFra, datoTil]
   );
 
+  // Flat tidspunkter (brukes når alle baner har lik slot-lengde)
+  const tidspunktResultat = useMemo(() => {
+    if (valgteBaner.length === 0) {
+      return {
+        tidspunkter: standardTidspunkter,
+        harUlikSlotLengde: false,
+        advarselTekst: undefined,
+      };
+    }
+    return beregnTidspunkterForBaner(baner, valgteBaner);
+  }, [baner, valgteBaner, standardTidspunkter]);
+
+  const tilgjengeligeTidspunkter = tidspunktResultat.tidspunkter;
+  const slotLengdeAdvarsel = tidspunktResultat.advarselTekst;
+
+  // Slot-grupper (gruppering etter slot-lengde)
+  const slotGrupper = useMemo(
+    () => grupperBanerEtterSlotLengde(baner, valgteBaner),
+    [baner, valgteBaner]
+  );
+  const erGruppert = slotGrupper.length > 1;
+
+  // Sync "alle X" → valgte lister
   useEffect(() => {
     if (alleBaner) setValgteBaner(baner.map((b) => b.id));
   }, [alleBaner, baner]);
@@ -118,20 +173,79 @@ export default function RedigerArrangementView() {
   }, [alleUkedager, tilgjengeligeUkedager]);
 
   useEffect(() => {
-    if (alleTidspunkter) setValgteTidspunkter(tilgjengeligeTidspunkter);
-  }, [alleTidspunkter, tilgjengeligeTidspunkter]);
+    if (!erGruppert && alleTidspunkter) setValgteTidspunkter(tilgjengeligeTidspunkter);
+  }, [erGruppert, alleTidspunkter, tilgjengeligeTidspunkter]);
 
+  // Når dato-periode endres: fjern ukedager som ikke lenger er gyldige
   useEffect(() => {
     setValgteUkedager((prev) => prev.filter((d) => tilgjengeligeUkedager.includes(d)));
   }, [tilgjengeligeUkedager]);
+
+  // Fjern flat-tidspunkter som ikke lenger er tilgjengelige
+  useEffect(() => {
+    if (!erGruppert) {
+      setValgteTidspunkter((prev) => prev.filter((t) => tilgjengeligeTidspunkter.includes(t)));
+    }
+  }, [erGruppert, tilgjengeligeTidspunkter]);
+
+  // ───────── Per-gruppe effekter ─────────
+
+  // Opprydding: hold per-gruppe-state i sync med aktive grupper
+  useEffect(() => {
+    if (!erGruppert) return;
+
+    setTidspunkterPerGruppe((prev) => {
+      const next: Record<number, string[]> = {};
+      for (const gruppe of slotGrupper) {
+        const sl = gruppe.slotLengdeMinutter;
+        next[sl] = (prev[sl] ?? []).filter((t) => gruppe.tidspunkter.includes(t));
+      }
+      return next;
+    });
+
+    setAllePerGruppe((prev) => {
+      const next: Record<number, boolean> = {};
+      for (const gruppe of slotGrupper) {
+        next[gruppe.slotLengdeMinutter] = prev[gruppe.slotLengdeMinutter] ?? false;
+      }
+      return next;
+    });
+  }, [erGruppert, slotGrupper]);
+
+  // Sync "alle" → valgte tidspunkter per gruppe
+  useEffect(() => {
+    if (!erGruppert) return;
+
+    setTidspunkterPerGruppe((prev) => {
+      const next = { ...prev };
+      for (const gruppe of slotGrupper) {
+        const sl = gruppe.slotLengdeMinutter;
+        if (allePerGruppe[sl]) {
+          next[sl] = gruppe.tidspunkter;
+        }
+      }
+      return next;
+    });
+  }, [erGruppert, allePerGruppe, slotGrupper]);
+
+  // ───────── DTO-bygging ─────────
+
+  const byggBaneGrupper = () => {
+    if (erGruppert) {
+      return slotGrupper.map((g) => ({
+        baneIder: g.baneIder,
+        tidspunkter: tidspunkterPerGruppe[g.slotLengdeMinutter] ?? [],
+      }));
+    }
+    return [{ baneIder: valgteBaner, tidspunkter: valgteTidspunkter }];
+  };
 
   const dtoOrNull = () =>
     byggDto({
       datoFra,
       datoTil,
-      valgteBaner,
+      baneGrupper: byggBaneGrupper(),
       valgteUkedager,
-      valgteTidspunkter,
       kategori,
       beskrivelse,
       tillaterPaamelding,
@@ -162,6 +276,21 @@ export default function RedigerArrangementView() {
     ? `${arrangement!.antallPaameldte} påmelding(er) vil bli fjernet.`
     : undefined;
 
+  // ───────── Per-gruppe toggle-handlers ─────────
+
+  const toggleTidspunktForGruppe = (slotLengde: number, tid: string) => {
+    setTidspunkterPerGruppe((prev) => ({
+      ...prev,
+      [slotLengde]: prev[slotLengde]?.includes(tid)
+        ? prev[slotLengde].filter((t) => t !== tid)
+        : [...(prev[slotLengde] ?? []), tid],
+    }));
+  };
+
+  const toggleAlleForGruppe = (slotLengde: number, v: boolean) => {
+    setAllePerGruppe((prev) => ({ ...prev, [slotLengde]: v }));
+  };
+
   return (
     <>
       <PageSection title="Velg arrangement" description="Velg arrangementet du vil redigere.">
@@ -178,12 +307,12 @@ export default function RedigerArrangementView() {
                     <Select
                       value={valgtId}
                       onValueChange={setValgtId}
-                      disabled={loadingArrangementer}
+                      disabled={isLoadingArrangementer}
                     >
                       <SelectTrigger id="velg-arrangement">
                         <SelectValue
                           placeholder={
-                            loadingArrangementer ? "Henter arrangementer…" : "Velg arrangement…"
+                            isLoadingArrangementer ? "Henter arrangementer…" : "Velg arrangement…"
                           }
                         />
                       </SelectTrigger>
@@ -215,56 +344,57 @@ export default function RedigerArrangementView() {
         </RowPanel>
       </PageSection>
 
-      {valgtId &&
-        (isLoading || isLoadingArrangement || (!!arrangement && prefyltId !== arrangement.id)) && (
-          <FormSkeleton />
-        )}
+      {valgtId && (isLoading || (!!arrangement && prefyltId !== arrangement.id)) && (
+        <FormSkeleton />
+      )}
 
-      {valgtId &&
-        !isLoading &&
-        !isLoadingArrangement &&
-        arrangement &&
-        prefyltId === arrangement.id && (
-          <ArrangementContent
-            kategorier={KATEGORIER}
-            kategori={kategori}
-            beskrivelse={beskrivelse}
-            datoFra={datoFra}
-            datoTil={datoTil}
-            baner={baner}
-            tilgjengeligeUkedager={tilgjengeligeUkedager}
-            tilgjengeligeTidspunkter={tilgjengeligeTidspunkter}
-            valgteBaner={valgteBaner}
-            valgteUkedager={valgteUkedager}
-            valgteTidspunkter={valgteTidspunkter}
-            alleBaner={alleBaner}
-            alleUkedager={alleUkedager}
-            alleTidspunkter={alleTidspunkter}
-            dialogOpen={dialogOpen}
-            forhandsvisning={forhandsvisning}
-            isLoadingForhandsvisning={isLoadingForhandsvisning}
-            onChangeKategori={setKategori}
-            onChangeBeskrivelse={setBeskrivelse}
-            tillaterPaamelding={tillaterPaamelding}
-            onChangeTillaterPaamelding={setTillaterPaamelding}
-            onChangeDatoFra={setDatoFra}
-            onChangeDatoTil={setDatoTil}
-            onToggleAlleBaner={setAlleBaner}
-            onToggleAlleUkedager={setAlleUkedager}
-            onToggleAlleTidspunkter={setAlleTidspunkter}
-            onToggleBane={(id) => toggleItem(id, setValgteBaner)}
-            onToggleUkedag={(dag) => toggleItem(dag, setValgteUkedager)}
-            onToggleTidspunkt={(tid) => toggleItem(tid, setValgteTidspunkter)}
-            onOpenPreview={åpneForhandsvisning}
-            onCreate={håndterOppdater}
-            onDialogOpenChange={(open) => {
-              setDialogOpen(open);
-              if (!open) clearForhandsvisning();
-            }}
-            bekreftTekst={`Oppdater ${forhandsvisning.ledige.length} bookinger`}
-            advarsel={advarsel}
-          />
-        )}
+      {valgtId && !isLoading && arrangement && prefyltId === arrangement.id && (
+        <ArrangementContent
+          kategorier={KATEGORIER}
+          kategori={kategori}
+          beskrivelse={beskrivelse}
+          datoFra={datoFra}
+          datoTil={datoTil}
+          baner={baner}
+          tilgjengeligeUkedager={tilgjengeligeUkedager}
+          tilgjengeligeTidspunkter={tilgjengeligeTidspunkter}
+          valgteBaner={valgteBaner}
+          valgteUkedager={valgteUkedager}
+          valgteTidspunkter={valgteTidspunkter}
+          alleBaner={alleBaner}
+          alleUkedager={alleUkedager}
+          alleTidspunkter={alleTidspunkter}
+          dialogOpen={dialogOpen}
+          forhandsvisning={forhandsvisning}
+          isLoadingForhandsvisning={isLoadingForhandsvisning}
+          onChangeKategori={setKategori}
+          onChangeBeskrivelse={setBeskrivelse}
+          tillaterPaamelding={tillaterPaamelding}
+          onChangeTillaterPaamelding={setTillaterPaamelding}
+          onChangeDatoFra={setDatoFra}
+          onChangeDatoTil={setDatoTil}
+          onToggleAlleBaner={setAlleBaner}
+          onToggleAlleUkedager={setAlleUkedager}
+          onToggleAlleTidspunkter={setAlleTidspunkter}
+          onToggleBane={(id) => toggleItem(id, setValgteBaner)}
+          onToggleUkedag={(dag) => toggleItem(dag, setValgteUkedager)}
+          onToggleTidspunkt={(tid) => toggleItem(tid, setValgteTidspunkter)}
+          onOpenPreview={åpneForhandsvisning}
+          onCreate={håndterOppdater}
+          onDialogOpenChange={(open) => {
+            setDialogOpen(open);
+            if (!open) clearForhandsvisning();
+          }}
+          bekreftTekst={`Oppdater ${forhandsvisning.ledige.length} bookinger`}
+          advarsel={advarsel}
+          slotLengdeAdvarsel={slotLengdeAdvarsel}
+          slotGrupper={erGruppert ? slotGrupper : undefined}
+          tidspunkterPerGruppe={erGruppert ? tidspunkterPerGruppe : undefined}
+          allePerGruppe={erGruppert ? allePerGruppe : undefined}
+          onToggleAlleForGruppe={erGruppert ? toggleAlleForGruppe : undefined}
+          onToggleTidspunktForGruppe={erGruppert ? toggleTidspunktForGruppe : undefined}
+        />
+      )}
     </>
   );
 }

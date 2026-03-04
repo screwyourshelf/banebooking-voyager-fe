@@ -43,9 +43,13 @@ const tomForhandsvisning: ArrangementForhåndsvisningRespons = { ledige: [], kon
 function dtoKey(dto: OpprettArrangementForespørsel) {
   const stable: OpprettArrangementForespørsel = {
     ...dto,
-    ukedager: [...dto.ukedager].sort(), // DayOfWeek strings -> lex ok
-    tidspunkter: [...dto.tidspunkter].sort(), // "HH:mm" -> lex fungerer
-    baneIder: [...dto.baneIder].sort(), // Guid-string -> lex ok
+    ukedager: [...dto.ukedager].sort(),
+    baneGrupper: dto.baneGrupper
+      .map((g) => ({
+        baneIder: [...g.baneIder].sort(),
+        tidspunkter: [...g.tidspunkter].sort(),
+      }))
+      .sort((a, b) => a.baneIder[0]?.localeCompare(b.baneIder[0] ?? "") ?? 0),
   };
 
   return JSON.stringify(stable);

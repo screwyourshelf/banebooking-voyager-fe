@@ -7,6 +7,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
   Select,
   SelectContent,
@@ -17,10 +18,12 @@ import {
 
 import DatoVelger from "@/components/DatoVelger";
 import ForhandsvisningDialog from "./ForhandsvisningDialog";
+import { TriangleAlert } from "lucide-react";
 
 import type { ArrangementKategori, DayOfWeek, ArrangementForhåndsvisningRespons } from "@/types";
 import type { BaneRespons } from "@/types";
 import { dayOfWeekKortNorsk } from "@/utils/datoUtils";
+import type { SlotLengdeGruppe } from "./arrangementUtils";
 
 type Props = {
   kategorier: readonly ArrangementKategori[];
@@ -66,6 +69,13 @@ type Props = {
   onDialogOpenChange: (open: boolean) => void;
   bekreftTekst?: string;
   advarsel?: string;
+  slotLengdeAdvarsel?: string;
+
+  slotGrupper?: SlotLengdeGruppe[];
+  tidspunkterPerGruppe?: Record<number, string[]>;
+  allePerGruppe?: Record<number, boolean>;
+  onToggleAlleForGruppe?: (slotLengde: number, v: boolean) => void;
+  onToggleTidspunktForGruppe?: (slotLengde: number, tid: string) => void;
 };
 
 const UKEDAGER_REKKEFOLGE: readonly DayOfWeek[] = [
@@ -123,7 +133,16 @@ export default function ArrangementContent(props: Props) {
     onDialogOpenChange,
     bekreftTekst,
     advarsel,
+    slotLengdeAdvarsel,
+
+    slotGrupper,
+    tidspunkterPerGruppe,
+    allePerGruppe,
+    onToggleAlleForGruppe,
+    onToggleTidspunktForGruppe,
   } = props;
+
+  const erGruppert = slotGrupper && slotGrupper.length > 1;
 
   return (
     <>
@@ -236,27 +255,77 @@ export default function ArrangementContent(props: Props) {
                 </div>
               </Row>
 
-              <Row
-                title="Tidspunkter"
-                right={
-                  <Switch checked={alleTidspunkter} onCheckedChange={onToggleAlleTidspunkter} />
-                }
-              >
-                <div className="flex flex-wrap gap-2">
-                  {tilgjengeligeTidspunkter.map((tid) => (
-                    <Button
-                      key={tid}
-                      type="button"
-                      variant={valgteTidspunkter.includes(tid) ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => onToggleTidspunkt(tid)}
-                      disabled={alleTidspunkter}
-                    >
-                      {tid}
-                    </Button>
-                  ))}
-                </div>
-              </Row>
+              {erGruppert ? (
+                <>
+                  {slotGrupper!.map((gruppe) => {
+                    const sl = gruppe.slotLengdeMinutter;
+                    const valgte = tidspunkterPerGruppe?.[sl] ?? [];
+                    const alle = allePerGruppe?.[sl] ?? false;
+
+                    return (
+                      <Row
+                        key={sl}
+                        title={`Tidspunkter – ${sl} min`}
+                        description={gruppe.baneNavn.join(", ")}
+                        right={
+                          <Switch
+                            checked={alle}
+                            onCheckedChange={(v) => onToggleAlleForGruppe?.(sl, v)}
+                          />
+                        }
+                      >
+                        <div className="flex flex-wrap gap-2">
+                          {gruppe.tidspunkter.map((tid) => (
+                            <Button
+                              key={tid}
+                              type="button"
+                              variant={valgte.includes(tid) ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => onToggleTidspunktForGruppe?.(sl, tid)}
+                              disabled={alle}
+                            >
+                              {tid}
+                            </Button>
+                          ))}
+                        </div>
+                      </Row>
+                    );
+                  })}
+                </>
+              ) : (
+                <>
+                  {slotLengdeAdvarsel && (
+                    <div className="px-2 py-2">
+                      <Alert className="border-amber-200 bg-amber-50 text-amber-700 [&>svg]:text-amber-700">
+                        <TriangleAlert />
+                        <AlertDescription>{slotLengdeAdvarsel}</AlertDescription>
+                      </Alert>
+                    </div>
+                  )}
+
+                  <Row
+                    title="Tidspunkter"
+                    right={
+                      <Switch checked={alleTidspunkter} onCheckedChange={onToggleAlleTidspunkter} />
+                    }
+                  >
+                    <div className="flex flex-wrap gap-2">
+                      {tilgjengeligeTidspunkter.map((tid) => (
+                        <Button
+                          key={tid}
+                          type="button"
+                          variant={valgteTidspunkter.includes(tid) ? "default" : "outline"}
+                          size="sm"
+                          onClick={() => onToggleTidspunkt(tid)}
+                          disabled={alleTidspunkter}
+                        >
+                          {tid}
+                        </Button>
+                      ))}
+                    </div>
+                  </Row>
+                </>
+              )}
             </RowList>
           </RowPanel>
         </PageSection>

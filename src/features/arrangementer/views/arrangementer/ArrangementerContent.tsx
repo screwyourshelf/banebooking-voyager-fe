@@ -107,9 +107,9 @@ export default function ArrangementerContent({
             {synligeArrangementer.map((arr) => {
               const beskrivelse = arr.beskrivelse?.trim() ?? "";
               const harBeskrivelse = beskrivelse.length > 0;
-              const harBaner = (arr.baner?.length ?? 0) > 0;
+              const harGrupper = (arr.baneGrupper?.length ?? 0) > 0;
               const harUkedager = (arr.ukedager?.length ?? 0) > 0;
-              const harTidspunkter = (arr.tidspunkter?.length ?? 0) > 0;
+              const erFlereGrupper = (arr.baneGrupper?.length ?? 0) > 1;
 
               return (
                 <AccordionItem
@@ -149,27 +149,43 @@ export default function ArrangementerContent({
                       )}
 
                       <AccordionDetailGrid>
-                        {harBaner && (
-                          <AccordionDetailRow icon={MapPin} label="Baner">
-                            {arr.baner?.join(", ")}
-                          </AccordionDetailRow>
+                        {harGrupper && !erFlereGrupper && (
+                          <>
+                            <AccordionDetailRow icon={MapPin} label="Baner">
+                              {arr.baneGrupper[0].baneNavn.join(", ")}
+                            </AccordionDetailRow>
+
+                            {arr.baneGrupper[0].tidspunkter.length > 0 && (
+                              <AccordionDetailRow icon={Clock} label="Tidspunkter" colSpan={2}>
+                                {arr.baneGrupper[0].tidspunkter.join(", ")}
+                                <span className="text-muted-foreground">
+                                  {" "}
+                                  ({arr.baneGrupper[0].slotLengdeMinutter} min)
+                                </span>
+                              </AccordionDetailRow>
+                            )}
+                          </>
                         )}
+
+                        {erFlereGrupper &&
+                          arr.baneGrupper.map((gruppe, idx) => (
+                            <AccordionDetailRow
+                              key={idx}
+                              icon={MapPin}
+                              label={gruppe.baneNavn.join(", ")}
+                              colSpan={2}
+                            >
+                              {gruppe.tidspunkter.join(", ")}
+                              <span className="text-muted-foreground">
+                                {" "}
+                                ({gruppe.slotLengdeMinutter} min)
+                              </span>
+                            </AccordionDetailRow>
+                          ))}
 
                         {harUkedager && (
                           <AccordionDetailRow icon={Calendar} label="Ukedager">
                             {formatDayOfWeeksLangNorsk(arr.ukedager)}
-                          </AccordionDetailRow>
-                        )}
-
-                        {harTidspunkter && (
-                          <AccordionDetailRow icon={Clock} label="Tidspunkter" colSpan={2}>
-                            {arr.tidspunkter?.join(", ")}
-                            {arr.slotLengdeMinutter && (
-                              <span className="text-muted-foreground">
-                                {" "}
-                                ({arr.slotLengdeMinutter} min)
-                              </span>
-                            )}
                           </AccordionDetailRow>
                         )}
                         {arr.tillaterPaamelding && (

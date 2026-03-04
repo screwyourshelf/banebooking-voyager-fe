@@ -197,6 +197,17 @@ export function BookingSlotListAccordion({
                   )}
                 </AccordionDetailGrid>
 
+                {erInnlogget &&
+                  !slot.erPassert &&
+                  !erBooket &&
+                  !harArrangement &&
+                  !kan("booking:book") && (
+                    <p className="text-xs text-muted-foreground italic">
+                      Du kan ikke booke denne timen akkurat nå – maks antall bookinger kan være
+                      nådd.
+                    </p>
+                  )}
+
                 {/* Actions */}
                 {kanUtføreHandling && (
                   <AccordionActions className="flex-wrap gap-2">

@@ -24,6 +24,11 @@ export type DayOfWeek =
 
 // ─────────── Requests ───────────
 
+export type BaneGruppeForespørsel = {
+  baneIder: string[];
+  tidspunkter: string[];
+};
+
 export type OpprettArrangementForespørsel = {
   tittel: string;
   beskrivelse?: string;
@@ -31,8 +36,7 @@ export type OpprettArrangementForespørsel = {
   startDato: string;
   sluttDato: string;
   ukedager: DayOfWeek[];
-  tidspunkter: string[];
-  baneIder: string[];
+  baneGrupper: BaneGruppeForespørsel[];
   tillaterPaamelding: boolean;
 };
 
@@ -75,6 +79,13 @@ export type SlettArrangementRespons = {
   antallBookingerSlettet: number;
 };
 
+export type BaneGruppeRespons = {
+  baneIder: string[];
+  baneNavn: string[];
+  tidspunkter: string[];
+  slotLengdeMinutter: number;
+};
+
 export type ArrangementRespons = {
   id: string;
   tittel: string;
@@ -82,10 +93,8 @@ export type ArrangementRespons = {
   kategori: ArrangementKategori;
   startDato: string;
   sluttDato: string;
-  baner: string[];
+  baneGrupper: BaneGruppeRespons[];
   ukedager: DayOfWeek[];
-  tidspunkter: string[];
-  slotLengdeMinutter: number;
   tillaterPaamelding: boolean;
   antallPaameldte: number;
   erPaameldt: boolean;
@@ -118,20 +127,6 @@ export type ArrangementPaameldtListeRespons = {
   tillaterPaamelding: boolean;
   antallPaameldte: number;
   paameldte: PaameldtBrukerRespons[];
-};
-
-export type ArrangementForRedigeringRespons = {
-  id: string;
-  tittel: string;
-  beskrivelse?: string;
-  kategori: ArrangementKategori;
-  startDato: string;
-  sluttDato: string;
-  baneIder: string[];
-  ukedager: DayOfWeek[];
-  tidspunkter: string[];
-  tillaterPaamelding: boolean;
-  antallPaameldte: number;
 };
 
 export type ErstattArrangementRespons = {

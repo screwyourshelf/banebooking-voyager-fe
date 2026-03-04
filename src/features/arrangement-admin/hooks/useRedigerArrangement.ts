@@ -10,7 +10,7 @@ import { useSlug } from "@/hooks/useSlug";
 
 import type {
   OpprettArrangementForespørsel,
-  ArrangementForRedigeringRespons,
+  ArrangementRespons,
   ErstattArrangementRespons,
   ArrangementForhåndsvisningRespons,
 } from "@/types";
@@ -45,12 +45,17 @@ export function useRedigerArrangement(valgtId: string | null) {
   const { data: klubb, isLoading: loadingKlubb } = useKlubb();
   const { baner, isLoading: loadingBaner } = useBaner(false);
 
-  const { data: arrangement, isLoading: loadingArrangement } =
-    useApiQuery<ArrangementForRedigeringRespons>(
-      ["arrangement-redigering", slug, valgtId],
-      `/klubb/${slug}/arrangement/${valgtId ?? ""}`,
-      { requireAuth: true, enabled: !!valgtId }
-    );
+  const { data: arrangementer, isLoading: loadingArrangementer } = useApiQuery<
+    ArrangementRespons[]
+  >(["arrangementer-admin", slug], `/klubb/${slug}/arrangementer`, {
+    requireAuth: true,
+    staleTime: 30_000,
+  });
+
+  const arrangement = useMemo(
+    () => arrangementer?.find((a) => a.id === valgtId) ?? null,
+    [arrangementer, valgtId]
+  );
 
   const tilgjengeligeTidspunkter = useMemo(() => {
     const regel = klubb?.bookingRegel;
@@ -94,10 +99,7 @@ export function useRedigerArrangement(valgtId: string | null) {
         if (result.antallPaameldingFjernet > 0)
           melding += `, ${result.antallPaameldingFjernet} påmelding(er) fjernet`;
         toast.success(melding);
-        await queryClient.invalidateQueries({ queryKey: ["aktiveArrangementer", slug] });
-        await queryClient.invalidateQueries({
-          queryKey: ["arrangement-redigering", slug, valgtId],
-        });
+        await queryClient.invalidateQueries({ queryKey: ["arrangementer-admin", slug] });
       },
       onError: (err) => toast.error(err.message ?? "Feil ved oppdatering"),
       retry: false,
@@ -110,6 +112,7 @@ export function useRedigerArrangement(valgtId: string | null) {
   };
 
   return {
+    arrangementer,
     arrangement,
     baner,
     tilgjengeligeTidspunkter,
@@ -118,7 +121,7 @@ export function useRedigerArrangement(valgtId: string | null) {
     clearForhandsvisning,
     erstatt,
     isLoading: loadingKlubb || loadingBaner,
-    isLoadingArrangement: loadingArrangement,
+    isLoadingArrangementer: loadingArrangementer,
     isLoadingForhandsvisning: forhandsvisMutation.isPending,
   };
 }
