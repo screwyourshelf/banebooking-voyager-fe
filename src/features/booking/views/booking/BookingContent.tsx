@@ -1,9 +1,6 @@
-import { HelpCircle } from "lucide-react";
-
 import DatoVelger from "@/components/DatoVelger";
-import { BookingSlotListAccordion, ReglementDialog } from "@/features/booking/components";
+import { BookingSlotListAccordion } from "@/features/booking/components";
 import { TabsLazyMount } from "@/components/navigation";
-import { Button } from "@/components/ui/button";
 
 import type { BookingSlotRespons, BaneRespons } from "@/types";
 import type { User } from "@supabase/supabase-js";
@@ -46,12 +43,7 @@ export default function BookingContent({
   return (
     <>
       <div className="flex justify-between items-center mb-2">
-        <ReglementDialog>
-          <Button variant="ghost" size="icon" className="rounded-full" title="Vis banereglement">
-            <HelpCircle className="w-5 h-5" />
-          </Button>
-        </ReglementDialog>
-
+        
         <DatoVelger
           value={valgtDato}
           onChange={(date) => onDatoChange(date ?? null)}

@@ -12,6 +12,7 @@ export interface RouteConfig {
 // Lazy-loadede komponenter
 const BookingPage = lazy(() => import("@/features/booking/pages/BookingPage"));
 const MinSidePage = lazy(() => import("@/features/minside/pages/MinSidePage"));
+const MineBookingerPage = lazy(() => import("@/features/minside/pages/MineBookingerPage"));
 const ArrangementerPage = lazy(() => import("@/features/arrangementer/pages/ArrangementerPage"));
 const KlubbPage = lazy(() => import("@/features/klubb/pages/KlubbPage"));
 const BanerPage = lazy(() => import("@/features/baner/pages/BanerPage"));
@@ -25,6 +26,7 @@ export const routeConfig: RouteConfig[] = [
   { path: "", breadcrumb: "Book bane", index: true, component: BookingPage },
   { path: "vilkaar", breadcrumb: "Vilkår", component: VilkaarPage },
   { path: "minside", breadcrumb: "Min side", protected: true, component: MinSidePage },
+  { path: "bookinger", breadcrumb: "Mine bookinger", protected: true, component: MineBookingerPage },
   {
     path: "arrangementer",
     breadcrumb: "Arrangementer",

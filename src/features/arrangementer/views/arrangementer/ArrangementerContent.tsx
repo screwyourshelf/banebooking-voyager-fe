@@ -8,7 +8,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { AccordionDetailGrid, AccordionDetailRow } from "@/components/accordion";
+import { AccordionDetailGrid, AccordionDetailRow, AccordionActions } from "@/components/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDatoKort, formatDayOfWeeksLangNorsk, dagerIgjenTekst } from "@/utils/datoUtils";
@@ -101,7 +101,7 @@ export default function ArrangementerContent({
           <Accordion
             type="single"
             collapsible
-            className="space-y-2 mt-4"
+            className="space-y-1 mt-2"
             defaultValue={defaultArrangementId}
           >
             {synligeArrangementer.map((arr) => {
@@ -115,7 +115,7 @@ export default function ArrangementerContent({
                 <AccordionItem
                   key={arr.id}
                   value={arr.id}
-                  className={`rounded-md border bg-background px-4 last:border-b shadow-sm ${arr.erPassert ? "opacity-50" : ""}`}
+                  className={`rounded-md border bg-background px-2 last:border-b shadow-sm ${arr.erPassert ? "opacity-50" : ""}`}
                 >
                   <AccordionTrigger className="hover:no-underline">
                     <div className="flex flex-col items-start gap-1.5">
@@ -141,7 +141,7 @@ export default function ArrangementerContent({
                   </AccordionTrigger>
 
                   <AccordionContent>
-                    <div className="space-y-4">
+                    <div className="space-y-3">
                       {harBeskrivelse && (
                         <p className="text-sm text-muted-foreground whitespace-pre-wrap">
                           {beskrivelse}
@@ -191,7 +191,7 @@ export default function ArrangementerContent({
                       </AccordionDetailGrid>
 
                       {!arr.erPassert && arr.tillattHandlinger.length > 0 && (
-                        <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t">
+                        <AccordionActions className="flex-wrap gap-2">
                           {harHandling(arr.tillattHandlinger, "arrangement:kopierLenke") && (
                             <Button
                               variant="outline"
@@ -241,7 +241,7 @@ export default function ArrangementerContent({
                               Meld meg på
                             </Button>
                           )}
-                        </div>
+                        </AccordionActions>
                       )}
                     </div>
                   </AccordionContent>

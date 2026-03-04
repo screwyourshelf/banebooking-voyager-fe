@@ -128,7 +128,7 @@ export default function BrukereListeContent({
                     <AccordionItem
                       key={b.id}
                       value={b.id}
-                      className={`rounded-md border bg-background px-4 last:border-b shadow-sm ${slettet ? "opacity-60" : ""}`}
+                      className={`rounded-md border bg-background px-2 last:border-b shadow-sm ${slettet ? "opacity-60" : ""}`}
                     >
                       <AccordionTrigger className="hover:no-underline">
                         <div className="flex flex-col items-start gap-1.5">
@@ -147,7 +147,7 @@ export default function BrukereListeContent({
                       </AccordionTrigger>
 
                       <AccordionContent>
-                        <div className="space-y-4">
+                        <div className="space-y-3">
                           <AccordionDetailGrid>
                             <AccordionDetailRow icon={Mail} label="E-post">
                               {b.epost ?? "Ukjent"}

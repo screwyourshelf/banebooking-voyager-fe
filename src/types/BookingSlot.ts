@@ -1,3 +1,5 @@
+export type SlotStatus = "ledig" | "passert" | "arrangement" | "din_booking" | "opptatt";
+
 export type BookingSlotRespons = {
   bookingId: string | null;
   baneId: string;
@@ -16,6 +18,7 @@ export type BookingSlotRespons = {
   erPaameldt?: boolean;
   antallPaameldte?: number;
   erPassert: boolean;
+  status?: SlotStatus;
   værSymbol?: string;
   temperatur?: number;
   vind?: number;

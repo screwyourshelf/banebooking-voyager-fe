@@ -150,14 +150,21 @@ export default function Navbar() {
             {currentUser ? (
               <>
                 <DropdownMenuItem asChild>
-                  <Link to={`/${slug}/minside`}>
-                    <CircleUser className="mr-2 size-4" />
-                    Min side
-                  </Link>
-                </DropdownMenuItem>
+                    <Link to={`/${slug}/minside`}>
+                      <CircleUser className="mr-2 size-4" />
+                      Min side
+                    </Link>
+                  </DropdownMenuItem>
 
-                <DropdownMenuItem asChild>
-                  <Link to={`/${slug}/arrangementer`}>
+                  <DropdownMenuItem asChild>
+                    <Link to={`/${slug}/bookinger`}>
+                      <Calendar className="mr-2 size-4" />
+                      Mine bookinger
+                    </Link>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem asChild>
+                    <Link to={`/${slug}/arrangementer`}>
                     <Calendar className="mr-2 size-4" />
                     Arrangementer
                   </Link>

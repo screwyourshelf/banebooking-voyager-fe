@@ -4,7 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { AccordionDetailGrid, AccordionDetailRow } from "@/components/accordion";
+import { AccordionDetailGrid, AccordionDetailRow, AccordionActions } from "@/components/accordion";
 import WeatherInfo from "@/components/WeatherInfo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -23,7 +23,8 @@ import {
 import PaameldteDialog from "@/features/arrangementer/views/arrangementer/PaameldteDialog";
 import KobleTilArrangementDialog from "./KobleTilArrangementDialog";
 import { harHandling } from "@/utils/handlingUtils";
-import { grupperSlots } from "@/utils/bookingUtils";
+import { grupperSlots, utledSlotVisning } from "@/utils/bookingUtils";
+import { formatDatoKort } from "@/utils/datoUtils";
 import type { BookingSlotRespons } from "@/types";
 
 type Props = {
@@ -83,25 +84,8 @@ export function BookingSlotListAccordion({
         const harVaer =
           !!slot.værSymbol || typeof slot.temperatur === "number" || typeof slot.vind === "number";
 
-        let statusTekst = "Ledig";
-        let statusVariant: "default" | "secondary" | "outline" | "destructive" = "secondary";
-
-        if (slot.erPassert) {
-          statusTekst = "Passert";
-          statusVariant = "outline";
-        } else if (harArrangement) {
-          statusTekst = slot.arrangementTittel ?? "Arrangement";
-          statusVariant = "default";
-        } else if (currentUser && erMinBooking) {
-          statusTekst = "Din booking";
-          statusVariant = "default";
-        } else if (erBooket) {
-          statusTekst = "Opptatt";
-          statusVariant = "outline";
-        } else if (!!currentUser && !kan("booking:book")) {
-          statusTekst = "Opptatt";
-          statusVariant = "outline";
-        }
+        const erInnlogget = !!currentUser;
+        const { tekst: statusTekst, variant: statusVariant } = utledSlotVisning(slot, erInnlogget);
 
         const [startH, startM] = effStartTid.split(":").map(Number);
         const [sluttH, sluttM] = effSluttTid.split(":").map(Number);
@@ -111,7 +95,7 @@ export function BookingSlotListAccordion({
           <AccordionItem
             key={slotKey}
             value={slotKey}
-            className={`rounded-md border bg-background px-4 last:border-b shadow-sm ${slot.erPassert ? "opacity-50" : ""}`}
+            className={`rounded-md border bg-background px-2 last:border-b shadow-sm ${slot.erPassert ? "opacity-50" : ""}`}
           >
             <AccordionTrigger className="hover:no-underline">
               <div className="flex flex-col items-start gap-1.5">
@@ -145,7 +129,7 @@ export function BookingSlotListAccordion({
             </AccordionTrigger>
 
             <AccordionContent>
-              <div className="space-y-4">
+              <div className="space-y-3">
                 <AccordionDetailGrid>
                   <AccordionDetailRow icon={Timer} label="Varighet">
                     {varighet} min
@@ -202,7 +186,7 @@ export function BookingSlotListAccordion({
                       <div>
                         <div className="text-xs font-medium text-muted-foreground">Vær</div>
                         <div className="text-sm">
-                          {typeof slot.temperatur === "number" && <span>{slot.temperatur}°C</span>}
+                          {typeof slot.temperatur === "number" && <span>{slot.temperatur}°c</span>}
                           {typeof slot.temperatur === "number" &&
                             typeof slot.vind === "number" &&
                             " · "}
@@ -215,7 +199,7 @@ export function BookingSlotListAccordion({
 
                 {/* Actions */}
                 {kanUtføreHandling && (
-                  <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t">
+                  <AccordionActions className="flex-wrap gap-2">
                     {kan("booking:kobleTilArrangement") && (
                       <KobleTilArrangementDialog
                         valgtId={null}
@@ -308,7 +292,7 @@ export function BookingSlotListAccordion({
                         Meld meg på
                       </Button>
                     )}
-                  </div>
+                  </AccordionActions>
                 )}
               </div>
             </AccordionContent>
