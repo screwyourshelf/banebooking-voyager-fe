@@ -9,5 +9,5 @@ export function sortBookingerNyesteFoerst(bookinger: BookingSlotRespons[]): Book
 }
 
 export function buildBookingKey(b: BookingSlotRespons): string {
-  return `${b.baneId}-${b.dato}-${b.startTid}-${b.sluttTid}`;
+  return b.bookingId ?? `${b.baneId}-${b.dato}-${b.startTid}-${b.sluttTid}`;
 }

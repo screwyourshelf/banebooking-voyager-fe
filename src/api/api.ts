@@ -38,9 +38,8 @@ function pickErrorMessage(data: unknown): string | null {
 }
 
 api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
-  if (!config.requireAuth) return config;
-
-  // Rask path: bruk speilet token (oppdateres via supabase.onAuthStateChange)
+  // Alltid legg til token hvis tilgjengelig (gir backend full kontekst).
+  // requireAuth styrer kun om manglende token er en feil.
   const token = localStorage.getItem("supabase_token");
   if (token) {
     setAuthHeader(config, token);

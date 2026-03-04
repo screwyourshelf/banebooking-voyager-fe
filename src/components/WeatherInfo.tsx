@@ -35,7 +35,7 @@ export default function WeatherInfo({ værSymbol, temperatur, vind, iconOnly = f
           draggable={false}
         />
       )}
-      {typeof temperatur === "number" && <span>{temperatur}°</span>}
+      {typeof temperatur === "number" && <span>{temperatur}°C</span>}
       {typeof vind === "number" && <span>{vind} m/s</span>}
     </span>
   );

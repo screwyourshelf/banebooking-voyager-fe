@@ -1,15 +1,34 @@
 import { useEffect, useMemo, useState } from "react";
 import { useBaner } from "@/hooks/useBaner";
+import { useKlubb } from "@/hooks/useKlubb";
 
 import { FormSkeleton } from "@/components/loading";
 import RedigerBaneContent from "./RedigerBaneContent";
 import { loadValgtBaneId, saveValgtBaneId } from "./storage";
-import type { BaneRespons } from "@/types";
+import type { BaneRespons, OppdaterBaneBookingInnstillingerForespørsel } from "@/types";
 
 type BaneFormData = {
   navn: string;
   beskrivelse: string;
   aktiv: boolean;
+};
+
+type OverstyringFormData = {
+  aapningstid: number | null;
+  stengetid: number | null;
+  slotLengdeMinutter: number | null;
+  maksPerDag: number | null;
+  maksTotalt: number | null;
+  dagerFremITid: number | null;
+};
+
+const ALLE_NULL: OverstyringFormData = {
+  aapningstid: null,
+  stengetid: null,
+  slotLengdeMinutter: null,
+  maksPerDag: null,
+  maksTotalt: null,
+  dagerFremITid: null,
 };
 
 type TouchedState = { navn: boolean };
@@ -20,13 +39,22 @@ function validateNavn(navn: string): string | null {
   return null;
 }
 
+function timeToHour(t: string): number {
+  const h = parseInt((t ?? "").split(":")[0] ?? "0", 10);
+  return Number.isFinite(h) ? h : 0;
+}
+
+function hourToTime(h: number): string {
+  return `${String(h).padStart(2, "0")}:00`;
+}
+
 export default function RedigerBaneView() {
-  const { baner, isLoading, oppdaterBane } = useBaner(true);
+  const { baner, isLoading, oppdaterBane, oppdaterBookingInnstillinger } = useBaner(true);
+  const { data: klubb, isLoading: loadingKlubb } = useKlubb();
 
   const [redigerte, setRedigerte] = useState<Record<string, BaneFormData>>({});
   const [valgtBaneId, setValgtBaneId] = useState<string | null>(() => loadValgtBaneId());
 
-  // touched per bane-id (så du ikke får “feil” på ny bane du klikker deg inn på)
   const [touched, setTouched] = useState<Record<string, TouchedState>>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
 
@@ -40,27 +68,22 @@ export default function RedigerBaneView() {
     return redigerte[valgtBaneId] ?? null;
   }, [redigerte, valgtBaneId]);
 
-  // Persist valgt bane-id
   useEffect(() => {
     saveValgtBaneId(valgtBaneId);
   }, [valgtBaneId]);
 
-  // Hvis valgt bane ikke finnes lenger, nullstill
   useEffect(() => {
     if (valgtBaneId && !baner.some((b) => b.id === valgtBaneId)) {
       setValgtBaneId(null);
     }
   }, [baner, valgtBaneId]);
 
-  // Default til første bane om ingen er valgt
   useEffect(() => {
     if (!valgtBaneId && baner.length > 0) {
       setValgtBaneId(baner[0].id);
     }
   }, [baner, valgtBaneId]);
 
-  // Når du bytter bane, er det ofte mest “rolig” å resette submitAttempted
-  // (slik at feil ikke vises før blur/submit igjen)
   useEffect(() => {
     setSubmitAttempted(false);
   }, [valgtBaneId]);
@@ -83,7 +106,6 @@ export default function RedigerBaneView() {
     }));
   }
 
-  // Bygg "draft" vi faktisk viser i UI (draft > valgtBane)
   const draft: BaneFormData | null = useMemo(() => {
     if (!valgtBane) return null;
     return (
@@ -96,14 +118,118 @@ export default function RedigerBaneView() {
   }, [valgtBane, redigerteVerdier]);
 
   const errors = useMemo(() => {
-    return {
-      navn: draft ? validateNavn(draft.navn) : null,
-    };
+    return { navn: draft ? validateNavn(draft.navn) : null };
   }, [draft]);
 
-  const isDirty = useMemo(() => {
-    if (!valgtBane || !redigerteVerdier) return false;
+  const isValid = useMemo(() => !errors.navn, [errors.navn]);
 
+  const touchedNavn = valgtBaneId ? (touched[valgtBaneId]?.navn ?? false) : false;
+  const navnError = touchedNavn || submitAttempted ? errors.navn : null;
+
+  // --- Booking-overstyring ---
+
+  const [overstyringDrafts, setOverstyringDrafts] = useState<Record<string, OverstyringFormData>>(
+    {}
+  );
+
+  const [overstyringAktivDraft, setOverstyringAktivDraft] = useState<Record<string, boolean>>({});
+
+  const serverOverstyring: OverstyringFormData | null = useMemo(() => {
+    if (!valgtBane) return null;
+    const o = valgtBane.bookingOverstyring;
+    if (!o) return { ...ALLE_NULL };
+    return {
+      aapningstid: o.aapningstid !== null ? timeToHour(o.aapningstid) : null,
+      stengetid: o.stengetid !== null ? timeToHour(o.stengetid) : null,
+      slotLengdeMinutter: o.slotLengdeMinutter,
+      maksPerDag: o.maksPerDag,
+      maksTotalt: o.maksTotalt,
+      dagerFremITid: o.dagerFremITid,
+    };
+  }, [valgtBane]);
+
+  const serverHarOverstyring = useMemo(() => {
+    if (!valgtBane) return false;
+    return valgtBane.harOverstyring;
+  }, [valgtBane]);
+
+  const overstyringAktivert = useMemo(() => {
+    if (!valgtBaneId) return false;
+    return overstyringAktivDraft[valgtBaneId] ?? serverHarOverstyring;
+  }, [valgtBaneId, overstyringAktivDraft, serverHarOverstyring]);
+
+  const overstyring: OverstyringFormData | null = useMemo(() => {
+    if (!valgtBaneId || !serverOverstyring) return null;
+    return overstyringDrafts[valgtBaneId] ?? serverOverstyring;
+  }, [valgtBaneId, overstyringDrafts, serverOverstyring]);
+
+  useEffect(() => {
+    if (!valgtBaneId) return;
+    setOverstyringDrafts((prev) => {
+      if (!prev[valgtBaneId]) return prev;
+      const ny = { ...prev };
+      delete ny[valgtBaneId];
+      return ny;
+    });
+    setOverstyringAktivDraft((prev) => {
+      if (!(valgtBaneId in prev)) return prev;
+      const ny = { ...prev };
+      delete ny[valgtBaneId];
+      return ny;
+    });
+  }, [valgtBaneId]);
+
+  const klubbDefault = klubb?.bookingRegel ?? null;
+
+  function handleToggleOverstyringAktivert(aktiv: boolean) {
+    if (!valgtBaneId) return;
+    setOverstyringAktivDraft((prev) => ({ ...prev, [valgtBaneId]: aktiv }));
+    if (!aktiv) {
+      setOverstyringDrafts((prev) => ({
+        ...prev,
+        [valgtBaneId]: { ...ALLE_NULL },
+      }));
+    }
+  }
+
+  function handleToggleOverstyring(felt: keyof OverstyringFormData, aktiv: boolean) {
+    if (!valgtBaneId || !klubbDefault) return;
+    const current = overstyring ?? serverOverstyring;
+    if (!current) return;
+
+    const defaultVerdier: Record<keyof OverstyringFormData, number> = {
+      aapningstid: timeToHour(klubbDefault.aapningstid),
+      stengetid: timeToHour(klubbDefault.stengetid),
+      slotLengdeMinutter: klubbDefault.slotLengdeMinutter,
+      maksPerDag: klubbDefault.maksPerDag,
+      maksTotalt: klubbDefault.maksTotalt,
+      dagerFremITid: klubbDefault.dagerFremITid,
+    };
+
+    setOverstyringDrafts((prev) => ({
+      ...prev,
+      [valgtBaneId]: {
+        ...current,
+        [felt]: aktiv ? defaultVerdier[felt] : null,
+      },
+    }));
+  }
+
+  function handleChangeOverstyring(felt: keyof OverstyringFormData, verdi: number) {
+    if (!valgtBaneId) return;
+    const current = overstyring ?? serverOverstyring;
+    if (!current) return;
+
+    setOverstyringDrafts((prev) => ({
+      ...prev,
+      [valgtBaneId]: { ...current, [felt]: verdi },
+    }));
+  }
+
+  // --- Dirty / canSubmit ---
+
+  const baneDirty = useMemo(() => {
+    if (!valgtBane || !redigerteVerdier) return false;
     return !(
       redigerteVerdier.navn === valgtBane.navn &&
       redigerteVerdier.beskrivelse === valgtBane.beskrivelse &&
@@ -111,51 +237,93 @@ export default function RedigerBaneView() {
     );
   }, [valgtBane, redigerteVerdier]);
 
-  const isValid = useMemo(() => !errors.navn, [errors.navn]);
+  const overstyringDirty = useMemo(() => {
+    if (!valgtBaneId || !serverOverstyring) return false;
 
-  // samme semantikk som klubb: dirty + valid
+    if (overstyringAktivert !== serverHarOverstyring) return true;
+
+    const draft = overstyringDrafts[valgtBaneId];
+    if (!draft) return false;
+    return (
+      draft.aapningstid !== serverOverstyring.aapningstid ||
+      draft.stengetid !== serverOverstyring.stengetid ||
+      draft.slotLengdeMinutter !== serverOverstyring.slotLengdeMinutter ||
+      draft.maksPerDag !== serverOverstyring.maksPerDag ||
+      draft.maksTotalt !== serverOverstyring.maksTotalt ||
+      draft.dagerFremITid !== serverOverstyring.dagerFremITid
+    );
+  }, [
+    valgtBaneId,
+    overstyringDrafts,
+    serverOverstyring,
+    overstyringAktivert,
+    serverHarOverstyring,
+  ]);
+
+  const isDirty = baneDirty || overstyringDirty;
   const canSubmit = isDirty && isValid;
+  const isSaving = oppdaterBane.isPending || oppdaterBookingInnstillinger.isPending;
 
-  const touchedNavn = valgtBaneId ? (touched[valgtBaneId]?.navn ?? false) : false;
-
-  // samme logikk som dere bruker ellers: vis feil ved blur eller submit attempt
-  const navnError = touchedNavn || submitAttempted ? errors.navn : null;
+  // --- Submit ---
 
   async function onSubmit() {
     if (!valgtBaneId || !valgtBane) return;
 
     setSubmitAttempted(true);
     touchField(valgtBaneId, "navn");
-
-    if (!canSubmit) return;
-
-    const dto = redigerte[valgtBaneId];
-    if (!dto) return;
+    if (!isValid) return;
+    if (!isDirty) return;
 
     try {
-      await oppdaterBane.mutateAsync({ id: valgtBaneId, dto });
+      if (baneDirty) {
+        const dto = redigerte[valgtBaneId];
+        if (dto) {
+          await oppdaterBane.mutateAsync({ id: valgtBaneId, dto });
+        }
+      }
 
-      // Etter lagring: fjern draft for valgt bane
+      if (overstyringDirty) {
+        const effektiv = overstyringAktivert ? (overstyring ?? ALLE_NULL) : ALLE_NULL;
+
+        const dto: OppdaterBaneBookingInnstillingerForespørsel = {
+          aapningstid: effektiv.aapningstid !== null ? hourToTime(effektiv.aapningstid) : null,
+          stengetid: effektiv.stengetid !== null ? hourToTime(effektiv.stengetid) : null,
+          slotLengdeMinutter: effektiv.slotLengdeMinutter,
+          maksPerDag: effektiv.maksPerDag,
+          maksTotalt: effektiv.maksTotalt,
+          dagerFremITid: effektiv.dagerFremITid,
+        };
+
+        await oppdaterBookingInnstillinger.mutateAsync({ id: valgtBaneId, dto });
+      }
+
       setRedigerte((prev) => {
         const ny = { ...prev };
         delete ny[valgtBaneId];
         return ny;
       });
-
-      // Optional: reset touched for denne banen etter lagring
       setTouched((prev) => {
         const ny = { ...prev };
         delete ny[valgtBaneId];
         return ny;
       });
-
+      setOverstyringDrafts((prev) => {
+        const ny = { ...prev };
+        delete ny[valgtBaneId];
+        return ny;
+      });
+      setOverstyringAktivDraft((prev) => {
+        const ny = { ...prev };
+        delete ny[valgtBaneId];
+        return ny;
+      });
       setSubmitAttempted(false);
     } catch {
-      // Feil håndteres i hook (toast)
+      // Feil håndteres i hooks (toast)
     }
   }
 
-  if (isLoading) return <FormSkeleton />;
+  if (isLoading || loadingKlubb) return <FormSkeleton />;
 
   return (
     <RedigerBaneContent
@@ -168,14 +336,20 @@ export default function RedigerBaneView() {
         if (!valgtBane) return;
         håndterEndring(valgtBane.id, felt, verdi);
       }}
-      canSubmit={canSubmit}
-      isSaving={oppdaterBane.isPending}
-      onSubmit={() => void onSubmit()}
       navnError={navnError}
       onBlurNavn={() => {
         if (!valgtBaneId) return;
         touchField(valgtBaneId, "navn");
       }}
+      overstyringAktivert={overstyringAktivert}
+      onToggleOverstyringAktivert={handleToggleOverstyringAktivert}
+      klubbDefault={klubbDefault}
+      overstyring={overstyring}
+      onToggleOverstyring={handleToggleOverstyring}
+      onChangeOverstyring={handleChangeOverstyring}
+      canSubmit={canSubmit}
+      isSaving={isSaving}
+      onSubmit={() => void onSubmit()}
     />
   );
 }

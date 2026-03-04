@@ -1,9 +1,12 @@
 export type BookingSlotRespons = {
+  bookingId: string | null;
   baneId: string;
   baneNavn: string;
   dato: string;
   startTid: string;
   sluttTid: string;
+  bookingStartTid: string | null;
+  bookingSluttTid: string | null;
   booketAv: string | null;
   erEier?: boolean;
   arrangementTittel?: string;
@@ -28,8 +31,5 @@ export type OpprettBookingForespørsel = {
 };
 
 export type AvbestillBookingForespørsel = {
-  baneId: string;
-  dato: string;
-  startTid: string;
-  sluttTid: string;
+  bookingId: string;
 };

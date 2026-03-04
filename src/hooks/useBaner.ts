@@ -4,7 +4,12 @@ import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import api from "@/api/api";
-import type { BaneRespons, OpprettBaneForespørsel, OppdaterBaneForespørsel } from "@/types";
+import type {
+  BaneRespons,
+  OpprettBaneForespørsel,
+  OppdaterBaneForespørsel,
+  OppdaterBaneBookingInnstillingerForespørsel,
+} from "@/types";
 import { useSlug } from "@/hooks/useSlug";
 
 export function useBaner(inkluderInaktive = true) {
@@ -61,6 +66,22 @@ export function useBaner(inkluderInaktive = true) {
     }
   );
 
+  const oppdaterBookingInnstillinger = useApiMutation<
+    { id: string; dto: OppdaterBaneBookingInnstillingerForespørsel },
+    void
+  >("put", "/", {
+    mutationFn: async ({ id, dto }) => {
+      await api.put<void>(`/klubb/${slug}/baner/${id}/booking-innstillinger`, dto, {
+        requireAuth: true,
+      });
+    },
+    onSuccess: () => {
+      toast.success("Bookinginnstillinger oppdatert");
+      invalidateAll();
+    },
+    onError: (err) => toast.error(err.message ?? "Kunne ikke oppdatere bookinginnstillinger"),
+  });
+
   return {
     baner: banerQuery.data ?? [],
     isLoading: banerQuery.isLoading,
@@ -69,5 +90,6 @@ export function useBaner(inkluderInaktive = true) {
 
     opprettBane,
     oppdaterBane,
+    oppdaterBookingInnstillinger,
   };
 }

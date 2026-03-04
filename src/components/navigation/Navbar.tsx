@@ -122,7 +122,7 @@ export default function Navbar() {
 
       <div className="flex items-center gap-1">
         <ModeToggle />
-        {currentUser && <NotifikasjonDrawer />}
+        <NotifikasjonDrawer />
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>

@@ -3,11 +3,8 @@ import { toast } from "sonner";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useSlug } from "@/hooks/useSlug";
 
-export type BookingSlotResponsKey = {
-  baneId: string;
-  dato: string; // yyyy-MM-dd
-  startTid: string; // HH:mm
-  sluttTid: string; // HH:mm
+export type AvbestillVars = {
+  bookingId: string;
 };
 
 export function useBookingActions() {
@@ -22,27 +19,23 @@ export function useBookingActions() {
     void queryClient.invalidateQueries({ queryKey: ["bookinger", slug] });
   };
 
-  const cancelMutation = useApiMutation<BookingSlotResponsKey, void>(
-    "delete",
-    `/klubb/${slug}/bookinger`,
-    {
-      onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke avbestille.");
-      },
-      onSuccess: () => {
-        toast.info("Bookingen er avbestilt.");
-      },
-      onSettled: () => {
-        invalidateAll();
-      },
-    }
-  );
+  const cancelMutation = useApiMutation<AvbestillVars, void>("delete", `/klubb/${slug}/bookinger`, {
+    onError: (err) => {
+      toast.error(err.message ?? "Kunne ikke avbestille.");
+    },
+    onSuccess: () => {
+      toast.info("Bookingen er avbestilt.");
+    },
+    onSettled: () => {
+      invalidateAll();
+    },
+  });
 
-  const avbestill = (key: BookingSlotResponsKey) => {
+  const avbestill = (key: AvbestillVars) => {
     cancelMutation.mutate(key);
   };
 
-  const avbestillAsync = async (key: BookingSlotResponsKey) => {
+  const avbestillAsync = async (key: AvbestillVars) => {
     return cancelMutation.mutateAsync(key);
   };
 

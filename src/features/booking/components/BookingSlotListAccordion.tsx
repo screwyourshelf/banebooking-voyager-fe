@@ -23,6 +23,7 @@ import {
 import PaameldteDialog from "@/features/minside/views/kommende-arrangementer/PaameldteDialog";
 import KobleTilArrangementDialog from "./KobleTilArrangementDialog";
 import { harHandling } from "@/utils/handlingUtils";
+import { grupperSlots } from "@/utils/bookingUtils";
 import type { BookingSlotRespons } from "@/types";
 
 type Props = {
@@ -56,22 +57,26 @@ export function BookingSlotListAccordion({
     );
   }
 
+  const synligeSlots = grupperSlots(slots);
+
   return (
     <Accordion type="single" collapsible className="space-y-1">
-      {slots.map((slot) => {
-        const slotKey = `${slot.dato}-${slot.startTid}-${slot.baneId}`;
-        const tid = `${slot.startTid.slice(0, 5)} – ${slot.sluttTid.slice(0, 5)}`;
+      {synligeSlots.map((slot) => {
+        const slotKey = slot.bookingId ?? `${slot.dato}-${slot.startTid}-${slot.baneId}`;
+        const effStartTid = slot.bookingStartTid ?? slot.startTid;
+        const effSluttTid = slot.bookingSluttTid ?? slot.sluttTid;
+        const tid = `${effStartTid.slice(0, 5)} – ${effSluttTid.slice(0, 5)}`;
         const formatKort = (t: string) => {
           const [h, m] = t.slice(0, 5).split(":");
           return m === "00" ? h : `${h}:${m}`;
         };
-        const tidKort = `${formatKort(slot.startTid)}–${formatKort(slot.sluttTid)}`;
+        const tidKort = `${formatKort(effStartTid)}–${formatKort(effSluttTid)}`;
 
         const harArrangement = !!slot.arrangementTittel;
-        const erBooket = !!slot.booketAv;
+        const kan = (h: string) => harHandling(slot.tillattHandlinger, h);
+        const erBooket = !!slot.booketAv || kan("booking:slett") || kan("booking:avbestill");
         const erMinBooking = slot.erEier === true;
 
-        const kan = (h: string) => harHandling(slot.tillattHandlinger, h);
         const harHandlinger = slot.tillattHandlinger.length > 0;
         const kanUtføreHandling = !!currentUser && harHandlinger;
 
@@ -93,10 +98,13 @@ export function BookingSlotListAccordion({
         } else if (erBooket) {
           statusTekst = "Opptatt";
           statusVariant = "outline";
+        } else if (!!currentUser && !kan("booking:book")) {
+          statusTekst = "Opptatt";
+          statusVariant = "outline";
         }
 
-        const [startH, startM] = slot.startTid.split(":").map(Number);
-        const [sluttH, sluttM] = slot.sluttTid.split(":").map(Number);
+        const [startH, startM] = effStartTid.split(":").map(Number);
+        const [sluttH, sluttM] = effSluttTid.split(":").map(Number);
         const varighet = sluttH * 60 + sluttM - (startH * 60 + startM);
 
         return (
@@ -194,7 +202,7 @@ export function BookingSlotListAccordion({
                       <div>
                         <div className="text-xs font-medium text-muted-foreground">Vær</div>
                         <div className="text-sm">
-                          {typeof slot.temperatur === "number" && <span>{slot.temperatur}°</span>}
+                          {typeof slot.temperatur === "number" && <span>{slot.temperatur}°C</span>}
                           {typeof slot.temperatur === "number" &&
                             typeof slot.vind === "number" &&
                             " · "}

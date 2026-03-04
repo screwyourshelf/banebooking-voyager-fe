@@ -1,5 +1,6 @@
 import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList, Row } from "@/components/rows";
+import SwitchRow from "@/components/rows/SwitchRow";
 import { FormActions, FormLayout, FormSubmitButton } from "@/components/forms";
 
 import { Field, FieldError } from "@/components/ui/field";
@@ -12,12 +13,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { BaneRespons } from "@/types";
+import type { BaneRespons, BookingRegelRespons } from "@/types";
 
 type BaneFormData = {
   navn: string;
   beskrivelse: string;
   aktiv: boolean;
+};
+
+type OverstyringFormData = {
+  aapningstid: number | null;
+  stengetid: number | null;
+  slotLengdeMinutter: number | null;
+  maksPerDag: number | null;
+  maksTotalt: number | null;
+  dagerFremITid: number | null;
 };
 
 type Props = {
@@ -30,13 +40,25 @@ type Props = {
 
   onChangeFelt: (felt: keyof BaneFormData, verdi: string | boolean) => void;
 
+  navnError: string | null;
+  onBlurNavn: () => void;
+
+  overstyringAktivert: boolean;
+  onToggleOverstyringAktivert: (aktiv: boolean) => void;
+
+  klubbDefault: BookingRegelRespons | null;
+  overstyring: OverstyringFormData | null;
+  onToggleOverstyring: (felt: keyof OverstyringFormData, aktiv: boolean) => void;
+  onChangeOverstyring: (felt: keyof OverstyringFormData, verdi: number) => void;
+
   canSubmit: boolean;
   isSaving: boolean;
   onSubmit: () => void;
-
-  navnError: string | null;
-  onBlurNavn: () => void;
 };
+
+function hourLabel(h: number) {
+  return `${String(h).padStart(2, "0")}:00`;
+}
 
 export default function RedigerBaneContent({
   baner,
@@ -45,11 +67,17 @@ export default function RedigerBaneContent({
   valgtBane,
   redigerteVerdier,
   onChangeFelt,
+  navnError,
+  onBlurNavn,
+  overstyringAktivert,
+  onToggleOverstyringAktivert,
+  klubbDefault,
+  overstyring,
+  onToggleOverstyring,
+  onChangeOverstyring,
   canSubmit,
   isSaving,
   onSubmit,
-  navnError,
-  onBlurNavn,
 }: Props) {
   const navn = redigerteVerdier?.navn ?? valgtBane?.navn ?? "";
   const beskrivelse = redigerteVerdier?.beskrivelse ?? valgtBane?.beskrivelse ?? "";
@@ -127,6 +155,18 @@ export default function RedigerBaneContent({
                     />
                   }
                 />
+
+                <Row
+                  title="Overstyr bookinginnstillinger"
+                  description="Overstyr klubbens standardinnstillinger for denne banen."
+                  right={
+                    <Switch
+                      disabled={isSaving}
+                      checked={overstyringAktivert}
+                      onCheckedChange={onToggleOverstyringAktivert}
+                    />
+                  }
+                />
               </>
             ) : (
               <Row title="Ingen baner funnet">
@@ -138,6 +178,200 @@ export default function RedigerBaneContent({
           </RowList>
         </RowPanel>
       </PageSection>
+
+      {valgtBane && overstyringAktivert && klubbDefault && overstyring && (
+        <PageSection
+          title="Bookinginnstillinger"
+          description="Felter som ikke er overstyrt arves fra klubben."
+        >
+          <RowPanel>
+            <RowList>
+              <SwitchRow
+                title="Overstyr åpningstid"
+                description={`Klubb-default: ${klubbDefault.aapningstid}`}
+                checked={overstyring.aapningstid !== null}
+                onCheckedChange={(v) => onToggleOverstyring("aapningstid", v)}
+                disabled={isSaving}
+              />
+              {overstyring.aapningstid !== null && (
+                <Row
+                  title="Åpningstid"
+                  right={
+                    <div className="text-sm font-medium tabular-nums">
+                      {hourLabel(overstyring.aapningstid)}
+                    </div>
+                  }
+                >
+                  <Field>
+                    <input
+                      type="range"
+                      value={overstyring.aapningstid}
+                      min={6}
+                      max={23}
+                      step={1}
+                      onChange={(e) => onChangeOverstyring("aapningstid", Number(e.target.value))}
+                      className="w-full accent-primary"
+                      disabled={isSaving}
+                    />
+                  </Field>
+                </Row>
+              )}
+
+              <SwitchRow
+                title="Overstyr stengetid"
+                description={`Klubb-default: ${klubbDefault.stengetid}`}
+                checked={overstyring.stengetid !== null}
+                onCheckedChange={(v) => onToggleOverstyring("stengetid", v)}
+                disabled={isSaving}
+              />
+              {overstyring.stengetid !== null && (
+                <Row
+                  title="Stengetid"
+                  right={
+                    <div className="text-sm font-medium tabular-nums">
+                      {hourLabel(overstyring.stengetid)}
+                    </div>
+                  }
+                >
+                  <Field>
+                    <input
+                      type="range"
+                      value={overstyring.stengetid}
+                      min={6}
+                      max={23}
+                      step={1}
+                      onChange={(e) => onChangeOverstyring("stengetid", Number(e.target.value))}
+                      className="w-full accent-primary"
+                      disabled={isSaving}
+                    />
+                  </Field>
+                </Row>
+              )}
+
+              <SwitchRow
+                title="Overstyr slot-lengde"
+                description={`Klubb-default: ${klubbDefault.slotLengdeMinutter} min`}
+                checked={overstyring.slotLengdeMinutter !== null}
+                onCheckedChange={(v) => onToggleOverstyring("slotLengdeMinutter", v)}
+                disabled={isSaving}
+              />
+              {overstyring.slotLengdeMinutter !== null && (
+                <Row title="Slot-lengde">
+                  <Field>
+                    <Select
+                      value={overstyring.slotLengdeMinutter.toString()}
+                      onValueChange={(val) =>
+                        onChangeOverstyring("slotLengdeMinutter", parseInt(val, 10))
+                      }
+                      disabled={isSaving}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Velg slot-lengde" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="30">30 minutter</SelectItem>
+                        <SelectItem value="45">45 minutter</SelectItem>
+                        <SelectItem value="60">60 minutter</SelectItem>
+                        <SelectItem value="90">90 minutter</SelectItem>
+                        <SelectItem value="120">120 minutter</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                </Row>
+              )}
+
+              <SwitchRow
+                title="Overstyr maks per dag"
+                description={`Klubb-default: ${klubbDefault.maksPerDag}`}
+                checked={overstyring.maksPerDag !== null}
+                onCheckedChange={(v) => onToggleOverstyring("maksPerDag", v)}
+                disabled={isSaving}
+              />
+              {overstyring.maksPerDag !== null && (
+                <Row
+                  title="Maks bookinger per dag"
+                  right={
+                    <div className="text-sm font-medium tabular-nums">{overstyring.maksPerDag}</div>
+                  }
+                >
+                  <Field>
+                    <input
+                      type="range"
+                      value={overstyring.maksPerDag}
+                      min={1}
+                      max={10}
+                      step={1}
+                      onChange={(e) => onChangeOverstyring("maksPerDag", Number(e.target.value))}
+                      className="w-full accent-primary"
+                      disabled={isSaving}
+                    />
+                  </Field>
+                </Row>
+              )}
+
+              <SwitchRow
+                title="Overstyr maks aktive bookinger"
+                description={`Klubb-default: ${klubbDefault.maksTotalt}`}
+                checked={overstyring.maksTotalt !== null}
+                onCheckedChange={(v) => onToggleOverstyring("maksTotalt", v)}
+                disabled={isSaving}
+              />
+              {overstyring.maksTotalt !== null && (
+                <Row
+                  title="Maks aktive bookinger"
+                  right={
+                    <div className="text-sm font-medium tabular-nums">{overstyring.maksTotalt}</div>
+                  }
+                >
+                  <Field>
+                    <input
+                      type="range"
+                      value={overstyring.maksTotalt}
+                      min={1}
+                      max={20}
+                      step={1}
+                      onChange={(e) => onChangeOverstyring("maksTotalt", Number(e.target.value))}
+                      className="w-full accent-primary"
+                      disabled={isSaving}
+                    />
+                  </Field>
+                </Row>
+              )}
+
+              <SwitchRow
+                title="Overstyr dager frem i tid"
+                description={`Klubb-default: ${klubbDefault.dagerFremITid}`}
+                checked={overstyring.dagerFremITid !== null}
+                onCheckedChange={(v) => onToggleOverstyring("dagerFremITid", v)}
+                disabled={isSaving}
+              />
+              {overstyring.dagerFremITid !== null && (
+                <Row
+                  title="Dager frem i tid"
+                  right={
+                    <div className="text-sm font-medium tabular-nums">
+                      {overstyring.dagerFremITid}
+                    </div>
+                  }
+                >
+                  <Field>
+                    <input
+                      type="range"
+                      value={overstyring.dagerFremITid}
+                      min={1}
+                      max={150}
+                      step={1}
+                      onChange={(e) => onChangeOverstyring("dagerFremITid", Number(e.target.value))}
+                      className="w-full accent-primary"
+                      disabled={isSaving}
+                    />
+                  </Field>
+                </Row>
+              )}
+            </RowList>
+          </RowPanel>
+        </PageSection>
+      )}
 
       <FormActions variant="sticky" align="left" spaced={false} className="w-full">
         <FormSubmitButton

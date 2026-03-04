@@ -19,13 +19,10 @@ export default function MineBookingerTab() {
   }, [bookinger]);
 
   async function handleAvbestill(slot: BookingSlotRespons) {
-    if (isPending) return;
+    if (isPending || !slot.bookingId) return;
 
     await avbestillAsync({
-      baneId: slot.baneId,
-      dato: slot.dato,
-      startTid: slot.startTid,
-      sluttTid: slot.sluttTid,
+      bookingId: slot.bookingId,
     });
   }
 

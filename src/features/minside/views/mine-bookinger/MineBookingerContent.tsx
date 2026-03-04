@@ -16,6 +16,7 @@ import { formatDatoKort } from "@/utils/datoUtils";
 import { Timer, User, XCircle } from "lucide-react";
 import type { BookingSlotRespons } from "@/types";
 import { harHandling } from "@/utils/handlingUtils";
+import { grupperSlots } from "@/utils/bookingUtils";
 
 import { buildBookingKey } from "./bookingSort";
 
@@ -55,8 +56,9 @@ export default function MineBookingerContent({
   }, [visHistoriske]);
 
   const hasBookinger = bookinger.length > 0;
-  const synligeBookinger = bookinger.slice(0, synligAntall);
-  const harFlere = synligAntall < bookinger.length;
+  const grupperteBookinger = grupperSlots(bookinger);
+  const synligeBookinger = grupperteBookinger.slice(0, synligAntall);
+  const harFlere = synligAntall < grupperteBookinger.length;
 
   const tomTekst = visHistoriske
     ? "Du har ingen registrerte bookinger."
@@ -89,12 +91,14 @@ export default function MineBookingerContent({
           >
             {synligeBookinger.map((b) => {
               const key = buildBookingKey(b);
-              const tid = `${b.startTid.slice(0, 5)} – ${b.sluttTid.slice(0, 5)}`;
+              const effStartTid = b.bookingStartTid ?? b.startTid;
+              const effSluttTid = b.bookingSluttTid ?? b.sluttTid;
+              const tid = `${effStartTid.slice(0, 5)} – ${effSluttTid.slice(0, 5)}`;
               const kanAvbestille = harHandling(b.tillattHandlinger, "booking:avbestill");
               const dagerIgjen = b.erPassert ? null : dagerIgjenFra(b.dato);
 
-              const [startH, startM] = b.startTid.split(":").map(Number);
-              const [sluttH, sluttM] = b.sluttTid.split(":").map(Number);
+              const [startH, startM] = effStartTid.split(":").map(Number);
+              const [sluttH, sluttM] = effSluttTid.split(":").map(Number);
               const varighet = sluttH * 60 + sluttM - (startH * 60 + startM);
 
               return (
@@ -174,7 +178,7 @@ export default function MineBookingerContent({
                 size="sm"
                 onClick={() => setSynligAntall((prev) => prev + PAGE_SIZE)}
               >
-                Vis flere ({bookinger.length - synligAntall} gjenstår)
+                Vis flere ({grupperteBookinger.length - synligAntall} gjenstår)
               </Button>
             </div>
           )}

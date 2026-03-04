@@ -13,6 +13,7 @@ type SlotVars = {
   sluttTid: string;
   arrangementId?: string;
 };
+type CancelVars = { bookingId: string };
 type OptimisticContext = { previous?: BookingSlotRespons[] };
 
 export function useBooking(dato: string, baneId: string) {
@@ -39,7 +40,7 @@ export function useBooking(dato: string, baneId: string) {
     }
   );
 
-  // Query-feil toast (én gang per feil)
+  // Query-feil toast (en gang per feil)
   const errorToastetRef = useRef(false);
   useEffect(() => {
     if (!bookingerQuery.error) {
@@ -75,8 +76,11 @@ export function useBooking(dato: string, baneId: string) {
             erSammeSlot(s, vars)
               ? {
                   ...s,
+                  bookingId: null,
                   booketAv: "Du",
                   erEier: true,
+                  bookingStartTid: s.startTid,
+                  bookingSluttTid: s.sluttTid,
                   tillattHandlinger: ["booking:avbestill"],
                 }
               : s
@@ -100,7 +104,7 @@ export function useBooking(dato: string, baneId: string) {
   );
 
   // DELETE (avbestill) (optimistic)
-  const cancelMutation = useApiMutation<SlotVars, void, OptimisticContext>(
+  const cancelMutation = useApiMutation<CancelVars, void, OptimisticContext>(
     "delete",
     `/klubb/${slug}/bookinger`,
     {
@@ -111,11 +115,14 @@ export function useBooking(dato: string, baneId: string) {
 
         queryClient.setQueryData<BookingSlotRespons[]>(queryKey, (old = []) =>
           old.map((s) =>
-            erSammeSlot(s, vars)
+            s.bookingId === vars.bookingId
               ? {
                   ...s,
+                  bookingId: null,
                   booketAv: null,
                   erEier: false,
+                  bookingStartTid: null,
+                  bookingSluttTid: null,
                   tillattHandlinger: ["booking:book"],
                 }
               : s
@@ -138,7 +145,7 @@ export function useBooking(dato: string, baneId: string) {
   );
 
   // DELETE admin (optimistic)
-  const deleteMutation = useApiMutation<SlotVars, void, OptimisticContext>(
+  const deleteMutation = useApiMutation<CancelVars, void, OptimisticContext>(
     "delete",
     `/klubb/${slug}/bookinger/admin`,
     {
@@ -149,11 +156,14 @@ export function useBooking(dato: string, baneId: string) {
 
         queryClient.setQueryData<BookingSlotRespons[]>(queryKey, (old = []) =>
           old.map((s) =>
-            erSammeSlot(s, vars)
+            s.bookingId === vars.bookingId
               ? {
                   ...s,
+                  bookingId: null,
                   booketAv: null,
                   erEier: false,
+                  bookingStartTid: null,
+                  bookingSluttTid: null,
                   tillattHandlinger: ["booking:book"],
                 }
               : s
@@ -192,21 +202,15 @@ export function useBooking(dato: string, baneId: string) {
         arrangementId,
       }),
 
-    onCancel: (slot: BookingSlotRespons) =>
-      cancelMutation.mutate({
-        baneId,
-        dato,
-        startTid: slot.startTid,
-        sluttTid: slot.sluttTid,
-      }),
+    onCancel: (slot: BookingSlotRespons) => {
+      if (!slot.bookingId) return;
+      cancelMutation.mutate({ bookingId: slot.bookingId });
+    },
 
-    onDelete: (slot: BookingSlotRespons) =>
-      deleteMutation.mutate({
-        baneId: slot.baneId ?? baneId,
-        dato: slot.dato ?? dato,
-        startTid: slot.startTid,
-        sluttTid: slot.sluttTid,
-      }),
+    onDelete: (slot: BookingSlotRespons) => {
+      if (!slot.bookingId) return;
+      deleteMutation.mutate({ bookingId: slot.bookingId });
+    },
 
     hentBookinger: bookingerQuery.refetch,
   };

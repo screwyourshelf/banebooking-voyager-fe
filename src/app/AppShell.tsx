@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
 import { Toaster } from "sonner";
 import { Navbar, BreadcrumbMedSti } from "@/components/navigation";
-import "animate.css";
+import "@/styles/animate-fadeIn.css";
 
 export default function AppShell() {
   return (

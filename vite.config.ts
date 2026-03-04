@@ -37,18 +37,58 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           manualChunks(id) {
-            if (id.includes("node_modules/react-dom") || id.includes("node_modules/react/")) {
+            if (!id.includes("node_modules")) return;
+
+            // React core: react, react-dom, react-router-dom
+            if (
+              id.includes("node_modules/react-dom") ||
+              id.includes("node_modules/react/") ||
+              id.includes("node_modules/react-router-dom") ||
+              id.includes("node_modules/react-router/")
+            ) {
               return "react";
             }
-            if (id.includes("node_modules/@radix-ui")) {
+
+            // Radix UI primitives (radix-ui v1+ og eldre @radix-ui)
+            if (id.includes("node_modules/radix-ui") || id.includes("node_modules/@radix-ui")) {
               return "shadcn";
             }
+
+            // Lucide ikoner
             if (id.includes("node_modules/lucide-react")) {
               return "lucide";
+            }
+
+            // React Query
+            if (id.includes("node_modules/@tanstack")) {
+              return "query";
+            }
+
+            // Supabase
+            if (id.includes("node_modules/@supabase")) {
+              return "supabase";
+            }
+
+            // Skjema: react-hook-form, zod, resolvers
+            if (
+              id.includes("node_modules/react-hook-form") ||
+              id.includes("node_modules/@hookform") ||
+              id.includes("node_modules/zod")
+            ) {
+              return "forms";
+            }
+
+            // Dato-bibliotek
+            if (id.includes("node_modules/date-fns")) {
+              return "date-fns";
             }
           },
         },
       },
+      // Inline CSS under 4 KB direkte i HTML (unngår ekstra nettverksforespørsel)
+      cssCodeSplit: true,
+      // Komprimer JS bedre med esbuild (Vite 7 default, men eksplisitt for klarhet)
+      minify: "esbuild",
     },
 
     server: {
