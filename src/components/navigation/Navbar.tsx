@@ -20,6 +20,8 @@ import { useLogin } from "@/hooks/useLogin";
 import { useKlubb } from "@/hooks/useKlubb";
 import { useBruker } from "@/hooks/useBruker";
 import { harHandling } from "@/utils/handlingUtils";
+import { prefetchRoute } from "@/utils/prefetchRoute";
+
 import NavbarBrandMedKlubb from "./NavbarBrandMedKlubb";
 import ModeToggle from "./ModeToggle";
 import { NotifikasjonDrawer } from "@/features/feed/components";
@@ -27,6 +29,13 @@ import { useSlug } from "@/hooks/useSlug";
 
 function erGyldigEpost(v: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
+}
+
+function prefetch(path: string) {
+  return {
+    onMouseEnter: () => prefetchRoute(path),
+    onTouchStart: () => prefetchRoute(path),
+  };
 }
 
 export default function Navbar() {
@@ -59,6 +68,7 @@ export default function Navbar() {
 
   const h = bruker?.tillattHandlinger ?? [];
   const erAdmin = harHandling(h, "klubb:admin");
+
   const harAdminSeksjon =
     harHandling(h, "klubb:admin") ||
     harHandling(h, "baner:admin") ||
@@ -130,6 +140,7 @@ export default function Navbar() {
               className="h-8 px-2 flex items-center gap-2 sm:text-xs sm:px-2"
             >
               <Menu className="size-4 text-muted-foreground sm:hidden" />
+
               <span className="hidden sm:inline-flex items-center gap-2">
                 {currentUser ? (
                   <>
@@ -150,21 +161,21 @@ export default function Navbar() {
             {currentUser ? (
               <>
                 <DropdownMenuItem asChild>
-                  <Link to={`/${slug}/minside`}>
+                  <Link to={`/${slug}/minside`} {...prefetch("minside")}>
                     <CircleUser className="mr-2 size-4" />
                     Min side
                   </Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild>
-                  <Link to={`/${slug}/bookinger`}>
+                  <Link to={`/${slug}/bookinger`} {...prefetch("bookinger")}>
                     <Calendar className="mr-2 size-4" />
                     Mine bookinger
                   </Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild>
-                  <Link to={`/${slug}/arrangementer`}>
+                  <Link to={`/${slug}/arrangementer`} {...prefetch("arrangementer")}>
                     <Calendar className="mr-2 size-4" />
                     Arrangementer
                   </Link>
@@ -180,29 +191,32 @@ export default function Navbar() {
                 {harAdminSeksjon && (
                   <>
                     <DropdownMenuSeparator />
+
                     <div className="px-2 py-1 text-xs font-semibold text-muted-foreground">
                       {erAdmin ? "Admin" : "Utvidet tilgang"}
                     </div>
 
                     {harHandling(h, "klubb:admin") && (
                       <DropdownMenuItem asChild>
-                        <Link to={`/${slug}/admin/klubb`}>
+                        <Link to={`/${slug}/admin/klubb`} {...prefetch("admin/klubb")}>
                           <Wrench className="mr-2 size-4" />
                           Klubb
                         </Link>
                       </DropdownMenuItem>
                     )}
+
                     {harHandling(h, "baner:admin") && (
                       <DropdownMenuItem asChild>
-                        <Link to={`/${slug}/admin/baner`}>
+                        <Link to={`/${slug}/admin/baner`} {...prefetch("admin/baner")}>
                           <Wrench className="mr-2 size-4" />
                           Baner
                         </Link>
                       </DropdownMenuItem>
                     )}
+
                     {harHandling(h, "brukere:admin") && (
                       <DropdownMenuItem asChild>
-                        <Link to={`/${slug}/admin/brukere`}>
+                        <Link to={`/${slug}/admin/brukere`} {...prefetch("admin/brukere")}>
                           <Wrench className="mr-2 size-4" />
                           Brukere
                         </Link>
@@ -211,7 +225,7 @@ export default function Navbar() {
 
                     {harHandling(h, "arrangement:se") && (
                       <DropdownMenuItem asChild>
-                        <Link to={`/${slug}/arrangement`}>
+                        <Link to={`/${slug}/arrangement`} {...prefetch("arrangement")}>
                           <Calendar className="mr-2 size-4" />
                           Arrangement
                         </Link>
@@ -221,6 +235,7 @@ export default function Navbar() {
                 )}
 
                 <DropdownMenuSeparator />
+
                 <DropdownMenuItem onClick={() => signOut()} disabled={erBusy}>
                   <LogOut className="mr-2 size-4" />
                   Logg ut
@@ -235,11 +250,14 @@ export default function Navbar() {
                   </Link>
                   .
                 </p>
+
                 <DropdownMenuItem onClick={handleGoogleLogin} disabled={erBusy}>
                   <GoogleIcon className="mr-2 size-5" />
                   Logg inn med Google
                 </DropdownMenuItem>
+
                 <DropdownMenuSeparator />
+
                 {step === "input" ? (
                   <FormLayout density="compact" className="px-2 w-full" onSubmit={submitSendOtp}>
                     <div className="space-y-1">
@@ -257,6 +275,7 @@ export default function Navbar() {
                           aria-invalid={!!feilEmail}
                           {...emailInputProps}
                         />
+
                         {feilEmail ? <FieldError>{feilEmail}</FieldError> : null}
                       </Field>
                     </div>
@@ -289,6 +308,7 @@ export default function Navbar() {
                           aria-invalid={!!feilOtp}
                           {...otpInputProps}
                         />
+
                         {feilOtp ? <FieldError>{feilOtp}</FieldError> : null}
                       </Field>
                     </div>

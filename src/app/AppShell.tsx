@@ -5,17 +5,16 @@ import "@/styles/animate-fadeIn.css";
 
 export default function AppShell() {
   return (
-    <div className="w-full min-h-screen flex flex-col">
-      <div className="w-full max-w-screen-sm mx-auto px-4 py-4 flex-1 flex">
-        <div className="bg-card rounded-md shadow-sm overflow-hidden w-full flex flex-col">
-          <header className="bg-gradient-to-b from-muted to-card border-b border-border shadow-sm">
+    <div className="min-h-screen flex flex-col w-full">
+      <div className="flex flex-1 w-full max-w-screen-sm mx-auto px-4 py-4">
+        <div className="flex flex-col w-full bg-card rounded-md shadow-sm overflow-hidden">
+          <header className="border-b border-border bg-gradient-to-b from-muted to-card shadow-sm">
             <Navbar />
           </header>
 
           <BreadcrumbMedSti />
 
-          {/* Viktig: flex-1 så main fyller resten av høyden */}
-          <main className="py-1 px-1 flex-1 min-h-0">
+          <main className="flex-1 min-h-0 p-1">
             <div className="animate__animated animate__fadeIn animate__faster">
               <Outlet />
             </div>
@@ -25,8 +24,8 @@ export default function AppShell() {
 
       <Toaster
         position="top-center"
-        mobileOffset={{ top: "35vh" }}
         offset={{ top: "35vh" }}
+        mobileOffset={{ top: "35vh" }}
         duration={1500}
       />
     </div>

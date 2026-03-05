@@ -71,7 +71,7 @@ export default function BrukereListeContent({
       >
         <RowPanel>
           <RowList>
-            <Row title="Filter på rolle" description="">
+            <Row title="Filter på rolle">
               <div className="flex flex-wrap gap-2">
                 {ROLLER.map((r) => {
                   const aktiv = rolleFilter.includes(r);
@@ -95,7 +95,7 @@ export default function BrukereListeContent({
               right={<Switch checked={visSlettede} onCheckedChange={onVisSlettedeChange} />}
             />
 
-            <Row title="Søk" description="">
+            <Row title="Søk">
               <Field>
                 <Input
                   id="brukersok"

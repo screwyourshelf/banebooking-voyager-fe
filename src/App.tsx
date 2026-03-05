@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useMemo } from "react";
 
 import SlugGate from "@/routes/SlugGate";
 import { routeConfig, flattenRoutes } from "@/routes/routeConfig";
@@ -11,10 +11,9 @@ import { ThemeProvider } from "@/components/ThemeProvider";
 
 const AuthCallbackPage = lazy(() => import("./app/AuthCallbackPage"));
 
-// Generer flate ruter fra config
-const appRoutes = flattenRoutes(routeConfig).filter((r) => r.component);
-
 export default function App() {
+  const appRoutes = useMemo(() => flattenRoutes(routeConfig).filter((r) => r.component), []);
+
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <BrowserRouter basename={import.meta.env.BASE_URL}>
@@ -32,6 +31,7 @@ export default function App() {
               >
                 {appRoutes.map((route) => {
                   const Component = route.component!;
+
                   const element = route.protected ? (
                     <ProtectedRoute>
                       <Component />
@@ -50,6 +50,7 @@ export default function App() {
             </Route>
 
             <Route path="auth/callback" element={<AuthCallbackPage />} />
+
             <Route
               path="*"
               element={<div className="p-4 text-center">404 – Fant ikke siden</div>}

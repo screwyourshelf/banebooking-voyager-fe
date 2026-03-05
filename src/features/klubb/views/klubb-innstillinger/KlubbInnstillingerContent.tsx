@@ -58,10 +58,7 @@ export default function KlubbInnstillingerContent({
       <PageSection title="Grunninfo" description="Informasjon som vises utad i Banebooking.">
         <RowPanel>
           <RowList>
-            <Row
-              title="Klubbnavn"
-              description="Navnet på klubben slik det vises utad i Banebooking."
-            >
+            <Row title="Klubbnavn">
               <Field data-invalid={!!navnError}>
                 <Input
                   id="klubbnavn"
@@ -77,10 +74,7 @@ export default function KlubbInnstillingerContent({
               </Field>
             </Row>
 
-            <Row
-              title="Kontakt-e-post"
-              description="Vises på klubbens infoside. Brukes til henvendelser fra medlemmer og gjester."
-            >
+            <Row title="Kontakt-e-post" description="Vises på klubbens infoside.">
               <Field data-invalid={!!kontaktEpostError}>
                 <Input
                   id="kontaktEpost"
@@ -102,7 +96,7 @@ export default function KlubbInnstillingerContent({
 
       <PageSection
         title="Kart"
-        description="Valgfrie innstillinger for innhenting av værinformasjon."
+        description="Valgfritt. Koordinatene brukes til å vise værinformasjon."
       >
         <RowPanel>
           <RowList>
@@ -133,16 +127,10 @@ export default function KlubbInnstillingerContent({
         </RowPanel>
       </PageSection>
 
-      <PageSection
-        title="Feed"
-        description="Valgfrie innstillinger for innhenting av nyheter fra klubbens RSS-feed."
-      >
+      <PageSection title="Feed" description="Valgfritt. Henter og viser nyheter fra en RSS-feed.">
         <RowPanel>
           <RowList>
-            <Row
-              title="RSS-feed"
-              description="URL til klubbens RSS-feed. Hvis satt, hentes og vises de nyeste innleggene i appen."
-            >
+            <Row title="RSS-feed">
               <Field>
                 <Input
                   id="feedUrl"
@@ -155,10 +143,7 @@ export default function KlubbInnstillingerContent({
               </Field>
             </Row>
 
-            <Row
-              title="Aldergrense for feedinnslag (dager)"
-              description="Hvor mange dager gamle innslag som vises."
-            >
+            <Row title="Aldergrense for feedinnslag (dager)">
               <Field data-invalid={!!feedSynligAntallDagerError}>
                 <Input
                   id="feedSynligAntallDager"

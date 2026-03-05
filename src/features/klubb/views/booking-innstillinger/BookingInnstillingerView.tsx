@@ -123,7 +123,7 @@ export default function BookingInnstillingerView() {
       onChangeMaksTotalt={(val) => setBooking((b) => ({ ...b, maksTotalt: val }))}
       onChangeDagerFremITid={(val) => setBooking((b) => ({ ...b, dagerFremITid: val }))}
       onChangeSlotLengdeMinutter={(val) =>
-        setBooking((b) => ({ ...b, slotLengdeMinutter: parseInt(val, 10) }))
+        setBooking((b) => ({ ...b, slotLengdeMinutter: Number(val) }))
       }
       canSubmit={canSubmit}
       isSaving={OppdaterKlubbForespørsel.isPending}

@@ -18,6 +18,11 @@ import type { BookingSlotRespons } from "@/types";
 import { harHandling } from "@/utils/handlingUtils";
 import { grupperSlots } from "@/utils/bookingUtils";
 
+function formatKort(t: string) {
+  const [h, m] = t.slice(0, 5).split(":");
+  return m === "00" ? h : `${h}:${m}`;
+}
+
 import { buildBookingKey } from "./bookingSort";
 
 type Props = {
@@ -54,10 +59,7 @@ export default function MineBookingerContent({
     : "Du har ingen kommende bookinger.";
 
   return (
-    <PageSection
-      title="Bookinger"
-      description="Se kommende bookinger og velg om du vil inkludere tidligere."
-    >
+    <PageSection title="Bookinger">
       <RowPanel>
         <RowList>
           <SwitchRow
@@ -83,10 +85,6 @@ export default function MineBookingerContent({
               const effStartTid = b.bookingStartTid ?? b.startTid;
               const effSluttTid = b.bookingSluttTid ?? b.sluttTid;
               const tid = `${effStartTid.slice(0, 5)} – ${effSluttTid.slice(0, 5)}`;
-              const formatKort = (t: string) => {
-                const [h, m] = t.slice(0, 5).split(":");
-                return m === "00" ? h : `${h}:${m}`;
-              };
               const tidKort = `${formatKort(effStartTid)}–${formatKort(effSluttTid)}`;
               const kanAvbestille = harHandling(b.tillattHandlinger, "booking:avbestill");
               const harVaer =

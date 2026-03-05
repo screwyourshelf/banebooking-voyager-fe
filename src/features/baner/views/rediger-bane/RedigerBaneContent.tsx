@@ -90,10 +90,10 @@ export default function RedigerBaneContent({
         onSubmit();
       }}
     >
-      <PageSection title="Rediger bane" description="Velg en bane og oppdater informasjon.">
+      <PageSection title="Rediger bane">
         <RowPanel>
           <RowList>
-            <Row title="Velg bane" description="Velg hvilken bane du vil endre.">
+            <Row title="Velg bane">
               <Field>
                 <Select
                   disabled={isSaving}
@@ -117,7 +117,7 @@ export default function RedigerBaneContent({
 
             {valgtBane ? (
               <>
-                <Row title="Navn" description="Navn på banen slik det vises i booking.">
+                <Row title="Navn" description="Vises i bookingvisningen.">
                   <Field data-invalid={!!navnError}>
                     <Input
                       id="navn"
@@ -146,7 +146,7 @@ export default function RedigerBaneContent({
 
                 <Row
                   title="Aktiv"
-                  description="Avgjør om banen er tilgjengelig for booking."
+                  description="Bestemmer om banen kan bookes."
                   right={
                     <Switch
                       disabled={isSaving}
@@ -158,7 +158,6 @@ export default function RedigerBaneContent({
 
                 <Row
                   title="Overstyr bookinginnstillinger"
-                  description="Overstyr klubbens standardinnstillinger for denne banen."
                   right={
                     <Switch
                       disabled={isSaving}

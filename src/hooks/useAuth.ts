@@ -14,6 +14,7 @@ function buildRedirectUrl() {
 
 export function useAuth() {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
+  const [ready, setReady] = useState(false);
 
   useEffect(() => {
     let alive = true;
@@ -21,6 +22,7 @@ export function useAuth() {
     supabase.auth.getSession().then(({ data }) => {
       if (!alive) return;
       setCurrentUser(data.session?.user ?? null);
+      setReady(true);
     });
 
     const {
@@ -28,6 +30,7 @@ export function useAuth() {
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!alive) return;
       setCurrentUser(session?.user ?? null);
+      setReady(true);
     });
 
     return () => {
@@ -46,6 +49,7 @@ export function useAuth() {
 
   return {
     currentUser,
+    ready,
     signOut,
   };
 }

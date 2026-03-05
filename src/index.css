@@ -3,12 +3,25 @@
 
 @custom-variant dark (&:is(.dark *));
 
+html {
+  background-color: #0b3a4a;
+}
+
 body {
-  background-image: url("/backgrounds/bg.webp");
+  background: transparent;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-image:
+    linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
+    image-set(url("/backgrounds/bg-2.avif") type("image/avif"));
   background-size: cover;
   background-position: center;
-  background-attachment: fixed;
-  background-color: #0b3a4a;
+  background-repeat: no-repeat;
 }
 
 @theme inline {

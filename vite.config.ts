@@ -3,29 +3,24 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { fileURLToPath, URL } from "node:url";
 
-// Plugin som erstatter %BASE_URL% i index.html med riktig base-path
+// Erstatter %BASE_URL% i index.html
 function htmlBaseUrlPlugin(base: string): Plugin {
   return {
     name: "html-base-url",
     enforce: "pre",
-    transformIndexHtml: {
-      order: "pre",
-      handler(html) {
-        return html.replace(/%BASE_URL%/g, base);
-      },
+    transformIndexHtml(html) {
+      return html.replace(/%BASE_URL%/g, base);
     },
   };
 }
 
 export default defineConfig(({ mode }) => {
-  // GH Pages prod ligger under /banebooking-voyager-fe/
-  // Dev/preview lokalt skal være /
   const base = mode === "production" ? "/banebooking-voyager-fe/" : "/";
 
   return {
     base,
 
-    plugins: [react(), tailwindcss(), htmlBaseUrlPlugin(base)],
+    plugins: [htmlBaseUrlPlugin(base), react(), tailwindcss()],
 
     resolve: {
       alias: {
@@ -34,65 +29,61 @@ export default defineConfig(({ mode }) => {
     },
 
     build: {
+      target: "es2022",
+      sourcemap: false,
+      minify: "esbuild",
+
+      modulePreload: {
+        polyfill: false,
+      },
+
+      cssCodeSplit: true,
+
       rollupOptions: {
         output: {
           manualChunks(id) {
             if (!id.includes("node_modules")) return;
 
-            // React core: react, react-dom, react-router-dom
-            if (
-              id.includes("node_modules/react-dom") ||
-              id.includes("node_modules/react/") ||
-              id.includes("node_modules/react-router-dom") ||
-              id.includes("node_modules/react-router/")
-            ) {
+            // React + router
+            if (id.includes("react") || id.includes("react-dom") || id.includes("react-router")) {
               return "react";
             }
 
-            // Radix UI primitives (radix-ui v1+ og eldre @radix-ui)
-            if (id.includes("node_modules/radix-ui") || id.includes("node_modules/@radix-ui")) {
-              return "shadcn";
-            }
-
-            // Lucide ikoner
-            if (id.includes("node_modules/lucide-react")) {
-              return "lucide";
+            // Radix / shadcn primitives
+            if (id.includes("@radix-ui") || id.includes("radix-ui")) {
+              return "radix";
             }
 
             // React Query
-            if (id.includes("node_modules/@tanstack")) {
+            if (id.includes("@tanstack")) {
               return "query";
             }
 
-            // Supabase
-            if (id.includes("node_modules/@supabase")) {
+            // Supabase client
+            if (id.includes("@supabase")) {
               return "supabase";
             }
 
-            // Skjema: react-hook-form, zod, resolvers
-            if (
-              id.includes("node_modules/react-hook-form") ||
-              id.includes("node_modules/@hookform") ||
-              id.includes("node_modules/zod")
-            ) {
+            // Forms
+            if (id.includes("react-hook-form") || id.includes("@hookform") || id.includes("zod")) {
               return "forms";
             }
 
-            // Dato-bibliotek
-            if (id.includes("node_modules/date-fns")) {
-              return "date-fns";
+            // Date utils
+            if (id.includes("date-fns")) {
+              return "date";
+            }
+
+            // Icons
+            if (id.includes("lucide-react")) {
+              return "icons";
             }
           },
         },
       },
-      // Inline CSS under 4 KB direkte i HTML (unngår ekstra nettverksforespørsel)
-      cssCodeSplit: true,
-      // Komprimer JS bedre med esbuild (Vite 7 default, men eksplisitt for klarhet)
-      minify: "esbuild",
     },
 
     server: {
-      // Vite dev server: åpne riktig startside (uten /banebooking-voyager-fe/)
       open: "/aas-tennisklubb",
       proxy: {
         "/api": {
@@ -104,7 +95,6 @@ export default defineConfig(({ mode }) => {
     },
 
     preview: {
-      // vite preview kjører også "lokalt", så start på /
       open: "/aas-tennisklubb",
       proxy: {
         "/api": {

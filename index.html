@@ -3,17 +3,55 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Banebooking</title>
 
-    <!-- Tidlig tilkobling til Supabase (DNS + TCP + TLS) -->
-    <link rel="preconnect" href="https://wfklkakrogxbhozxhtqd.supabase.co" />
+    <title>Banebooking</title>
+    <meta name="description" content="Banebooking – enkel booking av tennisbaner." />
+
+    <meta name="theme-color" content="#0b3a4a" />
+    <meta name="color-scheme" content="dark light" />
+
+    <!-- Supabase connection warmup -->
+    <link rel="preconnect" href="https://wfklkakrogxbhozxhtqd.supabase.co" crossorigin />
     <link rel="dns-prefetch" href="https://wfklkakrogxbhozxhtqd.supabase.co" />
 
+    <!-- Preload background image -->
+    <link rel="preload" as="image" href="/backgrounds/bg-2.avif" type="image/avif" />
+
     <style>
-      html,
+      html {
+        height: 100%;
+        background: #0b3a4a;
+      }
       body {
         height: 100%;
         margin: 0;
+        background: transparent;
+      }
+
+      /* Boot screen vises før React starter */
+      #boot {
+        position: fixed;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        background: #0b3a4a;
+        color: white;
+        font-family: system-ui, sans-serif;
+      }
+
+      .boot-loader {
+        width: 36px;
+        height: 36px;
+        border: 3px solid rgba(255, 255, 255, 0.2);
+        border-top-color: white;
+        border-radius: 50%;
+        animation: spin 0.8s linear infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
       }
     </style>
 
@@ -22,14 +60,16 @@
     <link rel="icon" type="image/png" sizes="16x16" href="%BASE_URL%favicon-16x16.png" />
     <link rel="apple-touch-icon" href="%BASE_URL%apple-touch-icon.png" />
     <link rel="manifest" href="%BASE_URL%site.webmanifest" />
-    <meta name="theme-color" content="#ffffff" />
-    <link rel="mask-icon" href="%BASE_URL%safari-pinned-tab.svg" color="#5bbad5" />
-    <meta name="msapplication-TileColor" content="#da532c" />
-    <meta name="msapplication-config" content="%BASE_URL%browserconfig.xml" />
   </head>
 
   <body>
+    <!-- Boot loader før React mount -->
+    <div id="boot">
+      <div class="boot-loader"></div>
+    </div>
+
     <div id="root"></div>
+
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -24,8 +24,12 @@ import PaameldteDialog from "@/features/arrangementer/views/arrangementer/Paamel
 import KobleTilArrangementDialog from "./KobleTilArrangementDialog";
 import { harHandling } from "@/utils/handlingUtils";
 import { grupperSlots, utledSlotVisning } from "@/utils/bookingUtils";
-import { formatDatoKort } from "@/utils/datoUtils";
 import type { BookingSlotRespons } from "@/types";
+
+function formatKort(t: string) {
+  const [h, m] = t.slice(0, 5).split(":");
+  return m === "00" ? h : `${h}:${m}`;
+}
 
 type Props = {
   slots: BookingSlotRespons[];
@@ -67,10 +71,6 @@ export function BookingSlotListAccordion({
         const effStartTid = slot.bookingStartTid ?? slot.startTid;
         const effSluttTid = slot.bookingSluttTid ?? slot.sluttTid;
         const tid = `${effStartTid.slice(0, 5)} – ${effSluttTid.slice(0, 5)}`;
-        const formatKort = (t: string) => {
-          const [h, m] = t.slice(0, 5).split(":");
-          return m === "00" ? h : `${h}:${m}`;
-        };
         const tidKort = `${formatKort(effStartTid)}–${formatKort(effSluttTid)}`;
 
         const harArrangement = !!slot.arrangementTittel;

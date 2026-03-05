@@ -60,7 +60,7 @@ export default function MinProfilContent({
       <PageSection title="Innstillinger" description="Velg hva som vises som navnet ditt i appen.">
         <RowPanel>
           <RowList>
-            <Row title="Visningsnavn" description="Velg e-post eller et eget navn.">
+            <Row title="Visningsnavn">
               <RadioGroup
                 value={mode}
                 onValueChange={(v) => onSetMode(v === "epost" ? "epost" : "navn")}

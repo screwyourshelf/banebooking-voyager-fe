@@ -3,17 +3,28 @@ import { useSlug } from "@/hooks/useSlug";
 import { useKlubb } from "@/hooks/useKlubb";
 import { AppFrameSkeleton } from "@/components/loading";
 
-export default function AppBoot({ children }: { children: React.ReactNode }) {
+type Props = {
+  children: React.ReactNode;
+};
+
+export default function AppBoot({ children }: Props) {
   const slug = useSlug();
 
-  const { data: klubb, isLoading: loadingKlubb } = useKlubb();
+  const { data: klubb, isLoading, error } = useKlubb();
 
   useEffect(() => {
-    localStorage.setItem("slug", slug);
+    if (slug) {
+      localStorage.setItem("slug", slug);
+    }
   }, [slug]);
 
-  if (loadingKlubb) return <AppFrameSkeleton />;
-  if (!klubb) return <div className="p-4">Fant ikke klubb.</div>;
+  if (isLoading) {
+    return <AppFrameSkeleton />;
+  }
+
+  if (error || !klubb) {
+    return <div className="p-4 text-center">Fant ikke klubb.</div>;
+  }
 
   return <>{children}</>;
 }

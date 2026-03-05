@@ -38,7 +38,7 @@ export function useBruker() {
 
   const mutateVilkaar = useCallback(() => {
     vilkaarMutation.mutate({ versjon: AKTIV_VILKAAR.versjon });
-  }, [vilkaarMutation]);
+  }, [vilkaarMutation.mutate]);
 
   useEffect(() => {
     const data = brukerQuery.data;

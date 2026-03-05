@@ -38,10 +38,10 @@ export default function NyBaneContent({
         onSubmit();
       }}
     >
-      <PageSection title="Ny bane" description="Legg til en ny bane i klubben.">
+      <PageSection title="Ny bane">
         <RowPanel>
           <RowList>
-            <Row title="Navn" description="Navn på banen slik det vises i booking.">
+            <Row title="Navn" description="Vises i bookingvisningen.">
               <Field data-invalid={!!navnError}>
                 <Input
                   id="ny-navn"

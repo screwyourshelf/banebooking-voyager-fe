@@ -41,7 +41,7 @@ export default function PersondataView() {
 
   return (
     <div>
-      <PageSection title="Persondata" description="Her kan du se vilkår og laste ned egne data.">
+      <PageSection title="Persondata" description="Se vilkår og last ned egne data.">
         <RowPanel>
           <RowList>
             <InfoRow
@@ -52,7 +52,6 @@ export default function PersondataView() {
 
             <Row
               title="Les vilkårene"
-              description="Åpnes i ny fane."
               right={
                 <Link
                   to={`/${slug}/vilkaar`}
