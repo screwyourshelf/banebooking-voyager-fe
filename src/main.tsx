@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import App from "./App";
 import "./index.css";
 
-// Fjern boot-loader fra index.html når React starter
 requestAnimationFrame(() => {
   document.getElementById("boot")?.remove();
 });
@@ -28,21 +27,17 @@ const ReactQueryDevtools = import.meta.env.DEV
     )
   : () => null;
 
-const rootElement = document.getElementById("root");
+const rootElement = document.getElementById("root")!;
 
-if (!rootElement) {
-  throw new Error("Root element not found");
-}
-
-createRoot(rootElement).render(
-  <StrictMode>
-    <QueryClientProvider client={queryClient}>
-      <App />
-      {import.meta.env.DEV && (
-        <Suspense fallback={null}>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </Suspense>
-      )}
-    </QueryClientProvider>
-  </StrictMode>
+const app = (
+  <QueryClientProvider client={queryClient}>
+    <App />
+    {import.meta.env.DEV && (
+      <Suspense fallback={null}>
+        <ReactQueryDevtools initialIsOpen={false} />
+      </Suspense>
+    )}
+  </QueryClientProvider>
 );
+
+createRoot(rootElement).render(import.meta.env.DEV ? <StrictMode>{app}</StrictMode> : app);
