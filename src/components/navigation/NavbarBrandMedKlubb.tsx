@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useSlug } from "@/hooks/useSlug";
+import { useState } from "react";
 
 type Props = {
   klubbnavn: React.ReactNode;
@@ -7,38 +8,32 @@ type Props = {
 
 export default function NavbarBrandMedKlubb({ klubbnavn }: Props) {
   const slug = useSlug();
+  const base = import.meta.env.BASE_URL ?? "/";
 
-  const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
+  const klubbPath = `${base}klubber/${slug}/img`;
+  const defaultPath = `${base}klubber/default/img`;
 
-  const klubbPath = `${base}/klubber/${slug}/img`;
-  const defaultPath = `${base}/klubber/default/img`;
+  const [src, setSrc] = useState(`${klubbPath}/logo.svg`);
 
   return (
     <Link
       to={`/${slug}`}
       className="flex items-center gap-2 text-base font-semibold text-foreground hover:text-foreground/80"
     >
-      <picture className="flex-shrink-0">
-        {/* klubb svg */}
-        <source srcSet={`${klubbPath}/logo.svg`} type="image/svg+xml" />
-
-        {/* klubb webp */}
-        <source srcSet={`${klubbPath}/logo.webp`} type="image/webp" />
-
-        {/* default svg */}
-        <source srcSet={`${defaultPath}/logo.svg`} type="image/svg+xml" />
-
-        {/* default webp fallback */}
-        <img
-          src={`${defaultPath}/logo.webp`}
-          alt=""
-          width={32}
-          height={32}
-          loading="eager"
-          decoding="async"
-          className="h-8 w-auto max-w-8 object-contain rounded-sm"
-        />
-      </picture>
+      <img
+        src={src}
+        alt=""
+        width={32}
+        height={32}
+        className="h-8 w-8 object-contain rounded-sm"
+        onError={() => {
+          if (src.endsWith(".svg")) {
+            setSrc(`${klubbPath}/logo.webp`);
+          } else if (src.endsWith(".webp")) {
+            setSrc(`${defaultPath}/logo.svg`);
+          }
+        }}
+      />
 
       {klubbnavn}
     </Link>
