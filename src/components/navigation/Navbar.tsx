@@ -137,6 +137,8 @@ export default function Navbar() {
           <DropdownMenuTrigger asChild>
             <Button
               variant="outline"
+              aria-label="Åpne meny"
+              aria-haspopup="menu"
               className="h-8 px-2 flex items-center gap-2 sm:text-xs sm:px-2"
             >
               <Menu className="size-4 text-muted-foreground sm:hidden" />

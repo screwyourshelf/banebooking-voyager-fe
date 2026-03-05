@@ -1,15 +1,7 @@
 import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList, Row } from "@/components/rows";
 import { FormSubmitButton, FormLayout, FormActions } from "@/components/forms";
-
 import { Field } from "@/components/ui/field";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 type Props = {
   aapningHour: number;
@@ -38,6 +30,13 @@ function hourLabel(h: number) {
   return `${String(h).padStart(2, "0")}:00`;
 }
 
+/* slot mapping */
+const slotValues = [30, 45, 60, 90];
+
+function slotLabel(min: number) {
+  return `${min} min`;
+}
+
 export default function BookingInnstillingerContent({
   aapningHour,
   stengeHour,
@@ -52,6 +51,8 @@ export default function BookingInnstillingerContent({
   isSaving,
   onSubmit,
 }: Props) {
+  const slotIndex = Math.max(0, slotValues.indexOf(booking.slotLengdeMinutter));
+
   return (
     <FormLayout
       onSubmit={(e) => {
@@ -163,24 +164,39 @@ export default function BookingInnstillingerContent({
               </Field>
             </Row>
 
-            <Row title="Slot-lengde" description="Låst i denne versjonen.">
+            <Row
+              title="Slot-lengde"
+              description="Lengde på hver booking."
+              right={
+                <div className="text-sm font-medium tabular-nums">
+                  {slotLabel(booking.slotLengdeMinutter)}
+                </div>
+              }
+            >
               <Field>
-                <Select
-                  value={booking.slotLengdeMinutter.toString()}
-                  onValueChange={onChangeSlotLengdeMinutter}
-                  disabled
-                >
-                  <SelectTrigger id="slotLengdeMinutter">
-                    <SelectValue placeholder="Velg slot-lengde" />
-                  </SelectTrigger>
+                <div className="space-y-2">
+                  <input
+                    id="slotLengdeMinutter"
+                    type="range"
+                    min={0}
+                    max={slotValues.length - 1}
+                    step={1}
+                    value={slotIndex}
+                    onChange={(e) => {
+                      const index = Number(e.target.value);
+                      const minutes = slotValues[index];
+                      onChangeSlotLengdeMinutter(minutes.toString());
+                    }}
+                    className="w-full accent-primary"
+                  />
 
-                  <SelectContent>
-                    <SelectItem value="30">30 minutter</SelectItem>
-                    <SelectItem value="45">45 minutter</SelectItem>
-                    <SelectItem value="60">60 minutter</SelectItem>
-                    <SelectItem value="90">90 minutter</SelectItem>
-                  </SelectContent>
-                </Select>
+                  {/* labels under slider */}
+                  <div className="flex justify-between text-xs text-muted-foreground px-1">
+                    {slotValues.map((v) => (
+                      <span key={v}>{v}</span>
+                    ))}
+                  </div>
+                </div>
               </Field>
             </Row>
           </RowList>

@@ -19,7 +19,7 @@ export default function NotifikasjonDrawer() {
   if (isLoading || feed.length === 0) return null;
 
   return (
-    <Drawer direction="right">
+    <Drawer direction="right" modal>
       <DrawerTrigger asChild>
         <Button variant="ghost" size="icon" className="relative" aria-label="Notifikasjoner">
           <BellRing />

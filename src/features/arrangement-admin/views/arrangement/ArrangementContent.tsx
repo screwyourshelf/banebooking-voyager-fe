@@ -218,6 +218,7 @@ export default function ArrangementContent(props: Props) {
                     <Button
                       key={dag}
                       type="button"
+                      aria-label="Ukedager"
                       variant={valgteUkedager.includes(dag) ? "default" : "outline"}
                       size="sm"
                       onClick={() => onToggleUkedag(dag)}
@@ -244,6 +245,7 @@ export default function ArrangementContent(props: Props) {
                     <Button
                       key={b.id}
                       type="button"
+                      aria-label="Baner"
                       variant={valgteBaner.includes(b.id) ? "default" : "outline"}
                       size="sm"
                       onClick={() => onToggleBane(b.id)}
@@ -279,6 +281,7 @@ export default function ArrangementContent(props: Props) {
                             <Button
                               key={tid}
                               type="button"
+                              aria-label="Tidspunkter"
                               variant={valgte.includes(tid) ? "default" : "outline"}
                               size="sm"
                               onClick={() => onToggleTidspunktForGruppe?.(sl, tid)}
@@ -314,6 +317,7 @@ export default function ArrangementContent(props: Props) {
                         <Button
                           key={tid}
                           type="button"
+                          aria-label="Tidspunkter"
                           variant={valgteTidspunkter.includes(tid) ? "default" : "outline"}
                           size="sm"
                           onClick={() => onToggleTidspunkt(tid)}

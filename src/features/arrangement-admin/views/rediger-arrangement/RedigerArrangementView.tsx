@@ -293,10 +293,13 @@ export default function RedigerArrangementView() {
 
   return (
     <>
-      <PageSection title="Velg arrangement" description="Velg arrangementet du vil redigere.">
+      <PageSection
+        title="Rediger arrangement"
+        description="Velg arrangementet du vil redigere eller avlyse."
+      >
         <RowPanel>
           <RowList>
-            <Row title="Arrangement" description="Velg et aktivt arrangement.">
+            <Row title="Arrangement">
               <div className="flex items-center gap-2">
                 <div className="flex-1 min-w-0">
                   <Field>

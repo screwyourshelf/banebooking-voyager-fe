@@ -160,6 +160,7 @@ export function BookingSlotListAccordion({
                         >
                           <button
                             type="button"
+                            aria-label="Påmeldte"
                             className="underline underline-offset-2 hover:text-foreground transition-colors"
                           >
                             {slot.antallPaameldte ?? 0} påmeldt

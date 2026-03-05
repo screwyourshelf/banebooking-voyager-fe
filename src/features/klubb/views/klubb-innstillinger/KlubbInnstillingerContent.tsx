@@ -55,7 +55,7 @@ export default function KlubbInnstillingerContent({
         onSubmit();
       }}
     >
-      <PageSection title="Grunninfo" description="Informasjon som vises utad i Banebooking.">
+      <PageSection title="Grunninfo" description="Navn på klubb og kontaktinformasjon.">
         <RowPanel>
           <RowList>
             <Row title="Klubbnavn">

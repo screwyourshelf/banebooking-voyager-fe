@@ -37,6 +37,7 @@ export default function DatoVelger({ value, onChange, minDate, visNavigering = t
           <Button
             type="button"
             variant="outline"
+            aria-label="Velg dato"
             className="h-8 px-2 text-sm flex-1 justify-start text-left min-w-[10rem]"
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
@@ -65,6 +66,7 @@ export default function DatoVelger({ value, onChange, minDate, visNavigering = t
             type="button"
             variant="outline"
             size="icon"
+            aria-label="Forrige dag"
             onClick={forrigeDag}
             className="h-8 w-8"
             disabled={disablePrev}
@@ -76,6 +78,7 @@ export default function DatoVelger({ value, onChange, minDate, visNavigering = t
             type="button"
             variant="outline"
             size="icon"
+            aria-label="Neste dag"
             onClick={nesteDag}
             className="h-8 w-8"
             disabled={!value}

@@ -7,6 +7,7 @@ import { useApiPostQuery } from "@/hooks/useApiPostQuery";
 import { useKlubb } from "@/hooks/useKlubb";
 import { useBaner } from "@/hooks/useBaner";
 import { useSlug } from "@/hooks/useSlug";
+import { genererTidspunkter } from "../views/arrangement/arrangementUtils";
 
 import type {
   OpprettArrangementForespørsel,
@@ -14,32 +15,9 @@ import type {
   ArrangementForhåndsvisningRespons,
 } from "@/types";
 
-function parseTimeToMinutes(tid: string) {
-  const [h, m] = tid.split(":").map(Number);
-  return h * 60 + m;
-}
-
-function minutesToTime(mins: number): string {
-  const h = String(Math.floor(mins / 60)).padStart(2, "0");
-  const m = String(mins % 60).padStart(2, "0");
-  return `${h}:${m}`;
-}
-
-function genererTidspunkter(start: string, slutt: string, slotMinutter: number): string[] {
-  const startMin = parseTimeToMinutes(start);
-  const sluttMin = parseTimeToMinutes(slutt);
-  const result: string[] = [];
-
-  for (let t = startMin; t + slotMinutter <= sluttMin; t += slotMinutter) {
-    result.push(minutesToTime(t));
-  }
-
-  return result;
-}
-
 const tomForhandsvisning: ArrangementForhåndsvisningRespons = { ledige: [], konflikter: [] };
 
-// Stabil nøkkel: sorter arrays som ikke er semantisk ordnet
+// Stabil nøkkel
 function dtoKey(dto: OpprettArrangementForespørsel) {
   const stable: OpprettArrangementForespørsel = {
     ...dto,

@@ -79,6 +79,7 @@ export default function BrukereListeContent({
                     <Button
                       key={r}
                       type="button"
+                      aria-label="Filter på rolle"
                       size="sm"
                       variant={aktiv ? "default" : "outline"}
                       onClick={() => onToggleRolle(r)}
@@ -168,6 +169,7 @@ export default function BrukereListeContent({
                             <AccordionActions>
                               <Button
                                 type="button"
+                                aria-label="Rediger bruker"
                                 size="sm"
                                 variant="outline"
                                 onClick={(e) => {

@@ -59,7 +59,10 @@ export default function MineBookingerContent({
     : "Du har ingen kommende bookinger.";
 
   return (
-    <PageSection title="Bookinger">
+    <PageSection
+      title="Bookinger"
+      description="Oversikt over dine kommende og tidligere bookinger."
+    >
       <RowPanel>
         <RowList>
           <SwitchRow

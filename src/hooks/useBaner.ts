@@ -3,7 +3,6 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
-import api from "@/api/api";
 import type {
   BaneRespons,
   OpprettBaneForespørsel,
@@ -53,11 +52,9 @@ export function useBaner(inkluderInaktive = true) {
 
   const oppdaterBane = useApiMutation<{ id: string; dto: OppdaterBaneForespørsel }, void>(
     "put",
-    "/",
+    ({ id }) => `/klubb/${slug}/baner/${id}`,
     {
-      mutationFn: async ({ id, dto }) => {
-        await api.put<void>(`/klubb/${slug}/baner/${id}`, dto, { requireAuth: true });
-      },
+      getBody: ({ dto }) => dto,
       onSuccess: () => {
         toast.success("Bane oppdatert");
         invalidateAll();
@@ -69,12 +66,8 @@ export function useBaner(inkluderInaktive = true) {
   const oppdaterBookingInnstillinger = useApiMutation<
     { id: string; dto: OppdaterBaneBookingInnstillingerForespørsel },
     void
-  >("put", "/", {
-    mutationFn: async ({ id, dto }) => {
-      await api.put<void>(`/klubb/${slug}/baner/${id}/booking-innstillinger`, dto, {
-        requireAuth: true,
-      });
-    },
+  >("put", ({ id }) => `/klubb/${slug}/baner/${id}/booking-innstillinger`, {
+    getBody: ({ dto }) => dto,
     onSuccess: () => {
       toast.success("Bookinginnstillinger oppdatert");
       invalidateAll();

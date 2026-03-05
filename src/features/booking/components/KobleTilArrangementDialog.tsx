@@ -66,6 +66,7 @@ export default function KobleTilArrangementDialog({ valgtId, onVelg, children }:
                 <li key={arr.id}>
                   <button
                     type="button"
+                    aria-label="Velg arrangement"
                     onClick={() => setLokaltValgtId(lokaltValgtId === arr.id ? null : arr.id)}
                     className={`w-full text-left px-3 py-2 rounded-md text-sm border transition-colors ${
                       lokaltValgtId === arr.id

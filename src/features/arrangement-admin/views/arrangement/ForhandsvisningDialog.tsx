@@ -67,7 +67,7 @@ export default function ForhandsvisningDialog({
             <ForhandsvisningTable beskrivelse={beskrivelse} forhandsvisning={forhandsvisning} />
 
             <DialogFooter className="mt-3">
-              <Button type="button" onClick={onCreate}>
+              <Button type="button" aria-label="Opprett bookinger" onClick={onCreate}>
                 {bekreftTekst ?? `Opprett ${antallLedige} bookinger`}
               </Button>
             </DialogFooter>

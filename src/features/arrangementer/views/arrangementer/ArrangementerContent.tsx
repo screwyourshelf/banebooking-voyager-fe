@@ -81,7 +81,7 @@ export default function ArrangementerContent({
   return (
     <PageSection
       title="Arrangementer"
-      description="Se kommende arrangementer og velg om du vil inkludere tidligere."
+      description="Oversikt over kommende arrangementer i klubben."
     >
       <RowPanel>
         <RowList>
@@ -197,6 +197,7 @@ export default function ArrangementerContent({
                             <PaameldteDialog arrangementId={arr.id} tittel={arr.tittel}>
                               <button
                                 type="button"
+                                aria-label="Påmeldte"
                                 className="underline underline-offset-2 hover:text-foreground transition-colors"
                               >
                                 {arr.antallPaameldte} påmeldt

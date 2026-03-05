@@ -10,16 +10,12 @@ import { useSlug } from "@/hooks/useSlug";
 export function useBruker() {
   const slug = useSlug();
   const { currentUser } = useAuth();
-  const authKey = currentUser?.id ?? "anon";
 
-  const brukerQuery = useApiQuery<BrukerRespons | null>(
-    ["bruker", slug, authKey],
-    `/klubb/${slug}/bruker`,
-    {
-      staleTime: 60_000,
-      requireAuth: true,
-    }
-  );
+  const brukerQuery = useApiQuery<BrukerRespons | null>(["bruker", slug], `/klubb/${slug}/bruker`, {
+    staleTime: 60_000,
+    requireAuth: true,
+    enabled: !!slug && !!currentUser,
+  });
 
   const vilkaarMutation = useApiMutation<{ versjon: string }, void>(
     "post",
@@ -38,12 +34,11 @@ export function useBruker() {
 
   const mutateVilkaar = useCallback(() => {
     vilkaarMutation.mutate({ versjon: AKTIV_VILKAAR.versjon });
-  }, [vilkaarMutation.mutate]);
+  }, [vilkaarMutation]);
 
   useEffect(() => {
     const data = brukerQuery.data;
-    if (!data) return;
-    if (brukerQuery.isLoading) return;
+    if (!data || brukerQuery.isLoading) return;
 
     if (data.vilkårAkseptertDato) {
       harForsoktVilkaarRef.current = false;
@@ -60,10 +55,12 @@ export function useBruker() {
 
   useEffect(() => {
     const err = brukerQuery.error;
+
     if (!err) {
       toastetFeilRef.current = false;
       return;
     }
+
     if (toastetFeilRef.current) return;
 
     toast.error(err.message ?? "Kunne ikke hente bruker");
