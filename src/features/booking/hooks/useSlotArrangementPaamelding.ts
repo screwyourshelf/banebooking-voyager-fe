@@ -2,7 +2,7 @@ import { useApiMutation } from "@/hooks/useApiMutation";
 import { useSlug } from "@/hooks/useSlug";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import type { ArrangementPaameldingRespons, BookingSlotRespons } from "@/types";
+import type { ArrangementPaameldingRespons, KalenderSlotRespons } from "@/types";
 
 type PaameldingVars = { arrangementId: string };
 
@@ -43,10 +43,10 @@ export function useSlotArrangementPaamelding(dato: string, baneId: string) {
   );
 
   return {
-    onMeldPaa: (slot: BookingSlotRespons) => {
+    onMeldPaa: (slot: KalenderSlotRespons) => {
       if (slot.arrangementId) meldPaaMutation.mutate({ arrangementId: slot.arrangementId });
     },
-    onMeldAv: (slot: BookingSlotRespons) => {
+    onMeldAv: (slot: KalenderSlotRespons) => {
       if (slot.arrangementId) meldAvMutation.mutate({ arrangementId: slot.arrangementId });
     },
   };

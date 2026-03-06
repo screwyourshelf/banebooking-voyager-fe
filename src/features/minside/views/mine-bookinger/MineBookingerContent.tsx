@@ -13,10 +13,10 @@ import WeatherInfo from "@/components/WeatherInfo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDatoKort, dagerIgjenTekst } from "@/utils/datoUtils";
-import { Timer, User, Calendar, XCircle } from "lucide-react";
-import type { BookingSlotRespons } from "@/types";
+import { Timer, Calendar, XCircle } from "lucide-react";
+import type { MinBookingRespons } from "@/types";
 import { harHandling } from "@/utils/handlingUtils";
-import { grupperSlots } from "@/utils/bookingUtils";
+import { Kapabiliteter } from "@/utils/kapabiliteter";
 
 function formatKort(t: string) {
   const [h, m] = t.slice(0, 5).split(":");
@@ -29,10 +29,10 @@ type Props = {
   visHistoriske: boolean;
   onToggleVisHistoriske: (value: boolean) => void;
 
-  bookinger: BookingSlotRespons[];
+  bookinger: MinBookingRespons[];
   isPending: boolean;
 
-  onAvbestill: (slot: BookingSlotRespons) => void;
+  onAvbestill: (slot: MinBookingRespons) => void;
 };
 
 export default function MineBookingerContent({
@@ -50,9 +50,8 @@ export default function MineBookingerContent({
   }, [visHistoriske]);
 
   const hasBookinger = bookinger.length > 0;
-  const grupperteBookinger = grupperSlots(bookinger);
-  const synligeBookinger = grupperteBookinger.slice(0, synligAntall);
-  const harFlere = synligAntall < grupperteBookinger.length;
+  const synligeBookinger = bookinger.slice(0, synligAntall);
+  const harFlere = synligAntall < bookinger.length;
 
   const tomTekst = visHistoriske
     ? "Du har ingen registrerte bookinger."
@@ -85,16 +84,14 @@ export default function MineBookingerContent({
           >
             {synligeBookinger.map((b) => {
               const key = buildBookingKey(b);
-              const effStartTid = b.bookingStartTid ?? b.startTid;
-              const effSluttTid = b.bookingSluttTid ?? b.sluttTid;
-              const tid = `${effStartTid.slice(0, 5)} – ${effSluttTid.slice(0, 5)}`;
-              const tidKort = `${formatKort(effStartTid)}–${formatKort(effSluttTid)}`;
-              const kanAvbestille = harHandling(b.tillattHandlinger, "booking:avbestill");
+              const tid = `${b.startTid.slice(0, 5)} – ${b.sluttTid.slice(0, 5)}`;
+              const tidKort = `${formatKort(b.startTid)}–${formatKort(b.sluttTid)}`;
+              const kanAvbestille = harHandling(b.kapabiliteter, Kapabiliteter.booking.avbestill);
               const harVaer =
                 !!b.værSymbol || typeof b.temperatur === "number" || typeof b.vind === "number";
 
-              const [startH, startM] = effStartTid.split(":").map(Number);
-              const [sluttH, sluttM] = effSluttTid.split(":").map(Number);
+              const [startH, startM] = b.startTid.split(":").map(Number);
+              const [sluttH, sluttM] = b.sluttTid.split(":").map(Number);
               const varighet = sluttH * 60 + sluttM - (startH * 60 + startM);
 
               return (
@@ -136,12 +133,6 @@ export default function MineBookingerContent({
                         <AccordionDetailRow icon={Timer} label="Varighet">
                           {varighet} min
                         </AccordionDetailRow>
-
-                        {b.booketAv && (
-                          <AccordionDetailRow icon={User} label="Booket av">
-                            {b.booketAv}
-                          </AccordionDetailRow>
-                        )}
 
                         {harVaer && (
                           <div className="flex items-start gap-2 sm:col-span-2">
@@ -199,7 +190,7 @@ export default function MineBookingerContent({
                 size="sm"
                 onClick={() => setSynligAntall((prev) => prev + PAGE_SIZE)}
               >
-                Vis flere ({grupperteBookinger.length - synligAntall} gjenstår)
+                Vis flere ({bookinger.length - synligAntall} gjenstår)
               </Button>
             </div>
           )}

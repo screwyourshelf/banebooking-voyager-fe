@@ -15,7 +15,7 @@ export type BaneRespons = {
   navn: string;
   beskrivelse: string;
   aktiv: boolean;
-  tillattHandlinger: string[];
+  kapabiliteter: string[];
   bookingInnstillinger: BookingRegelRespons;
   harOverstyring: boolean;
   bookingOverstyring: BaneBookingOverstyringRespons | null;

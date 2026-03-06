@@ -4,6 +4,7 @@ import { ListSkeleton } from "@/components/loading";
 import { useBruker } from "@/hooks/useBruker";
 import { useAdminBrukere } from "@/features/brukere/hooks/useAdminBrukere";
 import { harHandling } from "@/utils/handlingUtils";
+import { Kapabiliteter } from "@/utils/kapabiliteter";
 
 import type { RolleType, BrukerRespons, EditState } from "@/features/brukere/types";
 import BrukereListeContent from "./BrukereListeContent";
@@ -19,7 +20,7 @@ export default function BrukereListeView() {
 
   const { brukere, laster: lasterListe, oppdater, oppdaterLaster } = useAdminBrukere();
 
-  const erKlubbAdmin = harHandling(bruker?.tillattHandlinger, "brukere:admin");
+  const erKlubbAdmin = harHandling(bruker?.kapabiliteter, Kapabiliteter.brukere.admin);
 
   // Filters
   const [query, setQuery] = useState("");

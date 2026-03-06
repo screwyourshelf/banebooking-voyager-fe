@@ -1,5 +1,6 @@
-import type { BookingSlotRespons, SlotStatus } from "@/types";
+import type { KalenderSlotRespons, SlotStatus } from "@/types";
 import { harHandling } from "@/utils/handlingUtils";
+import { Kapabiliteter } from "@/utils/kapabiliteter";
 
 export type SlotVisning = {
   tekst: string;
@@ -14,7 +15,7 @@ const visningPerStatus: Record<SlotStatus, SlotVisning> = {
   opptatt: { tekst: "Opptatt", variant: "outline" },
 };
 
-export function utledSlotStatus(slot: BookingSlotRespons, erInnlogget: boolean): SlotStatus {
+export function utledSlotStatus(slot: KalenderSlotRespons, erInnlogget: boolean): SlotStatus {
   if (slot.status) return slot.status;
 
   if (slot.erPassert) return "passert";
@@ -23,15 +24,15 @@ export function utledSlotStatus(slot: BookingSlotRespons, erInnlogget: boolean):
 
   const erBooket =
     !!slot.booketAv ||
-    harHandling(slot.tillattHandlinger, "booking:slett") ||
-    harHandling(slot.tillattHandlinger, "booking:avbestill");
+    harHandling(slot.kapabiliteter, Kapabiliteter.booking.slett) ||
+    harHandling(slot.kapabiliteter, Kapabiliteter.booking.avbestill);
 
   if (erBooket) return "opptatt";
 
   if (
     erInnlogget &&
-    slot.tillattHandlinger.length > 0 &&
-    !harHandling(slot.tillattHandlinger, "booking:book")
+    slot.kapabiliteter.length > 0 &&
+    !harHandling(slot.kapabiliteter, Kapabiliteter.booking.book)
   ) {
     return "opptatt";
   }
@@ -39,7 +40,7 @@ export function utledSlotStatus(slot: BookingSlotRespons, erInnlogget: boolean):
   return "ledig";
 }
 
-export function utledSlotVisning(slot: BookingSlotRespons, erInnlogget: boolean): SlotVisning {
+export function utledSlotVisning(slot: KalenderSlotRespons, erInnlogget: boolean): SlotVisning {
   const status = utledSlotStatus(slot, erInnlogget);
   const visning = visningPerStatus[status];
 
@@ -50,7 +51,7 @@ export function utledSlotVisning(slot: BookingSlotRespons, erInnlogget: boolean)
   return visning;
 }
 
-export function grupperSlots(slots: BookingSlotRespons[]): BookingSlotRespons[] {
+export function grupperSlots(slots: KalenderSlotRespons[]): KalenderSlotRespons[] {
   const sett = new Set<string>();
   return slots.filter((slot) => {
     if (!slot.bookingId) return true;
@@ -60,9 +61,9 @@ export function grupperSlots(slots: BookingSlotRespons[]): BookingSlotRespons[] 
   });
 }
 
-export function erSpennendBooking(slot: BookingSlotRespons): boolean {
+export function erSpennendBooking(slot: KalenderSlotRespons): boolean {
   return (
     slot.bookingStartTid !== null &&
-    (slot.startTid !== slot.bookingStartTid || slot.sluttTid !== slot.bookingSluttTid)
+    (slot.slotStartTid !== slot.bookingStartTid || slot.slotSluttTid !== slot.bookingSluttTid)
   );
 }

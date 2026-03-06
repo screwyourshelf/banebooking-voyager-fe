@@ -99,7 +99,7 @@ export type ArrangementRespons = {
   antallPaameldte: number;
   erPaameldt: boolean;
   erPassert: boolean;
-  tillattHandlinger: string[];
+  kapabiliteter: string[];
 };
 
 export type ArrangementPaameldingRespons = {

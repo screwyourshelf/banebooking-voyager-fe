@@ -20,6 +20,7 @@ import { useLogin } from "@/hooks/useLogin";
 import { useKlubb } from "@/hooks/useKlubb";
 import { useBruker } from "@/hooks/useBruker";
 import { harHandling } from "@/utils/handlingUtils";
+import { Kapabiliteter } from "@/utils/kapabiliteter";
 import { prefetchRoute } from "@/utils/prefetchRoute";
 
 import NavbarBrandMedKlubb from "./NavbarBrandMedKlubb";
@@ -66,14 +67,14 @@ export default function Navbar() {
     setFeilOtp(null);
   }, [step]);
 
-  const h = bruker?.tillattHandlinger ?? [];
-  const erAdmin = harHandling(h, "klubb:admin");
+  const h = bruker?.kapabiliteter ?? [];
+  const erAdmin = harHandling(h, Kapabiliteter.klubb.admin);
 
   const harAdminSeksjon =
-    harHandling(h, "klubb:admin") ||
-    harHandling(h, "baner:admin") ||
-    harHandling(h, "brukere:admin") ||
-    harHandling(h, "arrangement:se");
+    harHandling(h, Kapabiliteter.klubb.admin) ||
+    harHandling(h, Kapabiliteter.baner.admin) ||
+    harHandling(h, Kapabiliteter.brukere.admin) ||
+    harHandling(h, Kapabiliteter.arrangement.se);
 
   const stoppDropdownKeybindings = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key.length === 1) e.stopPropagation();
@@ -198,7 +199,7 @@ export default function Navbar() {
                       {erAdmin ? "Admin" : "Utvidet tilgang"}
                     </div>
 
-                    {harHandling(h, "klubb:admin") && (
+                    {harHandling(h, Kapabiliteter.klubb.admin) && (
                       <DropdownMenuItem asChild>
                         <Link to={`/${slug}/admin/klubb`} {...prefetch("admin/klubb")}>
                           <Wrench className="mr-2 size-4" />
@@ -207,7 +208,7 @@ export default function Navbar() {
                       </DropdownMenuItem>
                     )}
 
-                    {harHandling(h, "baner:admin") && (
+                    {harHandling(h, Kapabiliteter.baner.admin) && (
                       <DropdownMenuItem asChild>
                         <Link to={`/${slug}/admin/baner`} {...prefetch("admin/baner")}>
                           <Wrench className="mr-2 size-4" />
@@ -216,7 +217,7 @@ export default function Navbar() {
                       </DropdownMenuItem>
                     )}
 
-                    {harHandling(h, "brukere:admin") && (
+                    {harHandling(h, Kapabiliteter.brukere.admin) && (
                       <DropdownMenuItem asChild>
                         <Link to={`/${slug}/admin/brukere`} {...prefetch("admin/brukere")}>
                           <Wrench className="mr-2 size-4" />
@@ -225,7 +226,7 @@ export default function Navbar() {
                       </DropdownMenuItem>
                     )}
 
-                    {harHandling(h, "arrangement:se") && (
+                    {harHandling(h, Kapabiliteter.arrangement.se) && (
                       <DropdownMenuItem asChild>
                         <Link to={`/${slug}/arrangement`} {...prefetch("arrangement")}>
                           <Calendar className="mr-2 size-4" />

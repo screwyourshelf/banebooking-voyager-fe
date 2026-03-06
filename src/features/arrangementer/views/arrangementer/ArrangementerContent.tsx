@@ -27,6 +27,7 @@ import { SlettArrangementDialog } from "@/features/arrangement-admin/components"
 import PaameldteDialog from "./PaameldteDialog";
 import { useSlug } from "@/hooks/useSlug";
 import { harHandling } from "@/utils/handlingUtils";
+import { Kapabiliteter } from "@/utils/kapabiliteter";
 import { toast } from "sonner";
 import type { ArrangementRespons } from "@/types";
 
@@ -207,9 +208,12 @@ export default function ArrangementerContent({
                         )}
                       </AccordionDetailGrid>
 
-                      {!arr.erPassert && arr.tillattHandlinger.length > 0 && (
+                      {!arr.erPassert && arr.kapabiliteter.length > 0 && (
                         <AccordionActions className="flex-wrap gap-2">
-                          {harHandling(arr.tillattHandlinger, "arrangement:kopierLenke") && (
+                          {harHandling(
+                            arr.kapabiliteter,
+                            Kapabiliteter.arrangement.kopierLenke
+                          ) && (
                             <Button
                               variant="outline"
                               size="sm"
@@ -220,7 +224,7 @@ export default function ArrangementerContent({
                               Kopier lenke
                             </Button>
                           )}
-                          {harHandling(arr.tillattHandlinger, "arrangement:avlys") && (
+                          {harHandling(arr.kapabiliteter, Kapabiliteter.arrangement.avlys) && (
                             <SlettArrangementDialog
                               tittel={arr.tittel}
                               onSlett={() => onAvlys(arr).then(() => {})}
@@ -236,7 +240,7 @@ export default function ArrangementerContent({
                               }
                             />
                           )}
-                          {harHandling(arr.tillattHandlinger, "arrangement:meldAv") && (
+                          {harHandling(arr.kapabiliteter, Kapabiliteter.arrangement.meldAv) && (
                             <Button
                               variant="outline"
                               size="sm"
@@ -247,7 +251,7 @@ export default function ArrangementerContent({
                               Meld meg av
                             </Button>
                           )}
-                          {harHandling(arr.tillattHandlinger, "arrangement:meldPaa") && (
+                          {harHandling(arr.kapabiliteter, Kapabiliteter.arrangement.meldPaa) && (
                             <Button
                               variant="outline"
                               size="sm"

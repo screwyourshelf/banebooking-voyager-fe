@@ -19,17 +19,22 @@ export function useBookingActions() {
     void queryClient.invalidateQueries({ queryKey: ["bookinger", slug] });
   };
 
-  const cancelMutation = useApiMutation<AvbestillVars, void>("delete", `/klubb/${slug}/bookinger`, {
-    onError: (err) => {
-      toast.error(err.message ?? "Kunne ikke avbestille.");
-    },
-    onSuccess: () => {
-      toast.info("Bookingen er avbestilt.");
-    },
-    onSettled: () => {
-      invalidateAll();
-    },
-  });
+  const cancelMutation = useApiMutation<AvbestillVars, void>(
+    "delete",
+    (vars) => `/klubb/${slug}/bookinger/${vars.bookingId}`,
+    {
+      getBody: () => undefined,
+      onError: (err) => {
+        toast.error(err.message ?? "Kunne ikke avbestille.");
+      },
+      onSuccess: () => {
+        toast.info("Bookingen er avbestilt.");
+      },
+      onSettled: () => {
+        invalidateAll();
+      },
+    }
+  );
 
   const avbestill = (key: AvbestillVars) => {
     cancelMutation.mutate(key);

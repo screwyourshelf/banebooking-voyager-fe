@@ -23,6 +23,7 @@ import {
 import PaameldteDialog from "@/features/arrangementer/views/arrangementer/PaameldteDialog";
 import KobleTilArrangementDialog from "./KobleTilArrangementDialog";
 import { harHandling } from "@/utils/handlingUtils";
+import { Kapabiliteter } from "@/utils/kapabiliteter";
 import { grupperSlots, utledSlotVisning } from "@/utils/bookingUtils";
 import type { BookingSlotRespons } from "@/types";
 
@@ -67,18 +68,21 @@ export function BookingSlotListAccordion({
   return (
     <Accordion type="single" collapsible className="space-y-1">
       {synligeSlots.map((slot) => {
-        const slotKey = slot.bookingId ?? `${slot.dato}-${slot.startTid}-${slot.baneId}`;
-        const effStartTid = slot.bookingStartTid ?? slot.startTid;
-        const effSluttTid = slot.bookingSluttTid ?? slot.sluttTid;
+        const slotKey = slot.bookingId ?? `${slot.dato}-${slot.slotStartTid}-${slot.baneId}`;
+        const effStartTid = slot.bookingStartTid ?? slot.slotStartTid;
+        const effSluttTid = slot.bookingSluttTid ?? slot.slotSluttTid;
         const tid = `${effStartTid.slice(0, 5)} – ${effSluttTid.slice(0, 5)}`;
         const tidKort = `${formatKort(effStartTid)}–${formatKort(effSluttTid)}`;
 
         const harArrangement = !!slot.arrangementTittel;
-        const kan = (h: string) => harHandling(slot.tillattHandlinger, h);
-        const erBooket = !!slot.booketAv || kan("booking:slett") || kan("booking:avbestill");
+        const kan = (h: string) => harHandling(slot.kapabiliteter, h);
+        const erBooket =
+          !!slot.booketAv ||
+          kan(Kapabiliteter.booking.slett) ||
+          kan(Kapabiliteter.booking.avbestill);
         const erMinBooking = slot.erEier === true;
 
-        const harHandlinger = slot.tillattHandlinger.length > 0;
+        const harHandlinger = slot.kapabiliteter.length > 0;
         const kanUtføreHandling = !!currentUser && harHandlinger;
 
         const harVaer =
@@ -212,7 +216,7 @@ export function BookingSlotListAccordion({
                 {/* Actions */}
                 {kanUtføreHandling && (
                   <AccordionActions className="flex-wrap gap-2">
-                    {kan("booking:kobleTilArrangement") && (
+                    {kan(Kapabiliteter.booking.kobleTilArrangement) && (
                       <KobleTilArrangementDialog
                         valgtId={null}
                         onVelg={(id) => {
@@ -230,7 +234,7 @@ export function BookingSlotListAccordion({
                       </KobleTilArrangementDialog>
                     )}
 
-                    {kan("booking:book") && (
+                    {kan(Kapabiliteter.booking.book) && (
                       <Button
                         variant="outline"
                         size="sm"
@@ -245,7 +249,7 @@ export function BookingSlotListAccordion({
                       </Button>
                     )}
 
-                    {kan("booking:avbestill") && (
+                    {kan(Kapabiliteter.booking.avbestill) && (
                       <Button
                         variant="outline"
                         size="sm"
@@ -260,7 +264,7 @@ export function BookingSlotListAccordion({
                       </Button>
                     )}
 
-                    {kan("booking:slett") && (
+                    {kan(Kapabiliteter.booking.slett) && (
                       <Button
                         variant="destructive"
                         size="sm"
@@ -275,7 +279,7 @@ export function BookingSlotListAccordion({
                       </Button>
                     )}
 
-                    {kan("booking:meldAv") && (
+                    {kan(Kapabiliteter.booking.meldAv) && (
                       <Button
                         variant="outline"
                         size="sm"
@@ -290,7 +294,7 @@ export function BookingSlotListAccordion({
                       </Button>
                     )}
 
-                    {kan("booking:meldPaa") && (
+                    {kan(Kapabiliteter.booking.meldPaa) && (
                       <Button
                         variant="outline"
                         size="sm"

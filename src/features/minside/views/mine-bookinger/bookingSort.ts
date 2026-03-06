@@ -1,6 +1,6 @@
-import type { BookingSlotRespons } from "@/types";
+import type { MinBookingRespons } from "@/types";
 
-export function sortBookingerNyesteFoerst(bookinger: BookingSlotRespons[]): BookingSlotRespons[] {
+export function sortBookingerNyesteFoerst(bookinger: MinBookingRespons[]): MinBookingRespons[] {
   return [...bookinger].sort((a, b) => {
     const datoDiff = new Date(b.dato).getTime() - new Date(a.dato).getTime();
     if (datoDiff !== 0) return datoDiff;
@@ -8,6 +8,6 @@ export function sortBookingerNyesteFoerst(bookinger: BookingSlotRespons[]): Book
   });
 }
 
-export function buildBookingKey(b: BookingSlotRespons): string {
+export function buildBookingKey(b: MinBookingRespons): string {
   return b.bookingId ?? `${b.baneId}-${b.dato}-${b.startTid}-${b.sluttTid}`;
 }

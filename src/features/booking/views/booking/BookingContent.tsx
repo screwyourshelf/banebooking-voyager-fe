@@ -2,7 +2,7 @@ import DatoVelger from "@/components/DatoVelger";
 import { BookingSlotListAccordion } from "@/features/booking/components";
 import { TabsLazyMount } from "@/components/navigation";
 
-import type { BookingSlotRespons, BaneRespons } from "@/types";
+import type { KalenderSlotRespons, BaneRespons } from "@/types";
 import type { User } from "@supabase/supabase-js";
 
 type Props = {
@@ -13,16 +13,16 @@ type Props = {
   valgtDato: Date | null;
   onDatoChange: (dato: Date | null) => void;
 
-  slots: BookingSlotRespons[];
+  slots: KalenderSlotRespons[];
   isLoading: boolean;
 
   currentUser: User | null;
 
-  onBook: (slot: BookingSlotRespons) => void;
-  onCancel: (slot: BookingSlotRespons) => void;
-  onDelete: (slot: BookingSlotRespons) => void;
-  onMeldPaa: (slot: BookingSlotRespons) => void;
-  onMeldAv: (slot: BookingSlotRespons) => void;
+  onBook: (slot: KalenderSlotRespons) => void;
+  onCancel: (slot: KalenderSlotRespons) => void;
+  onDelete: (slot: KalenderSlotRespons) => void;
+  onMeldPaa: (slot: KalenderSlotRespons) => void;
+  onMeldAv: (slot: KalenderSlotRespons) => void;
 };
 
 export default function BookingContent({

@@ -1,13 +1,13 @@
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
-import type { BookingSlotRespons } from "@/types";
+import type { MinBookingRespons } from "@/types";
 import { useSlug } from "@/hooks/useSlug";
 
 export function useMineBookinger(inkluderHistoriske = false) {
   const slug = useSlug();
 
-  const query = useApiQuery<BookingSlotRespons[]>(
+  const query = useApiQuery<MinBookingRespons[]>(
     ["mineBookinger", slug, inkluderHistoriske],
     `/klubb/${slug}/bookinger/mine${inkluderHistoriske ? "?inkluderHistoriske=true" : ""}`,
     {

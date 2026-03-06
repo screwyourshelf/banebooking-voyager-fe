@@ -1,10 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { keepPreviousData, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import type { BookingSlotRespons } from "@/types";
+import type { KalenderSlotRespons } from "@/types";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useSlug } from "@/hooks/useSlug";
+import { Kapabiliteter } from "@/utils/kapabiliteter";
 
 type SlotVars = {
   baneId: string;
@@ -14,7 +15,7 @@ type SlotVars = {
   arrangementId?: string;
 };
 type CancelVars = { bookingId: string };
-type OptimisticContext = { previous?: BookingSlotRespons[] };
+type OptimisticContext = { previous?: KalenderSlotRespons[] };
 
 export function useBooking(dato: string, baneId: string) {
   const slug = useSlug();
@@ -26,9 +27,9 @@ export function useBooking(dato: string, baneId: string) {
   const enabled = Boolean(baneId) && Boolean(dato);
 
   // GET slots
-  const bookingerQuery = useApiQuery<BookingSlotRespons[]>(
+  const bookingerQuery = useApiQuery<KalenderSlotRespons[]>(
     queryKey,
-    `/klubb/${slug}/bookinger?baneId=${baneId}&dato=${dato}`,
+    `/klubb/${slug}/kalender?baneId=${baneId}&dato=${dato}`,
     {
       requireAuth: true,
       enabled,
@@ -58,8 +59,8 @@ export function useBooking(dato: string, baneId: string) {
     void queryClient.invalidateQueries({ queryKey: ["mineBookinger", slug] });
   };
 
-  const erSammeSlot = (s: BookingSlotRespons, v: { startTid: string; sluttTid: string }) =>
-    s.startTid === v.startTid && s.sluttTid === v.sluttTid;
+  const erSammeSlot = (s: KalenderSlotRespons, v: { startTid: string; sluttTid: string }) =>
+    s.slotStartTid === v.startTid && s.slotSluttTid === v.sluttTid;
 
   // POST booking (optimistic)
   const bookMutation = useApiMutation<SlotVars, void, OptimisticContext>(
@@ -69,9 +70,9 @@ export function useBooking(dato: string, baneId: string) {
       onMutate: async (vars) => {
         await queryClient.cancelQueries({ queryKey });
 
-        const previous = queryClient.getQueryData<BookingSlotRespons[]>(queryKey);
+        const previous = queryClient.getQueryData<KalenderSlotRespons[]>(queryKey);
 
-        queryClient.setQueryData<BookingSlotRespons[]>(queryKey, (old = []) =>
+        queryClient.setQueryData<KalenderSlotRespons[]>(queryKey, (old = []) =>
           old.map((s) =>
             erSammeSlot(s, vars)
               ? {
@@ -79,9 +80,9 @@ export function useBooking(dato: string, baneId: string) {
                   bookingId: null,
                   booketAv: "Du",
                   erEier: true,
-                  bookingStartTid: s.startTid,
-                  bookingSluttTid: s.sluttTid,
-                  tillattHandlinger: ["booking:avbestill"],
+                  bookingStartTid: s.slotStartTid,
+                  bookingSluttTid: s.slotSluttTid,
+                  kapabiliteter: [Kapabiliteter.booking.avbestill],
                 }
               : s
           )
@@ -106,14 +107,15 @@ export function useBooking(dato: string, baneId: string) {
   // DELETE (avbestill) (optimistic)
   const cancelMutation = useApiMutation<CancelVars, void, OptimisticContext>(
     "delete",
-    `/klubb/${slug}/bookinger`,
+    (vars) => `/klubb/${slug}/bookinger/${vars.bookingId}`,
     {
+      getBody: () => undefined,
       onMutate: async (vars) => {
         await queryClient.cancelQueries({ queryKey });
 
-        const previous = queryClient.getQueryData<BookingSlotRespons[]>(queryKey);
+        const previous = queryClient.getQueryData<KalenderSlotRespons[]>(queryKey);
 
-        queryClient.setQueryData<BookingSlotRespons[]>(queryKey, (old = []) =>
+        queryClient.setQueryData<KalenderSlotRespons[]>(queryKey, (old = []) =>
           old.map((s) =>
             s.bookingId === vars.bookingId
               ? {
@@ -123,7 +125,7 @@ export function useBooking(dato: string, baneId: string) {
                   erEier: false,
                   bookingStartTid: null,
                   bookingSluttTid: null,
-                  tillattHandlinger: ["booking:book"],
+                  kapabiliteter: [Kapabiliteter.booking.book],
                 }
               : s
           )
@@ -147,14 +149,15 @@ export function useBooking(dato: string, baneId: string) {
   // DELETE admin (optimistic)
   const deleteMutation = useApiMutation<CancelVars, void, OptimisticContext>(
     "delete",
-    `/klubb/${slug}/bookinger/admin`,
+    (vars) => `/klubb/${slug}/bookinger/${vars.bookingId}/admin`,
     {
+      getBody: () => undefined,
       onMutate: async (vars) => {
         await queryClient.cancelQueries({ queryKey });
 
-        const previous = queryClient.getQueryData<BookingSlotRespons[]>(queryKey);
+        const previous = queryClient.getQueryData<KalenderSlotRespons[]>(queryKey);
 
-        queryClient.setQueryData<BookingSlotRespons[]>(queryKey, (old = []) =>
+        queryClient.setQueryData<KalenderSlotRespons[]>(queryKey, (old = []) =>
           old.map((s) =>
             s.bookingId === vars.bookingId
               ? {
@@ -164,7 +167,7 @@ export function useBooking(dato: string, baneId: string) {
                   erEier: false,
                   bookingStartTid: null,
                   bookingSluttTid: null,
-                  tillattHandlinger: ["booking:book"],
+                  kapabiliteter: [Kapabiliteter.booking.book],
                 }
               : s
           )
@@ -193,21 +196,21 @@ export function useBooking(dato: string, baneId: string) {
     apenSlotTid,
     setApenSlotTid,
 
-    onBook: (slot: BookingSlotRespons, arrangementId?: string) =>
+    onBook: (slot: KalenderSlotRespons, arrangementId?: string) =>
       bookMutation.mutate({
         baneId,
         dato,
-        startTid: slot.startTid,
-        sluttTid: slot.sluttTid,
+        startTid: slot.slotStartTid,
+        sluttTid: slot.slotSluttTid,
         arrangementId,
       }),
 
-    onCancel: (slot: BookingSlotRespons) => {
+    onCancel: (slot: KalenderSlotRespons) => {
       if (!slot.bookingId) return;
       cancelMutation.mutate({ bookingId: slot.bookingId });
     },
 
-    onDelete: (slot: BookingSlotRespons) => {
+    onDelete: (slot: KalenderSlotRespons) => {
       if (!slot.bookingId) return;
       deleteMutation.mutate({ bookingId: slot.bookingId });
     },
