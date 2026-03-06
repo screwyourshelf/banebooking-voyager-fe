@@ -60,6 +60,13 @@ function hourLabel(h: number) {
   return `${String(h).padStart(2, "0")}:00`;
 }
 
+/* slot mapping */
+const slotValues = [30, 45, 60, 90];
+
+function slotLabel(min: number) {
+  return `${min} min`;
+}
+
 export default function RedigerBaneContent({
   baner,
   valgtBaneId,
@@ -248,38 +255,6 @@ export default function RedigerBaneContent({
               )}
 
               <SwitchRow
-                title="Overstyr slot-lengde"
-                description={`Klubb-default: ${klubbDefault.slotLengdeMinutter} min`}
-                checked={overstyring.slotLengdeMinutter !== null}
-                onCheckedChange={(v) => onToggleOverstyring("slotLengdeMinutter", v)}
-                disabled={isSaving}
-              />
-              {overstyring.slotLengdeMinutter !== null && (
-                <Row title="Slot-lengde">
-                  <Field>
-                    <Select
-                      value={overstyring.slotLengdeMinutter.toString()}
-                      onValueChange={(val) =>
-                        onChangeOverstyring("slotLengdeMinutter", parseInt(val, 10))
-                      }
-                      disabled={isSaving}
-                    >
-                      <SelectTrigger>
-                        <SelectValue placeholder="Velg slot-lengde" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="30">30 minutter</SelectItem>
-                        <SelectItem value="45">45 minutter</SelectItem>
-                        <SelectItem value="60">60 minutter</SelectItem>
-                        <SelectItem value="90">90 minutter</SelectItem>
-                        <SelectItem value="120">120 minutter</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </Field>
-                </Row>
-              )}
-
-              <SwitchRow
                 title="Overstyr maks per dag"
                 description={`Klubb-default: ${klubbDefault.maksPerDag}`}
                 checked={overstyring.maksPerDag !== null}
@@ -297,8 +272,8 @@ export default function RedigerBaneContent({
                     <input
                       type="range"
                       value={overstyring.maksPerDag}
-                      min={1}
-                      max={10}
+                      min={0}
+                      max={5}
                       step={1}
                       onChange={(e) => onChangeOverstyring("maksPerDag", Number(e.target.value))}
                       className="w-full accent-primary"
@@ -326,8 +301,8 @@ export default function RedigerBaneContent({
                     <input
                       type="range"
                       value={overstyring.maksTotalt}
-                      min={1}
-                      max={20}
+                      min={0}
+                      max={10}
                       step={1}
                       onChange={(e) => onChangeOverstyring("maksTotalt", Number(e.target.value))}
                       className="w-full accent-primary"
@@ -358,12 +333,56 @@ export default function RedigerBaneContent({
                       type="range"
                       value={overstyring.dagerFremITid}
                       min={1}
-                      max={150}
+                      max={14}
                       step={1}
                       onChange={(e) => onChangeOverstyring("dagerFremITid", Number(e.target.value))}
                       className="w-full accent-primary"
                       disabled={isSaving}
                     />
+                  </Field>
+                </Row>
+              )}
+
+              <SwitchRow
+                title="Overstyr slot-lengde"
+                description={`Klubb-default: ${klubbDefault.slotLengdeMinutter} min`}
+                checked={overstyring.slotLengdeMinutter !== null}
+                onCheckedChange={(v) => onToggleOverstyring("slotLengdeMinutter", v)}
+                disabled={isSaving}
+              />
+              {overstyring.slotLengdeMinutter !== null && (
+                <Row
+                  title="Slot-lengde"
+                  right={
+                    <div className="text-sm font-medium tabular-nums">
+                      {slotLabel(overstyring.slotLengdeMinutter)}
+                    </div>
+                  }
+                >
+                  <Field>
+                    <div className="space-y-2">
+                      <input
+                        type="range"
+                        min={0}
+                        max={slotValues.length - 1}
+                        step={1}
+                        value={Math.max(0, slotValues.indexOf(overstyring.slotLengdeMinutter))}
+                        onChange={(e) => {
+                          const index = Number(e.target.value);
+                          const minutes = slotValues[index];
+                          onChangeOverstyring("slotLengdeMinutter", minutes);
+                        }}
+                        className="w-full accent-primary"
+                        disabled={isSaving}
+                      />
+
+                      {/* labels under slider */}
+                      <div className="flex justify-between text-xs text-muted-foreground px-1">
+                        {slotValues.map((v) => (
+                          <span key={v}>{v}</span>
+                        ))}
+                      </div>
+                    </div>
                   </Field>
                 </Row>
               )}
