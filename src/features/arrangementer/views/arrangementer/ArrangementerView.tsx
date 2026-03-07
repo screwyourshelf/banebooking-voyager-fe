@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ListSkeleton } from "@/components/loading";
+import { QueryFeil } from "@/components/errors";
 import { useSearchParams } from "react-router-dom";
 import { useArrangementer } from "./useArrangementer";
 import { useArrangementPaamelding } from "./useArrangementPaamelding";
@@ -11,7 +12,13 @@ export default function ArrangementerView() {
   const [searchParams] = useSearchParams();
   const [visHistoriske, setVisHistoriske] = useState(false);
 
-  const { data: arrangementer = [], isLoading } = useArrangementer(visHistoriske);
+  const {
+    data: arrangementer = [],
+    isLoading,
+    error,
+    refetch,
+    isFetching,
+  } = useArrangementer(visHistoriske);
   const { onMeldPaa, onMeldAv } = useArrangementPaamelding();
   const { onAvlys } = useAvlysArrangement();
 
@@ -20,14 +27,16 @@ export default function ArrangementerView() {
   const defaultArrangementId = searchParams.get("arrangement") ?? undefined;
 
   return (
-    <ArrangementerContent
-      visHistoriske={visHistoriske}
-      onToggleVisHistoriske={setVisHistoriske}
-      arrangementer={arrangementer}
-      onMeldPaa={onMeldPaa}
-      onMeldAv={onMeldAv}
-      onAvlys={onAvlys}
-      defaultArrangementId={defaultArrangementId}
-    />
+    <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
+      <ArrangementerContent
+        visHistoriske={visHistoriske}
+        onToggleVisHistoriske={setVisHistoriske}
+        arrangementer={arrangementer}
+        onMeldPaa={onMeldPaa}
+        onMeldAv={onMeldAv}
+        onAvlys={onAvlys}
+        defaultArrangementId={defaultArrangementId}
+      />
+    </QueryFeil>
   );
 }

@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { ListSkeleton } from "@/components/loading";
+import { QueryFeil } from "@/components/errors";
 import { useMineBookinger } from "@/features/minside/hooks/useMineBookinger";
 import { useBookingActions } from "@/features/minside/hooks/useBookingActions";
 import type { MinBookingRespons } from "@/types";
@@ -11,7 +12,13 @@ import { sortBookingerNyesteFoerst } from "./bookingSort";
 export default function MineBookingerTab() {
   const [visHistoriske, setVisHistoriske] = useState(false);
 
-  const { data: bookinger = [], isLoading } = useMineBookinger(visHistoriske);
+  const {
+    data: bookinger = [],
+    isLoading,
+    error,
+    refetch,
+    isFetching,
+  } = useMineBookinger(visHistoriske);
   const { avbestillAsync, isPending } = useBookingActions();
 
   const visteBookinger = useMemo(() => {
@@ -29,12 +36,14 @@ export default function MineBookingerTab() {
   if (isLoading) return <ListSkeleton />;
 
   return (
-    <MineBookingerContent
-      visHistoriske={visHistoriske}
-      onToggleVisHistoriske={setVisHistoriske}
-      bookinger={visteBookinger}
-      isPending={isPending}
-      onAvbestill={handleAvbestill}
-    />
+    <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
+      <MineBookingerContent
+        visHistoriske={visHistoriske}
+        onToggleVisHistoriske={setVisHistoriske}
+        bookinger={visteBookinger}
+        isPending={isPending}
+        onAvbestill={handleAvbestill}
+      />
+    </QueryFeil>
   );
 }

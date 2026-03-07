@@ -2,6 +2,7 @@ import { useEffect, useState, useMemo } from "react";
 import { format } from "date-fns";
 
 import { ListSkeleton } from "@/components/loading";
+import { QueryFeil } from "@/components/errors";
 import { useBaner } from "@/hooks/useBaner";
 import { useBooking } from "@/features/booking/hooks/useBooking";
 import { useSlotArrangementPaamelding } from "@/features/booking/hooks/useSlotArrangementPaamelding";
@@ -16,7 +17,6 @@ export default function BookingView() {
 
   const { currentUser } = useAuth();
 
-  // Stabil dato-streng (endres kun når valgtDato endres)
   const valgtDatoStr = useMemo(
     () => (valgtDato ? format(valgtDato, "yyyy-MM-dd") : ""),
     [valgtDato]
@@ -28,18 +28,19 @@ export default function BookingView() {
     onCancel,
     onDelete,
     isLoading: loadingBooking,
+    isFetching,
+    error: bookingError,
+    hentBookinger,
   } = useBooking(valgtDatoStr, valgtBaneId);
 
   const { onMeldPaa, onMeldAv } = useSlotArrangementPaamelding(valgtDatoStr, valgtBaneId);
 
-  // Sett default bane
   useEffect(() => {
     if (!valgtBaneId && baner.length > 0) {
       setValgtBaneId(baner[0].id);
     }
   }, [baner, valgtBaneId]);
 
-  // Husk valgtDato i localStorage
   useEffect(() => {
     if (valgtDato) {
       localStorage.setItem("valgtDato", valgtDato.toISOString());
@@ -51,20 +52,22 @@ export default function BookingView() {
   }
 
   return (
-    <BookingContent
-      baner={baner}
-      valgtBaneId={valgtBaneId}
-      onBaneChange={setValgtBaneId}
-      valgtDato={valgtDato}
-      onDatoChange={setValgtDato}
-      slots={slots}
-      isLoading={loadingBooking}
-      currentUser={currentUser}
-      onBook={onBook}
-      onCancel={onCancel}
-      onDelete={onDelete}
-      onMeldPaa={onMeldPaa}
-      onMeldAv={onMeldAv}
-    />
+    <QueryFeil error={bookingError} isFetching={isFetching} onRetry={() => void hentBookinger()}>
+      <BookingContent
+        baner={baner}
+        valgtBaneId={valgtBaneId}
+        onBaneChange={setValgtBaneId}
+        valgtDato={valgtDato}
+        onDatoChange={setValgtDato}
+        slots={slots}
+        isLoading={loadingBooking}
+        currentUser={currentUser}
+        onBook={onBook}
+        onCancel={onCancel}
+        onDelete={onDelete}
+        onMeldPaa={onMeldPaa}
+        onMeldAv={onMeldAv}
+      />
+    </QueryFeil>
   );
 }

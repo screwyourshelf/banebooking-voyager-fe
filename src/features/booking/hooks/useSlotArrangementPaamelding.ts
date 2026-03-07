@@ -22,7 +22,7 @@ export function useSlotArrangementPaamelding(dato: string, baneId: string) {
         toast.success("Du er påmeldt!");
       },
       onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke melde på.");
+        toast.error(err.message);
       },
       onSettled: invalidate,
     }
@@ -36,7 +36,7 @@ export function useSlotArrangementPaamelding(dato: string, baneId: string) {
         toast.success("Du er avmeldt.");
       },
       onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke melde av.");
+        toast.error(err.message);
       },
       onSettled: invalidate,
     }

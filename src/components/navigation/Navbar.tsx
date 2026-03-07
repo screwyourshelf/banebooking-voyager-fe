@@ -85,7 +85,6 @@ export default function Navbar() {
       type: "text" as const,
       inputMode: "email" as const,
       autoComplete: "email" as const,
-      placeholder: "din@epost.no",
       className: "text-sm h-8",
       onKeyDown: stoppDropdownKeybindings,
     }),

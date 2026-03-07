@@ -9,9 +9,11 @@ import AppShell from "@/app/AppShell";
 import { AppFrameSkeleton } from "@/components/loading";
 import { ProtectedRoute } from "@/routes/ProtectedRoute";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { AppErrorBoundary } from "@/components/errors";
 
 const AuthCallbackPage = lazy(() => import("./app/AuthCallbackPage"));
 const SperretPage = lazy(() => import("@/features/sperre/pages/SperretPage"));
+const NotFoundPage = lazy(() => import("@/features/errors/pages/NotFoundPage"));
 
 export default function App() {
   const appRoutes = useMemo(() => flattenRoutes(routeConfig).filter((r) => r.component), []);
@@ -19,50 +21,49 @@ export default function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <BrowserRouter basename={import.meta.env.BASE_URL}>
-        <Suspense fallback={<AppFrameSkeleton />}>
-          <Routes>
-            <Route path="/" element={<Navigate to="/aas-tennisklubb" replace />} />
+        <AppErrorBoundary>
+          <Suspense fallback={<AppFrameSkeleton />}>
+            <Routes>
+              <Route path="/" element={<Navigate to="/aas-tennisklubb" replace />} />
 
-            <Route path=":slug?" element={<SlugGate />}>
-              <Route
-                element={
-                  <AppBoot>
-                    <AppShell />
-                  </AppBoot>
-                }
-              >
-                <Route element={<SperretGuard />}>
-                  {appRoutes.map((route) => {
-                    const Component = route.component!;
+              <Route path=":slug?" element={<SlugGate />}>
+                <Route
+                  element={
+                    <AppBoot>
+                      <AppShell />
+                    </AppBoot>
+                  }
+                >
+                  <Route element={<SperretGuard />}>
+                    {appRoutes.map((route) => {
+                      const Component = route.component!;
 
-                    const element = route.protected ? (
-                      <ProtectedRoute>
+                      const element = route.protected ? (
+                        <ProtectedRoute>
+                          <Component />
+                        </ProtectedRoute>
+                      ) : (
                         <Component />
-                      </ProtectedRoute>
-                    ) : (
-                      <Component />
-                    );
+                      );
 
-                    return route.index ? (
-                      <Route key="index" index element={element} />
-                    ) : (
-                      <Route key={route.fullPath} path={route.fullPath} element={element} />
-                    );
-                  })}
+                      return route.index ? (
+                        <Route key="index" index element={element} />
+                      ) : (
+                        <Route key={route.fullPath} path={route.fullPath} element={element} />
+                      );
+                    })}
+                  </Route>
+
+                  <Route path="sperret" element={<SperretPage />} />
                 </Route>
-
-                <Route path="sperret" element={<SperretPage />} />
               </Route>
-            </Route>
 
-            <Route path="auth/callback" element={<AuthCallbackPage />} />
+              <Route path="auth/callback" element={<AuthCallbackPage />} />
 
-            <Route
-              path="*"
-              element={<div className="p-4 text-center">404 – Fant ikke siden</div>}
-            />
-          </Routes>
-        </Suspense>
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </Suspense>
+        </AppErrorBoundary>
       </BrowserRouter>
     </ThemeProvider>
   );

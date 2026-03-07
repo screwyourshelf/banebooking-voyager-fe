@@ -44,7 +44,7 @@ export function useAdminBrukersperre() {
           queryKey: ["bruker-sperrer", slug, payload.brukerId],
         });
       },
-      onError: (err) => toast.error(err.message ?? "Kunne ikke sperre bruker"),
+      onError: (err) => toast.error(err.message),
       retry: false,
     }
   );
@@ -61,7 +61,7 @@ export function useAdminBrukersperre() {
           queryKey: ["bruker-sperrer", slug, payload.brukerId],
         });
       },
-      onError: (err) => toast.error(err.message ?? "Kunne ikke oppheve sperre"),
+      onError: (err) => toast.error(err.message),
       retry: false,
     }
   );

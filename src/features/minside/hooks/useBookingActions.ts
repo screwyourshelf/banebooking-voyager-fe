@@ -25,7 +25,7 @@ export function useBookingActions() {
     {
       getBody: () => undefined,
       onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke avbestille.");
+        toast.error(err.message);
       },
       onSuccess: () => {
         toast.info("Bookingen er avbestilt.");

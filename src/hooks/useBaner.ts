@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
@@ -29,18 +28,6 @@ export function useBaner(inkluderInaktive = true) {
       requireAuth: false,
     }
   );
-
-  const errorToastetRef = useRef(false);
-  useEffect(() => {
-    if (!banerQuery.error) {
-      errorToastetRef.current = false;
-      return;
-    }
-    if (errorToastetRef.current) return;
-
-    toast.error(banerQuery.error.message ?? "Kunne ikke hente baner");
-    errorToastetRef.current = true;
-  }, [banerQuery.error]);
 
   const opprettBane = useApiMutation<OpprettBaneForespørsel, void>("post", `/klubb/${slug}/baner`, {
     onSuccess: () => {
@@ -78,6 +65,7 @@ export function useBaner(inkluderInaktive = true) {
   return {
     baner: banerQuery.data ?? [],
     isLoading: banerQuery.isLoading,
+    isFetching: banerQuery.isFetching,
     error: banerQuery.error,
     refetch: banerQuery.refetch,
 

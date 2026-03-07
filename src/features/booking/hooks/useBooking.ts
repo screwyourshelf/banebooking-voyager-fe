@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { keepPreviousData, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import type { KalenderSlotRespons } from "@/types";
@@ -41,19 +41,6 @@ export function useBooking(dato: string, baneId: string) {
     }
   );
 
-  // Query-feil toast (en gang per feil)
-  const errorToastetRef = useRef(false);
-  useEffect(() => {
-    if (!bookingerQuery.error) {
-      errorToastetRef.current = false;
-      return;
-    }
-    if (errorToastetRef.current) return;
-
-    toast.error(bookingerQuery.error.message ?? "Kunne ikke hente bookinger");
-    errorToastetRef.current = true;
-  }, [bookingerQuery.error]);
-
   const invalidateAll = () => {
     void queryClient.invalidateQueries({ queryKey });
     void queryClient.invalidateQueries({ queryKey: ["mineBookinger", slug] });
@@ -92,7 +79,7 @@ export function useBooking(dato: string, baneId: string) {
       },
       onError: (err, _vars, ctx) => {
         if (ctx?.previous) queryClient.setQueryData(queryKey, ctx.previous);
-        toast.error(err.message ?? "Kunne ikke booke.");
+        toast.error(err.message);
       },
       onSuccess: (_data, vars) => {
         const tid = `${vars.startTid.slice(0, 2)}-${vars.sluttTid.slice(0, 2)}`;
@@ -135,7 +122,7 @@ export function useBooking(dato: string, baneId: string) {
       },
       onError: (err, _vars, ctx) => {
         if (ctx?.previous) queryClient.setQueryData(queryKey, ctx.previous);
-        toast.error(err.message ?? "Kunne ikke avbestille.");
+        toast.error(err.message);
       },
       onSuccess: () => {
         toast.info("Bookingen er avbestilt.");
@@ -177,7 +164,7 @@ export function useBooking(dato: string, baneId: string) {
       },
       onError: (err, _vars, ctx) => {
         if (ctx?.previous) queryClient.setQueryData(queryKey, ctx.previous);
-        toast.error(err.message ?? "Kunne ikke slette booking.");
+        toast.error(err.message);
       },
       onSuccess: () => {
         toast.success("Booking slettet");
@@ -193,6 +180,7 @@ export function useBooking(dato: string, baneId: string) {
     slots: bookingerQuery.data ?? [],
     isLoading: bookingerQuery.isLoading,
     isFetching: bookingerQuery.isFetching,
+    error: bookingerQuery.error,
     apenSlotTid,
     setApenSlotTid,
 

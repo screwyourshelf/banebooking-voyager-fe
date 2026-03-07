@@ -36,7 +36,7 @@ export function useAdminBrukere() {
         toast.success("Bruker oppdatert");
         await queryClient.invalidateQueries({ queryKey: brukereKey });
       },
-      onError: (err) => toast.error(err.message ?? "Kunne ikke oppdatere bruker"),
+      onError: (err) => toast.error(err.message),
       retry: false,
     }
   );
@@ -58,7 +58,7 @@ export function useAdminBrukere() {
         toast.success("Bruker slettet");
         await queryClient.invalidateQueries({ queryKey: brukereKey });
       },
-      onError: (err) => toast.error(err.message ?? "Kunne ikke slette bruker"),
+      onError: (err) => toast.error(err.message),
       retry: false,
     }
   );
@@ -70,11 +70,12 @@ export function useAdminBrukere() {
   return {
     brukere: brukereQuery.data ?? [],
     laster: brukereQuery.isLoading,
+    isFetching: brukereQuery.isFetching,
     oppdaterLaster: oppdaterMutation.isPending,
     slettLaster: slettMutation.isPending,
     oppdater,
     slett,
     hentBrukere: brukereQuery.refetch,
-    error: brukereQuery.error?.message ?? null,
+    error: brukereQuery.error,
   };
 }

@@ -13,6 +13,7 @@ import {
 } from "@/features/brukere/components";
 
 import type { RolleType, BrukerRespons, EditState } from "@/features/brukere/types";
+import { QueryFeil } from "@/components/errors";
 import BrukereListeContent from "./BrukereListeContent";
 import RedigerBrukerDialog from "./RedigerBrukerDialog";
 
@@ -27,10 +28,13 @@ export default function BrukereListeView() {
   const {
     brukere,
     laster: lasterListe,
+    isFetching: brukereFetching,
     oppdater,
     oppdaterLaster,
     slett,
     slettLaster,
+    error: brukereError,
+    hentBrukere,
   } = useAdminBrukere();
 
   const { sperr, opphev, sperrLaster, opphevLaster } = useAdminBrukersperre();
@@ -113,66 +117,68 @@ export default function BrukereListeView() {
   }
 
   return (
-    <>
-      <BrukereListeContent
-        query={query}
-        onQueryChange={setQuery}
-        visSlettede={visSlettede}
-        onVisSlettedeChange={setVisSlettede}
-        rolleFilter={rolleFilter}
-        onToggleRolle={toggleRolle}
-        filtrerteBrukere={filtrerteBrukere}
-        lasterListe={lasterListe}
-        currentBrukerId={bruker?.id}
-        onRedigerBruker={åpenRedigering}
-        renderSlettAction={(b) => {
-          const kanSlette = harHandling(b.kapabiliteter, Kapabiliteter.brukere.slett);
-          if (!kanSlette) return null;
+    <QueryFeil error={brukereError} isFetching={brukereFetching} onRetry={() => void hentBrukere()}>
+      <>
+        <BrukereListeContent
+          query={query}
+          onQueryChange={setQuery}
+          visSlettede={visSlettede}
+          onVisSlettedeChange={setVisSlettede}
+          rolleFilter={rolleFilter}
+          onToggleRolle={toggleRolle}
+          filtrerteBrukere={filtrerteBrukere}
+          lasterListe={lasterListe}
+          currentBrukerId={bruker?.id}
+          onRedigerBruker={åpenRedigering}
+          renderSlettAction={(b) => {
+            const kanSlette = harHandling(b.kapabiliteter, Kapabiliteter.brukere.slett);
+            if (!kanSlette) return null;
 
-          return (
-            <SlettBrukerDialog
-              brukerEpost={b.epost}
-              onSlett={handleSlettBruker(b.id)}
-              isLoading={slettLaster}
-            />
-          );
-        }}
-        renderSperrAction={(b) => {
-          const kanSperr = harHandling(b.kapabiliteter, Kapabiliteter.brukere.sperr);
-          if (!kanSperr) return null;
+            return (
+              <SlettBrukerDialog
+                brukerEpost={b.epost}
+                onSlett={handleSlettBruker(b.id)}
+                isLoading={slettLaster}
+              />
+            );
+          }}
+          renderSperrAction={(b) => {
+            const kanSperr = harHandling(b.kapabiliteter, Kapabiliteter.brukere.sperr);
+            if (!kanSperr) return null;
 
-          return (
-            <SperrBrukerDialog
-              brukerEpost={b.epost}
-              onSperr={(data) => sperr(b.id, data)}
-              isLoading={sperrLaster}
-            />
-          );
-        }}
-        onÅpneSperreHistorikk={åpneSperreHistorikk}
-      />
-
-      {sperreBruker ? (
-        <SperreHistorikkDialog
-          brukerId={sperreBruker.id}
-          brukerEpost={sperreBruker.epost}
-          kanOppheve={harHandling(sperreBruker.kapabiliteter, Kapabiliteter.brukere.opphevSperre)}
-          onOpphev={handleOpphev(sperreBruker.id)}
-          opphevLaster={opphevLaster}
-          onClose={() => setSperreBruker(null)}
+            return (
+              <SperrBrukerDialog
+                brukerEpost={b.epost}
+                onSperr={(data) => sperr(b.id, data)}
+                isLoading={sperrLaster}
+              />
+            );
+          }}
+          onÅpneSperreHistorikk={åpneSperreHistorikk}
         />
-      ) : null}
 
-      {aktivBruker ? (
-        <RedigerBrukerDialog
-          aktivBruker={aktivBruker}
-          edit={edit}
-          onEditChange={(update) => setEdit((s) => ({ ...s, ...update }))}
-          onClose={() => setAktivBruker(null)}
-          onSave={lagreEndringer}
-          isSaving={oppdaterLaster}
-        />
-      ) : null}
-    </>
+        {sperreBruker ? (
+          <SperreHistorikkDialog
+            brukerId={sperreBruker.id}
+            brukerEpost={sperreBruker.epost}
+            kanOppheve={harHandling(sperreBruker.kapabiliteter, Kapabiliteter.brukere.opphevSperre)}
+            onOpphev={handleOpphev(sperreBruker.id)}
+            opphevLaster={opphevLaster}
+            onClose={() => setSperreBruker(null)}
+          />
+        ) : null}
+
+        {aktivBruker ? (
+          <RedigerBrukerDialog
+            aktivBruker={aktivBruker}
+            edit={edit}
+            onEditChange={(update) => setEdit((s) => ({ ...s, ...update }))}
+            onClose={() => setAktivBruker(null)}
+            onSave={lagreEndringer}
+            isSaving={oppdaterLaster}
+          />
+        ) : null}
+      </>
+    </QueryFeil>
   );
 }

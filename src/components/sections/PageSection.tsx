@@ -36,7 +36,7 @@ export default function PageSection({
       )}
     >
       {showHeader ? (
-        <div className="px-2">
+        <div className="px-1">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               {title ? (
@@ -55,7 +55,7 @@ export default function PageSection({
         </div>
       ) : null}
 
-      <div className={cn("px-2", showHeader ? "mt-3" : "", gap)}>{children}</div>
+      <div className={cn("px-1", showHeader ? "mt-3" : "", gap)}>{children}</div>
     </section>
   );
 }

@@ -22,7 +22,7 @@ export function useAvlysArrangement() {
         void queryClient.invalidateQueries({ queryKey: ["arrangementer-admin", slug] });
       },
       onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke avlyse arrangement.");
+        toast.error(err.message);
       },
     }
   );

@@ -14,5 +14,5 @@ const widthClass: Record<NonNullable<PageProps["width"]>, string> = {
 };
 
 export default function Page({ children, className, width = "md" }: PageProps) {
-  return <div className={cn(widthClass[width], "mx-auto px-1 py-2", className)}>{children}</div>;
+  return <div className={cn(widthClass[width], "mx-auto py-2", className)}>{children}</div>;
 }

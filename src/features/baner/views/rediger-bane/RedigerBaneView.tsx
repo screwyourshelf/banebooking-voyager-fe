@@ -3,6 +3,7 @@ import { useBaner } from "@/hooks/useBaner";
 import { useKlubb } from "@/hooks/useKlubb";
 
 import { FormSkeleton } from "@/components/loading";
+import { QueryFeil } from "@/components/errors";
 import RedigerBaneContent from "./RedigerBaneContent";
 import { loadValgtBaneId, saveValgtBaneId } from "./storage";
 import type { BaneRespons, OppdaterBaneBookingInnstillingerForespørsel } from "@/types";
@@ -59,7 +60,7 @@ function tilFormData(bane: BaneRespons): BaneFormData {
 }
 
 export default function RedigerBaneView() {
-  const { baner, isLoading, oppdaterBane, oppdaterBookingInnstillinger } = useBaner(true);
+  const { baner, isLoading, isFetching, error, refetch, oppdaterBane, oppdaterBookingInnstillinger } = useBaner(true);
   const { data: klubb, isLoading: loadingKlubb } = useKlubb();
 
   const [redigerte, setRedigerte] = useState<Record<string, BaneFormData>>({});
@@ -343,7 +344,8 @@ export default function RedigerBaneView() {
   if (isLoading || loadingKlubb) return <FormSkeleton />;
 
   return (
-    <RedigerBaneContent
+    <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
+      <RedigerBaneContent
       baner={baner}
       valgtBaneId={valgtBaneId}
       onChangeValgtBaneId={setValgtBaneId}
@@ -368,5 +370,6 @@ export default function RedigerBaneView() {
       isSaving={isSaving}
       onSubmit={() => void onSubmit()}
     />
+    </QueryFeil>
   );
 }

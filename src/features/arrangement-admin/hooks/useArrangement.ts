@@ -97,7 +97,7 @@ export function useArrangement() {
         // eller (hvis dere fortsatt bruker den gamle):
         // await queryClient.invalidateQueries({ queryKey: ["arrangementer", slug] });
       },
-      onError: (err) => toast.error(err.message ?? "Feil ved oppretting"),
+      onError: (err) => toast.error(err.message),
       retry: false,
     }
   );
