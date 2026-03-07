@@ -1,1 +1,0 @@
-import{j as o}from"./react-a1TbB9O6.js";import{R as c}from"./RowList-D-BinoHm.js";import{S as f}from"./switch-BYKnGsJX.js";function n({title:t,description:r,checked:s,onCheckedChange:i,disabled:m=!1,className:a,density:p="compact"}){return o.jsx(c,{title:t,description:r,density:p,className:a,right:o.jsx(f,{checked:s,onCheckedChange:i,disabled:m})})}export{n as S};

@@ -1,0 +1,1 @@
+import{j as a}from"./react-DXlgs-Bd.js";import{S as e}from"./index-CubAqJax.js";function m(){return a.jsxs("div",{className:"animate__animated animate__fadeIn animate__faster space-y-4",children:[a.jsx(e,{className:"h-6 w-3/4"}),a.jsx(e,{className:"h-4 w-1/2"}),a.jsx(e,{className:"h-20 w-full"})]})}export{m as L};
