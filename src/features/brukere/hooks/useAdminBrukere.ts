@@ -49,11 +49,31 @@ export function useAdminBrukere() {
     });
   };
 
+  // DELETE: slett bruker
+  const slettMutation = useApiMutation<{ brukerId: string }, void>(
+    "delete",
+    ({ brukerId }) => `/klubb/${slug}/bruker/admin/bruker/${brukerId}`,
+    {
+      onSuccess: async () => {
+        toast.success("Bruker slettet");
+        await queryClient.invalidateQueries({ queryKey: brukereKey });
+      },
+      onError: (err) => toast.error(err.message ?? "Kunne ikke slette bruker"),
+      retry: false,
+    }
+  );
+
+  const slett = async (brukerId: string) => {
+    await slettMutation.mutateAsync({ brukerId });
+  };
+
   return {
     brukere: brukereQuery.data ?? [],
     laster: brukereQuery.isLoading,
     oppdaterLaster: oppdaterMutation.isPending,
+    slettLaster: slettMutation.isPending,
     oppdater,
+    slett,
     hentBrukere: brukereQuery.refetch,
     error: brukereQuery.error?.message ?? null,
   };

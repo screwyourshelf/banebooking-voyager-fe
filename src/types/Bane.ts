@@ -15,6 +15,7 @@ export type BaneRespons = {
   navn: string;
   beskrivelse: string;
   aktiv: boolean;
+  sortering: number;
   kapabiliteter: string[];
   bookingInnstillinger: BookingRegelRespons;
   harOverstyring: boolean;
@@ -25,12 +26,14 @@ export type BaneRespons = {
 export type OpprettBaneForespørsel = {
   navn: string;
   beskrivelse?: string;
+  sortering?: number;
 };
 
 export type OppdaterBaneForespørsel = {
   navn: string;
   beskrivelse?: string;
   aktiv: boolean;
+  sortering?: number;
 };
 
 export type OppdaterBaneBookingInnstillingerForespørsel = {

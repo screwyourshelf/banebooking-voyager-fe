@@ -11,6 +11,7 @@ type BaneFormData = {
   navn: string;
   beskrivelse: string;
   aktiv: boolean;
+  sortering: string;
 };
 
 type OverstyringFormData = {
@@ -46,6 +47,15 @@ function timeToHour(t: string): number {
 
 function hourToTime(h: number): string {
   return `${String(h).padStart(2, "0")}:00`;
+}
+
+function tilFormData(bane: BaneRespons): BaneFormData {
+  return {
+    navn: bane.navn,
+    beskrivelse: bane.beskrivelse,
+    aktiv: bane.aktiv,
+    sortering: String(bane.sortering),
+  };
 }
 
 export default function RedigerBaneView() {
@@ -100,7 +110,10 @@ export default function RedigerBaneView() {
     setRedigerte((prev) => ({
       ...prev,
       [id]: {
-        ...(prev[id] ?? (baner.find((b) => b.id === id) as BaneFormData)),
+        ...(prev[id] ??
+          (baner.find((b) => b.id === id)
+            ? tilFormData(baner.find((b) => b.id === id)!)
+            : undefined)),
         [felt]: verdi,
       },
     }));
@@ -108,13 +121,7 @@ export default function RedigerBaneView() {
 
   const draft: BaneFormData | null = useMemo(() => {
     if (!valgtBane) return null;
-    return (
-      redigerteVerdier ?? {
-        navn: valgtBane.navn,
-        beskrivelse: valgtBane.beskrivelse,
-        aktiv: valgtBane.aktiv,
-      }
-    );
+    return redigerteVerdier ?? (valgtBane ? tilFormData(valgtBane) : null);
   }, [valgtBane, redigerteVerdier]);
 
   const errors = useMemo(() => {
@@ -233,7 +240,8 @@ export default function RedigerBaneView() {
     return !(
       redigerteVerdier.navn === valgtBane.navn &&
       redigerteVerdier.beskrivelse === valgtBane.beskrivelse &&
-      redigerteVerdier.aktiv === valgtBane.aktiv
+      redigerteVerdier.aktiv === valgtBane.aktiv &&
+      redigerteVerdier.sortering === String(valgtBane.sortering)
     );
   }, [valgtBane, redigerteVerdier]);
 
@@ -278,7 +286,16 @@ export default function RedigerBaneView() {
       if (baneDirty) {
         const dto = redigerte[valgtBaneId];
         if (dto) {
-          await oppdaterBane.mutateAsync({ id: valgtBaneId, dto });
+          const sortering = parseInt(dto.sortering, 10);
+          await oppdaterBane.mutateAsync({
+            id: valgtBaneId,
+            dto: {
+              navn: dto.navn,
+              beskrivelse: dto.beskrivelse,
+              aktiv: dto.aktiv,
+              sortering: Number.isFinite(sortering) ? sortering : 0,
+            },
+          });
         }
       }
 

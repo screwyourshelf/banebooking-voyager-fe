@@ -3,6 +3,7 @@ import { lazy, Suspense, useMemo } from "react";
 
 import SlugGate from "@/routes/SlugGate";
 import { routeConfig, flattenRoutes } from "@/routes/routeConfig";
+import { SperretGuard } from "@/routes/SperretGuard";
 import AppBoot from "@/app/AppBoot";
 import AppShell from "@/app/AppShell";
 import { AppFrameSkeleton } from "@/components/loading";
@@ -10,6 +11,7 @@ import { ProtectedRoute } from "@/routes/ProtectedRoute";
 import { ThemeProvider } from "@/components/ThemeProvider";
 
 const AuthCallbackPage = lazy(() => import("./app/AuthCallbackPage"));
+const SperretPage = lazy(() => import("@/features/sperre/pages/SperretPage"));
 
 export default function App() {
   const appRoutes = useMemo(() => flattenRoutes(routeConfig).filter((r) => r.component), []);
@@ -29,23 +31,27 @@ export default function App() {
                   </AppBoot>
                 }
               >
-                {appRoutes.map((route) => {
-                  const Component = route.component!;
+                <Route element={<SperretGuard />}>
+                  {appRoutes.map((route) => {
+                    const Component = route.component!;
 
-                  const element = route.protected ? (
-                    <ProtectedRoute>
+                    const element = route.protected ? (
+                      <ProtectedRoute>
+                        <Component />
+                      </ProtectedRoute>
+                    ) : (
                       <Component />
-                    </ProtectedRoute>
-                  ) : (
-                    <Component />
-                  );
+                    );
 
-                  return route.index ? (
-                    <Route key="index" index element={element} />
-                  ) : (
-                    <Route key={route.fullPath} path={route.fullPath} element={element} />
-                  );
-                })}
+                    return route.index ? (
+                      <Route key="index" index element={element} />
+                    ) : (
+                      <Route key={route.fullPath} path={route.fullPath} element={element} />
+                    );
+                  })}
+                </Route>
+
+                <Route path="sperret" element={<SperretPage />} />
               </Route>
             </Route>
 

@@ -9,6 +9,41 @@ export interface BrukerRespons {
   vilkårAkseptertDato?: string | null;
   vilkårVersjon?: string | null;
   kapabiliteter: string[];
+  erSperret?: boolean;
+  antallAktiveSperrer?: number;
+}
+
+export interface BrukerSperreRespons {
+  id: string;
+  brukerId: string;
+  klubbId: string | null;
+  klubbNavn: string | null;
+  type: string;
+  aktivFra: string;
+  aktivTil: string | null;
+  årsak: string;
+  opprettetAv: string;
+  opprettetTidspunkt: string;
+  opphevtAv: string | null;
+  opphevtTidspunkt: string | null;
+  erAktiv: boolean;
+}
+
+export interface BrukerSperrerRespons {
+  brukerId: string;
+  antallAktive: number;
+  sperrer: BrukerSperreRespons[];
+}
+
+export interface SperrBrukerForespørsel {
+  type: string;
+  årsak: string;
+  aktivTil: string | null;
+}
+
+export interface OpphevSperreRespons {
+  sperreId: string;
+  opphevtTidspunkt: string;
 }
 
 // Requests

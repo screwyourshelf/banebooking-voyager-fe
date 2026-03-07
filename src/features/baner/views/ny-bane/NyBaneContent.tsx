@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 type FormState = {
   navn: string;
   beskrivelse: string;
+  sortering: string;
 };
 
 type Props = {

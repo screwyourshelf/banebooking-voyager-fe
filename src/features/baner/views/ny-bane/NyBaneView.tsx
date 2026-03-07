@@ -6,6 +6,7 @@ import NyBaneContent from "./NyBaneContent";
 type FormState = {
   navn: string;
   beskrivelse: string;
+  sortering: string;
 };
 
 function validateNavn(navn: string): string | null {
@@ -17,7 +18,7 @@ function validateNavn(navn: string): string | null {
 export default function NyBaneView() {
   const { opprettBane } = useBaner();
 
-  const [form, setForm] = useState<FormState>({ navn: "", beskrivelse: "" });
+  const [form, setForm] = useState<FormState>({ navn: "", beskrivelse: "", sortering: "0" });
   const [touched, setTouched] = useState<{ navn: boolean }>({ navn: false });
   const errors = useMemo(() => ({ navn: validateNavn(form.navn) }), [form.navn]);
 
@@ -45,11 +46,16 @@ export default function NyBaneView() {
     if (!isValid) return;
 
     const navn = form.navn.trim();
+    const sortering = parseInt(form.sortering, 10);
 
     try {
-      await opprettBane.mutateAsync({ navn, beskrivelse: form.beskrivelse });
+      await opprettBane.mutateAsync({
+        navn,
+        beskrivelse: form.beskrivelse,
+        sortering: Number.isFinite(sortering) ? sortering : 0,
+      });
 
-      setForm({ navn: "", beskrivelse: "" });
+      setForm({ navn: "", beskrivelse: "", sortering: "0" });
       setTouched({ navn: false });
     } catch {
       // Backend-feil håndteres i hook (toast)

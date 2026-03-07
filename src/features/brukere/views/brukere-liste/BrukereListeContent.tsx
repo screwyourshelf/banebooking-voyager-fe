@@ -13,10 +13,11 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
 import { Field } from "@/components/ui/field";
-import { Mail, User, Shield } from "lucide-react";
+import { Mail, User, Shield, Ban } from "lucide-react";
 
 import type { BrukerRespons, RolleType } from "@/features/brukere/types";
 import { ROLLER } from "@/features/brukere/types";
+import type { ReactNode } from "react";
 
 type Props = {
   // Filter state
@@ -34,6 +35,9 @@ type Props = {
 
   // Actions
   onRedigerBruker: (bruker: BrukerRespons) => void;
+  renderSlettAction?: (bruker: BrukerRespons) => ReactNode;
+  renderSperrAction?: (bruker: BrukerRespons) => ReactNode;
+  onÅpneSperreHistorikk?: (bruker: BrukerRespons) => void;
 };
 
 function erSlettetEpost(epost?: string | null) {
@@ -52,6 +56,9 @@ export default function BrukereListeContent({
   lasterListe,
   currentBrukerId,
   onRedigerBruker,
+  renderSlettAction,
+  renderSperrAction,
+  onÅpneSperreHistorikk,
 }: Props) {
   const PAGE_SIZE = 20;
   const [synligAntall, setSynligAntall] = useState(PAGE_SIZE);
@@ -140,6 +147,11 @@ export default function BrukereListeContent({
                                 Slettet
                               </Badge>
                             )}
+                            {b.erSperret && (
+                              <Badge variant="destructive" className="text-xs">
+                                Sperret
+                              </Badge>
+                            )}
                           </div>
                           {b.visningsnavn && (
                             <span className="text-xs text-muted-foreground">{b.visningsnavn}</span>
@@ -163,10 +175,39 @@ export default function BrukereListeContent({
                             <AccordionDetailRow icon={Shield} label="Rolle" colSpan={2}>
                               {rolle}
                             </AccordionDetailRow>
+                            {b.antallAktiveSperrer !== undefined && (
+                              <AccordionDetailRow icon={Ban} label="Aktive sperrer" colSpan={2}>
+                                {onÅpneSperreHistorikk ? (
+                                  <button
+                                    type="button"
+                                    className="hover:underline underline-offset-2"
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      onÅpneSperreHistorikk(b);
+                                    }}
+                                  >
+                                    {b.antallAktiveSperrer === 0 ? (
+                                      <span className="text-muted-foreground italic">Ingen</span>
+                                    ) : (
+                                      <span className="text-destructive">
+                                        {b.antallAktiveSperrer}
+                                      </span>
+                                    )}
+                                  </button>
+                                ) : b.antallAktiveSperrer === 0 ? (
+                                  <span className="text-muted-foreground italic">Ingen</span>
+                                ) : (
+                                  <span className="text-destructive">{b.antallAktiveSperrer}</span>
+                                )}
+                              </AccordionDetailRow>
+                            )}
                           </AccordionDetailGrid>
 
                           {kanRedigere && (
-                            <AccordionActions>
+                            <AccordionActions className="flex-wrap gap-2">
+                              {renderSlettAction?.(b)}
+                              {renderSperrAction?.(b)}
+
                               <Button
                                 type="button"
                                 aria-label="Rediger bruker"
@@ -176,6 +217,7 @@ export default function BrukereListeContent({
                                   e.stopPropagation();
                                   onRedigerBruker(b);
                                 }}
+                                className="flex items-center gap-2 text-sm"
                               >
                                 Rediger
                               </Button>

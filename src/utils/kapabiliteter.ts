@@ -22,5 +22,9 @@ export const Kapabiliteter = {
   },
   brukere: {
     admin: "brukere:admin",
+    slett: "bruker:slett",
+    sperr: "bruker:sperr",
+    opphevSperre: "bruker:opphevSperre",
+    seSperre: "bruker:seSperre",
   },
 } as const;

@@ -19,6 +19,7 @@ type BaneFormData = {
   navn: string;
   beskrivelse: string;
   aktiv: boolean;
+  sortering: string;
 };
 
 type OverstyringFormData = {
@@ -89,6 +90,7 @@ export default function RedigerBaneContent({
   const navn = redigerteVerdier?.navn ?? valgtBane?.navn ?? "";
   const beskrivelse = redigerteVerdier?.beskrivelse ?? valgtBane?.beskrivelse ?? "";
   const aktiv = redigerteVerdier?.aktiv ?? valgtBane?.aktiv ?? false;
+  const sortering = redigerteVerdier?.sortering ?? String(valgtBane?.sortering ?? 0);
 
   return (
     <FormLayout
@@ -146,6 +148,19 @@ export default function RedigerBaneContent({
                       disabled={isSaving}
                       value={beskrivelse}
                       onChange={(e) => onChangeFelt("beskrivelse", e.target.value)}
+                      autoComplete="off"
+                    />
+                  </Field>
+                </Row>
+
+                <Row title="Sortering" description="Lave tall vises først. Standard: 0.">
+                  <Field>
+                    <Input
+                      id="sortering"
+                      type="number"
+                      disabled={isSaving}
+                      value={sortering}
+                      onChange={(e) => onChangeFelt("sortering", e.target.value)}
                       autoComplete="off"
                     />
                   </Field>
