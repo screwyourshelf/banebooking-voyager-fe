@@ -1,1 +1,0 @@
-import{j as e}from"./react-BFibbCh6.js";import{g as n}from"./index-BS1mRqq2.js";const o={md:"max-w-screen-md",lg:"max-w-screen-lg",full:"max-w-none"};function x({children:m,className:s,width:a="md"}){return e.jsx("div",{className:n(o[a],"mx-auto py-2",s),children:m})}export{x as P};
