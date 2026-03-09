@@ -19,6 +19,7 @@ const loadMinSidePage = () => import("@/features/minside/pages/MinSidePage");
 const loadMineBookingerPage = () => import("@/features/minside/pages/MineBookingerPage");
 const loadArrangementerPage = () => import("@/features/arrangementer/pages/ArrangementerPage");
 const loadArrangementAdminPage = () => import("@/features/arrangement-admin/pages/ArrangementPage");
+const loadTurneringPage = () => import("@/features/turnering/pages/TurneringPage");
 
 const loadKlubbPage = () => import("@/features/klubb/pages/KlubbPage");
 const loadBanerPage = () => import("@/features/baner/pages/BanerPage");
@@ -35,6 +36,7 @@ const MinSidePage = lazy(loadMinSidePage);
 const MineBookingerPage = lazy(loadMineBookingerPage);
 const ArrangementerPage = lazy(loadArrangementerPage);
 const ArrangementAdminPage = lazy(loadArrangementAdminPage);
+const TurneringPage = lazy(loadTurneringPage);
 
 const KlubbPage = lazy(loadKlubbPage);
 const BanerPage = lazy(loadBanerPage);
@@ -92,6 +94,14 @@ export const routeConfig: RouteConfig[] = [
     protected: true,
     component: ArrangementAdminPage,
     loader: loadArrangementAdminPage,
+  },
+
+  {
+    path: "turnering/:turneringId",
+    breadcrumb: "Turnering",
+    protected: true,
+    component: TurneringPage,
+    loader: loadTurneringPage,
   },
 
   {

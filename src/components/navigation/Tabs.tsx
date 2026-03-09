@@ -36,7 +36,7 @@ export default function Tabs({
 
   return (
     <RadixTabs value={resolvedValue} defaultValue={resolvedDefault} onValueChange={onValueChange}>
-      <TabsList className={`flex flex-wrap gap-2 mb-2 ${className}`}>
+      <TabsList className={`flex flex-wrap gap-2 mb-2 h-auto ${className}`}>
         {items.map((item) => (
           <TabsTrigger key={item.value} value={item.value}>
             {item.label}
@@ -66,7 +66,7 @@ export function TabsLazyMount({ items, value, onValueChange, className = "" }: T
 
   return (
     <RadixTabs value={activeItem.value} onValueChange={onValueChange}>
-      <TabsList className={`flex flex-wrap gap-2 mb-2 ${className}`}>
+      <TabsList className={`flex flex-wrap gap-2 mb-2 h-auto ${className}`}>
         {items.map((item) => (
           <TabsTrigger key={item.value} value={item.value}>
             {item.label}

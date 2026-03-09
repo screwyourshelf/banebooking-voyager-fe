@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList } from "@/components/rows";
 import SwitchRow from "@/components/rows/SwitchRow";
@@ -22,6 +23,8 @@ import {
   CalendarPlus,
   XCircle,
   Ban,
+  Trophy,
+  Settings,
 } from "lucide-react";
 import { SlettArrangementDialog } from "@/features/arrangement-admin/components";
 import PaameldteDialog from "./PaameldteDialog";
@@ -42,6 +45,15 @@ type Props = {
   defaultArrangementId?: string;
 };
 
+const TURNERING_STATUS_TEKST: Record<string, string> = {
+  Oppsett: "Påmelding åpner snart",
+  PaameldingAapen: "Påmelding åpen",
+  PaameldingLukket: "Påmelding lukket",
+  DrawPublisert: "Draw publisert",
+  Pagaar: "Turnering pågår",
+  Avsluttet: "Avsluttet",
+};
+
 function datoTekst(arr: ArrangementRespons) {
   return arr.startDato === arr.sluttDato
     ? formatDatoKort(arr.startDato)
@@ -58,6 +70,7 @@ export default function ArrangementerContent({
   defaultArrangementId,
 }: Props) {
   const slug = useSlug();
+  const navigate = useNavigate();
   const PAGE_SIZE = 10;
   const [synligAntall, setSynligAntall] = useState(PAGE_SIZE);
 
@@ -206,62 +219,111 @@ export default function ArrangementerContent({
                             </PaameldteDialog>
                           </AccordionDetailRow>
                         )}
+                        {arr.turneringStatus !== null && (
+                          <AccordionDetailRow icon={Trophy} label="Turnering" colSpan={2}>
+                            {TURNERING_STATUS_TEKST[arr.turneringStatus] ?? arr.turneringStatus}
+                          </AccordionDetailRow>
+                        )}
                       </AccordionDetailGrid>
 
-                      {!arr.erPassert && arr.kapabiliteter.length > 0 && (
+                      {(harHandling(arr.kapabiliteter, Kapabiliteter.arrangement.seTurnering) ||
+                        harHandling(
+                          arr.kapabiliteter,
+                          Kapabiliteter.arrangement.administrerTurnering
+                        ) ||
+                        (!arr.erPassert &&
+                          (harHandling(arr.kapabiliteter, Kapabiliteter.arrangement.kopierLenke) ||
+                            harHandling(arr.kapabiliteter, Kapabiliteter.arrangement.avlys) ||
+                            harHandling(arr.kapabiliteter, Kapabiliteter.arrangement.meldAv) ||
+                            harHandling(
+                              arr.kapabiliteter,
+                              Kapabiliteter.arrangement.meldPaa
+                            )))) && (
                         <AccordionActions className="flex-wrap gap-2">
                           {harHandling(
                             arr.kapabiliteter,
-                            Kapabiliteter.arrangement.kopierLenke
-                          ) && (
+                            Kapabiliteter.arrangement.administrerTurnering
+                          ) ? (
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => kopierLenke(arr.id)}
+                              onClick={() => navigate(`/${slug}/turnering/${arr.turneringId}`)}
                               className="flex items-center gap-2 text-sm"
                             >
-                              <Link className="h-4 w-4" />
-                              Kopier lenke
+                              <Settings className="h-4 w-4" />
+                              Administrer turnering
                             </Button>
-                          )}
-                          {harHandling(arr.kapabiliteter, Kapabiliteter.arrangement.avlys) && (
-                            <SlettArrangementDialog
-                              tittel={arr.tittel}
-                              onSlett={() => onAvlys(arr).then(() => {})}
-                              trigger={
-                                <Button
-                                  variant="destructive"
-                                  size="sm"
-                                  className="flex items-center gap-2 text-sm"
-                                >
-                                  <Ban className="size-4" />
-                                  Avlys
-                                </Button>
-                              }
-                            />
-                          )}
-                          {harHandling(arr.kapabiliteter, Kapabiliteter.arrangement.meldAv) && (
+                          ) : harHandling(
+                              arr.kapabiliteter,
+                              Kapabiliteter.arrangement.seTurnering
+                            ) ? (
                             <Button
                               variant="outline"
                               size="sm"
-                              onClick={() => onMeldAv(arr)}
+                              onClick={() => navigate(`/${slug}/turnering/${arr.turneringId}`)}
                               className="flex items-center gap-2 text-sm"
                             >
-                              <XCircle className="size-4" />
-                              Meld meg av
+                              <Trophy className="h-4 w-4" />
+                              Se turnering
                             </Button>
-                          )}
-                          {harHandling(arr.kapabiliteter, Kapabiliteter.arrangement.meldPaa) && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => onMeldPaa(arr)}
-                              className="flex items-center gap-2 text-sm"
-                            >
-                              <CalendarPlus className="size-4" />
-                              Meld meg på
-                            </Button>
-                          )}
+                          ) : null}
+                          {!arr.erPassert &&
+                            harHandling(
+                              arr.kapabiliteter,
+                              Kapabiliteter.arrangement.kopierLenke
+                            ) && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => kopierLenke(arr.id)}
+                                className="flex items-center gap-2 text-sm"
+                              >
+                                <Link className="h-4 w-4" />
+                                Kopier lenke
+                              </Button>
+                            )}
+                          {!arr.erPassert &&
+                            harHandling(arr.kapabiliteter, Kapabiliteter.arrangement.avlys) && (
+                              <SlettArrangementDialog
+                                tittel={arr.tittel}
+                                harTurnering={arr.turneringId !== null}
+                                onSlett={() => onAvlys(arr).then(() => {})}
+                                trigger={
+                                  <Button
+                                    variant="destructive"
+                                    size="sm"
+                                    className="flex items-center gap-2 text-sm"
+                                  >
+                                    <Ban className="size-4" />
+                                    Avlys
+                                  </Button>
+                                }
+                              />
+                            )}
+                          {!arr.erPassert &&
+                            harHandling(arr.kapabiliteter, Kapabiliteter.arrangement.meldAv) && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => onMeldAv(arr)}
+                                className="flex items-center gap-2 text-sm"
+                              >
+                                <XCircle className="size-4" />
+                                Meld meg av
+                              </Button>
+                            )}
+                          {!arr.erPassert &&
+                            harHandling(arr.kapabiliteter, Kapabiliteter.arrangement.meldPaa) && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => onMeldPaa(arr)}
+                                className="flex items-center gap-2 text-sm"
+                              >
+                                <CalendarPlus className="size-4" />
+                                Meld meg på
+                              </Button>
+                            )}
                         </AccordionActions>
                       )}
                     </div>

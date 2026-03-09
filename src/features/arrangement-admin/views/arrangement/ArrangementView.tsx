@@ -3,6 +3,7 @@ import { toast } from "sonner";
 
 import { FormSkeleton } from "@/components/loading";
 import { useArrangement } from "../../hooks/useArrangement";
+import { useOpprettTurnering } from "@/features/turnering/hooks/turnering/useOpprettTurnering";
 
 import ArrangementContent from "./ArrangementContent";
 import {
@@ -43,6 +44,8 @@ export default function ArrangementView() {
     isLoadingForhandsvisning,
   } = useArrangement();
 
+  const turneringMutation = useOpprettTurnering();
+
   const [datoFra, setDatoFra] = useState<Date>(new Date());
   const [datoTil, setDatoTil] = useState<Date>(new Date());
 
@@ -57,6 +60,7 @@ export default function ArrangementView() {
   const [kategori, setKategori] = useState<ArrangementKategori>("Annet");
   const [beskrivelse, setBeskrivelse] = useState("");
   const [tillaterPaamelding, setTillaterPaamelding] = useState(false);
+  const [opprettTurnering, setOpprettTurnering] = useState(false);
 
   const [dialogOpen, setDialogOpen] = useState(false);
 
@@ -192,9 +196,12 @@ export default function ArrangementView() {
   const håndterOpprett = async () => {
     const dto = dtoOrNull();
     if (!dto) return;
-    await opprett(dto);
+    const { result } = await opprett(dto);
     clearForhandsvisning();
     setDialogOpen(false);
+    if (opprettTurnering) {
+      turneringMutation.mutate({ arrangementId: result.arrangementId });
+    }
   };
 
   // ───────── Per-gruppe toggle-handlers ─────────
@@ -237,6 +244,8 @@ export default function ArrangementView() {
       onChangeBeskrivelse={setBeskrivelse}
       tillaterPaamelding={tillaterPaamelding}
       onChangeTillaterPaamelding={setTillaterPaamelding}
+      tillaterTurnering={opprettTurnering}
+      onChangeTillaterTurnering={setOpprettTurnering}
       onChangeDatoFra={setDatoFra}
       onChangeDatoTil={setDatoTil}
       onToggleAlleBaner={setAlleBaner}

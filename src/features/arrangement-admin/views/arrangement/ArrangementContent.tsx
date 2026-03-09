@@ -64,6 +64,9 @@ type Props = {
   onToggleUkedag: (dag: DayOfWeek) => void;
   onToggleTidspunkt: (tid: string) => void;
 
+  tillaterTurnering?: boolean;
+  onChangeTillaterTurnering?: (v: boolean) => void;
+
   onOpenPreview: () => void;
   onCreate: () => void;
   onDialogOpenChange: (open: boolean) => void;
@@ -117,6 +120,8 @@ export default function ArrangementContent(props: Props) {
     onChangeBeskrivelse,
     tillaterPaamelding,
     onChangeTillaterPaamelding,
+    tillaterTurnering,
+    onChangeTillaterTurnering,
     onChangeDatoFra,
     onChangeDatoTil,
 
@@ -194,6 +199,14 @@ export default function ArrangementContent(props: Props) {
                 checked={tillaterPaamelding}
                 onCheckedChange={onChangeTillaterPaamelding}
               />
+              {onChangeTillaterTurnering !== undefined && (
+                <SwitchRow
+                  title="Inkluder turneringsmodul"
+                  description="Legger til klasser, trekning og kampresultater for turneringer."
+                  checked={tillaterTurnering ?? false}
+                  onCheckedChange={onChangeTillaterTurnering}
+                />
+              )}
             </RowList>
           </RowPanel>
         </PageSection>

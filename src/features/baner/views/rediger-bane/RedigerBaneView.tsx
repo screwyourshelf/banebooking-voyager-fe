@@ -60,7 +60,15 @@ function tilFormData(bane: BaneRespons): BaneFormData {
 }
 
 export default function RedigerBaneView() {
-  const { baner, isLoading, isFetching, error, refetch, oppdaterBane, oppdaterBookingInnstillinger } = useBaner(true);
+  const {
+    baner,
+    isLoading,
+    isFetching,
+    error,
+    refetch,
+    oppdaterBane,
+    oppdaterBookingInnstillinger,
+  } = useBaner(true);
   const { data: klubb, isLoading: loadingKlubb } = useKlubb();
 
   const [redigerte, setRedigerte] = useState<Record<string, BaneFormData>>({});
@@ -346,30 +354,30 @@ export default function RedigerBaneView() {
   return (
     <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
       <RedigerBaneContent
-      baner={baner}
-      valgtBaneId={valgtBaneId}
-      onChangeValgtBaneId={setValgtBaneId}
-      valgtBane={valgtBane}
-      redigerteVerdier={redigerteVerdier}
-      onChangeFelt={(felt, verdi) => {
-        if (!valgtBane) return;
-        håndterEndring(valgtBane.id, felt, verdi);
-      }}
-      navnError={navnError}
-      onBlurNavn={() => {
-        if (!valgtBaneId) return;
-        touchField(valgtBaneId, "navn");
-      }}
-      overstyringAktivert={overstyringAktivert}
-      onToggleOverstyringAktivert={handleToggleOverstyringAktivert}
-      klubbDefault={klubbDefault}
-      overstyring={overstyring}
-      onToggleOverstyring={handleToggleOverstyring}
-      onChangeOverstyring={handleChangeOverstyring}
-      canSubmit={canSubmit}
-      isSaving={isSaving}
-      onSubmit={() => void onSubmit()}
-    />
+        baner={baner}
+        valgtBaneId={valgtBaneId}
+        onChangeValgtBaneId={setValgtBaneId}
+        valgtBane={valgtBane}
+        redigerteVerdier={redigerteVerdier}
+        onChangeFelt={(felt, verdi) => {
+          if (!valgtBane) return;
+          håndterEndring(valgtBane.id, felt, verdi);
+        }}
+        navnError={navnError}
+        onBlurNavn={() => {
+          if (!valgtBaneId) return;
+          touchField(valgtBaneId, "navn");
+        }}
+        overstyringAktivert={overstyringAktivert}
+        onToggleOverstyringAktivert={handleToggleOverstyringAktivert}
+        klubbDefault={klubbDefault}
+        overstyring={overstyring}
+        onToggleOverstyring={handleToggleOverstyring}
+        onChangeOverstyring={handleChangeOverstyring}
+        canSubmit={canSubmit}
+        isSaving={isSaving}
+        onSubmit={() => void onSubmit()}
+      />
     </QueryFeil>
   );
 }

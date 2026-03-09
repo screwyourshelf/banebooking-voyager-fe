@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 import { FormSkeleton } from "@/components/loading";
 import PageSection from "@/components/sections/PageSection";
@@ -18,6 +19,8 @@ import {
 import { useRedigerArrangement } from "../../hooks/useRedigerArrangement";
 import { useAvlysArrangement } from "../../hooks/useAvlysArrangement";
 import { SlettArrangementDialog } from "../../components";
+import { useSlug } from "@/hooks/useSlug";
+import { useOpprettTurnering } from "@/features/turnering/hooks/turnering/useOpprettTurnering";
 import ArrangementContent from "../arrangement/ArrangementContent";
 import {
   byggDto,
@@ -52,6 +55,9 @@ function parseDatoString(s: string): Date {
 
 export default function RedigerArrangementView() {
   const [valgtId, setValgtId] = useState<string>("");
+  const slug = useSlug();
+  const navigate = useNavigate();
+  const turneringMutation = useOpprettTurnering();
 
   const {
     arrangementer,
@@ -397,6 +403,43 @@ export default function RedigerArrangementView() {
           onToggleAlleForGruppe={erGruppert ? toggleAlleForGruppe : undefined}
           onToggleTidspunktForGruppe={erGruppert ? toggleTidspunktForGruppe : undefined}
         />
+      )}
+
+      {valgtId && !isLoading && arrangement && prefyltId === arrangement.id && (
+        <PageSection title="Turneringsmodul">
+          <RowPanel>
+            <RowList>
+              {arrangement.turneringId ? (
+                <Row
+                  title="Status"
+                  description="Turneringsmodul er tilknyttet dette arrangementet."
+                >
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => navigate(`/${slug}/turnering/${arrangement.turneringId}`)}
+                  >
+                    Gå til turnering
+                  </Button>
+                </Row>
+              ) : (
+                <Row
+                  title="Status"
+                  description="Ingen turneringsmodul er tilknyttet dette arrangementet."
+                >
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => turneringMutation.mutate({ arrangementId: arrangement.id })}
+                    disabled={turneringMutation.isPending}
+                  >
+                    {turneringMutation.isPending ? "Oppretter..." : "Opprett turneringsmodul"}
+                  </Button>
+                </Row>
+              )}
+            </RowList>
+          </RowPanel>
+        </PageSection>
       )}
     </>
   );

@@ -100,6 +100,8 @@ export type ArrangementRespons = {
   erPaameldt: boolean;
   erPassert: boolean;
   kapabiliteter: string[];
+  turneringId: string | null;
+  turneringStatus: string | null;
 };
 
 export type ArrangementPaameldingRespons = {
