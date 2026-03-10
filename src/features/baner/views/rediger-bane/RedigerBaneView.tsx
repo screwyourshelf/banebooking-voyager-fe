@@ -345,7 +345,7 @@ export default function RedigerBaneView() {
       });
       setSubmitAttempted(false);
     } catch {
-      // Feil håndteres i hooks (toast)
+      // feil vises inline via oppdaterBane.error / oppdaterBookingInnstillinger.error
     }
   }
 
@@ -377,6 +377,7 @@ export default function RedigerBaneView() {
         canSubmit={canSubmit}
         isSaving={isSaving}
         onSubmit={() => void onSubmit()}
+        mutasjonFeil={oppdaterBane.error?.message ?? oppdaterBookingInnstillinger.error?.message ?? null}
       />
     </QueryFeil>
   );

@@ -16,6 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { GenererDrawForespørsel, TurneringStruktur } from "@/types";
+import { erGyldigAntallGrupper } from "../../utils/turneringValidering";
 
 type Props = {
   open: boolean;
@@ -45,6 +46,11 @@ export function GenererDrawDialog({
 }: Props) {
   const anbefaltAntallGrupper = anbefalAntallGrupper(antallGodkjente);
   const [antallGrupper, setAntallGrupper] = useState<number>(anbefaltAntallGrupper);
+
+  const forFaaSpillere = antallGodkjente < 2;
+  const tilgjengeligeGrupper = [1, 2, 3, 4].filter((n) =>
+    erGyldigAntallGrupper(antallGodkjente, n)
+  );
 
   function handleGenerer() {
     const payload: GenererDrawForespørsel = {};
@@ -79,18 +85,24 @@ export function GenererDrawDialog({
         </DialogHeader>
 
         <div className="space-y-4">
+          {forFaaSpillere && (
+            <p className="text-sm text-destructive">
+              Minst 2 godkjente deltakere kreves for å generere draw.
+            </p>
+          )}
           {klasseStruktur === "GruppeMedSluttspill" && (
             <div className="space-y-1.5">
               <Label>Antall grupper</Label>
               <Select
                 value={String(antallGrupper)}
                 onValueChange={(v) => setAntallGrupper(Number(v))}
+                disabled={forFaaSpillere}
               >
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  {[1, 2, 3, 4].map((n) => (
+                  {tilgjengeligeGrupper.map((n) => (
                     <SelectItem key={n} value={String(n)}>
                       {n} grupper
                     </SelectItem>
@@ -106,7 +118,7 @@ export function GenererDrawDialog({
             </Button>
             <Button
               onClick={handleGenerer}
-              disabled={isPending}
+              disabled={isPending || forFaaSpillere}
               variant={erRegenerer ? "destructive" : "default"}
             >
               {isPending ? "Genererer..." : erRegenerer ? "Ja, regenerer draw" : "Generer draw"}

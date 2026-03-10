@@ -79,6 +79,7 @@ type Props = {
   allePerGruppe?: Record<number, boolean>;
   onToggleAlleForGruppe?: (slotLengde: number, v: boolean) => void;
   onToggleTidspunktForGruppe?: (slotLengde: number, tid: string) => void;
+  serverFeil?: string | null;
 };
 
 const UKEDAGER_REKKEFOLGE: readonly DayOfWeek[] = [
@@ -145,6 +146,7 @@ export default function ArrangementContent(props: Props) {
     allePerGruppe,
     onToggleAlleForGruppe,
     onToggleTidspunktForGruppe,
+    serverFeil,
   } = props;
 
   const erGruppert = slotGrupper && slotGrupper.length > 1;
@@ -367,6 +369,7 @@ export default function ArrangementContent(props: Props) {
         onCreate={onCreate}
         bekreftTekst={bekreftTekst}
         advarsel={advarsel}
+        serverFeil={serverFeil}
       />
     </>
   );

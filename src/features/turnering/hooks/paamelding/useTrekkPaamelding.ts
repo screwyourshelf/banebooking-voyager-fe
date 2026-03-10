@@ -25,9 +25,6 @@ export function useTrekkPaamelding(turneringId: string, klasseId: string) {
         toast.success("Påmelding trukket.");
         invalidate();
       },
-      onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke trekke påmelding.");
-      },
     }
   );
 }

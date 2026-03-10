@@ -11,6 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { KlasseType, LeggTilKlasseForespørsel, TurneringStruktur } from "@/types";
+import { ServerFeil } from "@/components/errors";
 
 const KLASSE_TYPER: KlasseType[] = [
   "HerreSingle",
@@ -62,6 +63,7 @@ type Props = {
   eksisterendeKlasser: KlasseType[];
   onLeggTil: (payload: LeggTilKlasseForespørsel) => void;
   isPending: boolean;
+  serverFeil?: string | null;
 };
 
 export function LeggTilKlasseDialog({
@@ -70,6 +72,7 @@ export function LeggTilKlasseDialog({
   eksisterendeKlasser,
   onLeggTil,
   isPending,
+  serverFeil,
 }: Props) {
   const tilgjengelige = KLASSE_TYPER.filter((k) => !eksisterendeKlasser.includes(k));
   const [klasseType, setKlasseType] = useState<KlasseType | "">(tilgjengelige[0] ?? "");
@@ -264,6 +267,7 @@ export function LeggTilKlasseDialog({
             </div>
           </div>
 
+          <ServerFeil feil={serverFeil ?? null} />
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => handleClose(false)} disabled={isPending}>
               Avbryt

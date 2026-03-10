@@ -28,6 +28,7 @@ import {
 } from "lucide-react";
 import { SlettArrangementDialog } from "@/features/arrangement-admin/components";
 import PaameldteDialog from "./PaameldteDialog";
+import { ServerFeil } from "@/components/errors";
 import { useSlug } from "@/hooks/useSlug";
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
@@ -43,12 +44,12 @@ type Props = {
   onMeldAv: (arr: ArrangementRespons) => void;
   onAvlys: (arr: ArrangementRespons) => Promise<unknown>;
   defaultArrangementId?: string;
+  serverFeil?: string | null;
 };
 
 const TURNERING_STATUS_TEKST: Record<string, string> = {
   Oppsett: "Påmelding åpner snart",
   PaameldingAapen: "Påmelding åpen",
-  PaameldingLukket: "Påmelding lukket",
   DrawPublisert: "Draw publisert",
   Pagaar: "Turnering pågår",
   Avsluttet: "Avsluttet",
@@ -68,6 +69,7 @@ export default function ArrangementerContent({
   onMeldAv,
   onAvlys,
   defaultArrangementId,
+  serverFeil,
 }: Props) {
   const slug = useSlug();
   const navigate = useNavigate();
@@ -112,6 +114,7 @@ export default function ArrangementerContent({
         <p className="text-sm text-muted-foreground italic mt-4">{tomTekst}</p>
       ) : (
         <>
+          <ServerFeil feil={serverFeil ?? null} />
           <Accordion
             type="single"
             collapsible

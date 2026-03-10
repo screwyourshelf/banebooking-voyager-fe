@@ -9,7 +9,7 @@ import { QueryFeil } from "@/components/errors";
 import {
   TurneringStatusBadge,
   klasseTypeNavn,
-  GruppeStillingTabell,
+  GruppeStillingTabellMedForklaring,
   KampKort,
   SluttspillBracket,
   ResultatDialog,
@@ -31,7 +31,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { nesteStatus, STATUS_LABELS } from "./adminStatusUtils";
+import { nesteStatus } from "./adminStatusUtils";
+import AdminKampgjennomforingContent from "./AdminKampgjennomforingContent";
 import type {
   TurneringRespons,
   TurneringKlasseRespons,
@@ -45,17 +46,32 @@ type KlasseTabProps = {
 };
 
 type AdminGruppeDrawTabProps = {
+  turneringId: string;
+  klasseId: string;
   gruppe: TurneringGruppeVisning;
   kanRegistrere: boolean;
   onRegistrer: (kampId: string) => void;
 };
 
-function AdminGruppeDrawTab({ gruppe, kanRegistrere, onRegistrer }: AdminGruppeDrawTabProps) {
+function AdminGruppeDrawTab({
+  turneringId,
+  klasseId,
+  gruppe,
+  kanRegistrere,
+  onRegistrer,
+}: AdminGruppeDrawTabProps) {
   const items = [
     {
       value: "stilling",
       label: "Stilling",
-      content: <GruppeStillingTabell deltakere={gruppe.deltakere} />,
+      content: (
+        <GruppeStillingTabellMedForklaring
+          deltakere={gruppe.deltakere}
+          turneringId={turneringId}
+          klasseId={klasseId}
+          gruppeId={gruppe.id}
+        />
+      ),
     },
     {
       value: "kamper",
@@ -158,6 +174,8 @@ function AdminKampKlasseTab({ turneringId, klasse }: KlasseTabProps) {
       label: gruppe.navn,
       content: (
         <AdminGruppeDrawTab
+          turneringId={turneringId}
+          klasseId={klasse.id}
           gruppe={gruppe}
           kanRegistrere={kanRegistrere}
           onRegistrer={åpneResultatForGruppe}
@@ -278,8 +296,14 @@ function AdminKampKlasseTab({ turneringId, klasse }: KlasseTabProps) {
                 ? klasse.gruppespillKampFormat.antallSett
                 : klasse.sluttspillKampFormat.antallSett
             }
+            superTiebreak={
+              erGruppeKamp && klasse.gruppespillKampFormat
+                ? klasse.gruppespillKampFormat.superTiebreak
+                : klasse.sluttspillKampFormat.superTiebreak
+            }
             onSubmit={(payload) => håndterResultatSubmit({ ...payload, kampId: resultatKampId! })}
             isPending={registrerGruppekamp.isPending || registrerSluttspillkamp.isPending}
+            serverFeil={registrerGruppekamp.error?.message ?? registrerSluttspillkamp.error?.message ?? null}
           />
         )}
       </div>
@@ -302,37 +326,12 @@ export default function AdminKampgjennomforingView({ turnering }: Props) {
   }));
 
   return (
-    <div className="space-y-4">
-      {/* ─── Header ─── */}
-      <PageSection>
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h2 className="text-lg font-semibold">{turnering.arrangementTittel}</h2>
-            <div className="mt-1">
-              <TurneringStatusBadge status={turnering.status} />
-            </div>
-          </div>
-          {neste && (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => statusMutation.mutate({ nyStatus: neste })}
-              disabled={statusMutation.isPending}
-            >
-              {statusMutation.isPending ? "Oppdaterer..." : `Sett til «${STATUS_LABELS[neste]}»`}
-            </Button>
-          )}
-        </div>
-      </PageSection>
-
-      {/* ─── Klasse-tabs ─── */}
-      {turnering.klasser.length > 0 ? (
-        <PageSection title="Klasser">
-          <Tabs items={klasseTabs} />
-        </PageSection>
-      ) : (
-        <p className="text-sm text-muted-foreground italic">Ingen klasser er satt opp ennå.</p>
-      )}
-    </div>
+    <AdminKampgjennomforingContent
+      turnering={turnering}
+      neste={neste}
+      onNesteStatus={() => statusMutation.mutate({ nyStatus: neste! })}
+      nesteStatusPending={statusMutation.isPending}
+      klasseTabs={klasseTabs}
+    />
   );
 }

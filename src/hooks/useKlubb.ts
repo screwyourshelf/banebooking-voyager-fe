@@ -1,4 +1,3 @@
-import { useEffect, useRef } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
@@ -16,20 +15,6 @@ export function useKlubb() {
     staleTime: Infinity,
   });
 
-  const toastetFeilRef = useRef(false);
-
-  useEffect(() => {
-    if (!klubbQuery.error) {
-      toastetFeilRef.current = false;
-      return;
-    }
-
-    if (toastetFeilRef.current) return;
-
-    toast.error(klubbQuery.error.message ?? "Kunne ikke hente klubb");
-    toastetFeilRef.current = true;
-  }, [klubbQuery.error]);
-
   const oppdaterKlubbMutation = useApiMutation<OppdaterKlubbForespørsel, void>(
     "put",
     `/klubb/${slug}`,
@@ -39,9 +24,6 @@ export function useKlubb() {
 
         void queryClient.invalidateQueries({ queryKey: ["klubb", slug] });
         void queryClient.invalidateQueries({ queryKey: ["feed", slug] });
-      },
-      onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke oppdatere klubb");
       },
     }
   );
@@ -55,5 +37,6 @@ export function useKlubb() {
     // mutation
     oppdaterKlubb: oppdaterKlubbMutation.mutateAsync,
     oppdaterKlubbLaster: oppdaterKlubbMutation.isPending,
+    oppdaterKlubbFeil: oppdaterKlubbMutation.error,
   };
 }

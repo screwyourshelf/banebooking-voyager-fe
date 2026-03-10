@@ -33,11 +33,13 @@ export default function BrukereListeView() {
     oppdaterLaster,
     slett,
     slettLaster,
+    oppdaterFeil,
+    slettFeil,
     error: brukereError,
     hentBrukere,
   } = useAdminBrukere();
 
-  const { sperr, opphev, sperrLaster, opphevLaster } = useAdminBrukersperre();
+  const { sperr, opphev, sperrLaster, opphevLaster, sperrFeil, opphevFeil } = useAdminBrukersperre();
 
   const erKlubbAdmin = harHandling(bruker?.kapabiliteter, Kapabiliteter.brukere.admin);
 
@@ -81,12 +83,15 @@ export default function BrukereListeView() {
   const lagreEndringer = async () => {
     if (!aktivBruker) return;
 
-    await oppdater(aktivBruker.id, {
-      rolle: edit.rolle,
-      visningsnavn: edit.visningsnavn,
-    });
-
-    setAktivBruker(null);
+    try {
+      await oppdater(aktivBruker.id, {
+        rolle: edit.rolle,
+        visningsnavn: edit.visningsnavn,
+      });
+      setAktivBruker(null);
+    } catch {
+      // feil vises via oppdaterFeil i RedigerBrukerDialog
+    }
   };
 
   function toggleRolle(r: RolleType) {
@@ -98,7 +103,11 @@ export default function BrukereListeView() {
   };
 
   const handleOpphev = (brukerId: string) => async (sperreId: string) => {
-    await opphev(brukerId, sperreId);
+    try {
+      await opphev(brukerId, sperreId);
+    } catch {
+      // feil vises via opphevFeil i SperreHistorikkDialog
+    }
   };
 
   const åpneSperreHistorikk = (b: BrukerRespons) => {
@@ -139,6 +148,7 @@ export default function BrukereListeView() {
                 brukerEpost={b.epost}
                 onSlett={handleSlettBruker(b.id)}
                 isLoading={slettLaster}
+                serverFeil={slettFeil?.message ?? null}
               />
             );
           }}
@@ -151,6 +161,7 @@ export default function BrukereListeView() {
                 brukerEpost={b.epost}
                 onSperr={(data) => sperr(b.id, data)}
                 isLoading={sperrLaster}
+                serverFeil={sperrFeil?.message ?? null}
               />
             );
           }}
@@ -164,6 +175,7 @@ export default function BrukereListeView() {
             kanOppheve={harHandling(sperreBruker.kapabiliteter, Kapabiliteter.brukere.opphevSperre)}
             onOpphev={handleOpphev(sperreBruker.id)}
             opphevLaster={opphevLaster}
+            opphevFeil={opphevFeil?.message ?? null}
             onClose={() => setSperreBruker(null)}
           />
         ) : null}
@@ -176,6 +188,7 @@ export default function BrukereListeView() {
             onClose={() => setAktivBruker(null)}
             onSave={lagreEndringer}
             isSaving={oppdaterLaster}
+            serverFeil={oppdaterFeil?.message ?? null}
           />
         ) : null}
       </>

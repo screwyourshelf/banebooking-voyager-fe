@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { ServerFeil } from "@/components/errors";
 import {
   Select,
   SelectContent,
@@ -35,6 +36,7 @@ type Props = {
   gjeldendStatus: PaameldingStatus;
   onOppdater: (payload: OppdaterPaameldingStatusForespørsel) => void;
   isPending: boolean;
+  serverFeil?: string | null;
 };
 
 export function PaameldingStatusDialog({
@@ -44,6 +46,7 @@ export function PaameldingStatusDialog({
   gjeldendStatus,
   onOppdater,
   isPending,
+  serverFeil,
 }: Props) {
   const muligeStatuser = GYLDIGE_OVERGANGER[gjeldendStatus] ?? [];
   const [nyStatus, setNyStatus] = useState<PaameldingStatus | "">(muligeStatuser[0] ?? "");
@@ -98,6 +101,7 @@ export function PaameldingStatusDialog({
             />
           </div>
 
+          <ServerFeil feil={serverFeil ?? null} />
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => handleClose(false)} disabled={isPending}>
               Avbryt

@@ -8,6 +8,7 @@ import { RowPanel, RowList, Row } from "@/components/rows";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
+import { ServerFeil } from "@/components/errors";
 import {
   Select,
   SelectContent,
@@ -68,6 +69,8 @@ export default function RedigerArrangementView() {
     forhandsvis,
     clearForhandsvisning,
     erstatt,
+    erstattFeil,
+    forhandsvisFeil,
     isLoading,
     isLoadingArrangementer,
     isLoadingForhandsvisning,
@@ -268,9 +271,13 @@ export default function RedigerArrangementView() {
   const håndterOppdater = async () => {
     const dto = dtoOrNull();
     if (!dto) return;
-    await erstatt(dto);
-    clearForhandsvisning();
-    setDialogOpen(false);
+    try {
+      await erstatt(dto);
+      clearForhandsvisning();
+      setDialogOpen(false);
+    } catch {
+      // feil vises via erstattFeil
+    }
   };
 
   const skalFjernePaameldte =
@@ -402,6 +409,7 @@ export default function RedigerArrangementView() {
           allePerGruppe={erGruppert ? allePerGruppe : undefined}
           onToggleAlleForGruppe={erGruppert ? toggleAlleForGruppe : undefined}
           onToggleTidspunktForGruppe={erGruppert ? toggleTidspunktForGruppe : undefined}
+          serverFeil={erstattFeil?.message ?? forhandsvisFeil?.message ?? null}
         />
       )}
 
@@ -439,6 +447,7 @@ export default function RedigerArrangementView() {
               )}
             </RowList>
           </RowPanel>
+          <ServerFeil feil={turneringMutation.error?.message ?? null} />
         </PageSection>
       )}
     </>

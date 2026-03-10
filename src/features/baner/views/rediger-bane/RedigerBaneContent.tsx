@@ -5,6 +5,7 @@ import { FormActions, FormLayout, FormSubmitButton } from "@/components/forms";
 
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { ServerFeil } from "@/components/errors";
 import { Switch } from "@/components/ui/switch";
 import {
   Select,
@@ -55,6 +56,7 @@ type Props = {
   canSubmit: boolean;
   isSaving: boolean;
   onSubmit: () => void;
+  mutasjonFeil?: string | null;
 };
 
 function hourLabel(h: number) {
@@ -86,6 +88,7 @@ export default function RedigerBaneContent({
   canSubmit,
   isSaving,
   onSubmit,
+  mutasjonFeil,
 }: Props) {
   const navn = redigerteVerdier?.navn ?? valgtBane?.navn ?? "";
   const beskrivelse = redigerteVerdier?.beskrivelse ?? valgtBane?.beskrivelse ?? "";
@@ -407,6 +410,7 @@ export default function RedigerBaneContent({
       )}
 
       <FormActions variant="sticky" align="left" spaced={false} className="w-full">
+        <ServerFeil feil={mutasjonFeil} />
         <FormSubmitButton
           fullWidth
           isLoading={isSaving}

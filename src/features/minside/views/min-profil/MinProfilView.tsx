@@ -42,11 +42,14 @@ export default function MinProfilView() {
   const canSubmit = ny.length > 0 && ny !== gammel && (mode === "epost" || !valideringsFeil);
 
   async function lagreVisningsnavn() {
-    // Sett error kun når bruker trykker lagre
     setError(valideringsFeil);
     if (valideringsFeil) return;
 
-    await mutateAsync({ visningsnavn: valgtVisningsnavn });
+    try {
+      await mutateAsync({ visningsnavn: valgtVisningsnavn });
+    } catch {
+      // feil vises via oppdaterVisningsnavn.error
+    }
   }
 
   return (
@@ -65,11 +68,12 @@ export default function MinProfilView() {
       }}
       maxLength={MAX_VISNINGSNAVN_LENGTH}
       error={error}
+      serverFeil={oppdaterVisningsnavn.error?.message ?? null}
       canSubmit={canSubmit}
       isSaving={isPending}
       onSubmit={() => void lagreVisningsnavn()}
       deleteAction={<SlettMegDialog slettMeg={slettMeg} />}
-      isDeleteDisabled={isPending} // valgfritt: lås sletting mens vi lagrer navn
+      isDeleteDisabled={isPending}
     />
   );
 }

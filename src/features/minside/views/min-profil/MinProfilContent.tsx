@@ -8,6 +8,7 @@ import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { ServerFeil } from "@/components/errors";
 
 export type Mode = "epost" | "navn";
 
@@ -26,6 +27,7 @@ type Props = {
   canSubmit: boolean;
   isSaving: boolean;
   error: string | null;
+  serverFeil?: string | null;
 
   onSubmit: () => void;
 
@@ -45,6 +47,7 @@ export default function MinProfilContent({
   canSubmit,
   isSaving,
   error,
+  serverFeil,
   onSubmit,
   deleteAction,
   isDeleteDisabled = false,
@@ -122,6 +125,7 @@ export default function MinProfilContent({
       </PageSection>
 
       <FormActions variant="sticky" align="left" spaced={false} className="w-full">
+        <ServerFeil feil={serverFeil} />
         <FormSubmitButton
           isLoading={isSaving}
           disabled={!canSubmit}

@@ -23,9 +23,6 @@ export function useMeldPaaKlasse(turneringId: string, klasseId: string) {
         toast.success("Påmelding registrert!");
         invalidate();
       },
-      onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke melde på.");
-      },
     }
   );
 }

@@ -4,6 +4,7 @@ import { FormActions, FormLayout, FormSubmitButton } from "@/components/forms";
 
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { ServerFeil } from "@/components/errors";
 
 type FormState = {
   navn: string;
@@ -21,6 +22,7 @@ type Props = {
 
   navnError: string | null;
   onBlurNavn: () => void;
+  mutasjonFeil?: string | null;
 };
 
 export default function NyBaneContent({
@@ -31,6 +33,7 @@ export default function NyBaneContent({
   onSubmit,
   navnError,
   onBlurNavn,
+  mutasjonFeil,
 }: Props) {
   return (
     <FormLayout
@@ -73,6 +76,7 @@ export default function NyBaneContent({
       </PageSection>
 
       <FormActions variant="sticky" align="left" spaced={false} className="w-full">
+        <ServerFeil feil={mutasjonFeil} />
         <FormSubmitButton
           fullWidth
           isLoading={isSaving}

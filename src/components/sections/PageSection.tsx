@@ -36,7 +36,7 @@ export default function PageSection({
       )}
     >
       {showHeader ? (
-        <div className="px-1">
+        <div className="px-2">
           <div className="flex items-start justify-between gap-3">
             <div className="min-w-0">
               {title ? (

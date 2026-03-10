@@ -9,7 +9,7 @@ import { QueryFeil } from "@/components/errors";
 import {
   TurneringStatusBadge,
   klasseTypeNavn,
-  GruppeStillingTabell,
+  GruppeStillingTabellMedForklaring,
   KampKort,
   SluttspillBracket,
   ResultatDialog,
@@ -33,12 +33,16 @@ type KlasseTabProps = {
 };
 
 type ResultatansvarligGruppeDrawTabProps = {
+  turneringId: string;
+  klasseId: string;
   gruppe: TurneringGruppeVisning;
   kanRegistrere: boolean;
   onRegistrer: (kampId: string) => void;
 };
 
 function ResultatansvarligGruppeDrawTab({
+  turneringId,
+  klasseId,
   gruppe,
   kanRegistrere,
   onRegistrer,
@@ -47,7 +51,14 @@ function ResultatansvarligGruppeDrawTab({
     {
       value: "stilling",
       label: "Stilling",
-      content: <GruppeStillingTabell deltakere={gruppe.deltakere} />,
+      content: (
+        <GruppeStillingTabellMedForklaring
+          deltakere={gruppe.deltakere}
+          turneringId={turneringId}
+          klasseId={klasseId}
+          gruppeId={gruppe.id}
+        />
+      ),
     },
     {
       value: "kamper",
@@ -141,6 +152,8 @@ function ResultatansvarligKlasseTab({ turneringId, klasse }: KlasseTabProps) {
       label: gruppe.navn,
       content: (
         <ResultatansvarligGruppeDrawTab
+          turneringId={turneringId}
+          klasseId={klasse.id}
           gruppe={gruppe}
           kanRegistrere={kanRegistrere}
           onRegistrer={åpneResultatForGruppe}
@@ -226,8 +239,14 @@ function ResultatansvarligKlasseTab({ turneringId, klasse }: KlasseTabProps) {
                 ? klasse.gruppespillKampFormat.antallSett
                 : klasse.sluttspillKampFormat.antallSett
             }
+            superTiebreak={
+              erGruppeKamp && klasse.gruppespillKampFormat
+                ? klasse.gruppespillKampFormat.superTiebreak
+                : klasse.sluttspillKampFormat.superTiebreak
+            }
             onSubmit={(payload) => håndterResultatSubmit({ ...payload, kampId: resultatKampId! })}
             isPending={registrerGruppekamp.isPending || registrerSluttspillkamp.isPending}
+            serverFeil={registrerGruppekamp.error?.message ?? registrerSluttspillkamp.error?.message ?? null}
           />
         )}
       </div>

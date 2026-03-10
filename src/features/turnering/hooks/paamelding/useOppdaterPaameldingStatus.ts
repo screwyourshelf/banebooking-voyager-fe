@@ -27,9 +27,6 @@ export function useOppdaterPaameldingStatus(turneringId: string, klasseId: strin
         toast.success("Status oppdatert");
         invalidate();
       },
-      onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke oppdatere status.");
-      },
     }
   );
 }

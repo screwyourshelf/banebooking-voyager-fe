@@ -16,9 +16,6 @@ export function useLeggTilKlasse(turneringId: string) {
         toast.success("Klasse lagt til");
         void queryClient.invalidateQueries({ queryKey: ["turnering", slug, turneringId] });
       },
-      onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke legge til klasse.");
-      },
     }
   );
 }

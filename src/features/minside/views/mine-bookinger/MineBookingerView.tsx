@@ -19,7 +19,7 @@ export default function MineBookingerTab() {
     refetch,
     isFetching,
   } = useMineBookinger(visHistoriske);
-  const { avbestillAsync, isPending } = useBookingActions();
+  const { avbestillAsync, isPending, error: avbestillFeil } = useBookingActions();
 
   const visteBookinger = useMemo(() => {
     return sortBookingerNyesteFoerst(bookinger);
@@ -28,9 +28,13 @@ export default function MineBookingerTab() {
   async function handleAvbestill(slot: MinBookingRespons) {
     if (isPending || !slot.bookingId) return;
 
-    await avbestillAsync({
-      bookingId: slot.bookingId,
-    });
+    try {
+      await avbestillAsync({
+        bookingId: slot.bookingId,
+      });
+    } catch {
+      // feil eksponeres via avbestillFeil
+    }
   }
 
   if (isLoading) return <ListSkeleton />;
@@ -43,6 +47,7 @@ export default function MineBookingerTab() {
         bookinger={visteBookinger}
         isPending={isPending}
         onAvbestill={handleAvbestill}
+        serverFeil={avbestillFeil?.message ?? null}
       />
     </QueryFeil>
   );

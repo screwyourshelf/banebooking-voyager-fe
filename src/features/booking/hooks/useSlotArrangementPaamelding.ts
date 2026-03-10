@@ -21,9 +21,6 @@ export function useSlotArrangementPaamelding(dato: string, baneId: string) {
       onSuccess: () => {
         toast.success("Du er påmeldt!");
       },
-      onError: (err) => {
-        toast.error(err.message);
-      },
       onSettled: invalidate,
     }
   );
@@ -34,9 +31,6 @@ export function useSlotArrangementPaamelding(dato: string, baneId: string) {
     {
       onSuccess: () => {
         toast.success("Du er avmeldt.");
-      },
-      onError: (err) => {
-        toast.error(err.message);
       },
       onSettled: invalidate,
     }
@@ -49,5 +43,7 @@ export function useSlotArrangementPaamelding(dato: string, baneId: string) {
     onMeldAv: (slot: KalenderSlotRespons) => {
       if (slot.arrangementId) meldAvMutation.mutate({ arrangementId: slot.arrangementId });
     },
+    paameldingFeil: meldPaaMutation.error,
+    avmeldingFeil: meldAvMutation.error,
   };
 }

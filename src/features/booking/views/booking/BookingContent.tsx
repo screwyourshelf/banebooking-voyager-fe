@@ -1,6 +1,7 @@
 import DatoVelger from "@/components/DatoVelger";
 import { BookingSlotListAccordion } from "@/features/booking/components";
 import { TabsLazyMount } from "@/components/navigation";
+import { ServerFeil } from "@/components/errors";
 
 import type { KalenderSlotRespons, BaneRespons } from "@/types";
 import type { User } from "@supabase/supabase-js";
@@ -23,6 +24,7 @@ type Props = {
   onDelete: (slot: KalenderSlotRespons) => void;
   onMeldPaa: (slot: KalenderSlotRespons) => void;
   onMeldAv: (slot: KalenderSlotRespons) => void;
+  serverFeil: string | null;
 };
 
 export default function BookingContent({
@@ -39,6 +41,7 @@ export default function BookingContent({
   onDelete,
   onMeldPaa,
   onMeldAv,
+  serverFeil,
 }: Props) {
   return (
     <>
@@ -49,6 +52,8 @@ export default function BookingContent({
           visNavigering={true}
         />
       </div>
+
+      <ServerFeil feil={serverFeil} />
 
       <TabsLazyMount
         items={baner.map((bane) => ({

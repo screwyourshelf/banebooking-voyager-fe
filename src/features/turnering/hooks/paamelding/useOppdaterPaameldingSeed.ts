@@ -26,9 +26,6 @@ export function useOppdaterPaameldingSeed(turneringId: string, klasseId: string)
         toast.success("Seed oppdatert");
         invalidate();
       },
-      onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke oppdatere seed.");
-      },
     }
   );
 }

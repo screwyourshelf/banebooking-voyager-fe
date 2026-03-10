@@ -19,12 +19,13 @@ export default function ArrangementerView() {
     refetch,
     isFetching,
   } = useArrangementer(visHistoriske);
-  const { onMeldPaa, onMeldAv } = useArrangementPaamelding();
+  const { onMeldPaa, onMeldAv, paameldingFeil, avmeldingFeil } = useArrangementPaamelding();
   const { onAvlys } = useAvlysArrangement();
 
   if (isLoading) return <ListSkeleton />;
 
   const defaultArrangementId = searchParams.get("arrangement") ?? undefined;
+  const serverFeil = paameldingFeil?.message ?? avmeldingFeil?.message ?? null;
 
   return (
     <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
@@ -36,6 +37,7 @@ export default function ArrangementerView() {
         onMeldAv={onMeldAv}
         onAvlys={onAvlys}
         defaultArrangementId={defaultArrangementId}
+        serverFeil={serverFeil}
       />
     </QueryFeil>
   );

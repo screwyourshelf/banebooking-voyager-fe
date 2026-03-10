@@ -28,15 +28,11 @@ export function useMeg() {
         toast.success("Visningsnavn oppdatert");
         void megQuery.refetch();
       },
-      onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke oppdatere visningsnavn");
-      },
     }
   );
 
   const slettMeg = useApiMutation<void, void>("delete", `/klubb/${slug}/bruker/meg`, {
     onSuccess: () => toast.success("Brukeren er slettet"),
-    onError: (err) => toast.error(err.message ?? "Kunne ikke slette bruker"),
   });
 
   const lastNedEgenData = async () => {

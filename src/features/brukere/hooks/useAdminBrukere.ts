@@ -1,4 +1,3 @@
-import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
@@ -36,7 +35,6 @@ export function useAdminBrukere() {
         toast.success("Bruker oppdatert");
         await queryClient.invalidateQueries({ queryKey: brukereKey });
       },
-      onError: (err) => toast.error(err.message),
       retry: false,
     }
   );
@@ -58,7 +56,6 @@ export function useAdminBrukere() {
         toast.success("Bruker slettet");
         await queryClient.invalidateQueries({ queryKey: brukereKey });
       },
-      onError: (err) => toast.error(err.message),
       retry: false,
     }
   );
@@ -73,6 +70,8 @@ export function useAdminBrukere() {
     isFetching: brukereQuery.isFetching,
     oppdaterLaster: oppdaterMutation.isPending,
     slettLaster: slettMutation.isPending,
+    oppdaterFeil: oppdaterMutation.error,
+    slettFeil: slettMutation.error,
     oppdater,
     slett,
     hentBrukere: brukereQuery.refetch,

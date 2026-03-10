@@ -12,6 +12,7 @@ import {
   SluttspillBracket,
 } from "../../components";
 import { useDraw } from "../../hooks/draw/useDraw";
+import AdminAvsluttetContent from "./AdminAvsluttetContent";
 import type { TurneringRespons, TurneringKlasseRespons } from "@/types";
 
 type KlasseTabProps = {
@@ -91,26 +92,5 @@ export default function AdminAvsluttetView({ turnering }: Props) {
     content: <AdminAvsluttetKlasseTab key={klasse.id} turneringId={turnering.id} klasse={klasse} />,
   }));
 
-  return (
-    <div className="space-y-4">
-      {/* ─── Header ─── */}
-      <PageSection>
-        <div>
-          <h2 className="text-lg font-semibold">{turnering.arrangementTittel}</h2>
-          <div className="mt-1">
-            <TurneringStatusBadge status={turnering.status} />
-          </div>
-        </div>
-      </PageSection>
-
-      {/* ─── Klasse-tabs ─── */}
-      {turnering.klasser.length > 0 ? (
-        <PageSection title="Klasser">
-          <Tabs items={klasseTabs} />
-        </PageSection>
-      ) : (
-        <p className="text-sm text-muted-foreground italic">Ingen klasser er satt opp ennå.</p>
-      )}
-    </div>
-  );
+  return <AdminAvsluttetContent turnering={turnering} klasseTabs={klasseTabs} />;
 }

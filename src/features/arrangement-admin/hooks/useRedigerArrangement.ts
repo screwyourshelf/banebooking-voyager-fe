@@ -60,7 +60,6 @@ export function useRedigerArrangement(valgtId: string | null) {
     ArrangementForhåndsvisningRespons
   >("put", `/klubb/${slug}/arrangement/${valgtId ?? ""}/forhandsvis`, {
     onSuccess: (result) => setForhandsvisning(result),
-    onError: (err) => toast.error(err.message),
     retry: false,
   });
 
@@ -81,7 +80,6 @@ export function useRedigerArrangement(valgtId: string | null) {
         toast.success(melding);
         await queryClient.invalidateQueries({ queryKey: ["arrangementer-admin", slug] });
       },
-      onError: (err) => toast.error(err.message),
       retry: false,
     }
   );
@@ -100,6 +98,8 @@ export function useRedigerArrangement(valgtId: string | null) {
     forhandsvis,
     clearForhandsvisning,
     erstatt,
+    erstattFeil: erstattMutation.error,
+    forhandsvisFeil: forhandsvisMutation.error,
     isLoading: loadingKlubb || loadingBaner,
     isLoadingArrangementer: loadingArrangementer,
     isLoadingForhandsvisning: forhandsvisMutation.isPending,

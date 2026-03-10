@@ -17,9 +17,6 @@ export function useFjernKlasse(turneringId: string) {
         toast.success("Klasse fjernet");
         void queryClient.invalidateQueries({ queryKey: ["turnering", slug, turneringId] });
       },
-      onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke fjerne klasse.");
-      },
     }
   );
 }

@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useBrukerSperrer } from "@/features/brukere/hooks/useAdminBrukersperre";
+import { ServerFeil } from "@/components/errors";
 
 type Props = {
   brukerId: string;
@@ -17,6 +18,7 @@ type Props = {
   kanOppheve: boolean;
   onOpphev: (sperreId: string) => Promise<void>;
   opphevLaster: boolean;
+  opphevFeil: string | null;
   onClose: () => void;
 };
 
@@ -26,6 +28,7 @@ export default function SperreHistorikkDialog({
   kanOppheve,
   onOpphev,
   opphevLaster,
+  opphevFeil,
   onClose,
 }: Props) {
   const { data, isLoading } = useBrukerSperrer(brukerId, true);
@@ -106,6 +109,8 @@ export default function SperreHistorikkDialog({
               ))}
             </ul>
           )}
+
+          <ServerFeil feil={opphevFeil} />
         </div>
       </DialogContent>
     </Dialog>

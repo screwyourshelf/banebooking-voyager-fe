@@ -58,7 +58,7 @@ export default function NyBaneView() {
       setForm({ navn: "", beskrivelse: "", sortering: "0" });
       setTouched({ navn: false });
     } catch {
-      // Backend-feil håndteres i hook (toast)
+      // feil vises inline via opprettBane.error
     }
   }
 
@@ -71,6 +71,7 @@ export default function NyBaneView() {
       onSubmit={() => void onSubmit()}
       navnError={navnError}
       onBlurNavn={touchNavn}
+      mutasjonFeil={opprettBane.error?.message ?? null}
     />
   );
 }

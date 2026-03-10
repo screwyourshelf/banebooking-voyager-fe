@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { FormSkeleton } from "@/components/loading";
+import { QueryFeil } from "@/components/errors";
 import { useKlubb } from "@/hooks/useKlubb";
 
 import KlubbInnstillingerContent from "./KlubbInnstillingerContent";
@@ -54,7 +55,15 @@ function parseOptionalNumber(text: string): number | undefined {
 }
 
 export default function KlubbInnstillingerView() {
-  const { data: klubb, isLoading, oppdaterKlubb, oppdaterKlubbLaster } = useKlubb();
+  const {
+    data: klubb,
+    isLoading,
+    error,
+    refetch,
+    oppdaterKlubb,
+    oppdaterKlubbLaster,
+    oppdaterKlubbFeil,
+  } = useKlubb();
 
   const [form, setForm] = useState<FormState>({
     navn: "",
@@ -117,7 +126,8 @@ export default function KlubbInnstillingerView() {
 
   const canSubmit = isDirty && isValid;
 
-  if (isLoading || !klubb) return <FormSkeleton />;
+  if (isLoading) return <FormSkeleton />;
+  if (!klubb) return <QueryFeil error={error} isFetching={false} onRetry={refetch}>{null}</QueryFeil>;
 
   const onChange = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((f) => ({ ...f, [key]: value }));
@@ -175,6 +185,7 @@ export default function KlubbInnstillingerView() {
       touched={touched}
       errors={errors}
       onBlurField={touchField}
+      mutasjonFeil={oppdaterKlubbFeil?.message ?? null}
     />
   );
 }

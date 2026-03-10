@@ -13,12 +13,14 @@ import { Input } from "@/components/ui/input";
 import { Field } from "@/components/ui/field";
 import DatoVelger from "@/components/DatoVelger";
 import type { SperrBrukerForespørsel } from "@/types";
+import { ServerFeil } from "@/components/errors";
 
 type Props = {
   brukerEpost: string;
   onSperr: (data: SperrBrukerForespørsel) => Promise<void>;
   disabled?: boolean;
   isLoading?: boolean;
+  serverFeil?: string | null;
 };
 
 export default function SperrBrukerDialog({
@@ -26,6 +28,7 @@ export default function SperrBrukerDialog({
   onSperr,
   disabled = false,
   isLoading = false,
+  serverFeil = null,
 }: Props) {
   const [open, setOpen] = useState(false);
   const [isBusy, setIsBusy] = useState(false);
@@ -54,7 +57,7 @@ export default function SperrBrukerDialog({
       setÅrsak("");
       setAktivTil(null);
     } catch {
-      // Feil-toast håndteres i useAdminBrukersperre
+      // feil vises via serverFeil-prop i dialogen
     } finally {
       setIsBusy(false);
     }
@@ -118,6 +121,7 @@ export default function SperrBrukerDialog({
         </div>
 
         <DialogFooter>
+          <ServerFeil feil={serverFeil} />
           <Button variant="outline" onClick={() => setOpen(false)} disabled={loading}>
             Avbryt
           </Button>

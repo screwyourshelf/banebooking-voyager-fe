@@ -3,11 +3,9 @@ import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList, Row } from "@/components/rows";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import Tabs from "@/components/navigation/Tabs";
 import { ListSkeleton } from "@/components/loading";
-import { QueryFeil } from "@/components/errors";
+import { QueryFeil, ServerFeil } from "@/components/errors";
 import {
-  TurneringStatusBadge,
   klasseTypeNavn,
   MeldPaaDialog,
   PaameldingStatusBadge,
@@ -22,7 +20,8 @@ import { useTrekkPaamelding } from "../../hooks/paamelding/useTrekkPaamelding";
 import { useOppdaterPaameldingStatus } from "../../hooks/paamelding/useOppdaterPaameldingStatus";
 import { useOppdaterPaameldingSeed } from "../../hooks/paamelding/useOppdaterPaameldingSeed";
 import { useGenererDraw } from "../../hooks/draw/useGenererDraw";
-import { nesteStatus, STATUS_LABELS } from "./adminStatusUtils";
+import { nesteStatus } from "./adminStatusUtils";
+import AdminPaameldingContent from "./AdminPaameldingContent";
 import type { TurneringRespons, TurneringKlasseRespons, PaameldingStatus } from "@/types";
 
 const UGYLDIGE_STATUSER: PaameldingStatus[] = ["Avslatt", "TrukketSeg"];
@@ -69,7 +68,7 @@ function AdminPaameldingKlasseTab({ turneringId, klasse, turneringStatus }: Klas
               <Button size="sm" variant="outline" onClick={() => setMeldPaaDialogOpen(true)}>
                 Legg til deltaker
               </Button>
-              {turneringStatus === "PaameldingLukket" && (
+              {turneringStatus === "PaameldingAapen" && (
                 <Button
                   size="sm"
                   variant="outline"
@@ -89,6 +88,7 @@ function AdminPaameldingKlasseTab({ turneringId, klasse, turneringStatus }: Klas
               {data.antallReserve > 0 && <span>{data.antallReserve} reserve</span>}
             </div>
           )}
+          <ServerFeil feil={trekkMutation.error?.message ?? null} />
           {aktivePaameldinger.length === 0 ? (
             <p className="text-sm text-muted-foreground italic">Ingen påmeldinger ennå.</p>
           ) : (
@@ -159,6 +159,7 @@ function AdminPaameldingKlasseTab({ turneringId, klasse, turneringStatus }: Klas
             });
           }}
           isPending={meldPaaMutation.isPending}
+          serverFeil={meldPaaMutation.error?.message ?? null}
         />
 
         <GenererDrawDialog
@@ -185,11 +186,13 @@ function AdminPaameldingKlasseTab({ turneringId, klasse, turneringStatus }: Klas
             gjeldendStatus={paameldingForStatusDialog.status}
             onOppdater={(payload) => {
               if (statusDialogForId) {
-                statusMutation.mutate({ paameldingId: statusDialogForId, ...payload });
-                setStatusDialogForId(null);
+                statusMutation.mutate({ paameldingId: statusDialogForId, ...payload }, {
+                  onSuccess: () => setStatusDialogForId(null),
+                });
               }
             }}
             isPending={statusMutation.isPending}
+            serverFeil={statusMutation.error?.message ?? null}
           />
         )}
 
@@ -203,11 +206,13 @@ function AdminPaameldingKlasseTab({ turneringId, klasse, turneringStatus }: Klas
             gjeldendeSeed={paameldingForSeedDialog.seed}
             onOppdater={(seed) => {
               if (seedDialogForId) {
-                seedMutation.mutate({ paameldingId: seedDialogForId, seed });
-                setSeedDialogForId(null);
+                seedMutation.mutate({ paameldingId: seedDialogForId, seed }, {
+                  onSuccess: () => setSeedDialogForId(null),
+                });
               }
             }}
             isPending={seedMutation.isPending}
+            serverFeil={seedMutation.error?.message ?? null}
           />
         )}
       </div>
@@ -237,37 +242,12 @@ export default function AdminPaameldingView({ turnering }: Props) {
   }));
 
   return (
-    <div className="space-y-4">
-      {/* ─── Header ─── */}
-      <PageSection>
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <h2 className="text-lg font-semibold">{turnering.arrangementTittel}</h2>
-            <div className="mt-1">
-              <TurneringStatusBadge status={turnering.status} />
-            </div>
-          </div>
-          {neste && (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={() => statusMutation.mutate({ nyStatus: neste })}
-              disabled={statusMutation.isPending}
-            >
-              {statusMutation.isPending ? "Oppdaterer..." : `Sett til «${STATUS_LABELS[neste]}»`}
-            </Button>
-          )}
-        </div>
-      </PageSection>
-
-      {/* ─── Klasse-tabs ─── */}
-      {turnering.klasser.length > 0 ? (
-        <PageSection title="Klasser">
-          <Tabs items={klasseTabs} />
-        </PageSection>
-      ) : (
-        <p className="text-sm text-muted-foreground italic">Ingen klasser er satt opp ennå.</p>
-      )}
-    </div>
+    <AdminPaameldingContent
+      turnering={turnering}
+      neste={neste}
+      onNesteStatus={() => statusMutation.mutate({ nyStatus: neste! })}
+      nesteStatusPending={statusMutation.isPending}
+      klasseTabs={klasseTabs}
+    />
   );
 }

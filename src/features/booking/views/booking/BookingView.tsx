@@ -31,9 +31,18 @@ export default function BookingView() {
     isFetching,
     error: bookingError,
     hentBookinger,
+    bookFeil,
+    cancelFeil,
+    deleteFeil,
   } = useBooking(valgtDatoStr, valgtBaneId);
 
-  const { onMeldPaa, onMeldAv } = useSlotArrangementPaamelding(valgtDatoStr, valgtBaneId);
+  const { onMeldPaa, onMeldAv, paameldingFeil, avmeldingFeil } = useSlotArrangementPaamelding(
+    valgtDatoStr,
+    valgtBaneId
+  );
+
+  const serverFeil =
+    bookFeil?.message ?? cancelFeil?.message ?? deleteFeil?.message ?? paameldingFeil?.message ?? avmeldingFeil?.message ?? null;
 
   useEffect(() => {
     if (!valgtBaneId && baner.length > 0) {
@@ -67,6 +76,7 @@ export default function BookingView() {
         onDelete={onDelete}
         onMeldPaa={onMeldPaa}
         onMeldAv={onMeldAv}
+        serverFeil={serverFeil}
       />
     </QueryFeil>
   );

@@ -1,4 +1,3 @@
-import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
@@ -44,7 +43,6 @@ export function useAdminBrukersperre() {
           queryKey: ["bruker-sperrer", slug, payload.brukerId],
         });
       },
-      onError: (err) => toast.error(err.message),
       retry: false,
     }
   );
@@ -61,7 +59,6 @@ export function useAdminBrukersperre() {
           queryKey: ["bruker-sperrer", slug, payload.brukerId],
         });
       },
-      onError: (err) => toast.error(err.message),
       retry: false,
     }
   );
@@ -79,5 +76,7 @@ export function useAdminBrukersperre() {
     opphev,
     sperrLaster: sperrMutation.isPending,
     opphevLaster: opphevMutation.isPending,
+    sperrFeil: sperrMutation.error,
+    opphevFeil: opphevMutation.error,
   };
 }

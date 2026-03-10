@@ -29,9 +29,6 @@ export function useRegistrerResultat(turneringId: string, klasseId: string) {
         toast.success("Resultat registrert");
         invalidate();
       },
-      onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke registrere resultat.");
-      },
     }
   );
 
@@ -48,9 +45,6 @@ export function useRegistrerResultat(turneringId: string, klasseId: string) {
       onSuccess: () => {
         toast.success("Resultat registrert");
         invalidate();
-      },
-      onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke registrere resultat.");
       },
     }
   );

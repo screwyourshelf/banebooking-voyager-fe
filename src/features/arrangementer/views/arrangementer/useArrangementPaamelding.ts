@@ -22,9 +22,6 @@ export function useArrangementPaamelding() {
       onSuccess: () => {
         toast.success("Du er påmeldt!");
       },
-      onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke melde på.");
-      },
       onSettled: invalidate,
     }
   );
@@ -36,9 +33,6 @@ export function useArrangementPaamelding() {
       onSuccess: () => {
         toast.success("Du er avmeldt.");
       },
-      onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke melde av.");
-      },
       onSettled: invalidate,
     }
   );
@@ -46,5 +40,7 @@ export function useArrangementPaamelding() {
   return {
     onMeldPaa: (arr: ArrangementRespons) => meldPaaMutation.mutate({ arrangementId: arr.id }),
     onMeldAv: (arr: ArrangementRespons) => meldAvMutation.mutate({ arrangementId: arr.id }),
+    paameldingFeil: meldPaaMutation.error,
+    avmeldingFeil: meldAvMutation.error,
   };
 }

@@ -24,9 +24,6 @@ export function useBookingActions() {
     (vars) => `/klubb/${slug}/bookinger/${vars.bookingId}`,
     {
       getBody: () => undefined,
-      onError: (err) => {
-        toast.error(err.message);
-      },
       onSuccess: () => {
         toast.info("Bookingen er avbestilt.");
       },
@@ -48,5 +45,6 @@ export function useBookingActions() {
     avbestill,
     avbestillAsync,
     isPending: cancelMutation.isPending,
+    error: cancelMutation.error,
   };
 }

@@ -4,6 +4,7 @@ import { FormSubmitButton, FormLayout, FormActions } from "@/components/forms";
 
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { ServerFeil } from "@/components/errors";
 
 type FormState = {
   navn: string;
@@ -30,6 +31,7 @@ type Props = {
     feedSynligAntallDager: string | null;
   };
   onBlurField: (key: "navn" | "kontaktEpost" | "feedSynligAntallDager") => void;
+  mutasjonFeil?: string | null;
 };
 
 export default function KlubbInnstillingerContent({
@@ -41,6 +43,7 @@ export default function KlubbInnstillingerContent({
   touched,
   errors,
   onBlurField,
+  mutasjonFeil,
 }: Props) {
   const navnError = touched.navn ? errors.navn : null;
   const kontaktEpostError = touched.kontaktEpost ? errors.kontaktEpost : null;
@@ -167,6 +170,7 @@ export default function KlubbInnstillingerContent({
       </PageSection>
 
       <FormActions variant="sticky" align="left" spaced={false} className="w-full">
+        <ServerFeil feil={mutasjonFeil} />
         <FormSubmitButton
           isLoading={isSaving}
           disabled={!canSubmit}

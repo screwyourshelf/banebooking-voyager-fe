@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { AlertTriangle } from "lucide-react";
+import { ServerFeil } from "@/components/errors";
 import {
   AlertDialog,
   AlertDialogTrigger,
@@ -31,19 +32,24 @@ export default function SlettArrangementDialog({
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [bekreftTurnering, setBekreftTurnering] = useState(false);
+  const [feil, setFeil] = useState<string | null>(null);
 
   const handleOpenChange = (value: boolean) => {
     setOpen(value);
-    if (!value) setBekreftTurnering(false);
+    if (!value) {
+      setBekreftTurnering(false);
+      setFeil(null);
+    }
   };
 
   const handleDelete = async () => {
     setIsDeleting(true);
+    setFeil(null);
     try {
       await onSlett();
       setOpen(false);
-    } catch {
-      // evt. toast.error
+    } catch (err) {
+      setFeil(err instanceof Error ? err.message : "Kunne ikke avlyse arrangement.");
     } finally {
       setIsDeleting(false);
     }
@@ -78,6 +84,7 @@ export default function SlettArrangementDialog({
           </div>
         )}
         <AlertDialogFooter>
+          <ServerFeil feil={feil} />
           <AlertDialogCancel disabled={isDeleting}>Avbryt</AlertDialogCancel>
           <AlertDialogAction asChild>
             <Button

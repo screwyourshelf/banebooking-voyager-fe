@@ -21,9 +21,6 @@ export function useAvlysArrangement() {
         void queryClient.invalidateQueries({ queryKey: ["aktiveArrangementer", slug] });
         void queryClient.invalidateQueries({ queryKey: ["arrangementer-admin", slug] });
       },
-      onError: (err) => {
-        toast.error(err.message);
-      },
     }
   );
 

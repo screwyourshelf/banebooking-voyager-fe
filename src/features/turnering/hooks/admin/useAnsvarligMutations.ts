@@ -24,9 +24,6 @@ export function useAnsvarligMutations(turneringId: string) {
         toast.success("Ansvarlig lagt til");
         invalidate();
       },
-      onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke legge til ansvarlig.");
-      },
     }
   );
 
@@ -37,9 +34,6 @@ export function useAnsvarligMutations(turneringId: string) {
       onSuccess: () => {
         toast.success("Ansvarlig fjernet");
         invalidate();
-      },
-      onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke fjerne ansvarlig.");
       },
     }
   );

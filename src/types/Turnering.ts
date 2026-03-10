@@ -3,7 +3,6 @@
 export type TurneringStatus =
   | "Oppsett"
   | "PaameldingAapen"
-  | "PaameldingLukket"
   | "DrawPublisert"
   | "Pagaar"
   | "Avsluttet";
@@ -56,6 +55,9 @@ export type TurneringRespons = {
   id: string;
   arrangementId: string;
   arrangementTittel: string;
+  arrangementBeskrivelse: string;
+  arrangementStartDato: string | null;
+  arrangementSluttDato: string | null;
   status: TurneringStatus;
   klasser: TurneringKlasseRespons[];
   kapabiliteter: string[];
@@ -184,6 +186,32 @@ export type KampResultatRespons = {
   status: KampStatus;
   vinner: KampVinner;
   avslutning: KampAvslutning;
+};
+
+export type RangeringsKriterium =
+  | "KamperVunnet"
+  | "InnbyrdesOppgjør"
+  | "Settdifferanse"
+  | "Gamedifferanse"
+  | "Seeding";
+
+export type PlassForklaring = {
+  plass: number;
+  gruppeDeltakerId: string;
+  spillerNavn: string;
+  kampVunnet: number;
+  kampTapt: number;
+  settVunnet: number;
+  settTapt: number;
+  gameVunnet: number;
+  gameTapt: number;
+  kriterium: RangeringsKriterium;
+  beskrivelse: string;
+};
+
+export type StillingsForklaringRespons = {
+  gruppeNavn: string;
+  plasseringer: PlassForklaring[];
 };
 
 // ─────────── Requests ───────────

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList } from "@/components/rows";
 import SwitchRow from "@/components/rows/SwitchRow";
+import { ServerFeil } from "@/components/errors";
 import {
   Accordion,
   AccordionContent,
@@ -33,6 +34,7 @@ type Props = {
   isPending: boolean;
 
   onAvbestill: (slot: MinBookingRespons) => void;
+  serverFeil: string | null;
 };
 
 export default function MineBookingerContent({
@@ -41,6 +43,7 @@ export default function MineBookingerContent({
   bookinger,
   isPending,
   onAvbestill,
+  serverFeil,
 }: Props) {
   const PAGE_SIZE = 10;
   const [synligAntall, setSynligAntall] = useState(PAGE_SIZE);
@@ -77,6 +80,7 @@ export default function MineBookingerContent({
         <p className="text-sm text-muted-foreground italic mt-4">{tomTekst}</p>
       ) : (
         <>
+          <ServerFeil feil={serverFeil} />
           <Accordion
             type="single"
             collapsible

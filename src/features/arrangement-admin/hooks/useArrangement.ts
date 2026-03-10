@@ -97,7 +97,6 @@ export function useArrangement() {
         // eller (hvis dere fortsatt bruker den gamle):
         // await queryClient.invalidateQueries({ queryKey: ["arrangementer", slug] });
       },
-      onError: (err) => toast.error(err.message),
       retry: false,
     }
   );
@@ -117,6 +116,7 @@ export function useArrangement() {
     clearForhandsvisning,
 
     opprett,
+    opprettFeil: opprettMutation.error,
 
     isLoading: loadingKlubb || loadingBaner,
     isLoadingForhandsvisning,

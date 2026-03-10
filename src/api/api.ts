@@ -31,8 +31,8 @@ function pickErrorMessage(data: unknown): string | null {
   return (
     (typeof obj.melding === "string" && obj.melding) ||
     (typeof obj.message === "string" && obj.message) ||
-    (typeof obj.title === "string" && obj.title) ||
     (typeof obj.detail === "string" && obj.detail) ||
+    (typeof obj.title === "string" && obj.title) ||
     null
   );
 }

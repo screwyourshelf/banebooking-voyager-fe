@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import PageSection from "@/components/sections/PageSection";
@@ -31,9 +30,6 @@ export default function PersondataView() {
     try {
       setLasterNed(true);
       await lastNedEgenData();
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Kunne ikke laste ned egen data";
-      toast.error(message);
     } finally {
       setLasterNed(false);
     }

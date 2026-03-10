@@ -11,12 +11,14 @@ import {
   AlertDialogAction,
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
+import { ServerFeil } from "@/components/errors";
 
 type Props = {
   brukerEpost: string;
   onSlett: () => Promise<void>;
   disabled?: boolean;
   isLoading?: boolean;
+  serverFeil?: string | null;
 };
 
 export default function SlettBrukerDialog({
@@ -24,6 +26,7 @@ export default function SlettBrukerDialog({
   onSlett,
   disabled = false,
   isLoading = false,
+  serverFeil = null,
 }: Props) {
   const [open, setOpen] = useState(false);
   const [isBusy, setIsBusy] = useState(false);
@@ -34,7 +37,7 @@ export default function SlettBrukerDialog({
       await onSlett();
       setOpen(false);
     } catch {
-      // Feil-toast håndteres i useAdminBrukere
+      // feil vises via serverFeil-prop i dialogen
     } finally {
       setIsBusy(false);
     }
@@ -65,6 +68,7 @@ export default function SlettBrukerDialog({
         </AlertDialogHeader>
 
         <AlertDialogFooter>
+          <ServerFeil feil={serverFeil} />
           <AlertDialogCancel disabled={loading}>Avbryt</AlertDialogCancel>
 
           <AlertDialogAction asChild>

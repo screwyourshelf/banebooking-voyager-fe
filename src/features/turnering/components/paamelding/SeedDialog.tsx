@@ -3,6 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { ServerFeil } from "@/components/errors";
 
 type Props = {
   open: boolean;
@@ -11,6 +12,7 @@ type Props = {
   gjeldendeSeed: number | null;
   onOppdater: (seed: number | null) => void;
   isPending: boolean;
+  serverFeil?: string | null;
 };
 
 export function SeedDialog({
@@ -20,6 +22,7 @@ export function SeedDialog({
   gjeldendeSeed,
   onOppdater,
   isPending,
+  serverFeil,
 }: Props) {
   const [verdi, setVerdi] = useState<string>(gjeldendeSeed != null ? String(gjeldendeSeed) : "");
 
@@ -55,6 +58,7 @@ export function SeedDialog({
             />
           </div>
 
+          <ServerFeil feil={serverFeil ?? null} />
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => handleClose(false)} disabled={isPending}>
               Avbryt

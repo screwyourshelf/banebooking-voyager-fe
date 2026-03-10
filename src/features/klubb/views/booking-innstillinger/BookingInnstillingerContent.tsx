@@ -2,6 +2,7 @@ import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList, Row } from "@/components/rows";
 import { FormSubmitButton, FormLayout, FormActions } from "@/components/forms";
 import { Field } from "@/components/ui/field";
+import { ServerFeil } from "@/components/errors";
 
 type Props = {
   aapningHour: number;
@@ -24,6 +25,7 @@ type Props = {
   canSubmit: boolean;
   isSaving: boolean;
   onSubmit: () => void;
+  mutasjonFeil?: string | null;
 };
 
 function hourLabel(h: number) {
@@ -50,6 +52,7 @@ export default function BookingInnstillingerContent({
   canSubmit,
   isSaving,
   onSubmit,
+  mutasjonFeil,
 }: Props) {
   const slotIndex = Math.max(0, slotValues.indexOf(booking.slotLengdeMinutter));
 
@@ -204,6 +207,7 @@ export default function BookingInnstillingerContent({
       </PageSection>
 
       <FormActions variant="sticky">
+        <ServerFeil feil={mutasjonFeil} />
         <FormSubmitButton
           isLoading={isSaving}
           disabled={!canSubmit}

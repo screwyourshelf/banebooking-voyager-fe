@@ -77,9 +77,8 @@ export function useBooking(dato: string, baneId: string) {
 
         return { previous };
       },
-      onError: (err, _vars, ctx) => {
+      onError: (_err, _vars, ctx) => {
         if (ctx?.previous) queryClient.setQueryData(queryKey, ctx.previous);
-        toast.error(err.message);
       },
       onSuccess: (_data, vars) => {
         const tid = `${vars.startTid.slice(0, 2)}-${vars.sluttTid.slice(0, 2)}`;
@@ -120,9 +119,8 @@ export function useBooking(dato: string, baneId: string) {
 
         return { previous };
       },
-      onError: (err, _vars, ctx) => {
+      onError: (_err, _vars, ctx) => {
         if (ctx?.previous) queryClient.setQueryData(queryKey, ctx.previous);
-        toast.error(err.message);
       },
       onSuccess: () => {
         toast.info("Bookingen er avbestilt.");
@@ -162,9 +160,8 @@ export function useBooking(dato: string, baneId: string) {
 
         return { previous };
       },
-      onError: (err, _vars, ctx) => {
+      onError: (_err, _vars, ctx) => {
         if (ctx?.previous) queryClient.setQueryData(queryKey, ctx.previous);
-        toast.error(err.message);
       },
       onSuccess: () => {
         toast.success("Booking slettet");
@@ -202,6 +199,10 @@ export function useBooking(dato: string, baneId: string) {
       if (!slot.bookingId) return;
       deleteMutation.mutate({ bookingId: slot.bookingId });
     },
+
+    bookFeil: bookMutation.error,
+    cancelFeil: cancelMutation.error,
+    deleteFeil: deleteMutation.error,
 
     hentBookinger: bookingerQuery.refetch,
   };

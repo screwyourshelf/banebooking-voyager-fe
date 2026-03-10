@@ -34,7 +34,6 @@ export function useBaner(inkluderInaktive = true) {
       toast.success("Bane opprettet");
       invalidateAll();
     },
-    onError: (err) => toast.error(err.message ?? "Kunne ikke opprette bane"),
   });
 
   const oppdaterBane = useApiMutation<{ id: string; dto: OppdaterBaneForespørsel }, void>(
@@ -46,7 +45,6 @@ export function useBaner(inkluderInaktive = true) {
         toast.success("Bane oppdatert");
         invalidateAll();
       },
-      onError: (err) => toast.error(err.message ?? "Kunne ikke oppdatere bane"),
     }
   );
 
@@ -59,7 +57,6 @@ export function useBaner(inkluderInaktive = true) {
       toast.success("Bookinginnstillinger oppdatert");
       invalidateAll();
     },
-    onError: (err) => toast.error(err.message ?? "Kunne ikke oppdatere bookinginnstillinger"),
   });
 
   return {

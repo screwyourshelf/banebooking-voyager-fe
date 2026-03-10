@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import type { UseMutationResult } from "@tanstack/react-query";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
+import { ServerFeil } from "@/components/errors";
 
 type Props = {
   slettMeg: UseMutationResult<void, Error, void>;
@@ -39,7 +40,7 @@ export default function SlettMegDialog({
       setOpen(false);
       await signOut();
     } catch {
-      // Feil-toast håndteres i useMeg
+      // feil vises via slettMeg.error i dialogen
     }
   };
 
@@ -65,6 +66,7 @@ export default function SlettMegDialog({
         </AlertDialogHeader>
 
         <AlertDialogFooter>
+          <ServerFeil feil={slettMeg.error?.message ?? null} />
           <AlertDialogCancel disabled={isBusy}>Avbryt</AlertDialogCancel>
 
           <AlertDialogAction asChild>

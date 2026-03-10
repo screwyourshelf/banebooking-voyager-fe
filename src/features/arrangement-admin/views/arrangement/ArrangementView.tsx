@@ -40,6 +40,7 @@ export default function ArrangementView() {
     forhandsvis,
     clearForhandsvisning,
     opprett,
+    opprettFeil,
     isLoading,
     isLoadingForhandsvisning,
   } = useArrangement();
@@ -196,11 +197,15 @@ export default function ArrangementView() {
   const håndterOpprett = async () => {
     const dto = dtoOrNull();
     if (!dto) return;
-    const { result } = await opprett(dto);
-    clearForhandsvisning();
-    setDialogOpen(false);
-    if (opprettTurnering) {
-      turneringMutation.mutate({ arrangementId: result.arrangementId });
+    try {
+      const { result } = await opprett(dto);
+      if (opprettTurnering) {
+        await turneringMutation.mutateAsync({ arrangementId: result.arrangementId });
+      }
+      clearForhandsvisning();
+      setDialogOpen(false);
+    } catch {
+      // feil vises via opprettFeil / turneringMutation.error
     }
   };
 
@@ -266,6 +271,7 @@ export default function ArrangementView() {
       allePerGruppe={erGruppert ? allePerGruppe : undefined}
       onToggleAlleForGruppe={erGruppert ? toggleAlleForGruppe : undefined}
       onToggleTidspunktForGruppe={erGruppert ? toggleTidspunktForGruppe : undefined}
+      serverFeil={opprettFeil?.message ?? turneringMutation.error?.message ?? null}
     />
   );
 }

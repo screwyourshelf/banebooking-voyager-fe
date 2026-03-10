@@ -19,9 +19,6 @@ export function useOpprettTurnering() {
         void queryClient.invalidateQueries({ queryKey: ["arrangementer", slug] });
         navigate(`/${slug}/turnering/${data.id}`);
       },
-      onError: (err) => {
-        toast.error(err.message ?? "Kunne ikke opprette turnering.");
-      },
     }
   );
 }

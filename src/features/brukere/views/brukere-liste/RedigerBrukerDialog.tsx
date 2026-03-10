@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field } from "@/components/ui/field";
+import { ServerFeil } from "@/components/errors";
 
 import {
   Dialog,
@@ -20,6 +21,7 @@ type Props = {
   onClose: () => void;
   onSave: () => void;
   isSaving: boolean;
+  serverFeil: string | null;
 };
 
 export default function RedigerBrukerDialog({
@@ -29,6 +31,7 @@ export default function RedigerBrukerDialog({
   onClose,
   onSave,
   isSaving,
+  serverFeil,
 }: Props) {
   return (
     <Dialog
@@ -80,6 +83,7 @@ export default function RedigerBrukerDialog({
         </div>
 
         <DialogFooter>
+          <ServerFeil feil={serverFeil} />
           <Button variant="outline" onClick={onClose} disabled={isSaving}>
             Avbryt
           </Button>

@@ -9,6 +9,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { TriangleAlert } from "lucide-react";
+import { ServerFeil } from "@/components/errors";
 
 import ForhandsvisningTable from "./ForhandsvisningTable";
 import type { ArrangementForhåndsvisningRespons } from "@/types";
@@ -25,6 +26,7 @@ type Props = {
   onCreate: () => void;
   bekreftTekst?: string;
   advarsel?: string;
+  serverFeil?: string | null;
 };
 
 export default function ForhandsvisningDialog({
@@ -36,6 +38,7 @@ export default function ForhandsvisningDialog({
   onCreate,
   bekreftTekst,
   advarsel,
+  serverFeil,
 }: Props) {
   const antallLedige = forhandsvisning.ledige.length;
   const antallKonflikter = forhandsvisning.konflikter.length;
@@ -67,6 +70,7 @@ export default function ForhandsvisningDialog({
             <ForhandsvisningTable beskrivelse={beskrivelse} forhandsvisning={forhandsvisning} />
 
             <DialogFooter className="mt-3">
+              <ServerFeil feil={serverFeil ?? null} />
               <Button type="button" aria-label="Opprett bookinger" onClick={onCreate}>
                 {bekreftTekst ?? `Opprett ${antallLedige} bookinger`}
               </Button>

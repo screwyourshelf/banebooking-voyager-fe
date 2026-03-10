@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { FormSkeleton } from "@/components/loading";
+import { QueryFeil } from "@/components/errors";
 import { useKlubb } from "@/hooks/useKlubb";
 
 import BookingInnstillingerContent from "./BookingInnstillingerContent";
@@ -24,7 +25,15 @@ function hourToTime(h: number): string {
 }
 
 export default function BookingInnstillingerView() {
-  const { data: klubb, isLoading, oppdaterKlubb, oppdaterKlubbLaster } = useKlubb();
+  const {
+    data: klubb,
+    isLoading,
+    error,
+    refetch,
+    oppdaterKlubb,
+    oppdaterKlubbLaster,
+    oppdaterKlubbFeil,
+  } = useKlubb();
 
   const [booking, setBooking] = useState<BookingRegelForm>({
     maksPerDag: 1,
@@ -73,7 +82,8 @@ export default function BookingInnstillingerView() {
     );
   }, [klubb, booking]);
 
-  if (isLoading || !klubb) return <FormSkeleton />;
+  if (isLoading) return <FormSkeleton />;
+  if (!klubb) return <QueryFeil error={error} isFetching={false} onRetry={refetch}>{null}</QueryFeil>;
 
   const submit = () => {
     void oppdaterKlubb({
@@ -128,6 +138,7 @@ export default function BookingInnstillingerView() {
       canSubmit={canSubmit}
       isSaving={oppdaterKlubbLaster}
       onSubmit={submit}
+      mutasjonFeil={oppdaterKlubbFeil?.message ?? null}
     />
   );
 }

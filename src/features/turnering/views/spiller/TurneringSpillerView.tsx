@@ -10,13 +10,13 @@ import { RowPanel, RowList, Row } from "@/components/rows";
 import { Button } from "@/components/ui/button";
 import Tabs from "@/components/navigation/Tabs";
 import { ListSkeleton } from "@/components/loading";
-import { QueryFeil } from "@/components/errors";
+import { QueryFeil, ServerFeil } from "@/components/errors";
 import {
   TurneringStatusBadge,
   klasseTypeNavn,
   MeldPaaDialog,
   PaameldingStatusBadge,
-  GruppeStillingTabell,
+  GruppeStillingTabellMedForklaring,
   KampKort,
   SluttspillBracket,
 } from "../../components";
@@ -26,6 +26,7 @@ import { useTrekkPaamelding } from "../../hooks/paamelding/useTrekkPaamelding";
 import { useDraw } from "../../hooks/draw/useDraw";
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
+import TurneringSpillerContent from "./TurneringSpillerContent";
 
 const UGYLDIGE_STATUSER: PaameldingStatus[] = ["Avslatt", "TrukketSeg"];
 
@@ -70,6 +71,7 @@ function SpillerPaameldingKlasseTab({
               {data.antallReserve > 0 && <span>{data.antallReserve} reserve</span>}
             </div>
           )}
+          <ServerFeil feil={trekkMutation.error?.message ?? null} />
           {aktivePaameldinger.length === 0 ? (
             <p className="text-sm text-muted-foreground italic">Ingen påmeldinger ennå.</p>
           ) : (
@@ -114,6 +116,7 @@ function SpillerPaameldingKlasseTab({
             });
           }}
           isPending={meldPaaMutation.isPending}
+          serverFeil={meldPaaMutation.error?.message ?? null}
         />
       </div>
     </QueryFeil>
@@ -126,15 +129,24 @@ type DrawKlasseTabProps = {
 };
 
 type GruppeDrawTabProps = {
+  turneringId: string;
+  klasseId: string;
   gruppe: TurneringGruppeVisning;
 };
 
-function GruppeDrawTab({ gruppe }: GruppeDrawTabProps) {
+function GruppeDrawTab({ turneringId, klasseId, gruppe }: GruppeDrawTabProps) {
   const items = [
     {
       value: "stilling",
       label: "Stilling",
-      content: <GruppeStillingTabell deltakere={gruppe.deltakere} />,
+      content: (
+        <GruppeStillingTabellMedForklaring
+          deltakere={gruppe.deltakere}
+          turneringId={turneringId}
+          klasseId={klasseId}
+          gruppeId={gruppe.id}
+        />
+      ),
     },
     {
       value: "kamper",
@@ -174,7 +186,7 @@ function SpillerDrawKlasseTab({ turneringId, klasse }: DrawKlasseTabProps) {
     drawData?.grupper?.map((gruppe) => ({
       value: gruppe.id,
       label: gruppe.navn,
-      content: <GruppeDrawTab gruppe={gruppe} />,
+      content: <GruppeDrawTab turneringId={turneringId} klasseId={klasse.id} gruppe={gruppe} />,
     })) ?? [];
 
   const sluttspillTabs =
@@ -214,7 +226,7 @@ export default function TurneringSpillerView({ turnering }: Props) {
   const kanMeldePaa = harHandling(turnering.kapabiliteter, Kapabiliteter.turnering.meldPaaKlasse);
 
   const visDrawFaser = status === "DrawPublisert" || status === "Pagaar" || status === "Avsluttet";
-  const visPaamelding = status === "PaameldingAapen" || status === "PaameldingLukket";
+  const visPaamelding = status === "PaameldingAapen";
 
   const klasseTabs = turnering.klasser.map((klasse) => ({
     value: klasse.id,
@@ -232,33 +244,11 @@ export default function TurneringSpillerView({ turnering }: Props) {
   }));
 
   return (
-    <div className="space-y-4">
-      <PageSection>
-        <div>
-          <h2 className="text-lg font-semibold">{turnering.arrangementTittel}</h2>
-          <div className="mt-1">
-            <TurneringStatusBadge status={turnering.status} />
-          </div>
-        </div>
-      </PageSection>
-
-      {status === "Oppsett" && (
-        <PageSection>
-          <p className="text-sm text-muted-foreground italic">Påmelding åpner snart.</p>
-        </PageSection>
-      )}
-
-      {(visPaamelding || visDrawFaser) && turnering.klasser.length > 0 && (
-        <PageSection title="Klasser">
-          <Tabs items={klasseTabs} />
-        </PageSection>
-      )}
-
-      {(visPaamelding || visDrawFaser) && turnering.klasser.length === 0 && (
-        <PageSection>
-          <p className="text-sm text-muted-foreground italic">Ingen klasser er satt opp.</p>
-        </PageSection>
-      )}
-    </div>
+    <TurneringSpillerContent
+      turnering={turnering}
+      klasseTabs={klasseTabs}
+      visPaamelding={visPaamelding}
+      visDrawFaser={visDrawFaser}
+    />
   );
 }

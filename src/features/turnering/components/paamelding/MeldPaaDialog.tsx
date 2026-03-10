@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import type { KlasseType, MeldPaaKlasseForespørsel } from "@/types";
+import { ServerFeil } from "@/components/errors";
 
 const DOBBEL_KLASSER: KlasseType[] = ["HerreDobbel", "DameDobbel", "MixedDobbel", "JuniorDobbel"];
 
@@ -20,6 +21,7 @@ type Props = {
   erAdmin: boolean;
   onMeldPaa: (payload: MeldPaaKlasseForespørsel) => void;
   isPending: boolean;
+  serverFeil?: string | null;
 };
 
 export function MeldPaaDialog({
@@ -29,6 +31,7 @@ export function MeldPaaDialog({
   erAdmin,
   onMeldPaa,
   isPending,
+  serverFeil,
 }: Props) {
   const erDobbel = DOBBEL_KLASSER.includes(klasseType);
 
@@ -37,6 +40,11 @@ export function MeldPaaDialog({
 
   const [adminSpiller1Navn, setAdminSpiller1Navn] = useState("");
   const [adminSpiller2Navn, setAdminSpiller2Navn] = useState("");
+
+  const isSubmitDisabled =
+    isPending ||
+    (erAdmin && !adminSpiller1Navn.trim()) ||
+    (!erAdmin && erDobbel && !manuellMakkerNavn.trim());
 
   function handleMeldPaa() {
     if (erAdmin && adminSpiller1Navn) {
@@ -128,11 +136,12 @@ export function MeldPaaDialog({
             <p className="text-sm text-muted-foreground">Bekreft at du vil melde deg på klassen.</p>
           )}
 
+          <ServerFeil feil={serverFeil ?? null} />
           <div className="flex justify-end gap-2">
             <Button variant="outline" onClick={() => handleClose(false)} disabled={isPending}>
               Avbryt
             </Button>
-            <Button onClick={handleMeldPaa} disabled={isPending}>
+            <Button onClick={handleMeldPaa} disabled={isSubmitDisabled}>
               {isPending ? "Melder på..." : "Meld på"}
             </Button>
           </div>
