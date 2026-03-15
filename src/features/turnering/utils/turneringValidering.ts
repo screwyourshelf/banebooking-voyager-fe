@@ -16,22 +16,13 @@ export function erGyldigSuperTiebreakScore(s1: number, s2: number): boolean {
   return hi >= 10 && hi - lo >= 2;
 }
 
-export function erGyldigSettScore(
-  s1: number,
-  s2: number,
-  erSuperTiebreak: boolean
-): boolean {
-  return erSuperTiebreak
-    ? erGyldigSuperTiebreakScore(s1, s2)
-    : erGyldigRegularSettScore(s1, s2);
+export function erGyldigSettScore(s1: number, s2: number, erSuperTiebreak: boolean): boolean {
+  return erSuperTiebreak ? erGyldigSuperTiebreakScore(s1, s2) : erGyldigRegularSettScore(s1, s2);
 }
 
 // ─── Vinner/sett regler (kun Normal avslutning) ───────────────────────────────
 
-export function erVinnerReflektertISett(
-  vinner: KampVinner,
-  sett: ParsedSett[]
-): boolean {
+export function erVinnerReflektertISett(vinner: KampVinner, sett: ParsedSett[]): boolean {
   if (sett.length === 0) return false;
   const sp1 = sett.filter((s) => s.spiller1Games > s.spiller2Games).length;
   const sp2 = sett.filter((s) => s.spiller2Games > s.spiller1Games).length;
@@ -45,9 +36,7 @@ export function vinnerHarNokSett(
 ): boolean {
   const needed = Math.ceil(antallSett / 2);
   const vunnet = sett.filter((s) =>
-    vinner === "Spiller1"
-      ? s.spiller1Games > s.spiller2Games
-      : s.spiller2Games > s.spiller1Games
+    vinner === "Spiller1" ? s.spiller1Games > s.spiller2Games : s.spiller2Games > s.spiller1Games
   ).length;
   return vunnet >= needed;
 }
@@ -74,23 +63,28 @@ export function erVinnerKorrektVedAvslutning(
   if (avslutning === "Normal") return true;
   const fullforteSett = sett.slice(0, -1);
   const vinnerVunnet = fullforteSett.filter((s) =>
-    vinner === "Spiller1"
-      ? s.spiller1Games > s.spiller2Games
-      : s.spiller2Games > s.spiller1Games
+    vinner === "Spiller1" ? s.spiller1Games > s.spiller2Games : s.spiller2Games > s.spiller1Games
   ).length;
   const taperVunnet = fullforteSett.filter((s) =>
-    vinner === "Spiller1"
-      ? s.spiller2Games > s.spiller1Games
-      : s.spiller1Games > s.spiller2Games
+    vinner === "Spiller1" ? s.spiller2Games > s.spiller1Games : s.spiller1Games > s.spiller2Games
   ).length;
   return vinnerVunnet >= taperVunnet;
 }
 
 // ─── Draw-regler ──────────────────────────────────────────────────────────────
 
-export function erGyldigAntallGrupper(
-  antallGodkjente: number,
-  antallGrupper: number
+export function erGyldigAntallGrupper(antallPaameldte: number, antallGrupper: number): boolean {
+  return antallGrupper > 0 && antallGrupper < antallPaameldte;
+}
+
+export function erGyldigSomGaarViderePerGruppe(
+  antallGrupper: number,
+  antallSomGaarViderePerGruppe: number
 ): boolean {
-  return antallGrupper > 0 && antallGrupper < antallGodkjente;
+  if (antallSomGaarViderePerGruppe < 1) return false;
+  return antallGrupper * antallSomGaarViderePerGruppe >= 2;
+}
+
+export function gyldigeSomGaarVidereAlternativer(antallGrupper: number): number[] {
+  return [1, 2, 4].filter((k) => erGyldigSomGaarViderePerGruppe(antallGrupper, k));
 }

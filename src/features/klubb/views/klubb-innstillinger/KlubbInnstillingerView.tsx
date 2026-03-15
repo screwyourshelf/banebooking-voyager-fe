@@ -127,7 +127,12 @@ export default function KlubbInnstillingerView() {
   const canSubmit = isDirty && isValid;
 
   if (isLoading) return <FormSkeleton />;
-  if (!klubb) return <QueryFeil error={error} isFetching={false} onRetry={refetch}>{null}</QueryFeil>;
+  if (!klubb)
+    return (
+      <QueryFeil error={error} isFetching={false} onRetry={refetch}>
+        {null}
+      </QueryFeil>
+    );
 
   const onChange = <K extends keyof FormState>(key: K, value: FormState[K]) => {
     setForm((f) => ({ ...f, [key]: value }));

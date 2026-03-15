@@ -1,11 +1,6 @@
 // src/types/Turnering.ts
 
-export type TurneringStatus =
-  | "Oppsett"
-  | "PaameldingAapen"
-  | "DrawPublisert"
-  | "Pagaar"
-  | "Avsluttet";
+export type TurneringStatus = "Oppsett" | "PaameldingAapen" | "Pagaar" | "Avsluttet";
 
 export type KlasseType =
   | "HerreSingle"
@@ -17,8 +12,6 @@ export type KlasseType =
   | "JuniorDobbel";
 
 export type TurneringStruktur = "RoundRobin" | "GruppeMedSluttspill" | "Utslagning";
-
-export type PaameldingStatus = "Sokt" | "Godkjent" | "Reserve" | "Avslatt" | "TrukketSeg";
 
 export type KampStatus = "Planlagt" | "Pagaar" | "Ferdig" | "WalkOver" | "Utsatt" | "Bye";
 
@@ -37,17 +30,12 @@ export type KampFormat = {
 export type TurneringKlasseRespons = {
   id: string;
   klasseType: KlasseType;
-  maxDeltakere: number | null;
-  paameldingFrist: string | null;
-  autoGodkjenn: boolean;
   struktur: TurneringStruktur;
   antallGrupper: number | null;
   antallSomGaarViderePerGruppe: number | null;
   sluttspillKampFormat: KampFormat;
   gruppespillKampFormat: KampFormat | null;
-  antallGodkjente: number;
-  antallSokt: number;
-  antallReserve: number;
+  antallPaameldte: number;
   foreslåttStartTid: string | null;
 };
 
@@ -67,7 +55,7 @@ export type TurneringPaameldingRespons = {
   id: string;
   spiller1Navn: string;
   spiller2Navn: string | null;
-  status: PaameldingStatus;
+  trukketSeg: boolean;
   paameldtTid: string;
   adminMerknad: string | null;
   kanTrekkeSeg: boolean;
@@ -77,9 +65,7 @@ export type TurneringPaameldingRespons = {
 export type TurneringPaameldingListeRespons = {
   turneringKlasseId: string;
   klasseType: KlasseType;
-  antallGodkjente: number;
-  antallSokt: number;
-  antallReserve: number;
+  antallPaameldte: number;
   paameldinger: TurneringPaameldingRespons[];
 };
 
@@ -226,9 +212,14 @@ export type OppdaterTurneringStatusForespørsel = {
 
 export type LeggTilKlasseForespørsel = {
   klasseType: KlasseType;
-  maxDeltakere?: number;
-  paameldingFrist?: string;
-  autoGodkjenn?: boolean;
+  struktur: TurneringStruktur;
+  antallGrupper?: number;
+  antallSomGaarViderePerGruppe?: number;
+  sluttspillKampFormat: KampFormat;
+  gruppespillKampFormat?: KampFormat;
+};
+
+export type OppdaterKlasseStrukturForespørsel = {
   struktur: TurneringStruktur;
   antallGrupper?: number;
   antallSomGaarViderePerGruppe?: number;
@@ -245,13 +236,15 @@ export type MeldPaaKlasseForespørsel = {
   spiller2Epost?: string;
 };
 
-export type OppdaterPaameldingStatusForespørsel = {
-  nyStatus: PaameldingStatus;
-  adminMerknad?: string;
-};
-
 export type OppdaterPaameldingSeedForespørsel = {
   seed: number | null;
+};
+
+export type OppdaterPaameldingDetaljerForespørsel = {
+  spiller1Navn?: string;
+  spiller1BrukerId?: string;
+  spiller2Navn?: string;
+  spiller2BrukerId?: string;
 };
 
 export type GenererDrawForespørsel = {

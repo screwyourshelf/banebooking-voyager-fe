@@ -52,6 +52,7 @@ type Props = {
   onChangeKategori: (v: ArrangementKategori) => void;
   onChangeBeskrivelse: (v: string) => void;
   tillaterPaamelding: boolean;
+  tillaterPaameldingDisabled?: boolean;
   onChangeTillaterPaamelding: (v: boolean) => void;
   onChangeDatoFra: (d: Date) => void;
   onChangeDatoTil: (d: Date) => void;
@@ -65,7 +66,9 @@ type Props = {
   onToggleTidspunkt: (tid: string) => void;
 
   tillaterTurnering?: boolean;
+  tillaterTurneringDisabled?: boolean;
   onChangeTillaterTurnering?: (v: boolean) => void;
+  onNavigerTilTurnering?: () => void;
 
   onOpenPreview: () => void;
   onCreate: () => void;
@@ -120,9 +123,12 @@ export default function ArrangementContent(props: Props) {
     onChangeKategori,
     onChangeBeskrivelse,
     tillaterPaamelding,
+    tillaterPaameldingDisabled,
     onChangeTillaterPaamelding,
     tillaterTurnering,
+    tillaterTurneringDisabled,
     onChangeTillaterTurnering,
+    onNavigerTilTurnering,
     onChangeDatoFra,
     onChangeDatoTil,
 
@@ -200,13 +206,33 @@ export default function ArrangementContent(props: Props) {
                 description="Lar medlemmer melde seg på arrangementet."
                 checked={tillaterPaamelding}
                 onCheckedChange={onChangeTillaterPaamelding}
+                disabled={tillaterPaameldingDisabled}
               />
               {onChangeTillaterTurnering !== undefined && (
-                <SwitchRow
+                <Row
                   title="Inkluder turneringsmodul"
                   description="Legger til klasser, trekning og kampresultater for turneringer."
-                  checked={tillaterTurnering ?? false}
-                  onCheckedChange={onChangeTillaterTurnering}
+                  density="compact"
+                  right={
+                    <div className="flex items-center gap-3">
+                      {onNavigerTilTurnering && tillaterTurnering && (
+                        <Button
+                          type="button"
+                          variant="link"
+                          size="sm"
+                          className="h-auto p-0 text-xs"
+                          onClick={onNavigerTilTurnering}
+                        >
+                          Gå til turnering
+                        </Button>
+                      )}
+                      <Switch
+                        checked={tillaterTurnering ?? false}
+                        onCheckedChange={onChangeTillaterTurnering}
+                        disabled={tillaterTurneringDisabled}
+                      />
+                    </div>
+                  }
                 />
               )}
             </RowList>

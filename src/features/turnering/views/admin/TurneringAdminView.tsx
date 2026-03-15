@@ -12,9 +12,7 @@ export default function TurneringAdminView({ turnering }: Props) {
   const { status } = turnering;
 
   if (status === "Oppsett") return <AdminOppsettView turnering={turnering} />;
-  if (status === "PaameldingAapen")
-    return <AdminPaameldingView turnering={turnering} />;
-  if (status === "DrawPublisert" || status === "Pagaar")
-    return <AdminKampgjennomforingView turnering={turnering} />;
+  if (status === "PaameldingAapen") return <AdminPaameldingView turnering={turnering} />;
+
   return <AdminAvsluttetView turnering={turnering} />;
 }

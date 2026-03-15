@@ -2,10 +2,11 @@ import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useSlug } from "@/hooks/useSlug";
+import type { OppdaterPaameldingDetaljerForespørsel } from "@/types";
 
-type TrekkPaameldingPayload = { paameldingId: string };
+type Payload = OppdaterPaameldingDetaljerForespørsel & { paameldingId: string };
 
-export function useTrekkPaamelding(turneringId: string, klasseId: string) {
+export function useOppdaterPaameldingDetaljer(turneringId: string, klasseId: string) {
   const slug = useSlug();
   const queryClient = useQueryClient();
 
@@ -15,13 +16,13 @@ export function useTrekkPaamelding(turneringId: string, klasseId: string) {
     });
   };
 
-  return useApiMutation<TrekkPaameldingPayload, void>(
-    "delete",
+  return useApiMutation<Payload, void>(
+    "put",
     ({ paameldingId }) =>
-      `/klubb/${slug}/turnering/${turneringId}/klasse/${klasseId}/paamelding/${paameldingId}`,
+      `/klubb/${slug}/turnering/${turneringId}/klasse/${klasseId}/paamelding/${paameldingId}/detaljer`,
     {
       onSuccess: () => {
-        toast.success("Påmelding trukket.");
+        toast.success("Påmelding oppdatert.");
         invalidate();
       },
     }

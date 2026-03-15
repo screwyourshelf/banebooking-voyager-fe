@@ -248,9 +248,15 @@ export default function ArrangementView() {
       onChangeKategori={setKategori}
       onChangeBeskrivelse={setBeskrivelse}
       tillaterPaamelding={tillaterPaamelding}
-      onChangeTillaterPaamelding={setTillaterPaamelding}
+      onChangeTillaterPaamelding={(v) => {
+        setTillaterPaamelding(v);
+        if (v) setOpprettTurnering(false);
+      }}
       tillaterTurnering={opprettTurnering}
-      onChangeTillaterTurnering={setOpprettTurnering}
+      onChangeTillaterTurnering={(v) => {
+        setOpprettTurnering(v);
+        if (v) setTillaterPaamelding(false);
+      }}
       onChangeDatoFra={setDatoFra}
       onChangeDatoTil={setDatoTil}
       onToggleAlleBaner={setAlleBaner}

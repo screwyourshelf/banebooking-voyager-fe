@@ -83,7 +83,12 @@ export default function BookingInnstillingerView() {
   }, [klubb, booking]);
 
   if (isLoading) return <FormSkeleton />;
-  if (!klubb) return <QueryFeil error={error} isFetching={false} onRetry={refetch}>{null}</QueryFeil>;
+  if (!klubb)
+    return (
+      <QueryFeil error={error} isFetching={false} onRetry={refetch}>
+        {null}
+      </QueryFeil>
+    );
 
   const submit = () => {
     void oppdaterKlubb({

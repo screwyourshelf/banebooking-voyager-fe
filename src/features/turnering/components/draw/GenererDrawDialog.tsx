@@ -16,13 +16,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { GenererDrawForespørsel, TurneringStruktur } from "@/types";
-import { erGyldigAntallGrupper } from "../../utils/turneringValidering";
+import {
+  erGyldigAntallGrupper,
+  gyldigeSomGaarVidereAlternativer,
+} from "../../utils/turneringValidering";
 
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   klasseStruktur: TurneringStruktur;
-  antallGodkjente: number;
+  antallPaameldte: number;
   erRegenerer: boolean;
   onGenerer: (payload: GenererDrawForespørsel) => void;
   isPending: boolean;
@@ -39,24 +42,34 @@ export function GenererDrawDialog({
   open,
   onOpenChange,
   klasseStruktur,
-  antallGodkjente,
+  antallPaameldte,
   erRegenerer,
   onGenerer,
   isPending,
 }: Props) {
-  const anbefaltAntallGrupper = anbefalAntallGrupper(antallGodkjente);
+  const anbefaltAntallGrupper = anbefalAntallGrupper(antallPaameldte);
   const [antallGrupper, setAntallGrupper] = useState<number>(anbefaltAntallGrupper);
+  const [antallSomGaarViderePerGruppe, setAntallSomGaarViderePerGruppe] = useState<number>(2);
 
-  const forFaaSpillere = antallGodkjente < 2;
+  const forFaaSpillere = antallPaameldte < 2;
   const tilgjengeligeGrupper = [1, 2, 3, 4].filter((n) =>
-    erGyldigAntallGrupper(antallGodkjente, n)
+    erGyldigAntallGrupper(antallPaameldte, n)
   );
+  const tilgjengeligeVidere = gyldigeSomGaarVidereAlternativer(antallGrupper);
+
+  function handleAntallGrupperChange(v: number) {
+    setAntallGrupper(v);
+    const gyldige = gyldigeSomGaarVidereAlternativer(v);
+    if (!gyldige.includes(antallSomGaarViderePerGruppe)) {
+      setAntallSomGaarViderePerGruppe(gyldige[0] ?? 2);
+    }
+  }
 
   function handleGenerer() {
     const payload: GenererDrawForespørsel = {};
     if (klasseStruktur === "GruppeMedSluttspill") {
       payload.antallGrupper = antallGrupper;
-      payload.antallSomGaarViderePerGruppe = 2;
+      payload.antallSomGaarViderePerGruppe = antallSomGaarViderePerGruppe;
     }
     onGenerer(payload);
   }
@@ -64,6 +77,7 @@ export function GenererDrawDialog({
   function handleClose(v: boolean) {
     if (!v) {
       setAntallGrupper(anbefaltAntallGrupper);
+      setAntallSomGaarViderePerGruppe(2);
     }
     onOpenChange(v);
   }
@@ -74,7 +88,7 @@ export function GenererDrawDialog({
         <DialogHeader>
           <DialogTitle>{erRegenerer ? "Regenerer draw" : "Generer draw"}</DialogTitle>
           <DialogDescription>
-            {antallGodkjente} godkjente deltakere
+            {antallPaameldte} påmeldte deltakere
             {erRegenerer && (
               <span className="block mt-1 text-destructive font-medium">
                 ⚠ Alle eksisterende grupper og kampoppsett for denne klassen vil slettes og bygges
@@ -87,28 +101,49 @@ export function GenererDrawDialog({
         <div className="space-y-4">
           {forFaaSpillere && (
             <p className="text-sm text-destructive">
-              Minst 2 godkjente deltakere kreves for å generere draw.
+              Minst 2 påmeldte deltakere kreves for å generere draw.
             </p>
           )}
           {klasseStruktur === "GruppeMedSluttspill" && (
-            <div className="space-y-1.5">
-              <Label>Antall grupper</Label>
-              <Select
-                value={String(antallGrupper)}
-                onValueChange={(v) => setAntallGrupper(Number(v))}
-                disabled={forFaaSpillere}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  {tilgjengeligeGrupper.map((n) => (
-                    <SelectItem key={n} value={String(n)}>
-                      {n} grupper
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+            <div className="grid grid-cols-2 gap-3">
+              <div className="space-y-1.5">
+                <Label>Antall grupper</Label>
+                <Select
+                  value={String(antallGrupper)}
+                  onValueChange={(v) => handleAntallGrupperChange(Number(v))}
+                  disabled={forFaaSpillere}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {tilgjengeligeGrupper.map((n) => (
+                      <SelectItem key={n} value={String(n)}>
+                        {n} {n === 1 ? "gruppe" : "grupper"}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-1.5">
+                <Label>Videre per gruppe</Label>
+                <Select
+                  value={String(antallSomGaarViderePerGruppe)}
+                  onValueChange={(v) => setAntallSomGaarViderePerGruppe(Number(v))}
+                  disabled={forFaaSpillere}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {tilgjengeligeVidere.map((n) => (
+                      <SelectItem key={n} value={String(n)}>
+                        {n}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           )}
 

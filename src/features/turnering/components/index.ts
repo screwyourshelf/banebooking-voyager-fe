@@ -1,6 +1,7 @@
 export { TurneringStatusBadge } from "./turnering/TurneringStatusBadge";
 export { TurneringHeaderSection } from "./turnering/TurneringHeaderSection";
 export { LeggTilKlasseDialog } from "./turnering/LeggTilKlasseDialog";
+export { OppdaterKlasseStrukturDialog } from "./turnering/OppdaterKlasseStrukturDialog";
 export { PaameldingStatusBadge } from "./paamelding/PaameldingStatusBadge";
 export { MeldPaaDialog } from "./paamelding/MeldPaaDialog";
 export { PaameldingStatusDialog } from "./paamelding/PaameldingStatusDialog";
@@ -15,3 +16,6 @@ export { ResultatDialog } from "./draw/ResultatDialog";
 export { GenererDrawDialog } from "./draw/GenererDrawDialog";
 export { GenererKampplanDialog } from "./draw/GenererKampplanDialog";
 export { GruppeStillingTabellMedForklaring } from "./draw/GruppeStillingTabellMedForklaring";
+export { GruppeTab } from "./draw/GruppeTab";
+export { KlasseKampTab } from "./draw/KlasseKampTab";
+export type { KlasseKampTabContext } from "./draw/KlasseKampTab";

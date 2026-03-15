@@ -9,61 +9,74 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { X } from "lucide-react";
+import { useBaner } from "@/hooks/useBaner";
 import type { GenererKampplanForespørsel } from "@/types";
 
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  forslagStartTid?: string | null;
   onGenerer: (payload: GenererKampplanForespørsel) => void;
   isPending: boolean;
 };
 
-function defaultStartTid(): string {
+function toDatetimeLocal(isoOrDato: string): string {
+  if (/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}/.test(isoOrDato)) {
+    return isoOrDato.substring(0, 16);
+  }
+  return `${isoOrDato}T09:00`;
+}
+
+function defaultStartTid(forslagStartTid?: string | null): string {
+  if (forslagStartTid) {
+    return toDatetimeLocal(forslagStartTid);
+  }
   const now = new Date();
   now.setMinutes(0, 0, 0);
   const pad = (n: number) => String(n).padStart(2, "0");
   return `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}T${pad(now.getHours())}:00`;
 }
 
-export function GenererKampplanDialog({ open, onOpenChange, onGenerer, isPending }: Props) {
-  const [startTid, setStartTid] = useState<string>(defaultStartTid);
-  const [kampVarighetMinutter, setKampVarighetMinutter] = useState<string>("60");
-  const [baner, setBaner] = useState<string[]>([]);
-  const [baneinput, setBaneinput] = useState<string>("");
+const VARIGHET_VERDIER = [30, 60, 90, 120] as const;
 
-  function leggTilBane() {
-    const trimmed = baneinput.trim();
-    if (!trimmed || baner.includes(trimmed)) return;
-    setBaner((prev) => [...prev, trimmed]);
-    setBaneinput("");
-  }
+export function GenererKampplanDialog({
+  open,
+  onOpenChange,
+  forslagStartTid,
+  onGenerer,
+  isPending,
+}: Props) {
+  const { baner: tilgjengeligeBaner } = useBaner(false);
 
-  function fjernBane(bane: string) {
-    setBaner((prev) => prev.filter((b) => b !== bane));
+  const [startTid, setStartTid] = useState<string>(() => defaultStartTid(forslagStartTid));
+  const [varighetIndex, setVarighetIndex] = useState(1);
+  const [valgteBaner, setValgteBaner] = useState<string[]>([]);
+
+  function toggleBane(navn: string) {
+    setValgteBaner((prev) =>
+      prev.includes(navn) ? prev.filter((b) => b !== navn) : [...prev, navn]
+    );
   }
 
   function handleGenerer() {
-    if (!startTid || baner.length === 0) return;
-    const varighet = Number(kampVarighetMinutter);
+    if (!startTid || valgteBaner.length === 0) return;
     onGenerer({
       startTid: new Date(startTid).toISOString(),
-      kampVarighetMinutter: varighet > 0 ? varighet : undefined,
-      baner,
+      kampVarighetMinutter: VARIGHET_VERDIER[varighetIndex],
+      baner: valgteBaner,
     });
   }
 
   function handleClose(v: boolean) {
     if (!v) {
-      setStartTid(defaultStartTid());
-      setKampVarighetMinutter("60");
-      setBaner([]);
-      setBaneinput("");
+      setStartTid(defaultStartTid(forslagStartTid));
+      setVarighetIndex(1);
+      setValgteBaner([]);
     }
     onOpenChange(v);
   }
 
-  const kanGenerer = !!startTid && baner.length > 0 && Number(kampVarighetMinutter) > 0;
+  const kanGenerer = !!startTid && valgteBaner.length > 0;
 
   return (
     <Dialog open={open} onOpenChange={handleClose}>
@@ -87,56 +100,44 @@ export function GenererKampplanDialog({ open, onOpenChange, onGenerer, isPending
           </div>
 
           <div className="space-y-1.5">
-            <Label htmlFor="kampplan-varighet">Kampvarighet (minutter)</Label>
-            <Input
-              id="kampplan-varighet"
-              type="number"
-              min={1}
-              value={kampVarighetMinutter}
-              onChange={(e) => setKampVarighetMinutter(e.target.value)}
+            <div className="flex items-center justify-between">
+              <Label>Kampvarighet</Label>
+              <span className="text-sm font-medium tabular-nums">
+                {VARIGHET_VERDIER[varighetIndex]} min
+              </span>
+            </div>
+            <input
+              type="range"
+              min={0}
+              max={VARIGHET_VERDIER.length - 1}
+              step={1}
+              value={varighetIndex}
+              onChange={(e) => setVarighetIndex(Number(e.target.value))}
+              className="w-full accent-primary"
             />
+            <div className="flex justify-between text-xs text-muted-foreground px-1">
+              {VARIGHET_VERDIER.map((v) => (
+                <span key={v}>{v}</span>
+              ))}
+            </div>
           </div>
 
           <div className="space-y-1.5">
             <Label>Baner</Label>
-            <div className="flex gap-2">
-              <Input
-                placeholder="t.eks. Bane A"
-                value={baneinput}
-                onChange={(e) => setBaneinput(e.target.value)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") {
-                    e.preventDefault();
-                    leggTilBane();
-                  }
-                }}
-              />
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={leggTilBane}
-                disabled={!baneinput.trim()}
-              >
-                Legg til
-              </Button>
-            </div>
-            {baner.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mt-1.5">
-                {baner.map((bane) => (
-                  <span
-                    key={bane}
-                    className="inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium"
+            {tilgjengeligeBaner.length === 0 ? (
+              <p className="text-sm text-muted-foreground italic">Ingen aktive baner funnet.</p>
+            ) : (
+              <div className="flex flex-wrap gap-2">
+                {tilgjengeligeBaner.map((b) => (
+                  <Button
+                    key={b.id}
+                    type="button"
+                    size="sm"
+                    variant={valgteBaner.includes(b.navn) ? "default" : "outline"}
+                    onClick={() => toggleBane(b.navn)}
                   >
-                    {bane}
-                    <button
-                      type="button"
-                      onClick={() => fjernBane(bane)}
-                      className="text-muted-foreground hover:text-foreground"
-                    >
-                      <X className="h-3 w-3" />
-                    </button>
-                  </span>
+                    {b.navn}
+                  </Button>
                 ))}
               </div>
             )}

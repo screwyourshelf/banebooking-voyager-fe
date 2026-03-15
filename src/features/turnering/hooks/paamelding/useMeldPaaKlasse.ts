@@ -12,7 +12,6 @@ export function useMeldPaaKlasse(turneringId: string, klasseId: string) {
     void queryClient.invalidateQueries({
       queryKey: ["paameldinger", slug, turneringId, klasseId],
     });
-    void queryClient.invalidateQueries({ queryKey: ["turnering", slug, turneringId] });
   };
 
   return useApiMutation<MeldPaaKlasseForespørsel, TurneringPaameldingRespons>(

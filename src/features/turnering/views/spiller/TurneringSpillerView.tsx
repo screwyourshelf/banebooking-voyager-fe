@@ -1,10 +1,5 @@
 import { useState } from "react";
-import type {
-  TurneringRespons,
-  TurneringKlasseRespons,
-  PaameldingStatus,
-  TurneringGruppeVisning,
-} from "@/types";
+import type { TurneringRespons, TurneringKlasseRespons } from "@/types";
 import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList, Row } from "@/components/rows";
 import { Button } from "@/components/ui/button";
@@ -12,23 +7,16 @@ import Tabs from "@/components/navigation/Tabs";
 import { ListSkeleton } from "@/components/loading";
 import { QueryFeil, ServerFeil } from "@/components/errors";
 import {
-  TurneringStatusBadge,
   klasseTypeNavn,
   MeldPaaDialog,
-  PaameldingStatusBadge,
-  GruppeStillingTabellMedForklaring,
-  KampKort,
+  GruppeTab,
   SluttspillBracket,
 } from "../../components";
 import { usePaameldinger } from "../../hooks/paamelding/usePaameldinger";
 import { useMeldPaaKlasse } from "../../hooks/paamelding/useMeldPaaKlasse";
 import { useTrekkPaamelding } from "../../hooks/paamelding/useTrekkPaamelding";
 import { useDraw } from "../../hooks/draw/useDraw";
-import { harHandling } from "@/utils/handlingUtils";
-import { Kapabiliteter } from "@/utils/kapabiliteter";
 import TurneringSpillerContent from "./TurneringSpillerContent";
-
-const UGYLDIGE_STATUSER: PaameldingStatus[] = ["Avslatt", "TrukketSeg"];
 
 type PaameldingKlasseTabProps = {
   turneringId: string;
@@ -49,7 +37,7 @@ function SpillerPaameldingKlasseTab({
   if (isLoading) return <ListSkeleton />;
 
   const aktivePaameldinger =
-    data?.paameldinger.filter((p) => !UGYLDIGE_STATUSER.includes(p.status)) ?? [];
+    data?.paameldinger.filter((p) => !p.trukketSeg) ?? [];
 
   return (
     <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
@@ -66,9 +54,7 @@ function SpillerPaameldingKlasseTab({
         >
           {data && (
             <div className="flex gap-3 text-sm text-muted-foreground mb-2">
-              <span>{data.antallGodkjente} godkjent</span>
-              {data.antallSokt > 0 && <span>{data.antallSokt} søkt</span>}
-              {data.antallReserve > 0 && <span>{data.antallReserve} reserve</span>}
+              <span>{data.antallPaameldte} påmeldt</span>
             </div>
           )}
           <ServerFeil feil={trekkMutation.error?.message ?? null} />
@@ -84,7 +70,6 @@ function SpillerPaameldingKlasseTab({
                     description={p.spiller2Navn ?? undefined}
                     right={
                       <div className="flex items-center gap-2">
-                        <PaameldingStatusBadge status={p.status} />
                         {p.kanTrekkeSeg && (
                           <Button
                             variant="ghost"
@@ -128,49 +113,6 @@ type DrawKlasseTabProps = {
   klasse: TurneringKlasseRespons;
 };
 
-type GruppeDrawTabProps = {
-  turneringId: string;
-  klasseId: string;
-  gruppe: TurneringGruppeVisning;
-};
-
-function GruppeDrawTab({ turneringId, klasseId, gruppe }: GruppeDrawTabProps) {
-  const items = [
-    {
-      value: "stilling",
-      label: "Stilling",
-      content: (
-        <GruppeStillingTabellMedForklaring
-          deltakere={gruppe.deltakere}
-          turneringId={turneringId}
-          klasseId={klasseId}
-          gruppeId={gruppe.id}
-        />
-      ),
-    },
-    {
-      value: "kamper",
-      label: "Kamper",
-      content: (
-        <div className="space-y-2">
-          {gruppe.kamper.map((kamp) => (
-            <KampKort key={kamp.id} kamp={kamp} kanRegistrere={false} />
-          ))}
-        </div>
-      ),
-    },
-  ];
-
-  return (
-    <div className="space-y-2">
-      {gruppe.foreslåttBane && (
-        <p className="text-sm text-muted-foreground">Bane: {gruppe.foreslåttBane}</p>
-      )}
-      <Tabs items={items} />
-    </div>
-  );
-}
-
 function SpillerDrawKlasseTab({ turneringId, klasse }: DrawKlasseTabProps) {
   const {
     data: drawData,
@@ -186,7 +128,9 @@ function SpillerDrawKlasseTab({ turneringId, klasse }: DrawKlasseTabProps) {
     drawData?.grupper?.map((gruppe) => ({
       value: gruppe.id,
       label: gruppe.navn,
-      content: <GruppeDrawTab turneringId={turneringId} klasseId={klasse.id} gruppe={gruppe} />,
+      content: (
+        <GruppeTab turneringId={turneringId} klasseId={klasse.id} gruppe={gruppe} visForklaring />
+      ),
     })) ?? [];
 
   const sluttspillTabs =
@@ -223,9 +167,8 @@ type Props = {
 
 export default function TurneringSpillerView({ turnering }: Props) {
   const { status } = turnering;
-  const kanMeldePaa = harHandling(turnering.kapabiliteter, Kapabiliteter.turnering.meldPaaKlasse);
 
-  const visDrawFaser = status === "DrawPublisert" || status === "Pagaar" || status === "Avsluttet";
+  const visDrawFaser = status === "Pagaar" || status === "Avsluttet";
   const visPaamelding = status === "PaameldingAapen";
 
   const klasseTabs = turnering.klasser.map((klasse) => ({
@@ -238,7 +181,7 @@ export default function TurneringSpillerView({ turnering }: Props) {
         key={klasse.id}
         turneringId={turnering.id}
         klasse={klasse}
-        kanMeldePaa={kanMeldePaa && status === "PaameldingAapen"}
+        kanMeldePaa={visPaamelding}
       />
     ),
   }));

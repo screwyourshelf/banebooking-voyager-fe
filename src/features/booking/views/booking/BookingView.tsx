@@ -42,7 +42,12 @@ export default function BookingView() {
   );
 
   const serverFeil =
-    bookFeil?.message ?? cancelFeil?.message ?? deleteFeil?.message ?? paameldingFeil?.message ?? avmeldingFeil?.message ?? null;
+    bookFeil?.message ??
+    cancelFeil?.message ??
+    deleteFeil?.message ??
+    paameldingFeil?.message ??
+    avmeldingFeil?.message ??
+    null;
 
   useEffect(() => {
     if (!valgtBaneId && baner.length > 0) {

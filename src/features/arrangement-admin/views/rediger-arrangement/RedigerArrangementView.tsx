@@ -8,7 +8,6 @@ import { RowPanel, RowList, Row } from "@/components/rows";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
-import { ServerFeil } from "@/components/errors";
 import {
   Select,
   SelectContent,
@@ -386,7 +385,23 @@ export default function RedigerArrangementView() {
           onChangeKategori={setKategori}
           onChangeBeskrivelse={setBeskrivelse}
           tillaterPaamelding={tillaterPaamelding}
-          onChangeTillaterPaamelding={setTillaterPaamelding}
+          tillaterPaameldingDisabled={!!arrangement.turneringId}
+          onChangeTillaterPaamelding={(v) => {
+            setTillaterPaamelding(v);
+          }}
+          tillaterTurnering={!!arrangement.turneringId}
+          tillaterTurneringDisabled={!!arrangement.turneringId}
+          onChangeTillaterTurnering={(v) => {
+            if (v) {
+              setTillaterPaamelding(false);
+              turneringMutation.mutate({ arrangementId: arrangement.id });
+            }
+          }}
+          onNavigerTilTurnering={
+            arrangement.turneringId
+              ? () => navigate(`/${slug}/turnering/${arrangement.turneringId}`)
+              : undefined
+          }
           onChangeDatoFra={setDatoFra}
           onChangeDatoTil={setDatoTil}
           onToggleAlleBaner={setAlleBaner}
@@ -409,46 +424,13 @@ export default function RedigerArrangementView() {
           allePerGruppe={erGruppert ? allePerGruppe : undefined}
           onToggleAlleForGruppe={erGruppert ? toggleAlleForGruppe : undefined}
           onToggleTidspunktForGruppe={erGruppert ? toggleTidspunktForGruppe : undefined}
-          serverFeil={erstattFeil?.message ?? forhandsvisFeil?.message ?? null}
+          serverFeil={
+            erstattFeil?.message ??
+            forhandsvisFeil?.message ??
+            turneringMutation.error?.message ??
+            null
+          }
         />
-      )}
-
-      {valgtId && !isLoading && arrangement && prefyltId === arrangement.id && (
-        <PageSection title="Turneringsmodul">
-          <RowPanel>
-            <RowList>
-              {arrangement.turneringId ? (
-                <Row
-                  title="Status"
-                  description="Turneringsmodul er tilknyttet dette arrangementet."
-                >
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => navigate(`/${slug}/turnering/${arrangement.turneringId}`)}
-                  >
-                    Gå til turnering
-                  </Button>
-                </Row>
-              ) : (
-                <Row
-                  title="Status"
-                  description="Ingen turneringsmodul er tilknyttet dette arrangementet."
-                >
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => turneringMutation.mutate({ arrangementId: arrangement.id })}
-                    disabled={turneringMutation.isPending}
-                  >
-                    {turneringMutation.isPending ? "Oppretter..." : "Opprett turneringsmodul"}
-                  </Button>
-                </Row>
-              )}
-            </RowList>
-          </RowPanel>
-          <ServerFeil feil={turneringMutation.error?.message ?? null} />
-        </PageSection>
       )}
     </>
   );

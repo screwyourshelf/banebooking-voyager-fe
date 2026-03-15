@@ -18,7 +18,6 @@ export default function ResultatansvarligKampContent({ turnering, klasseTabs }: 
       <TurneringHeaderSection
         tittel={turnering.arrangementTittel}
         status={turnering.status}
-        beskrivelse={turnering.arrangementBeskrivelse}
         startDato={turnering.arrangementStartDato}
         sluttDato={turnering.arrangementSluttDato}
       />

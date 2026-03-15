@@ -1,9 +1,8 @@
 import type { ReactNode } from "react";
 import PageSection from "@/components/sections/PageSection";
-import { Button } from "@/components/ui/button";
 import Tabs from "@/components/navigation/Tabs";
 import { TurneringHeaderSection } from "../../components";
-import { STATUS_LABELS } from "./adminStatusUtils";
+import { NesteStatusKnapp } from "./NesteStatusKnapp";
 import type { TurneringRespons, TurneringStatus } from "@/types";
 
 type TabItem = { value: string; label: string; content: ReactNode };
@@ -13,6 +12,8 @@ type Props = {
   neste: TurneringStatus | null;
   onNesteStatus: () => void;
   nesteStatusPending: boolean;
+  forrige?: TurneringStatus | null;
+  onForrigeStatus?: () => void;
   klasseTabs: TabItem[];
 };
 
@@ -21,6 +22,8 @@ export default function AdminPaameldingContent({
   neste,
   onNesteStatus,
   nesteStatusPending,
+  forrige,
+  onForrigeStatus,
   klasseTabs,
 }: Props) {
   return (
@@ -29,19 +32,17 @@ export default function AdminPaameldingContent({
       <TurneringHeaderSection
         tittel={turnering.arrangementTittel}
         status={turnering.status}
-        beskrivelse={turnering.arrangementBeskrivelse}
         startDato={turnering.arrangementStartDato}
         sluttDato={turnering.arrangementSluttDato}
         actions={
           neste ? (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={onNesteStatus}
-              disabled={nesteStatusPending}
-            >
-              {nesteStatusPending ? "Oppdaterer..." : `Sett til «${STATUS_LABELS[neste]}»`}
-            </Button>
+            <NesteStatusKnapp
+              neste={neste}
+              onNesteStatus={onNesteStatus}
+              forrige={forrige ?? undefined}
+              onForrigeStatus={onForrigeStatus}
+              pending={nesteStatusPending}
+            />
           ) : undefined
         }
       />

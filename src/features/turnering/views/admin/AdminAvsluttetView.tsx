@@ -4,13 +4,7 @@ import PageSection from "@/components/sections/PageSection";
 import Tabs from "@/components/navigation/Tabs";
 import { ListSkeleton } from "@/components/loading";
 import { QueryFeil } from "@/components/errors";
-import {
-  TurneringStatusBadge,
-  klasseTypeNavn,
-  GruppeStillingTabell,
-  KampKort,
-  SluttspillBracket,
-} from "../../components";
+import { klasseTypeNavn, GruppeTab, SluttspillBracket } from "../../components";
 import { useDraw } from "../../hooks/draw/useDraw";
 import AdminAvsluttetContent from "./AdminAvsluttetContent";
 import type { TurneringRespons, TurneringKlasseRespons } from "@/types";
@@ -33,6 +27,26 @@ function AdminAvsluttetKlasseTab({ turneringId, klasse }: KlasseTabProps) {
 
   const harDraw = !!drawData;
 
+  const gruppeTabs =
+    drawData?.grupper?.map((gruppe) => ({
+      value: gruppe.id,
+      label: gruppe.navn,
+      content: <GruppeTab gruppe={gruppe} turneringId={turneringId} klasseId={klasse.id} />,
+    })) ?? [];
+
+  const sluttspillTabs =
+    drawData?.sluttspill && drawData.sluttspill.length > 0
+      ? [
+          {
+            value: "sluttspill",
+            label: "Sluttspill",
+            content: <SluttspillBracket kamper={drawData.sluttspill} kanRegistrere={false} />,
+          },
+        ]
+      : [];
+
+  const gruppePlanTabs = [...gruppeTabs, ...sluttspillTabs];
+
   return (
     <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
       <PageSection title="Kampprogram">
@@ -49,33 +63,11 @@ function AdminAvsluttetKlasseTab({ turneringId, klasse }: KlasseTabProps) {
           <p className="text-sm text-muted-foreground italic">Ingen kampprogram tilgjengelig.</p>
         )}
 
-        {harDraw && drawData && (
-          <div className="space-y-4">
-            {drawData.grupper?.map((gruppe) => (
-              <div key={gruppe.id} className="space-y-3">
-                <div className="flex items-center gap-2">
-                  <h4 className="text-sm font-semibold">{gruppe.navn}</h4>
-                  {gruppe.foreslåttBane && (
-                    <span className="text-sm text-muted-foreground">→ {gruppe.foreslåttBane}</span>
-                  )}
-                </div>
-                <GruppeStillingTabell deltakere={gruppe.deltakere} />
-                <div className="space-y-2">
-                  {gruppe.kamper.map((kamp) => (
-                    <KampKort key={kamp.id} kamp={kamp} kanRegistrere={false} />
-                  ))}
-                </div>
-              </div>
-            ))}
-
-            {drawData.sluttspill && drawData.sluttspill.length > 0 && (
-              <div className="space-y-2">
-                <h4 className="text-sm font-semibold">Sluttspill</h4>
-                <SluttspillBracket kamper={drawData.sluttspill} kanRegistrere={false} />
-              </div>
-            )}
-          </div>
+        {harDraw && gruppePlanTabs.length === 0 && (
+          <p className="text-sm text-muted-foreground italic">Ingen grupper tilgjengelig.</p>
         )}
+
+        {harDraw && gruppePlanTabs.length > 0 && <Tabs items={gruppePlanTabs} />}
       </PageSection>
     </QueryFeil>
   );

@@ -39,7 +39,8 @@ export default function BrukereListeView() {
     hentBrukere,
   } = useAdminBrukere();
 
-  const { sperr, opphev, sperrLaster, opphevLaster, sperrFeil, opphevFeil } = useAdminBrukersperre();
+  const { sperr, opphev, sperrLaster, opphevLaster, sperrFeil, opphevFeil } =
+    useAdminBrukersperre();
 
   const erKlubbAdmin = harHandling(bruker?.kapabiliteter, Kapabiliteter.brukere.admin);
 

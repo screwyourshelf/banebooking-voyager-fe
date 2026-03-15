@@ -10,7 +10,6 @@ export function useFrøSluttspill(turneringId: string, klasseId: string) {
 
   const invalidate = () => {
     void queryClient.invalidateQueries({ queryKey: ["draw", slug, turneringId, klasseId] });
-    void queryClient.invalidateQueries({ queryKey: ["turnering", slug, turneringId] });
   };
 
   return useApiMutation<void, FrøSluttspillRespons>(

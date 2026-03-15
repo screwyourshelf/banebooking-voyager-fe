@@ -10,28 +10,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { KlasseType, LeggTilKlasseForespørsel, TurneringStruktur } from "@/types";
+import type { OppdaterKlasseStrukturForespørsel, TurneringKlasseRespons, TurneringStruktur } from "@/types";
 import { ServerFeil } from "@/components/errors";
-
-const KLASSE_TYPER: KlasseType[] = [
-  "HerreSingle",
-  "DameSingle",
-  "HerreDobbel",
-  "DameDobbel",
-  "MixedDobbel",
-  "JuniorSingle",
-  "JuniorDobbel",
-];
-
-const KLASSE_LABELS: Record<KlasseType, string> = {
-  HerreSingle: "Herre single",
-  DameSingle: "Dame single",
-  HerreDobbel: "Herre dobbel",
-  DameDobbel: "Dame dobbel",
-  MixedDobbel: "Mixed dobbel",
-  JuniorSingle: "Junior single",
-  JuniorDobbel: "Junior dobbel",
-};
+import { klasseTypeNavn } from "../draw/klasseTypeUtils";
 
 const STRUKTUR_LABELS: Record<TurneringStruktur, string> = {
   RoundRobin: "Round Robin",
@@ -45,48 +26,33 @@ type KampFormatState = {
   superTiebreak: boolean;
 };
 
-const DEFAULT_SLUTTSPILL_FORMAT: KampFormatState = {
-  antallSett: 3,
-  spillTil: 6,
-  superTiebreak: true,
-};
-
-const DEFAULT_GRUPPESPILL_FORMAT: KampFormatState = {
-  antallSett: 3,
-  spillTil: 6,
-  superTiebreak: false,
-};
-
 type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  eksisterendeKlasser: KlasseType[];
-  onLeggTil: (payload: LeggTilKlasseForespørsel) => void;
+  klasse: TurneringKlasseRespons;
+  onOppdater: (payload: OppdaterKlasseStrukturForespørsel) => void;
   isPending: boolean;
   serverFeil?: string | null;
 };
 
-export function LeggTilKlasseDialog({
+export function OppdaterKlasseStrukturDialog({
   open,
   onOpenChange,
-  eksisterendeKlasser,
-  onLeggTil,
+  klasse,
+  onOppdater,
   isPending,
   serverFeil,
 }: Props) {
-  const tilgjengelige = KLASSE_TYPER.filter((k) => !eksisterendeKlasser.includes(k));
-  const [klasseType, setKlasseType] = useState<KlasseType | "">(tilgjengelige[0] ?? "");
-  const [struktur, setStruktur] = useState<TurneringStruktur>("GruppeMedSluttspill");
-  const [sluttspillFormat, setSluttspillFormat] =
-    useState<KampFormatState>(DEFAULT_SLUTTSPILL_FORMAT);
+  const [struktur, setStruktur] = useState<TurneringStruktur>(klasse.struktur);
+  const [sluttspillFormat, setSluttspillFormat] = useState<KampFormatState>(
+    klasse.sluttspillKampFormat
+  );
   const [gruppespillFormat, setGruppespillFormat] = useState<KampFormatState>(
-    DEFAULT_GRUPPESPILL_FORMAT
+    klasse.gruppespillKampFormat ?? { antallSett: 3, spillTil: 6, superTiebreak: false }
   );
 
-  function handleLeggTil() {
-    if (!klasseType) return;
-    onLeggTil({
-      klasseType,
+  function handleOppdater() {
+    onOppdater({
       struktur,
       sluttspillKampFormat: sluttspillFormat,
       ...(struktur === "GruppeMedSluttspill" && { gruppespillKampFormat: gruppespillFormat }),
@@ -95,10 +61,11 @@ export function LeggTilKlasseDialog({
 
   function handleClose(v: boolean) {
     if (!v) {
-      setKlasseType(tilgjengelige[0] ?? "");
-      setStruktur("GruppeMedSluttspill");
-      setSluttspillFormat(DEFAULT_SLUTTSPILL_FORMAT);
-      setGruppespillFormat(DEFAULT_GRUPPESPILL_FORMAT);
+      setStruktur(klasse.struktur);
+      setSluttspillFormat(klasse.sluttspillKampFormat);
+      setGruppespillFormat(
+        klasse.gruppespillKampFormat ?? { antallSett: 3, spillTil: 6, superTiebreak: false }
+      );
     }
     onOpenChange(v);
   }
@@ -107,33 +74,10 @@ export function LeggTilKlasseDialog({
     <Dialog open={open} onOpenChange={handleClose}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Legg til klasse</DialogTitle>
+          <DialogTitle>Rediger klasse – {klasseTypeNavn(klasse.klasseType)}</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-4">
-          <div className="space-y-1.5">
-            <Label>Klasse</Label>
-            <Select
-              value={klasseType}
-              onValueChange={(v) => setKlasseType(v as KlasseType)}
-              disabled={tilgjengelige.length === 0}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Velg klasse" />
-              </SelectTrigger>
-              <SelectContent>
-                {tilgjengelige.map((k) => (
-                  <SelectItem key={k} value={k}>
-                    {KLASSE_LABELS[k]}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            {tilgjengelige.length === 0 && (
-              <p className="text-sm text-muted-foreground">Alle klasser er allerede lagt til.</p>
-            )}
-          </div>
-
           <div className="space-y-1.5">
             <Label>Struktur</Label>
             <Select value={struktur} onValueChange={(v) => setStruktur(v as TurneringStruktur)}>
@@ -271,11 +215,8 @@ export function LeggTilKlasseDialog({
             <Button variant="outline" onClick={() => handleClose(false)} disabled={isPending}>
               Avbryt
             </Button>
-            <Button
-              onClick={handleLeggTil}
-              disabled={!klasseType || tilgjengelige.length === 0 || isPending}
-            >
-              {isPending ? "Legger til..." : "Legg til klasse"}
+            <Button onClick={handleOppdater} disabled={isPending}>
+              {isPending ? "Lagrer..." : "Lagre endringer"}
             </Button>
           </div>
         </div>

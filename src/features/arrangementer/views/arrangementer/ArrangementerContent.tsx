@@ -50,7 +50,6 @@ type Props = {
 const TURNERING_STATUS_TEKST: Record<string, string> = {
   Oppsett: "Påmelding åpner snart",
   PaameldingAapen: "Påmelding åpen",
-  DrawPublisert: "Draw publisert",
   Pagaar: "Turnering pågår",
   Avsluttet: "Avsluttet",
 };

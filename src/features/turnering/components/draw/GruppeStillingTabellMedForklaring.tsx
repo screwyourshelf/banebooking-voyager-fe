@@ -40,9 +40,7 @@ export function GruppeStillingTabellMedForklaring({
     return gameDiffB - gameDiffA;
   });
 
-  const forklaringMap = new Map(
-    forklaring?.plasseringer.map((p) => [p.gruppeDeltakerId, p]) ?? []
-  );
+  const forklaringMap = new Map(forklaring?.plasseringer.map((p) => [p.gruppeDeltakerId, p]) ?? []);
 
   const harForklaring = !!forklaring;
 
@@ -100,10 +98,7 @@ export function GruppeStillingTabellMedForklaring({
                     harForklaring && "cursor-pointer hover:bg-muted/50 transition-colors",
                     erÅpen && "border-b-0"
                   )}
-                  onClick={() =>
-                    harForklaring &&
-                    setÅpenId(erÅpen ? null : d.gruppeDeltakerId)
-                  }
+                  onClick={() => harForklaring && setÅpenId(erÅpen ? null : d.gruppeDeltakerId)}
                 >
                   <td className="py-1.5 pr-2 text-muted-foreground">{idx + 1}</td>
                   <td className="py-1.5 pr-4 font-medium">{d.spillerNavn}</td>

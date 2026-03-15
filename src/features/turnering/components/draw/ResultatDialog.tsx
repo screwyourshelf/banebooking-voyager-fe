@@ -83,8 +83,7 @@ export function ResultatDialog({
     const nySettFeil: (string | null)[] = sett.map(() => null);
     let nyClientFeil: string | null = null;
 
-    const skaValidereSett =
-      avslutning === "Normal" ? filledSett : filledSett.slice(0, -1);
+    const skaValidereSett = avslutning === "Normal" ? filledSett : filledSett.slice(0, -1);
 
     for (const s of skaValidereSett) {
       const erSisteSet = s.idx === antallSett - 1;
@@ -235,9 +234,7 @@ export function ResultatDialog({
                     placeholder="0"
                   />
                 </div>
-                {settFeil[idx] && (
-                  <p className="text-xs text-destructive pl-14">{settFeil[idx]}</p>
-                )}
+                {settFeil[idx] && <p className="text-xs text-destructive pl-14">{settFeil[idx]}</p>}
               </div>
             ))}
           </div>

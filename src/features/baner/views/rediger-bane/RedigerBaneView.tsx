@@ -377,7 +377,9 @@ export default function RedigerBaneView() {
         canSubmit={canSubmit}
         isSaving={isSaving}
         onSubmit={() => void onSubmit()}
-        mutasjonFeil={oppdaterBane.error?.message ?? oppdaterBookingInnstillinger.error?.message ?? null}
+        mutasjonFeil={
+          oppdaterBane.error?.message ?? oppdaterBookingInnstillinger.error?.message ?? null
+        }
       />
     </QueryFeil>
   );

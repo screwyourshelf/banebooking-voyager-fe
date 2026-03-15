@@ -1,26 +1,13 @@
 import { useState } from "react";
-import { format, parseISO } from "date-fns";
-import { nb } from "date-fns/locale";
-import PageSection from "@/components/sections/PageSection";
 import { Button } from "@/components/ui/button";
-import Tabs from "@/components/navigation/Tabs";
-import { ListSkeleton } from "@/components/loading";
-import { QueryFeil } from "@/components/errors";
 import {
-  TurneringStatusBadge,
   klasseTypeNavn,
-  GruppeStillingTabellMedForklaring,
-  KampKort,
-  SluttspillBracket,
-  ResultatDialog,
-  GenererKampplanDialog,
   GenererDrawDialog,
+  KlasseKampTab,
+  type KlasseKampTabContext,
 } from "../../components";
 import { useOppdaterTurneringStatus } from "../../hooks/turnering/useOppdaterTurneringStatus";
-import { useDraw } from "../../hooks/draw/useDraw";
-import { useGenererKampplan } from "../../hooks/draw/useGenererKampplan";
 import { useGenererDraw } from "../../hooks/draw/useGenererDraw";
-import { useRegistrerResultat } from "../../hooks/draw/useRegistrerResultat";
 import { useFrøSluttspill } from "../../hooks/draw/useFrøSluttspill";
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
@@ -33,281 +20,67 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { nesteStatus } from "./adminStatusUtils";
 import AdminKampgjennomforingContent from "./AdminKampgjennomforingContent";
-import type {
-  TurneringRespons,
-  TurneringKlasseRespons,
-  TurneringGruppeVisning,
-  RegistrerResultatForespørsel,
-} from "@/types";
+import type { TurneringRespons, TurneringKlasseRespons } from "@/types";
 
-type KlasseTabProps = {
+type AdminKampActionsProps = {
   turneringId: string;
   klasse: TurneringKlasseRespons;
+  ctx: KlasseKampTabContext;
 };
 
-type AdminGruppeDrawTabProps = {
-  turneringId: string;
-  klasseId: string;
-  gruppe: TurneringGruppeVisning;
-  kanRegistrere: boolean;
-  onRegistrer: (kampId: string) => void;
-};
-
-function AdminGruppeDrawTab({
-  turneringId,
-  klasseId,
-  gruppe,
-  kanRegistrere,
-  onRegistrer,
-}: AdminGruppeDrawTabProps) {
-  const items = [
-    {
-      value: "stilling",
-      label: "Stilling",
-      content: (
-        <GruppeStillingTabellMedForklaring
-          deltakere={gruppe.deltakere}
-          turneringId={turneringId}
-          klasseId={klasseId}
-          gruppeId={gruppe.id}
-        />
-      ),
-    },
-    {
-      value: "kamper",
-      label: "Kamper",
-      content: (
-        <div className="space-y-2">
-          {gruppe.kamper.map((kamp) => (
-            <KampKort
-              key={kamp.id}
-              kamp={kamp}
-              kanRegistrere={kanRegistrere}
-              onRegistrer={onRegistrer}
-            />
-          ))}
-        </div>
-      ),
-    },
-  ];
-
-  return (
-    <div className="space-y-2">
-      {gruppe.foreslåttBane && (
-        <p className="text-sm text-muted-foreground">Bane: {gruppe.foreslåttBane}</p>
-      )}
-      <Tabs items={items} />
-    </div>
-  );
-}
-
-function AdminKampKlasseTab({ turneringId, klasse }: KlasseTabProps) {
-  const {
-    data: drawData,
-    isLoading,
-    error,
-    refetch,
-    isFetching,
-  } = useDraw(turneringId, klasse.id, true);
-  const genererKampplanMutation = useGenererKampplan(turneringId, klasse.id);
+function AdminKampActions({ turneringId, klasse, ctx }: AdminKampActionsProps) {
   const genererDrawMutation = useGenererDraw(turneringId, klasse.id);
   const frøSluttspillMutation = useFrøSluttspill(turneringId, klasse.id);
-  const { registrerGruppekamp, registrerSluttspillkamp } = useRegistrerResultat(
-    turneringId,
-    klasse.id
-  );
-
-  const [resultatKampId, setResultatKampId] = useState<string | null>(null);
-  const [resultatErSluttspill, setResultatErSluttspill] = useState(false);
-  const [kampplanDialogOpen, setKampplanDialogOpen] = useState(false);
   const [drawDialogOpen, setDrawDialogOpen] = useState(false);
-
-  const drawKapabiliteter = drawData?.klasse.kapabiliteter ?? [];
-  const kanRegistrere = harHandling(drawKapabiliteter, Kapabiliteter.turnering.registrerResultat);
-  const kanGenererKampplan = harHandling(
-    drawKapabiliteter,
-    Kapabiliteter.turnering.genererKampplan
+  const kanFrøSluttspill = harHandling(
+    ctx.drawKapabiliteter,
+    Kapabiliteter.turnering.frøSluttspill
   );
-  const kanFrøSluttspill = harHandling(drawKapabiliteter, Kapabiliteter.turnering.frøSluttspill);
-  const harDraw = !!drawData;
-
-  const alleGruppekamperFerdig =
-    drawData?.grupper?.every((g) =>
-      g.kamper.every((k) => k.status === "Ferdig" || k.status === "WalkOver" || k.status === "Bye")
-    ) ?? false;
-
-  function åpneResultatForGruppe(kampId: string) {
-    setResultatErSluttspill(false);
-    setResultatKampId(kampId);
-  }
-
-  function åpneResultatForSluttspill(kampId: string) {
-    setResultatErSluttspill(true);
-    setResultatKampId(kampId);
-  }
-
-  function håndterResultatSubmit(payload: RegistrerResultatForespørsel & { kampId: string }) {
-    if (!resultatKampId) return;
-    const mutasjon = resultatErSluttspill ? registrerSluttspillkamp : registrerGruppekamp;
-    mutasjon.mutate(
-      { ...payload, kampId: resultatKampId },
-      { onSuccess: () => setResultatKampId(null) }
-    );
-  }
-
-  const alleKamper = [
-    ...(drawData?.grupper?.flatMap((g) => g.kamper) ?? []),
-    ...(drawData?.sluttspill ?? []),
-  ];
-  const resultatKamp = resultatKampId
-    ? (alleKamper.find((k) => k.id === resultatKampId) ?? null)
-    : null;
-  const erGruppeKamp = !!drawData?.grupper
-    ?.flatMap((g) => g.kamper)
-    .find((k) => k.id === resultatKampId);
-
-  if (isLoading) return <ListSkeleton />;
-
-  const gruppeTabs =
-    drawData?.grupper?.map((gruppe) => ({
-      value: gruppe.id,
-      label: gruppe.navn,
-      content: (
-        <AdminGruppeDrawTab
-          turneringId={turneringId}
-          klasseId={klasse.id}
-          gruppe={gruppe}
-          kanRegistrere={kanRegistrere}
-          onRegistrer={åpneResultatForGruppe}
-        />
-      ),
-    })) ?? [];
-
-  const sluttspillTabs =
-    drawData?.sluttspill && drawData.sluttspill.length > 0
-      ? [
-          {
-            value: "sluttspill",
-            label: "Sluttspill",
-            content: (
-              <SluttspillBracket
-                kamper={drawData.sluttspill}
-                kanRegistrere={kanRegistrere}
-                onRegistrer={åpneResultatForSluttspill}
-              />
-            ),
-          },
-        ]
-      : [];
-
-  const gruppePlanTabs = [...gruppeTabs, ...sluttspillTabs];
 
   return (
-    <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
-      <div className="space-y-4">
-        <PageSection
-          title="Kampprogram"
-          actions={
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button size="sm" variant="outline">
-                  <MoreHorizontal className="size-4" />
-                  <span className="sr-only">Handlinger</span>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem
-                  onClick={() => setDrawDialogOpen(true)}
-                  disabled={genererDrawMutation.isPending}
-                >
-                  {harDraw ? "Regenerer draw" : "Generer draw"}
-                </DropdownMenuItem>
-                {kanGenererKampplan && harDraw && (
-                  <DropdownMenuItem
-                    onClick={() => setKampplanDialogOpen(true)}
-                    disabled={genererKampplanMutation.isPending}
-                  >
-                    Generer kampplan
-                  </DropdownMenuItem>
-                )}
-                {kanFrøSluttspill && harDraw && (
-                  <DropdownMenuItem
-                    onClick={() => frøSluttspillMutation.mutate()}
-                    disabled={frøSluttspillMutation.isPending || !alleGruppekamperFerdig}
-                  >
-                    Frø sluttspill
-                  </DropdownMenuItem>
-                )}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          }
-        >
-          {klasse.foreslåttStartTid && (
-            <p className="text-sm text-muted-foreground">
-              Starter{" "}
-              {format(parseISO(klasse.foreslåttStartTid), "EEEE d. MMM 'kl.' HH:mm", {
-                locale: nb,
-              })}
-            </p>
+    <>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button size="sm" variant="outline">
+            <MoreHorizontal className="size-4" />
+            <span className="sr-only">Handlinger</span>
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem
+            onClick={() => setDrawDialogOpen(true)}
+            disabled={genererDrawMutation.isPending}
+          >
+            {ctx.harDraw ? "Regenerer draw" : "Generer draw"}
+          </DropdownMenuItem>
+          {ctx.kanGenererKampplan && ctx.harDraw && (
+            <DropdownMenuItem onClick={() => ctx.openKampplan()} disabled={ctx.kampplanPending}>
+              Generer kampplan
+            </DropdownMenuItem>
           )}
-
-          {!harDraw && (
-            <p className="text-sm text-muted-foreground italic">Draw er ikke generert ennå.</p>
+          {kanFrøSluttspill && ctx.harDraw && (
+            <DropdownMenuItem
+              onClick={() => frøSluttspillMutation.mutate()}
+              disabled={frøSluttspillMutation.isPending || !ctx.alleGruppekamperFerdig}
+            >
+              Frø sluttspill
+            </DropdownMenuItem>
           )}
-
-          {harDraw && gruppePlanTabs.length === 0 && (
-            <p className="text-sm text-muted-foreground italic">Ingen grupper ennå.</p>
-          )}
-          {harDraw && gruppePlanTabs.length > 0 && <Tabs items={gruppePlanTabs} />}
-        </PageSection>
-
-        <GenererDrawDialog
-          open={drawDialogOpen}
-          onOpenChange={setDrawDialogOpen}
-          klasseStruktur={klasse.struktur}
-          antallGodkjente={klasse.antallGodkjente}
-          erRegenerer={harDraw}
-          onGenerer={(payload) => {
-            genererDrawMutation.mutate(payload);
-            setDrawDialogOpen(false);
-          }}
-          isPending={genererDrawMutation.isPending}
-        />
-
-        <GenererKampplanDialog
-          open={kampplanDialogOpen}
-          onOpenChange={setKampplanDialogOpen}
-          onGenerer={(payload) => {
-            genererKampplanMutation.mutate(payload);
-            setKampplanDialogOpen(false);
-          }}
-          isPending={genererKampplanMutation.isPending}
-        />
-
-        {resultatKamp && (
-          <ResultatDialog
-            open={!!resultatKampId}
-            onOpenChange={(v) => {
-              if (!v) setResultatKampId(null);
-            }}
-            kamp={resultatKamp}
-            antallSett={
-              erGruppeKamp && klasse.gruppespillKampFormat
-                ? klasse.gruppespillKampFormat.antallSett
-                : klasse.sluttspillKampFormat.antallSett
-            }
-            superTiebreak={
-              erGruppeKamp && klasse.gruppespillKampFormat
-                ? klasse.gruppespillKampFormat.superTiebreak
-                : klasse.sluttspillKampFormat.superTiebreak
-            }
-            onSubmit={(payload) => håndterResultatSubmit({ ...payload, kampId: resultatKampId! })}
-            isPending={registrerGruppekamp.isPending || registrerSluttspillkamp.isPending}
-            serverFeil={registrerGruppekamp.error?.message ?? registrerSluttspillkamp.error?.message ?? null}
-          />
-        )}
-      </div>
-    </QueryFeil>
+        </DropdownMenuContent>
+      </DropdownMenu>
+      <GenererDrawDialog
+        open={drawDialogOpen}
+        onOpenChange={setDrawDialogOpen}
+        klasseStruktur={klasse.struktur}
+        antallPaameldte={klasse.antallPaameldte}
+        erRegenerer={ctx.harDraw}
+        onGenerer={(payload) => {
+          genererDrawMutation.mutate(payload);
+          setDrawDialogOpen(false);
+        }}
+        isPending={genererDrawMutation.isPending}
+      />
+    </>
   );
 }
 
@@ -322,7 +95,20 @@ export default function AdminKampgjennomforingView({ turnering }: Props) {
   const klasseTabs = turnering.klasser.map((klasse) => ({
     value: klasse.id,
     label: klasseTypeNavn(klasse.klasseType),
-    content: <AdminKampKlasseTab key={klasse.id} turneringId={turnering.id} klasse={klasse} />,
+    content: (
+      <KlasseKampTab
+        key={klasse.id}
+        turneringId={turnering.id}
+        klasse={klasse}
+        forslagStartTid={
+          klasse.foreslåttStartTid ??
+          (turnering.arrangementStartDato ? `${turnering.arrangementStartDato}T09:00` : null)
+        }
+        renderActions={(ctx) => (
+          <AdminKampActions turneringId={turnering.id} klasse={klasse} ctx={ctx} />
+        )}
+      />
+    ),
   }));
 
   return (

@@ -1,9 +1,8 @@
 import type { ReactNode } from "react";
 import PageSection from "@/components/sections/PageSection";
-import { Button } from "@/components/ui/button";
 import Tabs from "@/components/navigation/Tabs";
 import { TurneringHeaderSection } from "../../components";
-import { STATUS_LABELS } from "./adminStatusUtils";
+import { NesteStatusKnapp } from "./NesteStatusKnapp";
 import type { TurneringRespons, TurneringStatus } from "@/types";
 
 type TabItem = { value: string; label: string; content: ReactNode };
@@ -29,19 +28,15 @@ export default function AdminKampgjennomforingContent({
       <TurneringHeaderSection
         tittel={turnering.arrangementTittel}
         status={turnering.status}
-        beskrivelse={turnering.arrangementBeskrivelse}
         startDato={turnering.arrangementStartDato}
         sluttDato={turnering.arrangementSluttDato}
         actions={
           neste ? (
-            <Button
-              size="sm"
-              variant="outline"
-              onClick={onNesteStatus}
-              disabled={nesteStatusPending}
-            >
-              {nesteStatusPending ? "Oppdaterer..." : `Sett til «${STATUS_LABELS[neste]}»`}
-            </Button>
+            <NesteStatusKnapp
+              neste={neste}
+              onNesteStatus={onNesteStatus}
+              pending={nesteStatusPending}
+            />
           ) : undefined
         }
       />
