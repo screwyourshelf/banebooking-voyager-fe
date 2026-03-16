@@ -41,48 +41,48 @@ export default function ForhandsvisningTable({ forhandsvisning }: Props) {
 
   return (
     <div className="max-h-[60vh] overflow-auto rounded-md border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Dato</TableHead>
-              <TableHead>Klokkeslett</TableHead>
-              <TableHead>Bane</TableHead>
-              <TableHead>Status</TableHead>
-            </TableRow>
-          </TableHeader>
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableHead>Dato</TableHead>
+            <TableHead>Klokkeslett</TableHead>
+            <TableHead>Bane</TableHead>
+            <TableHead>Status</TableHead>
+          </TableRow>
+        </TableHeader>
 
-          <TableBody>
-            {alleSlots.map((slot) => {
-              const erKonflikt = konfliktKeys.has(slotKey(slot));
-              const baneNavn = slot.baneNavn?.trim() || "(ukjent bane)";
+        <TableBody>
+          {alleSlots.map((slot) => {
+            const erKonflikt = konfliktKeys.has(slotKey(slot));
+            const baneNavn = slot.baneNavn?.trim() || "(ukjent bane)";
 
-              return (
-                <TableRow
-                  key={slotKey(slot)}
-                  className={cn("hover:bg-muted/50", erKonflikt && "bg-muted/40")}
-                >
-                  <TableCell className="align-top whitespace-nowrap">
-                    {formatDatoKort(slot.dato)}
-                  </TableCell>
+            return (
+              <TableRow
+                key={slotKey(slot)}
+                className={cn("hover:bg-muted/50", erKonflikt && "bg-muted/40")}
+              >
+                <TableCell className="align-top whitespace-nowrap">
+                  {formatDatoKort(slot.dato)}
+                </TableCell>
 
-                  <TableCell className="align-top whitespace-nowrap">
-                    {slot.startTid} – {slot.sluttTid}
-                  </TableCell>
+                <TableCell className="align-top whitespace-nowrap">
+                  {slot.startTid} – {slot.sluttTid}
+                </TableCell>
 
-                  <TableCell className="align-top whitespace-nowrap">{baneNavn}</TableCell>
+                <TableCell className="align-top whitespace-nowrap">{baneNavn}</TableCell>
 
-                  <TableCell className="align-top">
-                    {erKonflikt ? (
-                      <span className="text-xs text-muted-foreground">Konflikt</span>
-                    ) : (
-                      <span className="text-xs text-muted-foreground">Ledig</span>
-                    )}
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </div>
+                <TableCell className="align-top">
+                  {erKonflikt ? (
+                    <span className="text-xs text-muted-foreground">Konflikt</span>
+                  ) : (
+                    <span className="text-xs text-muted-foreground">Ledig</span>
+                  )}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </div>
   );
 }

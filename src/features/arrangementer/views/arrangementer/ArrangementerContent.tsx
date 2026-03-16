@@ -213,18 +213,18 @@ export default function ArrangementerContent({
                             iconClassName={arr.erPaameldt ? "text-green-600" : undefined}
                           >
                             {erInnlogget ? (
-                            <PaameldteDialog arrangementId={arr.id} tittel={arr.tittel}>
-                              <button
-                                type="button"
-                                aria-label="Påmeldte"
-                                className="underline underline-offset-2 hover:text-foreground transition-colors"
-                              >
-                                {arr.antallPaameldte} påmeldt
-                              </button>
-                            </PaameldteDialog>
-                          ) : (
-                            <span>{arr.antallPaameldte} påmeldt</span>
-                          )}
+                              <PaameldteDialog arrangementId={arr.id} tittel={arr.tittel}>
+                                <button
+                                  type="button"
+                                  aria-label="Påmeldte"
+                                  className="underline underline-offset-2 hover:text-foreground transition-colors"
+                                >
+                                  {arr.antallPaameldte} påmeldt
+                                </button>
+                              </PaameldteDialog>
+                            ) : (
+                              <span>{arr.antallPaameldte} påmeldt</span>
+                            )}
                           </AccordionDetailRow>
                         )}
                         {arr.turneringStatus !== null && (
