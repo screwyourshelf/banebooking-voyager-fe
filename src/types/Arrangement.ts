@@ -32,6 +32,8 @@ export type BaneGruppeForespørsel = {
 export type OpprettArrangementForespørsel = {
   tittel: string;
   beskrivelse?: string;
+  nettsideBeskrivelse?: string;
+  publisertPåNettsiden?: boolean;
   kategori: ArrangementKategori;
   startDato: string;
   sluttDato: string;
@@ -45,6 +47,22 @@ export type SlettArrangementForespørsel = {
 };
 
 // ─────────── Responses ───────────
+
+export type ArrangementPresentasjonType =
+  | "EnkeltDato"
+  | "DatoIntervallAlleDager"
+  | "DatoIntervallUkedager"
+  | "Uregelmessig";
+
+export type ArrangementPresentasjon = {
+  type: ArrangementPresentasjonType;
+  startDato: string;
+  sluttDato: string;
+  ukedager: DayOfWeek[];
+  tidspunkter: string[];
+  baneNavn: string[];
+  harAvvikendeSlots: boolean;
+};
 
 export type ArrangementSlotRespons = {
   dato: string;
@@ -86,10 +104,27 @@ export type BaneGruppeRespons = {
   slotLengdeMinutter: number;
 };
 
+export type OffentligArrangementRespons = {
+  id: string;
+  tittel: string;
+  /** Innholdet fra nettsideBeskrivelse – kan være HTML eller Markdown */
+  beskrivelse?: string;
+  kategori: ArrangementKategori;
+  startDato: string;
+  sluttDato: string;
+  baneGrupper: BaneGruppeRespons[];
+  ukedager: DayOfWeek[];
+  tillaterPaamelding: boolean;
+  antallPaameldte: number;
+  presentasjon: ArrangementPresentasjon;
+};
+
 export type ArrangementRespons = {
   id: string;
   tittel: string;
   beskrivelse?: string;
+  nettsideBeskrivelse?: string;
+  publisertPåNettsiden: boolean;
   kategori: ArrangementKategori;
   startDato: string;
   sluttDato: string;
@@ -102,6 +137,7 @@ export type ArrangementRespons = {
   kapabiliteter: string[];
   turneringId: string | null;
   turneringStatus: string | null;
+  presentasjon: ArrangementPresentasjon;
 };
 
 export type ArrangementPaameldingRespons = {

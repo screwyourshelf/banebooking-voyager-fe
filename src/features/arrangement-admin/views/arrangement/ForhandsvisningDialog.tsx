@@ -18,8 +18,6 @@ type Props = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
 
-  beskrivelse: string;
-
   forhandsvisning: ArrangementForhåndsvisningRespons;
   isLoading: boolean;
 
@@ -32,7 +30,6 @@ type Props = {
 export default function ForhandsvisningDialog({
   open,
   onOpenChange,
-  beskrivelse,
   forhandsvisning,
   isLoading,
   onCreate,
@@ -67,7 +64,7 @@ export default function ForhandsvisningDialog({
               </Alert>
             )}
 
-            <ForhandsvisningTable beskrivelse={beskrivelse} forhandsvisning={forhandsvisning} />
+            <ForhandsvisningTable forhandsvisning={forhandsvisning} />
 
             <DialogFooter className="mt-3">
               <ServerFeil feil={serverFeil ?? null} />

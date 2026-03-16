@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+﻿import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList } from "@/components/rows";
@@ -45,6 +45,7 @@ type Props = {
   onAvlys: (arr: ArrangementRespons) => Promise<unknown>;
   defaultArrangementId?: string;
   serverFeil?: string | null;
+  erInnlogget: boolean;
 };
 
 const TURNERING_STATUS_TEKST: Record<string, string> = {
@@ -69,6 +70,7 @@ export default function ArrangementerContent({
   onAvlys,
   defaultArrangementId,
   serverFeil,
+  erInnlogget,
 }: Props) {
   const slug = useSlug();
   const navigate = useNavigate();
@@ -210,6 +212,7 @@ export default function ArrangementerContent({
                             label="Påmeldte"
                             iconClassName={arr.erPaameldt ? "text-green-600" : undefined}
                           >
+                            {erInnlogget ? (
                             <PaameldteDialog arrangementId={arr.id} tittel={arr.tittel}>
                               <button
                                 type="button"
@@ -219,6 +222,9 @@ export default function ArrangementerContent({
                                 {arr.antallPaameldte} påmeldt
                               </button>
                             </PaameldteDialog>
+                          ) : (
+                            <span>{arr.antallPaameldte} påmeldt</span>
+                          )}
                           </AccordionDetailRow>
                         )}
                         {arr.turneringStatus !== null && (

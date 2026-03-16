@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+﻿import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import {
   DropdownMenu,
@@ -245,6 +245,15 @@ export default function Navbar() {
               </>
             ) : (
               <>
+                <DropdownMenuItem asChild>
+                  <Link to={`/${slug}/arrangementer`} {...prefetch("arrangementer")}>
+                    <Calendar className="mr-2 size-4" />
+                    Arrangementer
+                  </Link>
+                </DropdownMenuItem>
+
+                <DropdownMenuSeparator />
+
                 <p className="text-xs text-muted-foreground px-2 pb-1">
                   Ved å logge inn samtykker du til våre{" "}
                   <Link to={`/${slug}/vilkaar`} className="underline">

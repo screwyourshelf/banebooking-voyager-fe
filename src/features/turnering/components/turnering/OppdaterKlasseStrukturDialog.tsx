@@ -10,7 +10,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { OppdaterKlasseStrukturForespørsel, TurneringKlasseRespons, TurneringStruktur } from "@/types";
+import type {
+  OppdaterKlasseStrukturForespørsel,
+  TurneringKlasseRespons,
+  TurneringStruktur,
+} from "@/types";
 import { ServerFeil } from "@/components/errors";
 import { klasseTypeNavn } from "../draw/klasseTypeUtils";
 

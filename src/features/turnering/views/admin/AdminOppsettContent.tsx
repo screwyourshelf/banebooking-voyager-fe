@@ -142,11 +142,7 @@ export default function AdminOppsettContent({
                     description={`${k.antallPaameldte} påmeldt${k.foreslåttStartTid ? ` · Starter ${format(parseISO(k.foreslåttStartTid), "d. MMM 'kl.' HH:mm", { locale: nb })}` : ""}`}
                     right={
                       <div className="flex items-center gap-1">
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => onRedigerKlasse(k)}
-                        >
+                        <Button variant="ghost" size="sm" onClick={() => onRedigerKlasse(k)}>
                           <Pencil className="h-4 w-4" />
                         </Button>
                         <Button
@@ -287,7 +283,9 @@ export default function AdminOppsettContent({
       {redigerKlasse && (
         <OppdaterKlasseStrukturDialog
           open={!!redigerKlasse}
-          onOpenChange={(v) => { if (!v) onRedigerKlasse(null); }}
+          onOpenChange={(v) => {
+            if (!v) onRedigerKlasse(null);
+          }}
           klasse={redigerKlasse}
           onOppdater={onOppdaterKlasseStruktur}
           isPending={oppdaterKlasseStrukturPending}

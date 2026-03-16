@@ -1,4 +1,4 @@
-import { lazy, type ComponentType } from "react";
+﻿import { lazy, type ComponentType } from "react";
 
 export interface RouteConfig {
   path: string;
@@ -83,7 +83,6 @@ export const routeConfig: RouteConfig[] = [
   {
     path: "arrangementer",
     breadcrumb: "Arrangementer",
-    protected: true,
     component: ArrangementerPage,
     loader: loadArrangementerPage,
   },

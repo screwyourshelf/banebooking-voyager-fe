@@ -60,6 +60,8 @@ export default function ArrangementView() {
 
   const [kategori, setKategori] = useState<ArrangementKategori>("Annet");
   const [beskrivelse, setBeskrivelse] = useState("");
+  const [nettsideBeskrivelse, setNettsideBeskrivelse] = useState("");
+  const [publisertPåNettsiden, setPublisertPåNettsiden] = useState(false);
   const [tillaterPaamelding, setTillaterPaamelding] = useState(false);
   const [opprettTurnering, setOpprettTurnering] = useState(false);
 
@@ -181,6 +183,8 @@ export default function ArrangementView() {
       valgteUkedager,
       kategori,
       beskrivelse,
+      nettsideBeskrivelse,
+      publisertPåNettsiden,
       tillaterPaamelding,
       onWarning: (msg) => toast.warning(msg),
     });
@@ -247,6 +251,10 @@ export default function ArrangementView() {
       isLoadingForhandsvisning={isLoadingForhandsvisning}
       onChangeKategori={setKategori}
       onChangeBeskrivelse={setBeskrivelse}
+      nettsideBeskrivelse={nettsideBeskrivelse}
+      publisertPåNettsiden={publisertPåNettsiden}
+      onChangeNettsideBeskrivelse={setNettsideBeskrivelse}
+      onChangePublisertPåNettsiden={setPublisertPåNettsiden}
       tillaterPaamelding={tillaterPaamelding}
       onChangeTillaterPaamelding={(v) => {
         setTillaterPaamelding(v);

@@ -13,7 +13,6 @@ import { formatDatoKort } from "@/utils/datoUtils";
 import type { ArrangementForhåndsvisningRespons, ArrangementSlotRespons } from "@/types";
 
 type Props = {
-  beskrivelse: string;
   forhandsvisning: ArrangementForhåndsvisningRespons;
 };
 
@@ -21,7 +20,7 @@ function slotKey(s: ArrangementSlotRespons) {
   return `${s.dato}|${s.baneId}|${s.startTid}|${s.sluttTid}`;
 }
 
-export default function ForhandsvisningTable({ beskrivelse, forhandsvisning }: Props) {
+export default function ForhandsvisningTable({ forhandsvisning }: Props) {
   const konfliktKeys = useMemo(
     () => new Set(forhandsvisning.konflikter.map(slotKey)),
     [forhandsvisning.konflikter]
@@ -41,10 +40,7 @@ export default function ForhandsvisningTable({ beskrivelse, forhandsvisning }: P
   }, [forhandsvisning.ledige, forhandsvisning.konflikter]);
 
   return (
-    <div className="space-y-2">
-      <p className="text-sm text-muted-foreground">{beskrivelse}</p>
-
-      <div className="max-h-[60vh] overflow-auto rounded-md border">
+    <div className="max-h-[60vh] overflow-auto rounded-md border">
         <Table>
           <TableHeader>
             <TableRow>
@@ -88,6 +84,5 @@ export default function ForhandsvisningTable({ beskrivelse, forhandsvisning }: P
           </TableBody>
         </Table>
       </div>
-    </div>
   );
 }

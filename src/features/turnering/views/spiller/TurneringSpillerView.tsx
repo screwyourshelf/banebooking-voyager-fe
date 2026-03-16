@@ -6,12 +6,7 @@ import { Button } from "@/components/ui/button";
 import Tabs from "@/components/navigation/Tabs";
 import { ListSkeleton } from "@/components/loading";
 import { QueryFeil, ServerFeil } from "@/components/errors";
-import {
-  klasseTypeNavn,
-  MeldPaaDialog,
-  GruppeTab,
-  SluttspillBracket,
-} from "../../components";
+import { klasseTypeNavn, MeldPaaDialog, GruppeTab, SluttspillBracket } from "../../components";
 import { usePaameldinger } from "../../hooks/paamelding/usePaameldinger";
 import { useMeldPaaKlasse } from "../../hooks/paamelding/useMeldPaaKlasse";
 import { useTrekkPaamelding } from "../../hooks/paamelding/useTrekkPaamelding";
@@ -36,8 +31,7 @@ function SpillerPaameldingKlasseTab({
 
   if (isLoading) return <ListSkeleton />;
 
-  const aktivePaameldinger =
-    data?.paameldinger.filter((p) => !p.trukketSeg) ?? [];
+  const aktivePaameldinger = data?.paameldinger.filter((p) => !p.trukketSeg) ?? [];
 
   return (
     <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>

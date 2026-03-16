@@ -124,12 +124,24 @@ type ByggDtoArgs = {
   valgteUkedager: DayOfWeek[];
   kategori: ArrangementKategori;
   beskrivelse: string;
+  nettsideBeskrivelse: string;
+  publisertPåNettsiden: boolean;
   tillaterPaamelding: boolean;
   onWarning: (msg: string) => void;
 };
 
 export function byggDto(args: ByggDtoArgs): OpprettArrangementForespørsel | null {
-  const { datoFra, datoTil, baneGrupper, valgteUkedager, kategori, beskrivelse, onWarning } = args;
+  const {
+    datoFra,
+    datoTil,
+    baneGrupper,
+    valgteUkedager,
+    kategori,
+    beskrivelse,
+    nettsideBeskrivelse,
+    publisertPåNettsiden,
+    onWarning,
+  } = args;
 
   const gyldigeGrupper = baneGrupper.filter(
     (g) => g.baneIder.length > 0 && g.tidspunkter.length > 0
@@ -152,6 +164,8 @@ export function byggDto(args: ByggDtoArgs): OpprettArrangementForespørsel | nul
   return {
     tittel: kategori,
     beskrivelse: beskrivelse?.trim() ? beskrivelse : undefined,
+    nettsideBeskrivelse: nettsideBeskrivelse?.trim() ? nettsideBeskrivelse : undefined,
+    publisertPåNettsiden: publisertPåNettsiden || undefined,
     kategori,
     startDato: tilDatoTekst(datoFra),
     sluttDato: tilDatoTekst(datoTil),

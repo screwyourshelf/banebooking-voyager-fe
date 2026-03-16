@@ -1,4 +1,5 @@
-import { useState } from "react";
+﻿import { useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 import { ListSkeleton } from "@/components/loading";
 import { QueryFeil } from "@/components/errors";
 import { useSearchParams } from "react-router-dom";
@@ -11,6 +12,7 @@ import ArrangementerContent from "./ArrangementerContent";
 export default function ArrangementerView() {
   const [searchParams] = useSearchParams();
   const [visHistoriske, setVisHistoriske] = useState(false);
+  const { currentUser } = useAuth();
 
   const {
     data: arrangementer = [],
@@ -38,6 +40,7 @@ export default function ArrangementerView() {
         onAvlys={onAvlys}
         defaultArrangementId={defaultArrangementId}
         serverFeil={serverFeil}
+        erInnlogget={!!currentUser}
       />
     </QueryFeil>
   );

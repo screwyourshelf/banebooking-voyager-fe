@@ -36,12 +36,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import type {
-  TurneringRespons,
-  TurneringKlasseRespons,
-  BrukerRespons,
-  KlasseType,
-} from "@/types";
+import type { TurneringRespons, TurneringKlasseRespons, BrukerRespons, KlasseType } from "@/types";
 
 const DOBBEL_KLASSER: KlasseType[] = ["HerreDobbel", "DameDobbel", "MixedDobbel", "JuniorDobbel"];
 
@@ -63,8 +58,7 @@ function AdminPaameldingKlasseTab({ turneringId, klasse, brukere }: KlasseTabPro
 
   if (isLoading) return <ListSkeleton />;
 
-  const aktivePaameldinger =
-    data?.paameldinger.filter((p) => !p.trukketSeg) ?? [];
+  const aktivePaameldinger = data?.paameldinger.filter((p) => !p.trukketSeg) ?? [];
 
   const paameldingForStatusDialog = statusDialogForId
     ? (data?.paameldinger.find((p) => p.id === statusDialogForId) ?? null)

@@ -90,7 +90,10 @@ export default function RedigerArrangementView() {
 
   const [kategori, setKategori] = useState<ArrangementKategori>("Annet");
   const [beskrivelse, setBeskrivelse] = useState("");
+  const [nettsideBeskrivelse, setNettsideBeskrivelse] = useState("");
+  const [publisertPåNettsiden, setPublisertPåNettsiden] = useState(false);
   const [tillaterPaamelding, setTillaterPaamelding] = useState(false);
+  const [ønskerTurnering, setØnskerTurnering] = useState(false);
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [prefyltId, setPrefyltId] = useState<string | null>(null);
@@ -107,6 +110,8 @@ export default function RedigerArrangementView() {
     }
     setKategori(arrangement.kategori);
     setBeskrivelse(arrangement.beskrivelse ?? "");
+    setNettsideBeskrivelse(arrangement.nettsideBeskrivelse ?? "");
+    setPublisertPåNettsiden(arrangement.publisertPåNettsiden ?? false);
     setTillaterPaamelding(arrangement.tillaterPaamelding);
     setDatoFra(parseDatoString(arrangement.startDato));
     setDatoTil(parseDatoString(arrangement.sluttDato));
@@ -141,6 +146,7 @@ export default function RedigerArrangementView() {
     setAlleBaner(false);
     setAlleUkedager(false);
     setAlleTidspunkter(false);
+    setØnskerTurnering(false);
     setPrefyltId(arrangement.id);
   }, [arrangement, baner]);
 
@@ -256,6 +262,8 @@ export default function RedigerArrangementView() {
       valgteUkedager,
       kategori,
       beskrivelse,
+      nettsideBeskrivelse,
+      publisertPåNettsiden,
       tillaterPaamelding,
       onWarning: (msg) => toast.warning(msg),
     });
@@ -272,10 +280,13 @@ export default function RedigerArrangementView() {
     if (!dto) return;
     try {
       await erstatt(dto);
+      if (ønskerTurnering && !arrangement?.turneringId) {
+        await turneringMutation.mutateAsync({ arrangementId: arrangement!.id });
+      }
       clearForhandsvisning();
       setDialogOpen(false);
     } catch {
-      // feil vises via erstattFeil
+      // feil vises via erstattFeil / turneringMutation.error
     }
   };
 
@@ -346,6 +357,7 @@ export default function RedigerArrangementView() {
                 {arrangement && prefyltId === arrangement.id && (
                   <SlettArrangementDialog
                     tittel={arrangement.tittel}
+                    harTurnering={arrangement.turneringId !== null}
                     onSlett={async () => {
                       await avlys(arrangement.id);
                       setValgtId("");
@@ -384,18 +396,21 @@ export default function RedigerArrangementView() {
           isLoadingForhandsvisning={isLoadingForhandsvisning}
           onChangeKategori={setKategori}
           onChangeBeskrivelse={setBeskrivelse}
+          nettsideBeskrivelse={nettsideBeskrivelse}
+          publisertPåNettsiden={publisertPåNettsiden}
+          onChangeNettsideBeskrivelse={setNettsideBeskrivelse}
+          onChangePublisertPåNettsiden={setPublisertPåNettsiden}
           tillaterPaamelding={tillaterPaamelding}
           tillaterPaameldingDisabled={!!arrangement.turneringId}
           onChangeTillaterPaamelding={(v) => {
             setTillaterPaamelding(v);
+            if (v) setØnskerTurnering(false);
           }}
-          tillaterTurnering={!!arrangement.turneringId}
+          tillaterTurnering={!!arrangement.turneringId || ønskerTurnering}
           tillaterTurneringDisabled={!!arrangement.turneringId}
           onChangeTillaterTurnering={(v) => {
-            if (v) {
-              setTillaterPaamelding(false);
-              turneringMutation.mutate({ arrangementId: arrangement.id });
-            }
+            setØnskerTurnering(v);
+            if (v) setTillaterPaamelding(false);
           }}
           onNavigerTilTurnering={
             arrangement.turneringId
