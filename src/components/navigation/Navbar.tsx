@@ -1,4 +1,4 @@
-﻿import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useEffect, useMemo, useState } from "react";
 import {
   DropdownMenu,
@@ -12,7 +12,7 @@ import { FormLayout, FormActions, FormSubmitButton } from "@/components/forms";
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
-import { User, LogIn, LogOut, Calendar, CircleUser, Wrench, Menu } from "lucide-react";
+import { LogIn, LogOut, Calendar, CalendarCheck, CircleUser, Wrench, Menu, Home, Trophy } from "lucide-react";
 import { GoogleIcon } from "@/components/icons";
 
 import { useAuth } from "@/hooks/useAuth";
@@ -129,7 +129,16 @@ export default function Navbar() {
     <div className="w-full flex justify-between items-center px-2 py-1">
       <NavbarBrandMedKlubb klubbnavn={klubb?.navn ?? "\u00A0"} />
 
-      <div className="flex items-center gap-1">
+      <nav className="hidden sm:flex items-center gap-0.5 mx-4">
+        <Button variant="ghost" size="sm" className="h-8 text-sm" asChild>
+          <Link to={`/${slug}`}>Book bane</Link>
+        </Button>
+        <Button variant="ghost" size="sm" className="h-8 text-sm" asChild>
+          <Link to={`/${slug}/arrangementer`} {...prefetch("arrangementer")}>Arrangementer</Link>
+        </Button>
+      </nav>
+
+      <div className="flex items-center gap-1 ml-auto">
         <ModeToggle />
         <NotifikasjonDrawer />
 
@@ -139,15 +148,15 @@ export default function Navbar() {
               variant="outline"
               aria-label="Åpne meny"
               aria-haspopup="menu"
-              className="h-8 px-2 flex items-center gap-2 sm:text-xs sm:px-2"
+              className="h-8 px-2 flex items-center gap-2"
             >
               <Menu className="size-4 text-muted-foreground sm:hidden" />
 
-              <span className="hidden sm:inline-flex items-center gap-2">
+              <span className="hidden sm:inline-flex items-center gap-2 text-xs">
                 {currentUser ? (
                   <>
-                    <User className="size-4 text-muted-foreground" />
-                    {currentUser.email}
+                    <CircleUser className="size-4 text-muted-foreground" />
+                    <span className="max-w-[10rem] truncate">{currentUser.email}</span>
                   </>
                 ) : (
                   <>
@@ -162,6 +171,22 @@ export default function Navbar() {
           <DropdownMenuContent align="end" className="w-64 space-y-0.5">
             {currentUser ? (
               <>
+                <div className="sm:hidden">
+                  <DropdownMenuItem asChild>
+                    <Link to={`/${slug}`}>
+                      <Home className="mr-2 size-4" />
+                      Book bane
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to={`/${slug}/arrangementer`} {...prefetch("arrangementer")}>
+                      <Trophy className="mr-2 size-4" />
+                      Arrangementer
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </div>
+
                 <DropdownMenuItem asChild>
                   <Link to={`/${slug}/minside`} {...prefetch("minside")}>
                     <CircleUser className="mr-2 size-4" />
@@ -171,22 +196,8 @@ export default function Navbar() {
 
                 <DropdownMenuItem asChild>
                   <Link to={`/${slug}/bookinger`} {...prefetch("bookinger")}>
-                    <Calendar className="mr-2 size-4" />
+                    <CalendarCheck className="mr-2 size-4" />
                     Mine bookinger
-                  </Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem asChild>
-                  <Link to={`/${slug}/arrangementer`} {...prefetch("arrangementer")}>
-                    <Calendar className="mr-2 size-4" />
-                    Arrangementer
-                  </Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem asChild>
-                  <Link to={`/${slug}`}>
-                    <Calendar className="mr-2 size-4" />
-                    Book bane
                   </Link>
                 </DropdownMenuItem>
 
@@ -245,14 +256,21 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                <DropdownMenuItem asChild>
-                  <Link to={`/${slug}/arrangementer`} {...prefetch("arrangementer")}>
-                    <Calendar className="mr-2 size-4" />
-                    Arrangementer
-                  </Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuSeparator />
+                <div className="sm:hidden">
+                  <DropdownMenuItem asChild>
+                    <Link to={`/${slug}`}>
+                      <Home className="mr-2 size-4" />
+                      Book bane
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link to={`/${slug}/arrangementer`} {...prefetch("arrangementer")}>
+                      <Trophy className="mr-2 size-4" />
+                      Arrangementer
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                </div>
 
                 <p className="text-xs text-muted-foreground px-2 pb-1">
                   Ved å logge inn samtykker du til våre{" "}
