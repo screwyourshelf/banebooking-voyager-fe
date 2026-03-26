@@ -1,1 +1,0 @@
-import{j as r,bU as s}from"./react-CnrBNToK.js";import{A as t,n as i}from"./index-COmmaFXm.js";function l({feil:e}){return e?r.jsxs(t,{variant:"destructive",children:[r.jsx(s,{className:"h-4 w-4"}),r.jsx(i,{children:e})]}):null}export{l as S};
