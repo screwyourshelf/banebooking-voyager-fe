@@ -5,6 +5,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { AccordionDetailGrid, AccordionDetailRow, AccordionActions } from "@/components/accordion";
+import { Stack, Inline } from "@/components/layout";
 import WeatherInfo from "@/components/WeatherInfo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -102,8 +103,8 @@ export function BookingSlotListAccordion({
             className={`rounded-md border bg-background px-2 last:border-b shadow-sm ${slot.erPassert ? "opacity-50" : ""}`}
           >
             <AccordionTrigger className="hover:no-underline">
-              <div className="flex flex-col items-start gap-1.5">
-                <div className="flex items-center gap-2">
+              <Stack gap="xs" className="items-start">
+                <Inline gap="md">
                   <span className="font-medium sm:hidden">{tidKort}</span>
                   <span className="font-medium hidden sm:inline">{tid}</span>
                   <WeatherInfo værSymbol={slot.værSymbol} iconOnly />
@@ -120,7 +121,7 @@ export function BookingSlotListAccordion({
                         <UserCheck className="size-4" />
                       </span>
                     )}
-                </div>
+                </Inline>
                 {harArrangement && slot.arrangementBeskrivelse && (
                   <span className="text-xs text-muted-foreground line-clamp-1">
                     {slot.arrangementBeskrivelse}
@@ -129,11 +130,11 @@ export function BookingSlotListAccordion({
                 {erBooket && !harArrangement && slot.booketAv && (
                   <span className="text-xs text-muted-foreground">{slot.booketAv}</span>
                 )}
-              </div>
+              </Stack>
             </AccordionTrigger>
 
             <AccordionContent>
-              <div className="space-y-3">
+              <Stack gap="sm">
                 <AccordionDetailGrid>
                   <AccordionDetailRow icon={Timer} label="Varighet">
                     {varighet} min
@@ -310,7 +311,7 @@ export function BookingSlotListAccordion({
                     )}
                   </AccordionActions>
                 )}
-              </div>
+              </Stack>
             </AccordionContent>
           </AccordionItem>
         );

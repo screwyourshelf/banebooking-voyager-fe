@@ -1,6 +1,7 @@
 ﻿import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import PageSection from "@/components/sections/PageSection";
+import { Stack, Inline } from "@/components/layout";
 import { RowPanel, RowList } from "@/components/rows";
 import SwitchRow from "@/components/rows/SwitchRow";
 import {
@@ -136,8 +137,8 @@ export default function ArrangementerContent({
                   className={`rounded-md border bg-background px-2 last:border-b shadow-sm ${arr.erPassert ? "opacity-50" : ""}`}
                 >
                   <AccordionTrigger className="hover:no-underline">
-                    <div className="flex flex-col items-start gap-1.5">
-                      <div className="flex items-center gap-2">
+                    <Stack gap="xs" className="items-start">
+                      <Inline gap="md">
                         <span className="font-medium">{arr.tittel}</span>
                         {arr.erPassert ? (
                           <Badge variant="outline" className="text-xs">
@@ -153,13 +154,13 @@ export default function ArrangementerContent({
                             <UserCheck className="size-4" />
                           </span>
                         )}
-                      </div>
+                      </Inline>
                       <span className="text-xs text-muted-foreground">{datoTekst(arr)}</span>
-                    </div>
+                    </Stack>
                   </AccordionTrigger>
 
                   <AccordionContent>
-                    <div className="space-y-3">
+                    <Stack gap="sm">
                       {harBeskrivelse && (
                         <p className="text-sm text-muted-foreground whitespace-pre-wrap">
                           {beskrivelse}
@@ -334,7 +335,7 @@ export default function ArrangementerContent({
                             )}
                         </AccordionActions>
                       )}
-                    </div>
+                    </Stack>
                   </AccordionContent>
                 </AccordionItem>
               );
@@ -342,7 +343,7 @@ export default function ArrangementerContent({
           </Accordion>
 
           {harFlere && (
-            <div className="flex justify-center mt-4">
+            <Inline justify="center" className="mt-4">
               <Button
                 variant="outline"
                 size="sm"
@@ -350,7 +351,7 @@ export default function ArrangementerContent({
               >
                 Vis flere ({arrangementer.length - synligAntall} gjenstår)
               </Button>
-            </div>
+            </Inline>
           )}
         </>
       )}

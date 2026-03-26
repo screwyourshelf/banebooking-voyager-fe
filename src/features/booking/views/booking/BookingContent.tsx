@@ -1,6 +1,7 @@
 import DatoVelger from "@/components/DatoVelger";
 import { BookingSlotListAccordion } from "@/features/booking/components";
 import { TabsLazyMount } from "@/components/navigation";
+import { Inline } from "@/components/layout";
 import { ServerFeil } from "@/components/errors";
 
 import type { KalenderSlotRespons, BaneRespons } from "@/types";
@@ -45,13 +46,13 @@ export default function BookingContent({
 }: Props) {
   return (
     <>
-      <div className="flex justify-between items-center mb-2">
+      <Inline justify="between" className="mb-2">
         <DatoVelger
           value={valgtDato}
           onChange={(date) => onDatoChange(date ?? null)}
           visNavigering={true}
         />
-      </div>
+      </Inline>
 
       <ServerFeil feil={serverFeil} />
 

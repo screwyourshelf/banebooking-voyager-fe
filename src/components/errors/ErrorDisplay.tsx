@@ -1,5 +1,6 @@
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
+import { Stack } from "@/components/layout";
 
 type ErrorDisplayProps = {
   icon: LucideIcon;
@@ -19,13 +20,13 @@ export function ErrorDisplay({
   const isDev = import.meta.env.DEV;
 
   return (
-    <div className="flex flex-col items-center gap-6 py-12 px-6 text-center">
+    <Stack gap="xl" className="items-center py-12 px-6 text-center">
       <Icon className="h-16 w-16 text-muted-foreground" />
 
-      <div className="space-y-1">
+      <Stack gap="xs" className="items-center">
         <h1 className="text-xl font-semibold">{title}</h1>
         <p className="text-sm text-muted-foreground">{description}</p>
-      </div>
+      </Stack>
 
       {children}
 
@@ -36,6 +37,6 @@ export function ErrorDisplay({
             : String(error)}
         </pre>
       )}
-    </div>
+    </Stack>
   );
 }

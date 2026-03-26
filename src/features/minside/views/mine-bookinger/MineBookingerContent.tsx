@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import PageSection from "@/components/sections/PageSection";
+import { Stack, Inline } from "@/components/layout";
 import { RowPanel, RowList } from "@/components/rows";
 import SwitchRow from "@/components/rows/SwitchRow";
 import { ServerFeil } from "@/components/errors";
@@ -105,8 +106,8 @@ export default function MineBookingerContent({
                   className={`rounded-md border bg-background px-2 last:border-b shadow-sm ${b.erPassert ? "opacity-50" : ""}`}
                 >
                   <AccordionTrigger className="hover:no-underline">
-                    <div className="flex flex-col items-start gap-1.5">
-                      <div className="flex items-center gap-2">
+                    <Stack gap="xs" className="items-start">
+                      <Inline gap="md">
                         <span className="font-medium">{b.baneNavn}</span>
                         <span className="font-medium sm:hidden">{tidKort}</span>
                         <span className="font-medium hidden sm:inline">{tid}</span>
@@ -120,15 +121,15 @@ export default function MineBookingerContent({
                             {dagerIgjenTekst(b.dato)}
                           </Badge>
                         )}
-                      </div>
+                      </Inline>
                       <span className="text-xs text-muted-foreground">
                         {formatDatoKort(b.dato)}
                       </span>
-                    </div>
+                    </Stack>
                   </AccordionTrigger>
 
                   <AccordionContent>
-                    <div className="space-y-3">
+                    <Stack gap="sm">
                       <AccordionDetailGrid>
                         <AccordionDetailRow icon={Calendar} label="Dato">
                           {formatDatoKort(b.dato)}
@@ -180,7 +181,7 @@ export default function MineBookingerContent({
                           </Button>
                         </AccordionActions>
                       )}
-                    </div>
+                    </Stack>
                   </AccordionContent>
                 </AccordionItem>
               );
@@ -188,7 +189,7 @@ export default function MineBookingerContent({
           </Accordion>
 
           {harFlere && (
-            <div className="flex justify-center mt-4">
+            <Inline justify="center" className="mt-4">
               <Button
                 variant="outline"
                 size="sm"
@@ -196,7 +197,7 @@ export default function MineBookingerContent({
               >
                 Vis flere ({bookinger.length - synligAntall} gjenstår)
               </Button>
-            </div>
+            </Inline>
           )}
         </>
       )}

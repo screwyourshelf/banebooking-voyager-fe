@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field } from "@/components/ui/field";
+import { Stack } from "@/components/layout";
 import { ServerFeil } from "@/components/errors";
 
 import {
@@ -48,13 +49,13 @@ export default function RedigerBrukerDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
-          <div className="space-y-1">
+        <Stack gap="lg">
+          <Stack gap="xs">
             <div className="text-xs text-muted-foreground">Bruker</div>
             <div className="text-sm font-medium break-words">{aktivBruker.epost}</div>
-          </div>
+          </Stack>
 
-          <div className="space-y-2">
+          <Stack gap="sm">
             <div className="text-sm font-medium">Visningsnavn</div>
 
             <Field>
@@ -66,9 +67,9 @@ export default function RedigerBrukerDialog({
                 className="bg-background"
               />
             </Field>
-          </div>
+          </Stack>
 
-          <div className="space-y-2">
+          <Stack gap="sm">
             <div className="text-sm font-medium">Rolle</div>
             <select
               className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
@@ -79,8 +80,8 @@ export default function RedigerBrukerDialog({
               <option value="Utvidet">Utvidet</option>
               <option value="KlubbAdmin">KlubbAdmin</option>
             </select>
-          </div>
-        </div>
+          </Stack>
+        </Stack>
 
         <DialogFooter>
           <ServerFeil feil={serverFeil} />

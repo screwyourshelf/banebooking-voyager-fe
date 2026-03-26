@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { useRef } from "react";
 import { RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Stack } from "@/components/layout";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -21,13 +22,13 @@ export function QueryFeil({ error, isFetching, onRetry, children }: Props) {
 
   if (message) {
     return (
-      <div className="flex flex-col items-center gap-3 py-10 text-center">
+      <Stack gap="sm" className="items-center py-10 text-center">
         <p className="text-sm text-muted-foreground">{message}</p>
         <Button variant="outline" size="sm" onClick={onRetry} disabled={isFetching}>
           <RefreshCw className={cn("h-4 w-4", isFetching && "animate-spin")} />
           {isFetching ? "Prøver..." : "Prøv igjen"}
         </Button>
-      </div>
+      </Stack>
     );
   }
 

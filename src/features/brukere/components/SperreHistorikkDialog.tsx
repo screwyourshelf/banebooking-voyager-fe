@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Stack, Inline } from "@/components/layout";
 import { useBrukerSperrer } from "@/features/brukere/hooks/useAdminBrukersperre";
 import { ServerFeil } from "@/components/errors";
 
@@ -46,11 +47,11 @@ export default function SperreHistorikkDialog({
           <DialogDescription className="sr-only">Administrer sperrer for bruker</DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4 overflow-y-auto max-h-[60vh] pr-1">
-          <div className="space-y-1">
+        <Stack gap="lg" className="overflow-y-auto max-h-[60vh] pr-1">
+          <Stack gap="xs">
             <div className="text-xs text-muted-foreground">Bruker</div>
             <div className="text-sm font-medium break-words">{brukerEpost}</div>
-          </div>
+          </Stack>
 
           {isLoading && <p className="text-sm text-muted-foreground">Henter sperrer…</p>}
 
@@ -59,11 +60,12 @@ export default function SperreHistorikkDialog({
           )}
 
           {data && data.sperrer.length > 0 && (
-            <ul className="space-y-2">
+            <Stack gap="sm" as="ul">
               {data.sperrer.map((sperre) => (
-                <li key={sperre.id} className="rounded-md border p-3 space-y-1 text-sm">
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-medium break-words">{sperre.årsak}</span>
+                <li key={sperre.id} className="rounded-md border p-3 text-sm">
+                  <Stack gap="xs">
+                    <Inline gap="md" justify="between">
+                      <span className="font-medium break-words">{sperre.årsak}</span>
                     {sperre.erAktiv ? (
                       <Badge variant="destructive" className="shrink-0">
                         Aktiv
@@ -73,8 +75,8 @@ export default function SperreHistorikkDialog({
                         Opphevet
                       </Badge>
                     )}
-                  </div>
-                  <div className="text-xs text-muted-foreground">
+                    </Inline>
+                    <div className="text-xs text-muted-foreground">
                     Sperret av: {sperre.opprettetAv} ·{" "}
                     {format(new Date(sperre.opprettetTidspunkt), "dd.MM.yyyy HH:mm", {
                       locale: nb,
@@ -105,13 +107,14 @@ export default function SperreHistorikkDialog({
                       </Button>
                     </div>
                   )}
+                  </Stack>
                 </li>
               ))}
-            </ul>
+            </Stack>
           )}
 
           <ServerFeil feil={opphevFeil} />
-        </div>
+        </Stack>
       </DialogContent>
     </Dialog>
   );

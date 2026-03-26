@@ -22,7 +22,7 @@ export default function PageSection({
   density = "compact",
   tone = "soft",
 }: Props) {
-  const gap = density === "compact" ? "space-y-1" : "space-y-2";
+  const gap = density === "compact" ? "space-y-1 md:space-y-2" : "space-y-2 md:space-y-3";
   const showHeader = !!title || !!description || !!actions;
 
   return (
@@ -30,8 +30,7 @@ export default function PageSection({
       className={cn(
         "rounded-xl",
         tone === "soft" && "bg-gradient-to-b from-muted/60 via-muted/25 to-transparent",
-        // litt "kort-padding" uten border/shadow
-        tone === "soft" && (density === "compact" ? "py-1" : "py-2"),
+        tone === "soft" && (density === "compact" ? "py-2 md:py-3" : "py-3 md:py-4"),
         className
       )}
     >
@@ -55,7 +54,7 @@ export default function PageSection({
         </div>
       ) : null}
 
-      <div className={cn("px-1", showHeader ? "mt-3" : "", gap)}>{children}</div>
+      <div className={cn("px-1 md:px-2", showHeader ? "mt-3 md:mt-4" : "", gap)}>{children}</div>
     </section>
   );
 }

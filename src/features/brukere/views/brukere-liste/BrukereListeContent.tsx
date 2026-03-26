@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import PageSection from "@/components/sections/PageSection";
+import { Stack, Inline } from "@/components/layout";
 import { RowPanel, RowList, Row } from "@/components/rows";
 import {
   Accordion,
@@ -71,7 +72,7 @@ export default function BrukereListeContent({
   const harFlere = synligAntall < filtrerteBrukere.length;
 
   return (
-    <div className="space-y-4">
+    <Stack gap="lg">
       <PageSection
         title="Brukere"
         description="Søk etter brukere og endre rolle eller visningsnavn."
@@ -79,7 +80,7 @@ export default function BrukereListeContent({
         <RowPanel>
           <RowList>
             <Row title="Filter på rolle">
-              <div className="flex flex-wrap gap-2">
+              <Inline gap="md" wrap>
                 {ROLLER.map((r) => {
                   const aktiv = rolleFilter.includes(r);
                   return (
@@ -95,7 +96,7 @@ export default function BrukereListeContent({
                     </Button>
                   );
                 })}
-              </div>
+              </Inline>
             </Row>
 
             <Row
@@ -139,8 +140,8 @@ export default function BrukereListeContent({
                       className={`rounded-md border bg-background px-2 last:border-b shadow-sm ${slettet ? "opacity-60" : ""}`}
                     >
                       <AccordionTrigger className="hover:no-underline">
-                        <div className="flex flex-col items-start gap-1.5">
-                          <div className="flex items-center gap-2">
+                        <Stack gap="xs" className="items-start">
+                          <Inline gap="md">
                             <span className="font-medium">{b.epost ?? "Ukjent bruker"}</span>
                             {slettet && (
                               <Badge variant="outline" className="text-xs">
@@ -152,15 +153,15 @@ export default function BrukereListeContent({
                                 Sperret
                               </Badge>
                             )}
-                          </div>
+                          </Inline>
                           {b.visningsnavn && (
                             <span className="text-xs text-muted-foreground">{b.visningsnavn}</span>
                           )}
-                        </div>
+                        </Stack>
                       </AccordionTrigger>
 
                       <AccordionContent>
-                        <div className="space-y-3">
+                        <Stack gap="sm">
                           <AccordionDetailGrid>
                             <AccordionDetailRow icon={Mail} label="E-post">
                               {b.epost ?? "Ukjent"}
@@ -223,7 +224,7 @@ export default function BrukereListeContent({
                               </Button>
                             </AccordionActions>
                           )}
-                        </div>
+                        </Stack>
                       </AccordionContent>
                     </AccordionItem>
                   );
@@ -231,7 +232,7 @@ export default function BrukereListeContent({
               </Accordion>
 
               {harFlere && (
-                <div className="flex justify-center mt-4">
+                <Inline justify="center" className="mt-4">
                   <Button
                     variant="outline"
                     size="sm"
@@ -239,12 +240,12 @@ export default function BrukereListeContent({
                   >
                     Vis flere ({filtrerteBrukere.length - synligAntall} gjenstår)
                   </Button>
-                </div>
+                </Inline>
               )}
             </>
           )}
         </div>
       </PageSection>
-    </div>
+    </Stack>
   );
 }

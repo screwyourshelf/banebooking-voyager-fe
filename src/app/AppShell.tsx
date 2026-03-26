@@ -9,15 +9,15 @@ export default function AppShell() {
 
   return (
     <div className="min-h-screen flex flex-col w-full">
-      <div className="flex flex-1 w-full max-w-screen-sm mx-auto px-2 py-5">
-        <div className="flex flex-col w-full bg-card rounded-md shadow-sm overflow-hidden">
+      <div className="flex flex-1 w-full max-w-screen-sm md:max-w-3xl mx-auto px-2 md:px-4 py-5 md:py-8">
+        <div className="flex flex-col w-full bg-card rounded-md md:rounded-xl shadow-sm overflow-hidden">
           <header className="border-b border-border bg-gradient-to-b from-muted to-card shadow-sm">
             <Navbar />
           </header>
 
           <BreadcrumbMedSti />
 
-          <main className="flex-1 min-h-0 py-1">
+          <main className="flex-1 min-h-0 py-2 md:py-4">
             <div className="animate__animated animate__fadeIn animate__faster">
               <Outlet />
             </div>

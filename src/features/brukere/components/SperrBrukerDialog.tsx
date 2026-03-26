@@ -11,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field } from "@/components/ui/field";
+import { Stack } from "@/components/layout";
 import DatoVelger from "@/components/DatoVelger";
 import type { SperrBrukerForespørsel } from "@/types";
 import { ServerFeil } from "@/components/errors";
@@ -84,8 +85,8 @@ export default function SperrBrukerDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
-          <div className="space-y-2">
+        <Stack gap="lg">
+          <Stack gap="sm">
             <div className="text-sm font-medium">Årsak</div>
             <Field>
               <Input
@@ -96,9 +97,9 @@ export default function SperrBrukerDialog({
                 className="bg-background"
               />
             </Field>
-          </div>
+          </Stack>
 
-          <div className="space-y-2">
+          <Stack gap="sm">
             <div className="text-sm font-medium">Aktiv til (valgfritt)</div>
             <DatoVelger
               value={aktivTil}
@@ -117,8 +118,8 @@ export default function SperrBrukerDialog({
                 Fjern utløpsdato
               </Button>
             )}
-          </div>
-        </div>
+          </Stack>
+        </Stack>
 
         <DialogFooter>
           <ServerFeil feil={serverFeil} />
