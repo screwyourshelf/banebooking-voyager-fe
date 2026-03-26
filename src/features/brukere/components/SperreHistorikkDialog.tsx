@@ -66,47 +66,47 @@ export default function SperreHistorikkDialog({
                   <Stack gap="xs">
                     <Inline gap="md" justify="between">
                       <span className="font-medium break-words">{sperre.årsak}</span>
-                    {sperre.erAktiv ? (
-                      <Badge variant="destructive" className="shrink-0">
-                        Aktiv
-                      </Badge>
-                    ) : (
-                      <Badge variant="outline" className="shrink-0">
-                        Opphevet
-                      </Badge>
-                    )}
+                      {sperre.erAktiv ? (
+                        <Badge variant="destructive" className="shrink-0">
+                          Aktiv
+                        </Badge>
+                      ) : (
+                        <Badge variant="outline" className="shrink-0">
+                          Opphevet
+                        </Badge>
+                      )}
                     </Inline>
                     <div className="text-xs text-muted-foreground">
-                    Sperret av: {sperre.opprettetAv} ·{" "}
-                    {format(new Date(sperre.opprettetTidspunkt), "dd.MM.yyyy HH:mm", {
-                      locale: nb,
-                    })}
-                  </div>
-                  {sperre.aktivTil && (
-                    <div className="text-xs text-muted-foreground">
-                      Utløper: {format(new Date(sperre.aktivTil), "dd.MM.yyyy", { locale: nb })}
-                    </div>
-                  )}
-                  {sperre.opphevtAv && sperre.opphevtTidspunkt && (
-                    <div className="text-xs text-muted-foreground">
-                      Opphevet av: {sperre.opphevtAv} ·{" "}
-                      {format(new Date(sperre.opphevtTidspunkt), "dd.MM.yyyy HH:mm", {
+                      Sperret av: {sperre.opprettetAv} ·{" "}
+                      {format(new Date(sperre.opprettetTidspunkt), "dd.MM.yyyy HH:mm", {
                         locale: nb,
                       })}
                     </div>
-                  )}
-                  {sperre.erAktiv && kanOppheve && (
-                    <div className="pt-1">
-                      <Button
-                        size="sm"
-                        variant="outline"
-                        disabled={opphevLaster}
-                        onClick={() => onOpphev(sperre.id)}
-                      >
-                        {opphevLaster ? "Opphever..." : "Opphev"}
-                      </Button>
-                    </div>
-                  )}
+                    {sperre.aktivTil && (
+                      <div className="text-xs text-muted-foreground">
+                        Utløper: {format(new Date(sperre.aktivTil), "dd.MM.yyyy", { locale: nb })}
+                      </div>
+                    )}
+                    {sperre.opphevtAv && sperre.opphevtTidspunkt && (
+                      <div className="text-xs text-muted-foreground">
+                        Opphevet av: {sperre.opphevtAv} ·{" "}
+                        {format(new Date(sperre.opphevtTidspunkt), "dd.MM.yyyy HH:mm", {
+                          locale: nb,
+                        })}
+                      </div>
+                    )}
+                    {sperre.erAktiv && kanOppheve && (
+                      <div className="pt-1">
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          disabled={opphevLaster}
+                          onClick={() => onOpphev(sperre.id)}
+                        >
+                          {opphevLaster ? "Opphever..." : "Opphev"}
+                        </Button>
+                      </div>
+                    )}
                   </Stack>
                 </li>
               ))}

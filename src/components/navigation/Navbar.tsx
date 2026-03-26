@@ -12,7 +12,17 @@ import { FormLayout, FormActions, FormSubmitButton } from "@/components/forms";
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
-import { LogIn, LogOut, Calendar, CalendarCheck, CircleUser, Wrench, Menu, Home, Trophy } from "lucide-react";
+import {
+  LogIn,
+  LogOut,
+  Calendar,
+  CalendarCheck,
+  CircleUser,
+  Wrench,
+  Menu,
+  Home,
+  Trophy,
+} from "lucide-react";
 import { GoogleIcon } from "@/components/icons";
 
 import { useAuth } from "@/hooks/useAuth";
@@ -134,7 +144,9 @@ export default function Navbar() {
           <Link to={`/${slug}`}>Book bane</Link>
         </Button>
         <Button variant="ghost" size="sm" className="h-8 text-sm" asChild>
-          <Link to={`/${slug}/arrangementer`} {...prefetch("arrangementer")}>Arrangementer</Link>
+          <Link to={`/${slug}/arrangementer`} {...prefetch("arrangementer")}>
+            Arrangementer
+          </Link>
         </Button>
       </nav>
 
