@@ -5,7 +5,6 @@ import { Table, TableRow, TableCell, TableHeader } from "@tiptap/extension-table
 import {
   Bold,
   Italic,
-  Heading2,
   List,
   ListOrdered,
   Quote,
@@ -20,29 +19,34 @@ import { cn } from "@/lib/utils";
 
 type Props = {
   content: string;
-  onChange: (html: string) => void;
+  onChange: (json: string) => void;
   className?: string;
 };
 
 export default function TiptapEditor({ content, onChange, className }: Props) {
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit.configure({
+        heading: false,
+        code: false,
+        codeBlock: false,
+      }),
       Table.configure({ resizable: false }),
       TableRow,
       TableCell,
       TableHeader,
     ],
-    content,
+    content: content ? JSON.parse(content) : "",
     onUpdate: ({ editor }) => {
-      onChange(editor.getHTML());
+      onChange(JSON.stringify(editor.getJSON()));
     },
   });
 
   useEffect(() => {
     if (!editor || editor.isDestroyed) return;
-    if (content !== editor.getHTML()) {
-      editor.commands.setContent(content, { emitUpdate: false });
+    const currentJson = JSON.stringify(editor.getJSON());
+    if (content !== currentJson) {
+      editor.commands.setContent(content ? JSON.parse(content) : "", { emitUpdate: false });
     }
   }, [content, editor]);
 
