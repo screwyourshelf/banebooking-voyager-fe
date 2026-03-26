@@ -8,6 +8,7 @@ import { RowPanel, RowList, Row, SwitchRow } from "@/components/rows";
 import { FormActions, FormLayout, FormSubmitButton } from "@/components/forms";
 
 import { Field } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -35,6 +36,7 @@ type Props = {
   kategorier: readonly ArrangementKategori[];
   kategori: ArrangementKategori;
   beskrivelse: string;
+  nettsideTittel: string;
   nettsideBeskrivelse: string;
   publisertPåNettsiden: boolean;
 
@@ -59,6 +61,7 @@ type Props = {
 
   onChangeKategori: (v: ArrangementKategori) => void;
   onChangeBeskrivelse: (v: string) => void;
+  onChangeNettsideTittel: (v: string) => void;
   onChangeNettsideBeskrivelse: (v: string) => void;
   onChangePublisertPåNettsiden: (v: boolean) => void;
   tillaterPaamelding: boolean;
@@ -110,6 +113,7 @@ export default function ArrangementContent(props: Props) {
     kategorier,
     kategori,
     beskrivelse,
+    nettsideTittel,
     nettsideBeskrivelse,
     publisertPåNettsiden,
 
@@ -134,6 +138,7 @@ export default function ArrangementContent(props: Props) {
 
     onChangeKategori,
     onChangeBeskrivelse,
+    onChangeNettsideTittel,
     onChangeNettsideBeskrivelse,
     onChangePublisertPåNettsiden,
     tillaterPaamelding,
@@ -252,12 +257,25 @@ export default function ArrangementContent(props: Props) {
                       />
 
                       {publisertPåNettsiden ? (
-                        <Row title="Beskrivelse for nettsiden">
-                          <TiptapEditor
-                            content={nettsideBeskrivelse}
-                            onChange={onChangeNettsideBeskrivelse}
-                          />
-                        </Row>
+                        <>
+                          <Row title="Tittel for nettsiden">
+                            <Field>
+                              <Input
+                                id="nettside-tittel"
+                                value={nettsideTittel}
+                                onChange={(e) => onChangeNettsideTittel(e.target.value)}
+                                placeholder="F.eks. Vårturnering 2026"
+                                maxLength={100}
+                              />
+                            </Field>
+                          </Row>
+                          <Row title="Beskrivelse for nettsiden">
+                            <TiptapEditor
+                              content={nettsideBeskrivelse}
+                              onChange={onChangeNettsideBeskrivelse}
+                            />
+                          </Row>
+                        </>
                       ) : (
                         <Row title="Beskrivelse">
                           <Field>

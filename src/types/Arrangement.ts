@@ -32,6 +32,7 @@ export type BaneGruppeForespørsel = {
 export type OpprettArrangementForespørsel = {
   tittel: string;
   beskrivelse?: string;
+  nettsideTittel?: string;
   nettsideBeskrivelse?: string;
   publisertPåNettsiden?: boolean;
   kategori: ArrangementKategori;
@@ -123,6 +124,7 @@ export type ArrangementRespons = {
   id: string;
   tittel: string;
   beskrivelse?: string;
+  nettsideTittel?: string;
   nettsideBeskrivelse?: string;
   publisertPåNettsiden: boolean;
   kategori: ArrangementKategori;

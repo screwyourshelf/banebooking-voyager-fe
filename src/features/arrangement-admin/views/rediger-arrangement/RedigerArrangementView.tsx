@@ -90,6 +90,7 @@ export default function RedigerArrangementView() {
 
   const [kategori, setKategori] = useState<ArrangementKategori>("Annet");
   const [beskrivelse, setBeskrivelse] = useState("");
+  const [nettsideTittel, setNettsideTittel] = useState("");
   const [nettsideBeskrivelse, setNettsideBeskrivelse] = useState("");
   const [publisertPåNettsiden, setPublisertPåNettsiden] = useState(false);
   const [tillaterPaamelding, setTillaterPaamelding] = useState(false);
@@ -110,6 +111,7 @@ export default function RedigerArrangementView() {
     }
     setKategori(arrangement.kategori);
     setBeskrivelse(arrangement.beskrivelse ?? "");
+    setNettsideTittel(arrangement.nettsideTittel ?? "");
     setNettsideBeskrivelse(arrangement.nettsideBeskrivelse ?? "");
     setPublisertPåNettsiden(arrangement.publisertPåNettsiden ?? false);
     setTillaterPaamelding(arrangement.tillaterPaamelding);
@@ -262,6 +264,7 @@ export default function RedigerArrangementView() {
       valgteUkedager,
       kategori,
       beskrivelse,
+      nettsideTittel,
       nettsideBeskrivelse,
       publisertPåNettsiden,
       tillaterPaamelding,
@@ -396,8 +399,10 @@ export default function RedigerArrangementView() {
           isLoadingForhandsvisning={isLoadingForhandsvisning}
           onChangeKategori={setKategori}
           onChangeBeskrivelse={setBeskrivelse}
+          nettsideTittel={nettsideTittel}
           nettsideBeskrivelse={nettsideBeskrivelse}
           publisertPåNettsiden={publisertPåNettsiden}
+          onChangeNettsideTittel={setNettsideTittel}
           onChangeNettsideBeskrivelse={setNettsideBeskrivelse}
           onChangePublisertPåNettsiden={setPublisertPåNettsiden}
           tillaterPaamelding={tillaterPaamelding}

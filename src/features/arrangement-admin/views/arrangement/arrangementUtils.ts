@@ -124,6 +124,7 @@ type ByggDtoArgs = {
   valgteUkedager: DayOfWeek[];
   kategori: ArrangementKategori;
   beskrivelse: string;
+  nettsideTittel: string;
   nettsideBeskrivelse: string;
   publisertPåNettsiden: boolean;
   tillaterPaamelding: boolean;
@@ -164,6 +165,7 @@ export function byggDto(args: ByggDtoArgs): OpprettArrangementForespørsel | nul
   return {
     tittel: kategori,
     beskrivelse: beskrivelse?.trim() ? beskrivelse : undefined,
+    nettsideTittel: args.nettsideTittel?.trim() ? args.nettsideTittel : undefined,
     nettsideBeskrivelse: nettsideBeskrivelse?.trim() ? nettsideBeskrivelse : undefined,
     publisertPåNettsiden: publisertPåNettsiden || undefined,
     kategori,

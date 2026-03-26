@@ -60,6 +60,7 @@ export default function ArrangementView() {
 
   const [kategori, setKategori] = useState<ArrangementKategori>("Annet");
   const [beskrivelse, setBeskrivelse] = useState("");
+  const [nettsideTittel, setNettsideTittel] = useState("");
   const [nettsideBeskrivelse, setNettsideBeskrivelse] = useState("");
   const [publisertPåNettsiden, setPublisertPåNettsiden] = useState(false);
   const [tillaterPaamelding, setTillaterPaamelding] = useState(false);
@@ -183,6 +184,7 @@ export default function ArrangementView() {
       valgteUkedager,
       kategori,
       beskrivelse,
+      nettsideTittel,
       nettsideBeskrivelse,
       publisertPåNettsiden,
       tillaterPaamelding,
@@ -251,8 +253,10 @@ export default function ArrangementView() {
       isLoadingForhandsvisning={isLoadingForhandsvisning}
       onChangeKategori={setKategori}
       onChangeBeskrivelse={setBeskrivelse}
-      nettsideBeskrivelse={nettsideBeskrivelse}
+      nettsideTittel={nettsideTittel}
       publisertPåNettsiden={publisertPåNettsiden}
+      onChangeNettsideTittel={setNettsideTittel}
+      nettsideBeskrivelse={nettsideBeskrivelse}
       onChangeNettsideBeskrivelse={setNettsideBeskrivelse}
       onChangePublisertPåNettsiden={setPublisertPåNettsiden}
       tillaterPaamelding={tillaterPaamelding}
