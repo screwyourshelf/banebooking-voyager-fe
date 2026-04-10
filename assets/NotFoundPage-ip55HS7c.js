@@ -1,1 +1,0 @@
-import{j as i,Z as r}from"./react-DkxED8xc.js";import{a as t,E as e}from"./index-BpWeXJnJ.js";import"./query-BJts5Vyd.js";import"./radix-BQCqNqg0.js";import"./supabase-Baxrk5fR.js";import"./date-gag7BW7V.js";function f(){return i.jsx(t,{children:i.jsx(e,{icon:r,title:"Siden finnes ikke",description:"Vi fant ikke siden du lette etter."})})}export{f as default};
