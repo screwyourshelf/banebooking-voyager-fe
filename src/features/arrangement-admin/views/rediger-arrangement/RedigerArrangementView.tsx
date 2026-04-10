@@ -11,7 +11,10 @@ import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
+  SelectGroup,
   SelectItem,
+  SelectLabel,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -46,6 +49,11 @@ const KATEGORIER = [
 
 function toggleItem<T>(item: T, set: React.Dispatch<React.SetStateAction<T[]>>) {
   set((prev) => (prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]));
+}
+
+function formatDatoKort(s: string): string {
+  const [y, m, d] = s.split("-").map(Number);
+  return new Date(y, m - 1, d).toLocaleDateString("nb-NO", { day: "numeric", month: "short" });
 }
 
 function parseDatoString(s: string): Date {
@@ -347,11 +355,35 @@ export default function RedigerArrangementView() {
                       </SelectTrigger>
 
                       <SelectContent>
-                        {arrangementer?.map((a) => (
-                          <SelectItem key={a.id} value={a.id}>
-                            {a.tittel}
-                          </SelectItem>
-                        ))}
+                        {(() => {
+                          const aktive = arrangementer?.filter((a) => !a.erPassert) ?? [];
+                          const passerte = arrangementer?.filter((a) => a.erPassert) ?? [];
+                          return (
+                            <>
+                              {aktive.length > 0 && (
+                                <SelectGroup>
+                                  <SelectLabel>Aktive og kommende</SelectLabel>
+                                  {aktive.map((a) => (
+                                    <SelectItem key={a.id} value={a.id}>
+                                      {a.tittel} — {formatDatoKort(a.startDato)} – {formatDatoKort(a.sluttDato)}
+                                    </SelectItem>
+                                  ))}
+                                </SelectGroup>
+                              )}
+                              {aktive.length > 0 && passerte.length > 0 && <SelectSeparator />}
+                              {passerte.length > 0 && (
+                                <SelectGroup>
+                                  <SelectLabel>Passerte</SelectLabel>
+                                  {passerte.map((a) => (
+                                    <SelectItem key={a.id} value={a.id}>
+                                      {a.tittel} — {formatDatoKort(a.startDato)} – {formatDatoKort(a.sluttDato)}
+                                    </SelectItem>
+                                  ))}
+                                </SelectGroup>
+                              )}
+                            </>
+                          );
+                        })()}
                       </SelectContent>
                     </Select>
                   </Field>
