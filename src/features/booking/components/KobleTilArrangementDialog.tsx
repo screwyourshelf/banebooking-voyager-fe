@@ -61,7 +61,7 @@ export default function KobleTilArrangementDialog({ valgtId, onVelg, children }:
           )}
 
           {data && data.length > 0 && (
-            <ul className="space-y-1">
+            <ul className="space-y-1 max-h-60 overflow-y-auto pr-1">
               {data.map((arr) => (
                 <li key={arr.id}>
                   <button
