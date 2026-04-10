@@ -1,0 +1,1 @@
+import{j as a}from"./react-C0PCy-ms.js";import{i as e}from"./index-DNi1IHFh.js";const n={md:"max-w-screen-md",lg:"max-w-screen-lg",xl:"max-w-screen-xl",full:"max-w-none"};function t({children:m,className:s,width:x="md"}){return a.jsx("div",{className:e(n[x],"mx-auto px-2 md:px-4 py-3 md:py-5",s),children:m})}export{t as P};
