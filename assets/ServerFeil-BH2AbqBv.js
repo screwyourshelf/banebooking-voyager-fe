@@ -1,1 +1,0 @@
-import{j as r,c1 as s}from"./react-COiYNNZu.js";import{A as t,o as i}from"./index-C65WBptT.js";function l({feil:e}){return e?r.jsxs(t,{variant:"destructive",children:[r.jsx(s,{className:"h-4 w-4"}),r.jsx(i,{children:e})]}):null}export{l as S};
