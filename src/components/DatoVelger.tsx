@@ -31,14 +31,14 @@ export default function DatoVelger({ value, onChange, minDate, visNavigering = t
   const disablePrev = !value || (!!minDate && subDays(value, 1) < minDate);
 
   return (
-    <div className="flex flex-wrap sm:flex-nowrap gap-2 items-center w-full">
+    <div className="flex gap-1 items-center">
       <Popover>
         <PopoverTrigger asChild>
           <Button
             type="button"
             variant="outline"
             aria-label="Velg dato"
-            className="h-8 px-2 text-sm flex-1 justify-start text-left min-w-[10rem]"
+            className="h-8 px-2 text-sm w-[10rem] justify-start text-left"
           >
             <CalendarIcon className="mr-2 h-4 w-4" />
             {visningsformat}

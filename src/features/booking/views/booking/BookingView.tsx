@@ -98,6 +98,7 @@ export default function BookingView() {
         onDatoChange={setValgtDato}
         slots={slots}
         isLoading={loadingBooking}
+        isFetching={isFetching}
         currentUser={currentUser}
         onBook={onBook}
         onFjern={onFjern}
