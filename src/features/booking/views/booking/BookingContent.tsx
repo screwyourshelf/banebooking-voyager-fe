@@ -99,7 +99,9 @@ export default function BookingContent({
           value: bane.id,
           label: bane.navn,
           content: (
-            <div className={`transition-opacity duration-200 ${isFetching && !isLoading ? "opacity-50" : "opacity-100"}`}>
+            <div
+              className={`transition-opacity duration-200 ${isFetching && !isLoading ? "opacity-50" : "opacity-100"}`}
+            >
               <BookingSlotListAccordion
                 slots={slots}
                 currentUser={currentUser ? { epost: currentUser.email ?? "" } : null}
