@@ -28,11 +28,15 @@ import TiptapEditor from "@/components/editor/TiptapEditor";
 import { TriangleAlert } from "lucide-react";
 
 import type { ArrangementKategori, DayOfWeek, ArrangementForhåndsvisningRespons } from "@/types";
-import type { BaneRespons } from "@/types";
+import type { BaneRespons, GrenRespons } from "@/types";
 import { dayOfWeekKortNorsk } from "@/utils/datoUtils";
 import type { SlotLengdeGruppe } from "./arrangementUtils";
 
 type Props = {
+  grener: GrenRespons[];
+  valgtGrenId: string;
+  onGrenChange: (grenId: string) => void;
+
   kategorier: readonly ArrangementKategori[];
   kategori: ArrangementKategori;
   beskrivelse: string;
@@ -110,6 +114,9 @@ const UKEDAGER_REKKEFOLGE: readonly DayOfWeek[] = [
 
 export default function ArrangementContent(props: Props) {
   const {
+    grener,
+    valgtGrenId,
+    onGrenChange,
     kategorier,
     kategori,
     beskrivelse,
@@ -248,6 +255,25 @@ export default function ArrangementContent(props: Props) {
                           </Select>
                         </Field>
                       </Row>
+
+                      {grener.length > 1 && (
+                        <Row title="Gren" description="Baner filtreres etter valgt gren.">
+                          <Field>
+                            <Select value={valgtGrenId} onValueChange={onGrenChange}>
+                              <SelectTrigger id="gren">
+                                <SelectValue placeholder="Velg gren..." />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {grener.map((g) => (
+                                  <SelectItem key={g.id} value={g.id}>
+                                    {g.navn}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </Field>
+                        </Row>
+                      )}
 
                       <SwitchRow
                         title="Vis på nettsiden"

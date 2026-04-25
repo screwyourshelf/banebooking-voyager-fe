@@ -4,6 +4,7 @@ import type { TurneringStatus } from "@/types";
 const varianter: Record<TurneringStatus, "default" | "secondary" | "destructive" | "outline"> = {
   Oppsett: "secondary",
   PaameldingAapen: "default",
+  DrawPublisert: "default",
   Pagaar: "default",
   Avsluttet: "outline",
 };
@@ -11,6 +12,7 @@ const varianter: Record<TurneringStatus, "default" | "secondary" | "destructive"
 const labels: Record<TurneringStatus, string> = {
   Oppsett: "Oppsett",
   PaameldingAapen: "Påmelding åpen",
+  DrawPublisert: "Draw publisert",
   Pagaar: "Pågår",
   Avsluttet: "Avsluttet",
 };

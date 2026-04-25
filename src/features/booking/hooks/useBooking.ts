@@ -33,7 +33,7 @@ export function useBooking(dato: string, baneId: string) {
     {
       requireAuth: true,
       enabled,
-      staleTime: 0,
+      staleTime: 5_000,
       refetchInterval: 30_000,
       refetchOnWindowFocus: true,
       refetchIntervalInBackground: false,
@@ -69,7 +69,7 @@ export function useBooking(dato: string, baneId: string) {
                   erEier: true,
                   bookingStartTid: s.slotStartTid,
                   bookingSluttTid: s.slotSluttTid,
-                  kapabiliteter: [Kapabiliteter.booking.avbestill],
+                  kapabiliteter: [Kapabiliteter.booking.fjern],
                 }
               : s
           )
@@ -90,8 +90,8 @@ export function useBooking(dato: string, baneId: string) {
     }
   );
 
-  // DELETE (avbestill) (optimistic)
-  const cancelMutation = useApiMutation<CancelVars, void, OptimisticContext>(
+  // DELETE (fjern booking) (optimistic)
+  const fjernMutation = useApiMutation<CancelVars, void, OptimisticContext>(
     "delete",
     (vars) => `/klubb/${slug}/bookinger/${vars.bookingId}`,
     {
@@ -124,47 +124,6 @@ export function useBooking(dato: string, baneId: string) {
       },
       onSuccess: () => {
         toast.info("Bookingen er avbestilt.");
-      },
-      onSettled: () => {
-        invalidateAll();
-      },
-    }
-  );
-
-  // DELETE admin (optimistic)
-  const deleteMutation = useApiMutation<CancelVars, void, OptimisticContext>(
-    "delete",
-    (vars) => `/klubb/${slug}/bookinger/${vars.bookingId}/admin`,
-    {
-      getBody: () => undefined,
-      onMutate: async (vars) => {
-        await queryClient.cancelQueries({ queryKey });
-
-        const previous = queryClient.getQueryData<KalenderSlotRespons[]>(queryKey);
-
-        queryClient.setQueryData<KalenderSlotRespons[]>(queryKey, (old = []) =>
-          old.map((s) =>
-            s.bookingId === vars.bookingId
-              ? {
-                  ...s,
-                  bookingId: null,
-                  booketAv: null,
-                  erEier: false,
-                  bookingStartTid: null,
-                  bookingSluttTid: null,
-                  kapabiliteter: [Kapabiliteter.booking.book],
-                }
-              : s
-          )
-        );
-
-        return { previous };
-      },
-      onError: (_err, _vars, ctx) => {
-        if (ctx?.previous) queryClient.setQueryData(queryKey, ctx.previous);
-      },
-      onSuccess: () => {
-        toast.success("Booking slettet");
         setApenSlotTid(null);
       },
       onSettled: () => {
@@ -190,19 +149,13 @@ export function useBooking(dato: string, baneId: string) {
         arrangementId,
       }),
 
-    onCancel: (slot: KalenderSlotRespons) => {
+    onFjern: (slot: KalenderSlotRespons) => {
       if (!slot.bookingId) return;
-      cancelMutation.mutate({ bookingId: slot.bookingId });
-    },
-
-    onDelete: (slot: KalenderSlotRespons) => {
-      if (!slot.bookingId) return;
-      deleteMutation.mutate({ bookingId: slot.bookingId });
+      fjernMutation.mutate({ bookingId: slot.bookingId });
     },
 
     bookFeil: bookMutation.error,
-    cancelFeil: cancelMutation.error,
-    deleteFeil: deleteMutation.error,
+    fjernFeil: fjernMutation.error,
 
     hentBookinger: bookingerQuery.refetch,
   };

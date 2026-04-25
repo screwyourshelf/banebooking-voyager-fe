@@ -5,16 +5,26 @@ import { FormActions, FormLayout, FormSubmitButton } from "@/components/forms";
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { ServerFeil } from "@/components/errors";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { GrenRespons } from "@/types";
 
 type FormState = {
   navn: string;
   beskrivelse: string;
   sortering: string;
+  grenId: string;
 };
 
 type Props = {
   form: FormState;
   onChange: <K extends keyof FormState>(key: K, value: FormState[K]) => void;
+  grener: GrenRespons[];
 
   canSubmit: boolean;
   isSaving: boolean;
@@ -28,6 +38,7 @@ type Props = {
 export default function NyBaneContent({
   form,
   onChange,
+  grener,
   canSubmit,
   isSaving,
   onSubmit,
@@ -45,6 +56,27 @@ export default function NyBaneContent({
       <PageSection title="Ny bane">
         <RowPanel>
           <RowList>
+            <Row title="Gren" description="Hvilken gren banen tilhører.">
+              <Field>
+                <Select
+                  disabled={isSaving}
+                  value={form.grenId}
+                  onValueChange={(val) => onChange("grenId", val)}
+                >
+                  <SelectTrigger id="ny-grenId" className="bg-background">
+                    <SelectValue placeholder="Velg gren..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {grener.map((g) => (
+                      <SelectItem key={g.id} value={g.id}>
+                        {g.navn}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
+            </Row>
+
             <Row title="Navn" description="Vises i bookingvisningen.">
               <Field data-invalid={!!navnError}>
                 <Input

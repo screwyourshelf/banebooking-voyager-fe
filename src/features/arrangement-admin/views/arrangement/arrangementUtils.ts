@@ -118,6 +118,7 @@ export function grupperBanerEtterSlotLengde(
 }
 
 type ByggDtoArgs = {
+  grenId: string;
   datoFra: Date;
   datoTil: Date;
   baneGrupper: BaneGruppeForespørsel[];
@@ -133,6 +134,7 @@ type ByggDtoArgs = {
 
 export function byggDto(args: ByggDtoArgs): OpprettArrangementForespørsel | null {
   const {
+    grenId,
     datoFra,
     datoTil,
     baneGrupper,
@@ -163,6 +165,7 @@ export function byggDto(args: ByggDtoArgs): OpprettArrangementForespørsel | nul
     return (onWarning("Ingen av de valgte ukedagene finnes i datointervallet"), null);
 
   return {
+    grenId,
     tittel: kategori,
     beskrivelse: beskrivelse?.trim() ? beskrivelse : undefined,
     nettsideTittel: args.nettsideTittel?.trim() ? args.nettsideTittel : undefined,

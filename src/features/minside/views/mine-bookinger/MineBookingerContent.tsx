@@ -34,7 +34,7 @@ type Props = {
   bookinger: MinBookingRespons[];
   isPending: boolean;
 
-  onAvbestill: (slot: MinBookingRespons) => void;
+  onFjern: (slot: MinBookingRespons) => void;
   serverFeil: string | null;
 };
 
@@ -43,7 +43,7 @@ export default function MineBookingerContent({
   onToggleVisHistoriske,
   bookinger,
   isPending,
-  onAvbestill,
+  onFjern,
   serverFeil,
 }: Props) {
   const PAGE_SIZE = 10;
@@ -91,7 +91,7 @@ export default function MineBookingerContent({
               const key = buildBookingKey(b);
               const tid = `${b.startTid.slice(0, 5)} – ${b.sluttTid.slice(0, 5)}`;
               const tidKort = `${formatKort(b.startTid)}–${formatKort(b.sluttTid)}`;
-              const kanAvbestille = harHandling(b.kapabiliteter, Kapabiliteter.booking.avbestill);
+              const kanFjerne = harHandling(b.kapabiliteter, Kapabiliteter.booking.fjern);
               const harVaer =
                 !!b.værSymbol || typeof b.temperatur === "number" || typeof b.vind === "number";
 
@@ -165,14 +165,14 @@ export default function MineBookingerContent({
                         )}
                       </AccordionDetailGrid>
 
-                      {kanAvbestille && (
+                      {kanFjerne && (
                         <AccordionActions>
                           <Button
                             variant="outline"
                             size="sm"
                             onClick={(e) => {
                               e.stopPropagation();
-                              onAvbestill(b);
+                              onFjern(b);
                             }}
                             className="flex items-center gap-2 text-sm"
                           >

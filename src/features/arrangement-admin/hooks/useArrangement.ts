@@ -4,8 +4,8 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useApiPostQuery } from "@/hooks/useApiPostQuery";
-import { useKlubb } from "@/hooks/useKlubb";
 import { useBaner } from "@/hooks/useBaner";
+import { useGrener } from "@/hooks/useGrener";
 import { useSlug } from "@/hooks/useSlug";
 import { genererTidspunkter } from "../views/arrangement/arrangementUtils";
 
@@ -13,6 +13,7 @@ import type {
   OpprettArrangementForespørsel,
   OpprettArrangementRespons,
   ArrangementForhåndsvisningRespons,
+  BookingRegelRespons,
 } from "@/types";
 
 const tomForhandsvisning: ArrangementForhåndsvisningRespons = { ledige: [], konflikter: [] };
@@ -33,15 +34,20 @@ function dtoKey(dto: OpprettArrangementForespørsel) {
   return JSON.stringify(stable);
 }
 
-export function useArrangement() {
+export function useArrangement(valgtGrenId: string) {
   const slug = useSlug();
   const queryClient = useQueryClient();
 
-  const { data: klubb, isLoading: loadingKlubb } = useKlubb();
+  const { grener, isLoading: loadingGrener } = useGrener(false);
   const { baner, isLoading: loadingBaner } = useBaner(false);
 
+  const valgtGren = useMemo(
+    () => grener.find((g) => g.id === valgtGrenId) ?? null,
+    [grener, valgtGrenId]
+  );
+
   const tilgjengeligeTidspunkter = useMemo(() => {
-    const regel = klubb?.bookingRegel;
+    const regel: BookingRegelRespons | null = valgtGren?.bookingInnstillinger ?? null;
     if (!regel) return [];
 
     const start = regel.aapningstid || "08:00";
@@ -49,7 +55,7 @@ export function useArrangement() {
     const slot = regel.slotLengdeMinutter || 60;
 
     return genererTidspunkter(start, slutt, slot);
-  }, [klubb?.bookingRegel]);
+  }, [valgtGren]);
 
   // ───────── Preview (POST-query) ─────────
   const [sisteForhandsvisDto, setSisteForhandsvisDto] =
@@ -107,7 +113,7 @@ export function useArrangement() {
   };
 
   return {
-    klubb,
+    grener,
     baner,
     tilgjengeligeTidspunkter,
 
@@ -118,7 +124,7 @@ export function useArrangement() {
     opprett,
     opprettFeil: opprettMutation.error,
 
-    isLoading: loadingKlubb || loadingBaner,
+    isLoading: loadingGrener || loadingBaner,
     isLoadingForhandsvisning,
   };
 }

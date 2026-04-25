@@ -22,7 +22,13 @@ const statusDotClass: Record<TurneringStatus, string> = {
   Avsluttet: "bg-muted-foreground/30",
 };
 
-const STATUS_REKKEFØLGE: TurneringStatus[] = ["Oppsett", "PaameldingAapen", "Pagaar", "Avsluttet"];
+const STATUS_REKKEFØLGE: TurneringStatus[] = [
+  "Oppsett",
+  "PaameldingAapen",
+  "DrawPublisert",
+  "Pagaar",
+  "Avsluttet",
+];
 
 function formatDatoTekst(start: string | null, slutt: string | null): string | null {
   if (!start) return null;

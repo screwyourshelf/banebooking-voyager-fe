@@ -10,7 +10,3 @@ export type OpprettBookingForespørsel = {
   startTid: string;
   sluttTid: string;
 };
-
-export type AvbestillBookingForespørsel = {
-  bookingId: string;
-};

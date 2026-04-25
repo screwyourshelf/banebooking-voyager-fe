@@ -1,8 +1,7 @@
 export const Kapabiliteter = {
   booking: {
     book: "booking:book",
-    avbestill: "booking:avbestill",
-    slett: "booking:slett",
+    fjern: "booking:fjern",
     kobleTilArrangement: "booking:kobleTilArrangement",
     meldAv: "booking:meldAv",
     meldPaa: "booking:meldPaa",
@@ -21,6 +20,9 @@ export const Kapabiliteter = {
   },
   baner: {
     admin: "baner:admin",
+  },
+  grener: {
+    admin: "grener:admin",
   },
   brukere: {
     admin: "brukere:admin",

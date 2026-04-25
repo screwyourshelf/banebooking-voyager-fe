@@ -5,7 +5,7 @@ type Props = {
   children: ReactNode;
   className?: string;
   gap?: "xs" | "sm" | "md" | "lg" | "xl";
-  as?: "div" | "section";
+  as?: "div" | "section" | "ul";
 };
 
 const gapClass: Record<NonNullable<Props["gap"]>, string> = {

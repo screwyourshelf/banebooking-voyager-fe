@@ -24,6 +24,7 @@ const loadTurneringPage = () => import("@/features/turnering/pages/TurneringPage
 const loadKlubbPage = () => import("@/features/klubb/pages/KlubbPage");
 const loadBanerPage = () => import("@/features/baner/pages/BanerPage");
 const loadBrukerePage = () => import("@/features/brukere/pages/BrukerePage");
+const loadGrenerPage = () => import("@/features/grener/pages/GrenerPage");
 
 const loadVilkaarPage = () => import("@/features/policy/pages/VilkaarPage");
 
@@ -41,6 +42,7 @@ const TurneringPage = lazy(loadTurneringPage);
 const KlubbPage = lazy(loadKlubbPage);
 const BanerPage = lazy(loadBanerPage);
 const BrukerePage = lazy(loadBrukerePage);
+const GrenerPage = lazy(loadGrenerPage);
 
 const VilkaarPage = lazy(loadVilkaarPage);
 
@@ -120,6 +122,13 @@ export const routeConfig: RouteConfig[] = [
         protected: true,
         component: BanerPage,
         loader: loadBanerPage,
+      },
+      {
+        path: "grener",
+        breadcrumb: "Grener",
+        protected: true,
+        component: GrenerPage,
+        loader: loadGrenerPage,
       },
       {
         path: "brukere",

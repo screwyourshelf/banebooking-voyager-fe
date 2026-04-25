@@ -3,6 +3,7 @@ import type { TurneringStatus } from "@/types";
 export const STATUS_REKKEFOLGE: TurneringStatus[] = [
   "Oppsett",
   "PaameldingAapen",
+  "DrawPublisert",
   "Pagaar",
   "Avsluttet",
 ];
@@ -10,6 +11,7 @@ export const STATUS_REKKEFOLGE: TurneringStatus[] = [
 export const STATUS_LABELS: Record<TurneringStatus, string> = {
   Oppsett: "Oppsett",
   PaameldingAapen: "Påmelding åpen",
+  DrawPublisert: "Draw publisert",
   Pagaar: "Pågår",
   Avsluttet: "Avsluttet",
 };

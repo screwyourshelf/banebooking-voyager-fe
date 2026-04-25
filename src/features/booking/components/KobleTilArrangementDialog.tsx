@@ -77,9 +77,7 @@ export default function KobleTilArrangementDialog({ valgtId, onVelg, children }:
                   >
                     <div className="font-medium">{arr.tittel}</div>
                     {arr.beskrivelse && (
-                      <div className="mt-0.5 truncate text-xs opacity-70">
-                        {arr.beskrivelse}
-                      </div>
+                      <div className="mt-0.5 truncate text-xs opacity-70">{arr.beskrivelse}</div>
                     )}
                   </button>
                 </li>

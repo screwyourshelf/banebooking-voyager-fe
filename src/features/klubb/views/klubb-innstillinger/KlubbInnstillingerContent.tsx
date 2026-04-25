@@ -9,7 +9,6 @@ import { ServerFeil } from "@/components/errors";
 type FormState = {
   navn: string;
   kontaktEpost: string;
-  banereglement: string;
   latitude: string;
   longitude: string;
   feedUrl: string;

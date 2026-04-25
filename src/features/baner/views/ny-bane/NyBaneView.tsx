@@ -1,5 +1,6 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useBaner } from "@/hooks/useBaner";
+import { useGrener } from "@/hooks/useGrener";
 
 import NyBaneContent from "./NyBaneContent";
 
@@ -7,6 +8,7 @@ type FormState = {
   navn: string;
   beskrivelse: string;
   sortering: string;
+  grenId: string;
 };
 
 function validateNavn(navn: string): string | null {
@@ -17,17 +19,30 @@ function validateNavn(navn: string): string | null {
 
 export default function NyBaneView() {
   const { opprettBane } = useBaner();
+  const { grener } = useGrener(false);
 
-  const [form, setForm] = useState<FormState>({ navn: "", beskrivelse: "", sortering: "0" });
+  const [form, setForm] = useState<FormState>({
+    navn: "",
+    beskrivelse: "",
+    sortering: "0",
+    grenId: "",
+  });
   const [touched, setTouched] = useState<{ navn: boolean }>({ navn: false });
   const errors = useMemo(() => ({ navn: validateNavn(form.navn) }), [form.navn]);
+
+  // Pre-select gren if only 1 available
+  useEffect(() => {
+    if (!form.grenId && grener.length > 0) {
+      setForm((f) => ({ ...f, grenId: grener[0].id }));
+    }
+  }, [grener, form.grenId]);
 
   const isDirty = useMemo(
     () => form.navn.trim().length > 0 || form.beskrivelse.trim().length > 0,
     [form.navn, form.beskrivelse]
   );
 
-  const isValid = useMemo(() => !errors.navn, [errors.navn]);
+  const isValid = useMemo(() => !errors.navn && !!form.grenId, [errors.navn, form.grenId]);
 
   const canSubmit = isDirty && isValid;
 
@@ -53,9 +68,15 @@ export default function NyBaneView() {
         navn,
         beskrivelse: form.beskrivelse,
         sortering: Number.isFinite(sortering) ? sortering : 0,
+        grenId: form.grenId,
       });
 
-      setForm({ navn: "", beskrivelse: "", sortering: "0" });
+      setForm({
+        navn: "",
+        beskrivelse: "",
+        sortering: "0",
+        grenId: grener.length === 1 ? grener[0].id : "",
+      });
       setTouched({ navn: false });
     } catch {
       // feil vises inline via opprettBane.error
@@ -66,6 +87,7 @@ export default function NyBaneView() {
     <NyBaneContent
       form={form}
       onChange={onChange}
+      grener={grener}
       canSubmit={canSubmit}
       isSaving={opprettBane.isPending}
       onSubmit={() => void onSubmit()}

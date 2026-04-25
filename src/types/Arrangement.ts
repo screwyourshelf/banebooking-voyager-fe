@@ -30,6 +30,7 @@ export type BaneGruppeForespørsel = {
 };
 
 export type OpprettArrangementForespørsel = {
+  grenId: string;
   tittel: string;
   beskrivelse?: string;
   nettsideTittel?: string;

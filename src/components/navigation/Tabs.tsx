@@ -61,6 +61,8 @@ type TabsLazyMountProps = {
 };
 
 export function TabsLazyMount({ items, value, onValueChange, className = "" }: TabsLazyMountProps) {
+  if (items.length === 0) return null;
+
   // Finn valgt tab, eller fallback til første hvis value er ugyldig
   const activeItem = items.find((item) => item.value === value) ?? items[0];
 

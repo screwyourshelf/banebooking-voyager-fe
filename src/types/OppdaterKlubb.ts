@@ -11,10 +11,8 @@ export type OppdaterBookingRegelForespørsel = {
 export type OppdaterKlubbForespørsel = {
   navn: string;
   kontaktEpost?: string;
-  banereglement?: string;
   latitude?: number;
   longitude?: number;
   feedUrl?: string;
   feedSynligAntallDager: number;
-  bookingRegel: OppdaterBookingRegelForespørsel;
 };

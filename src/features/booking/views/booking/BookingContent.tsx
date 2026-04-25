@@ -3,11 +3,22 @@ import { BookingSlotListAccordion } from "@/features/booking/components";
 import { TabsLazyMount } from "@/components/navigation";
 import { Inline } from "@/components/layout";
 import { ServerFeil } from "@/components/errors";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-import type { KalenderSlotRespons, BaneRespons } from "@/types";
+import type { KalenderSlotRespons, BaneRespons, GrenRespons } from "@/types";
 import type { User } from "@supabase/supabase-js";
 
 type Props = {
+  grener: GrenRespons[];
+  valgtGrenId: string;
+  onGrenChange: (grenId: string) => void;
+
   baner: BaneRespons[];
   valgtBaneId: string;
   onBaneChange: (baneId: string) => void;
@@ -21,14 +32,16 @@ type Props = {
   currentUser: User | null;
 
   onBook: (slot: KalenderSlotRespons) => void;
-  onCancel: (slot: KalenderSlotRespons) => void;
-  onDelete: (slot: KalenderSlotRespons) => void;
+  onFjern: (slot: KalenderSlotRespons) => void;
   onMeldPaa: (slot: KalenderSlotRespons) => void;
   onMeldAv: (slot: KalenderSlotRespons) => void;
   serverFeil: string | null;
 };
 
 export default function BookingContent({
+  grener,
+  valgtGrenId,
+  onGrenChange,
   baner,
   valgtBaneId,
   onBaneChange,
@@ -38,8 +51,7 @@ export default function BookingContent({
   isLoading,
   currentUser,
   onBook,
-  onCancel,
-  onDelete,
+  onFjern,
   onMeldPaa,
   onMeldAv,
   serverFeil,
@@ -52,6 +64,20 @@ export default function BookingContent({
           onChange={(date) => onDatoChange(date ?? null)}
           visNavigering={true}
         />
+        {grener.length > 1 && (
+          <Select value={valgtGrenId} onValueChange={onGrenChange}>
+            <SelectTrigger className="w-[160px] bg-background">
+              <SelectValue placeholder="Velg gren..." />
+            </SelectTrigger>
+            <SelectContent>
+              {grener.map((g) => (
+                <SelectItem key={g.id} value={g.id}>
+                  {g.navn}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        )}
       </Inline>
 
       <ServerFeil feil={serverFeil} />
@@ -65,8 +91,7 @@ export default function BookingContent({
               slots={slots}
               currentUser={currentUser ? { epost: currentUser.email ?? "" } : null}
               onBook={onBook}
-              onCancel={onCancel}
-              onDelete={onDelete}
+              onFjern={onFjern}
               onMeldPaa={onMeldPaa}
               onMeldAv={onMeldAv}
               isLoading={isLoading}

@@ -1,30 +1,34 @@
 import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList, Row } from "@/components/rows";
-import { FormSubmitButton, FormLayout, FormActions } from "@/components/forms";
-import { Field } from "@/components/ui/field";
+import { FormActions, FormLayout, FormSubmitButton } from "@/components/forms";
+
+import { Field, FieldError } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { ServerFeil } from "@/components/errors";
 
+type FormState = {
+  navn: string;
+  banereglement: string;
+  sortering: string;
+  aapningstid: number;
+  stengetid: number;
+  maksPerDag: number;
+  maksTotalt: number;
+  dagerFremITid: number;
+  slotLengdeMinutter: number;
+};
+
 type Props = {
-  aapningHour: number;
-  stengeHour: number;
-
-  booking: {
-    maksPerDag: number;
-    maksTotalt: number;
-    dagerFremITid: number;
-    slotLengdeMinutter: number;
-  };
-
-  onChangeAapningHour: (val: number) => void;
-  onChangeStengeHour: (val: number) => void;
-  onChangeMaksPerDag: (val: number) => void;
-  onChangeMaksTotalt: (val: number) => void;
-  onChangeDagerFremITid: (val: number) => void;
-  onChangeSlotLengdeMinutter: (val: string) => void;
+  form: FormState;
+  onChange: <K extends keyof FormState>(key: K, value: FormState[K]) => void;
 
   canSubmit: boolean;
   isSaving: boolean;
   onSubmit: () => void;
+
+  navnError: string | null;
+  onBlurNavn: () => void;
   mutasjonFeil?: string | null;
 };
 
@@ -32,29 +36,23 @@ function hourLabel(h: number) {
   return `${String(h).padStart(2, "0")}:00`;
 }
 
-/* slot mapping */
 const slotValues = [30, 45, 60, 90];
 
 function slotLabel(min: number) {
   return `${min} min`;
 }
 
-export default function BookingInnstillingerContent({
-  aapningHour,
-  stengeHour,
-  booking,
-  onChangeAapningHour,
-  onChangeStengeHour,
-  onChangeMaksPerDag,
-  onChangeMaksTotalt,
-  onChangeDagerFremITid,
-  onChangeSlotLengdeMinutter,
+export default function NyGrenContent({
+  form,
+  onChange,
   canSubmit,
   isSaving,
   onSubmit,
+  navnError,
+  onBlurNavn,
   mutasjonFeil,
 }: Props) {
-  const slotIndex = Math.max(0, slotValues.indexOf(booking.slotLengdeMinutter));
+  const slotIndex = Math.max(0, slotValues.indexOf(form.slotLengdeMinutter));
 
   return (
     <FormLayout
@@ -63,6 +61,52 @@ export default function BookingInnstillingerContent({
         onSubmit();
       }}
     >
+      <PageSection title="Ny gren">
+        <RowPanel>
+          <RowList>
+            <Row title="Navn" description="F.eks. Tennis, Padel.">
+              <Field data-invalid={!!navnError}>
+                <Input
+                  id="ny-gren-navn"
+                  disabled={isSaving}
+                  value={form.navn}
+                  onChange={(e) => onChange("navn", e.target.value)}
+                  onBlur={onBlurNavn}
+                  aria-invalid={!!navnError}
+                  autoComplete="off"
+                />
+                {navnError ? <FieldError>{navnError}</FieldError> : null}
+              </Field>
+            </Row>
+
+            <Row title="Banereglement" description="Valgfritt. Vises i bookingvisningen.">
+              <Field>
+                <Textarea
+                  id="ny-gren-banereglement"
+                  disabled={isSaving}
+                  value={form.banereglement}
+                  onChange={(e) => onChange("banereglement", e.target.value)}
+                  rows={4}
+                />
+              </Field>
+            </Row>
+
+            <Row title="Sortering" description="Lave tall vises først. Standard: 0.">
+              <Field>
+                <Input
+                  id="ny-gren-sortering"
+                  type="number"
+                  disabled={isSaving}
+                  value={form.sortering}
+                  onChange={(e) => onChange("sortering", e.target.value)}
+                  autoComplete="off"
+                />
+              </Field>
+            </Row>
+          </RowList>
+        </RowPanel>
+      </PageSection>
+
       <PageSection title="Bookinginnstillinger" description="Styr åpningstider og bookinggrenser.">
         <RowPanel>
           <RowList>
@@ -70,19 +114,21 @@ export default function BookingInnstillingerContent({
               title="Åpningstid"
               description="Tidligste starttidspunkt."
               right={
-                <div className="text-sm font-medium tabular-nums">{hourLabel(aapningHour)}</div>
+                <div className="text-sm font-medium tabular-nums">
+                  {hourLabel(form.aapningstid)}
+                </div>
               }
             >
               <Field>
                 <input
-                  id="aapningstid"
                   type="range"
-                  value={aapningHour}
+                  value={form.aapningstid}
                   min={6}
                   max={23}
                   step={1}
-                  onChange={(e) => onChangeAapningHour(Number(e.target.value))}
+                  onChange={(e) => onChange("aapningstid", Number(e.target.value))}
                   className="w-full accent-primary"
+                  disabled={isSaving}
                 />
               </Field>
             </Row>
@@ -91,19 +137,19 @@ export default function BookingInnstillingerContent({
               title="Stengetid"
               description="Seneste starttidspunkt."
               right={
-                <div className="text-sm font-medium tabular-nums">{hourLabel(stengeHour)}</div>
+                <div className="text-sm font-medium tabular-nums">{hourLabel(form.stengetid)}</div>
               }
             >
               <Field>
                 <input
-                  id="stengetid"
                   type="range"
-                  value={stengeHour}
+                  value={form.stengetid}
                   min={6}
                   max={23}
                   step={1}
-                  onChange={(e) => onChangeStengeHour(Number(e.target.value))}
+                  onChange={(e) => onChange("stengetid", Number(e.target.value))}
                   className="w-full accent-primary"
+                  disabled={isSaving}
                 />
               </Field>
             </Row>
@@ -111,18 +157,18 @@ export default function BookingInnstillingerContent({
             <Row
               title="Maks bookinger per dag"
               description="Per bruker."
-              right={<div className="text-sm font-medium tabular-nums">{booking.maksPerDag}</div>}
+              right={<div className="text-sm font-medium tabular-nums">{form.maksPerDag}</div>}
             >
               <Field>
                 <input
-                  id="maksPerDag"
                   type="range"
-                  value={booking.maksPerDag}
+                  value={form.maksPerDag}
                   min={0}
                   max={5}
                   step={1}
-                  onChange={(e) => onChangeMaksPerDag(Number(e.target.value))}
+                  onChange={(e) => onChange("maksPerDag", Number(e.target.value))}
                   className="w-full accent-primary"
+                  disabled={isSaving}
                 />
               </Field>
             </Row>
@@ -130,18 +176,18 @@ export default function BookingInnstillingerContent({
             <Row
               title="Maks aktive bookinger"
               description="Per bruker (totalt)."
-              right={<div className="text-sm font-medium tabular-nums">{booking.maksTotalt}</div>}
+              right={<div className="text-sm font-medium tabular-nums">{form.maksTotalt}</div>}
             >
               <Field>
                 <input
-                  id="maksTotalt"
                   type="range"
-                  value={booking.maksTotalt}
+                  value={form.maksTotalt}
                   min={0}
                   max={10}
                   step={1}
-                  onChange={(e) => onChangeMaksTotalt(Number(e.target.value))}
+                  onChange={(e) => onChange("maksTotalt", Number(e.target.value))}
                   className="w-full accent-primary"
+                  disabled={isSaving}
                 />
               </Field>
             </Row>
@@ -149,20 +195,18 @@ export default function BookingInnstillingerContent({
             <Row
               title="Hvor langt frem du kan booke"
               description="Antall dager frem i tid."
-              right={
-                <div className="text-sm font-medium tabular-nums">{booking.dagerFremITid}</div>
-              }
+              right={<div className="text-sm font-medium tabular-nums">{form.dagerFremITid}</div>}
             >
               <Field>
                 <input
-                  id="dagerFremITid"
                   type="range"
-                  value={booking.dagerFremITid}
+                  value={form.dagerFremITid}
                   min={1}
                   max={14}
                   step={1}
-                  onChange={(e) => onChangeDagerFremITid(Number(e.target.value))}
+                  onChange={(e) => onChange("dagerFremITid", Number(e.target.value))}
                   className="w-full accent-primary"
+                  disabled={isSaving}
                 />
               </Field>
             </Row>
@@ -172,14 +216,13 @@ export default function BookingInnstillingerContent({
               description="Lengde på hver booking."
               right={
                 <div className="text-sm font-medium tabular-nums">
-                  {slotLabel(booking.slotLengdeMinutter)}
+                  {slotLabel(form.slotLengdeMinutter)}
                 </div>
               }
             >
               <Field>
                 <div className="space-y-2">
                   <input
-                    id="slotLengdeMinutter"
                     type="range"
                     min={0}
                     max={slotValues.length - 1}
@@ -188,12 +231,11 @@ export default function BookingInnstillingerContent({
                     onChange={(e) => {
                       const index = Number(e.target.value);
                       const minutes = slotValues[index];
-                      onChangeSlotLengdeMinutter(minutes.toString());
+                      onChange("slotLengdeMinutter", minutes);
                     }}
                     className="w-full accent-primary"
+                    disabled={isSaving}
                   />
-
-                  {/* labels under slider */}
                   <div className="flex justify-between text-xs text-muted-foreground px-1">
                     {slotValues.map((v) => (
                       <span key={v}>{v}</span>
@@ -206,15 +248,15 @@ export default function BookingInnstillingerContent({
         </RowPanel>
       </PageSection>
 
-      <FormActions variant="sticky">
+      <FormActions variant="sticky" align="left" spaced={false} className="w-full">
         <ServerFeil feil={mutasjonFeil} />
         <FormSubmitButton
+          fullWidth
           isLoading={isSaving}
           disabled={!canSubmit}
-          fullWidth
-          loadingText="Lagrer..."
+          loadingText="Legger til..."
         >
-          Lagre endringer
+          Legg til
         </FormSubmitButton>
       </FormActions>
     </FormLayout>

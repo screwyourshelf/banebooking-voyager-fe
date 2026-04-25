@@ -83,6 +83,7 @@ export default function Navbar() {
   const harAdminSeksjon =
     harHandling(h, Kapabiliteter.klubb.admin) ||
     harHandling(h, Kapabiliteter.baner.admin) ||
+    harHandling(h, Kapabiliteter.grener.admin) ||
     harHandling(h, Kapabiliteter.brukere.admin) ||
     harHandling(h, Kapabiliteter.arrangement.se);
 
@@ -235,6 +236,15 @@ export default function Navbar() {
                         <Link to={`/${slug}/admin/baner`} {...prefetch("admin/baner")}>
                           <Wrench className="mr-2 size-4" />
                           Baner
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+
+                    {harHandling(h, Kapabiliteter.grener.admin) && (
+                      <DropdownMenuItem asChild>
+                        <Link to={`/${slug}/admin/grener`} {...prefetch("admin/grener")}>
+                          <Wrench className="mr-2 size-4" />
+                          Grener
                         </Link>
                       </DropdownMenuItem>
                     )}

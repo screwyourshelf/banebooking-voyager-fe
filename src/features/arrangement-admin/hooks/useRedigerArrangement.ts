@@ -4,7 +4,7 @@ import { useQueryClient } from "@tanstack/react-query";
 
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useApiQuery } from "@/hooks/useApiQuery";
-import { useKlubb } from "@/hooks/useKlubb";
+import { useGrener } from "@/hooks/useGrener";
 import { useBaner } from "@/hooks/useBaner";
 import { useSlug } from "@/hooks/useSlug";
 import { genererTidspunkter } from "../views/arrangement/arrangementUtils";
@@ -14,15 +14,16 @@ import type {
   ArrangementRespons,
   ErstattArrangementRespons,
   ArrangementForhåndsvisningRespons,
+  BookingRegelRespons,
 } from "@/types";
 
 const tomForhandsvisning: ArrangementForhåndsvisningRespons = { ledige: [], konflikter: [] };
 
-export function useRedigerArrangement(valgtId: string | null) {
+export function useRedigerArrangement(valgtId: string | null, valgtGrenId: string) {
   const slug = useSlug();
   const queryClient = useQueryClient();
 
-  const { data: klubb, isLoading: loadingKlubb } = useKlubb();
+  const { grener, isLoading: loadingGrener } = useGrener(false);
   const { baner, isLoading: loadingBaner } = useBaner(false);
 
   const { data: arrangementer, isLoading: loadingArrangementer } = useApiQuery<
@@ -37,14 +38,19 @@ export function useRedigerArrangement(valgtId: string | null) {
     [arrangementer, valgtId]
   );
 
+  const valgtGren = useMemo(
+    () => grener.find((g) => g.id === valgtGrenId) ?? null,
+    [grener, valgtGrenId]
+  );
+
   const tilgjengeligeTidspunkter = useMemo(() => {
-    const regel = klubb?.bookingRegel;
+    const regel: BookingRegelRespons | null = valgtGren?.bookingInnstillinger ?? null;
     if (!regel) return [];
     const start = regel.aapningstid || "08:00";
     const slutt = regel.stengetid || "22:00";
     const slot = regel.slotLengdeMinutter || 60;
     return genererTidspunkter(start, slutt, slot);
-  }, [klubb?.bookingRegel]);
+  }, [valgtGren]);
 
   const [forhandsvisning, setForhandsvisning] =
     useState<ArrangementForhåndsvisningRespons>(tomForhandsvisning);
@@ -92,6 +98,7 @@ export function useRedigerArrangement(valgtId: string | null) {
   return {
     arrangementer,
     arrangement,
+    grener,
     baner,
     tilgjengeligeTidspunkter,
     forhandsvisning,
@@ -100,7 +107,7 @@ export function useRedigerArrangement(valgtId: string | null) {
     erstatt,
     erstattFeil: erstattMutation.error,
     forhandsvisFeil: forhandsvisMutation.error,
-    isLoading: loadingKlubb || loadingBaner,
+    isLoading: loadingGrener || loadingBaner,
     isLoadingArrangementer: loadingArrangementer,
     isLoadingForhandsvisning: forhandsvisMutation.isPending,
   };

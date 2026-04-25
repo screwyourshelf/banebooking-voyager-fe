@@ -3,7 +3,7 @@ import { toast } from "sonner";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useSlug } from "@/hooks/useSlug";
 
-export type AvbestillVars = {
+export type FjernVars = {
   bookingId: string;
 };
 
@@ -19,7 +19,7 @@ export function useBookingActions() {
     void queryClient.invalidateQueries({ queryKey: ["bookinger", slug] });
   };
 
-  const cancelMutation = useApiMutation<AvbestillVars, void>(
+  const fjernMutation = useApiMutation<FjernVars, void>(
     "delete",
     (vars) => `/klubb/${slug}/bookinger/${vars.bookingId}`,
     {
@@ -33,18 +33,18 @@ export function useBookingActions() {
     }
   );
 
-  const avbestill = (key: AvbestillVars) => {
-    cancelMutation.mutate(key);
+  const fjern = (key: FjernVars) => {
+    fjernMutation.mutate(key);
   };
 
-  const avbestillAsync = async (key: AvbestillVars) => {
-    return cancelMutation.mutateAsync(key);
+  const fjernAsync = async (key: FjernVars) => {
+    return fjernMutation.mutateAsync(key);
   };
 
   return {
-    avbestill,
-    avbestillAsync,
-    isPending: cancelMutation.isPending,
-    error: cancelMutation.error,
+    fjern,
+    fjernAsync,
+    isPending: fjernMutation.isPending,
+    error: fjernMutation.error,
   };
 }

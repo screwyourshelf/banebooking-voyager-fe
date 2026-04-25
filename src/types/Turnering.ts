@@ -1,6 +1,11 @@
 // src/types/Turnering.ts
 
-export type TurneringStatus = "Oppsett" | "PaameldingAapen" | "Pagaar" | "Avsluttet";
+export type TurneringStatus =
+  | "Oppsett"
+  | "PaameldingAapen"
+  | "DrawPublisert"
+  | "Pagaar"
+  | "Avsluttet";
 
 export type KlasseType =
   | "HerreSingle"

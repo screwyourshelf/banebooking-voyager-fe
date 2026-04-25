@@ -14,13 +14,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { BaneRespons, BookingRegelRespons } from "@/types";
+import type { BaneRespons, BookingRegelRespons, GrenRespons } from "@/types";
 
 type BaneFormData = {
   navn: string;
   beskrivelse: string;
   aktiv: boolean;
   sortering: string;
+  grenId: string;
 };
 
 type OverstyringFormData = {
@@ -34,6 +35,7 @@ type OverstyringFormData = {
 
 type Props = {
   baner: BaneRespons[];
+  grener: GrenRespons[];
   valgtBaneId: string | null;
   onChangeValgtBaneId: (id: string | null) => void;
 
@@ -72,6 +74,7 @@ function slotLabel(min: number) {
 
 export default function RedigerBaneContent({
   baner,
+  grener,
   valgtBaneId,
   onChangeValgtBaneId,
   valgtBane,
@@ -94,6 +97,7 @@ export default function RedigerBaneContent({
   const beskrivelse = redigerteVerdier?.beskrivelse ?? valgtBane?.beskrivelse ?? "";
   const aktiv = redigerteVerdier?.aktiv ?? valgtBane?.aktiv ?? false;
   const sortering = redigerteVerdier?.sortering ?? String(valgtBane?.sortering ?? 0);
+  const grenId = redigerteVerdier?.grenId ?? valgtBane?.grenId ?? "";
 
   return (
     <FormLayout
@@ -119,7 +123,7 @@ export default function RedigerBaneContent({
                   <SelectContent>
                     {baner.map((b) => (
                       <SelectItem key={b.id} value={b.id}>
-                        {b.navn} {b.aktiv ? "" : "(inaktiv)"}
+                        {b.grenNavn}: {b.navn} {b.aktiv ? "" : "(inaktiv)"}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -129,6 +133,27 @@ export default function RedigerBaneContent({
 
             {valgtBane ? (
               <>
+                <Row title="Gren" description="Hvilken gren banen tilhører.">
+                  <Field>
+                    <Select
+                      disabled={isSaving}
+                      value={grenId}
+                      onValueChange={(val) => onChangeFelt("grenId", val)}
+                    >
+                      <SelectTrigger id="rediger-grenId" className="bg-background">
+                        <SelectValue placeholder="Velg gren..." />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {grener.map((g) => (
+                          <SelectItem key={g.id} value={g.id}>
+                            {g.navn}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Field>
+                </Row>
+
                 <Row title="Navn" description="Vises i bookingvisningen.">
                   <Field data-invalid={!!navnError}>
                     <Input

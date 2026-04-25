@@ -6,30 +6,34 @@ import {
   DialogTrigger,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { useKlubb } from "@/hooks/useKlubb";
+import { useGrener } from "@/hooks/useGrener";
 import { ReactNode } from "react";
 
 type Props = {
   children: ReactNode;
+  grenId?: string;
 };
 
-export default function ReglementDialog({ children }: Props) {
-  const { data: klubb, isLoading } = useKlubb();
+export default function ReglementDialog({ children, grenId }: Props) {
+  const { grener, isLoading } = useGrener(false);
 
-  if (isLoading || !klubb) {
+  if (isLoading || grener.length === 0) {
     return null;
   }
 
-  const { bookingRegel } = klubb;
+  const gren = grenId ? grener.find((g) => g.id === grenId) : grener[0];
+  if (!gren) return null;
+
+  const bookingRegel = gren.bookingInnstillinger;
 
   return (
     <Dialog>
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Bookingregler</DialogTitle>
+          <DialogTitle>Bookingregler – {gren.navn}</DialogTitle>
           <DialogDescription className="sr-only">
-            Oversikt over bookingreglene i klubben
+            Oversikt over bookingreglene for {gren.navn}
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4">

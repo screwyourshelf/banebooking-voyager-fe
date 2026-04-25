@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useBaner } from "@/hooks/useBaner";
-import { useKlubb } from "@/hooks/useKlubb";
+import { useGrener } from "@/hooks/useGrener";
 
 import { FormSkeleton } from "@/components/loading";
 import { QueryFeil } from "@/components/errors";
@@ -13,6 +13,7 @@ type BaneFormData = {
   beskrivelse: string;
   aktiv: boolean;
   sortering: string;
+  grenId: string;
 };
 
 type OverstyringFormData = {
@@ -56,6 +57,7 @@ function tilFormData(bane: BaneRespons): BaneFormData {
     beskrivelse: bane.beskrivelse,
     aktiv: bane.aktiv,
     sortering: String(bane.sortering),
+    grenId: bane.grenId,
   };
 }
 
@@ -69,7 +71,7 @@ export default function RedigerBaneView() {
     oppdaterBane,
     oppdaterBookingInnstillinger,
   } = useBaner(true);
-  const { data: klubb, isLoading: loadingKlubb } = useKlubb();
+  const { grener, isLoading: loadingGrener } = useGrener(false);
 
   const [redigerte, setRedigerte] = useState<Record<string, BaneFormData>>({});
   const [valgtBaneId, setValgtBaneId] = useState<string | null>(() => loadValgtBaneId());
@@ -195,7 +197,11 @@ export default function RedigerBaneView() {
     });
   }, [valgtBaneId]);
 
-  const klubbDefault = klubb?.bookingRegel ?? null;
+  const klubbDefault = useMemo(() => {
+    if (!valgtBane) return null;
+    const gren = grener.find((g) => g.id === valgtBane.grenId);
+    return gren?.bookingInnstillinger ?? null;
+  }, [valgtBane, grener]);
 
   function handleToggleOverstyringAktivert(aktiv: boolean) {
     if (!valgtBaneId) return;
@@ -250,7 +256,8 @@ export default function RedigerBaneView() {
       redigerteVerdier.navn === valgtBane.navn &&
       redigerteVerdier.beskrivelse === valgtBane.beskrivelse &&
       redigerteVerdier.aktiv === valgtBane.aktiv &&
-      redigerteVerdier.sortering === String(valgtBane.sortering)
+      redigerteVerdier.sortering === String(valgtBane.sortering) &&
+      redigerteVerdier.grenId === valgtBane.grenId
     );
   }, [valgtBane, redigerteVerdier]);
 
@@ -299,6 +306,7 @@ export default function RedigerBaneView() {
           await oppdaterBane.mutateAsync({
             id: valgtBaneId,
             dto: {
+              grenId: dto.grenId,
               navn: dto.navn,
               beskrivelse: dto.beskrivelse,
               aktiv: dto.aktiv,
@@ -349,12 +357,13 @@ export default function RedigerBaneView() {
     }
   }
 
-  if (isLoading || loadingKlubb) return <FormSkeleton />;
+  if (isLoading || loadingGrener) return <FormSkeleton />;
 
   return (
     <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
       <RedigerBaneContent
         baner={baner}
+        grener={grener}
         valgtBaneId={valgtBaneId}
         onChangeValgtBaneId={setValgtBaneId}
         valgtBane={valgtBane}

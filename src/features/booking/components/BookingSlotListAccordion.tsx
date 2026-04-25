@@ -19,7 +19,6 @@ import {
   Link2,
   CalendarPlus,
   XCircle,
-  Trash2,
 } from "lucide-react";
 import PaameldteDialog from "@/features/arrangementer/views/arrangementer/PaameldteDialog";
 import KobleTilArrangementDialog from "./KobleTilArrangementDialog";
@@ -37,8 +36,7 @@ type Props = {
   slots: BookingSlotRespons[];
   currentUser: { epost: string } | null;
   onBook?: (slot: BookingSlotRespons, arrangementId?: string) => void;
-  onCancel?: (slot: BookingSlotRespons) => void;
-  onDelete?: (slot: BookingSlotRespons) => void;
+  onFjern?: (slot: BookingSlotRespons) => void;
   onMeldPaa?: (slot: BookingSlotRespons) => void;
   onMeldAv?: (slot: BookingSlotRespons) => void;
   isLoading?: boolean;
@@ -48,8 +46,7 @@ export function BookingSlotListAccordion({
   slots,
   currentUser,
   onBook,
-  onCancel,
-  onDelete,
+  onFjern,
   onMeldPaa,
   onMeldAv,
   isLoading = false,
@@ -77,10 +74,7 @@ export function BookingSlotListAccordion({
 
         const harArrangement = !!slot.arrangementTittel;
         const kan = (h: string) => harHandling(slot.kapabiliteter, h);
-        const erBooket =
-          !!slot.booketAv ||
-          kan(Kapabiliteter.booking.slett) ||
-          kan(Kapabiliteter.booking.avbestill);
+        const erBooket = !!slot.booketAv || kan(Kapabiliteter.booking.fjern);
         const erMinBooking = slot.erEier === true;
 
         const harHandlinger = slot.kapabiliteter.length > 0;
@@ -250,33 +244,18 @@ export function BookingSlotListAccordion({
                       </Button>
                     )}
 
-                    {kan(Kapabiliteter.booking.avbestill) && (
+                    {kan(Kapabiliteter.booking.fjern) && (
                       <Button
-                        variant="outline"
+                        variant={slot.erEier ? "outline" : "destructive"}
                         size="sm"
                         onClick={(e) => {
                           e.stopPropagation();
-                          onCancel?.(slot);
+                          onFjern?.(slot);
                         }}
                         className="flex items-center gap-2 text-sm"
                       >
                         <XCircle className="size-4" />
                         Avbestill
-                      </Button>
-                    )}
-
-                    {kan(Kapabiliteter.booking.slett) && (
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onDelete?.(slot);
-                        }}
-                        className="flex items-center gap-2 text-sm"
-                      >
-                        <Trash2 className="size-4" />
-                        Slett
                       </Button>
                     )}
 

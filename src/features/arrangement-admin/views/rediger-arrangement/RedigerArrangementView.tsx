@@ -63,6 +63,7 @@ function parseDatoString(s: string): Date {
 
 export default function RedigerArrangementView() {
   const [valgtId, setValgtId] = useState<string>("");
+  const [valgtGrenId, setValgtGrenId] = useState("");
   const slug = useSlug();
   const navigate = useNavigate();
   const turneringMutation = useOpprettTurnering();
@@ -70,7 +71,8 @@ export default function RedigerArrangementView() {
   const {
     arrangementer,
     arrangement,
-    baner,
+    grener,
+    baner: alleBanerData,
     tilgjengeligeTidspunkter: standardTidspunkter,
     forhandsvisning,
     forhandsvis,
@@ -81,9 +83,34 @@ export default function RedigerArrangementView() {
     isLoading,
     isLoadingArrangementer,
     isLoadingForhandsvisning,
-  } = useRedigerArrangement(valgtId || null);
+  } = useRedigerArrangement(valgtId || null, valgtGrenId);
+
+  // Filtrer baner til valgt gren
+  const baner = useMemo(
+    () => (valgtGrenId ? alleBanerData.filter((b) => b.grenId === valgtGrenId) : alleBanerData),
+    [alleBanerData, valgtGrenId]
+  );
 
   const { avlys } = useAvlysArrangement();
+
+  // Pre-select gren
+  useEffect(() => {
+    if (!valgtGrenId && grener.length > 0) {
+      setValgtGrenId(grener[0].id);
+    }
+  }, [grener, valgtGrenId]);
+
+  const handleGrenChange = (grenId: string) => {
+    setValgtGrenId(grenId);
+    setValgteBaner([]);
+    setValgteUkedager([]);
+    setValgteTidspunkter([]);
+    setAlleBaner(false);
+    setAlleUkedager(false);
+    setAlleTidspunkter(false);
+    setTidspunkterPerGruppe({});
+    setAllePerGruppe({});
+  };
 
   const [datoFra, setDatoFra] = useState<Date>(new Date());
   const [datoTil, setDatoTil] = useState<Date>(new Date());
@@ -266,6 +293,7 @@ export default function RedigerArrangementView() {
 
   const dtoOrNull = () =>
     byggDto({
+      grenId: valgtGrenId,
       datoFra,
       datoTil,
       baneGrupper: byggBaneGrupper(),
@@ -414,6 +442,9 @@ export default function RedigerArrangementView() {
 
       {valgtId && !isLoading && arrangement && prefyltId === arrangement.id && (
         <ArrangementContent
+          grener={grener}
+          valgtGrenId={valgtGrenId}
+          onGrenChange={handleGrenChange}
           kategorier={KATEGORIER}
           kategori={kategori}
           beskrivelse={beskrivelse}
