@@ -37,7 +37,8 @@ export default function KobleTilArrangementDialog({ valgtId, onVelg, children }:
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent>
+
+      <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-hidden">
         <DialogHeader>
           <DialogTitle>Koble til arrangement</DialogTitle>
           <DialogDescription className="sr-only">
@@ -45,11 +46,11 @@ export default function KobleTilArrangementDialog({ valgtId, onVelg, children }:
           </DialogDescription>
         </DialogHeader>
 
-        <div className="space-y-4">
-          <div className="text-sm text-muted-foreground">
-            Velg et pågående arrangement å knytte bookingen til, eller bekreft uten tilknytning.
-          </div>
+        <p className="text-sm text-muted-foreground">
+          Velg et pågående arrangement å knytte bookingen til, eller bekreft uten tilknytning.
+        </p>
 
+        <div className="max-h-[50dvh] overflow-y-auto pr-1">
           {isLoading && (
             <p className="text-sm text-muted-foreground italic">Henter arrangementer…</p>
           )}
@@ -61,22 +62,22 @@ export default function KobleTilArrangementDialog({ valgtId, onVelg, children }:
           )}
 
           {data && data.length > 0 && (
-            <ul className="space-y-1 max-h-60 overflow-y-auto pr-1">
+            <ul className="space-y-1 pb-1">
               {data.map((arr) => (
                 <li key={arr.id}>
                   <button
                     type="button"
                     aria-label="Velg arrangement"
                     onClick={() => setLokaltValgtId(lokaltValgtId === arr.id ? null : arr.id)}
-                    className={`w-full text-left px-3 py-2 rounded-md text-sm border transition-colors ${
+                    className={`w-full overflow-hidden rounded-md border px-3 py-2 text-left text-sm transition-colors ${
                       lokaltValgtId === arr.id
-                        ? "bg-primary text-primary-foreground border-primary"
+                        ? "border-primary bg-primary text-primary-foreground"
                         : "border-border hover:bg-muted"
                     }`}
                   >
                     <div className="font-medium">{arr.tittel}</div>
                     {arr.beskrivelse && (
-                      <div className="text-xs opacity-70 line-clamp-2 mt-0.5">
+                      <div className="mt-0.5 truncate text-xs opacity-70">
                         {arr.beskrivelse}
                       </div>
                     )}

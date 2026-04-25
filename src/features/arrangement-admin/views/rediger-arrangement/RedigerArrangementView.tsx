@@ -365,7 +365,8 @@ export default function RedigerArrangementView() {
                                   <SelectLabel>Aktive og kommende</SelectLabel>
                                   {aktive.map((a) => (
                                     <SelectItem key={a.id} value={a.id}>
-                                      {a.tittel} — {formatDatoKort(a.startDato)} – {formatDatoKort(a.sluttDato)}
+                                      {a.tittel} — {formatDatoKort(a.startDato)} –{" "}
+                                      {formatDatoKort(a.sluttDato)}
                                     </SelectItem>
                                   ))}
                                 </SelectGroup>
@@ -376,7 +377,8 @@ export default function RedigerArrangementView() {
                                   <SelectLabel>Passerte</SelectLabel>
                                   {passerte.map((a) => (
                                     <SelectItem key={a.id} value={a.id}>
-                                      {a.tittel} — {formatDatoKort(a.startDato)} – {formatDatoKort(a.sluttDato)}
+                                      {a.tittel} — {formatDatoKort(a.startDato)} –{" "}
+                                      {formatDatoKort(a.sluttDato)}
                                     </SelectItem>
                                   ))}
                                 </SelectGroup>
