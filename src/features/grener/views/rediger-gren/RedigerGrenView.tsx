@@ -56,10 +56,16 @@ export default function RedigerGrenView() {
   const { grener, isLoading, isFetching, error, refetch, oppdaterGren } = useGrener(true);
 
   const [redigerte, setRedigerte] = useState<Record<string, GrenFormData>>({});
-  const [valgtGrenId, setValgtGrenId] = useState<string | null>(() => loadValgtGrenId());
+  const [manuellGrenId, setValgtGrenId] = useState<string | null>(() => loadValgtGrenId());
 
   const [touched, setTouched] = useState<Record<string, TouchedState>>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
+
+  // Derived: validate against current grener list, fallback to first
+  const valgtGrenId =
+    manuellGrenId != null && grener.some((g) => g.id === manuellGrenId)
+      ? manuellGrenId
+      : (grener[0]?.id ?? null);
 
   const valgtGren: GrenRespons | null = useMemo(
     () => grener.find((g) => g.id === valgtGrenId) ?? null,
@@ -72,24 +78,15 @@ export default function RedigerGrenView() {
   }, [redigerte, valgtGrenId]);
 
   useEffect(() => {
-    saveValgtGrenId(valgtGrenId);
-  }, [valgtGrenId]);
+    saveValgtGrenId(manuellGrenId);
+  }, [manuellGrenId]);
 
-  useEffect(() => {
-    if (valgtGrenId && !grener.some((g) => g.id === valgtGrenId)) {
-      setValgtGrenId(null);
-    }
-  }, [grener, valgtGrenId]);
-
-  useEffect(() => {
-    if (!valgtGrenId && grener.length > 0) {
-      setValgtGrenId(grener[0].id);
-    }
-  }, [grener, valgtGrenId]);
-
-  useEffect(() => {
+  // Reset submitAttempted when selection changes (render-time adjust)
+  const [prevValgtGrenId, setPrevValgtGrenId] = useState(valgtGrenId);
+  if (valgtGrenId !== prevValgtGrenId) {
+    setPrevValgtGrenId(valgtGrenId);
     setSubmitAttempted(false);
-  }, [valgtGrenId]);
+  }
 
   function touchField(grenId: string, key: keyof TouchedState) {
     setTouched((prev) => {

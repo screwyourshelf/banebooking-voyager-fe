@@ -74,10 +74,16 @@ export default function RedigerBaneView() {
   const { grener, isLoading: loadingGrener } = useGrener(false);
 
   const [redigerte, setRedigerte] = useState<Record<string, BaneFormData>>({});
-  const [valgtBaneId, setValgtBaneId] = useState<string | null>(() => loadValgtBaneId());
+  const [manuellBaneId, setValgtBaneId] = useState<string | null>(() => loadValgtBaneId());
 
   const [touched, setTouched] = useState<Record<string, TouchedState>>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
+
+  // Derived: validate against current baner list, fallback to first
+  const valgtBaneId =
+    manuellBaneId != null && baner.some((b) => b.id === manuellBaneId)
+      ? manuellBaneId
+      : (baner[0]?.id ?? null);
 
   const valgtBane: BaneRespons | null = useMemo(
     () => baner.find((b) => b.id === valgtBaneId) ?? null,
@@ -90,24 +96,8 @@ export default function RedigerBaneView() {
   }, [redigerte, valgtBaneId]);
 
   useEffect(() => {
-    saveValgtBaneId(valgtBaneId);
-  }, [valgtBaneId]);
-
-  useEffect(() => {
-    if (valgtBaneId && !baner.some((b) => b.id === valgtBaneId)) {
-      setValgtBaneId(null);
-    }
-  }, [baner, valgtBaneId]);
-
-  useEffect(() => {
-    if (!valgtBaneId && baner.length > 0) {
-      setValgtBaneId(baner[0].id);
-    }
-  }, [baner, valgtBaneId]);
-
-  useEffect(() => {
-    setSubmitAttempted(false);
-  }, [valgtBaneId]);
+    saveValgtBaneId(manuellBaneId);
+  }, [manuellBaneId]);
 
   function touchField(baneId: string, key: keyof TouchedState) {
     setTouched((prev) => {
@@ -152,6 +142,27 @@ export default function RedigerBaneView() {
 
   const [overstyringAktivDraft, setOverstyringAktivDraft] = useState<Record<string, boolean>>({});
 
+  // Reset dependent state when bane selection changes (render-time adjust)
+  const [prevValgtBaneId, setPrevValgtBaneId] = useState(valgtBaneId);
+  if (valgtBaneId !== prevValgtBaneId) {
+    setPrevValgtBaneId(valgtBaneId);
+    setSubmitAttempted(false);
+    if (valgtBaneId) {
+      setOverstyringDrafts((prev) => {
+        if (!prev[valgtBaneId]) return prev;
+        const ny = { ...prev };
+        delete ny[valgtBaneId];
+        return ny;
+      });
+      setOverstyringAktivDraft((prev) => {
+        if (!(valgtBaneId in prev)) return prev;
+        const ny = { ...prev };
+        delete ny[valgtBaneId];
+        return ny;
+      });
+    }
+  }
+
   const serverOverstyring: OverstyringFormData | null = useMemo(() => {
     if (!valgtBane) return null;
     const o = valgtBane.bookingOverstyring;
@@ -180,22 +191,6 @@ export default function RedigerBaneView() {
     if (!valgtBaneId || !serverOverstyring) return null;
     return overstyringDrafts[valgtBaneId] ?? serverOverstyring;
   }, [valgtBaneId, overstyringDrafts, serverOverstyring]);
-
-  useEffect(() => {
-    if (!valgtBaneId) return;
-    setOverstyringDrafts((prev) => {
-      if (!prev[valgtBaneId]) return prev;
-      const ny = { ...prev };
-      delete ny[valgtBaneId];
-      return ny;
-    });
-    setOverstyringAktivDraft((prev) => {
-      if (!(valgtBaneId in prev)) return prev;
-      const ny = { ...prev };
-      delete ny[valgtBaneId];
-      return ny;
-    });
-  }, [valgtBaneId]);
 
   const klubbDefault = useMemo(() => {
     if (!valgtBane) return null;

@@ -1,7 +1,6 @@
 import { defineConfig, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
-import { fileURLToPath, URL } from "node:url";
 
 // Erstatter %BASE_URL% i index.html
 function htmlBaseUrlPlugin(base: string): Plugin {
@@ -23,15 +22,12 @@ export default defineConfig(({ mode }) => {
     plugins: [htmlBaseUrlPlugin(base), react(), tailwindcss()],
 
     resolve: {
-      alias: {
-        "@": fileURLToPath(new URL("./src", import.meta.url)),
-      },
+      tsconfigPaths: true,
     },
 
     build: {
       target: "es2022",
       sourcemap: false,
-      minify: "esbuild",
 
       modulePreload: {
         polyfill: false,
@@ -85,6 +81,7 @@ export default defineConfig(({ mode }) => {
 
     server: {
       open: "/aas-tennisklubb",
+      forwardConsole: true,
       proxy: {
         "/api": {
           target: "http://localhost:5015",

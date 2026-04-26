@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import {
   DropdownMenu,
   DropdownMenuTrigger,
@@ -72,10 +72,13 @@ export default function Navbar() {
   const [feilEmail, setFeilEmail] = useState<string | null>(null);
   const [feilOtp, setFeilOtp] = useState<string | null>(null);
 
-  useEffect(() => {
+  // Reset validation errors when step changes (render-time adjust)
+  const [prevStep, setPrevStep] = useState(step);
+  if (step !== prevStep) {
+    setPrevStep(step);
     setFeilEmail(null);
     setFeilOtp(null);
-  }, [step]);
+  }
 
   const h = bruker?.kapabiliteter ?? [];
   const erAdmin = harHandling(h, Kapabiliteter.klubb.admin);

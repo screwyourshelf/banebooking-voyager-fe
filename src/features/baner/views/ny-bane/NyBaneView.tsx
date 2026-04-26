@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { useBaner } from "@/hooks/useBaner";
 import { useGrener } from "@/hooks/useGrener";
 
@@ -30,19 +30,14 @@ export default function NyBaneView() {
   const [touched, setTouched] = useState<{ navn: boolean }>({ navn: false });
   const errors = useMemo(() => ({ navn: validateNavn(form.navn) }), [form.navn]);
 
-  // Pre-select gren if only 1 available
-  useEffect(() => {
-    if (!form.grenId && grener.length > 0) {
-      setForm((f) => ({ ...f, grenId: grener[0].id }));
-    }
-  }, [grener, form.grenId]);
+  const effectiveGrenId = form.grenId || grener[0]?.id || "";
 
   const isDirty = useMemo(
     () => form.navn.trim().length > 0 || form.beskrivelse.trim().length > 0,
     [form.navn, form.beskrivelse]
   );
 
-  const isValid = useMemo(() => !errors.navn && !!form.grenId, [errors.navn, form.grenId]);
+  const isValid = useMemo(() => !errors.navn && !!effectiveGrenId, [errors.navn, effectiveGrenId]);
 
   const canSubmit = isDirty && isValid;
 
@@ -68,7 +63,7 @@ export default function NyBaneView() {
         navn,
         beskrivelse: form.beskrivelse,
         sortering: Number.isFinite(sortering) ? sortering : 0,
-        grenId: form.grenId,
+        grenId: effectiveGrenId,
       });
 
       setForm({
@@ -85,7 +80,7 @@ export default function NyBaneView() {
 
   return (
     <NyBaneContent
-      form={form}
+      form={{ ...form, grenId: effectiveGrenId }}
       onChange={onChange}
       grener={grener}
       canSubmit={canSubmit}

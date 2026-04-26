@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { usePagination } from "@/hooks/usePagination";
 import PageSection from "@/components/sections/PageSection";
 import { Stack, Inline } from "@/components/layout";
 import { RowPanel, RowList } from "@/components/rows";
@@ -46,16 +46,14 @@ export default function MineBookingerContent({
   onFjern,
   serverFeil,
 }: Props) {
-  const PAGE_SIZE = 10;
-  const [synligAntall, setSynligAntall] = useState(PAGE_SIZE);
-
-  useEffect(() => {
-    setSynligAntall(PAGE_SIZE);
-  }, [visHistoriske]);
+  const {
+    synlige: synligeBookinger,
+    harFlere,
+    gjenstaar,
+    visFlere,
+  } = usePagination(bookinger, 10, visHistoriske);
 
   const hasBookinger = bookinger.length > 0;
-  const synligeBookinger = bookinger.slice(0, synligAntall);
-  const harFlere = synligAntall < bookinger.length;
 
   const tomTekst = visHistoriske
     ? "Du har ingen registrerte bookinger."
@@ -190,12 +188,8 @@ export default function MineBookingerContent({
 
           {harFlere && (
             <Inline justify="center" className="mt-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setSynligAntall((prev) => prev + PAGE_SIZE)}
-              >
-                Vis flere ({bookinger.length - synligAntall} gjenstår)
+              <Button variant="outline" size="sm" onClick={visFlere}>
+                Vis flere ({gjenstaar} gjenstår)
               </Button>
             </Inline>
           )}

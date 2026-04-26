@@ -93,12 +93,10 @@ export default function RedigerArrangementView() {
 
   const { avlys } = useAvlysArrangement();
 
-  // Pre-select gren
-  useEffect(() => {
-    if (!valgtGrenId && grener.length > 0) {
-      setValgtGrenId(grener[0].id);
-    }
-  }, [grener, valgtGrenId]);
+  // Pre-select gren (render-time adjust)
+  if (!valgtGrenId && grener.length > 0) {
+    setValgtGrenId(grener[0].id);
+  }
 
   const handleGrenChange = (grenId: string) => {
     setValgtGrenId(grenId);
@@ -138,54 +136,56 @@ export default function RedigerArrangementView() {
   const [tidspunkterPerGruppe, setTidspunkterPerGruppe] = useState<Record<number, string[]>>({});
   const [allePerGruppe, setAllePerGruppe] = useState<Record<number, boolean>>({});
 
-  // Pre-fyll skjema når arrangementdata lastes
-  useEffect(() => {
+  // Pre-fyll skjema når arrangementdata lastes (render-time adjust)
+  const [prevArrangementId, setPrevArrangementId] = useState<string | null>(null);
+  const arrangementId = arrangement?.id ?? null;
+  if (arrangementId !== prevArrangementId) {
+    setPrevArrangementId(arrangementId);
     if (!arrangement) {
       setPrefyltId(null);
-      return;
-    }
-    setKategori(arrangement.kategori);
-    setBeskrivelse(arrangement.beskrivelse ?? "");
-    setNettsideTittel(arrangement.nettsideTittel ?? "");
-    setNettsideBeskrivelse(arrangement.nettsideBeskrivelse ?? "");
-    setPublisertPåNettsiden(arrangement.publisertPåNettsiden ?? false);
-    setTillaterPaamelding(arrangement.tillaterPaamelding);
-    setDatoFra(parseDatoString(arrangement.startDato));
-    setDatoTil(parseDatoString(arrangement.sluttDato));
-
-    const alleBaneIder = arrangement.baneGrupper.flatMap((g) => g.baneIder);
-    setValgteBaner(alleBaneIder);
-    setValgteUkedager(arrangement.ukedager);
-    setValgteTidspunkter([...new Set(arrangement.baneGrupper.flatMap((g) => g.tidspunkter))]);
-
-    // Pre-fyll per-gruppe-state fra arrangement.baneGrupper
-    const grupper = grupperBanerEtterSlotLengde(baner, alleBaneIder);
-    if (grupper.length > 1) {
-      const baneIdTilTider = new Map<string, string[]>();
-      for (const g of arrangement.baneGrupper) {
-        for (const id of g.baneIder) {
-          baneIdTilTider.set(id, g.tidspunkter);
-        }
-      }
-      const perGruppe: Record<number, string[]> = {};
-      const alleFlags: Record<number, boolean> = {};
-      for (const computed of grupper) {
-        perGruppe[computed.slotLengdeMinutter] = baneIdTilTider.get(computed.baneIder[0]) ?? [];
-        alleFlags[computed.slotLengdeMinutter] = false;
-      }
-      setTidspunkterPerGruppe(perGruppe);
-      setAllePerGruppe(alleFlags);
     } else {
-      setTidspunkterPerGruppe({});
-      setAllePerGruppe({});
-    }
+      setKategori(arrangement.kategori);
+      setBeskrivelse(arrangement.beskrivelse ?? "");
+      setNettsideTittel(arrangement.nettsideTittel ?? "");
+      setNettsideBeskrivelse(arrangement.nettsideBeskrivelse ?? "");
+      setPublisertPåNettsiden(arrangement.publisertPåNettsiden ?? false);
+      setTillaterPaamelding(arrangement.tillaterPaamelding);
+      setDatoFra(parseDatoString(arrangement.startDato));
+      setDatoTil(parseDatoString(arrangement.sluttDato));
 
-    setAlleBaner(false);
-    setAlleUkedager(false);
-    setAlleTidspunkter(false);
-    setØnskerTurnering(false);
-    setPrefyltId(arrangement.id);
-  }, [arrangement, baner]);
+      const alleBaneIder = arrangement.baneGrupper.flatMap((g) => g.baneIder);
+      setValgteBaner(alleBaneIder);
+      setValgteUkedager(arrangement.ukedager);
+      setValgteTidspunkter([...new Set(arrangement.baneGrupper.flatMap((g) => g.tidspunkter))]);
+
+      const grupper = grupperBanerEtterSlotLengde(baner, alleBaneIder);
+      if (grupper.length > 1) {
+        const baneIdTilTider = new Map<string, string[]>();
+        for (const g of arrangement.baneGrupper) {
+          for (const id of g.baneIder) {
+            baneIdTilTider.set(id, g.tidspunkter);
+          }
+        }
+        const perGruppe: Record<number, string[]> = {};
+        const alleFlags: Record<number, boolean> = {};
+        for (const computed of grupper) {
+          perGruppe[computed.slotLengdeMinutter] = baneIdTilTider.get(computed.baneIder[0]) ?? [];
+          alleFlags[computed.slotLengdeMinutter] = false;
+        }
+        setTidspunkterPerGruppe(perGruppe);
+        setAllePerGruppe(alleFlags);
+      } else {
+        setTidspunkterPerGruppe({});
+        setAllePerGruppe({});
+      }
+
+      setAlleBaner(false);
+      setAlleUkedager(false);
+      setAlleTidspunkter(false);
+      setØnskerTurnering(false);
+      setPrefyltId(arrangement.id);
+    }
+  }
 
   const tilgjengeligeUkedager = useMemo(
     () => finnTilgjengeligeUkedager(datoFra, datoTil),
@@ -214,30 +214,21 @@ export default function RedigerArrangementView() {
   );
   const erGruppert = slotGrupper.length > 1;
 
-  // Sync "alle X" → valgte lister
-  useEffect(() => {
-    if (alleBaner) setValgteBaner(baner.map((b) => b.id));
-  }, [alleBaner, baner]);
+  // Filter invalid selections when available options change (render-time adjust)
+  const [prevTilgjengeligeUkedager, setPrevTilgjengeligeUkedager] = useState(tilgjengeligeUkedager);
+  const [prevTilgjengeligeTidspunkter, setPrevTilgjengeligeTidspunkter] =
+    useState(tilgjengeligeTidspunkter);
 
-  useEffect(() => {
-    if (alleUkedager) setValgteUkedager(tilgjengeligeUkedager);
-  }, [alleUkedager, tilgjengeligeUkedager]);
-
-  useEffect(() => {
-    if (!erGruppert && alleTidspunkter) setValgteTidspunkter(tilgjengeligeTidspunkter);
-  }, [erGruppert, alleTidspunkter, tilgjengeligeTidspunkter]);
-
-  // Når dato-periode endres: fjern ukedager som ikke lenger er gyldige
-  useEffect(() => {
+  if (tilgjengeligeUkedager !== prevTilgjengeligeUkedager) {
+    setPrevTilgjengeligeUkedager(tilgjengeligeUkedager);
     setValgteUkedager((prev) => prev.filter((d) => tilgjengeligeUkedager.includes(d)));
-  }, [tilgjengeligeUkedager]);
-
-  // Fjern flat-tidspunkter som ikke lenger er tilgjengelige
-  useEffect(() => {
+  }
+  if (tilgjengeligeTidspunkter !== prevTilgjengeligeTidspunkter) {
+    setPrevTilgjengeligeTidspunkter(tilgjengeligeTidspunkter);
     if (!erGruppert) {
       setValgteTidspunkter((prev) => prev.filter((t) => tilgjengeligeTidspunkter.includes(t)));
     }
-  }, [erGruppert, tilgjengeligeTidspunkter]);
+  }
 
   // ───────── Per-gruppe effekter ─────────
 
@@ -489,9 +480,18 @@ export default function RedigerArrangementView() {
           }
           onChangeDatoFra={setDatoFra}
           onChangeDatoTil={setDatoTil}
-          onToggleAlleBaner={setAlleBaner}
-          onToggleAlleUkedager={setAlleUkedager}
-          onToggleAlleTidspunkter={setAlleTidspunkter}
+          onToggleAlleBaner={(v) => {
+            setAlleBaner(v);
+            if (v) setValgteBaner(baner.map((b) => b.id));
+          }}
+          onToggleAlleUkedager={(v) => {
+            setAlleUkedager(v);
+            if (v) setValgteUkedager(tilgjengeligeUkedager);
+          }}
+          onToggleAlleTidspunkter={(v) => {
+            setAlleTidspunkter(v);
+            if (v && !erGruppert) setValgteTidspunkter(tilgjengeligeTidspunkter);
+          }}
           onToggleBane={(id) => toggleItem(id, setValgteBaner)}
           onToggleUkedag={(dag) => toggleItem(dag, setValgteUkedager)}
           onToggleTidspunkt={(tid) => toggleItem(tid, setValgteTidspunkter)}

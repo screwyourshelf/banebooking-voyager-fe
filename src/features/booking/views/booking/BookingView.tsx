@@ -14,11 +14,13 @@ import BookingContent from "./BookingContent";
 export default function BookingView() {
   const { grener, isLoading: loadingGrener } = useGrener(false);
   const { baner, isLoading: loadingBaner } = useBaner(false);
-  const [valgtGrenId, setValgtGrenId] = useState("");
-  const [valgtBaneId, setValgtBaneId] = useState("");
+  const [manuellGrenId, setValgtGrenId] = useState<string | null>(null);
+  const [manuellBaneId, setValgtBaneId] = useState<string | null>(null);
   const [valgtDato, setValgtDato] = useState<Date | null>(new Date());
 
   const { currentUser } = useAuth();
+
+  const valgtGrenId = manuellGrenId ?? grener[0]?.id ?? "";
 
   const valgtDatoStr = useMemo(
     () => (valgtDato ? format(valgtDato, "yyyy-MM-dd") : ""),
@@ -30,11 +32,10 @@ export default function BookingView() {
     [baner, valgtGrenId]
   );
 
-  // Synkron beregning av gyldig baneId — unngår stale request før effect kjører
-  const gyldigBaneId = useMemo(
-    () => (filtrerteBaner.some((b) => b.id === valgtBaneId) ? valgtBaneId : ""),
-    [filtrerteBaner, valgtBaneId]
-  );
+  const valgtBaneId =
+    manuellBaneId != null && filtrerteBaner.some((b) => b.id === manuellBaneId)
+      ? manuellBaneId
+      : (filtrerteBaner[0]?.id ?? "");
 
   const {
     slots,
@@ -46,11 +47,11 @@ export default function BookingView() {
     hentBookinger,
     bookFeil,
     fjernFeil,
-  } = useBooking(valgtDatoStr, gyldigBaneId);
+  } = useBooking(valgtDatoStr, valgtBaneId);
 
   const { onMeldPaa, onMeldAv, paameldingFeil, avmeldingFeil } = useSlotArrangementPaamelding(
     valgtDatoStr,
-    gyldigBaneId
+    valgtBaneId
   );
 
   const serverFeil =
@@ -59,21 +60,6 @@ export default function BookingView() {
     paameldingFeil?.message ??
     avmeldingFeil?.message ??
     null;
-
-  // Velg første gren som default
-  useEffect(() => {
-    if (!valgtGrenId && grener.length > 0) {
-      setValgtGrenId(grener[0].id);
-    }
-  }, [grener, valgtGrenId]);
-
-  // Når gren endres → velg første bane i filtrert liste
-  useEffect(() => {
-    const banerForGren = valgtGrenId ? baner.filter((b) => b.grenId === valgtGrenId) : baner;
-    if (!banerForGren.some((b) => b.id === valgtBaneId) && banerForGren.length > 0) {
-      setValgtBaneId(banerForGren[0].id);
-    }
-  }, [baner, valgtGrenId, valgtBaneId]);
 
   useEffect(() => {
     if (valgtDato) {

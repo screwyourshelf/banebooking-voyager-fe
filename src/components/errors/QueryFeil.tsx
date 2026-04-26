@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useRef } from "react";
+import { useState } from "react";
 import { RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Stack } from "@/components/layout";
@@ -13,12 +13,16 @@ type Props = {
 };
 
 export function QueryFeil({ error, isFetching, onRetry, children }: Props) {
-  const lastMessageRef = useRef<string | null>(null);
+  const [lastMessage, setLastMessage] = useState<string | null>(null);
 
-  if (error) lastMessageRef.current = error.message;
-  else if (!isFetching) lastMessageRef.current = null;
+  // Latch error message during retry (render-time adjust)
+  if (error && lastMessage !== error.message) {
+    setLastMessage(error.message);
+  } else if (!error && !isFetching && lastMessage !== null) {
+    setLastMessage(null);
+  }
 
-  const message = lastMessageRef.current;
+  const message = error?.message ?? lastMessage;
 
   if (message) {
     return (

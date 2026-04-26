@@ -76,7 +76,7 @@ export default function BrukereListeView() {
   const åpenRedigering = (b: BrukerRespons) => {
     setAktivBruker(b);
     setEdit({
-      rolle: ((b.roller?.[0] ?? "Medlem") as RolleType) ?? "Medlem",
+      rolle: (b.roller?.[0] ?? "Medlem") as RolleType,
       visningsnavn: b.visningsnavn ?? "",
     });
   };

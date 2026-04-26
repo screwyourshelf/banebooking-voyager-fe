@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -55,9 +55,12 @@ export function useRedigerArrangement(valgtId: string | null, valgtGrenId: strin
   const [forhandsvisning, setForhandsvisning] =
     useState<ArrangementForhåndsvisningRespons>(tomForhandsvisning);
 
-  useEffect(() => {
+  // Reset preview when selected arrangement changes (render-time adjust)
+  const [prevValgtId, setPrevValgtId] = useState(valgtId);
+  if (valgtId !== prevValgtId) {
+    setPrevValgtId(valgtId);
     setForhandsvisning(tomForhandsvisning);
-  }, [valgtId]);
+  }
 
   const clearForhandsvisning = () => setForhandsvisning(tomForhandsvisning);
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { usePagination } from "@/hooks/usePagination";
 import PageSection from "@/components/sections/PageSection";
 import { Stack, Inline } from "@/components/layout";
 import { RowPanel, RowList, Row } from "@/components/rows";
@@ -61,15 +61,13 @@ export default function BrukereListeContent({
   renderSperrAction,
   onÅpneSperreHistorikk,
 }: Props) {
-  const PAGE_SIZE = 20;
-  const [synligAntall, setSynligAntall] = useState(PAGE_SIZE);
-
-  useEffect(() => {
-    setSynligAntall(PAGE_SIZE);
-  }, [query, visSlettede, rolleFilter]);
-
-  const synligeBrukere = filtrerteBrukere.slice(0, synligAntall);
-  const harFlere = synligAntall < filtrerteBrukere.length;
+  const filterKey = `${query}|${visSlettede}|${rolleFilter.join(",")}`;
+  const {
+    synlige: synligeBrukere,
+    harFlere,
+    gjenstaar,
+    visFlere,
+  } = usePagination(filtrerteBrukere, 20, filterKey);
 
   return (
     <Stack gap="lg">
@@ -233,12 +231,8 @@ export default function BrukereListeContent({
 
               {harFlere && (
                 <Inline justify="center" className="mt-4">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setSynligAntall((prev) => prev + PAGE_SIZE)}
-                  >
-                    Vis flere ({filtrerteBrukere.length - synligAntall} gjenstår)
+                  <Button variant="outline" size="sm" onClick={visFlere}>
+                    Vis flere ({gjenstaar} gjenstår)
                   </Button>
                 </Inline>
               )}

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { FormSkeleton } from "@/components/loading";
 import { SlettMegDialog } from "@/features/minside/components";
@@ -15,9 +15,10 @@ export default function MinProfilView() {
   const [visningsnavn, setVisningsnavn] = useState("");
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (!bruker) return;
-
+  // Initialize form from server data (render-time adjust)
+  const [prevBruker, setPrevBruker] = useState(bruker);
+  if (bruker && bruker !== prevBruker) {
+    setPrevBruker(bruker);
     const navn = bruker.visningsnavn?.trim();
     if (!navn || navn === bruker.epost) {
       setMode("epost");
@@ -26,9 +27,8 @@ export default function MinProfilView() {
       setMode("navn");
       setVisningsnavn(navn);
     }
-
     setError(null);
-  }, [bruker]);
+  }
 
   if (lasterMeg || !bruker) return <FormSkeleton />;
 

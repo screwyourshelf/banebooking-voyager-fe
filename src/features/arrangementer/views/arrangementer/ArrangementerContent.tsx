@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+﻿import { usePagination } from "@/hooks/usePagination";
 import { useNavigate } from "react-router-dom";
 import PageSection from "@/components/sections/PageSection";
 import { Stack, Inline } from "@/components/layout";
@@ -75,12 +75,13 @@ export default function ArrangementerContent({
 }: Props) {
   const slug = useSlug();
   const navigate = useNavigate();
-  const PAGE_SIZE = 10;
-  const [synligAntall, setSynligAntall] = useState(PAGE_SIZE);
 
-  useEffect(() => {
-    setSynligAntall(PAGE_SIZE);
-  }, [visHistoriske]);
+  const {
+    synlige: synligeArrangementer,
+    harFlere,
+    gjenstaar,
+    visFlere,
+  } = usePagination(arrangementer, 10, visHistoriske);
 
   function kopierLenke(arrangementId: string) {
     const url = `${window.location.origin}/${slug}/arrangementer?arrangement=${arrangementId}`;
@@ -88,9 +89,6 @@ export default function ArrangementerContent({
       toast.success("Lenke kopiert til utklippstavle");
     });
   }
-
-  const synligeArrangementer = arrangementer.slice(0, synligAntall);
-  const harFlere = synligAntall < arrangementer.length;
 
   const tomTekst = visHistoriske
     ? "Ingen arrangementer registrert."
@@ -344,12 +342,8 @@ export default function ArrangementerContent({
 
           {harFlere && (
             <Inline justify="center" className="mt-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setSynligAntall((prev) => prev + PAGE_SIZE)}
-              >
-                Vis flere ({arrangementer.length - synligAntall} gjenstår)
+              <Button variant="outline" size="sm" onClick={visFlere}>
+                Vis flere ({gjenstaar} gjenstår)
               </Button>
             </Inline>
           )}

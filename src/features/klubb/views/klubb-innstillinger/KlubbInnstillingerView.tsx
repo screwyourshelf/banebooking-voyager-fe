@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { FormSkeleton } from "@/components/loading";
 import { QueryFeil } from "@/components/errors";
 import { useKlubb } from "@/hooks/useKlubb";
@@ -79,9 +79,10 @@ export default function KlubbInnstillingerView() {
     feedSynligAntallDager: false,
   });
 
-  useEffect(() => {
-    if (!klubb) return;
-
+  // Initialize form from server data (render-time adjust)
+  const [prevKlubb, setPrevKlubb] = useState(klubb);
+  if (klubb && klubb !== prevKlubb) {
+    setPrevKlubb(klubb);
     setForm({
       navn: klubb.navn ?? "",
       kontaktEpost: klubb.kontaktEpost ?? "",
@@ -90,10 +91,8 @@ export default function KlubbInnstillingerView() {
       feedUrl: klubb.feedUrl ?? "",
       feedSynligAntallDager: (klubb.feedSynligAntallDager ?? 50).toString(),
     });
-
-    // Reset touched når vi laster inn fra server (slik at vi ikke viser feil med en gang)
     setTouched({ navn: false, kontaktEpost: false, feedSynligAntallDager: false });
-  }, [klubb]);
+  }
 
   const errors = useMemo(() => {
     return {

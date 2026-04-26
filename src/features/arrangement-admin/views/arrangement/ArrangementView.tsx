@@ -56,12 +56,10 @@ export default function ArrangementView() {
     [alleBanerData, valgtGrenId]
   );
 
-  // Pre-select gren
-  useEffect(() => {
-    if (!valgtGrenId && grener.length > 0) {
-      setValgtGrenId(grener[0].id);
-    }
-  }, [grener, valgtGrenId]);
+  // Pre-select gren (render-time adjust)
+  if (!valgtGrenId && grener.length > 0) {
+    setValgtGrenId(grener[0].id);
+  }
 
   const [datoFra, setDatoFra] = useState<Date>(new Date());
   const [datoTil, setDatoTil] = useState<Date>(new Date());
@@ -128,30 +126,21 @@ export default function ArrangementView() {
   );
   const erGruppert = slotGrupper.length > 1;
 
-  // Sync "alle X" → valgte lister
-  useEffect(() => {
-    if (alleBaner) setValgteBaner(baner.map((b) => b.id));
-  }, [alleBaner, baner]);
+  // Filter invalid selections when available options change (render-time adjust)
+  const [prevTilgjengeligeUkedager, setPrevTilgjengeligeUkedager] = useState(tilgjengeligeUkedager);
+  const [prevTilgjengeligeTidspunkter, setPrevTilgjengeligeTidspunkter] =
+    useState(tilgjengeligeTidspunkter);
 
-  useEffect(() => {
-    if (alleUkedager) setValgteUkedager(tilgjengeligeUkedager);
-  }, [alleUkedager, tilgjengeligeUkedager]);
-
-  useEffect(() => {
-    if (!erGruppert && alleTidspunkter) setValgteTidspunkter(tilgjengeligeTidspunkter);
-  }, [erGruppert, alleTidspunkter, tilgjengeligeTidspunkter]);
-
-  // Når dato-periode endres: fjern ukedager som ikke lenger er gyldige
-  useEffect(() => {
+  if (tilgjengeligeUkedager !== prevTilgjengeligeUkedager) {
+    setPrevTilgjengeligeUkedager(tilgjengeligeUkedager);
     setValgteUkedager((prev) => prev.filter((d) => tilgjengeligeUkedager.includes(d)));
-  }, [tilgjengeligeUkedager]);
-
-  // Fjern flat-tidspunkter som ikke lenger er tilgjengelige
-  useEffect(() => {
+  }
+  if (tilgjengeligeTidspunkter !== prevTilgjengeligeTidspunkter) {
+    setPrevTilgjengeligeTidspunkter(tilgjengeligeTidspunkter);
     if (!erGruppert) {
       setValgteTidspunkter((prev) => prev.filter((t) => tilgjengeligeTidspunkter.includes(t)));
     }
-  }, [erGruppert, tilgjengeligeTidspunkter]);
+  }
 
   // ───────── Per-gruppe effekter ─────────
 
@@ -304,9 +293,18 @@ export default function ArrangementView() {
       }}
       onChangeDatoFra={setDatoFra}
       onChangeDatoTil={setDatoTil}
-      onToggleAlleBaner={setAlleBaner}
-      onToggleAlleUkedager={setAlleUkedager}
-      onToggleAlleTidspunkter={setAlleTidspunkter}
+      onToggleAlleBaner={(v) => {
+        setAlleBaner(v);
+        if (v) setValgteBaner(baner.map((b) => b.id));
+      }}
+      onToggleAlleUkedager={(v) => {
+        setAlleUkedager(v);
+        if (v) setValgteUkedager(tilgjengeligeUkedager);
+      }}
+      onToggleAlleTidspunkter={(v) => {
+        setAlleTidspunkter(v);
+        if (v && !erGruppert) setValgteTidspunkter(tilgjengeligeTidspunkter);
+      }}
       onToggleBane={(id) => toggleItem(id, setValgteBaner)}
       onToggleUkedag={(dag) => toggleItem(dag, setValgteUkedager)}
       onToggleTidspunkt={(tid) => toggleItem(tid, setValgteTidspunkter)}
