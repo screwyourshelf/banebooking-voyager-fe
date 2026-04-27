@@ -12,7 +12,12 @@ import {
   SperreHistorikkDialog,
 } from "@/features/brukere/components";
 
-import type { RolleType, BrukerRespons, EditState } from "@/features/brukere/types";
+import type {
+  RolleType,
+  MedlemskapFilterType,
+  BrukerRespons,
+  EditState,
+} from "@/features/brukere/types";
 import { QueryFeil } from "@/components/errors";
 import BrukereListeContent from "./BrukereListeContent";
 import RedigerBrukerDialog from "./RedigerBrukerDialog";
@@ -43,11 +48,13 @@ export default function BrukereListeView() {
     useAdminBrukersperre();
 
   const erKlubbAdmin = harHandling(bruker?.kapabiliteter, Kapabiliteter.brukere.admin);
+  const harLeseTilgang = harHandling(bruker?.kapabiliteter, Kapabiliteter.brukere.lese);
 
   // Filters
   const [query, setQuery] = useState("");
   const [visSlettede, setVisSlettede] = useState(false);
   const [rolleFilter, setRolleFilter] = useState<RolleType[]>([]);
+  const [medlemskapFilter, setMedlemskapFilter] = useState<MedlemskapFilterType[]>([]);
 
   // Dialog
   const [aktivBruker, setAktivBruker] = useState<BrukerRespons | null>(null);
@@ -70,8 +77,13 @@ export default function BrukereListeView() {
       .filter((b) => {
         if (!q) return true;
         return b.epost?.toLowerCase().includes(q) || b.visningsnavn?.toLowerCase().includes(q);
+      })
+      .filter((b) => {
+        if (medlemskapFilter.length === 0) return true;
+        const erBekreftet = !!b.medlemskapBekreftetDato;
+        return medlemskapFilter.includes(erBekreftet ? "bekreftet" : "ikke-bekreftet");
       });
-  }, [brukere, query, visSlettede, rolleFilter]);
+  }, [brukere, query, visSlettede, rolleFilter, medlemskapFilter]);
 
   const åpenRedigering = (b: BrukerRespons) => {
     setAktivBruker(b);
@@ -99,6 +111,10 @@ export default function BrukereListeView() {
     setRolleFilter((prev) => (prev.includes(r) ? prev.filter((x) => x !== r) : [...prev, r]));
   }
 
+  function toggleMedlemskap(m: MedlemskapFilterType) {
+    setMedlemskapFilter((prev) => (prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m]));
+  }
+
   const handleSlettBruker = (brukerId: string) => async () => {
     await slett(brukerId);
   };
@@ -118,7 +134,7 @@ export default function BrukereListeView() {
 
   if (lasterBruker) return <ListSkeleton />;
 
-  if (!erKlubbAdmin) {
+  if (!erKlubbAdmin && !harLeseTilgang) {
     return (
       <p className="text-sm text-destructive px-2 py-2 text-center">
         Du har ikke tilgang til denne siden.
@@ -136,9 +152,12 @@ export default function BrukereListeView() {
           onVisSlettedeChange={setVisSlettede}
           rolleFilter={rolleFilter}
           onToggleRolle={toggleRolle}
+          medlemskapFilter={medlemskapFilter}
+          onToggleMedlemskap={toggleMedlemskap}
           filtrerteBrukere={filtrerteBrukere}
           lasterListe={lasterListe}
           currentBrukerId={bruker?.id}
+          erKlubbAdmin={erKlubbAdmin}
           onRedigerBruker={åpenRedigering}
           renderSlettAction={(b) => {
             const kanSlette = harHandling(b.kapabiliteter, Kapabiliteter.brukere.slett);

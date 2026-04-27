@@ -11,6 +11,12 @@ export interface BrukerRespons {
   kapabiliteter: string[];
   erSperret?: boolean;
   antallAktiveSperrer?: number;
+  opprettetTid?: string;
+  måBekrefteMedlemskap?: boolean;
+  medlemskapBekreftelseLabel?: string | null;
+  medlemskapBekreftetDato?: string | null;
+  fulltNavn?: string | null;
+  medlemskapType?: string | null;
 }
 
 export interface BrukerSperreRespons {

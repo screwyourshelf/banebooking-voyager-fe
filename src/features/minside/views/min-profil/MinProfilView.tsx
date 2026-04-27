@@ -72,6 +72,10 @@ export default function MinProfilView() {
       canSubmit={canSubmit}
       isSaving={isPending}
       onSubmit={() => void lagreVisningsnavn()}
+      medlemskapBekreftelseLabel={bruker.medlemskapBekreftelseLabel}
+      fulltNavn={bruker.fulltNavn}
+      medlemskapType={bruker.medlemskapType}
+      medlemskapBekreftetDato={bruker.medlemskapBekreftetDato}
       deleteAction={<SlettMegDialog slettMeg={slettMeg} />}
       isDeleteDisabled={isPending}
     />

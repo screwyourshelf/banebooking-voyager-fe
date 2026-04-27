@@ -10,3 +10,4 @@ export * from "./Arrangement";
 export * from "./FeedItem";
 export * from "./Gren";
 export * from "./Turnering";
+export * from "./Medlemskap";

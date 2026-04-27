@@ -31,9 +31,22 @@ type Props = {
 
   onSubmit: () => void;
 
+  // Medlemskapsinformasjon
+  medlemskapBekreftelseLabel?: string | null;
+  fulltNavn?: string | null;
+  medlemskapType?: string | null;
+  medlemskapBekreftetDato?: string | null;
+
   // NYTT: ferdig knapp (dialog-trigger) sendes inn fra view
   deleteAction: ReactNode;
   isDeleteDisabled?: boolean;
+};
+
+const MEDLEMSKAP_TYPE_LABELS: Record<string, string> = {
+  BarnJunior: "Barn/junior (inntil 19 år)",
+  StudentVernepliktig: "Student/vernepliktig",
+  Voksen: "Voksen",
+  Familie: "Familiemedlemskap",
 };
 
 export default function MinProfilContent({
@@ -49,6 +62,10 @@ export default function MinProfilContent({
   error,
   serverFeil,
   onSubmit,
+  medlemskapBekreftelseLabel,
+  fulltNavn,
+  medlemskapType,
+  medlemskapBekreftetDato,
   deleteAction,
   isDeleteDisabled = false,
 }: Props) {
@@ -109,6 +126,19 @@ export default function MinProfilContent({
           <RowList>
             <InfoRow label="Brukernavn / ID" value={epost} />
             <InfoRow label="Tilgang" value={rollerText} />
+            {medlemskapBekreftelseLabel && fulltNavn ? <InfoRow label="Navn (medlemskap)" value={fulltNavn} /> : null}
+            {medlemskapBekreftelseLabel && medlemskapType ? (
+              <InfoRow
+                label="Type medlemskap"
+                value={MEDLEMSKAP_TYPE_LABELS[medlemskapType] ?? medlemskapType}
+              />
+            ) : null}
+            {medlemskapBekreftelseLabel && medlemskapBekreftetDato ? (
+              <InfoRow
+                label="Medlemskap bekreftet"
+                value={new Date(medlemskapBekreftetDato).toLocaleDateString("nb-NO")}
+              />
+            ) : null}
 
             {/* Destruktiv handling som egen rad i Konto */}
             <Row

@@ -26,10 +26,14 @@ export const Kapabiliteter = {
   },
   brukere: {
     admin: "brukere:admin",
+    lese: "brukere:lese",
     slett: "bruker:slett",
     sperr: "bruker:sperr",
     opphevSperre: "bruker:opphevSperre",
     seSperre: "bruker:seSperre",
+  },
+  medlemskap: {
+    aktiver: "medlemskap:aktiver",
   },
   turnering: {
     administrer: "turnering:administrer",

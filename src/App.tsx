@@ -4,6 +4,7 @@ import { lazy, Suspense, useMemo } from "react";
 import SlugGate from "@/routes/SlugGate";
 import { routeConfig, flattenRoutes } from "@/routes/routeConfig";
 import { SperretGuard } from "@/routes/SperretGuard";
+import { MedlemskapGuard } from "@/routes/MedlemskapGuard";
 import AppBoot from "@/app/AppBoot";
 import AppShell from "@/app/AppShell";
 import { AppFrameSkeleton } from "@/components/loading";
@@ -14,6 +15,9 @@ import { AppErrorBoundary } from "@/components/errors";
 
 const AuthCallbackPage = lazy(() => import("./app/AuthCallbackPage"));
 const SperretPage = lazy(() => import("@/features/sperre/pages/SperretPage"));
+const BekreftMedlemskapPage = lazy(
+  () => import("@/features/medlemskap/pages/BekreftMedlemskapPage")
+);
 const NotFoundPage = lazy(() => import("@/features/errors/pages/NotFoundPage"));
 
 export default function App() {
@@ -37,23 +41,27 @@ export default function App() {
                     }
                   >
                     <Route element={<SperretGuard />}>
-                      {appRoutes.map((route) => {
-                        const Component = route.component!;
+                      <Route element={<MedlemskapGuard />}>
+                        {appRoutes.map((route) => {
+                          const Component = route.component!;
 
-                        const element = route.protected ? (
-                          <ProtectedRoute>
+                          const element = route.protected ? (
+                            <ProtectedRoute>
+                              <Component />
+                            </ProtectedRoute>
+                          ) : (
                             <Component />
-                          </ProtectedRoute>
-                        ) : (
-                          <Component />
-                        );
+                          );
 
-                        return route.index ? (
-                          <Route key="index" index element={element} />
-                        ) : (
-                          <Route key={route.fullPath} path={route.fullPath} element={element} />
-                        );
-                      })}
+                          return route.index ? (
+                            <Route key="index" index element={element} />
+                          ) : (
+                            <Route key={route.fullPath} path={route.fullPath} element={element} />
+                          );
+                        })}
+                      </Route>
+
+                      <Route path="bekreft-medlemskap" element={<BekreftMedlemskapPage />} />
                     </Route>
 
                     <Route path="sperret" element={<SperretPage />} />
