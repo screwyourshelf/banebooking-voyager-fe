@@ -66,11 +66,12 @@ export default function BookingContent({
             <PopoverTrigger asChild>
               <Button
                 variant="outline"
-                size="icon"
-                className="h-8 w-8 shrink-0"
+                size="sm"
+                className="h-8 shrink-0 gap-1.5"
                 aria-label="Velg gren"
               >
                 <Filter className="h-4 w-4" />
+                Gren
               </Button>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-auto p-1">
