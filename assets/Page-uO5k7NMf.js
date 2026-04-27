@@ -1,1 +1,0 @@
-import{Cr as e}from"./react-Cvtz3ceK.js";import{t}from"./utils-CrJOQCAS.js";var n=e(),r={md:`max-w-screen-md`,lg:`max-w-screen-lg`,xl:`max-w-screen-xl`,full:`max-w-none`};function i({children:e,className:i,width:a=`md`}){return(0,n.jsx)(`div`,{className:t(r[a],`mx-auto px-2 md:px-4 py-3 md:py-5`,i),children:e})}export{i as t};
