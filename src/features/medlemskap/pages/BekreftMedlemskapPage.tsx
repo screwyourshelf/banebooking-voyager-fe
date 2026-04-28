@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Link } from "react-router-dom";
 
 const MEDLEMSKAP_TYPER = [
   { value: "BarnJunior", label: "Barn/junior (inntil 19 år)" },
@@ -39,13 +40,13 @@ export default function BekreftMedlemskapPage() {
   return (
     <ErrorDisplay
       icon={BadgeCheck}
-      title="Hei! Tid for en rask oppdatering"
-      description={`${klubb?.navn ?? "Klubben"} ber alle spillere bekrefte betalt medlemskap for den nye sesongen. Bekreft under for å fortsette å booke baner.`}
+      title="Bekreft medlemskap"
+      description={`For å booke baner må du være medlem av ${klubb?.navn ?? "klubben"}. Bekreft at du har betalt medlemskap for inneværende sesong. Husk at alle spillere du booker bane for også må være betalende medlemmer.`}
     >
       <div className="space-y-4 w-full max-w-xs">
         {klubb?.nettside && (
           <p className="text-sm text-muted-foreground text-center">
-            Har du ikke betalt?{" "}
+            Ikke medlem ennå?{" "}
             <a
               href={klubb.nettside}
               target="_blank"
@@ -54,9 +55,16 @@ export default function BekreftMedlemskapPage() {
             >
               Besøk klubbens hjemmeside
             </a>{" "}
-            for aktuelle medlemsavgifter.
+            for informasjon om medlemskap og priser.
           </p>
         )}
+        <p className="text-xs text-muted-foreground text-center">
+          Ved å bekrefte godtar du{" "}
+          <Link to={`/${slug}/vilkaar`} className="underline text-primary hover:text-primary/80">
+            vilkårene for bruk
+          </Link>
+          .
+        </p>
         <div className="space-y-2">
           <Label htmlFor="fulltNavn">Fullt navn</Label>
           <Input

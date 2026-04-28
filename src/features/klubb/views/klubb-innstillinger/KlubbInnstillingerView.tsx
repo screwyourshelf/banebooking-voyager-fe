@@ -82,7 +82,8 @@ export default function KlubbInnstillingerView() {
   });
 
   // Initialize form from server data (render-time adjust)
-  const [prevKlubb, setPrevKlubb] = useState(klubb);
+  // Use null as sentinel so cached data on first render still triggers initialization
+  const [prevKlubb, setPrevKlubb] = useState<typeof klubb | null>(null);
   if (klubb && klubb !== prevKlubb) {
     setPrevKlubb(klubb);
     setForm({

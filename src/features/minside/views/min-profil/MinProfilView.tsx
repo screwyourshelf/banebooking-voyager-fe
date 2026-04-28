@@ -16,7 +16,8 @@ export default function MinProfilView() {
   const [error, setError] = useState<string | null>(null);
 
   // Initialize form from server data (render-time adjust)
-  const [prevBruker, setPrevBruker] = useState(bruker);
+  // Use null as sentinel so cached data on first render still triggers initialization
+  const [prevBruker, setPrevBruker] = useState<typeof bruker | null>(null);
   if (bruker && bruker !== prevBruker) {
     setPrevBruker(bruker);
     const navn = bruker.visningsnavn?.trim();
