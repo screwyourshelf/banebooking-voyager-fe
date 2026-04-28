@@ -8,6 +8,7 @@ import KlubbInnstillingerContent from "./KlubbInnstillingerContent";
 type FormState = {
   navn: string;
   kontaktEpost: string;
+  nettside: string;
   latitude: string;
   longitude: string;
   feedUrl: string;
@@ -67,6 +68,7 @@ export default function KlubbInnstillingerView() {
   const [form, setForm] = useState<FormState>({
     navn: "",
     kontaktEpost: "",
+    nettside: "",
     latitude: "",
     longitude: "",
     feedUrl: "",
@@ -86,6 +88,7 @@ export default function KlubbInnstillingerView() {
     setForm({
       navn: klubb.navn ?? "",
       kontaktEpost: klubb.kontaktEpost ?? "",
+      nettside: klubb.nettside ?? "",
       latitude: klubb.latitude?.toString() ?? "",
       longitude: klubb.longitude?.toString() ?? "",
       feedUrl: klubb.feedUrl ?? "",
@@ -108,6 +111,7 @@ export default function KlubbInnstillingerView() {
     return (
       (form.navn ?? "") !== (klubb.navn ?? "") ||
       (form.kontaktEpost ?? "") !== (klubb.kontaktEpost ?? "") ||
+      (form.nettside ?? "") !== (klubb.nettside ?? "") ||
       (form.latitude ?? "") !== (klubb.latitude?.toString() ?? "") ||
       (form.longitude ?? "") !== (klubb.longitude?.toString() ?? "") ||
       (form.feedUrl ?? "") !== (klubb.feedUrl ?? "") ||
@@ -165,6 +169,7 @@ export default function KlubbInnstillingerView() {
       ...klubb,
       navn: form.navn.trim(),
       kontaktEpost: form.kontaktEpost.trim(),
+      nettside: form.nettside.trim() || undefined,
 
       latitude: lat ?? klubb.latitude ?? undefined,
       longitude: lon ?? klubb.longitude ?? undefined,

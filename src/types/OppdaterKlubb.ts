@@ -11,6 +11,7 @@ export type OppdaterBookingRegelForespørsel = {
 export type OppdaterKlubbForespørsel = {
   navn: string;
   kontaktEpost?: string;
+  nettside?: string;
   latitude?: number;
   longitude?: number;
   feedUrl?: string;

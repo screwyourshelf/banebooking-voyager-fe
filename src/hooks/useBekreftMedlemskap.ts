@@ -8,13 +8,17 @@ export function useBekreftMedlemskap() {
   const slug = useSlug();
   const queryClient = useQueryClient();
 
-  const mutation = useApiMutation<BekreftMedlemskapForespørsel, void>("post", `/klubb/${slug}/bruker/bekreft-medlemskap`, {
-    onSuccess: async () => {
-      toast.success("Medlemskap bekreftet!");
-      await queryClient.invalidateQueries({ queryKey: ["bruker", slug] });
-    },
-    retry: false,
-  });
+  const mutation = useApiMutation<BekreftMedlemskapForespørsel, void>(
+    "post",
+    `/klubb/${slug}/bruker/bekreft-medlemskap`,
+    {
+      onSuccess: async () => {
+        toast.success("Medlemskap bekreftet!");
+        await queryClient.invalidateQueries({ queryKey: ["bruker", slug] });
+      },
+      retry: false,
+    }
+  );
 
   return {
     bekreft: (forespørsel: BekreftMedlemskapForespørsel) => mutation.mutateAsync(forespørsel),

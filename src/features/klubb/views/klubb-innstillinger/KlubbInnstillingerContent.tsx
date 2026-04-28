@@ -9,6 +9,7 @@ import { ServerFeil } from "@/components/errors";
 type FormState = {
   navn: string;
   kontaktEpost: string;
+  nettside: string;
   latitude: string;
   longitude: string;
   feedUrl: string;
@@ -90,6 +91,19 @@ export default function KlubbInnstillingerContent({
                   aria-invalid={!!kontaktEpostError}
                 />
                 {kontaktEpostError ? <FieldError>{kontaktEpostError}</FieldError> : null}
+              </Field>
+            </Row>
+
+            <Row title="Nettside" description="Valgfritt. Lenke til klubbens hjemmeside.">
+              <Field>
+                <Input
+                  id="nettside"
+                  value={form.nettside}
+                  onChange={(e) => onChange("nettside", e.target.value)}
+                  placeholder="https://www.aastk.no"
+                  inputMode="url"
+                  type="url"
+                />
               </Field>
             </Row>
           </RowList>

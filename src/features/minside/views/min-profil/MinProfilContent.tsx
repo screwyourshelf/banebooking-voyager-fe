@@ -126,7 +126,9 @@ export default function MinProfilContent({
           <RowList>
             <InfoRow label="Brukernavn / ID" value={epost} />
             <InfoRow label="Tilgang" value={rollerText} />
-            {medlemskapBekreftelseLabel && fulltNavn ? <InfoRow label="Navn (medlemskap)" value={fulltNavn} /> : null}
+            {medlemskapBekreftelseLabel && fulltNavn ? (
+              <InfoRow label="Navn (medlemskap)" value={fulltNavn} />
+            ) : null}
             {medlemskapBekreftelseLabel && medlemskapType ? (
               <InfoRow
                 label="Type medlemskap"

@@ -34,16 +34,29 @@ export default function BekreftMedlemskapPage() {
     return <Navigate to={`/${slug}`} replace />;
   }
 
-  const label = bruker?.medlemskapBekreftelseLabel ?? klubb?.navn ?? "klubben";
   const kanBekrefte = fulltNavn.trim().length > 0 && medlemskapType.length > 0;
 
   return (
     <ErrorDisplay
       icon={BadgeCheck}
       title="Hei! Tid for en rask oppdatering"
-      description="Klubben ber alle medlemmer bekrefte medlemskapet sitt for den nye sesongen. Det tar bare noen sekunder!"
+      description={`${klubb?.navn ?? "Klubben"} ber alle spillere bekrefte betalt medlemskap for den nye sesongen. Bekreft under for å fortsette å booke baner.`}
     >
       <div className="space-y-4 w-full max-w-xs">
+        {klubb?.nettside && (
+          <p className="text-sm text-muted-foreground text-center">
+            Har du ikke betalt?{" "}
+            <a
+              href={klubb.nettside}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="underline text-primary hover:text-primary/80"
+            >
+              Besøk klubbens hjemmeside
+            </a>{" "}
+            for aktuelle medlemsavgifter.
+          </p>
+        )}
         <div className="space-y-2">
           <Label htmlFor="fulltNavn">Fullt navn</Label>
           <Input

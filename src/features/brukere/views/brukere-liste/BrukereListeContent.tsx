@@ -247,7 +247,11 @@ export default function BrukereListeContent({
                             </AccordionDetailRow>
 
                             {b.fulltNavn && (
-                              <AccordionDetailRow icon={UserCheck} label="Navn (medlemskap)" colSpan={2}>
+                              <AccordionDetailRow
+                                icon={UserCheck}
+                                label="Navn (medlemskap)"
+                                colSpan={2}
+                              >
                                 {b.fulltNavn}
                               </AccordionDetailRow>
                             )}
