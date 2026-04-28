@@ -1,0 +1,1 @@
+import{Er as e,kn as t}from"./react-BPY9mdE2.js";import{A as n,j as r}from"./index-BVXLJQq7.js";var i=e();function a(){return(0,i.jsx)(n,{children:(0,i.jsx)(r,{icon:t,title:`Siden finnes ikke`,description:`Vi fant ikke siden du lette etter.`})})}export{a as default};
