@@ -18,10 +18,14 @@ const SperretPage = lazy(() => import("@/features/sperre/pages/SperretPage"));
 const BekreftMedlemskapPage = lazy(
   () => import("@/features/medlemskap/pages/BekreftMedlemskapPage")
 );
+const VilkaarPage = lazy(() => import("@/features/policy/pages/VilkaarPage"));
 const NotFoundPage = lazy(() => import("@/features/errors/pages/NotFoundPage"));
 
 export default function App() {
-  const appRoutes = useMemo(() => flattenRoutes(routeConfig).filter((r) => r.component), []);
+  const appRoutes = useMemo(
+    () => flattenRoutes(routeConfig).filter((r) => r.component && r.path !== "vilkaar"),
+    []
+  );
 
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
@@ -62,6 +66,7 @@ export default function App() {
                       </Route>
 
                       <Route path="bekreft-medlemskap" element={<BekreftMedlemskapPage />} />
+                      <Route path="vilkaar" element={<VilkaarPage />} />
                     </Route>
 
                     <Route path="sperret" element={<SperretPage />} />
