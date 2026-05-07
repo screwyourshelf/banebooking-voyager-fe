@@ -48,10 +48,7 @@ export default function BookingView() {
     fjernFeil,
   } = useBooking(valgtDatoStr, valgtBaneId);
 
-  const serverFeil =
-    bookFeil?.message ??
-    fjernFeil?.message ??
-    null;
+  const serverFeil = bookFeil?.message ?? fjernFeil?.message ?? null;
 
   useEffect(() => {
     if (valgtDato) {

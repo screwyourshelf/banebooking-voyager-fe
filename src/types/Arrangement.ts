@@ -180,9 +180,9 @@ export type OppdaterArrangementMetadataForespørsel = {
  */
 export type LeggTilArrangementBookingForespørsel = {
   baneId: string;
-  dato: string;        // "YYYY-MM-DD"
-  startTid: string;   // "HH:MM"
-  sluttTid: string;   // "HH:MM"
+  dato: string; // "YYYY-MM-DD"
+  startTid: string; // "HH:MM"
+  sluttTid: string; // "HH:MM"
 };
 
 /**

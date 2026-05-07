@@ -2,10 +2,7 @@ import { useState } from "react";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useSlug } from "@/hooks/useSlug";
 
-import type {
-  ArrangementForhåndsvisningRespons,
-  OpprettArrangementForespørsel,
-} from "@/types";
+import type { ArrangementForhåndsvisningRespons, OpprettArrangementForespørsel } from "@/types";
 import type { LokalBooking } from "../types";
 import { lagBookingNøkkel } from "../components/BookingListe/bookingListeUtils";
 
@@ -65,10 +62,11 @@ export function useKonfliktSjekk(): ReturnType {
   const slug = useSlug();
   const [feil, setFeil] = useState<Error | null>(null);
 
-  const mutation = useApiMutation<
-    OpprettArrangementForespørsel,
-    ArrangementForhåndsvisningRespons
-  >("post", `/klubb/${slug}/arrangement/forhandsvis`, { retry: false });
+  const mutation = useApiMutation<OpprettArrangementForespørsel, ArrangementForhåndsvisningRespons>(
+    "post",
+    `/klubb/${slug}/arrangement/forhandsvis`,
+    { retry: false }
+  );
 
   const sjekkKonflikter = async (
     bookinger: LokalBooking[],

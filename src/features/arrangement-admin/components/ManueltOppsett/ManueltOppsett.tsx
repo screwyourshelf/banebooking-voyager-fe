@@ -226,9 +226,7 @@ export default function ManueltOppsett({ baner, onLeggTil }: Props) {
                     right={
                       <Switch
                         checked={alle}
-                        onCheckedChange={(v) =>
-                          setAllePerGruppe((prev) => ({ ...prev, [sl]: v }))
-                        }
+                        onCheckedChange={(v) => setAllePerGruppe((prev) => ({ ...prev, [sl]: v }))}
                       />
                     }
                   >
@@ -259,9 +257,7 @@ export default function ManueltOppsett({ baner, onLeggTil }: Props) {
             : valgteBaneIder.length > 0 && (
                 <Row
                   title="Tidspunkter"
-                  right={
-                    <Switch checked={alleTidspunkter} onCheckedChange={setAlleTidspunkter} />
-                  }
+                  right={<Switch checked={alleTidspunkter} onCheckedChange={setAlleTidspunkter} />}
                 >
                   <div className="flex flex-wrap gap-2">
                     {tilgjengeligeTidspunkter.map((tid) => (
@@ -269,9 +265,7 @@ export default function ManueltOppsett({ baner, onLeggTil }: Props) {
                         key={tid}
                         type="button"
                         variant={
-                          alleTidspunkter || valgteTidspunkter.includes(tid)
-                            ? "default"
-                            : "outline"
+                          alleTidspunkter || valgteTidspunkter.includes(tid) ? "default" : "outline"
                         }
                         size="sm"
                         onClick={() => toggleItem(tid, setValgteTidspunkter)}
@@ -290,9 +284,10 @@ export default function ManueltOppsett({ baner, onLeggTil }: Props) {
         <ul className="text-xs text-muted-foreground list-disc list-inside space-y-0.5 px-1">
           {valgteDataer.length === 0 && <li>Velg minst én dato</li>}
           {valgteBaneIder.length === 0 && <li>Velg minst én bane</li>}
-          {valgteBaneIder.length > 0 && !alleTidspunkter && valgteTidspunkter.length === 0 && !erGruppert && (
-            <li>Velg minst ett tidspunkt</li>
-          )}
+          {valgteBaneIder.length > 0 &&
+            !alleTidspunkter &&
+            valgteTidspunkter.length === 0 &&
+            !erGruppert && <li>Velg minst ett tidspunkt</li>}
           {valgteBaneIder.length > 0 &&
             erGruppert &&
             !slotGrupper.some(

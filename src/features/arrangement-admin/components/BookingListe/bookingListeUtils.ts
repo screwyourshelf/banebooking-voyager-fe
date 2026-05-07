@@ -4,7 +4,9 @@ import type { LokalBooking } from "../../types";
  * Stabil nøkkel for én booking-kombinasjon.
  * Brukes til deduplisering, merge og conflict tracking.
  */
-export function lagBookingNøkkel(b: Pick<LokalBooking, "dato" | "startTid" | "sluttTid" | "baneId">): string {
+export function lagBookingNøkkel(
+  b: Pick<LokalBooking, "dato" | "startTid" | "sluttTid" | "baneId">
+): string {
   return `${b.dato}_${b.startTid}_${b.sluttTid}_${b.baneId}`;
 }
 /**

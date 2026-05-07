@@ -263,6 +263,7 @@ Unngå én global «Lagre alt»-knapp før backend støtter trygg differanselagr
 ## Akseptansekriterier
 
 ### BookingListe
+
 - [ ] Viser alle bookinger som vil bli lagret
 - [ ] Viser konfliktstatus inline per booking (ikke i modal)
 - [ ] Støtter sletting av enkeltbooking
@@ -271,22 +272,26 @@ Unngå én global «Lagre alt»-knapp før backend støtter trygg differanselagr
 - [ ] Oppdateres umiddelbart når generator eller manuelt oppsett legger til bookinger
 
 ### Gjentakende oppsett
+
 - [ ] Generator-knapp legger forslag i BookingListe – åpner ikke modal
 - [ ] Eksisterende bookinger i listen beholdes (duplikater markeres)
 - [ ] Advarsel ved ulike slot-lengder vises i listen, ikke som blokkering
 
 ### Manuelt oppsett
+
 - [ ] shadcn `Calendar` i `mode="multiple"` for datovelger
 - [ ] Bruker velger tidspunkt og baner per batch
 - [ ] Bookinger legges i BookingListe etter klikk
 
 ### Redigering
+
 - [ ] Lagring av metadata (tittel, kategori osv.) regenererer **ikke** bookinger
 - [ ] Bokingendringer lagres separat fra metadata
 - [ ] Eksisterende bookinger lastes inn i BookingListe ved oppstart
 - [ ] Regenerer-knapp er tydelig adskilt og krever bekreftelse
 
 ### Generelt
+
 - [ ] Modal brukes kun til: rediger én booking, bekreftelser, konfliktinfo
 - [ ] BookingListe er alltid synlig under opprettelse og redigering
 
@@ -294,16 +299,16 @@ Unngå én global «Lagre alt»-knapp før backend støtter trygg differanselagr
 
 ## Eksisterende komponenter som bør gjenbrukes
 
-| Komponent / hook | Gjenbruk i ny løsning |
-|---|---|
-| `ArrangementContent` | Beholdes **midlertidig** men deles opp i separate seksjoner |
-| `ForhandsvisningTable` | Gjenbrukes som grunnlag for `BookingListe`-tabellen |
-| `ForhandsvisningDialog` | Erstattes – logikken flyttes til inline BookingListe |
-| `arrangementUtils.ts` | Beholdes – `beregnTidspunkterForBaner`, `grupperBanerEtterSlotLengde` m.fl. gjenbrukes |
-| `useArrangement.ts` | `forhandsvis`-logikken kan gjenbrukes for konfliktsjekk i BookingListe |
-| `useRedigerArrangement.ts` | `erstatt`-mutasjonen isoleres til regenerering-handling |
-| `DatoVelger` | Erstattes av shadcn `Calendar` i manuelt oppsett |
-| `SlettArrangementDialog` | Beholdes uendret |
+| Komponent / hook           | Gjenbruk i ny løsning                                                                  |
+| -------------------------- | -------------------------------------------------------------------------------------- |
+| `ArrangementContent`       | Beholdes **midlertidig** men deles opp i separate seksjoner                            |
+| `ForhandsvisningTable`     | Gjenbrukes som grunnlag for `BookingListe`-tabellen                                    |
+| `ForhandsvisningDialog`    | Erstattes – logikken flyttes til inline BookingListe                                   |
+| `arrangementUtils.ts`      | Beholdes – `beregnTidspunkterForBaner`, `grupperBanerEtterSlotLengde` m.fl. gjenbrukes |
+| `useArrangement.ts`        | `forhandsvis`-logikken kan gjenbrukes for konfliktsjekk i BookingListe                 |
+| `useRedigerArrangement.ts` | `erstatt`-mutasjonen isoleres til regenerering-handling                                |
+| `DatoVelger`               | Erstattes av shadcn `Calendar` i manuelt oppsett                                       |
+| `SlettArrangementDialog`   | Beholdes uendret                                                                       |
 
 ---
 
@@ -343,17 +348,17 @@ features/arrangement-admin/
 ```ts
 // Holder én booking i BookingListe før lagring
 export type LokalBooking = {
-  id: string;                                          // lokal UUID (crypto.randomUUID)
-  eksternId?: string;                                  // booking-id fra backend (finnes for eksisterende bookinger)
-  dato: string;                                        // "YYYY-MM-DD"
-  startTid: string;                                    // "HH:MM"
-  sluttTid: string;                                    // "HH:MM" – beregnes fra startTid + slotLengde
+  id: string; // lokal UUID (crypto.randomUUID)
+  eksternId?: string; // booking-id fra backend (finnes for eksisterende bookinger)
+  dato: string; // "YYYY-MM-DD"
+  startTid: string; // "HH:MM"
+  sluttTid: string; // "HH:MM" – beregnes fra startTid + slotLengde
   baneId: string;
   baneNavn: string;
   status: "ledig" | "konflikt" | "aktiv" | "slettet";
-  kilde: "generert" | "manuell" | "eksisterende";      // opprinnelse
-  erEndret?: boolean;                                  // true hvis eksisterende booking er modifisert
-  erSlettet?: boolean;                                 // true hvis eksisterende booking er markert for sletting
+  kilde: "generert" | "manuell" | "eksisterende"; // opprinnelse
+  erEndret?: boolean; // true hvis eksisterende booking er modifisert
+  erSlettet?: boolean; // true hvis eksisterende booking er markert for sletting
   konfliktInfo?: string;
 };
 ```
@@ -365,6 +370,7 @@ export type LokalBooking = {
 ### Steg 1 – `BookingListe` + `LokalBooking`-modell ✅
 
 **Opprettede filer:**
+
 - `features/arrangement-admin/types.ts` – `LokalBooking`, `LokalBookingStatus`, `LokalBookingKilde`
 - `components/BookingListe/bookingListeUtils.ts` – `sorterBookinger`, `formatDatoMedUkedag`, `tellKonflikter`
 - `hooks/useBookingListe.ts` – `leggTil`, `fjern`, `markerSlettet`, `oppdater`, `settAlle`, `nullstill`
@@ -372,6 +378,7 @@ export type LokalBooking = {
 - `components/BookingListe/BookingListe.tsx` – tabell med tom-tilstand, teller og «Legg til flere»-knapp
 
 **Valg:**
+
 - `LokalBooking`-typen bor i feature-lokalt `types.ts` (ikke i `src/types/`) siden den ikke speiler backend
 - Konflikter vises med amber-bakgrunn per rad og tooltip med `konfliktInfo`
 - Eksisterende bookinger (`kilde: "eksisterende"`) bruker «Avlys»-terminologi; andre bruker «Fjern»
@@ -386,11 +393,13 @@ export type LokalBooking = {
 #### Steg 2a – Generator → BookingListe (ingen konfliktsjekk)
 
 **Opprettede filer:**
+
 - `components/GjentakendeOppsett/GjentakendeOppsett.tsx` – periode, ukedager, baner, tidspunkter + «Generer»-knapp
 - `views/arrangement/OpprettArrangementView.tsx` – ny opprettelsesvisning (erstatter `ArrangementView`)
 - `arrangementUtils.ts` tillagt `genererLokalBookinger()` – produserer `LokalBooking[]` fra generator-parametre
 
 **Valg:**
+
 - `genererLokalBookinger` bor i `arrangementUtils.ts` (gjenbrukbar, ingen React-avhengigheter)
 - Slotlengde-logikk gjenbrukes uendret fra `grupperBanerEtterSlotLengde`
 - `GjentakendeOppsett` er ansvarsfri for BookingListe – kaller kun `onGenerer(bookinger)`
@@ -400,9 +409,11 @@ export type LokalBooking = {
 #### Steg 2b – Konfliktsjekk via forhandsvis-endpoint
 
 **Opprettede filer:**
+
 - `hooks/useKonfliktSjekk.ts` – POST mot `/arrangement/forhandsvis`, merger status tilbake med `mergeKonfliktStatus`
 
 **Valg:**
+
 - `useKonfliktSjekk` er separat hook (ikke i `useBookingListe`) – holder ansvar adskilt
 - `mergeKonfliktStatus` matcher bookinger på `dato|baneId|startTid`-nøkkel
 - Kjøres automatisk etter `GjentakendeOppsett.onGenerer` – ingen manuell «sjekk konflikter»-knapp
@@ -415,9 +426,11 @@ export type LokalBooking = {
 ### Steg 3 – Manuelt oppsett ✅
 
 **Opprettede filer:**
+
 - `components/ManueltOppsett/ManueltOppsett.tsx` – shadcn `Calendar` i `mode="multiple"`, banevalg, tidspunktvelger
 
 **Valg:**
+
 - `onLeggTil` bruker samme signatur som `GjentakendeOppsett.onGenerer` → identisk dedup + konfliktsjekk-flow
 - `sluttTid` beregnes per bane fra `bane.bookingOverstyring?.slotLengdeMinutter ?? bane.bookingInnstillinger.slotLengdeMinutter`
 - Tidspunkter genereres per valgt bane (union) – tilbakestilles hvis banen fjernes og tidspunktet ikke lenger er tilgjengelig
@@ -425,6 +438,7 @@ export type LokalBooking = {
 - `OpprettArrangementView` fikk modus-velger («Gjentakende oppsett» / «Manuelt oppsett») med to knapper – ingen shadcn Tabs for å holde det enkelt
 
 **Konsistens verifisert (pre-steg 3):**
+
 - `bookingNøkkel` → omdøpt til `lagBookingNøkkel` via rename symbol (9 filer)
 - `slotNøkkel` i `useKonfliktSjekk` fjernet – `lagBookingNøkkel` brukes direkte for backend-svar
 - Samme funksjon for: deduplisering (`leggTil`), conflict merge (`mergeKonfliktStatus`), snapshot-sjekk (`håndterGenerer`)
@@ -436,9 +450,11 @@ export type LokalBooking = {
 ### Steg 4 – Redigeringsvisning + API-kartlegging ✅ (frontend), 🔲 (backend)
 
 **Opprettede filer:**
+
 - `views/rediger-arrangement/RedigerArrangementView2.tsx` – ny view parallelt med eksisterende
 
 **Implementert (frontend):**
+
 - Arrangement-velger (dropdown, aktive/passerte gruppert)
 - Metadata pre-fylt (kategori, beskrivelse, tillaterPaamelding)
 - BookingListe rekonstruert via `arrangementTilLokalBookinger` (se under)
@@ -448,10 +464,14 @@ export type LokalBooking = {
 
 **Rekonstruksjon av BookingListe:**
 `ArrangementRespons.baneGrupper` er strukturelt identisk med `SlotLengdeGruppe`:
+
 ```typescript
 // BaneGruppeRespons (fra API) ≡ SlotLengdeGruppe (lokal type)
-{ slotLengdeMinutter, baneIder, baneNavn, tidspunkter }
+{
+  (slotLengdeMinutter, baneIder, baneNavn, tidspunkter);
+}
 ```
+
 Bruker `genererLokalBookinger(arr.baneGrupper, startDato, sluttDato, arr.ukedager)` direkte.
 Setter `kilde: "eksisterende"` på alle genererte bookinger.
 
@@ -461,13 +481,13 @@ Setter `kilde: "eksisterende"` på alle genererte bookinger.
 
 **Eksisterende endepunkter:**
 
-| Metode | URL | Funksjon | Problem |
-|--------|-----|----------|---------|
-| `GET` | `/api/klubb/{slug}/arrangementer` | Liste med metadata + `baneGrupper` (regler) | Ingen individuelle booking-IDer |
-| `POST` | `/api/klubb/{slug}/arrangement/forhandsvis` | Konfliktsjekk ved opprettelse | — |
-| `PUT` | `/api/klubb/{slug}/arrangement/{id}/forhandsvis` | Konfliktsjekk ved redigering (ekskluderer egne) | — |
-| `PUT` | `/api/klubb/{slug}/arrangement/{id}` | Erstatter ALLE bookinger i serie | Alt-eller-ingenting, destruktiv |
-| `DELETE` | `/api/klubb/{slug}/arrangement/{id}` | Sletter hele arrangementet | — |
+| Metode   | URL                                              | Funksjon                                        | Problem                         |
+| -------- | ------------------------------------------------ | ----------------------------------------------- | ------------------------------- |
+| `GET`    | `/api/klubb/{slug}/arrangementer`                | Liste med metadata + `baneGrupper` (regler)     | Ingen individuelle booking-IDer |
+| `POST`   | `/api/klubb/{slug}/arrangement/forhandsvis`      | Konfliktsjekk ved opprettelse                   | —                               |
+| `PUT`    | `/api/klubb/{slug}/arrangement/{id}/forhandsvis` | Konfliktsjekk ved redigering (ekskluderer egne) | —                               |
+| `PUT`    | `/api/klubb/{slug}/arrangement/{id}`             | Erstatter ALLE bookinger i serie                | Alt-eller-ingenting, destruktiv |
+| `DELETE` | `/api/klubb/{slug}/arrangement/{id}`             | Sletter hele arrangementet                      | —                               |
 
 **Gap 1 – Ingen endpoint for individuelle bookinger (kritisk)**
 
@@ -486,6 +506,7 @@ POST   /api/klubb/{slug}/arrangement/{id}/bookinger
 ```
 
 **GET – hent individuelle bookinger**
+
 ```csharp
 // Respons:
 public record ArrangementBookingRespons
@@ -502,6 +523,7 @@ public record ArrangementBookingRespons
 ```
 
 **DELETE – avlys enkeltbooking**
+
 ```csharp
 // Avlyser booking med gitt ID, frigjør sloten
 // Returnerer: { bookingId, melding }
@@ -509,6 +531,7 @@ public record ArrangementBookingRespons
 ```
 
 **POST – legg til ny enkeltbooking på arrangement**
+
 ```csharp
 public record LeggTilArrangementBookingForespørsel
 {
@@ -527,9 +550,11 @@ Det er ingen måte å lagre kun metadata (kategori, beskrivelse, tillaterPaameld
 å sende med alle bookinger på nytt.
 
 **Foreslått tillegg:**
+
 ```
 PATCH /api/klubb/{slug}/arrangement/{id}/metadata
 ```
+
 ```csharp
 public record OppdaterArrangementMetadataForespørsel
 {
@@ -544,6 +569,7 @@ public record OppdaterArrangementMetadataForespørsel
 ```
 
 **Prioritering:**
+
 1. `GET …/bookinger` – lavest risiko, bare en spørring, ingen sideeffekter ← **start her**
 2. `PATCH …/metadata` – isolert, trygg
 3. `DELETE …/bookinger/{id}` – avlys enkeltbooking
@@ -558,10 +584,12 @@ public record OppdaterArrangementMetadataForespørsel
 ### Steg 5 – Flytt regenerering til eksplisitt handling
 
 **Filer:**
+
 - `components/RegenererBookingerDialog.tsx`
 - `hooks/useRedigerArrangement.ts` (juster `erstatt` → `regenerer`)
 
 **Hva:**
+
 - Legg `erstatt`-logikken bak en egen knapp med `RegenererBookingerDialog`
 - Vis tydelig advarsel: «Alle eksisterende bookinger slettes og regenereres»
 - Krev to-stegs bekreftelse (dialog med eksplisitt tekst)

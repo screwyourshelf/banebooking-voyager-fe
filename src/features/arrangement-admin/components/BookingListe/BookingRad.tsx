@@ -1,11 +1,6 @@
 import { Pencil, Trash2, TriangleAlert } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 
 import type { LokalBooking } from "../../types";
@@ -35,9 +30,7 @@ export default function BookingRad({ booking, onRediger, onFjernEllerAvlys }: Pr
       )}
     >
       {/* Dato */}
-      <td className="px-3 py-2 text-sm whitespace-nowrap">
-        {formatDatoMedUkedag(booking.dato)}
-      </td>
+      <td className="px-3 py-2 text-sm whitespace-nowrap">{formatDatoMedUkedag(booking.dato)}</td>
 
       {/* Tid */}
       <td className="px-3 py-2 text-sm whitespace-nowrap">
@@ -60,9 +53,7 @@ export default function BookingRad({ booking, onRediger, onFjernEllerAvlys }: Pr
                   Konflikt
                 </span>
               </TooltipTrigger>
-              {booking.konfliktInfo && (
-                <TooltipContent>{booking.konfliktInfo}</TooltipContent>
-              )}
+              {booking.konfliktInfo && <TooltipContent>{booking.konfliktInfo}</TooltipContent>}
             </Tooltip>
           </TooltipProvider>
         ) : erEksisterende ? (

@@ -208,9 +208,7 @@ export function genererLokalBookinger({
 
   // Bygg sett av ISO-ukedager som er valgt OG finnes i perioden
   const gyldigeIso = new Set(
-    valgteUkedager
-      .map(dayOfWeekTilIso)
-      .filter((iso) => faktiskeUkedagerIso.has(iso))
+    valgteUkedager.map(dayOfWeekTilIso).filter((iso) => faktiskeUkedagerIso.has(iso))
   );
 
   if (gyldigeIso.size === 0) return [];
@@ -260,7 +258,13 @@ function leggTilMinutter(tid: string, minutter: number): string {
 }
 
 const JS_DAY_TO_DOW: DayOfWeek[] = [
-  "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
 ];
 
 /**

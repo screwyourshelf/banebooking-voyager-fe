@@ -134,7 +134,11 @@ export default function GjentakendeOppsett({ baner, onGenerer }: Props) {
   const effektivTidspunkterPerGruppe: Record<number, string[]> = erGruppert
     ? tidspunkterPerGruppe
     : slotGrupper.length === 1
-      ? { [slotGrupper[0].slotLengdeMinutter]: alleTidspunkter ? tilgjengeligeTidspunkter : valgteTidspunkter }
+      ? {
+          [slotGrupper[0].slotLengdeMinutter]: alleTidspunkter
+            ? tilgjengeligeTidspunkter
+            : valgteTidspunkter,
+        }
       : {};
 
   const håndterGenerer = () => {
@@ -196,10 +200,7 @@ export default function GjentakendeOppsett({ baner, onGenerer }: Props) {
           </Row>
 
           {/* Baner */}
-          <Row
-            title="Baner"
-            right={<Switch checked={alleBaner} onCheckedChange={setAlleBaner} />}
-          >
+          <Row title="Baner" right={<Switch checked={alleBaner} onCheckedChange={setAlleBaner} />}>
             <div className="flex flex-wrap gap-2">
               {baner.map((b) => (
                 <Button
@@ -239,9 +240,7 @@ export default function GjentakendeOppsett({ baner, onGenerer }: Props) {
                   right={
                     <Switch
                       checked={alle}
-                      onCheckedChange={(v) =>
-                        setAllePerGruppe((prev) => ({ ...prev, [sl]: v }))
-                      }
+                      onCheckedChange={(v) => setAllePerGruppe((prev) => ({ ...prev, [sl]: v }))}
                     />
                   }
                 >
@@ -272,9 +271,7 @@ export default function GjentakendeOppsett({ baner, onGenerer }: Props) {
           ) : (
             <Row
               title="Tidspunkter"
-              right={
-                <Switch checked={alleTidspunkter} onCheckedChange={setAlleTidspunkter} />
-              }
+              right={<Switch checked={alleTidspunkter} onCheckedChange={setAlleTidspunkter} />}
             >
               <div className="flex flex-wrap gap-2">
                 {tilgjengeligeTidspunkter.map((tid: string) => (
@@ -282,7 +279,7 @@ export default function GjentakendeOppsett({ baner, onGenerer }: Props) {
                     key={tid}
                     type="button"
                     variant={
-                      (alleTidspunkter || valgteTidspunkter.includes(tid)) ? "default" : "outline"
+                      alleTidspunkter || valgteTidspunkter.includes(tid) ? "default" : "outline"
                     }
                     size="sm"
                     onClick={() => toggleItem(tid, setValgteTidspunkter)}
@@ -297,12 +294,7 @@ export default function GjentakendeOppsett({ baner, onGenerer }: Props) {
         </RowList>
       </RowPanel>
 
-      <Button
-        type="button"
-        disabled={!kanGenerere}
-        onClick={håndterGenerer}
-        className="w-full"
-      >
+      <Button type="button" disabled={!kanGenerere} onClick={håndterGenerer} className="w-full">
         <Zap className="size-4 mr-1.5" />
         Generer forslag og legg i booking-liste
       </Button>

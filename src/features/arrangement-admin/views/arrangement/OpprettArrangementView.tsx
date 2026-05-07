@@ -84,7 +84,9 @@ export default function OpprettArrangementView() {
   const { bookinger, leggTil, fjern, markerSlettet, oppdater, settAlle } = useBookingListe();
   // Ref holder alltid siste liste – unngår stale closure i async-handler
   const bookingListeRef = useRef<LokalBooking[]>([]);
-  useEffect(() => { bookingListeRef.current = bookinger; }, [bookinger]);
+  useEffect(() => {
+    bookingListeRef.current = bookinger;
+  }, [bookinger]);
 
   // Konfliktsjekk (steg 2b)
   const { sjekkKonflikter, isLoading: sjekkKonflikterLoading } = useKonfliktSjekk();
@@ -145,14 +147,20 @@ export default function OpprettArrangementView() {
     // Re-kjør konfliktsjekk på listen etter endringen
     const oppdatertListe = bookingListeRef.current.map((b) =>
       b.id === id
-        ? { ...b, dato: verdier.dato, startTid: verdier.startTid, sluttTid: verdier.sluttTid,
-            baneId: verdier.baneId, baneNavn: verdier.baneNavn, status: "ukjent" as const }
+        ? {
+            ...b,
+            dato: verdier.dato,
+            startTid: verdier.startTid,
+            sluttTid: verdier.sluttTid,
+            baneId: verdier.baneId,
+            baneNavn: verdier.baneNavn,
+            status: "ukjent" as const,
+          }
         : b
     );
     const aktive = oppdatertListe.filter((b) => !b.erSlettet);
-    const konfliktDto = aktive.length > 0 && valgtGrenId
-      ? byggKonfliktSjekkDto(aktive, valgtGrenId, kategori)
-      : null;
+    const konfliktDto =
+      aktive.length > 0 && valgtGrenId ? byggKonfliktSjekkDto(aktive, valgtGrenId, kategori) : null;
     if (konfliktDto) {
       const resultat = await sjekkKonflikter(oppdatertListe, konfliktDto);
       if (resultat) settAlle(resultat.oppdaterteBookinger);
@@ -180,10 +188,18 @@ export default function OpprettArrangementView() {
 
     // Utled ukedager og periode fra booking-datoene (brukes kun for metadata på arrangementet)
     const JS_DAY_TO_DOW: DayOfWeek[] = [
-      "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
     ];
     const unikeUkedager: DayOfWeek[] = [
-      ...new Set(aktiveBookinger.map((b) => JS_DAY_TO_DOW[new Date(b.dato + "T00:00:00").getDay()])),
+      ...new Set(
+        aktiveBookinger.map((b) => JS_DAY_TO_DOW[new Date(b.dato + "T00:00:00").getDay()])
+      ),
     ];
     const datoer = aktiveBookinger.map((b) => b.dato).sort();
 
@@ -205,8 +221,10 @@ export default function OpprettArrangementView() {
       baneGrupper,
       beskrivelse: beskrivelse?.trim() || undefined,
       publisertPåNettsiden,
-      nettsideTittel: publisertPåNettsiden && nettsideTittel.trim() ? nettsideTittel.trim() : undefined,
-      nettsideBeskrivelse: publisertPåNettsiden && nettsideBeskrivelse.trim() ? nettsideBeskrivelse.trim() : undefined,
+      nettsideTittel:
+        publisertPåNettsiden && nettsideTittel.trim() ? nettsideTittel.trim() : undefined,
+      nettsideBeskrivelse:
+        publisertPåNettsiden && nettsideBeskrivelse.trim() ? nettsideBeskrivelse.trim() : undefined,
       // Eksplisitte slots: ALLTID sendt, slik at backend oppretter nøyaktig de
       // bookingene brukeren har i listen – ikke et rekonstruert gjentakende mønster
       eksplisitteSlots: aktiveBookinger.map((b) => ({
@@ -337,7 +355,6 @@ export default function OpprettArrangementView() {
                       </Field>
                     </Row>
                   )}
-
                 </RowList>
               </RowPanel>
             </div>
@@ -391,29 +408,38 @@ export default function OpprettArrangementView() {
             </div>
           </PageSection>
 
-          <FormLayout onSubmit={(e) => { e.preventDefault(); håndterOpprett(); }}>
+          <FormLayout
+            onSubmit={(e) => {
+              e.preventDefault();
+              håndterOpprett();
+            }}
+          >
             <FormActions variant="sticky">
               <FormSubmitButton
                 isLoading={sjekkKonflikterLoading}
                 loadingText="Sjekker konflikter…"
                 fullWidth
-                disabled={bookinger.filter((b) => !b.erSlettet).length === 0 || sjekkKonflikterLoading}
+                disabled={
+                  bookinger.filter((b) => !b.erSlettet).length === 0 || sjekkKonflikterLoading
+                }
               >
                 Opprett arrangement ({bookinger.filter((b) => !b.erSlettet).length} bookinger)
               </FormSubmitButton>
             </FormActions>
           </FormLayout>
 
-          {opprettFeil && (
-            <p className="text-sm text-destructive px-1">{opprettFeil.message}</p>
-          )}
+          {opprettFeil && <p className="text-sm text-destructive px-1">{opprettFeil.message}</p>}
         </TabsContent>
       </Tabs>
 
       {/* ─── Rediger enkeltbooking (modal) ─── */}
       <RedigerBookingModal
         key={redigeringsMålId ?? "closed"}
-        booking={redigeringsMålId !== null ? (bookinger.find((b) => b.id === redigeringsMålId) ?? null) : null}
+        booking={
+          redigeringsMålId !== null
+            ? (bookinger.find((b) => b.id === redigeringsMålId) ?? null)
+            : null
+        }
         baner={baner}
         onBekreft={håndterRedigerBekreft}
         onAvbryt={() => setRedigeringsMålId(null)}

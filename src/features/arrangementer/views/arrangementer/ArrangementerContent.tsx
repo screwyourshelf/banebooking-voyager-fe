@@ -15,13 +15,7 @@ import { AccordionActions } from "@/components/accordion";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { formatDatoKort, dagerIgjenTekst } from "@/utils/datoUtils";
-import {
-  Ban,
-  Trophy,
-  Settings,
-  ChevronDown,
-  ChevronUp,
-} from "lucide-react";
+import { Ban, Trophy, Settings, ChevronDown, ChevronUp } from "lucide-react";
 import { SlettArrangementDialog } from "@/features/arrangement-admin/components";
 import { ServerFeil } from "@/components/errors";
 import { useSlug } from "@/hooks/useSlug";
@@ -120,12 +114,7 @@ type ArrangementAccordionItemProps = {
   kopierLenke?: never;
 };
 
-function ArrangementAccordionItem({
-  arr,
-  slug,
-  navigate,
-  onAvlys,
-}: ArrangementAccordionItemProps) {
+function ArrangementAccordionItem({ arr, slug, navigate, onAvlys }: ArrangementAccordionItemProps) {
   const { kommendeBookinger, isLoading } = useArrangementKommendeBookinger(arr.id);
   const beskrivelse = arr.beskrivelse?.trim() ?? "";
 
@@ -181,7 +170,6 @@ function ArrangementAccordionItem({
 
       <AccordionContent>
         <Stack gap="sm" className="pb-1">
-
           {/* Beskrivelse — alltid synlig */}
           {beskrivelse && (
             <p className="text-sm text-muted-foreground whitespace-pre-wrap">{beskrivelse}</p>
@@ -209,9 +197,7 @@ function ArrangementAccordionItem({
                 <div className="mt-3 space-y-3">
                   {synligeDatoer.map(({ dato, slots }) => (
                     <div key={dato}>
-                      <p className="text-xs font-semibold mb-1">
-                        {formatDatoMedUkedagKort(dato)}
-                      </p>
+                      <p className="text-xs font-semibold mb-1">{formatDatoMedUkedagKort(dato)}</p>
                       <div className="space-y-0.5 pl-3 border-l-2 border-muted">
                         {slots.map((s) => (
                           <p

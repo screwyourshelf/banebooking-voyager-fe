@@ -10,15 +10,7 @@ import WeatherInfo from "@/components/WeatherInfo";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import SlotListSkeleton from "@/components/loading/SlotListSkeleton";
-import {
-  User,
-  Calendar,
-  Timer,
-  UserCheck,
-  Link2,
-  CalendarPlus,
-  XCircle,
-} from "lucide-react";
+import { User, Calendar, Timer, UserCheck, Link2, CalendarPlus, XCircle } from "lucide-react";
 import KobleTilArrangementDialog from "./KobleTilArrangementDialog";
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
@@ -99,15 +91,11 @@ export function BookingSlotListAccordion({
                   <Badge variant={statusVariant} className="text-xs">
                     {statusTekst}
                   </Badge>
-                  {currentUser &&
-                    !harArrangement && erMinBooking && (
-                      <span
-                        className="text-green-600"
-                        title="Din booking"
-                      >
-                        <UserCheck className="size-4" />
-                      </span>
-                    )}
+                  {currentUser && !harArrangement && erMinBooking && (
+                    <span className="text-green-600" title="Din booking">
+                      <UserCheck className="size-4" />
+                    </span>
+                  )}
                 </Inline>
                 {harArrangement && slot.arrangementBeskrivelse && (
                   <span className="text-xs text-muted-foreground line-clamp-1">

@@ -42,10 +42,7 @@ export function useLeggTilArrangementBooking(arrangementId: string) {
     ]);
 
   // Enkelt-mutasjon med toast – brukes av manuelt oppsett
-  const mutation = useApiMutation<
-    LeggTilArrangementBookingForespørsel,
-    ArrangementBookingRespons
-  >(
+  const mutation = useApiMutation<LeggTilArrangementBookingForespørsel, ArrangementBookingRespons>(
     "post",
     `/klubb/${slug}/arrangement/${arrangementId}/bookinger`,
     {

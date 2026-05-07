@@ -97,14 +97,10 @@ export function useArrangement(valgtGrenId: string) {
       onSuccess: async (result) => {
         clearForhandsvisning();
         if (result.antallOpprettet === 0) {
-          toast.warning(
-            "Ingen bookinger ble opprettet – alle tidspunkter er allerede booket."
-          );
+          toast.warning("Ingen bookinger ble opprettet – alle tidspunkter er allerede booket.");
         } else if (result.konflikter.length > 0) {
           toast.warning(
-            `${result.antallOpprettet} bookinger opprettet. ${
-              result.konflikter.length
-            } tidspunkt${
+            `${result.antallOpprettet} bookinger opprettet. ${result.konflikter.length} tidspunkt${
               result.konflikter.length === 1 ? "" : "er"
             } hadde konflikter og ble hoppet over.`
           );

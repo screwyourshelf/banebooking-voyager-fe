@@ -40,7 +40,9 @@ type Props = {
 };
 
 function getSlotLengde(bane: BaneRespons): number {
-  return bane.bookingOverstyring?.slotLengdeMinutter ?? bane.bookingInnstillinger.slotLengdeMinutter;
+  return (
+    bane.bookingOverstyring?.slotLengdeMinutter ?? bane.bookingInnstillinger.slotLengdeMinutter
+  );
 }
 
 function leggTilMinutter(tid: string, minutter: number): string {
@@ -154,8 +156,8 @@ export default function RedigerBookingModal({ booking, baner, onBekreft, onAvbry
           {/* SluttTid (beregnet, read-only) */}
           {sluttTid && (
             <p className="text-sm text-muted-foreground">
-              Sluttid: <span className="font-medium text-foreground">{sluttTid}</span>
-              {" "}({slotLengde} min)
+              Sluttid: <span className="font-medium text-foreground">{sluttTid}</span> ({slotLengde}{" "}
+              min)
             </p>
           )}
         </div>

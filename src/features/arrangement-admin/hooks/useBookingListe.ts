@@ -44,9 +44,7 @@ export function useBookingListe(): BookingListeHandlinger {
   }, []);
 
   const oppdater = useCallback((id: string, endringer: Partial<Omit<LokalBooking, "id">>) => {
-    setBookinger((prev) =>
-      prev.map((b) => (b.id === id ? { ...b, ...endringer } : b))
-    );
+    setBookinger((prev) => prev.map((b) => (b.id === id ? { ...b, ...endringer } : b)));
   }, []);
 
   const settAlle = useCallback((neste: LokalBooking[]) => {

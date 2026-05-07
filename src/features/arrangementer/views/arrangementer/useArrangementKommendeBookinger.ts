@@ -21,9 +21,7 @@ export function useArrangementKommendeBookinger(arrangementId: string) {
 
   const kommendeBookinger = (data ?? [])
     .filter((b) => b.dato >= idag)
-    .sort(
-      (a, b) => a.dato.localeCompare(b.dato) || a.startTid.localeCompare(b.startTid)
-    );
+    .sort((a, b) => a.dato.localeCompare(b.dato) || a.startTid.localeCompare(b.startTid));
 
   return { kommendeBookinger, isLoading };
 }

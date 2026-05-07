@@ -45,7 +45,6 @@ import type { ArrangementKategori } from "@/types";
 
 // ─── Hjelpefunksjoner ───────────────────────────────────────────────────────
 
-
 function formatDatoKort(s: string): string {
   const [y, m, d] = s.split("-").map(Number);
   return new Date(y, m - 1, d).toLocaleDateString("nb-NO", {
@@ -82,10 +81,9 @@ export default function RedigerArrangementView() {
   } = useRedigerArrangement(valgtId || null, "");
 
   // Ekte bookinger fra backend
-  const {
-    bookinger: ekteBookinger,
-    isLoading: isLoadingBookinger,
-  } = useArrangementBookinger(valgtId || null);
+  const { bookinger: ekteBookinger, isLoading: isLoadingBookinger } = useArrangementBookinger(
+    valgtId || null
+  );
 
   // Baner filtrert på gren utledet fra arrangement
   const grenId = useMemo(() => {
@@ -117,8 +115,11 @@ export default function RedigerArrangementView() {
   const { bookinger, leggTil, fjern, oppdater, settAlle, nullstill } = useBookingListe();
   const { sjekkKonflikter } = useKonfliktSjekk();
 
-  const { lagreMetadata, isLoading: lagreMetadataLoading, feil: lagreFeil } =
-    useOppdaterArrangementMetadata(valgtId);
+  const {
+    lagreMetadata,
+    isLoading: lagreMetadataLoading,
+    feil: lagreFeil,
+  } = useOppdaterArrangementMetadata(valgtId);
 
   const slug = useSlug();
   const navigate = useNavigate();
@@ -184,10 +185,7 @@ export default function RedigerArrangementView() {
     const snapshot = bookingListeRef.current;
     const alleMedNye = [
       ...snapshot,
-      ...nye.filter(
-        (n) =>
-          !snapshot.some((s) => lagBookingNøkkel(s) === lagBookingNøkkel(n))
-      ),
+      ...nye.filter((n) => !snapshot.some((s) => lagBookingNøkkel(s) === lagBookingNøkkel(n))),
     ];
 
     const aktive = alleMedNye.filter((b) => !b.erSlettet);
@@ -209,9 +207,7 @@ export default function RedigerArrangementView() {
     const snapshot = bookingListeRef.current;
     const alleMedNye = [
       ...snapshot,
-      ...nye.filter(
-        (n) => !snapshot.some((s) => lagBookingNøkkel(s) === lagBookingNøkkel(n))
-      ),
+      ...nye.filter((n) => !snapshot.some((s) => lagBookingNøkkel(s) === lagBookingNøkkel(n))),
     ];
 
     const aktive = alleMedNye.filter((b) => !b.erSlettet);
@@ -315,14 +311,20 @@ export default function RedigerArrangementView() {
 
       const oppdatertListe = bookingListeRef.current.map((b) =>
         b.id === id
-          ? { ...b, dato: verdier.dato, startTid: verdier.startTid, sluttTid: verdier.sluttTid,
-              baneId: verdier.baneId, baneNavn: verdier.baneNavn, status: "ukjent" as const }
+          ? {
+              ...b,
+              dato: verdier.dato,
+              startTid: verdier.startTid,
+              sluttTid: verdier.sluttTid,
+              baneId: verdier.baneId,
+              baneNavn: verdier.baneNavn,
+              status: "ukjent" as const,
+            }
           : b
       );
       const aktive = oppdatertListe.filter((b) => !b.erSlettet);
-      const konfliktDto = aktive.length > 0 && grenId
-        ? byggKonfliktSjekkDto(aktive, grenId, kategori)
-        : null;
+      const konfliktDto =
+        aktive.length > 0 && grenId ? byggKonfliktSjekkDto(aktive, grenId, kategori) : null;
       if (konfliktDto) {
         const resultat = await sjekkKonflikter(oppdatertListe, konfliktDto);
         if (resultat) settAlle(resultat.oppdaterteBookinger);
@@ -349,9 +351,7 @@ export default function RedigerArrangementView() {
                     <SelectTrigger id="velg-arrangement">
                       <SelectValue
                         placeholder={
-                          isLoadingArrangementer
-                            ? "Henter arrangementer…"
-                            : "Velg arrangement…"
+                          isLoadingArrangementer ? "Henter arrangementer…" : "Velg arrangement…"
                         }
                       />
                     </SelectTrigger>
@@ -472,7 +472,6 @@ export default function RedigerArrangementView() {
                         </Field>
                       </Row>
                     )}
-
                   </RowList>
                 </RowPanel>
 
@@ -485,8 +484,14 @@ export default function RedigerArrangementView() {
                         kategori,
                         beskrivelse: beskrivelse || undefined,
                         publisertPåNettsiden,
-                        nettsideTittel: publisertPåNettsiden && nettsideTittel.trim() ? nettsideTittel.trim() : undefined,
-                        nettsideBeskrivelse: publisertPåNettsiden && nettsideBeskrivelse.trim() ? nettsideBeskrivelse.trim() : undefined,
+                        nettsideTittel:
+                          publisertPåNettsiden && nettsideTittel.trim()
+                            ? nettsideTittel.trim()
+                            : undefined,
+                        nettsideBeskrivelse:
+                          publisertPåNettsiden && nettsideBeskrivelse.trim()
+                            ? nettsideBeskrivelse.trim()
+                            : undefined,
                       })
                     }
                     disabled={lagreMetadataLoading}
@@ -518,9 +523,7 @@ export default function RedigerArrangementView() {
                       ) : (
                         <button
                           type="button"
-                          onClick={() =>
-                            opprettTurnering.mutate({ arrangementId: arrangement.id })
-                          }
+                          onClick={() => opprettTurnering.mutate({ arrangementId: arrangement.id })}
                           disabled={opprettTurnering.isPending}
                           className="px-4 py-2 rounded-md bg-secondary text-secondary-foreground text-sm font-medium disabled:opacity-50"
                         >
@@ -604,7 +607,11 @@ export default function RedigerArrangementView() {
       {/* ─── Rediger enkeltbooking (modal) ─── */}
       <RedigerBookingModal
         key={redigeringsMålId ?? "closed"}
-        booking={redigeringsMålId !== null ? (bookinger.find((b) => b.id === redigeringsMålId) ?? null) : null}
+        booking={
+          redigeringsMålId !== null
+            ? (bookinger.find((b) => b.id === redigeringsMålId) ?? null)
+            : null
+        }
         baner={baner}
         onBekreft={håndterRedigerBekreft}
         onAvbryt={() => setRedigeringsMålId(null)}

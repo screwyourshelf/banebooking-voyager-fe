@@ -33,13 +33,13 @@ export default function BookingListe({
           <span className="text-muted-foreground font-normal">
             (
             {antallAktive > 0 && (
-              <span>{antallAktive} aktiv{antallAktive !== 1 ? "e" : ""}</span>
+              <span>
+                {antallAktive} aktiv{antallAktive !== 1 ? "e" : ""}
+              </span>
             )}
             {antallAktive > 0 && antallForslag > 0 && <span> · </span>}
             {antallForslag > 0 && (
-              <span className="text-blue-600 dark:text-blue-400">
-                {antallForslag} forslag
-              </span>
+              <span className="text-blue-600 dark:text-blue-400">{antallForslag} forslag</span>
             )}
             {antallAktive === 0 && antallForslag === 0 && <span>tom</span>}
             {antallKonflikter > 0 && (
