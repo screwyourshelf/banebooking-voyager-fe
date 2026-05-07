@@ -1,1 +1,0 @@
-import{r as e}from"./rolldown-runtime-S-ySWqyJ.js";import{kr as t}from"./react-BPY9mdE2.js";var n=e(t(),1);function r(e,t,r){let[i,a]=(0,n.useState)(t),[o,s]=(0,n.useState)(r);return r!==o&&(s(r),a(t)),{synlige:e.slice(0,i),harFlere:i<e.length,gjenstaar:e.length-i,visFlere:()=>a(e=>e+t)}}export{r as t};
