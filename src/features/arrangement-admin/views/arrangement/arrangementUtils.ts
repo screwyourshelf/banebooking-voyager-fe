@@ -11,6 +11,7 @@ import type {
   DayOfWeek,
 } from "@/types";
 import type { BaneRespons } from "@/types";
+import type { LokalBooking } from "../../types";
 
 export function finnTilgjengeligeUkedager(datoFra: Date, datoTil: Date): DayOfWeek[] {
   return finnDayOfWeeksIPeriode(datoFra, datoTil);
@@ -128,7 +129,6 @@ type ByggDtoArgs = {
   nettsideTittel: string;
   nettsideBeskrivelse: string;
   publisertPåNettsiden: boolean;
-  tillaterPaamelding: boolean;
   onWarning: (msg: string) => void;
 };
 
@@ -176,6 +176,138 @@ export function byggDto(args: ByggDtoArgs): OpprettArrangementForespørsel | nul
     sluttDato: tilDatoTekst(datoTil),
     ukedager: gyldigeUkedager,
     baneGrupper: gyldigeGrupper,
-    tillaterPaamelding: args.tillaterPaamelding,
+  };
+}
+
+// ─────────── LokalBooking-generering ───────────
+
+type GenererLokalBookingerArgs = {
+  datoFra: Date;
+  datoTil: Date;
+  valgteUkedager: DayOfWeek[];
+  /** Én eller flere slot-grupper. Bruk `grupperBanerEtterSlotLengde` for å bygge disse. */
+  slotGrupper: SlotLengdeGruppe[];
+  /** Valgte tidspunkter per slotLengde. Nøkkel = slotLengdeMinutter. */
+  tidspunkterPerGruppe: Record<number, string[]>;
+};
+
+/**
+ * Genererer LokalBooking[] fra gjentakende oppsett-parametre.
+ * Én booking per kombinasjon av dato × starttidspunkt × bane.
+ * Sluttid beregnes som startTid + slotLengdeMinutter.
+ * Status settes til "ukjent" – konfliktsjekk skjer i steg 2b.
+ */
+export function genererLokalBookinger({
+  datoFra,
+  datoTil,
+  valgteUkedager,
+  slotGrupper,
+  tidspunkterPerGruppe,
+}: GenererLokalBookingerArgs): LokalBooking[] {
+  const faktiskeUkedagerIso = finnUkedagerIDatoPeriode(datoFra, datoTil);
+
+  // Bygg sett av ISO-ukedager som er valgt OG finnes i perioden
+  const gyldigeIso = new Set(
+    valgteUkedager
+      .map(dayOfWeekTilIso)
+      .filter((iso) => faktiskeUkedagerIso.has(iso))
+  );
+
+  if (gyldigeIso.size === 0) return [];
+
+  // Iterer alle datoer i perioden
+  const start = new Date(datoFra.getFullYear(), datoFra.getMonth(), datoFra.getDate());
+  const slutt = new Date(datoTil.getFullYear(), datoTil.getMonth(), datoTil.getDate());
+
+  const bookinger: LokalBooking[] = [];
+
+  for (let d = new Date(start); d <= slutt; d.setDate(d.getDate() + 1)) {
+    const jsUkedag = d.getDay();
+    const iso = (jsUkedag === 0 ? 7 : jsUkedag) as 1 | 2 | 3 | 4 | 5 | 6 | 7;
+    if (!gyldigeIso.has(iso)) continue;
+
+    const dato = tilDatoTekst(new Date(d));
+
+    for (const gruppe of slotGrupper) {
+      const tidspunkter = tidspunkterPerGruppe[gruppe.slotLengdeMinutter] ?? [];
+
+      for (const startTid of tidspunkter) {
+        const sluttTid = leggTilMinutter(startTid, gruppe.slotLengdeMinutter);
+
+        for (let bi = 0; bi < gruppe.baneIder.length; bi++) {
+          bookinger.push({
+            id: crypto.randomUUID(),
+            dato,
+            startTid,
+            sluttTid,
+            baneId: gruppe.baneIder[bi],
+            baneNavn: gruppe.baneNavn[bi],
+            status: "ukjent",
+            kilde: "generert",
+          });
+        }
+      }
+    }
+  }
+
+  return bookinger;
+}
+
+function leggTilMinutter(tid: string, minutter: number): string {
+  const [h, m] = tid.split(":").map(Number);
+  const total = h * 60 + m + minutter;
+  return `${String(Math.floor(total / 60) % 24).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`;
+}
+
+const JS_DAY_TO_DOW: DayOfWeek[] = [
+  "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday",
+];
+
+/**
+ * Bygger et minimalt OpprettArrangementForespørsel til bruk i konfliktsjekk
+ * (POST /arrangement/forhandsvis). Utleder ukedager og periode direkte fra
+ * de aktive bookingene i listen – fungerer for både manuelt og gjentakende oppsett.
+ *
+ * Dersom ukedager er tomme (f.eks. ingen aktive bookinger), returnerer null.
+ */
+export function byggKonfliktSjekkDto(
+  aktive: LokalBooking[],
+  grenId: string,
+  kategori: ArrangementKategori
+): OpprettArrangementForespørsel | null {
+  if (aktive.length === 0) return null;
+
+  const unikeUkedager: DayOfWeek[] = [
+    ...new Set(aktive.map((b) => JS_DAY_TO_DOW[new Date(b.dato + "T00:00:00").getDay()])),
+  ];
+
+  const datoer = aktive.map((b) => b.dato).sort();
+
+  // Én banegruppe per bane med unike starttidspunkter
+  const baneMap = new Map<string, Set<string>>();
+  for (const b of aktive) {
+    const tider = baneMap.get(b.baneId) ?? new Set<string>();
+    tider.add(b.startTid);
+    baneMap.set(b.baneId, tider);
+  }
+  const baneGrupper = [...baneMap.entries()].map(([baneId, tider]) => ({
+    baneIder: [baneId],
+    tidspunkter: [...tider].sort(),
+  }));
+
+  return {
+    grenId,
+    tittel: kategori,
+    kategori,
+    startDato: datoer[0],
+    sluttDato: datoer[datoer.length - 1],
+    ukedager: unikeUkedager,
+    baneGrupper,
+    eksplisitteSlots: aktive.map((b) => ({
+      baneId: b.baneId,
+      dato: b.dato,
+      startTid: b.startTid,
+      sluttTid: b.sluttTid,
+    })),
   };
 }

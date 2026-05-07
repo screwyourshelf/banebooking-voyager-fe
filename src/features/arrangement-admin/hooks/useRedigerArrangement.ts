@@ -84,8 +84,6 @@ export function useRedigerArrangement(valgtId: string | null, valgtGrenId: strin
       onSuccess: async (result) => {
         clearForhandsvisning();
         let melding = `${result.antallOpprettet} bookinger oppdatert`;
-        if (result.antallPaameldingFjernet > 0)
-          melding += `, ${result.antallPaameldingFjernet} påmelding(er) fjernet`;
         toast.success(melding);
         await queryClient.invalidateQueries({ queryKey: ["arrangementer-admin", slug] });
       },

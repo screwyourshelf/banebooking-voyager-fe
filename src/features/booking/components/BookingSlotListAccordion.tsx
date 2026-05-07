@@ -14,13 +14,11 @@ import {
   User,
   Calendar,
   Timer,
-  Users,
   UserCheck,
   Link2,
   CalendarPlus,
   XCircle,
 } from "lucide-react";
-import PaameldteDialog from "@/features/arrangementer/views/arrangementer/PaameldteDialog";
 import KobleTilArrangementDialog from "./KobleTilArrangementDialog";
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
@@ -37,8 +35,6 @@ type Props = {
   currentUser: { epost: string } | null;
   onBook?: (slot: BookingSlotRespons, arrangementId?: string) => void;
   onFjern?: (slot: BookingSlotRespons) => void;
-  onMeldPaa?: (slot: BookingSlotRespons) => void;
-  onMeldAv?: (slot: BookingSlotRespons) => void;
   isLoading?: boolean;
 };
 
@@ -47,8 +43,6 @@ export function BookingSlotListAccordion({
   currentUser,
   onBook,
   onFjern,
-  onMeldPaa,
-  onMeldAv,
   isLoading = false,
 }: Props) {
   if (isLoading) return <SlotListSkeleton />;
@@ -106,11 +100,10 @@ export function BookingSlotListAccordion({
                     {statusTekst}
                   </Badge>
                   {currentUser &&
-                    ((!harArrangement && erMinBooking) ||
-                      (harArrangement && slot.tillaterPaamelding && slot.erPaameldt)) && (
+                    !harArrangement && erMinBooking && (
                       <span
                         className="text-green-600"
-                        title={erMinBooking ? "Din booking" : "Du er påmeldt"}
+                        title="Din booking"
                       >
                         <UserCheck className="size-4" />
                       </span>
@@ -143,31 +136,6 @@ export function BookingSlotListAccordion({
                   {harArrangement && slot.arrangementBeskrivelse && (
                     <AccordionDetailRow icon={Calendar} label="Arrangement" colSpan={2}>
                       <span className="whitespace-pre-wrap"></span>
-                    </AccordionDetailRow>
-                  )}
-
-                  {harArrangement && slot.tillaterPaamelding && slot.arrangementId && (
-                    <AccordionDetailRow
-                      icon={Users}
-                      label="Påmeldte"
-                      iconClassName={currentUser && slot.erPaameldt ? "text-green-600" : undefined}
-                    >
-                      {currentUser ? (
-                        <PaameldteDialog
-                          arrangementId={slot.arrangementId}
-                          tittel={slot.arrangementTittel ?? "Arrangement"}
-                        >
-                          <button
-                            type="button"
-                            aria-label="Påmeldte"
-                            className="underline underline-offset-2 hover:text-foreground transition-colors"
-                          >
-                            {slot.antallPaameldte ?? 0} påmeldt
-                          </button>
-                        </PaameldteDialog>
-                      ) : (
-                        <span className="text-sm">{slot.antallPaameldte ?? 0} påmeldt</span>
-                      )}
                     </AccordionDetailRow>
                   )}
 
@@ -256,36 +224,6 @@ export function BookingSlotListAccordion({
                       >
                         <XCircle className="size-4" />
                         Avbestill
-                      </Button>
-                    )}
-
-                    {kan(Kapabiliteter.booking.meldAv) && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onMeldAv?.(slot);
-                        }}
-                        className="flex items-center gap-2 text-sm"
-                      >
-                        <XCircle className="size-4" />
-                        Meld meg av
-                      </Button>
-                    )}
-
-                    {kan(Kapabiliteter.booking.meldPaa) && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onMeldPaa?.(slot);
-                        }}
-                        className="flex items-center gap-2 text-sm"
-                      >
-                        <CalendarPlus className="size-4" />
-                        Meld meg på
                       </Button>
                     )}
                   </AccordionActions>

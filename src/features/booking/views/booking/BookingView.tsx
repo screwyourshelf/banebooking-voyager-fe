@@ -6,7 +6,6 @@ import { QueryFeil } from "@/components/errors";
 import { useBaner } from "@/hooks/useBaner";
 import { useGrener } from "@/hooks/useGrener";
 import { useBooking } from "@/features/booking/hooks/useBooking";
-import { useSlotArrangementPaamelding } from "@/features/booking/hooks/useSlotArrangementPaamelding";
 import { useAuth } from "@/hooks/useAuth";
 
 import BookingContent from "./BookingContent";
@@ -49,16 +48,9 @@ export default function BookingView() {
     fjernFeil,
   } = useBooking(valgtDatoStr, valgtBaneId);
 
-  const { onMeldPaa, onMeldAv, paameldingFeil, avmeldingFeil } = useSlotArrangementPaamelding(
-    valgtDatoStr,
-    valgtBaneId
-  );
-
   const serverFeil =
     bookFeil?.message ??
     fjernFeil?.message ??
-    paameldingFeil?.message ??
-    avmeldingFeil?.message ??
     null;
 
   useEffect(() => {
@@ -88,8 +80,6 @@ export default function BookingView() {
         currentUser={currentUser}
         onBook={onBook}
         onFjern={onFjern}
-        onMeldPaa={onMeldPaa}
-        onMeldAv={onMeldAv}
         serverFeil={serverFeil}
       />
     </QueryFeil>

@@ -29,8 +29,6 @@ type Props = {
 
   onBook: (slot: KalenderSlotRespons) => void;
   onFjern: (slot: KalenderSlotRespons) => void;
-  onMeldPaa: (slot: KalenderSlotRespons) => void;
-  onMeldAv: (slot: KalenderSlotRespons) => void;
   serverFeil: string | null;
 };
 
@@ -49,8 +47,6 @@ export default function BookingContent({
   currentUser,
   onBook,
   onFjern,
-  onMeldPaa,
-  onMeldAv,
   serverFeil,
 }: Props) {
   return (
@@ -108,8 +104,6 @@ export default function BookingContent({
                 currentUser={currentUser ? { epost: currentUser.email ?? "" } : null}
                 onBook={onBook}
                 onFjern={onFjern}
-                onMeldPaa={onMeldPaa}
-                onMeldAv={onMeldAv}
                 isLoading={isLoading}
               />
             </div>

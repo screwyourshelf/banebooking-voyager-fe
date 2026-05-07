@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { Table, TableRow, TableCell, TableHeader } from "@tiptap/extension-table";
-import { Bold, Italic, List, ListOrdered, Quote, Grid3x3, Plus, Minus, Trash2 } from "lucide-react";
+import { Bold, Italic, List, ListOrdered, Quote, Grid3x3, Plus, Minus, Trash2, Heading2, Heading3 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -17,7 +17,7 @@ export default function TiptapEditor({ content, onChange, className }: Props) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
-        heading: false,
+        heading: { levels: [2, 3] },
         code: false,
         codeBlock: false,
       }),
@@ -65,6 +65,32 @@ export default function TiptapEditor({ content, onChange, className }: Props) {
           aria-label="Kursiv"
         >
           <Italic />
+        </Button>
+
+        <div className="w-px bg-border mx-0.5 self-stretch" />
+
+        <Button
+          type="button"
+          variant={editor.isActive("heading", { level: 2 }) ? "secondary" : "ghost"}
+          size="icon"
+          className="h-7 w-7"
+          onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
+          aria-label="Overskrift 2"
+          title="Overskrift (H2)"
+        >
+          <Heading2 />
+        </Button>
+
+        <Button
+          type="button"
+          variant={editor.isActive("heading", { level: 3 }) ? "secondary" : "ghost"}
+          size="icon"
+          className="h-7 w-7"
+          onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
+          aria-label="Overskrift 3"
+          title="Underoverskrift (H3)"
+        >
+          <Heading3 />
         </Button>
 
         <div className="w-px bg-border mx-0.5 self-stretch" />

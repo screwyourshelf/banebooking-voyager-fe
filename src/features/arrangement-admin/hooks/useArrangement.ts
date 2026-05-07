@@ -96,7 +96,21 @@ export function useArrangement(valgtGrenId: string) {
     {
       onSuccess: async (result) => {
         clearForhandsvisning();
-        toast.success(`${result.antallOpprettet} bookinger opprettet`);
+        if (result.antallOpprettet === 0) {
+          toast.warning(
+            "Ingen bookinger ble opprettet – alle tidspunkter er allerede booket."
+          );
+        } else if (result.konflikter.length > 0) {
+          toast.warning(
+            `${result.antallOpprettet} bookinger opprettet. ${
+              result.konflikter.length
+            } tidspunkt${
+              result.konflikter.length === 1 ? "" : "er"
+            } hadde konflikter og ble hoppet over.`
+          );
+        } else {
+          toast.success(`${result.antallOpprettet} bookinger opprettet.`);
+        }
 
         // Hvis du har en liste over "kommende arrangementer", invalidér den her:
         // await queryClient.invalidateQueries({ queryKey: ["kommende-arrangementer", slug] });

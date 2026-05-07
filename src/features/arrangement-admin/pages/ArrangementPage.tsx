@@ -1,7 +1,7 @@
 import Page from "@/components/Page";
 import Tabs from "@/components/navigation/Tabs";
 
-import ArrangementView from "@/features/arrangement-admin/views/arrangement/ArrangementView";
+import OpprettArrangementView from "@/features/arrangement-admin/views/arrangement/OpprettArrangementView";
 import RedigerArrangementView from "@/features/arrangement-admin/views/rediger-arrangement/RedigerArrangementView";
 
 export default function ArrangementPage() {
@@ -10,7 +10,7 @@ export default function ArrangementPage() {
       <Tabs
         defaultValue="opprett"
         items={[
-          { value: "opprett", label: "Opprett nytt", content: <ArrangementView /> },
+          { value: "opprett", label: "Opprett nytt", content: <OpprettArrangementView /> },
           { value: "rediger", label: "Rediger eksisterende", content: <RedigerArrangementView /> },
         ]}
       />

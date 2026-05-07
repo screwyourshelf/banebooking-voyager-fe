@@ -41,7 +41,15 @@ export type OpprettArrangementForespørsel = {
   sluttDato: string;
   ukedager: DayOfWeek[];
   baneGrupper: BaneGruppeForespørsel[];
-  tillaterPaamelding: boolean;
+  /** Eksplisitte slots – overstyrer gjentakende generering dersom satt. */
+  eksplisitteSlots?: EksplisittArrangementSlot[];
+};
+
+export type EksplisittArrangementSlot = {
+  baneId: string;
+  dato: string;
+  startTid: string;
+  sluttTid: string;
 };
 
 export type SlettArrangementForespørsel = {
@@ -90,7 +98,6 @@ export type ArrangementKonfliktRespons = {
 export type OpprettArrangementRespons = {
   arrangementId: string;
   antallOpprettet: number;
-  tillaterPaamelding: boolean;
   konflikter: ArrangementKonfliktRespons[];
 };
 
@@ -116,8 +123,6 @@ export type OffentligArrangementRespons = {
   sluttDato: string;
   baneGrupper: BaneGruppeRespons[];
   ukedager: DayOfWeek[];
-  tillaterPaamelding: boolean;
-  antallPaameldte: number;
   presentasjon: ArrangementPresentasjon;
 };
 
@@ -133,9 +138,6 @@ export type ArrangementRespons = {
   sluttDato: string;
   baneGrupper: BaneGruppeRespons[];
   ukedager: DayOfWeek[];
-  tillaterPaamelding: boolean;
-  antallPaameldte: number;
-  erPaameldt: boolean;
   erPassert: boolean;
   kapabiliteter: string[];
   turneringId: string | null;
@@ -143,37 +145,78 @@ export type ArrangementRespons = {
   presentasjon: ArrangementPresentasjon;
 };
 
-export type ArrangementPaameldingRespons = {
-  arrangementId: string;
-  antallPaameldte: number;
-  erPaameldt: boolean;
-};
-
 export type AktivtArrangementRespons = {
   id: string;
   tittel: string;
   beskrivelse?: string;
   kategori: ArrangementKategori;
-  tillaterPaamelding: boolean;
 };
 
-export type PaameldtBrukerRespons = {
-  brukerId: string;
-  visningsnavn: string;
-  paameldtTid: string;
+/**
+ * Én enkelt booking tilknyttet et arrangement.
+ * Returneres fra GET /api/klubb/{slug}/arrangement/{id}/bookinger.
+ * dato = "YYYY-MM-DD", startTid/sluttTid = "HH:MM"
+ */
+export type ArrangementBookingRespons = {
+  bookingId: string;
+  dato: string;
+  startTid: string;
+  sluttTid: string;
+  baneId: string;
+  baneNavn: string;
 };
 
-export type ArrangementPaameldtListeRespons = {
+export type OppdaterArrangementMetadataForespørsel = {
+  kategori: ArrangementKategori;
+  beskrivelse?: string;
+  nettsideTittel?: string;
+  nettsideBeskrivelse?: string;
+  publisertPåNettsiden: boolean;
+};
+
+/**
+ * Forespørsel for å legge til én booking i en arrangementsserie.
+ * POST /api/klubb/{slug}/arrangement/{id}/bookinger
+ */
+export type LeggTilArrangementBookingForespørsel = {
+  baneId: string;
+  dato: string;        // "YYYY-MM-DD"
+  startTid: string;   // "HH:MM"
+  sluttTid: string;   // "HH:MM"
+};
+
+/**
+ * Forespørsel for batch-opprettelse av bookinger.
+ * POST /api/klubb/{slug}/arrangement/{id}/bookinger/batch
+ */
+export type BatchLeggTilArrangementBookingerForespørsel = {
+  bookinger: LeggTilArrangementBookingForespørsel[];
+};
+
+export type BatchBookingFeilet = {
+  baneId: string;
+  dato: string;
+  startTid: string;
+  sluttTid: string;
+  feilmelding: string;
+};
+
+export type BatchLeggTilArrangementBookingerRespons = {
+  opprettet: ArrangementBookingRespons[];
+  feilet: BatchBookingFeilet[];
+};
+
+export type OppdaterArrangementMetadataRespons = {
   arrangementId: string;
-  tillaterPaamelding: boolean;
-  antallPaameldte: number;
-  paameldte: PaameldtBrukerRespons[];
+  kategori: ArrangementKategori;
+  beskrivelse?: string;
+  nettsideTittel?: string;
+  nettsideBeskrivelse?: string;
+  publisertPåNettsiden: boolean;
 };
 
 export type ErstattArrangementRespons = {
   arrangementId: string;
   antallOpprettet: number;
-  antallPaameldingFjernet: number;
-  tillaterPaamelding: boolean;
   konflikter: ArrangementKonfliktRespons[];
 };
