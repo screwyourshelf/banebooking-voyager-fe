@@ -1,4 +1,4 @@
-import { defineConfig, type Plugin } from "vite";
+import { defineConfig, loadEnv, type Plugin } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 
@@ -14,7 +14,8 @@ function htmlBaseUrlPlugin(base: string): Plugin {
 }
 
 export default defineConfig(({ mode }) => {
-  const base = mode === "production" ? "/banebooking-voyager-fe/" : "/";
+  const env = loadEnv(mode, process.cwd(), "");
+  const base = env.VITE_BASE_PATH ?? "/";
 
   return {
     base,
