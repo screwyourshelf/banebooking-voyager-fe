@@ -72,6 +72,7 @@ api.interceptors.response.use(
     const status = error.response.status;
 
     if (status === 401) {
+      localStorage.removeItem("supabase_token");
       if (!isHandling401) {
         isHandling401 = true;
         try {

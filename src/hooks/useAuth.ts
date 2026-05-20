@@ -34,6 +34,7 @@ export function useAuth() {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((_event, session) => {
       if (!alive) return;
+      if (!session) localStorage.removeItem("supabase_token");
       setCurrentUser(session?.user ?? null);
       setReady(true);
     });

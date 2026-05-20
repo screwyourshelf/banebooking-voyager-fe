@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -24,6 +25,7 @@ function formatKort(t: string) {
 
 type Props = {
   slots: BookingSlotRespons[];
+  valgtDato: Date | null;
   currentUser: { epost: string } | null;
   onBook?: (slot: BookingSlotRespons, arrangementId?: string) => void;
   onFjern?: (slot: BookingSlotRespons) => void;
@@ -32,11 +34,22 @@ type Props = {
 
 export function BookingSlotListAccordion({
   slots,
+  valgtDato,
   currentUser,
   onBook,
   onFjern,
   isLoading = false,
 }: Props) {
+  const idag = new Date(new Date().toDateString());
+  const erHistorisk = valgtDato != null && valgtDato < idag;
+  const erIDag = valgtDato != null && valgtDato.toDateString() === idag.toDateString();
+
+  const synligeSlots = grupperSlots(slots);
+  const passerte = synligeSlots.filter((s) => s.erPassert);
+  const kommende = synligeSlots.filter((s) => !s.erPassert);
+
+  const [visPasserte, setVisPasserte] = useState(erHistorisk);
+
   if (isLoading) return <SlotListSkeleton />;
 
   if (slots.length === 0) {
@@ -47,11 +60,25 @@ export function BookingSlotListAccordion({
     );
   }
 
-  const synligeSlots = grupperSlots(slots);
+  const slotsÅVise = erIDag && !visPasserte ? kommende : synligeSlots;
 
   return (
-    <Accordion type="single" collapsible className="space-y-1">
-      {synligeSlots.map((slot) => {
+    <>
+      {erIDag && passerte.length > 0 && (
+        <Inline justify="center" className="mb-4">
+          <Button variant="outline" size="sm" onClick={() => setVisPasserte((v) => !v)}>
+            {visPasserte ? "Skjul passerte" : `Vis passerte (${passerte.length})`}
+          </Button>
+        </Inline>
+      )}
+
+      {slotsÅVise.length === 0 ? (
+        <div className="text-muted text-sm italic py-4 text-center">
+          Ingen kommende slots å vise.
+        </div>
+      ) : (
+        <Accordion type="single" collapsible className="space-y-1">
+          {slotsÅVise.map((slot) => {
         const slotKey = slot.bookingId ?? `${slot.dato}-${slot.slotStartTid}-${slot.baneId}`;
         const effStartTid = slot.bookingStartTid ?? slot.slotStartTid;
         const effSluttTid = slot.bookingSluttTid ?? slot.slotSluttTid;
@@ -222,5 +249,7 @@ export function BookingSlotListAccordion({
         );
       })}
     </Accordion>
+      )}
+    </>
   );
 }

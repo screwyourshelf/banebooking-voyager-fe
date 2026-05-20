@@ -101,6 +101,7 @@ export default function BookingContent({
             >
               <BookingSlotListAccordion
                 slots={slots}
+                valgtDato={valgtDato}
                 currentUser={currentUser ? { epost: currentUser.email ?? "" } : null}
                 onBook={onBook}
                 onFjern={onFjern}

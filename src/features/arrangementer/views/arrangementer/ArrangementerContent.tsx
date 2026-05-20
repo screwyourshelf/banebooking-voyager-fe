@@ -21,8 +21,7 @@ import { ServerFeil } from "@/components/errors";
 
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
-import type { ArrangementRespons, ArrangementBookingRespons } from "@/types";
-import { useArrangementKommendeBookinger } from "./useArrangementKommendeBookinger";
+import type { ArrangementRespons, DagMedSlotsRespons } from "@/types";
 
 type Props = {
   visHistoriske: boolean;
@@ -60,50 +59,29 @@ function formatDatoMedUkedagKort(dato: string): string {
 const INITIAL_DATOER = 3;
 const DATOER_PER_KLIKK = 3;
 
-/** Grupperer bookinger per dato, og innenfor samme dato per tidsintervall.
- *  Baner for samme startTid+sluttTid slås sammen på én linje. */
-function grupperPerDato(
-  bookinger: ArrangementBookingRespons[]
-): { dato: string; slots: { startTid: string; sluttTid: string; baner: string }[] }[] {
-  const datoMap: Record<string, Record<string, string[]>> = {};
-  for (const b of bookinger) {
-    const tidNøkkel = `${b.startTid}|${b.sluttTid}`;
-    if (!datoMap[b.dato]) datoMap[b.dato] = {};
-    if (!datoMap[b.dato][tidNøkkel]) datoMap[b.dato][tidNøkkel] = [];
-    datoMap[b.dato][tidNøkkel].push(b.baneNavn);
-  }
-  return Object.entries(datoMap).map(([dato, tider]) => ({
-    dato,
-    slots: Object.entries(tider).map(([tidNøkkel, baner]) => {
-      const [startTid, sluttTid] = tidNøkkel.split("|");
-      const sorterteBaner = [...baner].sort();
-      const baneTekst =
-        sorterteBaner.length <= 2
-          ? sorterteBaner.join(" og ")
-          : `${sorterteBaner.slice(0, -1).join(", ")} og ${sorterteBaner[sorterteBaner.length - 1]}`;
-      return { startTid, sluttTid, baner: baneTekst };
-    }),
-  }));
-}
+function lagSummary(slotsPrDag: DagMedSlotsRespons[]) {
+  const idag = new Date().toISOString().slice(0, 10);
+  const kommende = slotsPrDag.filter((d) => d.dato >= idag);
+  if (kommende.length === 0) return null;
 
-function lagBookingSummary(bookinger: ArrangementBookingRespons[]) {
-  if (bookinger.length === 0) return null;
-  const sorterteStart = [...bookinger.map((b) => b.startTid.slice(0, 5))].sort();
-  const sorterteSlutt = [...bookinger.map((b) => b.sluttTid.slice(0, 5))].sort();
-  const minStart = sorterteStart[0];
-  const maxSlutt = sorterteSlutt[sorterteSlutt.length - 1];
-  const unikeBaner = [...new Set(bookinger.map((b) => b.baneNavn))].sort();
+  const alleBaner = kommende.flatMap((d) => d.slots.flatMap((s) => s.baneNavn));
+  const unikeBaner = [...new Set(alleBaner)].sort();
   const baneTekst =
     unikeBaner.length <= 2
       ? unikeBaner.join(" og ")
       : `${unikeBaner.slice(0, -1).join(", ")} og ${unikeBaner[unikeBaner.length - 1]}`;
-  const antallDager = new Set(bookinger.map((b) => b.dato)).size;
-  return {
-    tidsspenn: `${minStart}–${maxSlutt}`,
-    baner: baneTekst,
-    antall: bookinger.length,
-    antallDager,
-  };
+
+  const alleTider = kommende.flatMap((d) => d.slots);
+  const minStart = alleTider.map((s) => s.startTid.slice(0, 5)).sort()[0];
+  const maxSlutt = alleTider.map((s) => s.sluttTid.slice(0, 5)).sort().at(-1);
+  const antallSlots = kommende.reduce((sum, d) => sum + d.slots.length, 0);
+
+  return { tidsspenn: `${minStart}–${maxSlutt}`, baner: baneTekst, antall: antallSlots, antallDager: kommende.length };
+}
+
+function nesteKommendeDato(slotsPrDag: DagMedSlotsRespons[]): string | null {
+  const idag = new Date().toISOString().slice(0, 10);
+  return slotsPrDag.find((d) => d.dato >= idag)?.dato ?? null;
 }
 
 type ArrangementAccordionItemProps = {
@@ -114,17 +92,18 @@ type ArrangementAccordionItemProps = {
 };
 
 function ArrangementAccordionItem({ arr, navigate, onAvlys }: ArrangementAccordionItemProps) {
-  const { kommendeBookinger, isLoading } = useArrangementKommendeBookinger(arr.id);
+  const idag = new Date().toISOString().slice(0, 10);
+  const kommende = (arr.slotsPrDag ?? []).filter((d) => d.dato >= idag);
   const beskrivelse = arr.beskrivelse?.trim() ?? "";
 
   const [visProgram, setVisProgram] = useState(false);
   const [synligeDatoerAntall, setSynligeDatoerAntall] = useState(INITIAL_DATOER);
 
-  const gruppert = grupperPerDato(kommendeBookinger);
-  const summary = lagBookingSummary(kommendeBookinger);
+  const summary = lagSummary(arr.slotsPrDag ?? []);
+  const nesteDato = nesteKommendeDato(arr.slotsPrDag ?? []);
 
-  const synligeDatoer = gruppert.slice(0, synligeDatoerAntall);
-  const harFlereDatoer = gruppert.length > synligeDatoerAntall;
+  const synligeDatoer = kommende.slice(0, synligeDatoerAntall);
+  const harFlereDatoer = kommende.length > synligeDatoerAntall;
 
   const harHandlinger =
     harHandling(arr.kapabiliteter, Kapabiliteter.arrangement.seTurnering) ||
@@ -150,9 +129,9 @@ function ArrangementAccordionItem({ arr, navigate, onAvlys }: ArrangementAccordi
               <Badge variant="outline" className="text-xs">
                 Gjennomført
               </Badge>
-            ) : !isLoading && kommendeBookinger.length > 0 ? (
+            ) : nesteDato ? (
               <Badge variant="secondary" className="text-xs">
-                {dagerIgjenTekst(kommendeBookinger[0].dato)}
+                {dagerIgjenTekst(nesteDato)}
               </Badge>
             ) : null}
           </Inline>
@@ -175,9 +154,7 @@ function ArrangementAccordionItem({ arr, navigate, onAvlys }: ArrangementAccordi
           )}
 
           {/* Program-toggle */}
-          {isLoading ? (
-            <p className="text-sm text-muted-foreground/60 italic">Laster program…</p>
-          ) : summary ? (
+          {summary ? (
             <div>
               <button
                 type="button"
@@ -198,14 +175,21 @@ function ArrangementAccordionItem({ arr, navigate, onAvlys }: ArrangementAccordi
                     <div key={dato}>
                       <p className="text-xs font-semibold mb-1">{formatDatoMedUkedagKort(dato)}</p>
                       <div className="space-y-0.5 pl-3 border-l-2 border-muted">
-                        {slots.map((s) => (
-                          <p
-                            key={`${s.startTid}-${s.sluttTid}`}
-                            className="text-sm text-muted-foreground"
-                          >
-                            {s.startTid}–{s.sluttTid} · {s.baner}
-                          </p>
-                        ))}
+                        {slots.map((s) => {
+                          const sorterteBaner = [...s.baneNavn].sort();
+                          const baneTekst =
+                            sorterteBaner.length <= 2
+                              ? sorterteBaner.join(" og ")
+                              : `${sorterteBaner.slice(0, -1).join(", ")} og ${sorterteBaner[sorterteBaner.length - 1]}`;
+                          return (
+                            <p
+                              key={s.startTid}
+                              className="text-sm text-muted-foreground"
+                            >
+                              {s.startTid.slice(0, 5)}–{s.sluttTid.slice(0, 5)} · {baneTekst}
+                            </p>
+                          );
+                        })}
                       </div>
                     </div>
                   ))}

@@ -71,7 +71,6 @@ export type ArrangementPresentasjon = {
   ukedager: DayOfWeek[];
   tidspunkter: string[];
   baneNavn: string[];
-  harAvvikendeSlots: boolean;
 };
 
 export type ArrangementSlotRespons = {
@@ -126,6 +125,15 @@ export type OffentligArrangementRespons = {
   presentasjon: ArrangementPresentasjon;
 };
 
+export type DagMedSlotsRespons = {
+  dato: string;
+  slots: {
+    startTid: string;
+    sluttTid: string;
+    baneNavn: string[];
+  }[];
+};
+
 export type ArrangementRespons = {
   id: string;
   tittel: string;
@@ -143,6 +151,7 @@ export type ArrangementRespons = {
   turneringId: string | null;
   turneringStatus: string | null;
   presentasjon: ArrangementPresentasjon;
+  slotsPrDag: DagMedSlotsRespons[];
 };
 
 export type AktivtArrangementRespons = {

@@ -14,6 +14,7 @@ function buildRedirectUrl() {
 
 export async function signOutAndRedirect() {
   const redirectTo = buildRedirectUrl();
+  localStorage.removeItem("supabase_token");
   await supabase.auth.signOut();
   window.location.assign(redirectTo);
 }
