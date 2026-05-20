@@ -22,7 +22,6 @@ import TiptapEditor from "@/components/editor/TiptapEditor";
 
 import { useNavigate } from "react-router-dom";
 
-import { useSlug } from "@/hooks/useSlug";
 import { useOpprettTurnering } from "@/features/turnering/hooks/turnering/useOpprettTurnering";
 
 import { useRedigerArrangement } from "../../hooks/useRedigerArrangement";
@@ -121,7 +120,6 @@ export default function RedigerArrangementView() {
     feil: lagreFeil,
   } = useOppdaterArrangementMetadata(valgtId);
 
-  const slug = useSlug();
   const navigate = useNavigate();
   const opprettTurnering = useOpprettTurnering();
 
@@ -515,7 +513,7 @@ export default function RedigerArrangementView() {
                       {arrangement.turneringId ? (
                         <button
                           type="button"
-                          onClick={() => navigate(`/${slug}/turnering/${arrangement.turneringId}`)}
+                          onClick={() => navigate(`../turnering/${arrangement.turneringId}`)}
                           className="px-4 py-2 rounded-md bg-primary text-primary-foreground text-sm font-medium"
                         >
                           Administrer turnering

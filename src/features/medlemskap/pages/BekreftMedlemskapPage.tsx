@@ -4,7 +4,7 @@ import { Navigate } from "react-router-dom";
 import { useKlubb } from "@/hooks/useKlubb";
 import { useBruker } from "@/hooks/useBruker";
 import { useBekreftMedlemskap } from "@/hooks/useBekreftMedlemskap";
-import { useSlug } from "@/hooks/useSlug";
+
 import { ErrorDisplay } from "@/components/errors";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,7 +20,6 @@ const MEDLEMSKAP_TYPER = [
 ] as const;
 
 export default function BekreftMedlemskapPage() {
-  const slug = useSlug();
   const { data: klubb, isLoading: lasterKlubb } = useKlubb();
   const { bruker, laster: lasterBruker } = useBruker();
   const { bekreft, laster, vellykket, feil } = useBekreftMedlemskap();
@@ -32,7 +31,7 @@ export default function BekreftMedlemskapPage() {
 
   // Etter vellykket bekreftelse og brukerdata er oppdatert — naviger til bookingsiden
   if (!bruker?.måBekrefteMedlemskap && vellykket) {
-    return <Navigate to={`/${slug}`} replace />;
+    return <Navigate to=".." replace />;
   }
 
   const kanBekrefte = fulltNavn.trim().length > 0 && medlemskapType.length > 0;
@@ -60,7 +59,7 @@ export default function BekreftMedlemskapPage() {
         )}
         <p className="text-xs text-muted-foreground text-center">
           Ved å bekrefte godtar du{" "}
-          <Link to={`/${slug}/vilkaar`} className="underline text-primary hover:text-primary/80">
+          <Link to="../vilkaar" className="underline text-primary hover:text-primary/80">
             vilkårene for bruk
           </Link>
           .

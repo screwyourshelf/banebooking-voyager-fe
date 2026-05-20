@@ -8,10 +8,8 @@ import { FormSkeleton } from "@/components/loading";
 
 import { formatDatoKort } from "@/utils/datoUtils";
 import { useMeg } from "@/hooks/useMeg";
-import { useSlug } from "@/hooks/useSlug";
 
 export default function PersondataView() {
-  const slug = useSlug();
   const { bruker, laster, lastNedEgenData, slettMeg } = useMeg();
 
   const [lasterNed, setLasterNed] = useState(false);
@@ -50,7 +48,7 @@ export default function PersondataView() {
               title="Les vilkårene"
               right={
                 <Link
-                  to={`/${slug}/vilkaar`}
+                  to="../vilkaar"
                   className="text-sm underline text-primary hover:text-primary/80"
                   target="_blank"
                   rel="noopener noreferrer"

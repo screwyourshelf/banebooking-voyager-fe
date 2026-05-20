@@ -36,7 +36,6 @@ import { prefetchRoute } from "@/utils/prefetchRoute";
 import NavbarBrandMedKlubb from "./NavbarBrandMedKlubb";
 import ModeToggle from "./ModeToggle";
 import { NotifikasjonDrawer } from "@/features/feed/components";
-import { useSlug } from "@/hooks/useSlug";
 
 function erGyldigEpost(v: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
@@ -50,8 +49,6 @@ function prefetch(path: string) {
 }
 
 export default function Navbar() {
-  const slug = useSlug();
-
   const { data: klubb } = useKlubb();
   const { currentUser, signOut } = useAuth();
   const { bruker } = useBruker();
@@ -146,10 +143,10 @@ export default function Navbar() {
 
       <nav className="hidden sm:flex items-center gap-0.5 mx-4">
         <Button variant="ghost" size="sm" className="h-8 text-sm" asChild>
-          <Link to={`/${slug}`}>Book bane</Link>
+          <Link to=".">Book bane</Link>
         </Button>
         <Button variant="ghost" size="sm" className="h-8 text-sm" asChild>
-          <Link to={`/${slug}/arrangementer`} {...prefetch("arrangementer")}>
+          <Link to="arrangementer" {...prefetch("arrangementer")}>
             Arrangementer
           </Link>
         </Button>
@@ -190,13 +187,13 @@ export default function Navbar() {
               <>
                 <div className="sm:hidden">
                   <DropdownMenuItem asChild>
-                    <Link to={`/${slug}`}>
+                    <Link to=".">
                       <Home className="mr-2 size-4" />
                       Book bane
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to={`/${slug}/arrangementer`} {...prefetch("arrangementer")}>
+                    <Link to="arrangementer" {...prefetch("arrangementer")}>
                       <Trophy className="mr-2 size-4" />
                       Arrangementer
                     </Link>
@@ -205,14 +202,14 @@ export default function Navbar() {
                 </div>
 
                 <DropdownMenuItem asChild>
-                  <Link to={`/${slug}/minside`} {...prefetch("minside")}>
+                  <Link to="minside" {...prefetch("minside")}>
                     <CircleUser className="mr-2 size-4" />
                     Min side
                   </Link>
                 </DropdownMenuItem>
 
                 <DropdownMenuItem asChild>
-                  <Link to={`/${slug}/bookinger`} {...prefetch("bookinger")}>
+                  <Link to="bookinger" {...prefetch("bookinger")}>
                     <CalendarCheck className="mr-2 size-4" />
                     Mine bookinger
                   </Link>
@@ -228,7 +225,7 @@ export default function Navbar() {
 
                     {harHandling(h, Kapabiliteter.klubb.admin) && (
                       <DropdownMenuItem asChild>
-                        <Link to={`/${slug}/admin/klubb`} {...prefetch("admin/klubb")}>
+                        <Link to="admin/klubb" {...prefetch("admin/klubb")}>
                           <Wrench className="mr-2 size-4" />
                           Klubb
                         </Link>
@@ -237,7 +234,7 @@ export default function Navbar() {
 
                     {harHandling(h, Kapabiliteter.baner.admin) && (
                       <DropdownMenuItem asChild>
-                        <Link to={`/${slug}/admin/baner`} {...prefetch("admin/baner")}>
+                        <Link to="admin/baner" {...prefetch("admin/baner")}>
                           <Wrench className="mr-2 size-4" />
                           Baner
                         </Link>
@@ -246,7 +243,7 @@ export default function Navbar() {
 
                     {harHandling(h, Kapabiliteter.grener.admin) && (
                       <DropdownMenuItem asChild>
-                        <Link to={`/${slug}/admin/grener`} {...prefetch("admin/grener")}>
+                        <Link to="admin/grener" {...prefetch("admin/grener")}>
                           <Wrench className="mr-2 size-4" />
                           Grener
                         </Link>
@@ -256,7 +253,7 @@ export default function Navbar() {
                     {(harHandling(h, Kapabiliteter.brukere.admin) ||
                       harHandling(h, Kapabiliteter.brukere.lese)) && (
                       <DropdownMenuItem asChild>
-                        <Link to={`/${slug}/admin/brukere`} {...prefetch("admin/brukere")}>
+                        <Link to="admin/brukere" {...prefetch("admin/brukere")}>
                           <Wrench className="mr-2 size-4" />
                           Brukere
                         </Link>
@@ -265,7 +262,7 @@ export default function Navbar() {
 
                     {harHandling(h, Kapabiliteter.arrangement.se) && (
                       <DropdownMenuItem asChild>
-                        <Link to={`/${slug}/arrangement`} {...prefetch("arrangement")}>
+                        <Link to="arrangement" {...prefetch("arrangement")}>
                           <Calendar className="mr-2 size-4" />
                           Arrangement
                         </Link>
@@ -285,13 +282,13 @@ export default function Navbar() {
               <>
                 <div className="sm:hidden">
                   <DropdownMenuItem asChild>
-                    <Link to={`/${slug}`}>
+                    <Link to=".">
                       <Home className="mr-2 size-4" />
                       Book bane
                     </Link>
                   </DropdownMenuItem>
                   <DropdownMenuItem asChild>
-                    <Link to={`/${slug}/arrangementer`} {...prefetch("arrangementer")}>
+                    <Link to="arrangementer" {...prefetch("arrangementer")}>
                       <Trophy className="mr-2 size-4" />
                       Arrangementer
                     </Link>
@@ -301,7 +298,7 @@ export default function Navbar() {
 
                 <p className="text-xs text-muted-foreground px-2 pb-1">
                   Ved å logge inn samtykker du til våre{" "}
-                  <Link to={`/${slug}/vilkaar`} className="underline">
+                  <Link to="vilkaar" className="underline">
                     vilkår
                   </Link>
                   .

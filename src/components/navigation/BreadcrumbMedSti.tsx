@@ -21,7 +21,9 @@ export default function BreadcrumbMedSti() {
   const segments = parts.map((part, idx) => ({
     segment: part,
     name: getBreadcrumbName(part),
-    url: `/${[slug, ...parts.slice(0, idx + 1)].join("/")}`,
+    url: slug
+      ? `/${[slug, ...parts.slice(0, idx + 1)].join("/")}`
+      : `/${parts.slice(0, idx + 1).join("/")}`,
     isLast: idx === parts.length - 1,
     isAdmin: part === "admin",
   }));
@@ -32,7 +34,7 @@ export default function BreadcrumbMedSti() {
         {/* Hjem */}
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link to={`/${slug}`}>Hjem</Link>
+            <Link to={slug ? `/${slug}` : "/"}>Hjem</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
 

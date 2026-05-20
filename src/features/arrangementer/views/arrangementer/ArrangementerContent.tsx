@@ -18,7 +18,7 @@ import { formatDatoKort, dagerIgjenTekst } from "@/utils/datoUtils";
 import { Ban, Trophy, Settings, ChevronDown, ChevronUp } from "lucide-react";
 import { SlettArrangementDialog } from "@/features/arrangement-admin/components";
 import { ServerFeil } from "@/components/errors";
-import { useSlug } from "@/hooks/useSlug";
+
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
 import type { ArrangementRespons, ArrangementBookingRespons } from "@/types";
@@ -108,13 +108,12 @@ function lagBookingSummary(bookinger: ArrangementBookingRespons[]) {
 
 type ArrangementAccordionItemProps = {
   arr: ArrangementRespons;
-  slug: string;
   navigate: ReturnType<typeof useNavigate>;
   onAvlys: (arr: ArrangementRespons) => Promise<unknown>;
   kopierLenke?: never;
 };
 
-function ArrangementAccordionItem({ arr, slug, navigate, onAvlys }: ArrangementAccordionItemProps) {
+function ArrangementAccordionItem({ arr, navigate, onAvlys }: ArrangementAccordionItemProps) {
   const { kommendeBookinger, isLoading } = useArrangementKommendeBookinger(arr.id);
   const beskrivelse = arr.beskrivelse?.trim() ?? "";
 
@@ -233,7 +232,7 @@ function ArrangementAccordionItem({ arr, slug, navigate, onAvlys }: ArrangementA
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => navigate(`/${slug}/turnering/${arr.turneringId}`)}
+                  onClick={() => navigate(`../turnering/${arr.turneringId}`)}
                   className="flex items-center gap-2 text-sm"
                 >
                   <Settings className="h-4 w-4" />
@@ -243,7 +242,7 @@ function ArrangementAccordionItem({ arr, slug, navigate, onAvlys }: ArrangementA
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => navigate(`/${slug}/turnering/${arr.turneringId}`)}
+                  onClick={() => navigate(`../turnering/${arr.turneringId}`)}
                   className="flex items-center gap-2 text-sm"
                 >
                   <Trophy className="h-4 w-4" />
@@ -284,7 +283,6 @@ export default function ArrangementerContent({
   defaultArrangementId,
   serverFeil,
 }: Props) {
-  const slug = useSlug();
   const navigate = useNavigate();
 
   const [åpentId, setÅpentId] = useState<string | undefined>(defaultArrangementId);
@@ -332,7 +330,6 @@ export default function ArrangementerContent({
               <ArrangementAccordionItem
                 key={arr.id}
                 arr={arr}
-                slug={slug}
                 navigate={navigate}
                 onAvlys={onAvlys}
               />

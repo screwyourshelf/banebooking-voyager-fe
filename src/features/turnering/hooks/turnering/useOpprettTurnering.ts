@@ -17,7 +17,7 @@ export function useOpprettTurnering() {
       onSuccess: (data) => {
         toast.success("Turnering opprettet");
         void queryClient.invalidateQueries({ queryKey: ["arrangementer", slug] });
-        navigate(`/${slug}/turnering/${data.id}`);
+        navigate(`../turnering/${data.id}`);
       },
     }
   );
