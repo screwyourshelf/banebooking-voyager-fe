@@ -1,8 +1,13 @@
 import { useEffect, useState, useCallback } from "react";
 import { supabase } from "@/supabase";
+import { config } from "@/config";
 import type { User } from "@supabase/supabase-js";
 
 function buildRedirectUrl() {
+  if (config.tenantSlug) {
+    return window.location.origin + "/";
+  }
+
   const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
   const storedSlug = (localStorage.getItem("slug") ?? "").replace(/^\/+|\/+$/g, "");
 

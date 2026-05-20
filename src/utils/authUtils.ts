@@ -2,6 +2,10 @@ import { supabase } from "@/supabase";
 import { config } from "@/config";
 
 function buildRedirectUrl() {
+  if (config.tenantSlug) {
+    return window.location.origin + "/";
+  }
+
   const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
   const slug = (localStorage.getItem("slug") || config.defaultSlug).replace(/^\/+|\/+$/g, "");
 

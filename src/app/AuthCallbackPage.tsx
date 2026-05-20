@@ -16,8 +16,8 @@ export default function AuthCallbackPage() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const slug = cleanSlug(localStorage.getItem("slug"));
-    navigate(`/${slug}`, { replace: true });
+    const destination = config.tenantSlug ? "/" : `/${cleanSlug(localStorage.getItem("slug"))}`;
+    navigate(destination, { replace: true });
   }, [navigate]);
 
   return <div className="p-4 text-center">Logger inn ...</div>;

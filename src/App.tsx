@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Navigate, Outlet, Routes, Route } from "react-router-dom";
 import { lazy, Suspense, useMemo } from "react";
 
 import SlugGate from "@/routes/SlugGate";
@@ -12,6 +12,8 @@ import { ProtectedRoute } from "@/routes/ProtectedRoute";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppErrorBoundary } from "@/components/errors";
+import SlugProvider from "@/providers/SlugProvider";
+import { config } from "@/config";
 
 const AuthCallbackPage = lazy(() => import("./app/AuthCallbackPage"));
 const SperretPage = lazy(() => import("@/features/sperre/pages/SperretPage"));
@@ -27,6 +29,28 @@ export default function App() {
     []
   );
 
+  const tenantSlug = config.tenantSlug;
+
+  const routeElements = useMemo(
+    () =>
+      appRoutes.map((route) => {
+        const Component = route.component!;
+        const element = route.protected ? (
+          <ProtectedRoute>
+            <Component />
+          </ProtectedRoute>
+        ) : (
+          <Component />
+        );
+        return route.index ? (
+          <Route key="index" index element={element} />
+        ) : (
+          <Route key={route.fullPath} path={route.fullPath} element={element} />
+        );
+      }),
+    [appRoutes]
+  );
+
   return (
     <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
       <TooltipProvider>
@@ -34,44 +58,55 @@ export default function App() {
           <AppErrorBoundary>
             <Suspense fallback={<AppFrameSkeleton />}>
               <Routes>
-                <Route path="/" element={<Navigate to="/aas-tennisklubb" replace />} />
-
-                <Route path=":slug?" element={<SlugGate />}>
+                {tenantSlug ? (
                   <Route
                     element={
-                      <AppBoot>
-                        <AppShell />
-                      </AppBoot>
+                      <SlugProvider slug={tenantSlug}>
+                        <Outlet />
+                      </SlugProvider>
                     }
                   >
-                    <Route element={<SperretGuard />}>
-                      <Route element={<MedlemskapGuard />}>
-                        {appRoutes.map((route) => {
-                          const Component = route.component!;
+                    <Route
+                      element={
+                        <AppBoot>
+                          <AppShell />
+                        </AppBoot>
+                      }
+                    >
+                      <Route element={<SperretGuard />}>
+                        <Route element={<MedlemskapGuard />}>{routeElements}</Route>
 
-                          const element = route.protected ? (
-                            <ProtectedRoute>
-                              <Component />
-                            </ProtectedRoute>
-                          ) : (
-                            <Component />
-                          );
-
-                          return route.index ? (
-                            <Route key="index" index element={element} />
-                          ) : (
-                            <Route key={route.fullPath} path={route.fullPath} element={element} />
-                          );
-                        })}
+                        <Route path="bekreft-medlemskap" element={<BekreftMedlemskapPage />} />
+                        <Route path="vilkaar" element={<VilkaarPage />} />
                       </Route>
 
-                      <Route path="bekreft-medlemskap" element={<BekreftMedlemskapPage />} />
-                      <Route path="vilkaar" element={<VilkaarPage />} />
+                      <Route path="sperret" element={<SperretPage />} />
                     </Route>
-
-                    <Route path="sperret" element={<SperretPage />} />
                   </Route>
-                </Route>
+                ) : (
+                  <>
+                    <Route path="/" element={<Navigate to={`/${config.defaultSlug}`} replace />} />
+
+                    <Route path=":slug?" element={<SlugGate />}>
+                      <Route
+                        element={
+                          <AppBoot>
+                            <AppShell />
+                          </AppBoot>
+                        }
+                      >
+                        <Route element={<SperretGuard />}>
+                          <Route element={<MedlemskapGuard />}>{routeElements}</Route>
+
+                          <Route path="bekreft-medlemskap" element={<BekreftMedlemskapPage />} />
+                          <Route path="vilkaar" element={<VilkaarPage />} />
+                        </Route>
+
+                        <Route path="sperret" element={<SperretPage />} />
+                      </Route>
+                    </Route>
+                  </>
+                )}
 
                 <Route path="auth/callback" element={<AuthCallbackPage />} />
 

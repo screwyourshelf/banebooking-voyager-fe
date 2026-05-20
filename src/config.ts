@@ -9,6 +9,7 @@ export const config = {
 
   // App
   defaultSlug: import.meta.env.VITE_DEFAULT_SLUG ?? "aas-tennisklubb",
+  tenantSlug: (import.meta.env.VITE_TENANT_SLUG as string | undefined) || null,
 
   // Routing
   baseUrl: import.meta.env.BASE_URL,
