@@ -115,7 +115,7 @@ export default function ManueltOppsett({ baner, onLeggTil }: Props) {
       for (const g of slotGrupper) next[g.slotLengdeMinutter] = prev[g.slotLengdeMinutter] ?? false;
       return next;
     });
-  }, [erGruppert, slotGrupper]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [erGruppert, slotGrupper]);
 
   // Sync "alle" → velg alle tidspunkter i grupperte modus
   useEffect(() => {
@@ -127,7 +127,7 @@ export default function ManueltOppsett({ baner, onLeggTil }: Props) {
       }
       return next;
     });
-  }, [erGruppert, allePerGruppe, slotGrupper]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [erGruppert, allePerGruppe, slotGrupper]);
 
   // Effektiv tidspunkt-mapping brukt til generering og teller
   const effektivTidspunkterPerGruppe: Record<number, string[]> = erGruppert

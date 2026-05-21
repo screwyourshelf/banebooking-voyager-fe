@@ -23,7 +23,7 @@ import {
   Home,
   Trophy,
 } from "lucide-react";
-import { GoogleIcon } from "@/components/icons";
+import { GoogleIcon, IdrettensIdIcon } from "@/components/icons";
 
 import { useAuth } from "@/hooks/useAuth";
 import { useLogin } from "@/hooks/useLogin";
@@ -32,6 +32,7 @@ import { useBruker } from "@/hooks/useBruker";
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
 import { prefetchRoute } from "@/utils/prefetchRoute";
+import { config } from "@/config";
 
 import NavbarBrandMedKlubb from "./NavbarBrandMedKlubb";
 import ModeToggle from "./ModeToggle";
@@ -62,6 +63,7 @@ export default function Navbar() {
     step,
     erBusy,
     handleGoogleLogin,
+    handleIdrettensIdLogin,
     sendOtp,
     verifyOtp,
   } = useLogin();
@@ -308,6 +310,13 @@ export default function Navbar() {
                   <GoogleIcon className="mr-2 size-5" />
                   Logg inn med Google
                 </DropdownMenuItem>
+
+                {config.enableIdrettensId && (
+                  <DropdownMenuItem onClick={handleIdrettensIdLogin} disabled={erBusy}>
+                    <IdrettensIdIcon className="mr-2 size-5" />
+                    Logg inn med Idrettens ID
+                  </DropdownMenuItem>
+                )}
 
                 <DropdownMenuSeparator />
 

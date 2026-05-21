@@ -5,6 +5,7 @@ export const supabase = createClient(config.supabaseUrl, config.supabaseAnonKey,
   auth: {
     persistSession: true,
     autoRefreshToken: true,
+    flowType: "pkce",
   },
 });
 

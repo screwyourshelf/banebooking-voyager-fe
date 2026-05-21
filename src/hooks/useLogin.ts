@@ -33,6 +33,24 @@ export function useLogin() {
     if (error) toast.error(error.message);
   };
 
+  // Idrettens ID (OIDC via Buypass/NIF) — custom Supabase provider
+  // provider-strengen "custom:idrettens-id" matcher provider ID i Supabase-dashboardet.
+  // Supabase JS SDK støtter custom providers via provider: "custom:<id>".
+  // Ref: https://supabase.com/docs/guides/auth/custom-oidc-providers
+  const handleIdrettensIdLogin = async () => {
+    if (erBusy) return;
+
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "custom:idrettens-id",
+      options: {
+        redirectTo,
+        scopes: "openid email profile",
+      },
+    });
+
+    if (error) toast.error(error.message);
+  };
+
   const handleFacebookLogin = async () => {
     if (erBusy) return;
 
@@ -127,6 +145,7 @@ export function useLogin() {
     setStep,
     erBusy,
     handleGoogleLogin,
+    handleIdrettensIdLogin,
     handleFacebookLogin,
     sendOtp,
     verifyOtp,

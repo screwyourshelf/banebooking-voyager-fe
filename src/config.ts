@@ -16,4 +16,7 @@ export const config = {
 
   // UI
   feedDismissDurationMs: 24 * 60 * 60 * 1000,
+
+  // Feature flags
+  enableIdrettensId: import.meta.env.VITE_ENABLE_IDRETTENS_ID === "true",
 };
