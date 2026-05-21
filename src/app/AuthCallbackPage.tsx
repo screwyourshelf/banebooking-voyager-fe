@@ -57,7 +57,9 @@ export default function AuthCallbackPage() {
       }
 
       // Steg 2: ingen session ennå — vent på SIGNED_IN (PKCE/code-flow, f.eks. Idrettens ID)
-      const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      const {
+        data: { subscription },
+      } = supabase.auth.onAuthStateChange((event, session) => {
         if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
           logSessionDiagnostics(session);
           subscription.unsubscribe();

@@ -73,10 +73,18 @@ function lagSummary(slotsPrDag: DagMedSlotsRespons[]) {
 
   const alleTider = kommende.flatMap((d) => d.slots);
   const minStart = alleTider.map((s) => s.startTid.slice(0, 5)).sort()[0];
-  const maxSlutt = alleTider.map((s) => s.sluttTid.slice(0, 5)).sort().at(-1);
+  const maxSlutt = alleTider
+    .map((s) => s.sluttTid.slice(0, 5))
+    .sort()
+    .at(-1);
   const antallSlots = kommende.reduce((sum, d) => sum + d.slots.length, 0);
 
-  return { tidsspenn: `${minStart}–${maxSlutt}`, baner: baneTekst, antall: antallSlots, antallDager: kommende.length };
+  return {
+    tidsspenn: `${minStart}–${maxSlutt}`,
+    baner: baneTekst,
+    antall: antallSlots,
+    antallDager: kommende.length,
+  };
 }
 
 function nesteKommendeDato(slotsPrDag: DagMedSlotsRespons[]): string | null {
@@ -182,10 +190,7 @@ function ArrangementAccordionItem({ arr, navigate, onAvlys }: ArrangementAccordi
                               ? sorterteBaner.join(" og ")
                               : `${sorterteBaner.slice(0, -1).join(", ")} og ${sorterteBaner[sorterteBaner.length - 1]}`;
                           return (
-                            <p
-                              key={s.startTid}
-                              className="text-sm text-muted-foreground"
-                            >
+                            <p key={s.startTid} className="text-sm text-muted-foreground">
                               {s.startTid.slice(0, 5)}–{s.sluttTid.slice(0, 5)} · {baneTekst}
                             </p>
                           );

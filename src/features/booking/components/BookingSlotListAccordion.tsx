@@ -79,176 +79,183 @@ export function BookingSlotListAccordion({
       ) : (
         <Accordion type="single" collapsible className="space-y-1">
           {slotsÅVise.map((slot) => {
-        const slotKey = slot.bookingId ?? `${slot.dato}-${slot.slotStartTid}-${slot.baneId}`;
-        const effStartTid = slot.bookingStartTid ?? slot.slotStartTid;
-        const effSluttTid = slot.bookingSluttTid ?? slot.slotSluttTid;
-        const tid = `${effStartTid.slice(0, 5)} – ${effSluttTid.slice(0, 5)}`;
-        const tidKort = `${formatKort(effStartTid)}–${formatKort(effSluttTid)}`;
+            const slotKey = slot.bookingId ?? `${slot.dato}-${slot.slotStartTid}-${slot.baneId}`;
+            const effStartTid = slot.bookingStartTid ?? slot.slotStartTid;
+            const effSluttTid = slot.bookingSluttTid ?? slot.slotSluttTid;
+            const tid = `${effStartTid.slice(0, 5)} – ${effSluttTid.slice(0, 5)}`;
+            const tidKort = `${formatKort(effStartTid)}–${formatKort(effSluttTid)}`;
 
-        const harArrangement = !!slot.arrangementTittel;
-        const kan = (h: string) => harHandling(slot.kapabiliteter, h);
-        const erBooket = !!slot.booketAv || kan(Kapabiliteter.booking.fjern);
-        const erMinBooking = slot.erEier === true;
+            const harArrangement = !!slot.arrangementTittel;
+            const kan = (h: string) => harHandling(slot.kapabiliteter, h);
+            const erBooket = !!slot.booketAv || kan(Kapabiliteter.booking.fjern);
+            const erMinBooking = slot.erEier === true;
 
-        const harHandlinger = slot.kapabiliteter.length > 0;
-        const kanUtføreHandling = !!currentUser && harHandlinger;
+            const harHandlinger = slot.kapabiliteter.length > 0;
+            const kanUtføreHandling = !!currentUser && harHandlinger;
 
-        const harVaer =
-          !!slot.værSymbol || typeof slot.temperatur === "number" || typeof slot.vind === "number";
+            const harVaer =
+              !!slot.værSymbol ||
+              typeof slot.temperatur === "number" ||
+              typeof slot.vind === "number";
 
-        const erInnlogget = !!currentUser;
-        const { tekst: statusTekst, variant: statusVariant } = utledSlotVisning(slot, erInnlogget);
+            const erInnlogget = !!currentUser;
+            const { tekst: statusTekst, variant: statusVariant } = utledSlotVisning(
+              slot,
+              erInnlogget
+            );
 
-        const [startH, startM] = effStartTid.split(":").map(Number);
-        const [sluttH, sluttM] = effSluttTid.split(":").map(Number);
-        const varighet = sluttH * 60 + sluttM - (startH * 60 + startM);
+            const [startH, startM] = effStartTid.split(":").map(Number);
+            const [sluttH, sluttM] = effSluttTid.split(":").map(Number);
+            const varighet = sluttH * 60 + sluttM - (startH * 60 + startM);
 
-        return (
-          <AccordionItem
-            key={slotKey}
-            value={slotKey}
-            className={`rounded-md border bg-background px-2 last:border-b shadow-sm ${slot.erPassert ? "opacity-50" : ""}`}
-          >
-            <AccordionTrigger className="hover:no-underline">
-              <Stack gap="xs" className="items-start">
-                <Inline gap="md">
-                  <span className="font-medium sm:hidden">{tidKort}</span>
-                  <span className="font-medium hidden sm:inline">{tid}</span>
-                  <WeatherInfo værSymbol={slot.værSymbol} iconOnly />
-                  <Badge variant={statusVariant} className="text-xs">
-                    {statusTekst}
-                  </Badge>
-                  {currentUser && !harArrangement && erMinBooking && (
-                    <span className="text-green-600" title="Din booking">
-                      <UserCheck className="size-4" />
-                    </span>
-                  )}
-                </Inline>
-                {harArrangement && slot.arrangementBeskrivelse && (
-                  <span className="text-xs text-muted-foreground line-clamp-1">
-                    {slot.arrangementBeskrivelse}
-                  </span>
-                )}
-                {erBooket && !harArrangement && slot.booketAv && (
-                  <span className="text-xs text-muted-foreground">{slot.booketAv}</span>
-                )}
-              </Stack>
-            </AccordionTrigger>
-
-            <AccordionContent>
-              <Stack gap="sm">
-                <AccordionDetailGrid>
-                  <AccordionDetailRow icon={Timer} label="Varighet">
-                    {varighet} min
-                  </AccordionDetailRow>
-
-                  {erBooket && (
-                    <AccordionDetailRow icon={User} label="Booket av">
-                      {slot.booketAv}
-                    </AccordionDetailRow>
-                  )}
-
-                  {harArrangement && slot.arrangementBeskrivelse && (
-                    <AccordionDetailRow icon={Calendar} label="Arrangement" colSpan={2}>
-                      <span className="whitespace-pre-wrap"></span>
-                    </AccordionDetailRow>
-                  )}
-
-                  {harVaer && (
-                    <div className="flex items-start gap-2 sm:col-span-2">
-                      {slot.værSymbol && (
-                        <img
-                          src={`${import.meta.env.BASE_URL}weather-symbols/svg/${slot.værSymbol}.svg`}
-                          alt={slot.værSymbol}
-                          width={16}
-                          height={16}
-                          className="select-none mt-0.5 shrink-0"
-                          draggable={false}
-                        />
+            return (
+              <AccordionItem
+                key={slotKey}
+                value={slotKey}
+                className={`rounded-md border bg-background px-2 last:border-b shadow-sm ${slot.erPassert ? "opacity-50" : ""}`}
+              >
+                <AccordionTrigger className="hover:no-underline">
+                  <Stack gap="xs" className="items-start">
+                    <Inline gap="md">
+                      <span className="font-medium sm:hidden">{tidKort}</span>
+                      <span className="font-medium hidden sm:inline">{tid}</span>
+                      <WeatherInfo værSymbol={slot.værSymbol} iconOnly />
+                      <Badge variant={statusVariant} className="text-xs">
+                        {statusTekst}
+                      </Badge>
+                      {currentUser && !harArrangement && erMinBooking && (
+                        <span className="text-green-600" title="Din booking">
+                          <UserCheck className="size-4" />
+                        </span>
                       )}
-                      <div>
-                        <div className="text-xs font-medium text-muted-foreground">Vær</div>
-                        <div className="text-sm">
-                          {typeof slot.temperatur === "number" && <span>{slot.temperatur}°c</span>}
-                          {typeof slot.temperatur === "number" &&
-                            typeof slot.vind === "number" &&
-                            " · "}
-                          {typeof slot.vind === "number" && <span>{slot.vind} m/s</span>}
+                    </Inline>
+                    {harArrangement && slot.arrangementBeskrivelse && (
+                      <span className="text-xs text-muted-foreground line-clamp-1">
+                        {slot.arrangementBeskrivelse}
+                      </span>
+                    )}
+                    {erBooket && !harArrangement && slot.booketAv && (
+                      <span className="text-xs text-muted-foreground">{slot.booketAv}</span>
+                    )}
+                  </Stack>
+                </AccordionTrigger>
+
+                <AccordionContent>
+                  <Stack gap="sm">
+                    <AccordionDetailGrid>
+                      <AccordionDetailRow icon={Timer} label="Varighet">
+                        {varighet} min
+                      </AccordionDetailRow>
+
+                      {erBooket && (
+                        <AccordionDetailRow icon={User} label="Booket av">
+                          {slot.booketAv}
+                        </AccordionDetailRow>
+                      )}
+
+                      {harArrangement && slot.arrangementBeskrivelse && (
+                        <AccordionDetailRow icon={Calendar} label="Arrangement" colSpan={2}>
+                          <span className="whitespace-pre-wrap"></span>
+                        </AccordionDetailRow>
+                      )}
+
+                      {harVaer && (
+                        <div className="flex items-start gap-2 sm:col-span-2">
+                          {slot.værSymbol && (
+                            <img
+                              src={`${import.meta.env.BASE_URL}weather-symbols/svg/${slot.værSymbol}.svg`}
+                              alt={slot.værSymbol}
+                              width={16}
+                              height={16}
+                              className="select-none mt-0.5 shrink-0"
+                              draggable={false}
+                            />
+                          )}
+                          <div>
+                            <div className="text-xs font-medium text-muted-foreground">Vær</div>
+                            <div className="text-sm">
+                              {typeof slot.temperatur === "number" && (
+                                <span>{slot.temperatur}°c</span>
+                              )}
+                              {typeof slot.temperatur === "number" &&
+                                typeof slot.vind === "number" &&
+                                " · "}
+                              {typeof slot.vind === "number" && <span>{slot.vind} m/s</span>}
+                            </div>
+                          </div>
                         </div>
-                      </div>
-                    </div>
-                  )}
-                </AccordionDetailGrid>
+                      )}
+                    </AccordionDetailGrid>
 
-                {erInnlogget &&
-                  !slot.erPassert &&
-                  !erBooket &&
-                  !harArrangement &&
-                  !kan("booking:book") && (
-                    <p className="text-xs text-muted-foreground italic">
-                      Du kan ikke booke denne timen akkurat nå – maks antall bookinger kan være
-                      nådd.
-                    </p>
-                  )}
+                    {erInnlogget &&
+                      !slot.erPassert &&
+                      !erBooket &&
+                      !harArrangement &&
+                      !kan("booking:book") && (
+                        <p className="text-xs text-muted-foreground italic">
+                          Du kan ikke booke denne timen akkurat nå – maks antall bookinger kan være
+                          nådd.
+                        </p>
+                      )}
 
-                {/* Actions */}
-                {kanUtføreHandling && (
-                  <AccordionActions className="flex-wrap gap-2">
-                    {kan(Kapabiliteter.booking.kobleTilArrangement) && (
-                      <KobleTilArrangementDialog
-                        valgtId={null}
-                        onVelg={(id) => {
-                          if (id) onBook?.(slot, id);
-                        }}
-                      >
-                        <Button
-                          variant="outline"
-                          size="sm"
-                          className="flex items-center gap-2 text-sm"
-                        >
-                          <Link2 className="h-3.5 w-3.5 shrink-0" />
-                          Koble til arrangement
-                        </Button>
-                      </KobleTilArrangementDialog>
+                    {/* Actions */}
+                    {kanUtføreHandling && (
+                      <AccordionActions className="flex-wrap gap-2">
+                        {kan(Kapabiliteter.booking.kobleTilArrangement) && (
+                          <KobleTilArrangementDialog
+                            valgtId={null}
+                            onVelg={(id) => {
+                              if (id) onBook?.(slot, id);
+                            }}
+                          >
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="flex items-center gap-2 text-sm"
+                            >
+                              <Link2 className="h-3.5 w-3.5 shrink-0" />
+                              Koble til arrangement
+                            </Button>
+                          </KobleTilArrangementDialog>
+                        )}
+
+                        {kan(Kapabiliteter.booking.book) && (
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onBook?.(slot);
+                            }}
+                            className="flex items-center gap-2 text-sm"
+                          >
+                            <CalendarPlus className="size-4" />
+                            Book
+                          </Button>
+                        )}
+
+                        {kan(Kapabiliteter.booking.fjern) && (
+                          <Button
+                            variant={slot.erEier ? "outline" : "destructive"}
+                            size="sm"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              onFjern?.(slot);
+                            }}
+                            className="flex items-center gap-2 text-sm"
+                          >
+                            <XCircle className="size-4" />
+                            Avbestill
+                          </Button>
+                        )}
+                      </AccordionActions>
                     )}
-
-                    {kan(Kapabiliteter.booking.book) && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onBook?.(slot);
-                        }}
-                        className="flex items-center gap-2 text-sm"
-                      >
-                        <CalendarPlus className="size-4" />
-                        Book
-                      </Button>
-                    )}
-
-                    {kan(Kapabiliteter.booking.fjern) && (
-                      <Button
-                        variant={slot.erEier ? "outline" : "destructive"}
-                        size="sm"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          onFjern?.(slot);
-                        }}
-                        className="flex items-center gap-2 text-sm"
-                      >
-                        <XCircle className="size-4" />
-                        Avbestill
-                      </Button>
-                    )}
-                  </AccordionActions>
-                )}
-              </Stack>
-            </AccordionContent>
-          </AccordionItem>
-        );
-      })}
-    </Accordion>
+                  </Stack>
+                </AccordionContent>
+              </AccordionItem>
+            );
+          })}
+        </Accordion>
       )}
     </>
   );

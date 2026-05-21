@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .vs/
+
+# Local env overrides (use .env.example as template)
+.env
