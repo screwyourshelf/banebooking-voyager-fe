@@ -3,6 +3,7 @@ import { toast } from "sonner";
 
 import { FormSkeleton } from "@/components/loading";
 import { RowPanel, RowList, Row, SwitchRow } from "@/components/rows";
+import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -19,6 +20,7 @@ import {
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import PageSection from "@/components/sections/PageSection";
 import TiptapEditor from "@/components/editor/TiptapEditor";
+import { Ban } from "lucide-react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -29,6 +31,8 @@ import { useArrangementBookinger } from "../../hooks/useArrangementBookinger";
 import { useOppdaterArrangementMetadata } from "../../hooks/useOppdaterArrangementMetadata";
 import { useSlettArrangementBooking } from "../../hooks/useSlettArrangementBooking";
 import { useLeggTilArrangementBooking } from "../../hooks/useLeggTilArrangementBooking";
+import { useAvlysArrangement } from "../../hooks/useAvlysArrangement";
+import { SlettArrangementDialog } from "../../components";
 import { useBookingListe } from "../../hooks/useBookingListe";
 import { useKonfliktSjekk } from "../../hooks/useKonfliktSjekk";
 import GjentakendeOppsett from "../../components/GjentakendeOppsett/GjentakendeOppsett";
@@ -69,32 +73,25 @@ const KATEGORIER = [
 
 export default function RedigerArrangementView() {
   const [valgtId, setValgtId] = useState("");
+  const [valgtGrenId, setValgtGrenId] = useState("");
 
-  // useRedigerArrangement bruker valgtGrenId kun for tilgjengeligeTidspunkter (ikke relevant her)
   const {
     arrangementer,
     arrangement,
+    grener,
     baner: alleBanerData,
     isLoading,
     isLoadingArrangementer,
-  } = useRedigerArrangement(valgtId || null, "");
+  } = useRedigerArrangement(valgtId || null, valgtGrenId);
 
   // Ekte bookinger fra backend
   const { bookinger: ekteBookinger, isLoading: isLoadingBookinger } = useArrangementBookinger(
     valgtId || null
   );
 
-  // Baner filtrert på gren utledet fra arrangement
-  const grenId = useMemo(() => {
-    if (!arrangement) return "";
-    const baneId = arrangement.baneGrupper[0]?.baneIder[0];
-    if (!baneId) return "";
-    return alleBanerData.find((b) => b.id === baneId)?.grenId ?? "";
-  }, [arrangement, alleBanerData]);
-
   const baner = useMemo(
-    () => (grenId ? alleBanerData.filter((b) => b.grenId === grenId) : alleBanerData),
-    [alleBanerData, grenId]
+    () => (valgtGrenId ? alleBanerData.filter((b) => b.grenId === valgtGrenId) : alleBanerData),
+    [alleBanerData, valgtGrenId]
   );
 
   // Metadata-state
@@ -125,6 +122,7 @@ export default function RedigerArrangementView() {
 
   const { slettBooking } = useSlettArrangementBooking(valgtId);
   const { leggTilBooking, batchLeggTil } = useLeggTilArrangementBooking(valgtId);
+  const { avlys: avlysArrangement } = useAvlysArrangement(valgtId);
   const [oppretterForslag, setOppretterForslag] = useState(false);
 
   // Ref for å unngå stale closure i håndterGenererForslag
@@ -144,6 +142,7 @@ export default function RedigerArrangementView() {
    * Ref oppdateres synkront i render og leses korrekt av re-fetch-effekten.
    */
   const stagingRef = useRef<LokalBooking[]>([]);
+  // eslint-disable-next-line react-hooks/refs -- bevisst render-time sync: ref leses synkront av re-fetch-effekten
   stagingRef.current = bookinger.filter((b) => b.kilde !== "eksisterende");
 
   // Populer BookingListe når ekte bookinger er lastet – bevar staged forslag
@@ -171,6 +170,11 @@ export default function RedigerArrangementView() {
       setPublisertPåNettsiden(arrangement.publisertPåNettsiden);
       setNettsideTittel(arrangement.nettsideTittel ?? "");
       setNettsideBeskrivelse(arrangement.nettsideBeskrivelse ?? "");
+      const baneId = arrangement.baneGrupper[0]?.baneIder[0];
+      const derivertGrenId = baneId
+        ? (alleBanerData.find((b) => b.id === baneId)?.grenId ?? "")
+        : "";
+      if (derivertGrenId) setValgtGrenId(derivertGrenId);
     }
   }
 
@@ -189,7 +193,7 @@ export default function RedigerArrangementView() {
     const aktive = alleMedNye.filter((b) => !b.erSlettet);
     if (aktive.length === 0) return;
 
-    const konfliktDto = byggKonfliktSjekkDto(aktive, grenId, kategori);
+    const konfliktDto = byggKonfliktSjekkDto(aktive, valgtGrenId, kategori);
     if (!konfliktDto) return;
 
     const resultat = await sjekkKonflikter(alleMedNye, konfliktDto);
@@ -211,7 +215,7 @@ export default function RedigerArrangementView() {
     const aktive = alleMedNye.filter((b) => !b.erSlettet);
     if (aktive.length === 0) return;
 
-    const konfliktDto = byggKonfliktSjekkDto(aktive, grenId, kategori);
+    const konfliktDto = byggKonfliktSjekkDto(aktive, valgtGrenId, kategori);
     if (!konfliktDto) return;
 
     const resultat = await sjekkKonflikter(alleMedNye, konfliktDto);
@@ -322,7 +326,9 @@ export default function RedigerArrangementView() {
       );
       const aktive = oppdatertListe.filter((b) => !b.erSlettet);
       const konfliktDto =
-        aktive.length > 0 && grenId ? byggKonfliktSjekkDto(aktive, grenId, kategori) : null;
+        aktive.length > 0 && valgtGrenId
+          ? byggKonfliktSjekkDto(aktive, valgtGrenId, kategori)
+          : null;
       if (konfliktDto) {
         const resultat = await sjekkKonflikter(oppdatertListe, konfliktDto);
         if (resultat) settAlle(resultat.oppdaterteBookinger);
@@ -336,7 +342,7 @@ export default function RedigerArrangementView() {
     <div className="space-y-4">
       {/* ─── Velg arrangement ─── */}
       <PageSection title="Arrangement">
-        <div className="px-1 mt-3">
+        <div className="px-1 mt-3 space-y-2">
           <RowPanel>
             <RowList>
               <Row title="Velg arrangement">
@@ -391,6 +397,27 @@ export default function RedigerArrangementView() {
               </Row>
             </RowList>
           </RowPanel>
+          {arrangement && (
+            <div>
+              <SlettArrangementDialog
+                tittel={arrangement.tittel}
+                harTurnering={!!arrangement.turneringId}
+                onSlett={async () => {
+                  await avlysArrangement();
+                }}
+                trigger={
+                  <Button
+                    variant="destructive"
+                    size="sm"
+                    className="flex items-center gap-2 text-sm"
+                  >
+                    <Ban className="size-4" />
+                    Avlys
+                  </Button>
+                }
+              />
+            </div>
+          )}
         </div>
       </PageSection>
 
@@ -411,6 +438,25 @@ export default function RedigerArrangementView() {
               <div className="px-1 space-y-1 mt-2">
                 <RowPanel>
                   <RowList>
+                    {grener.length > 1 && (
+                      <Row title="Gren" description="Baner filtreres etter valgt gren.">
+                        <Field>
+                          <Select value={valgtGrenId} onValueChange={setValgtGrenId}>
+                            <SelectTrigger id="gren">
+                              <SelectValue placeholder="Velg gren..." />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {grener.map((g) => (
+                                <SelectItem key={g.id} value={g.id}>
+                                  {g.navn}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </Field>
+                      </Row>
+                    )}
+
                     <Row title="Kategori">
                       <Field>
                         <Select

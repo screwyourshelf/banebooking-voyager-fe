@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { nb } from "date-fns/locale";
 import { PlusCircle, TriangleAlert } from "lucide-react";
 
@@ -98,36 +98,43 @@ export default function ManueltOppsett({ baner, onLeggTil }: Props) {
     }
   }
 
-  // Opprydding: hold per-gruppe-state i sync med aktive grupper
-  useEffect(() => {
-    if (!erGruppert) return;
-    setTidspunkterPerGruppe((prev) => {
-      const next: Record<number, string[]> = {};
-      for (const g of slotGrupper) {
-        next[g.slotLengdeMinutter] = (prev[g.slotLengdeMinutter] ?? []).filter((t) =>
-          g.tidspunkter.includes(t)
-        );
-      }
-      return next;
-    });
-    setAllePerGruppe((prev) => {
-      const next: Record<number, boolean> = {};
-      for (const g of slotGrupper) next[g.slotLengdeMinutter] = prev[g.slotLengdeMinutter] ?? false;
-      return next;
-    });
-  }, [erGruppert, slotGrupper]);
+  // Opprydding: hold per-gruppe-state i sync med aktive grupper (render-time adjust)
+  const [prevSlotGrupper, setPrevSlotGrupper] = useState(slotGrupper);
+  if (slotGrupper !== prevSlotGrupper) {
+    setPrevSlotGrupper(slotGrupper);
+    if (erGruppert) {
+      setTidspunkterPerGruppe((prev) => {
+        const next: Record<number, string[]> = {};
+        for (const g of slotGrupper) {
+          next[g.slotLengdeMinutter] = (prev[g.slotLengdeMinutter] ?? []).filter((t) =>
+            g.tidspunkter.includes(t)
+          );
+        }
+        return next;
+      });
+      setAllePerGruppe((prev) => {
+        const next: Record<number, boolean> = {};
+        for (const g of slotGrupper)
+          next[g.slotLengdeMinutter] = prev[g.slotLengdeMinutter] ?? false;
+        return next;
+      });
+    }
+  }
 
-  // Sync "alle" → velg alle tidspunkter i grupperte modus
-  useEffect(() => {
-    if (!erGruppert) return;
-    setTidspunkterPerGruppe((prev) => {
-      const next = { ...prev };
-      for (const g of slotGrupper) {
-        if (allePerGruppe[g.slotLengdeMinutter]) next[g.slotLengdeMinutter] = g.tidspunkter;
-      }
-      return next;
-    });
-  }, [erGruppert, allePerGruppe, slotGrupper]);
+  // Sync "alle" → velg alle tidspunkter i grupperte modus (render-time adjust)
+  const [prevAllePerGruppe, setPrevAllePerGruppe] = useState(allePerGruppe);
+  if (allePerGruppe !== prevAllePerGruppe) {
+    setPrevAllePerGruppe(allePerGruppe);
+    if (erGruppert) {
+      setTidspunkterPerGruppe((prev) => {
+        const next = { ...prev };
+        for (const g of slotGrupper) {
+          if (allePerGruppe[g.slotLengdeMinutter]) next[g.slotLengdeMinutter] = g.tidspunkter;
+        }
+        return next;
+      });
+    }
+  }
 
   // Effektiv tidspunkt-mapping brukt til generering og teller
   const effektivTidspunkterPerGruppe: Record<number, string[]> = erGruppert

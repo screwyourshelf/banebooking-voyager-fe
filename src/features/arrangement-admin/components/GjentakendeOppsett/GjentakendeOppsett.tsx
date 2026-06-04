@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Zap } from "lucide-react";
 
 import { RowPanel, RowList, Row } from "@/components/rows";
@@ -83,36 +83,43 @@ export default function GjentakendeOppsett({ baner, onGenerer }: Props) {
     [baner, aktiveBaner]
   );
 
-  // Opprydding: hold per-gruppe-state i sync med aktive grupper
-  useEffect(() => {
-    if (!erGruppert) return;
-    setTidspunkterPerGruppe((prev) => {
-      const next: Record<number, string[]> = {};
-      for (const g of slotGrupper) {
-        next[g.slotLengdeMinutter] = (prev[g.slotLengdeMinutter] ?? []).filter((t) =>
-          g.tidspunkter.includes(t)
-        );
-      }
-      return next;
-    });
-    setAllePerGruppe((prev) => {
-      const next: Record<number, boolean> = {};
-      for (const g of slotGrupper) next[g.slotLengdeMinutter] = prev[g.slotLengdeMinutter] ?? false;
-      return next;
-    });
-  }, [erGruppert, slotGrupper]);
+  // Opprydding: hold per-gruppe-state i sync med aktive grupper (render-time adjust)
+  const [prevSlotGrupper, setPrevSlotGrupper] = useState(slotGrupper);
+  if (slotGrupper !== prevSlotGrupper) {
+    setPrevSlotGrupper(slotGrupper);
+    if (erGruppert) {
+      setTidspunkterPerGruppe((prev) => {
+        const next: Record<number, string[]> = {};
+        for (const g of slotGrupper) {
+          next[g.slotLengdeMinutter] = (prev[g.slotLengdeMinutter] ?? []).filter((t) =>
+            g.tidspunkter.includes(t)
+          );
+        }
+        return next;
+      });
+      setAllePerGruppe((prev) => {
+        const next: Record<number, boolean> = {};
+        for (const g of slotGrupper)
+          next[g.slotLengdeMinutter] = prev[g.slotLengdeMinutter] ?? false;
+        return next;
+      });
+    }
+  }
 
-  // Sync "alle" → velg alle tidspunkter per gruppe
-  useEffect(() => {
-    if (!erGruppert) return;
-    setTidspunkterPerGruppe((prev) => {
-      const next = { ...prev };
-      for (const g of slotGrupper) {
-        if (allePerGruppe[g.slotLengdeMinutter]) next[g.slotLengdeMinutter] = g.tidspunkter;
-      }
-      return next;
-    });
-  }, [erGruppert, allePerGruppe, slotGrupper]);
+  // Sync "alle" → velg alle tidspunkter per gruppe (render-time adjust)
+  const [prevAllePerGruppe, setPrevAllePerGruppe] = useState(allePerGruppe);
+  if (allePerGruppe !== prevAllePerGruppe) {
+    setPrevAllePerGruppe(allePerGruppe);
+    if (erGruppert) {
+      setTidspunkterPerGruppe((prev) => {
+        const next = { ...prev };
+        for (const g of slotGrupper) {
+          if (allePerGruppe[g.slotLengdeMinutter]) next[g.slotLengdeMinutter] = g.tidspunkter;
+        }
+        return next;
+      });
+    }
+  }
 
   // Ikke-gruppert: felles tidspunkter
   const [valgteTidspunkter, setValgteTidspunkter] = useState<string[]>([]);
