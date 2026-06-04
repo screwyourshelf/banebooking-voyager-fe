@@ -1,9 +1,9 @@
-﻿import { useState } from "react";
+﻿import { useState, useMemo } from "react";
 import { usePagination } from "@/hooks/usePagination";
 import { useNavigate } from "react-router-dom";
 import PageSection from "@/components/sections/PageSection";
 import { Stack, Inline } from "@/components/layout";
-import { RowPanel, RowList } from "@/components/rows";
+import { RowPanel, RowList, Row } from "@/components/rows";
 import SwitchRow from "@/components/rows/SwitchRow";
 import {
   Accordion,
@@ -142,6 +142,9 @@ function ArrangementAccordionItem({ arr, navigate, onAvlys }: ArrangementAccordi
                 {dagerIgjenTekst(nesteDato)}
               </Badge>
             ) : null}
+            <Badge variant="outline" className="text-xs">
+              {arr.grenNavn}
+            </Badge>
           </Inline>
           <span className="text-xs text-muted-foreground">{datoTekst(arr)}</span>
 
@@ -275,17 +278,37 @@ export default function ArrangementerContent({
   const navigate = useNavigate();
 
   const [åpentId, setÅpentId] = useState<string | undefined>(defaultArrangementId);
+  const [grenFilter, setGrenFilter] = useState<string[]>([]);
+
+  const grener = useMemo(
+    () => [...new Set(arrangementer.map((a) => a.grenNavn))].sort(),
+    [arrangementer]
+  );
+
+  const filtrerte = useMemo(() => {
+    if (grenFilter.length === 0) return arrangementer;
+    return arrangementer.filter((a) => grenFilter.includes(a.grenNavn));
+  }, [arrangementer, grenFilter]);
+
+  function toggleGren(gren: string) {
+    setGrenFilter((prev) =>
+      prev.includes(gren) ? prev.filter((x) => x !== gren) : [...prev, gren]
+    );
+  }
 
   const {
     synlige: synligeArrangementer,
     harFlere,
     gjenstaar,
     visFlere,
-  } = usePagination(arrangementer, 10, visHistoriske);
+  } = usePagination(filtrerte, 10, `${String(visHistoriske)}|${grenFilter.join(",")}`);
 
-  const tomTekst = visHistoriske
-    ? "Ingen arrangementer registrert."
-    : "Ingen kommende arrangementer.";
+  const tomTekst =
+    arrangementer.length > 0 && filtrerte.length === 0
+      ? "Ingen arrangementer matcher valgt gren."
+      : visHistoriske
+        ? "Ingen arrangementer registrert."
+        : "Ingen kommende arrangementer.";
 
   return (
     <PageSection
@@ -294,6 +317,26 @@ export default function ArrangementerContent({
     >
       <RowPanel>
         <RowList>
+          {grener.length > 1 && (
+            <Row title="Filter på gren">
+              <Inline gap="md" wrap>
+                {grener.map((gren) => {
+                  const aktiv = grenFilter.includes(gren);
+                  return (
+                    <Button
+                      key={gren}
+                      type="button"
+                      size="sm"
+                      variant={aktiv ? "default" : "outline"}
+                      onClick={() => toggleGren(gren)}
+                    >
+                      {gren}
+                    </Button>
+                  );
+                })}
+              </Inline>
+            </Row>
+          )}
           <SwitchRow
             title="Vis også tidligere arrangementer"
             checked={visHistoriske}
@@ -303,7 +346,7 @@ export default function ArrangementerContent({
         </RowList>
       </RowPanel>
 
-      {arrangementer.length === 0 ? (
+      {filtrerte.length === 0 ? (
         <p className="text-sm text-muted-foreground italic mt-4">{tomTekst}</p>
       ) : (
         <>

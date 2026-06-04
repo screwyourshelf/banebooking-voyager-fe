@@ -67,7 +67,7 @@ export default function BookingContent({
                 aria-label="Velg gren"
               >
                 <Filter className="h-4 w-4" />
-                Gren
+                {grener.find((g) => g.id === valgtGrenId)?.navn ?? "Gren"}
               </Button>
             </PopoverTrigger>
             <PopoverContent align="end" className="w-auto p-1">

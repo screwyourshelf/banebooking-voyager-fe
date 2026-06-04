@@ -141,6 +141,8 @@ export type ArrangementRespons = {
   nettsideTittel?: string;
   nettsideBeskrivelse?: string;
   publisertPåNettsiden: boolean;
+  grenNavn: string;
+  grenSlug: string;
   kategori: ArrangementKategori;
   startDato: string;
   sluttDato: string;

@@ -64,14 +64,6 @@ export function BookingSlotListAccordion({
 
   return (
     <>
-      {erIDag && passerte.length > 0 && (
-        <Inline justify="center" className="mb-4">
-          <Button variant="outline" size="sm" onClick={() => setVisPasserte((v) => !v)}>
-            {visPasserte ? "Skjul passerte" : `Vis passerte (${passerte.length})`}
-          </Button>
-        </Inline>
-      )}
-
       {slotsÅVise.length === 0 ? (
         <div className="text-muted text-sm italic py-4 text-center">
           Ingen kommende slots å vise.
@@ -256,6 +248,14 @@ export function BookingSlotListAccordion({
             );
           })}
         </Accordion>
+      )}
+
+      {erIDag && passerte.length > 0 && (
+        <Inline justify="center" className="mt-4">
+          <Button variant="outline" size="sm" onClick={() => setVisPasserte((v) => !v)}>
+            {visPasserte ? "Skjul passerte" : `Vis passerte (${passerte.length})`}
+          </Button>
+        </Inline>
       )}
     </>
   );
