@@ -88,7 +88,8 @@ export default function Navbar() {
     harHandling(h, Kapabiliteter.grener.admin) ||
     harHandling(h, Kapabiliteter.brukere.admin) ||
     harHandling(h, Kapabiliteter.brukere.lese) ||
-    harHandling(h, Kapabiliteter.arrangement.se);
+    harHandling(h, Kapabiliteter.arrangement.se) ||
+    harHandling(h, Kapabiliteter.kunngjøring.admin);
 
   const stoppDropdownKeybindings = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key.length === 1) e.stopPropagation();
@@ -258,6 +259,15 @@ export default function Navbar() {
                         <Link to="admin/brukere" {...prefetch("admin/brukere")}>
                           <Wrench className="mr-2 size-4" />
                           Brukere
+                        </Link>
+                      </DropdownMenuItem>
+                    )}
+
+                    {harHandling(h, Kapabiliteter.kunngjøring.admin) && (
+                      <DropdownMenuItem asChild>
+                        <Link to="admin/kunngjøringer" {...prefetch("admin/kunngjøringer")}>
+                          <Wrench className="mr-2 size-4" />
+                          Kunngjøringer
                         </Link>
                       </DropdownMenuItem>
                     )}

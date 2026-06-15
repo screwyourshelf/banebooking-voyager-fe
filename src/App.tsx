@@ -5,6 +5,7 @@ import SlugGate from "@/routes/SlugGate";
 import { routeConfig, flattenRoutes } from "@/routes/routeConfig";
 import { SperretGuard } from "@/routes/SperretGuard";
 import { MedlemskapGuard } from "@/routes/MedlemskapGuard";
+import { KunngjøringGuard } from "@/routes/KunngjøringGuard";
 import AppBoot from "@/app/AppBoot";
 import AppShell from "@/app/AppShell";
 import { AppFrameSkeleton } from "@/components/loading";
@@ -20,6 +21,7 @@ const SperretPage = lazy(() => import("@/features/sperre/pages/SperretPage"));
 const BekreftMedlemskapPage = lazy(
   () => import("@/features/medlemskap/pages/BekreftMedlemskapPage")
 );
+const KunngjøringPage = lazy(() => import("@/features/kunngjøringer/pages/KunngjøringPage"));
 const VilkaarPage = lazy(() => import("@/features/policy/pages/VilkaarPage"));
 const NotFoundPage = lazy(() => import("@/features/errors/pages/NotFoundPage"));
 
@@ -74,10 +76,12 @@ export default function App() {
                       }
                     >
                       <Route element={<SperretGuard />}>
-                        <Route element={<MedlemskapGuard />}>{routeElements}</Route>
-
-                        <Route path="bekreft-medlemskap" element={<BekreftMedlemskapPage />} />
-                        <Route path="vilkaar" element={<VilkaarPage />} />
+                        <Route element={<KunngjøringGuard />}>
+                          <Route element={<MedlemskapGuard />}>{routeElements}</Route>
+                          <Route path="bekreft-medlemskap" element={<BekreftMedlemskapPage />} />
+                          <Route path="vilkaar" element={<VilkaarPage />} />
+                        </Route>
+                        <Route path="kunngjøring" element={<KunngjøringPage />} />
                       </Route>
 
                       <Route path="sperret" element={<SperretPage />} />
@@ -96,10 +100,12 @@ export default function App() {
                         }
                       >
                         <Route element={<SperretGuard />}>
-                          <Route element={<MedlemskapGuard />}>{routeElements}</Route>
-
-                          <Route path="bekreft-medlemskap" element={<BekreftMedlemskapPage />} />
-                          <Route path="vilkaar" element={<VilkaarPage />} />
+                          <Route element={<KunngjøringGuard />}>
+                            <Route element={<MedlemskapGuard />}>{routeElements}</Route>
+                            <Route path="bekreft-medlemskap" element={<BekreftMedlemskapPage />} />
+                            <Route path="vilkaar" element={<VilkaarPage />} />
+                          </Route>
+                          <Route path="kunngjøring" element={<KunngjøringPage />} />
                         </Route>
 
                         <Route path="sperret" element={<SperretPage />} />

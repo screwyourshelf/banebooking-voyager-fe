@@ -13,6 +13,9 @@ export const Kapabiliteter = {
   klubb: {
     admin: "klubb:admin",
   },
+  kunngjøring: {
+    admin: "kunngjøring:admin",
+  },
   baner: {
     admin: "baner:admin",
   },

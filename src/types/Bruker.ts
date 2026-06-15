@@ -1,5 +1,11 @@
 export type RolleType = "Medlem" | "Utvidet" | "KlubbAdmin";
 
+export interface UlestKunngjøringRespons {
+  id: string;
+  tittel: string;
+  tekst: string;
+}
+
 // Response
 export interface BrukerRespons {
   id: string;
@@ -13,6 +19,7 @@ export interface BrukerRespons {
   antallAktiveSperrer?: number;
   opprettetTid?: string;
   måBekrefteMedlemskap?: boolean;
+  ulestKunngjøring?: UlestKunngjøringRespons | null;
   medlemskapBekreftelseLabel?: string | null;
   medlemskapBekreftetDato?: string | null;
   fulltNavn?: string | null;

@@ -25,6 +25,8 @@ const loadKlubbPage = () => import("@/features/klubb/pages/KlubbPage");
 const loadBanerPage = () => import("@/features/baner/pages/BanerPage");
 const loadBrukerePage = () => import("@/features/brukere/pages/BrukerePage");
 const loadGrenerPage = () => import("@/features/grener/pages/GrenerPage");
+const loadKunngjøringerAdminPage = () =>
+  import("@/features/kunngjøringer/pages/KunngjøringerAdminPage");
 
 const loadVilkaarPage = () => import("@/features/policy/pages/VilkaarPage");
 
@@ -43,6 +45,7 @@ const KlubbPage = lazy(loadKlubbPage);
 const BanerPage = lazy(loadBanerPage);
 const BrukerePage = lazy(loadBrukerePage);
 const GrenerPage = lazy(loadGrenerPage);
+const KunngjøringerAdminPage = lazy(loadKunngjøringerAdminPage);
 
 const VilkaarPage = lazy(loadVilkaarPage);
 
@@ -137,6 +140,13 @@ export const routeConfig: RouteConfig[] = [
         component: BrukerePage,
         loader: loadBrukerePage,
       },
+      {
+        path: "kunngjøringer",
+        breadcrumb: "Kunngjøringer",
+        protected: true,
+        component: KunngjøringerAdminPage,
+        loader: loadKunngjøringerAdminPage,
+      },
     ],
   },
 ];
@@ -169,7 +179,8 @@ export function flattenRoutes(
 */
 
 export function getBreadcrumbName(segment: string): string {
-  const lower = segment.toLowerCase();
+  const decoded = decodeURIComponent(segment);
+  const lower = decoded.toLowerCase();
 
   function search(routes: RouteConfig[]): string | undefined {
     for (const route of routes) {
@@ -184,7 +195,7 @@ export function getBreadcrumbName(segment: string): string {
     }
   }
 
-  return search(routeConfig) ?? capitalize(segment);
+  return search(routeConfig) ?? capitalize(decoded);
 }
 
 function capitalize(s: string) {
