@@ -13,9 +13,28 @@ function htmlBaseUrlPlugin(base: string): Plugin {
   };
 }
 
+function getReleaseId(): string {
+  const commitSha = process.env.CF_PAGES_COMMIT_SHA?.trim();
+
+  if (commitSha) {
+    if (!/^[0-9a-f]{40}$/i.test(commitSha)) {
+      throw new Error("CF_PAGES_COMMIT_SHA har ugyldig format.");
+    }
+
+    return commitSha.slice(0, 12).toLowerCase();
+  }
+
+  if (process.env.CF_PAGES === "1") {
+    throw new Error("CF_PAGES_COMMIT_SHA mangler i Cloudflare Pages-bygget.");
+  }
+
+  return "local";
+}
+
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const base = env.VITE_BASE_PATH ?? "/";
+  const releaseId = getReleaseId();
 
   return {
     base,
@@ -38,6 +57,11 @@ export default defineConfig(({ mode }) => {
 
       rollupOptions: {
         output: {
+          // Unike URL-er for hele modulgrafen hindrer at nettleseren blander
+          // JavaScript fra forskjellige produksjonsdeployeringer.
+          entryFileNames: `assets/[name]-${releaseId}-[hash].js`,
+          chunkFileNames: `assets/[name]-${releaseId}-[hash].js`,
+
           manualChunks(id) {
             if (!id.includes("node_modules")) return;
 
