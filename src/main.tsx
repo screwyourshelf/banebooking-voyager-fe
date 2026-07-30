@@ -6,6 +6,16 @@ import App from "./App";
 import { ReactQueryDevtoolsPanel } from "./components/ReactQueryDevtoolsPanel";
 import "./index.css";
 
+const recoveryUrl = new URL(window.location.href);
+if (recoveryUrl.searchParams.has("_app_reload")) {
+  recoveryUrl.searchParams.delete("_app_reload");
+  window.history.replaceState(
+    window.history.state,
+    "",
+    `${recoveryUrl.pathname}${recoveryUrl.search}${recoveryUrl.hash}`
+  );
+}
+
 requestAnimationFrame(() => {
   document.getElementById("boot")?.remove();
 });

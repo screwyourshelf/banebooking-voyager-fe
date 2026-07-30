@@ -59,7 +59,142 @@
           transform: rotate(360deg);
         }
       }
+
+      .boot-recovery {
+        max-width: 28rem;
+        padding: 1.5rem;
+        text-align: center;
+      }
+
+      .boot-recovery h1 {
+        margin: 0 0 0.75rem;
+        font-size: 1.25rem;
+      }
+
+      .boot-recovery p {
+        margin: 0 0 1rem;
+        color: rgba(255, 255, 255, 0.8);
+        line-height: 1.5;
+      }
+
+      .boot-recovery button {
+        border: 1px solid rgba(255, 255, 255, 0.35);
+        border-radius: 0.5rem;
+        padding: 0.65rem 1rem;
+        background: white;
+        color: #0b3a4a;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
     </style>
+
+    <script>
+      (() => {
+        const recoveryStorageKey = "banebooking:asset-recovery-at";
+        const recoveryQueryParameter = "_app_reload";
+        const recoveryCooldownMs = 60_000;
+        const recoveryMessageDelayMs = 15_000;
+        let recoveryStarted = false;
+
+        function reloadLatestVersion() {
+          const url = new URL(window.location.href);
+          url.searchParams.set(recoveryQueryParameter, Date.now().toString());
+          window.location.replace(url);
+        }
+
+        function canRecoverAutomatically() {
+          const recoveryAtInUrl = Number(
+            new URL(window.location.href).searchParams.get(recoveryQueryParameter) ?? "0"
+          );
+          if (Date.now() - recoveryAtInUrl < recoveryCooldownMs) {
+            return false;
+          }
+
+          try {
+            const lastRecoveryAt = Number(sessionStorage.getItem(recoveryStorageKey) ?? "0");
+            if (Date.now() - lastRecoveryAt < recoveryCooldownMs) {
+              return false;
+            }
+
+            sessionStorage.setItem(recoveryStorageKey, Date.now().toString());
+            return true;
+          } catch {
+            return true;
+          }
+        }
+
+        function showRecoveryMessage() {
+          const boot = document.getElementById("boot");
+          if (!boot || boot.querySelector(".boot-recovery")) {
+            return;
+          }
+
+          const content = document.createElement("div");
+          content.className = "boot-recovery";
+
+          const title = document.createElement("h1");
+          title.textContent = "Siden trenger en ny innlasting";
+
+          const description = document.createElement("p");
+          description.textContent =
+            "En nyere versjon er tilgjengelig, eller oppstarten tok for lang tid.";
+
+          const button = document.createElement("button");
+          button.type = "button";
+          button.textContent = "Last inn nyeste versjon";
+          button.addEventListener("click", () => {
+            try {
+              sessionStorage.removeItem(recoveryStorageKey);
+            } catch {
+              // Safari kan blokkere nettleserlagring i enkelte moduser.
+            }
+            reloadLatestVersion();
+          });
+
+          content.append(title, description, button);
+          boot.replaceChildren(content);
+        }
+
+        function recoverFromAssetError() {
+          if (recoveryStarted) {
+            return;
+          }
+          recoveryStarted = true;
+
+          if (canRecoverAutomatically()) {
+            reloadLatestVersion();
+            return;
+          }
+
+          showRecoveryMessage();
+        }
+
+        // Vites anbefalte hendelse når en gammel klient ber om en utgått chunk.
+        window.addEventListener("vite:preloadError", (event) => {
+          event.preventDefault();
+          recoverFromAssetError();
+        });
+
+        // Dekker også feil i selve inngangsmodulen før Vite-koden har startet.
+        window.addEventListener(
+          "error",
+          (event) => {
+            const target = event.target;
+            const failedModule = target instanceof HTMLScriptElement && target.type === "module";
+            const failedPreload =
+              target instanceof HTMLLinkElement && target.rel === "modulepreload";
+
+            if (failedModule || failedPreload) {
+              recoverFromAssetError();
+            }
+          },
+          true
+        );
+
+        window.setTimeout(showRecoveryMessage, recoveryMessageDelayMs);
+      })();
+    </script>
 
     <link rel="icon" href="%BASE_URL%favicon.svg?v=2" type="image/svg+xml" />
     <link rel="icon" href="%BASE_URL%favicon.ico?v=2" sizes="any" />
