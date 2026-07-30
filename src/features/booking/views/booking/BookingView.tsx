@@ -19,7 +19,9 @@ export default function BookingView() {
 
   const { currentUser } = useAuth();
 
-  const valgtGrenId = manuellGrenId ?? grener[0]?.id ?? "";
+  const standardGrenId =
+    grener.find((gren) => baner.some((bane) => bane.grenId === gren.id))?.id ?? grener[0]?.id ?? "";
+  const valgtGrenId = manuellGrenId ?? standardGrenId;
 
   const valgtDatoStr = useMemo(
     () => (valgtDato ? format(valgtDato, "yyyy-MM-dd") : ""),
@@ -56,7 +58,7 @@ export default function BookingView() {
     }
   }, [valgtDato]);
 
-  if (loadingBaner || loadingGrener || !valgtBaneId) {
+  if (loadingBaner || loadingGrener) {
     return <ListSkeleton />;
   }
 

@@ -91,28 +91,37 @@ export default function BookingContent({
 
       <ServerFeil feil={serverFeil} />
 
-      <TabsLazyMount
-        items={baner.map((bane) => ({
-          value: bane.id,
-          label: bane.navn,
-          content: (
-            <div
-              className={`transition-opacity duration-200 ${isFetching && !isLoading ? "opacity-50" : "opacity-100"}`}
-            >
-              <BookingSlotListAccordion
-                slots={slots}
-                valgtDato={valgtDato}
-                currentUser={currentUser ? { epost: currentUser.email ?? "" } : null}
-                onBook={onBook}
-                onFjern={onFjern}
-                isLoading={isLoading}
-              />
-            </div>
-          ),
-        }))}
-        value={valgtBaneId}
-        onValueChange={onBaneChange}
-      />
+      {baner.length === 0 ? (
+        <div
+          className="rounded-lg border border-dashed px-4 py-8 text-center text-sm text-muted-foreground"
+          role="status"
+        >
+          Ingen baner er lagt til for valgt gren.
+        </div>
+      ) : (
+        <TabsLazyMount
+          items={baner.map((bane) => ({
+            value: bane.id,
+            label: bane.navn,
+            content: (
+              <div
+                className={`transition-opacity duration-200 ${isFetching && !isLoading ? "opacity-50" : "opacity-100"}`}
+              >
+                <BookingSlotListAccordion
+                  slots={slots}
+                  valgtDato={valgtDato}
+                  currentUser={currentUser ? { epost: currentUser.email ?? "" } : null}
+                  onBook={onBook}
+                  onFjern={onFjern}
+                  isLoading={isLoading}
+                />
+              </div>
+            ),
+          }))}
+          value={valgtBaneId}
+          onValueChange={onBaneChange}
+        />
+      )}
     </>
   );
 }
