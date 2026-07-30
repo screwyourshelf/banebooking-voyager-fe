@@ -1,12 +1,9 @@
 import { Outlet } from "react-router-dom";
 import { Toaster } from "sonner";
 import { Navbar, BreadcrumbMedSti } from "@/components/navigation";
-import { useDynamicFavicons } from "@/hooks/useDynamicFavicons";
 import "@/styles/animate-fadeIn.css";
 
 export default function AppShell() {
-  useDynamicFavicons();
-
   return (
     <div className="min-h-screen flex flex-col w-full">
       <div className="flex flex-1 w-full max-w-screen-sm md:max-w-3xl mx-auto px-2 md:px-4 py-5 md:py-8">
