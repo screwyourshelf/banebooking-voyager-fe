@@ -16,9 +16,7 @@ if (recoveryUrl.searchParams.has("_app_reload")) {
   );
 }
 
-requestAnimationFrame(() => {
-  document.getElementById("boot")?.remove();
-});
+document.getElementById("boot")?.remove();
 
 const queryClient = new QueryClient({
   defaultOptions: {
