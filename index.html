@@ -94,7 +94,7 @@
         const recoveryStorageKey = "banebooking:asset-recovery-at";
         const recoveryQueryParameter = "_app_reload";
         const recoveryCooldownMs = 60_000;
-        const recoveryMessageDelayMs = 15_000;
+        const recoveryMessageDelayMs = 30_000;
         let recoveryStarted = false;
 
         function reloadLatestVersion() {
@@ -182,10 +182,8 @@
           (event) => {
             const target = event.target;
             const failedModule = target instanceof HTMLScriptElement && target.type === "module";
-            const failedPreload =
-              target instanceof HTMLLinkElement && target.rel === "modulepreload";
 
-            if (failedModule || failedPreload) {
+            if (failedModule) {
               recoverFromAssetError();
             }
           },
