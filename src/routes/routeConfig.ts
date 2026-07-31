@@ -79,7 +79,7 @@ export const routeConfig: RouteConfig[] = [
 
   {
     path: "bookinger",
-    breadcrumb: "Mine bookinger",
+    breadcrumb: "Mine tider",
     protected: true,
     component: MineBookingerPage,
     loader: loadMineBookingerPage,
@@ -94,7 +94,7 @@ export const routeConfig: RouteConfig[] = [
 
   {
     path: "arrangement",
-    breadcrumb: "Arrangement",
+    breadcrumb: "Administrer arrangementer",
     protected: true,
     component: ArrangementAdminPage,
     loader: loadArrangementAdminPage,
@@ -114,7 +114,7 @@ export const routeConfig: RouteConfig[] = [
     children: [
       {
         path: "klubb",
-        breadcrumb: "Klubb",
+        breadcrumb: "Klubbinnstillinger",
         protected: true,
         component: KlubbPage,
         loader: loadKlubbPage,

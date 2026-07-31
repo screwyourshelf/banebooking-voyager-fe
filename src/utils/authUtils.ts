@@ -1,5 +1,6 @@
 import { supabase } from "@/supabase";
 import { config } from "@/config";
+import { fjernUtviklingssession } from "@/auth/developmentSession";
 
 function buildRedirectUrl() {
   if (config.tenantSlug) {
@@ -14,6 +15,7 @@ function buildRedirectUrl() {
 
 export async function signOutAndRedirect() {
   const redirectTo = buildRedirectUrl();
+  fjernUtviklingssession();
   localStorage.removeItem("supabase_token");
   await supabase.auth.signOut();
   window.location.assign(redirectTo);

@@ -19,6 +19,7 @@ import type {
   EditState,
 } from "@/features/brukere/types";
 import { QueryFeil } from "@/components/errors";
+import PageHeader from "@/components/layout/PageHeader";
 import BrukereListeContent from "./BrukereListeContent";
 import RedigerBrukerDialog from "./RedigerBrukerDialog";
 
@@ -115,6 +116,13 @@ export default function BrukereListeView() {
     setMedlemskapFilter((prev) => (prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m]));
   }
 
+  function nullstillFiltre() {
+    setQuery("");
+    setVisSlettede(false);
+    setRolleFilter([]);
+    setMedlemskapFilter([]);
+  }
+
   const handleSlettBruker = (brukerId: string) => async () => {
     await slett(brukerId);
   };
@@ -135,16 +143,18 @@ export default function BrukereListeView() {
   if (lasterBruker) return <ListSkeleton />;
 
   if (!erKlubbAdmin && !harLeseTilgang) {
-    return (
-      <p className="text-sm text-destructive px-2 py-2 text-center">
-        Du har ikke tilgang til denne siden.
-      </p>
-    );
+    return <p className="user-admin-page__access-error">Du har ikke tilgang til denne siden.</p>;
   }
 
   return (
     <QueryFeil error={brukereError} isFetching={brukereFetching} onRetry={() => void hentBrukere()}>
-      <>
+      <div className="user-admin-page__content">
+        <PageHeader
+          title="Brukere"
+          description="Finn medlemmer, følg opp medlemskap og administrer tilganger."
+          className="user-admin-page__heading"
+        />
+
         <BrukereListeContent
           query={query}
           onQueryChange={setQuery}
@@ -154,6 +164,7 @@ export default function BrukereListeView() {
           onToggleRolle={toggleRolle}
           medlemskapFilter={medlemskapFilter}
           onToggleMedlemskap={toggleMedlemskap}
+          onResetFilters={nullstillFiltre}
           filtrerteBrukere={filtrerteBrukere}
           lasterListe={lasterListe}
           currentBrukerId={bruker?.id}
@@ -211,7 +222,7 @@ export default function BrukereListeView() {
             serverFeil={oppdaterFeil?.message ?? null}
           />
         ) : null}
-      </>
+      </div>
     </QueryFeil>
   );
 }

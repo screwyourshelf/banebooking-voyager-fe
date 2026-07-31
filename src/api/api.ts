@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosHeaders, type InternalAxiosRequestConfig } from
 import { supabase } from "@/supabase";
 import { signOutAndRedirect } from "@/utils/authUtils";
 import { toast } from "sonner";
+import { hentUtviklingssession } from "@/auth/developmentSession";
 
 const rawBase = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 const baseURL = import.meta.env.MODE === "development" || !rawBase ? "/api" : `${rawBase}/api`;
@@ -16,11 +17,11 @@ const api = axios.create({ baseURL, timeout: 20_000 });
 
 let isHandling401 = false;
 
-function setAuthHeader(config: InternalAxiosRequestConfig, token: string) {
+function setAuthHeader(config: InternalAxiosRequestConfig, token: string, scheme = "Bearer") {
   const headers =
     config.headers instanceof AxiosHeaders ? config.headers : new AxiosHeaders(config.headers);
 
-  headers.set("Authorization", `Bearer ${token}`);
+  headers.set("Authorization", `${scheme} ${token}`);
   config.headers = headers;
 }
 
@@ -40,6 +41,12 @@ function pickErrorMessage(data: unknown): string | null {
 api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
   // Alltid legg til token hvis tilgjengelig (gir backend full kontekst).
   // requireAuth styrer kun om manglende token er en feil.
+  const developmentSession = hentUtviklingssession();
+  if (developmentSession) {
+    setAuthHeader(config, developmentSession.accessToken, "DevelopmentBearer");
+    return config;
+  }
+
   const token = localStorage.getItem("supabase_token");
   if (token) {
     setAuthHeader(config, token);

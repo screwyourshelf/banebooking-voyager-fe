@@ -1,26 +1,32 @@
 import { Outlet } from "react-router-dom";
 import { Toaster } from "sonner";
-import { Navbar, BreadcrumbMedSti } from "@/components/navigation";
+import { AppSidebar, BreadcrumbMedSti, MobileBottomNav, Navbar } from "@/components/navigation";
 import "@/styles/animate-fadeIn.css";
 
 export default function AppShell() {
   return (
-    <div className="min-h-screen flex flex-col w-full">
-      <div className="flex flex-1 w-full max-w-screen-sm md:max-w-3xl mx-auto px-2 md:px-4 py-5 md:py-8">
-        <div className="flex flex-col w-full bg-card rounded-md md:rounded-xl shadow-sm overflow-hidden">
-          <header className="border-b border-border bg-gradient-to-b from-muted to-card shadow-sm">
+    <div className="app-shell">
+      <div className="app-shell__frame">
+        <aside className="app-shell__sidebar">
+          <AppSidebar />
+        </aside>
+
+        <div className="app-shell__workspace">
+          <header className="app-shell__topbar">
             <Navbar />
           </header>
 
           <BreadcrumbMedSti />
 
-          <main className="flex-1 min-h-0 py-2 md:py-4">
+          <main className="app-shell__main">
             <div className="animate__animated animate__fadeIn animate__faster">
               <Outlet />
             </div>
           </main>
         </div>
       </div>
+
+      <MobileBottomNav />
 
       <Toaster
         position="top-center"

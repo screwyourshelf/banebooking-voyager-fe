@@ -67,12 +67,7 @@ export default function SperrBrukerDialog({
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogTrigger asChild>
-        <Button
-          variant="destructive"
-          size="sm"
-          disabled={disabled || loading}
-          className="flex items-center gap-2 text-sm"
-        >
+        <Button variant="destructive" size="sm" disabled={disabled || loading}>
           Sperr
         </Button>
       </DialogTrigger>

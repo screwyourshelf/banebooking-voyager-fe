@@ -13,7 +13,11 @@ import {
 } from "@/components/ui/drawer";
 import { useFeed } from "@/hooks/useFeed";
 
-export default function NotifikasjonDrawer() {
+type Props = {
+  trigger?: "icon" | "text";
+};
+
+export default function NotifikasjonDrawer({ trigger = "icon" }: Props) {
   const { feed = [], isLoading } = useFeed();
 
   if (isLoading || feed.length === 0) return null;
@@ -21,19 +25,23 @@ export default function NotifikasjonDrawer() {
   return (
     <Drawer direction="right" modal>
       <DrawerTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative" aria-label="Notifikasjoner">
-          <BellRing />
-          {feed.length > 0 && (
+        {trigger === "text" ? (
+          <Button variant="ghost" size="sm" className="feed-notice__more">
+            Se alle ({feed.length})
+          </Button>
+        ) : (
+          <Button variant="ghost" size="icon" className="relative" aria-label="Klubbmeldinger">
+            <BellRing />
             <span className="absolute -top-0 -right-0 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground">
               {feed.length}
             </span>
-          )}
-        </Button>
+          </Button>
+        )}
       </DrawerTrigger>
 
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>Notifikasjoner</DrawerTitle>
+          <DrawerTitle>Fra klubben</DrawerTitle>
           <DrawerDescription>
             {`${feed.length} melding${feed.length === 1 ? "" : "er"}`}
           </DrawerDescription>

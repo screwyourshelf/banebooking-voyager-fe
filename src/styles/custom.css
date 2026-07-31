@@ -3,28 +3,6 @@
    Safe to keep across shadcn init / apply / update.
    ============================================== */
 
-/* --- App background --- */
-html {
-  background-color: #0b3a4a;
-}
-
-body {
-  background: transparent;
-}
-
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: -1;
-  background-image:
-    linear-gradient(rgba(0, 0, 0, 0.25), rgba(0, 0, 0, 0.25)),
-    image-set(url("/backgrounds/bg-3.avif") type("image/avif"));
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-}
-
 /* --- Tiptap / ProseMirror editor styles --- */
 .tiptap-editor .ProseMirror {
   outline: none;

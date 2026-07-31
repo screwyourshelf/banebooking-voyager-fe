@@ -1,5 +1,9 @@
 # Turnering frontend — full oversikt over problemer og muligheter
 
+> **Redesignmerknad (2026-07-31):** Analysen er fortsatt relevant for funksjon og
+> arkitektur. Den er ikke førende for visuell utforming; se
+> [`frontend-redesign-plan.md`](./frontend-redesign-plan.md).
+
 > Analyse av alle API-kall, invalidering, kodeduplisering og arkitektursvakheter.
 > Grunnlag for prioritert refaktorering.
 

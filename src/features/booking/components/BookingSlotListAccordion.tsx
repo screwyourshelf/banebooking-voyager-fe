@@ -5,23 +5,15 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
-import { AccordionDetailGrid, AccordionDetailRow, AccordionActions } from "@/components/accordion";
 import { Stack, Inline } from "@/components/layout";
 import WeatherInfo from "@/components/WeatherInfo";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import SlotListSkeleton from "@/components/loading/SlotListSkeleton";
-import { User, Calendar, Timer, UserCheck, Link2, CalendarPlus, XCircle } from "lucide-react";
 import KobleTilArrangementDialog from "./KobleTilArrangementDialog";
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
-import { grupperSlots, utledSlotVisning } from "@/utils/bookingUtils";
+import { grupperSlots, utledSlotStatus, utledSlotVisning } from "@/utils/bookingUtils";
 import type { BookingSlotRespons } from "@/types";
-
-function formatKort(t: string) {
-  const [h, m] = t.slice(0, 5).split(":");
-  return m === "00" ? h : `${h}:${m}`;
-}
 
 type Props = {
   slots: BookingSlotRespons[];
@@ -31,6 +23,195 @@ type Props = {
   onFjern?: (slot: BookingSlotRespons) => void;
   isLoading?: boolean;
 };
+
+type SlotRowProps = Pick<Props, "currentUser" | "onBook" | "onFjern"> & {
+  slot: BookingSlotRespons;
+};
+
+function BookingSlotRow({ slot, currentUser, onBook, onFjern }: SlotRowProps) {
+  const slotKey = slot.bookingId ?? `${slot.dato}-${slot.slotStartTid}-${slot.baneId}`;
+  const effektivStart = slot.bookingStartTid ?? slot.slotStartTid;
+  const effektivSlutt = slot.bookingSluttTid ?? slot.slotSluttTid;
+  const startTid = effektivStart.slice(0, 5);
+  const sluttTid = effektivSlutt.slice(0, 5);
+
+  const harArrangement = !!slot.arrangementTittel;
+  const kan = (handling: string) => harHandling(slot.kapabiliteter, handling);
+  const erBooket = !!slot.booketAv || kan(Kapabiliteter.booking.fjern);
+  const erInnlogget = !!currentUser;
+  const status = utledSlotStatus(slot, erInnlogget);
+  const { tekst: statusTekst } = utledSlotVisning(slot, erInnlogget);
+  const kanHurtigbooke = erInnlogget && !slot.erPassert && kan(Kapabiliteter.booking.book);
+
+  const kanIkkeBooke =
+    erInnlogget &&
+    !slot.erPassert &&
+    !erBooket &&
+    !harArrangement &&
+    !kan(Kapabiliteter.booking.book);
+
+  const kanKobleTilArrangement = kan(Kapabiliteter.booking.kobleTilArrangement);
+  const kanFjerne = kan(Kapabiliteter.booking.fjern);
+  const harHandlinger = erInnlogget && (kanKobleTilArrangement || kanFjerne);
+  const harDetaljer = harHandlinger;
+
+  const desktopHovedtekst = harArrangement
+    ? slot.arrangementTittel
+    : status === "din_booking"
+      ? "Din reservasjon"
+      : slot.booketAv
+        ? slot.booketAv
+        : statusTekst;
+
+  const mobilHovedtekst =
+    slot.erPassert || status === "passert" ? "Passert" : status === "ledig" ? "Ledig" : "Opptatt";
+
+  const mobilSekundærtekst = harArrangement
+    ? slot.arrangementTittel
+    : erInnlogget && slot.erEier === true
+      ? "Din reservasjon"
+      : slot.booketAv;
+
+  const visEgenStatus = harArrangement || !!slot.booketAv || status === "din_booking";
+
+  const oppsummering = (
+    <>
+      <div className="booking-slot__summary booking-slot__summary--mobile">
+        <div className="booking-slot__time booking-slot__time--mobile">
+          <strong>{startTid}</strong>
+          <span className="sr-only">til {sluttTid}</span>
+          {slot.værSymbol || typeof slot.temperatur === "number" ? (
+            <span className="booking-slot__time-weather">
+              <WeatherInfo
+                værSymbol={slot.værSymbol}
+                temperatur={slot.temperatur}
+                vind={slot.vind}
+                compact
+              />
+            </span>
+          ) : null}
+        </div>
+
+        <div className="booking-slot__mobile-content">
+          <span className="booking-slot__mobile-primary">{mobilHovedtekst}</span>
+          {mobilSekundærtekst ? (
+            <span className="booking-slot__mobile-secondary" title={mobilSekundærtekst}>
+              {mobilSekundærtekst}
+            </span>
+          ) : null}
+        </div>
+      </div>
+
+      <div className="booking-slot__summary booking-slot__summary--desktop">
+        <div className="booking-slot__time">
+          <strong>{startTid}</strong>
+          <span>– {sluttTid}</span>
+        </div>
+
+        <div className="booking-slot__identity">
+          <span className="booking-slot__name">{desktopHovedtekst}</span>
+          {harArrangement && slot.arrangementBeskrivelse ? (
+            <span className="booking-slot__secondary" title={slot.arrangementBeskrivelse}>
+              {harDetaljer ? "Se detaljer" : slot.arrangementBeskrivelse}
+            </span>
+          ) : null}
+        </div>
+
+        <div className="booking-slot__meta">
+          <span className="booking-slot__status" data-status={status} data-hidden={!visEgenStatus}>
+            {statusTekst}
+          </span>
+
+          <span className="booking-slot__weather booking-slot__weather--desktop">
+            <WeatherInfo værSymbol={slot.værSymbol} temperatur={slot.temperatur} vind={slot.vind} />
+          </span>
+        </div>
+      </div>
+    </>
+  );
+
+  const hurtighandling = kanHurtigbooke ? (
+    <Button
+      size="sm"
+      className="booking-slot__quick-action"
+      onClick={() => onBook?.(slot)}
+      aria-label={`Book tiden ${startTid} til ${sluttTid}`}
+    >
+      Book
+    </Button>
+  ) : null;
+
+  if (!harDetaljer) {
+    return (
+      <div className="record-card booking-slot" data-past={slot.erPassert} data-status={status}>
+        <div className="booking-slot__row">
+          <div className="booking-slot__trigger booking-slot__trigger--static">{oppsummering}</div>
+          {hurtighandling}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <AccordionItem
+      value={slotKey}
+      className="record-card booking-slot"
+      data-past={slot.erPassert}
+      data-status={status}
+    >
+      <div className="booking-slot__row">
+        <AccordionTrigger className="booking-slot__trigger hover:no-underline">
+          {oppsummering}
+        </AccordionTrigger>
+        {hurtighandling}
+      </div>
+
+      <AccordionContent className="booking-slot__details">
+        <Stack gap="sm">
+          {slot.arrangementBeskrivelse ? (
+            <p className="booking-slot__description whitespace-pre-wrap">
+              {slot.arrangementBeskrivelse}
+            </p>
+          ) : null}
+
+          {kanIkkeBooke ? (
+            <p className="booking-slot__description">
+              Du kan ikke booke denne tiden akkurat nå. Maks antall bookinger kan være nådd.
+            </p>
+          ) : null}
+
+          {harHandlinger ? (
+            <div className="booking-slot__actions">
+              {kanKobleTilArrangement ? (
+                <KobleTilArrangementDialog
+                  valgtId={null}
+                  onVelg={(id) => {
+                    if (id) onBook?.(slot, id);
+                  }}
+                >
+                  <Button variant="outline" size="sm" className="booking-slot__detail-action">
+                    Koble til arrangement
+                  </Button>
+                </KobleTilArrangementDialog>
+              ) : null}
+
+              {kanFjerne ? (
+                <Button
+                  variant="destructive"
+                  size="sm"
+                  onClick={() => onFjern?.(slot)}
+                  className="booking-slot__detail-action"
+                >
+                  Avbestill
+                </Button>
+              ) : null}
+            </div>
+          ) : null}
+        </Stack>
+      </AccordionContent>
+    </AccordionItem>
+  );
+}
 
 export function BookingSlotListAccordion({
   slots,
@@ -54,8 +235,9 @@ export function BookingSlotListAccordion({
 
   if (slots.length === 0) {
     return (
-      <div className="text-muted text-sm italic py-4 text-center">
-        Ingen bookinger eller slots å vise.
+      <div className="booking-slot__empty" role="status">
+        <div className="booking-slot__empty-title">Ingen tider denne dagen</div>
+        <p className="booking-slot__empty-copy">Prøv en annen dato eller bane.</p>
       </div>
     );
   }
@@ -65,193 +247,26 @@ export function BookingSlotListAccordion({
   return (
     <>
       {slotsÅVise.length === 0 ? (
-        <div className="text-muted text-sm italic py-4 text-center">
-          Ingen kommende slots å vise.
+        <div className="booking-slot__empty" role="status">
+          <div className="booking-slot__empty-title">Dagens spilletider er over</div>
+          <p className="booking-slot__empty-copy">Vis passerte tider eller velg neste dag.</p>
         </div>
       ) : (
-        <Accordion type="single" collapsible className="space-y-1">
-          {slotsÅVise.map((slot) => {
-            const slotKey = slot.bookingId ?? `${slot.dato}-${slot.slotStartTid}-${slot.baneId}`;
-            const effStartTid = slot.bookingStartTid ?? slot.slotStartTid;
-            const effSluttTid = slot.bookingSluttTid ?? slot.slotSluttTid;
-            const tid = `${effStartTid.slice(0, 5)} – ${effSluttTid.slice(0, 5)}`;
-            const tidKort = `${formatKort(effStartTid)}–${formatKort(effSluttTid)}`;
-
-            const harArrangement = !!slot.arrangementTittel;
-            const kan = (h: string) => harHandling(slot.kapabiliteter, h);
-            const erBooket = !!slot.booketAv || kan(Kapabiliteter.booking.fjern);
-            const erMinBooking = slot.erEier === true;
-
-            const harHandlinger = slot.kapabiliteter.length > 0;
-            const kanUtføreHandling = !!currentUser && harHandlinger;
-
-            const harVaer =
-              !!slot.værSymbol ||
-              typeof slot.temperatur === "number" ||
-              typeof slot.vind === "number";
-
-            const erInnlogget = !!currentUser;
-            const { tekst: statusTekst, variant: statusVariant } = utledSlotVisning(
-              slot,
-              erInnlogget
-            );
-
-            const [startH, startM] = effStartTid.split(":").map(Number);
-            const [sluttH, sluttM] = effSluttTid.split(":").map(Number);
-            const varighet = sluttH * 60 + sluttM - (startH * 60 + startM);
-
-            return (
-              <AccordionItem
-                key={slotKey}
-                value={slotKey}
-                className={`rounded-md border bg-background px-2 last:border-b shadow-sm ${slot.erPassert ? "opacity-50" : ""}`}
-              >
-                <AccordionTrigger className="hover:no-underline">
-                  <Stack gap="xs" className="items-start">
-                    <Inline gap="md">
-                      <span className="font-medium sm:hidden">{tidKort}</span>
-                      <span className="font-medium hidden sm:inline">{tid}</span>
-                      <WeatherInfo værSymbol={slot.værSymbol} iconOnly />
-                      <Badge variant={statusVariant} className="text-xs">
-                        {statusTekst}
-                      </Badge>
-                      {currentUser && !harArrangement && erMinBooking && (
-                        <span className="text-green-600" title="Din booking">
-                          <UserCheck className="size-4" />
-                        </span>
-                      )}
-                    </Inline>
-                    {harArrangement && slot.arrangementBeskrivelse && (
-                      <span className="text-xs text-muted-foreground line-clamp-1">
-                        {slot.arrangementBeskrivelse}
-                      </span>
-                    )}
-                    {erBooket && !harArrangement && slot.booketAv && (
-                      <span className="text-xs text-muted-foreground">{slot.booketAv}</span>
-                    )}
-                  </Stack>
-                </AccordionTrigger>
-
-                <AccordionContent>
-                  <Stack gap="sm">
-                    <AccordionDetailGrid>
-                      <AccordionDetailRow icon={Timer} label="Varighet">
-                        {varighet} min
-                      </AccordionDetailRow>
-
-                      {erBooket && (
-                        <AccordionDetailRow icon={User} label="Booket av">
-                          {slot.booketAv}
-                        </AccordionDetailRow>
-                      )}
-
-                      {harArrangement && slot.arrangementBeskrivelse && (
-                        <AccordionDetailRow icon={Calendar} label="Arrangement" colSpan={2}>
-                          <span className="whitespace-pre-wrap"></span>
-                        </AccordionDetailRow>
-                      )}
-
-                      {harVaer && (
-                        <div className="flex items-start gap-2 sm:col-span-2">
-                          {slot.værSymbol && (
-                            <img
-                              src={`${import.meta.env.BASE_URL}weather-symbols/svg/${slot.værSymbol}.svg`}
-                              alt={slot.værSymbol}
-                              width={16}
-                              height={16}
-                              className="select-none mt-0.5 shrink-0"
-                              draggable={false}
-                            />
-                          )}
-                          <div>
-                            <div className="text-xs font-medium text-muted-foreground">Vær</div>
-                            <div className="text-sm">
-                              {typeof slot.temperatur === "number" && (
-                                <span>{slot.temperatur}°c</span>
-                              )}
-                              {typeof slot.temperatur === "number" &&
-                                typeof slot.vind === "number" &&
-                                " · "}
-                              {typeof slot.vind === "number" && <span>{slot.vind} m/s</span>}
-                            </div>
-                          </div>
-                        </div>
-                      )}
-                    </AccordionDetailGrid>
-
-                    {erInnlogget &&
-                      !slot.erPassert &&
-                      !erBooket &&
-                      !harArrangement &&
-                      !kan("booking:book") && (
-                        <p className="text-xs text-muted-foreground italic">
-                          Du kan ikke booke denne timen akkurat nå – maks antall bookinger kan være
-                          nådd.
-                        </p>
-                      )}
-
-                    {/* Actions */}
-                    {kanUtføreHandling && (
-                      <AccordionActions className="flex-wrap gap-2">
-                        {kan(Kapabiliteter.booking.kobleTilArrangement) && (
-                          <KobleTilArrangementDialog
-                            valgtId={null}
-                            onVelg={(id) => {
-                              if (id) onBook?.(slot, id);
-                            }}
-                          >
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="flex items-center gap-2 text-sm"
-                            >
-                              <Link2 className="h-3.5 w-3.5 shrink-0" />
-                              Koble til arrangement
-                            </Button>
-                          </KobleTilArrangementDialog>
-                        )}
-
-                        {kan(Kapabiliteter.booking.book) && (
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onBook?.(slot);
-                            }}
-                            className="flex items-center gap-2 text-sm"
-                          >
-                            <CalendarPlus className="size-4" />
-                            Book
-                          </Button>
-                        )}
-
-                        {kan(Kapabiliteter.booking.fjern) && (
-                          <Button
-                            variant={slot.erEier ? "outline" : "destructive"}
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onFjern?.(slot);
-                            }}
-                            className="flex items-center gap-2 text-sm"
-                          >
-                            <XCircle className="size-4" />
-                            Avbestill
-                          </Button>
-                        )}
-                      </AccordionActions>
-                    )}
-                  </Stack>
-                </AccordionContent>
-              </AccordionItem>
-            );
-          })}
+        <Accordion type="single" collapsible className="record-list booking-slot-list">
+          {slotsÅVise.map((slot) => (
+            <BookingSlotRow
+              key={slot.bookingId ?? `${slot.dato}-${slot.slotStartTid}-${slot.baneId}`}
+              slot={slot}
+              currentUser={currentUser}
+              onBook={onBook}
+              onFjern={onFjern}
+            />
+          ))}
         </Accordion>
       )}
 
       {erIDag && passerte.length > 0 && (
-        <Inline justify="center" className="mt-4">
+        <Inline justify="center" className="booking-slot-list__past-toggle">
           <Button variant="outline" size="sm" onClick={() => setVisPasserte((v) => !v)}>
             {visPasserte ? "Skjul passerte" : `Vis passerte (${passerte.length})`}
           </Button>

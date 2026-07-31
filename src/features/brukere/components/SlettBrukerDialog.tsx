@@ -52,7 +52,7 @@ export default function SlettBrukerDialog({
           variant="destructive"
           size="sm"
           disabled={disabled || loading}
-          className="flex items-center gap-2 text-sm"
+          className="user-directory-row__delete-action"
         >
           {loading ? "Sletter..." : "Slett"}
         </Button>

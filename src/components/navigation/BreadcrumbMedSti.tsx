@@ -28,8 +28,13 @@ export default function BreadcrumbMedSti() {
     isAdmin: part === "admin",
   }));
 
+  if (segments.length === 0) return null;
+
   return (
-    <Breadcrumb aria-label="Brødsmulesti" className="px-4 py-1">
+    <Breadcrumb
+      aria-label="Brødsmulesti"
+      className="mx-auto w-full max-w-(--app-content-max) px-4 pt-3 md:px-8 lg:px-10"
+    >
       <BreadcrumbList>
         {/* Hjem */}
         <BreadcrumbItem>

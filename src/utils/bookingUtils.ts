@@ -26,11 +26,7 @@ export function utledSlotStatus(slot: KalenderSlotRespons, erInnlogget: boolean)
 
   if (erBooket) return "opptatt";
 
-  if (
-    erInnlogget &&
-    slot.kapabiliteter.length > 0 &&
-    !harHandling(slot.kapabiliteter, Kapabiliteter.booking.book)
-  ) {
+  if (erInnlogget && !harHandling(slot.kapabiliteter, Kapabiliteter.booking.book)) {
     return "opptatt";
   }
 
@@ -39,13 +35,7 @@ export function utledSlotStatus(slot: KalenderSlotRespons, erInnlogget: boolean)
 
 export function utledSlotVisning(slot: KalenderSlotRespons, erInnlogget: boolean): SlotVisning {
   const status = utledSlotStatus(slot, erInnlogget);
-  const visning = visningPerStatus[status];
-
-  if (status === "arrangement" && slot.arrangementTittel) {
-    return { ...visning, tekst: slot.arrangementTittel };
-  }
-
-  return visning;
+  return visningPerStatus[status];
 }
 
 export function grupperSlots(slots: KalenderSlotRespons[]): KalenderSlotRespons[] {

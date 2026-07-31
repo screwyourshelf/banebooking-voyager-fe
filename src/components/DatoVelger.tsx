@@ -1,6 +1,6 @@
 import { format, addDays, subDays } from "date-fns";
 import { nb } from "date-fns/locale";
-import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
@@ -14,7 +14,7 @@ type Props = {
 };
 
 export default function DatoVelger({ value, onChange, minDate, visNavigering = true }: Props) {
-  const visningsformat = value ? format(value, "dd.MM.yyyy", { locale: nb }) : "Velg dato";
+  const visningsformat = value ? format(value, "EEE d. MMMM", { locale: nb }) : "Velg dato";
 
   const forrigeDag = () => {
     if (!value) return;
@@ -31,17 +31,30 @@ export default function DatoVelger({ value, onChange, minDate, visNavigering = t
   const disablePrev = !value || (!!minDate && subDays(value, 1) < minDate);
 
   return (
-    <div className="flex gap-1 items-center">
+    <div className="date-switcher">
+      {visNavigering ? (
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          aria-label="Forrige dag"
+          onClick={forrigeDag}
+          className="date-switcher__nav"
+          disabled={disablePrev}
+        >
+          <ChevronLeft className="h-4 w-4" />
+        </Button>
+      ) : null}
+
       <Popover>
         <PopoverTrigger asChild>
           <Button
             type="button"
             variant="outline"
             aria-label="Velg dato"
-            className="h-8 px-2 text-sm w-[10rem] justify-start text-left"
+            className="date-switcher__value"
           >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {visningsformat}
+            <span>{visningsformat}</span>
           </Button>
         </PopoverTrigger>
 
@@ -60,33 +73,19 @@ export default function DatoVelger({ value, onChange, minDate, visNavigering = t
         </PopoverContent>
       </Popover>
 
-      {visNavigering && (
-        <div className="flex gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            aria-label="Forrige dag"
-            onClick={forrigeDag}
-            className="h-8 w-8"
-            disabled={disablePrev}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            aria-label="Neste dag"
-            onClick={nesteDag}
-            className="h-8 w-8"
-            disabled={!value}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
-      )}
+      {visNavigering ? (
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          aria-label="Neste dag"
+          onClick={nesteDag}
+          className="date-switcher__nav"
+          disabled={!value}
+        >
+          <ChevronRight className="h-4 w-4" />
+        </Button>
+      ) : null}
     </div>
   );
 }

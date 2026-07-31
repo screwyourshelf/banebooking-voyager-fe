@@ -4,6 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 import App from "./App";
 import { ReactQueryDevtoolsPanel } from "./components/ReactQueryDevtoolsPanel";
+import AuthProvider from "./providers/AuthProvider";
 import "./index.css";
 
 const recoveryUrl = new URL(window.location.href);
@@ -32,7 +33,9 @@ const rootElement = document.getElementById("root")!;
 
 const app = (
   <QueryClientProvider client={queryClient}>
-    <App />
+    <AuthProvider>
+      <App />
+    </AuthProvider>
     {import.meta.env.DEV && <ReactQueryDevtoolsPanel />}
   </QueryClientProvider>
 );

@@ -3,7 +3,7 @@ import BrukereListeView from "@/features/brukere/views/brukere-liste/BrukereList
 
 export default function BrukerePage() {
   return (
-    <Page>
+    <Page width="xl" className="user-admin-page">
       <BrukereListeView />
     </Page>
   );

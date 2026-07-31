@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Field } from "@/components/ui/field";
-import { Stack } from "@/components/layout";
 import { ServerFeil } from "@/components/errors";
+import { ShieldCheck, UserRound } from "lucide-react";
 
 import {
   Dialog,
@@ -41,49 +40,53 @@ export default function RedigerBrukerDialog({
         if (!open) onClose();
       }}
     >
-      <DialogContent>
-        <DialogHeader>
+      <DialogContent className="user-editor-dialog">
+        <DialogHeader className="user-editor-dialog__header">
           <DialogTitle>Rediger bruker</DialogTitle>
-          <DialogDescription className="sr-only">
-            Endre visningsnavn og rolle for bruker
-          </DialogDescription>
+          <DialogDescription>Oppdater navn og tilgangsnivå.</DialogDescription>
         </DialogHeader>
 
-        <Stack gap="lg">
-          <Stack gap="xs">
-            <div className="text-xs text-muted-foreground">Bruker</div>
-            <div className="text-sm font-medium break-words">{aktivBruker.epost}</div>
-          </Stack>
+        <div className="user-editor-dialog__identity">
+          <span aria-hidden="true">
+            <UserRound />
+          </span>
+          <div>
+            <strong>{aktivBruker.visningsnavn || "Bruker uten visningsnavn"}</strong>
+            <small>{aktivBruker.epost}</small>
+          </div>
+        </div>
 
-          <Stack gap="sm">
-            <div className="text-sm font-medium">Visningsnavn</div>
+        <div className="user-editor-dialog__fields">
+          <label htmlFor="visningsnavn">
+            <span>Visningsnavn</span>
+            <Input
+              id="visningsnavn"
+              value={edit.visningsnavn}
+              onChange={(event) => onEditChange({ visningsnavn: event.target.value })}
+              placeholder="Valgfritt"
+            />
+          </label>
 
-            <Field>
-              <Input
-                id="visningsnavn"
-                value={edit.visningsnavn}
-                onChange={(e) => onEditChange({ visningsnavn: e.target.value })}
-                placeholder="Valgfritt"
-                className="bg-background"
-              />
-            </Field>
-          </Stack>
-
-          <Stack gap="sm">
-            <div className="text-sm font-medium">Rolle</div>
+          <label htmlFor="brukerrolle">
+            <span>Rolle</span>
             <select
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+              id="brukerrolle"
+              className="user-editor-dialog__select"
               value={edit.rolle}
-              onChange={(e) => onEditChange({ rolle: e.target.value as RolleType })}
+              onChange={(event) => onEditChange({ rolle: event.target.value as RolleType })}
             >
               <option value="Medlem">Medlem</option>
               <option value="Utvidet">Utvidet</option>
               <option value="KlubbAdmin">KlubbAdmin</option>
             </select>
-          </Stack>
-        </Stack>
+            <small>
+              <ShieldCheck aria-hidden="true" />
+              Rollen styrer hvilke deler av administrasjonen brukeren kan åpne.
+            </small>
+          </label>
+        </div>
 
-        <DialogFooter>
+        <DialogFooter className="user-editor-dialog__footer">
           <ServerFeil feil={serverFeil} />
           <Button variant="outline" onClick={onClose} disabled={isSaving}>
             Avbryt

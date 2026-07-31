@@ -1,13 +1,20 @@
-import DatoVelger from "@/components/DatoVelger";
-import { BookingSlotListAccordion } from "@/features/booking/components";
-import { TabsLazyMount } from "@/components/navigation";
+import {
+  BookingCourtSwitcher,
+  BookingDateNavigator,
+  BookingFilters,
+  BookingMobileControls,
+  BookingSlotListAccordion,
+} from "@/features/booking/components";
 import { ServerFeil } from "@/components/errors";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Filter } from "lucide-react";
+import { PageHeader } from "@/components/layout";
+import { FeedNotice } from "@/features/feed/components";
+import { resolveBookingActivityTheme } from "@/features/booking/activityTheme";
+import { utledSlotStatus } from "@/utils/bookingUtils";
+import { format } from "date-fns";
+import { nb } from "date-fns/locale";
 
 import type { KalenderSlotRespons, BaneRespons, GrenRespons } from "@/types";
-import type { User } from "@supabase/supabase-js";
+import type { AuthenticatedUser } from "@/auth/authTypes";
 
 type Props = {
   grener: GrenRespons[];
@@ -25,7 +32,7 @@ type Props = {
   isLoading: boolean;
   isFetching: boolean;
 
-  currentUser: User | null;
+  currentUser: AuthenticatedUser | null;
 
   onBook: (slot: KalenderSlotRespons) => void;
   onFjern: (slot: KalenderSlotRespons) => void;
@@ -49,64 +56,116 @@ export default function BookingContent({
   onFjern,
   serverFeil,
 }: Props) {
+  const valgtGren = grener.find((gren) => gren.id === valgtGrenId);
+  const valgtBane = baner.find((bane) => bane.id === valgtBaneId);
+  const activityTheme = resolveBookingActivityTheme(valgtGren?.slug);
+  const datoTekst = valgtDato
+    ? format(valgtDato, "EEEE d. MMMM", { locale: nb })
+    : "Ingen dato valgt";
+  const ledigeAntall = slots.filter(
+    (slot) => !slot.erPassert && utledSlotStatus(slot, !!currentUser) === "ledig"
+  ).length;
+
   return (
-    <>
-      <div className="flex items-center gap-2 mb-2">
-        <DatoVelger
-          value={valgtDato}
-          onChange={(date) => onDatoChange(date ?? null)}
-          visNavigering={true}
-        />
-        {grener.length > 1 && (
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 shrink-0 gap-1.5"
-                aria-label="Velg gren"
-              >
-                <Filter className="h-4 w-4" />
-                {grener.find((g) => g.id === valgtGrenId)?.navn ?? "Gren"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent align="end" className="w-auto p-1">
-              <div className="flex flex-col gap-0.5">
-                {grener.map((g) => (
-                  <Button
-                    key={g.id}
-                    variant={g.id === valgtGrenId ? "default" : "ghost"}
-                    size="sm"
-                    className="justify-start text-sm"
-                    onClick={() => onGrenChange(g.id)}
-                  >
-                    {g.navn}
-                  </Button>
-                ))}
+    <div className="booking-page" data-activity-theme={activityTheme}>
+      <PageHeader
+        className="booking-page__heading"
+        title="Book bane"
+        description="Finn en ledig tid."
+      />
+
+      <FeedNotice />
+
+      <div className="booking-workspace">
+        <section className="booking-controls" aria-label="Velg dag, aktivitet og bane">
+          <div className="booking-control-section booking-control-section--date">
+            <div className="booking-control-section__heading">
+              <span>1 · Dag</span>
+              <strong>Velg når du vil spille</strong>
+            </div>
+
+            <BookingDateNavigator
+              value={valgtDato}
+              onChange={(date) => onDatoChange(date ?? null)}
+            />
+          </div>
+
+          <div className="booking-control-section booking-control-section--filters">
+            <div className="booking-control-section__heading">
+              <span>2 · Bane</span>
+              <strong>Velg aktivitet og bane</strong>
+            </div>
+
+            <BookingFilters
+              grener={grener}
+              valgtGrenId={valgtGrenId}
+              onGrenChange={onGrenChange}
+              baner={baner}
+              valgtBaneId={valgtBaneId}
+              onBaneChange={onBaneChange}
+            />
+          </div>
+        </section>
+
+        <section className="booking-schedule" aria-label="Tilgjengelige tider">
+          <header className="control-surface booking-schedule__header">
+            <div className="booking-schedule__summary">
+              <div className="booking-schedule__eyebrow">3 · Tidspunkt</div>
+              <h2 className="booking-schedule__title booking-schedule__title--desktop">
+                {valgtBane?.navn ?? valgtGren?.navn ?? "Baner"}
+              </h2>
+              <p className="booking-schedule__meta">
+                <span className="booking-schedule__meta-activity">
+                  {valgtGren?.navn ? `${valgtGren.navn} · ` : null}
+                </span>
+                {datoTekst}
+              </p>
+            </div>
+
+            <div className="booking-schedule__actions">
+              {baner.length > 0 && !isLoading ? (
+                <div className="booking-schedule__count" data-empty={ledigeAntall === 0}>
+                  {ledigeAntall === 0 ? "Ingen ledige" : `${ledigeAntall} ledige`}
+                </div>
+              ) : null}
+            </div>
+
+            <BookingMobileControls
+              grener={grener}
+              valgtGrenId={valgtGrenId}
+              onGrenChange={onGrenChange}
+              valgtDato={valgtDato}
+              onDatoChange={onDatoChange}
+            />
+
+            <BookingCourtSwitcher
+              baner={baner}
+              valgtBaneId={valgtBaneId}
+              onBaneChange={onBaneChange}
+              ledigeAntall={
+                baner.length > 0 && !isLoading && !isFetching ? ledigeAntall : undefined
+              }
+            />
+          </header>
+
+          <div className="booking-schedule__columns" aria-hidden="true">
+            <span>Tid</span>
+            <span>Tilgjengelighet</span>
+            <span>Vær</span>
+          </div>
+
+          <div className="booking-schedule__body">
+            <ServerFeil feil={serverFeil} />
+
+            {baner.length === 0 ? (
+              <div className="booking-slot__empty" role="status">
+                <div className="booking-slot__empty-title">Ingen baner å vise</div>
+                <p className="booking-slot__empty-copy">
+                  Det er ikke lagt til baner for {valgtGren?.navn ?? "denne aktiviteten"}.
+                </p>
               </div>
-            </PopoverContent>
-          </Popover>
-        )}
-      </div>
-
-      <ServerFeil feil={serverFeil} />
-
-      {baner.length === 0 ? (
-        <div
-          className="rounded-lg border border-dashed px-4 py-8 text-center text-sm text-muted-foreground"
-          role="status"
-        >
-          Ingen baner er lagt til for valgt gren.
-        </div>
-      ) : (
-        <TabsLazyMount
-          items={baner.map((bane) => ({
-            value: bane.id,
-            label: bane.navn,
-            content: (
-              <div
-                className={`transition-opacity duration-200 ${isFetching && !isLoading ? "opacity-50" : "opacity-100"}`}
-              >
+            ) : (
+              <div className={isFetching && !isLoading ? "booking-schedule__loading" : undefined}>
                 <BookingSlotListAccordion
                   slots={slots}
                   valgtDato={valgtDato}
@@ -116,12 +175,10 @@ export default function BookingContent({
                   isLoading={isLoading}
                 />
               </div>
-            ),
-          }))}
-          value={valgtBaneId}
-          onValueChange={onBaneChange}
-        />
-      )}
-    </>
+            )}
+          </div>
+        </section>
+      </div>
+    </div>
   );
 }

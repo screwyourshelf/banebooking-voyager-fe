@@ -1,5 +1,10 @@
 # Refaktorering: `features/turnering`
 
+> **Redesignmerknad (2026-07-31):** Arkitekturmålene i dokumentet gjelder fortsatt.
+> Visuelle layout- og komponentvalg er ikke en designguide og skal følge
+> [`frontend-redesign-plan.md`](./frontend-redesign-plan.md) når turneringsområdet
+> migreres.
+
 ## Bakgrunn og problem
 
 Turnering-featuren er bygd opp som én stor klump der all logikk, state og UI for alle brukere og alle faser av turneringen er bakt inn i de samme filene. Dette gjør koden vanskelig å navigere, vanskelig å endre, og vanskelig å resonnere rundt.
