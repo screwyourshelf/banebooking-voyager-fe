@@ -1,6 +1,6 @@
 # Frontend-redesign: handover til neste Codex-task
 
-> **Status:** Fundament og `Mine tider`-slice klar
+> **Status:** Fundament, `Mine tider` og `Arrangementer`-slice klar
 > **Sist oppdatert:** 2026-07-31
 > **Repo:** `/Users/andreas/Dev/banebooking/frontend`
 > **Branch:** `feature/frontend-design-poc`
@@ -93,6 +93,31 @@ Sentrale filer:
 - `src/features/minside/hooks/useMineBookinger.ts`
 - `src/features/minside/hooks/useBookingActions.ts`
 
+### Arrangementer
+
+- Siden bruker samme fullbreddes `record-collection`, toolbar, historikkbryter og
+  `record-list`/`record-card`-ramme som `Mine tider`.
+- Mobilraden har fast rekkefølge: dato, tittel/gren og arrangementsstatus. Kategori gjentas
+  ikke når den er identisk med tittelen.
+- Programmet åpnes inne i kortet og grupperer tider etter dato med separate kolonner for
+  klokkeslett og bane.
+- Offentlig og innlogget API-flyt er beholdt. Innlogging endrer bare data og handlinger som
+  backendens kapabiliteter tillater.
+- `arrangement:avlys`, `arrangement:seTurnering` og
+  `arrangement:administrerTurnering` styrer handlingene; siden har ingen lokal rolletabell.
+- Historikk, grenfilter, direkteåpning fra `?arrangement=`, lasting, API-feil og tomtilstander
+  har bevisste tilstander i samme flate.
+- Avlysning bruker felles destruktiv knapp og eksisterende bekreftelsesdialog uten å endre
+  API-kontrakten.
+
+Sentrale filer:
+
+- `src/features/arrangementer/views/arrangementer/ArrangementerView.tsx`
+- `src/features/arrangementer/views/arrangementer/ArrangementerContent.tsx`
+- `src/features/arrangementer/views/arrangementer/ArrangementRow.tsx`
+- `src/features/arrangementer/views/arrangementer/useArrangementer.ts`
+- `src/features/arrangementer/views/arrangementer/useAvlysArrangement.ts`
+
 ### Brukeradministrasjon
 
 - Mobil har grønn kontrollflate med nøytralt søkefelt og sammenleggbare filtre.
@@ -116,6 +141,8 @@ Sentrale filer:
 - `ControlChoice` gir felles geometri og valgtilstand.
 - `FilterSwitch` gir vedvarende av/på-filtre samme Radix-bryter, etikettstruktur og oransje
   valgmarkør på tvers av flater.
+- `RecordCollectionToolbar` gir listeflater samme opptelling, beskrivelse og handlinger på
+  den grønne kontrollflaten.
 - `record-list` og `record-card` gir felles ramme for slots og søkeresultater.
 - `RecordStatus` og `RecordListState` gir semantiske statuser og listetilstander uten at
   features bruker shadcn-varianter som produkt-API.
@@ -136,6 +163,7 @@ Sentrale filer:
 - `src/components/controls/FilterSwitch.tsx`
 - `src/components/records/RecordStatus.tsx`
 - `src/components/records/RecordListState.tsx`
+- `src/components/records/RecordCollectionToolbar.tsx`
 - `src/components/layout/PageHeader.tsx`
 - `src/components/ui/button.tsx`
 - `src/components/ui/accordion.tsx`
@@ -160,6 +188,8 @@ Sentrale filer:
 - Booking og brukeradmin er visuelt kontrollert på mobil og desktop.
 - `Mine tider` er kontrollert med Admin, Utvidet og Bruker.
 - Kommende, gjennomførte, tomtilstand, lasting, API-feil og avbestilling er kontrollert.
+- `Arrangementer` er kontrollert offentlig og med Admin, Utvidet og Bruker. Program,
+  historikkbryter, direkteåpning og kapabilitetsstyrt avlysning er kontrollert.
 - Lyst og mørkt tema er kontrollert.
 - Aktivitetsoverstyring er kontrollert for tennis, padel og bordtennis.
 - Den endelige normaltilstanden for `Mine tider` lastet uten feil eller advarsler i
@@ -176,6 +206,9 @@ Dette er ikke introdusert som en funksjonell feil i redesignarbeidet.
 - Desktop er kontrollert, men mobil har fått mest produktdesignarbeid i POC-en.
 - Aktivitetsfarger er foreløpig mappet fra slug i frontend.
 - Det finnes ingen automatisert visuell regresjonstest ennå.
+- Testdataene inneholder nå ett kommende arrangement uten turnering og bare én gren.
+  Historiske kort, grenfilter med flere valg og turneringshandlingene er derfor kartlagt i
+  kode, men ikke visuelt utløst med dagens fixture.
 - Gjentatt åpning av utviklingsinnloggingens konto-/rolledialog kan fortsatt gi Radix-
   advarselen `Missing Description or aria-describedby={undefined}` i Vite-konsollen. Den
   normale sidevisningen er ren; dialogadvarselen bør avgrenses og rettes i en egen liten
@@ -203,7 +236,7 @@ avgrensede vertikale slice.
 
 ### Ikke gjør i samme task
 
-- Ikke start arrangement-, turnering- eller backend-redesign samtidig.
+- Ikke start arrangementadministrasjon, turnering eller backend-redesign samtidig.
 - Ikke fjern Radix/shadcn-primitiver som fortsatt gir tilgjengelig interaksjon.
 - Ikke koble aktivitetsfarger til en ny backend-kontrakt uten en separat beslutning.
 - Ikke endre booking- eller autorisasjonsregler som del av den visuelle migreringen.

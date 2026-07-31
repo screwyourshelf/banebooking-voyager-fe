@@ -2,7 +2,11 @@ import { CalendarCheck, CalendarX, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 import { usePagination } from "@/hooks/usePagination";
 import FilterSwitch from "@/components/controls/FilterSwitch";
-import { RecordListState } from "@/components/records";
+import {
+  RecordCollectionSkeleton,
+  RecordCollectionToolbar,
+  RecordListState,
+} from "@/components/records";
 import { ServerFeil } from "@/components/errors";
 import { Inline } from "@/components/layout";
 import { Accordion } from "@/components/ui/accordion";
@@ -72,20 +76,6 @@ function groupBookingsByDate(bookings: MinBookingRespons[]): BookingGroup[] {
   }, []);
 }
 
-function MineBookingSkeleton() {
-  return (
-    <div className="record-list mine-bookings__skeleton" role="status" aria-label="Laster tider">
-      {[0, 1, 2, 3].map((item) => (
-        <div key={item} className="record-card mine-bookings__skeleton-row">
-          <span />
-          <span />
-          <span />
-        </div>
-      ))}
-    </div>
-  );
-}
-
 export default function MineBookingerContent({
   visHistoriske,
   onToggleVisHistoriske,
@@ -111,32 +101,30 @@ export default function MineBookingerContent({
   const bookingGroups = groupBookingsByDate(synligeBookinger);
 
   return (
-    <section className="mine-bookings" aria-label="Reservasjonsoversikt" aria-busy={isLoading}>
-      <header className="control-surface mine-bookings__toolbar">
-        <div className="mine-bookings__summary">
-          <span className="mine-bookings__summary-icon" aria-hidden="true">
-            <CalendarCheck />
-          </span>
-          <span>
-            <strong>{antallTekst}</strong>
-            <small>{visHistoriske ? "Kommende og gjennomførte" : "Kommende reservasjoner"}</small>
-          </span>
-        </div>
+    <section
+      className="record-collection mine-bookings"
+      aria-label="Reservasjonsoversikt"
+      aria-busy={isLoading}
+    >
+      <RecordCollectionToolbar
+        icon={<CalendarCheck />}
+        title={antallTekst}
+        description={visHistoriske ? "Kommende og gjennomførte" : "Kommende reservasjoner"}
+        actions={
+          <FilterSwitch
+            title="Vis tidligere"
+            checked={visHistoriske}
+            onCheckedChange={onToggleVisHistoriske}
+            disabled={isFetching}
+          />
+        }
+      />
 
-        <FilterSwitch
-          title="Vis tidligere"
-          checked={visHistoriske}
-          onCheckedChange={onToggleVisHistoriske}
-          disabled={isFetching}
-          className="mine-bookings__history-toggle"
-        />
-      </header>
-
-      <div className="mine-bookings__body">
+      <div className="record-collection__body">
         <ServerFeil feil={serverFeil} />
 
         {isLoading ? (
-          <MineBookingSkeleton />
+          <RecordCollectionSkeleton ariaLabel="Laster tider" rows={4} />
         ) : queryError ? (
           <RecordListState
             icon={<RefreshCw aria-hidden="true" />}
@@ -210,7 +198,7 @@ export default function MineBookingerContent({
             </Accordion>
 
             {harFlere ? (
-              <Inline justify="center" className="mine-bookings__pagination">
+              <Inline justify="center" className="record-collection__pagination">
                 <Button type="button" variant="outline" size="sm" onClick={visFlere}>
                   Vis flere ({gjenstaar} gjenstår)
                 </Button>

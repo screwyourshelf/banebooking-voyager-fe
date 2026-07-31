@@ -89,6 +89,8 @@ POC-en dekker nå:
 - `Book bane` med mobiltilpassede valg, aktivitetsfarger og ny slotvisning.
 - `Mine tider` med kommende og gjennomførte reservasjoner, delte record-kort og
   kapabilitetsstyrt avbestilling.
+- `Arrangementer` med offentlig og innlogget liste, programvisning, historikkfilter og
+  kapabilitetsstyrte handlinger.
 - `Brukere` med responsivt søk, filtre, resultatkort og redigeringsdialog.
 - Delte valg- og listeprimitiver samt sentrale design-tokens.
 
@@ -119,12 +121,14 @@ og reglement er neste naturlige slice.
 
 ### Fase 3 — Arrangementer
 
-1. Arrangementsliste og detaljvisning.
+1. Arrangementsliste og detaljvisning — fullført.
 2. Påmelding og avmelding.
 3. Opprettelse og administrasjon.
 
 Funksjonell modell i `arrangement-admin-refaktor.md` beholdes. Visuell utforming følger
-denne redesignplanen.
+denne redesignplanen. Arrangementsliste og detaljvisning bruker samme fullbreddes
+record-collection som `Mine tider`: dato, identitet og status har fast rekkefølge, mens
+programmet grupperes etter dato i det utvidede kortet.
 
 ### Fase 4 — Resterende administrasjon
 

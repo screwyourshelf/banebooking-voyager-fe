@@ -1,11 +1,10 @@
-﻿import { useState } from "react";
-import { ListSkeleton } from "@/components/loading";
-import { QueryFeil } from "@/components/errors";
+import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { useArrangementer } from "./useArrangementer";
-import { useAvlysArrangement } from "./useAvlysArrangement";
+import PageHeader from "@/components/layout/PageHeader";
 
 import ArrangementerContent from "./ArrangementerContent";
+import { useArrangementer } from "./useArrangementer";
+import { useAvlysArrangement } from "./useAvlysArrangement";
 
 export default function ArrangementerView() {
   const [searchParams] = useSearchParams();
@@ -19,21 +18,28 @@ export default function ArrangementerView() {
     isFetching,
   } = useArrangementer(visHistoriske);
   const { onAvlys } = useAvlysArrangement();
-
-  if (isLoading) return <ListSkeleton />;
-
   const defaultArrangementId = searchParams.get("arrangement") ?? undefined;
 
   return (
-    <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
+    <div className="record-collection-page">
+      <PageHeader
+        eyebrow="Klubben"
+        title="Arrangementer"
+        description="Se hva som skjer i klubben, og åpne programmet for tider og baner."
+        className="record-collection-page__heading"
+      />
+
       <ArrangementerContent
         visHistoriske={visHistoriske}
         onToggleVisHistoriske={setVisHistoriske}
         arrangementer={arrangementer}
+        isLoading={isLoading}
+        queryError={error?.message ?? null}
+        isFetching={isFetching}
+        onRetry={() => void refetch()}
         onAvlys={onAvlys}
         defaultArrangementId={defaultArrangementId}
-        serverFeil={null}
       />
-    </QueryFeil>
+    </div>
   );
 }

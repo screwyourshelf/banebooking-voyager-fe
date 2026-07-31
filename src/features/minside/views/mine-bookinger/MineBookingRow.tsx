@@ -36,7 +36,7 @@ export default function MineBookingRow({
     typeof booking.vind === "number";
 
   const summary = (
-    <div className="mine-booking__summary">
+    <div className="record-card__summary mine-booking__summary">
       <span className="mine-booking__time">
         <span className="mine-booking__time-range">
           <strong>{start}</strong>
@@ -65,8 +65,8 @@ export default function MineBookingRow({
 
   if (!canCancel) {
     return (
-      <div className="record-card mine-booking" data-past={booking.erPassert}>
-        <div className="mine-booking__static">{summary}</div>
+      <div className="record-card record-card-row mine-booking" data-past={booking.erPassert}>
+        <div className="record-card__static mine-booking__static">{summary}</div>
       </div>
     );
   }
@@ -74,14 +74,14 @@ export default function MineBookingRow({
   return (
     <AccordionItem
       value={bookingKey}
-      className="record-card mine-booking"
+      className="record-card record-card-row mine-booking"
       data-past={booking.erPassert}
     >
-      <AccordionTrigger className="mine-booking__trigger hover:no-underline">
+      <AccordionTrigger className="record-card__trigger mine-booking__trigger hover:no-underline">
         {summary}
       </AccordionTrigger>
 
-      <AccordionContent className="mine-booking__details">
+      <AccordionContent className="record-card__details mine-booking__details">
         <div className="mine-booking__detail-content">
           <dl className="mine-booking__facts">
             <div>
@@ -109,7 +109,7 @@ export default function MineBookingRow({
             ) : null}
           </dl>
 
-          <div className="mine-booking__actions">
+          <div className="record-card__actions mine-booking__actions">
             <Button
               type="button"
               variant="destructive"

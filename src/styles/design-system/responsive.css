@@ -363,39 +363,76 @@
       margin-bottom: -1.25rem;
     }
 
-    .mine-bookings-page {
+    .record-collection-page {
       gap: 1.5rem;
     }
 
-    .mine-bookings-page__heading {
+    .record-collection-page__heading {
       flex-direction: column;
       align-items: flex-start;
       gap: 0.5rem;
     }
 
-    .mine-bookings-page__heading .page-heading__title {
+    .record-collection-page__heading .page-heading__title {
       font-size: 3rem;
     }
 
-    .mine-bookings-page__heading .page-heading__description {
+    .record-collection-page__heading .page-heading__description {
       font-size: 1.125rem;
     }
 
-    .mine-bookings {
+    .record-collection {
       border-radius: 1.5rem;
     }
 
-    .mine-bookings__toolbar {
+    .record-collection__toolbar {
       min-height: 5rem;
       padding: 0.875rem 1.5rem;
     }
 
-    .mine-bookings__summary small {
+    .record-collection__summary-copy small {
       display: block;
     }
 
-    .mine-bookings__history-toggle {
+    .record-collection__toolbar-actions .filter-switch {
       min-width: 11rem;
+    }
+
+    .record-card__static,
+    .record-card__trigger {
+      min-height: 5.25rem;
+      padding: 0.75rem 1.5rem;
+    }
+
+    .record-card__trigger > [data-slot="accordion-trigger-icon"] {
+      margin-left: 1rem;
+    }
+
+    .record-card__summary {
+      gap: 1rem;
+    }
+
+    .record-card__details {
+      padding-inline: 1.5rem;
+    }
+
+    .record-collection-skeleton {
+      --record-skeleton-leading-column: 7rem;
+      --record-skeleton-leading-width: 6rem;
+    }
+
+    .record-collection-skeleton[data-layout="date"] {
+      --record-skeleton-leading-column: 9rem;
+      --record-skeleton-leading-width: 7rem;
+    }
+
+    .record-collection-skeleton__row {
+      min-height: 5.25rem;
+      grid-template-columns:
+        var(--record-skeleton-leading-column) minmax(var(--record-skeleton-main-column), 1fr)
+        5.5rem;
+      gap: 1rem;
+      padding: 0.75rem 1.5rem;
     }
 
     .mine-bookings__groups {
@@ -407,19 +444,8 @@
       padding-inline: 1.5rem;
     }
 
-    .mine-booking__static,
-    .mine-booking__trigger {
-      min-height: 5.25rem;
-      padding: 0.75rem 1.5rem;
-    }
-
-    .mine-booking__trigger > [data-slot="accordion-trigger-icon"] {
-      margin-left: 1rem;
-    }
-
     .mine-booking__summary {
       grid-template-columns: 7rem minmax(12rem, 1fr) auto;
-      gap: 1rem;
     }
 
     .mine-booking__time {
@@ -435,7 +461,7 @@
     }
 
     .mine-booking__details {
-      padding: 1rem 1.5rem;
+      padding-block: 1rem;
     }
 
     .mine-booking__detail-content {
@@ -456,15 +482,43 @@
       padding-top: 0;
     }
 
-    .mine-bookings__skeleton-row {
-      min-height: 5.25rem;
-      grid-template-columns: 7rem minmax(12rem, 1fr) 5.5rem;
-      gap: 1rem;
-      padding: 0.75rem 1.5rem;
+    .arrangements__filters {
+      padding: 0.75rem 1.5rem 0.875rem;
     }
 
-    .mine-bookings__skeleton-row > span:first-child {
-      width: 6rem;
+    .arrangements__list {
+      padding-block: 1rem 1.5rem;
+    }
+
+    .arrangement-card__summary {
+      grid-template-columns: 9rem minmax(14rem, 1fr) auto;
+    }
+
+    .arrangement-card__date strong,
+    .arrangement-card__identity strong {
+      font-size: var(--app-type-body);
+    }
+
+    .arrangement-card__details {
+      padding-block: 1rem 1.25rem;
+    }
+
+    .arrangement-card__detail-content {
+      gap: 1.25rem;
+    }
+
+    .arrangement-program__header {
+      padding: 0.75rem 1rem;
+    }
+
+    .arrangement-program__days {
+      padding: 1rem;
+    }
+
+    .arrangement-program__slot {
+      grid-template-columns: 8rem minmax(0, 1fr);
+      padding-inline: 0.75rem;
+      font-size: var(--app-type-label);
     }
 
     .booking-page {

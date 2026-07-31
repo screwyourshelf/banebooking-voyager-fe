@@ -3,7 +3,7 @@ import ArrangementerView from "@/features/arrangementer/views/arrangementer/Arra
 
 export default function ArrangementerPage() {
   return (
-    <Page>
+    <Page width="full">
       <ArrangementerView />
     </Page>
   );

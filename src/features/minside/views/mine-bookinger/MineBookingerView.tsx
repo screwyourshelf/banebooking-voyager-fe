@@ -36,12 +36,12 @@ export default function MineBookingerTab() {
   }
 
   return (
-    <div className="mine-bookings-page">
+    <div className="record-collection-page">
       <PageHeader
         eyebrow="Min konto"
         title="Mine tider"
         description="Se kommende reservasjoner, finn detaljer og hold oversikt over det du har spilt."
-        className="mine-bookings-page__heading"
+        className="record-collection-page__heading"
       />
 
       <MineBookingerContent
