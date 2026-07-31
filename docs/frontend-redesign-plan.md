@@ -9,6 +9,9 @@ pågår. Eldre feature- og refaktordokumenter er fortsatt relevante for funksjon
 men visuelle eksempler og instruksjoner om å kopiere eksisterende UI er underordnet denne
 planen.
 
+Fullførte og historiske planer ligger i [`docs/archive/`](./archive/README.md) og skal ikke
+brukes som gjeldende instruksjon uten kontroll mot dagens kode.
+
 ## Mål
 
 - Gi Banebooking en tydelig, moderne identitet som ikke ser ut som et generisk dashboard.

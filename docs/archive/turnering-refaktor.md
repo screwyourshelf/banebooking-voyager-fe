@@ -2,7 +2,7 @@
 
 > **Redesignmerknad (2026-07-31):** Arkitekturmålene i dokumentet gjelder fortsatt.
 > Visuelle layout- og komponentvalg er ikke en designguide og skal følge
-> [`frontend-redesign-plan.md`](./frontend-redesign-plan.md) når turneringsområdet
+> [`frontend-redesign-plan.md`](../frontend-redesign-plan.md) når turneringsområdet
 > migreres.
 
 ## Bakgrunn og problem

@@ -2,7 +2,7 @@
 
 > **Redesignmerknad (2026-07-31):** Refaktortrinnene beskriver funksjonell og teknisk
 > struktur. Visuelle eksempler er underordnet
-> [`frontend-redesign-plan.md`](./frontend-redesign-plan.md).
+> [`frontend-redesign-plan.md`](../frontend-redesign-plan.md).
 
 Hvert steg er **uavhengig** og kan landes som en egen commit.  
 Rekkefølgen er basert på risiko og avhengigheter — start fra toppen.

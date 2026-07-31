@@ -3,7 +3,7 @@
 > **Redesignmerknad (2026-07-31):** Dette er en fullført, historisk implementeringsplan.
 > Funksjonelle grenkrav gjelder fortsatt, men reglene om å kopiere eksisterende UI og ikke
 > introdusere nye mønstre er ikke førende under redesignen. Ny visuell utvikling følger
-> [`frontend-redesign-plan.md`](./frontend-redesign-plan.md).
+> [`frontend-redesign-plan.md`](../frontend-redesign-plan.md).
 
 > **Formål:** Eksakte instruksjoner for AI-agent. Hvert trinn er selvstendig og verifiserbart.
 > **Backend-referanse:** Gren-hierarkiet er ferdig implementert i backend (`Klubb → Gren → Baner`).

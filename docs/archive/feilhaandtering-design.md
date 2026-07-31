@@ -2,7 +2,7 @@
 
 > **Redesignmerknad (2026-07-31):** Strategien for når feil vises inline, i dialog eller som
 > sidefeil gjelder fortsatt. Eksakt visuell utforming av feilflater og knapper er under
-> redesign og skal følge [`frontend-redesign-plan.md`](./frontend-redesign-plan.md).
+> redesign og skal følge [`frontend-redesign-plan.md`](../frontend-redesign-plan.md).
 
 ## Bakgrunn
 

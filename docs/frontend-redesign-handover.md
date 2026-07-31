@@ -14,6 +14,8 @@
 4. Bruk utviklingsinnloggingen i innloggingsmenyen for å teste Admin, Utvidet og Bruker.
 5. Gjør neste arbeid som en avgrenset slice; ikke redesign flere ubeslektede sider samtidig.
 
+Dokumenter i `docs/archive/` er historiske og skal ikke brukes som gjeldende plan.
+
 ## Hva POC-en har etablert
 
 ### Appskall og navigasjon
