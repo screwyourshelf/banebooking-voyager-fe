@@ -1,0 +1,260 @@
+/*
+ * Banebooking design system
+ *
+ * All visual decisions live here. Components use role-based tokens and
+ * semantic classes, so the product can be retuned without editing pages.
+ */
+
+:root {
+  --radius: 0.75rem;
+
+  /* Brand */
+  --brand-50: #f2f7f0;
+  --brand-100: #e1edde;
+  --brand-200: #c2dbc0;
+  --brand-300: #98c094;
+  --brand-400: #6ca168;
+  --brand-500: #4d854d;
+  --brand-600: #376c3c;
+  --brand-700: #2a5632;
+  --brand-800: #23452a;
+  --brand-900: #1d3924;
+  --brand-950: #0d2013;
+
+  --clay-50: #fff6ef;
+  --clay-100: #fee8d7;
+  --clay-200: #fccdad;
+  --clay-300: #f8aa78;
+  --clay-400: #f08347;
+  --clay-500: #df672e;
+  --clay-600: #be4d22;
+  --clay-700: #983a20;
+
+  /* Product roles */
+  --app-canvas: #f2f3ed;
+  --app-surface: #ffffff;
+  --app-surface-subtle: #f7f8f3;
+  --app-surface-raised: #ffffff;
+  --app-ink: #172019;
+  --app-ink-soft: #536057;
+  --app-ink-faint: #768078;
+  --app-line: #dfe3dc;
+  --app-line-strong: #cbd2c9;
+  --app-brand: var(--brand-700);
+  --app-brand-strong: var(--brand-900);
+  --app-brand-soft: var(--brand-100);
+  --app-accent: var(--clay-500);
+  --app-accent-strong: var(--clay-700);
+  --app-accent-soft: var(--clay-100);
+  --app-accent-contrast: #ffffff;
+  --app-choice-indicator: var(--app-accent);
+  --app-choice-indicator-strong: var(--app-accent-strong);
+  --app-focus: #4d854d;
+  --app-sidebar: #173c25;
+  --app-sidebar-hover: #214d30;
+  --app-sidebar-active: #2a5d39;
+  --app-sidebar-text: #f7fbf6;
+  --app-sidebar-muted: #bdd0bf;
+  --app-nav-active: var(--brand-700);
+  --app-nav-active-surface: var(--brand-50);
+  --app-nav-indicator: var(--brand-500);
+  --app-nav-indicator-on-dark: var(--brand-300);
+  --app-control-surface: #173c25;
+  --app-control-surface-strong: #23452a;
+  --app-control-text: #ffffff;
+  --app-control-muted: #bdd0bf;
+  --activity-surface: var(--app-control-surface);
+  --activity-surface-strong: var(--app-control-surface-strong);
+  --activity-accent: #88c984;
+  --activity-accent-strong: #376c3c;
+  --activity-soft: #e4f3df;
+  --activity-text: #ffffff;
+  --activity-muted: #bdd0bf;
+  --app-shadow-sm: 0 1px 2px rgb(18 36 23 / 0.05);
+  --app-shadow-md: 0 12px 32px rgb(18 36 23 / 0.08);
+  --app-shadow-lg: 0 24px 70px rgb(18 36 23 / 0.12);
+  --app-content-max: 96rem;
+  --app-sidebar-width: 15.5rem;
+  --app-sidebar-rail-width: 4.5rem;
+  --app-record-gap: 0.5rem;
+  --app-record-padding-block: 0.5rem;
+  --app-record-radius: 0.875rem;
+  --app-record-shadow: 0 4px 16px rgb(18 36 23 / 0.07);
+
+  /* Typography
+   *
+   * One family keeps the product calm and recognisable. The role-based scale
+   * separates display text, reading text and compact UI labels without letting
+   * individual pages invent their own sizes.
+   */
+  --app-font-body:
+    "Geist Variable", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
+    "Segoe UI", sans-serif;
+  --app-font-display: var(--app-font-body);
+  --app-type-caption: 0.8125rem;
+  --app-type-label: 0.875rem;
+  --app-type-body-sm: 0.9375rem;
+  --app-type-body: 1rem;
+  --app-type-body-lg: 1.0625rem;
+  --app-type-heading-sm: 1.25rem;
+  --app-type-heading-md: 1.375rem;
+  --app-type-display: clamp(2.125rem, 4.8vw, 3.5rem);
+
+  /* Menu roles
+   *
+   * Navigation components share these roles across drawers, dropdowns and
+   * sidebars. Layout remains component-specific; typography and surface text
+   * hierarchy do not.
+   */
+  --app-menu-title-size: var(--app-type-heading-sm);
+  --app-menu-title-weight: 750;
+  --app-menu-item-size: var(--app-type-body-sm);
+  --app-menu-item-weight: 600;
+  --app-menu-meta-size: var(--app-type-caption);
+  --app-menu-label-weight: 700;
+  --app-menu-compact-weight: 650;
+  --app-menu-text: var(--app-ink);
+  --app-menu-muted: var(--app-ink-soft);
+  --app-menu-faint: var(--app-ink-faint);
+
+  /* Status */
+  --status-available-bg: #e4f3df;
+  --status-available-text: #24562a;
+  --status-available-indicator: #4f9f54;
+  --status-available-on-strong: #b9e7af;
+  --status-own-bg: #e4edf8;
+  --status-own-text: #234d78;
+  --status-event-bg: #fff0df;
+  --status-event-text: #874319;
+  --status-busy-bg: #eceeeb;
+  --status-busy-text: #596159;
+  --status-past-bg: #f1f1ee;
+  --status-past-text: #7b807b;
+  --status-warning-bg: #fff3d8;
+  --status-warning-text: #765114;
+  --status-warning-indicator: #d89b2b;
+  --status-danger-bg: #fbe8e6;
+  --status-danger-text: #9b312d;
+  --status-danger-indicator: #c9534c;
+
+  /* shadcn/Radix compatibility */
+  --background: var(--app-surface);
+  --foreground: var(--app-ink);
+  --card: var(--app-surface-raised);
+  --card-foreground: var(--app-ink);
+  --popover: var(--app-surface-raised);
+  --popover-foreground: var(--app-ink);
+  --primary: var(--app-brand);
+  --primary-foreground: #ffffff;
+  --secondary: var(--app-brand-soft);
+  --secondary-foreground: var(--brand-900);
+  --muted: #edf0e9;
+  --muted-foreground: var(--app-ink-soft);
+  --accent: var(--app-accent-soft);
+  --accent-foreground: #713315;
+  --destructive: #ba352f;
+  --border: var(--app-line);
+  --input: var(--app-line-strong);
+  --ring: var(--app-focus);
+  --chart-1: var(--brand-600);
+  --chart-2: var(--clay-500);
+  --chart-3: #4d789f;
+  --chart-4: #a78b36;
+  --chart-5: #765a8c;
+  --sidebar: var(--app-sidebar);
+  --sidebar-foreground: var(--app-sidebar-text);
+  --sidebar-primary: #ffffff;
+  --sidebar-primary-foreground: var(--app-sidebar);
+  --sidebar-accent: var(--app-sidebar-active);
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(255 255 255 / 0.12);
+  --sidebar-ring: #b8d8b7;
+}
+
+.dark {
+  --app-canvas: #0f1611;
+  --app-surface: #151e17;
+  --app-surface-subtle: #1a251d;
+  --app-surface-raised: #1d2920;
+  --app-ink: #eff5ef;
+  --app-ink-soft: #b3bfb5;
+  --app-ink-faint: #89958b;
+  --app-line: #304035;
+  --app-line-strong: #425447;
+  --app-brand: #84b880;
+  --app-brand-strong: #b9d5b5;
+  --app-brand-soft: #253b29;
+  --app-accent: #f08a50;
+  --app-accent-strong: #f8aa78;
+  --app-accent-soft: #45291e;
+  --app-accent-contrast: #2b160c;
+  --app-focus: #8dc288;
+  --app-sidebar: #102b1b;
+  --app-sidebar-hover: #173923;
+  --app-sidebar-active: #21492d;
+  --app-nav-active: #b9d5b5;
+  --app-nav-active-surface: #203d25;
+  --app-nav-indicator: #84b880;
+  --app-nav-indicator-on-dark: #98c094;
+  --activity-accent-strong: #afe0ae;
+  --activity-soft: #203d25;
+  --app-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.25);
+  --app-shadow-md: 0 12px 32px rgb(0 0 0 / 0.24);
+  --app-shadow-lg: 0 24px 70px rgb(0 0 0 / 0.34);
+  --app-record-shadow: 0 4px 16px rgb(0 0 0 / 0.22);
+
+  --status-available-bg: #203d25;
+  --status-available-text: #afe0ae;
+  --status-available-indicator: #79ca7e;
+  --status-own-bg: #20364c;
+  --status-own-text: #b9d7f4;
+  --status-event-bg: #462d1e;
+  --status-event-text: #ffc28f;
+  --status-busy-bg: #2c352e;
+  --status-busy-text: #c1c8c1;
+  --status-past-bg: #252c27;
+  --status-past-text: #929b94;
+  --status-warning-bg: #44361d;
+  --status-warning-text: #f3ce7a;
+  --status-warning-indicator: #e0ac42;
+  --status-danger-bg: #472523;
+  --status-danger-text: #ffaaa3;
+  --status-danger-indicator: #ef756d;
+
+  --primary: var(--app-brand);
+  --primary-foreground: #102115;
+  --secondary: var(--app-brand-soft);
+  --secondary-foreground: #d9ead7;
+  --muted: #253029;
+  --muted-foreground: var(--app-ink-soft);
+  --accent: var(--app-accent-soft);
+  --accent-foreground: #ffd2b6;
+  --destructive: #f07a70;
+  --border: var(--app-line);
+  --input: var(--app-line-strong);
+  --ring: var(--app-focus);
+}
+
+.booking-page[data-activity-theme="tennis"] {
+  --activity-accent: var(--app-accent);
+}
+
+.booking-page[data-activity-theme="padel"] {
+  --activity-accent: #88c984;
+}
+
+.booking-page[data-activity-theme="bordtennis"] {
+  --activity-accent: #8baec3;
+}
+
+.dark .booking-page[data-activity-theme="tennis"] {
+  --activity-accent: var(--app-accent);
+}
+
+.dark .booking-page[data-activity-theme="padel"] {
+  --activity-accent: #9ed79a;
+}
+
+.dark .booking-page[data-activity-theme="bordtennis"] {
+  --activity-accent: #a3c0d1;
+}

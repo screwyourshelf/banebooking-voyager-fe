@@ -1,47 +1,99 @@
+import { CalendarCheck, CalendarX, RefreshCw } from "lucide-react";
+import { Link } from "react-router-dom";
 import { usePagination } from "@/hooks/usePagination";
-import PageSection from "@/components/sections/PageSection";
-import { Stack, Inline } from "@/components/layout";
-import { RowPanel, RowList } from "@/components/rows";
-import SwitchRow from "@/components/rows/SwitchRow";
+import FilterSwitch from "@/components/controls/FilterSwitch";
+import { RecordListState } from "@/components/records";
 import { ServerFeil } from "@/components/errors";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { AccordionDetailGrid, AccordionDetailRow, AccordionActions } from "@/components/accordion";
-import WeatherInfo from "@/components/WeatherInfo";
-import { Badge } from "@/components/ui/badge";
+import { Inline } from "@/components/layout";
+import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { formatDatoKort, dagerIgjenTekst } from "@/utils/datoUtils";
-import { Timer, Calendar, XCircle } from "lucide-react";
 import type { MinBookingRespons } from "@/types";
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
 
-function formatKort(t: string) {
-  const [h, m] = t.slice(0, 5).split(":");
-  return m === "00" ? h : `${h}:${m}`;
-}
-
+import MineBookingRow from "./MineBookingRow";
 import { buildBookingKey } from "./bookingSort";
 
 type Props = {
   visHistoriske: boolean;
   onToggleVisHistoriske: (value: boolean) => void;
-
   bookinger: MinBookingRespons[];
+  isLoading: boolean;
+  queryError: string | null;
+  isFetching: boolean;
+  onRetry: () => void;
   isPending: boolean;
-
-  onFjern: (slot: MinBookingRespons) => void;
+  onFjern: (booking: MinBookingRespons) => void;
   serverFeil: string | null;
 };
+
+type BookingGroup = {
+  date: string;
+  bookings: MinBookingRespons[];
+};
+
+function parseLocalDate(date: string) {
+  return new Date(`${date.slice(0, 10)}T00:00:00`);
+}
+
+function capitalize(value: string) {
+  return value.charAt(0).toLocaleUpperCase("nb-NO") + value.slice(1);
+}
+
+function getDateHeading(date: string) {
+  const parsed = parseLocalDate(date);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const dayDifference = Math.round((parsed.getTime() - today.getTime()) / 86_400_000);
+  const full = parsed.toLocaleDateString("nb-NO", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+
+  return {
+    relative: dayDifference === 0 ? "I dag" : dayDifference === 1 ? "I morgen" : null,
+    full: capitalize(full),
+  };
+}
+
+function groupBookingsByDate(bookings: MinBookingRespons[]): BookingGroup[] {
+  return bookings.reduce<BookingGroup[]>((groups, booking) => {
+    const date = booking.dato.slice(0, 10);
+    const currentGroup = groups.at(-1);
+
+    if (currentGroup?.date === date) {
+      currentGroup.bookings.push(booking);
+    } else {
+      groups.push({ date, bookings: [booking] });
+    }
+
+    return groups;
+  }, []);
+}
+
+function MineBookingSkeleton() {
+  return (
+    <div className="record-list mine-bookings__skeleton" role="status" aria-label="Laster tider">
+      {[0, 1, 2, 3].map((item) => (
+        <div key={item} className="record-card mine-bookings__skeleton-row">
+          <span />
+          <span />
+          <span />
+        </div>
+      ))}
+    </div>
+  );
+}
 
 export default function MineBookingerContent({
   visHistoriske,
   onToggleVisHistoriske,
   bookinger,
+  isLoading,
+  queryError,
+  isFetching,
+  onRetry,
   isPending,
   onFjern,
   serverFeil,
@@ -53,148 +105,120 @@ export default function MineBookingerContent({
     visFlere,
   } = usePagination(bookinger, 10, visHistoriske);
 
-  const hasBookinger = bookinger.length > 0;
-
-  const tomTekst = visHistoriske
-    ? "Du har ingen registrerte bookinger."
-    : "Du har ingen kommende bookinger.";
+  const antallTekst = isLoading
+    ? "Henter tider…"
+    : `${bookinger.length} ${bookinger.length === 1 ? "tid" : "tider"}`;
+  const bookingGroups = groupBookingsByDate(synligeBookinger);
 
   return (
-    <PageSection
-      title="Bookinger"
-      description="Oversikt over dine kommende og tidligere bookinger."
-    >
-      <RowPanel>
-        <RowList>
-          <SwitchRow
-            title="Vis også tidligere bookinger"
-            checked={visHistoriske}
-            onCheckedChange={onToggleVisHistoriske}
-            density="compact"
-          />
-        </RowList>
-      </RowPanel>
+    <section className="mine-bookings" aria-label="Reservasjonsoversikt" aria-busy={isLoading}>
+      <header className="control-surface mine-bookings__toolbar">
+        <div className="mine-bookings__summary">
+          <span className="mine-bookings__summary-icon" aria-hidden="true">
+            <CalendarCheck />
+          </span>
+          <span>
+            <strong>{antallTekst}</strong>
+            <small>{visHistoriske ? "Kommende og gjennomførte" : "Kommende reservasjoner"}</small>
+          </span>
+        </div>
 
-      {!hasBookinger ? (
-        <p className="text-sm text-muted-foreground italic mt-4">{tomTekst}</p>
-      ) : (
-        <>
-          <ServerFeil feil={serverFeil} />
-          <Accordion
-            type="single"
-            collapsible
-            className={`space-y-1 mt-2 ${isPending ? "pointer-events-none opacity-60" : ""}`}
-          >
-            {synligeBookinger.map((b) => {
-              const key = buildBookingKey(b);
-              const tid = `${b.startTid.slice(0, 5)} – ${b.sluttTid.slice(0, 5)}`;
-              const tidKort = `${formatKort(b.startTid)}–${formatKort(b.sluttTid)}`;
-              const kanFjerne = harHandling(b.kapabiliteter, Kapabiliteter.booking.fjern);
-              const harVaer =
-                !!b.værSymbol || typeof b.temperatur === "number" || typeof b.vind === "number";
+        <FilterSwitch
+          title="Vis tidligere"
+          checked={visHistoriske}
+          onCheckedChange={onToggleVisHistoriske}
+          disabled={isFetching}
+          className="mine-bookings__history-toggle"
+        />
+      </header>
 
-              const [startH, startM] = b.startTid.split(":").map(Number);
-              const [sluttH, sluttM] = b.sluttTid.split(":").map(Number);
-              const varighet = sluttH * 60 + sluttM - (startH * 60 + startM);
+      <div className="mine-bookings__body">
+        <ServerFeil feil={serverFeil} />
 
-              return (
-                <AccordionItem
-                  key={key}
-                  value={key}
-                  className={`rounded-md border bg-background px-2 last:border-b shadow-sm ${b.erPassert ? "opacity-50" : ""}`}
-                >
-                  <AccordionTrigger className="hover:no-underline">
-                    <Stack gap="xs" className="items-start">
-                      <Inline gap="md">
-                        <span className="font-medium">{b.baneNavn}</span>
-                        <span className="font-medium sm:hidden">{tidKort}</span>
-                        <span className="font-medium hidden sm:inline">{tid}</span>
-                        <WeatherInfo værSymbol={b.værSymbol} iconOnly />
-                        {b.erPassert ? (
-                          <Badge variant="outline" className="text-xs">
-                            Gjennomført
-                          </Badge>
-                        ) : (
-                          <Badge variant="secondary" className="text-xs">
-                            {dagerIgjenTekst(b.dato)}
-                          </Badge>
-                        )}
-                      </Inline>
-                      <span className="text-xs text-muted-foreground">
-                        {formatDatoKort(b.dato)}
-                      </span>
-                    </Stack>
-                  </AccordionTrigger>
-
-                  <AccordionContent>
-                    <Stack gap="sm">
-                      <AccordionDetailGrid>
-                        <AccordionDetailRow icon={Calendar} label="Dato">
-                          {formatDatoKort(b.dato)}
-                        </AccordionDetailRow>
-
-                        <AccordionDetailRow icon={Timer} label="Varighet">
-                          {varighet} min
-                        </AccordionDetailRow>
-
-                        {harVaer && (
-                          <div className="flex items-start gap-2 sm:col-span-2">
-                            {b.værSymbol && (
-                              <img
-                                src={`${import.meta.env.BASE_URL}weather-symbols/svg/${b.værSymbol}.svg`}
-                                alt={b.værSymbol}
-                                width={16}
-                                height={16}
-                                className="select-none mt-0.5 shrink-0"
-                                draggable={false}
-                              />
-                            )}
-                            <div>
-                              <div className="text-xs font-medium text-muted-foreground">Vær</div>
-                              <div className="text-sm">
-                                {typeof b.temperatur === "number" && <span>{b.temperatur}°c</span>}
-                                {typeof b.temperatur === "number" &&
-                                  typeof b.vind === "number" &&
-                                  " · "}
-                                {typeof b.vind === "number" && <span>{b.vind} m/s</span>}
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </AccordionDetailGrid>
-
-                      {kanFjerne && (
-                        <AccordionActions>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onFjern(b);
-                            }}
-                            className="flex items-center gap-2 text-sm"
-                          >
-                            <XCircle className="size-4" />
-                            Avbestill
-                          </Button>
-                        </AccordionActions>
-                      )}
-                    </Stack>
-                  </AccordionContent>
-                </AccordionItem>
-              );
-            })}
-          </Accordion>
-
-          {harFlere && (
-            <Inline justify="center" className="mt-4">
-              <Button variant="outline" size="sm" onClick={visFlere}>
-                Vis flere ({gjenstaar} gjenstår)
+        {isLoading ? (
+          <MineBookingSkeleton />
+        ) : queryError ? (
+          <RecordListState
+            icon={<RefreshCw aria-hidden="true" />}
+            title="Kunne ikke hente tidene dine"
+            description={queryError}
+            tone="danger"
+            role="alert"
+            action={
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={onRetry}
+                disabled={isFetching}
+              >
+                {isFetching ? "Prøver igjen…" : "Prøv igjen"}
               </Button>
-            </Inline>
-          )}
-        </>
-      )}
-    </PageSection>
+            }
+          />
+        ) : bookinger.length === 0 ? (
+          <RecordListState
+            icon={<CalendarX aria-hidden="true" />}
+            title={visHistoriske ? "Ingen reservasjoner ennå" : "Ingen kommende tider"}
+            description={
+              visHistoriske
+                ? "Når du booker en bane, finner du både kommende og gjennomførte tider her."
+                : "Finn en ledig tid som passer, så dukker den opp her med en gang."
+            }
+            action={
+              <Button asChild size="sm">
+                <Link to="..">Book en bane</Link>
+              </Button>
+            }
+          />
+        ) : (
+          <>
+            <Accordion
+              type="single"
+              collapsible
+              className="mine-bookings__groups"
+              data-loading={isFetching || isPending}
+            >
+              {bookingGroups.map((group) => {
+                const heading = getDateHeading(group.date);
+
+                return (
+                  <section key={group.date} className="mine-bookings__date-group">
+                    <h2 className="mine-bookings__date-heading">
+                      {heading.relative ? <strong>{heading.relative}</strong> : null}
+                      <time dateTime={group.date}>{heading.full}</time>
+                    </h2>
+
+                    <div className="record-list mine-bookings__date-list">
+                      {group.bookings.map((booking) => (
+                        <MineBookingRow
+                          key={buildBookingKey(booking)}
+                          bookingKey={buildBookingKey(booking)}
+                          booking={booking}
+                          canCancel={harHandling(
+                            booking.kapabiliteter,
+                            Kapabiliteter.booking.fjern
+                          )}
+                          isPending={isPending}
+                          onCancel={onFjern}
+                        />
+                      ))}
+                    </div>
+                  </section>
+                );
+              })}
+            </Accordion>
+
+            {harFlere ? (
+              <Inline justify="center" className="mine-bookings__pagination">
+                <Button type="button" variant="outline" size="sm" onClick={visFlere}>
+                  Vis flere ({gjenstaar} gjenstår)
+                </Button>
+              </Inline>
+            ) : null}
+          </>
+        )}
+      </div>
+    </section>
   );
 }

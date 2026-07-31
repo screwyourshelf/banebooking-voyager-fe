@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { Search, X } from "lucide-react";
+import FilterSwitch from "@/components/controls/FilterSwitch";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
 import ControlChoice from "@/components/controls/ControlChoice";
 import type { MedlemskapFilterType, RolleType } from "@/features/brukere/types";
 import { MEDLEMSKAP_FILTER_VALG, ROLLER } from "@/features/brukere/types";
@@ -120,13 +120,13 @@ export default function BrukerFilterPanel({
           </div>
         </fieldset>
 
-        <label className="user-filter-panel__deleted">
-          <span>
-            <strong>Vis slettede</strong>
-            <small>Inkluder tidligere brukere</small>
-          </span>
-          <Switch checked={visSlettede} onCheckedChange={onVisSlettedeChange} />
-        </label>
+        <FilterSwitch
+          title="Vis slettede"
+          description="Inkluder tidligere brukere"
+          checked={visSlettede}
+          onCheckedChange={onVisSlettedeChange}
+          className="user-filter-panel__deleted"
+        />
 
         {harAktiveValg ? (
           <Button

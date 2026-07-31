@@ -1,6 +1,6 @@
 # Frontend-redesign: handover til neste Codex-task
 
-> **Status:** POC-milepæl klar
+> **Status:** Fundament og `Mine tider`-slice klar
 > **Sist oppdatert:** 2026-07-31
 > **Repo:** `/Users/andreas/Dev/banebooking/frontend`
 > **Branch:** `feature/frontend-design-poc`
@@ -71,6 +71,28 @@ Sentrale filer:
 - `src/features/booking/activityTheme.ts`
 - `src/features/feed/components/FeedNotice.tsx`
 
+### Mine tider
+
+- Siden bruker samme `record-list`/`record-card`-ramme som booking og brukeradmin.
+- Reservasjoner grupperes etter dato; datoflisen gjentas ikke i hver rad.
+- Mobilraden følger bookinglistens rekkefølge: tid og vær, bane, status og eventuell
+  detaljhandling.
+- Siden bruker samme fulle arbeidsbredde som booking, slik at navigasjon mellom flatene ikke
+  gir et tydelig breddehopp på desktop.
+- Kommende reservasjoner vises først; historikk kan hentes med ett felles kontrollvalg.
+- Tomtilstand, lasting, API-feil og mutasjonsfeil har bevisste tilstander i samme flate.
+- `booking:fjern` fra hver reservasjon avgjør om avbestilling vises; det finnes ingen lokal
+  rolletabell for handlingen.
+- Avbestill bruker den felles destruktive knappen og ligger høyrejustert i handlingsområdet.
+
+Sentrale filer:
+
+- `src/features/minside/views/mine-bookinger/MineBookingerView.tsx`
+- `src/features/minside/views/mine-bookinger/MineBookingerContent.tsx`
+- `src/features/minside/views/mine-bookinger/MineBookingRow.tsx`
+- `src/features/minside/hooks/useMineBookinger.ts`
+- `src/features/minside/hooks/useBookingActions.ts`
+
 ### Brukeradministrasjon
 
 - Mobil har grønn kontrollflate med nøytralt søkefelt og sammenleggbare filtre.
@@ -88,16 +110,32 @@ Sentrale filer:
 
 ### Delte designmønstre
 
-- Alle globale visuelle roller ligger foreløpig i `src/styles/design-system.css`.
+- `src/styles/design-system.css` er et lite, ordnet importpunkt.
+- Globale tokens, tekniske grunnregler, delte mønstre, migrerte sammensetninger og responsive
+  tilpasninger er skilt etter ansvar uten å dele styling per side.
 - `ControlChoice` gir felles geometri og valgtilstand.
+- `FilterSwitch` gir vedvarende av/på-filtre samme Radix-bryter, etikettstruktur og oransje
+  valgmarkør på tvers av flater.
 - `record-list` og `record-card` gir felles ramme for slots og søkeresultater.
+- `RecordStatus` og `RecordListState` gir semantiske statuser og listetilstander uten at
+  features bruker shadcn-varianter som produkt-API.
 - `PageHeader` gir felles sidehierarki.
+- Appskallet viser ikke en global breadcrumb. Dype flater skal få lokale tilbakehandlinger
+  når de redesignes.
 - Shadcn/Radix-primitiver er beholdt i `src/components/ui/`.
 
 Sentrale filer:
 
 - `src/styles/design-system.css`
+- `src/styles/design-system/tokens.css`
+- `src/styles/design-system/primitives.css`
+- `src/styles/design-system/patterns.css`
+- `src/styles/design-system/migrated-compositions.css`
+- `src/styles/design-system/responsive.css`
 - `src/components/controls/ControlChoice.tsx`
+- `src/components/controls/FilterSwitch.tsx`
+- `src/components/records/RecordStatus.tsx`
+- `src/components/records/RecordListState.tsx`
 - `src/components/layout/PageHeader.tsx`
 - `src/components/ui/button.tsx`
 - `src/components/ui/accordion.tsx`
@@ -120,21 +158,28 @@ Sentrale filer:
 - `npm run build` passerer.
 - `git diff --check` passerer.
 - Booking og brukeradmin er visuelt kontrollert på mobil og desktop.
+- `Mine tider` er kontrollert med Admin, Utvidet og Bruker.
+- Kommende, gjennomførte, tomtilstand, lasting, API-feil og avbestilling er kontrollert.
 - Lyst og mørkt tema er kontrollert.
 - Aktivitetsoverstyring er kontrollert for tennis, padel og bordtennis.
-- Ingen feil eller advarsler fra appen ble observert i nettleserkonsollen.
+- Den endelige normaltilstanden for `Mine tider` lastet uten feil eller advarsler i
+  nettleserkonsollen.
 
 Vite viser fortsatt et ikke-blokkerende varsel om at React-chunken er større enn 500 kB.
 Dette er ikke introdusert som en funksjonell feil i redesignarbeidet.
 
 ## Kjent gjeld og avgrensninger
 
-- `design-system.css` er stor og bør deles etter ansvar i neste fundament-slice. Ikke del
-  per side, og ikke gjør en mekanisk omskriving uten visuell kontroll.
+- `migrated-compositions.css` og `responsive.css` samler fortsatt flere migrerte flater for å
+  bevare kaskaden. Videre oppdeling skal skje etter mønster og ansvar, ikke per side.
 - Flere gamle sider bruker fortsatt lokale Tailwind-klasser og direkte shadcn-varianter.
 - Desktop er kontrollert, men mobil har fått mest produktdesignarbeid i POC-en.
 - Aktivitetsfarger er foreløpig mappet fra slug i frontend.
 - Det finnes ingen automatisert visuell regresjonstest ennå.
+- Gjentatt åpning av utviklingsinnloggingens konto-/rolledialog kan fortsatt gi Radix-
+  advarselen `Missing Description or aria-describedby={undefined}` i Vite-konsollen. Den
+  normale sidevisningen er ren; dialogadvarselen bør avgrenses og rettes i en egen liten
+  tilgjengelighetsoppgave.
 - Resterende sider er ikke migrert og kan derfor avvike tydelig fra appskallet.
 - Backendens planlagte overgang bort fra flere klubber/tenants inngår ikke i denne branchen.
 
@@ -142,19 +187,19 @@ Dette er ikke introdusert som en funksjonell feil i redesignarbeidet.
 
 ### Mål
 
-Konsolider redesignfundamentet uten å endre funksjonalitet, og migrer deretter `Mine tider`
-som neste vertikale slice.
+Fullfør booking- og kontoflyten med bookingbekreftelse, bookingfeil og reglement som neste
+avgrensede vertikale slice.
 
 ### Foreslått rekkefølge
 
-1. Kartlegg hvilke deler av `design-system.css` som er tokens, primitiver og delte mønstre.
-2. Del filen forsiktig etter disse ansvarsgrensene og behold importrekkefølgen stabil.
-3. Kartlegg dagens `MineBookingerPage`, alle tilstander og handlinger.
-4. Gjenbruk `record-list`, `record-card`, bookingstatus og destruktiv knapp.
-5. Lag bevisst mobil- og desktopvisning.
-6. Kontroller admin, utvidet og vanlig bruker der rollene påvirker siden.
-7. Kontroller lyst/mørkt tema, tomtilstand, lasting og API-feil.
-8. Kjør tekniske kontroller og visuell nettleserkontroll.
+1. Kartlegg bekreftelse, avviste bookinger, API-feil og reglementflyten uten å endre
+   bookingreglene.
+2. Gjenbruk delte statuser, listetilstander og handlingsvarianter.
+3. Legg kun til nye semantiske mønstre når eksisterende record- og handlingsmønstre ikke
+   dekker behovet.
+4. Løs mobil, desktop og lyst/mørkt tema i samme slice.
+5. Kontroller relevante innloggings- og kapabilitetstilstander.
+6. Kjør tekniske kontroller og visuell nettleserkontroll.
 
 ### Ikke gjør i samme task
 

@@ -75,6 +75,9 @@ oppdaterte primitiver må sammenlignes manuelt før eksisterende kode erstattes.
 - Desktop skal bruke arbeidsflaten, støtte flere kolonner og gi høyere informasjonstetthet.
 - Mobil skal ikke være en krympet desktop, og desktop skal ikke være en oppblåst mobil.
 - Mobil og desktop ferdigstilles og kontrolleres i samme utviklingsslice.
+- Appskallet bruker ikke en global breadcrumb-rad. Aktiv side i hovednavigasjonen og en
+  tydelig sidetittel gir orientering; dype detalj- og redigeringsflater skal bruke en lokal
+  tilbakehandling når den trengs.
 
 ## Status for POC
 
@@ -84,6 +87,8 @@ POC-en dekker nå:
 - Samlet innlogging/kontomeny, lyst/mørkt tema og utviklingsinnlogging.
 - RSS-/feedvarsler i det nye appskallet.
 - `Book bane` med mobiltilpassede valg, aktivitetsfarger og ny slotvisning.
+- `Mine tider` med kommende og gjennomførte reservasjoner, delte record-kort og
+  kapabilitetsstyrt avbestilling.
 - `Brukere` med responsivt søk, filtre, resultatkort og redigeringsdialog.
 - Delte valg- og listeprimitiver samt sentrale design-tokens.
 
@@ -91,22 +96,26 @@ POC-en dekker nå:
 
 ### Fase 1 — Konsolider fundamentet
 
-- Del den store `design-system.css` etter ansvar når grensene er tydelige: tokens,
-  primitiver og delte mønstre. Ikke del per side.
-- Gjør eksisterende `record-list`/`record-card`, status- og handlingsmønstre til tydelige,
-  dokumenterte delte komponenter der det gir reell type- eller atferdsverdi.
+- `design-system.css` er delt i tokens, primitiver, delte mønstre, migrerte sammensetninger
+  og responsive tilpasninger. Importrekkefølgen er stabil, og styling er ikke delt per side.
+- `record-list`/`record-card` er beholdt som delte CSS-mønstre; status, listetilstander og
+  vedvarende filterbrytere har fått semantiske komponenter der type- og atferdsverdien er
+  reell.
 - Kartlegg direkte bruk av `components/ui` og lokale Tailwind-varianter som bør erstattes av
   semantiske komponenter.
 - Behold fungerende domenelogikk uendret.
 
 ### Fase 2 — Fullfør booking- og kontoflyten
 
-1. `Mine tider` — neste anbefalte slice.
+1. `Mine tider` — fullført som første slice etter POC-en.
 2. Bookingbekreftelse, feiltilstander og reglement.
 3. `Min side`, innlogging og kontorelaterte flater.
 
-`Mine tider` prioriteres fordi siden kan gjenbruke slotkort, status og destruktive
-handlinger fra `Book bane` og dermed teste at fundamentet fungerer utenfor POC-siden.
+`Mine tider` bekrefter at slotkort, status og destruktive handlinger kan gjenbrukes utenfor
+`Book bane`. Reservasjoner grupperes etter dato, og hver rad følger bookinglistens
+informasjonsrekkefølge med tid/vær, bane, status og eventuell detaljhandling. Siden bruker
+samme arbeidsbredde som booking for å unngå layoutskift. Bookingbekreftelse, feiltilstander
+og reglement er neste naturlige slice.
 
 ### Fase 3 — Arrangementer
 

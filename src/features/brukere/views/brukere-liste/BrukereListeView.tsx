@@ -150,6 +150,7 @@ export default function BrukereListeView() {
     <QueryFeil error={brukereError} isFetching={brukereFetching} onRetry={() => void hentBrukere()}>
       <div className="user-admin-page__content">
         <PageHeader
+          eyebrow="Administrasjon"
           title="Brukere"
           description="Finn medlemmer, følg opp medlemskap og administrer tilganger."
           className="user-admin-page__heading"

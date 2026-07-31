@@ -16,11 +16,6 @@ export default function AppFrameSkeleton() {
             </div>
           </header>
 
-          {/* Breadcrumb-placeholder */}
-          <div className="px-3 py-2">
-            <Skeleton className="h-3 w-1/3" />
-          </div>
-
           {/* Main content – noen generiske rader */}
           <main className="py-1 px-3 flex-1 min-h-0 space-y-3">
             <div className="space-y-1">

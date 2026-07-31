@@ -1,10 +1,8 @@
 import { useMemo, useState } from "react";
-import { ListSkeleton } from "@/components/loading";
-import { QueryFeil } from "@/components/errors";
+import PageHeader from "@/components/layout/PageHeader";
 import { useMineBookinger } from "@/features/minside/hooks/useMineBookinger";
 import { useBookingActions } from "@/features/minside/hooks/useBookingActions";
 import type { MinBookingRespons } from "@/types";
-import "animate.css";
 
 import MineBookingerContent from "./MineBookingerContent";
 import { sortBookingerNyesteFoerst } from "./bookingSort";
@@ -37,18 +35,27 @@ export default function MineBookingerTab() {
     }
   }
 
-  if (isLoading) return <ListSkeleton />;
-
   return (
-    <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
+    <div className="mine-bookings-page">
+      <PageHeader
+        eyebrow="Min konto"
+        title="Mine tider"
+        description="Se kommende reservasjoner, finn detaljer og hold oversikt over det du har spilt."
+        className="mine-bookings-page__heading"
+      />
+
       <MineBookingerContent
         visHistoriske={visHistoriske}
         onToggleVisHistoriske={setVisHistoriske}
         bookinger={visteBookinger}
+        isLoading={isLoading}
+        queryError={error?.message ?? null}
+        isFetching={isFetching}
+        onRetry={() => void refetch()}
         isPending={isPending}
         onFjern={handleFjern}
         serverFeil={fjernFeil?.message ?? null}
       />
-    </QueryFeil>
+    </div>
   );
 }

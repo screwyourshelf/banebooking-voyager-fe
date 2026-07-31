@@ -70,6 +70,7 @@ export default function BookingContent({
     <div className="booking-page" data-activity-theme={activityTheme}>
       <PageHeader
         className="booking-page__heading"
+        eyebrow="Booking"
         title="Book bane"
         description="Finn en ledig tid."
       />

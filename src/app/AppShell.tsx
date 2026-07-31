@@ -1,6 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { Toaster } from "sonner";
-import { AppSidebar, BreadcrumbMedSti, MobileBottomNav, Navbar } from "@/components/navigation";
+import { AppSidebar, MobileBottomNav, Navbar } from "@/components/navigation";
 import "@/styles/animate-fadeIn.css";
 
 export default function AppShell() {
@@ -15,8 +15,6 @@ export default function AppShell() {
           <header className="app-shell__topbar">
             <Navbar />
           </header>
-
-          <BreadcrumbMedSti />
 
           <main className="app-shell__main">
             <div className="animate__animated animate__fadeIn animate__faster">
