@@ -102,6 +102,12 @@ POC-en dekker nå:
   underområdenavigasjon.
 - `Min side` med responsiv profil, kontoinformasjon, persondata og delt
   underområdenavigasjon.
+- `Kunngjøringer` med publiseringsstatus, opprettelse, bekreftelsesoversikt og felles
+  fareområde for deaktivering.
+- `Vilkår` og obligatoriske kunngjøringer med en delt, responsiv langtekstflate for innhold
+  som skal leses fremfor redigeres.
+- Guard-flatene `Sperret`, obligatorisk kunngjøring og medlemsbekreftelse med samme
+  sidehierarki, leseflate, status- og skjemamønstre som de øvrige løftede sidene.
 - Delte valg- og listeprimitiver samt sentrale design-tokens.
 
 ## Migreringsrekkefølge
@@ -124,13 +130,18 @@ POC-en dekker nå:
 1. `Mine tider` — fullført som første slice etter POC-en.
 2. Bookingbekreftelse, feiltilstander og reglement.
 3. `Min side` — fullført for profil og persondata; innlogging og øvrige kontoflater gjenstår.
+4. Guard-flater — fullført for sperret konto, obligatorisk kunngjøring og
+   medlemsbekreftelse.
 
 `Mine tider` bekrefter at slotkort, status og destruktive handlinger kan gjenbrukes utenfor
 `Book bane`. Reservasjoner grupperes etter dato, og hver rad følger bookinglistens
 informasjonsrekkefølge med tid/vær, bane, status og eventuell detaljhandling. Siden bruker
 samme arbeidsbredde som booking for å unngå layoutskift. `Min side` gjenbruker samme
 sidehierarki, settings-seksjoner, status og handlinger som administrasjonsflatene uten lokal
-profilstyling. Bookingbekreftelse, feiltilstander og reglement gjenstår i fasen.
+profilstyling. Guard-flatene bruker samme hierarki og den delte langtekstflaten, mens
+medlemskapstypen bruker et felles Radix-basert radiovalg for innstillingsskjemaer. Den
+eksisterende prioriteten `Sperret` → `Kunngjøring` → `Medlemskap` og alle API-kontrakter er
+beholdt. Bookingbekreftelse, feiltilstander og reglement gjenstår i fasen.
 
 ### Fase 3 — Arrangementer
 
@@ -148,7 +159,7 @@ programmet grupperes etter dato i det utvidede kortet.
 1. Baner — fullført.
 2. Grener — fullført.
 3. Klubbinnstillinger — fullført.
-4. Kunngjøringer.
+4. Kunngjøringer — fullført.
 
 `Brukere` er referanse for responsive adminlister, men nye sider skal gjenbruke delte
 mønstre fremfor å kopiere hele siden. `Baner` etablerer et liste–redigeringsmønster med
@@ -160,7 +171,11 @@ bookingregler i record-raden og samme editor for opprettelse og redigering.
 underområder bruker `Tabs` med den delte `section`-varianten, som også er tatt i bruk på
 `Min side`. Varianten bruker den grønne kontrollflaten og en tydelig oransje understrek for
 valgt område. Destruktive innstillingsområder bruker den delte `danger`-tonen på
-`SettingsSection`. `Kunngjøringer` er neste avgrensede administrasjonsslice.
+`SettingsSection`. `Kunngjøringer` gjenbruker det samme settings-hierarkiet for status,
+opprettelse og bekreftelser. Deaktivering bruker det delte fareområdet. Obligatoriske
+kunngjøringer og `Vilkår` deler `ContentDocument`, en avgrenset langtekstflate for
+leseinnhold. Den skal også vurderes for reglement og annet strukturert informasjonsinnhold;
+det er ikke en ny generell kortvariant eller et lokalt sidemønster.
 
 ### Fase 5 — Turnering
 

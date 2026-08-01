@@ -1,7 +1,7 @@
 # Frontend-redesign: handover til neste Codex-task
 
 > **Status:** Fundament, `Mine tider`, `Arrangementer`, `Baner`, `Grener`,
-> `Klubbinnstillinger` og `Min side`-slice klare
+> `Klubbinnstillinger`, `Min side`, `Kunngjøringer`, `Vilkår` og guard-flater klare
 > **Sist oppdatert:** 2026-08-01
 > **Repo:** `/Users/andreas/Dev/banebooking/frontend`
 > **Branch:** `feature/frontend-design-poc`
@@ -179,6 +179,7 @@ Sentrale filer:
 - `src/components/admin/AdminForm.tsx`
 - `src/components/admin/SettingsFields.tsx`
 - `src/components/admin/SettingsSection.tsx`
+
 - `src/components/records/RecordChoiceFilter.tsx`
 - `src/components/records/RecordText.tsx`
 
@@ -277,6 +278,80 @@ Sentrale filer:
 - `src/components/admin/SettingsFields.tsx`
 - `src/components/admin/SettingsSection.tsx`
 
+### Guard-flater
+
+- `Sperret`, obligatorisk kunngjøring og medlemsbekreftelse bruker samme `AdminPage`-
+  hierarki og arbeidsbredde som de øvrige løftede flatene. Ingen av guard-sidene har lokale
+  `className`-koblinger eller inline-stiler.
+- Guard-rekkefølgen er uendret: sperret konto prioriteres foran ulest kunngjøring, som igjen
+  prioriteres foran medlemsbekreftelse. Eksisterende navigasjon, autorisasjon og
+  API-kontrakter er beholdt.
+- Informasjon som må leses bruker den delte `ContentDocument`-flaten med grønn innledning.
+  Status vises med `RecordStatus`, og lasting/API-feil bruker de samme delte tilstandene som
+  administrasjonsflatene.
+- Sperret konto bruker et innebygd `SettingsSection`-fareområde og en nøytral
+  kontakthandling. Det er ikke innført en egen blokkert-sidevariant.
+- Medlemsbekreftelse bruker delte settings-rader, grønn hovedhandling og den nye
+  `SettingsRadioGroup`. Komponenten pakker Radix-radioens tilgjengelighet inn i det samme
+  sentrale valguttrykket som resten av produktet, og er laget for gjenbruk i senere
+  innstillingsskjemaer.
+- Obligatorisk kunngjøring bruker samme langtekstflate og handlingshierarki. Feil ved
+  bekreftelse fanges og vises i den delte feilflaten.
+
+Sentrale filer:
+
+- `src/features/sperre/pages/SperretPage.tsx`
+- `src/features/kunngjøringer/pages/KunngjøringPage.tsx`
+- `src/features/medlemskap/pages/BekreftMedlemskapPage.tsx`
+- `src/components/layout/ContentDocument.tsx`
+- `src/components/admin/SettingsFields.tsx`
+
+### Kunngjøringer
+
+- Administrasjonssiden bruker samme `AdminPage`-hierarki og `SettingsSection`-mønster som
+  Klubbinnstillinger og Min side. Det er ikke opprettet en lokal kunngjøringsvariant.
+- Ingen aktiv kunngjøring vises som en nøytral status. Opprettelse bruker delte
+  settings-rader, grønn primærhandling og felles feilflate uten lokale klasser.
+- En aktiv kunngjøring viser budskap, tidsrom og bekreftelsesfremdrift gjennom delte
+  status- og settings-komponenter. Hver bekreftelse er en vanlig settings-rad.
+- Deaktivering ligger i `SettingsSection` sin felles `danger`-tone og beholder eksisterende
+  destruktive API-flyt.
+- Den obligatoriske kunngjøringen bruker samme sidehierarki og den delte
+  `ContentDocument`-flaten som Vilkår. Linjeskift i budskapet beholdes, og bekreftelse er en
+  grønn hovedhandling i samme flate.
+- `kunngjøring:admin` styrer både navigasjon og innhold ved direkte URL. Utvidet og Bruker
+  får en eksplisitt tilgangstilstand.
+- Eksisterende kontrakter for aktiv kunngjøring, opprettelse, deaktivering og bekreftelse er
+  beholdt.
+
+Sentrale filer:
+
+- `src/features/kunngjøringer/pages/KunngjøringerAdminPage.tsx`
+- `src/features/kunngjøringer/views/KunngjøringerAdminView.tsx`
+- `src/features/kunngjøringer/pages/KunngjøringPage.tsx`
+- `src/features/kunngjøringer/hooks/useKunngjøringAdmin.ts`
+- `src/components/layout/ContentDocument.tsx`
+- `src/components/admin/SettingsFields.tsx`
+
+### Vilkår
+
+- Den offentlige vilkårssiden bruker samme sidehierarki og arbeidsbredde som de løftede
+  flatene, men innholdet har en avgrenset lesebredde for lange tekster.
+- Innledning og nummererte avsnitt bruker `ContentDocument`; dette er et sentralt
+  langtekstmønster som også brukes av obligatoriske kunngjøringer og kan gjenbrukes for
+  reglement. Det er ikke en ny generell kort- eller sidevariant.
+- Oppdatert dato bruker `RecordStatus`. Kontaktlenke og typografi styles sentralt i
+  langtekstmønsteret.
+- Offentlig lasting og API-feil har delte tilstander med retry. Eksisterende klubb- og
+  vilkårsdata er beholdt.
+- Vilkårssiden inneholder ingen lokale `className`-koblinger eller inline-stiler.
+
+Sentrale filer:
+
+- `src/features/policy/pages/VilkaarPage.tsx`
+- `src/features/policy/pages/vilkaar.ts`
+- `src/components/layout/ContentDocument.tsx`
+
 ### Delte designmønstre
 
 - `src/styles/design-system.css` er et lite, ordnet importpunkt.
@@ -287,6 +362,8 @@ Sentrale filer:
   valgmarkør på tvers av flater.
 - `SwitchRow` gir innstillingsfelter den samme oransje valgmarkøren; features skal ikke
   overstyre bryterfarge lokalt.
+- `SettingsRadioGroup` gir innstillingsskjemaer ett felles Radix-basert radiovalg med samme
+  oransje valgmarkør, temaoppførsel og responsive geometri.
 - `RecordCollectionToolbar` gir listeflater samme opptelling, beskrivelse og handlinger på
   den grønne kontrollflaten.
 - `record-list` og `record-card` gir felles ramme for slots og søkeresultater.
@@ -308,6 +385,10 @@ Sentrale filer:
   uten at features lager lokale røde kort.
 - `AdminSettingsForm` og `AdminFormActions` lar vanlige innstillingssider bruke samme
   skjema- og handlingshierarki som editorene uten lokale layoutklasser.
+- `ContentDocument` gir vilkår, reglement og obligatoriske beskjeder én responsiv
+  langtekstflate med felles lesebredde, seksjoner, lenker og temaoppførsel.
+- `SettingsText` viser lengre, skrivebeskyttet innhold i vanlige settings-rader uten lokal
+  tekststyling.
 - `AdminPage`, `AdminEntityCollection`, `AdminEditorDialog`, `AdminForm` og `SettingsFields`
   eier
   presentasjonsklassene for administrasjonsflater. Features komponerer semantiske komponenter
@@ -330,6 +411,8 @@ Sentrale filer:
 - `src/components/records/RecordListState.tsx`
 - `src/components/records/RecordCollectionToolbar.tsx`
 - `src/components/layout/PageHeader.tsx`
+- `src/components/layout/ContentDocument.tsx`
+- `src/components/admin/SettingsFields.tsx`
 - `src/components/admin/SettingsSection.tsx`
 - `src/components/navigation/Tabs.tsx`
 - `src/components/ui/button.tsx`
@@ -372,6 +455,23 @@ Sentrale filer:
   vilkårsstatus, dataeksportens tilgjengelighet og slettedialog er kontrollert uten å sende
   mutasjoner eller nedlasting.
 - `Min side` er visuelt kontrollert på mobil og desktop i lyst og mørkt tema.
+- `Kunngjøringer` er kontrollert med Admin, Utvidet og Bruker på direkte URL. Inaktiv
+  status, opprettelsesfelter og handlingshierarki er kontrollert uten å publisere eller
+  endre testdata.
+- `Kunngjøringer` er kontrollert på mobil og desktop i lyst og mørkt tema. Nettleserkontroll
+  bekrefter full mobilbredde uten horisontal overflow og samme desktoparbeidsbredde som de
+  øvrige administrasjonsflatene.
+- `Vilkår` er kontrollert offentlig og innlogget på mobil og desktop i lyst og mørkt tema.
+  Langtekstflaten har avgrenset lesebredde på desktop og fyller mobilens innholdsflate.
+- Medlemsbekreftelse er utløst gjennom den reelle guarden med Bruker og Utvidet. Mobil og
+  desktop, lyst og mørkt tema, fullt navn, fire medlemskapstyper, valgt tilstand og aktivert
+  hovedhandling er kontrollert uten å sende bekreftelsen. Flaten har ingen horisontal
+  overflow.
+- Sperret-flaten er visuelt kontrollert på direkte URL på mobil og desktop i lyst og mørkt
+  tema. Fareområde og kontaktlenke er kontrollert uten å sperre en testbruker.
+- Guard-rekkefølgen `Sperret` → `Kunngjøring` → `Medlemskap` er kontrollert i rutingen.
+  Dagens fixture har ingen aktiv kunngjøring eller sperret bruker, så disse to guardene er
+  ikke utløst ved å mutere testdata i denne slicen.
 - Lyst og mørkt tema er kontrollert.
 - Aktivitetsoverstyring er kontrollert for tennis, padel og bordtennis.
 - Den endelige normaltilstanden for `Mine tider` lastet uten feil eller advarsler i
@@ -397,9 +497,14 @@ Dette er ikke introdusert som en funksjonell feil i redesignarbeidet.
 - Alle tre grener i testdataene er aktive. Inaktiv status, tomtilstand og API-feil er derfor
   kartlagt i kode, mens opprettelsesvalidering og editor er visuelt kontrollert uten å lagre
   testdata.
-- Testklubben har ingen aktiv medlemskapsbekreftelse. Aktiv periode og destruktiv
-  deaktivering er kartlagt i kode; inaktiv status og aktiveringsskjemaet er visuelt
-  kontrollert uten å endre testdata.
+- Testklubben har en aktiv medlemskapsperiode (`Sesong 2026`). Medlemsguarden er visuelt og
+  funksjonelt kontrollert frem til innsending; ingen medlemsbekreftelse eller destruktiv
+  deaktivering ble sendt under kontrollen.
+- Testklubben har ingen aktiv kunngjøring. Aktiv status, bekreftelsesliste, deaktivering og
+  den obligatoriske lesebekreftelsen er derfor kartlagt i kode, mens inaktiv status og
+  opprettelsesflaten er kontrollert uten å publisere eller endre testdata.
+- Testdataene har ingen sperret bruker. Sperret-flaten er derfor visuelt kontrollert på
+  direkte URL, mens guardbetingelsen og prioriteringen er kartlagt i kode.
 - Gjentatt åpning av utviklingsinnloggingens konto-/rolledialog kan fortsatt gi Radix-
   advarselen `Missing Description or aria-describedby={undefined}` i Vite-konsollen. Den
   normale sidevisningen er ren; dialogadvarselen bør avgrenses og rettes i en egen liten
@@ -411,19 +516,18 @@ Dette er ikke introdusert som en funksjonell feil i redesignarbeidet.
 
 ### Mål
 
-Redesign `Kunngjøringer` som neste avgrensede administrasjonsslice ved å bygge videre på
-det konsoliderte designfundamentet.
+Fullfør booking- og kontoflyten med bookingbekreftelse, feiltilstander og reglement som
+neste avgrensede slice.
 
 ### Foreslått rekkefølge
 
-1. Kartlegg publiseringsstatus, målgrupper, tidsstyring, opprettelse, redigering og relevante
-   API-feil.
-2. Gjenbruk administrasjonssidehodet, den grønne opprettelseshandlingen,
-   `AdminEntityCollection`, felles `AdminEditorDialog` og semantiske skjemamønstre der de
-   passer domenet.
-3. Behold eksisterende kunngjøringskontrakter og publiseringsregler.
+1. Kartlegg bookingbekreftelse, reglement, alle API-feil og tilbakeveier på mobil og
+   desktop.
+2. Gjenbruk bookingens record-/statusregler, eksisterende handlingshierarki og
+   `ContentDocument` for reglement der mønsteret passer.
+3. Behold eksisterende booking-, bekreftelses- og regelkontrakter.
 4. Løs mobil, desktop og lyst/mørkt tema i samme slice.
-5. Kontroller Admin, Utvidet og Bruker gjennom utviklingsinnloggingen.
+5. Kontroller relevante roller og både vellykkede og avbrutte flyter.
 6. Kjør tekniske kontroller og visuell nettleserkontroll.
 
 ### Ikke gjør i samme task

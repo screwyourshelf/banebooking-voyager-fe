@@ -9,10 +9,12 @@ export {
 export { default as AdminPage, AdminPageLoading, AdminPageState } from "./AdminPage";
 export {
   SettingsPanel,
+  SettingsRadioGroup,
   SettingsRange,
   SettingsRow,
   SettingsStack,
   SettingsSwitchRow,
+  SettingsText,
   SettingsValue,
 } from "./SettingsFields";
 export { default as SettingsSection } from "./SettingsSection";
