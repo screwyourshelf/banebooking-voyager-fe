@@ -31,6 +31,7 @@ export function useKlubb() {
   return {
     data: klubbQuery.data,
     isLoading: klubbQuery.isLoading,
+    isFetching: klubbQuery.isFetching,
     error: klubbQuery.error,
     refetch: klubbQuery.refetch,
 

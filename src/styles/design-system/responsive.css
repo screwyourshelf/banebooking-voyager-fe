@@ -136,6 +136,15 @@
       font-size: 1.125rem;
     }
 
+    .section-tabs {
+      gap: 1.5rem;
+    }
+
+    .section-tabs__list {
+      width: fit-content !important;
+      min-width: 24rem;
+    }
+
     .settings-section {
       border-radius: 1.5rem;
     }

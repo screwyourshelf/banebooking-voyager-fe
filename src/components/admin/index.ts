@@ -1,6 +1,11 @@
 export { AdminEntityCollection, AdminEntityList, AdminEntityRow } from "./AdminEntityCollection";
 export { default as AdminEditorDialog } from "./AdminEditorDialog";
-export { AdminEditorForm, AdminFormActions, AdminFormSubmitButton } from "./AdminForm";
+export {
+  AdminEditorForm,
+  AdminFormActions,
+  AdminFormSubmitButton,
+  AdminSettingsForm,
+} from "./AdminForm";
 export { default as AdminPage, AdminPageLoading, AdminPageState } from "./AdminPage";
 export {
   SettingsPanel,

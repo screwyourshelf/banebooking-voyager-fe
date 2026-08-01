@@ -1,12 +1,18 @@
-import PageSection from "@/components/sections/PageSection";
-import { RowPanel, RowList, Row } from "@/components/rows";
-import { FormSubmitButton, FormLayout, FormActions } from "@/components/forms";
-
+import { MapPin, Rss } from "lucide-react";
+import {
+  AdminFormActions,
+  AdminFormSubmitButton,
+  AdminSettingsForm,
+  SettingsPanel,
+  SettingsRow,
+  SettingsSection,
+  SettingsStack,
+} from "@/components/admin";
+import { ServerFeil } from "@/components/errors";
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { ServerFeil } from "@/components/errors";
 
-type FormState = {
+export type KlubbFormData = {
   navn: string;
   kontaktEpost: string;
   nettside: string;
@@ -17,13 +23,11 @@ type FormState = {
 };
 
 type Props = {
-  form: FormState;
-  onChange: <K extends keyof FormState>(key: K, value: FormState[K]) => void;
-
+  form: KlubbFormData;
+  onChange: <K extends keyof KlubbFormData>(key: K, value: KlubbFormData[K]) => void;
   canSubmit: boolean;
   isSaving: boolean;
   onSubmit: () => void;
-
   touched: { navn: boolean; kontaktEpost: boolean; feedSynligAntallDager: boolean };
   errors: {
     navn: string | null;
@@ -52,119 +56,139 @@ export default function KlubbInnstillingerContent({
     : null;
 
   return (
-    <FormLayout
-      onSubmit={(e) => {
-        e.preventDefault();
+    <AdminSettingsForm
+      onSubmit={(event) => {
+        event.preventDefault();
         onSubmit();
       }}
     >
-      <PageSection title="Grunninfo" description="Navn på klubb og kontaktinformasjon.">
-        <RowPanel>
-          <RowList>
-            <Row title="Klubbnavn">
+      <SettingsStack>
+        <SettingsSection
+          eyebrow="Profil"
+          title="Klubbinformasjon"
+          description="Navn og kontaktpunkter medlemmene møter."
+        >
+          <SettingsPanel>
+            <SettingsRow title="Klubbnavn">
               <Field data-invalid={!!navnError}>
                 <Input
                   id="klubbnavn"
+                  aria-label="Klubbnavn"
                   value={form.navn}
-                  onChange={(e) => onChange("navn", e.target.value)}
+                  onChange={(event) => onChange("navn", event.target.value)}
                   placeholder="Ås tennisklubb"
                   autoComplete="organization"
                   maxLength={60}
                   onBlur={() => onBlurField("navn")}
                   aria-invalid={!!navnError}
+                  disabled={isSaving}
                 />
                 {navnError ? <FieldError>{navnError}</FieldError> : null}
               </Field>
-            </Row>
+            </SettingsRow>
 
-            <Row title="Kontakt-e-post" description="Vises på klubbens infoside.">
+            <SettingsRow title="Kontakt-e-post" description="Vises i klubbens kontaktinformasjon.">
               <Field data-invalid={!!kontaktEpostError}>
                 <Input
                   id="kontaktEpost"
+                  aria-label="Kontakt-e-post"
                   value={form.kontaktEpost}
-                  onChange={(e) => onChange("kontaktEpost", e.target.value)}
+                  onChange={(event) => onChange("kontaktEpost", event.target.value)}
                   placeholder="post@klubb.no"
                   type="email"
                   inputMode="email"
                   autoComplete="email"
                   onBlur={() => onBlurField("kontaktEpost")}
                   aria-invalid={!!kontaktEpostError}
+                  disabled={isSaving}
                 />
                 {kontaktEpostError ? <FieldError>{kontaktEpostError}</FieldError> : null}
               </Field>
-            </Row>
+            </SettingsRow>
 
-            <Row title="Nettside" description="Valgfritt. Lenke til klubbens hjemmeside.">
+            <SettingsRow title="Nettside" description="Valgfri lenke til klubbens hjemmeside.">
               <Field>
                 <Input
                   id="nettside"
+                  aria-label="Nettside"
                   value={form.nettside}
-                  onChange={(e) => onChange("nettside", e.target.value)}
+                  onChange={(event) => onChange("nettside", event.target.value)}
                   placeholder="https://www.aastk.no"
                   inputMode="url"
                   type="url"
+                  disabled={isSaving}
                 />
               </Field>
-            </Row>
-          </RowList>
-        </RowPanel>
-      </PageSection>
+            </SettingsRow>
+          </SettingsPanel>
+        </SettingsSection>
 
-      <PageSection
-        title="Kart"
-        description="Valgfritt. Koordinatene brukes til å vise værinformasjon."
-      >
-        <RowPanel>
-          <RowList>
-            <Row title="Latitude (breddegrad)">
+        <SettingsSection
+          eyebrow="Sted"
+          icon={<MapPin />}
+          title="Vær og posisjon"
+          description="Koordinatene brukes til lokal værinformasjon i bookinglisten."
+        >
+          <SettingsPanel>
+            <SettingsRow title="Breddegrad" description="Desimalgrader mellom −90 og 90.">
               <Field>
                 <Input
                   id="latitude"
+                  aria-label="Breddegrad"
                   value={form.latitude}
-                  onChange={(e) => onChange("latitude", e.target.value)}
-                  placeholder="f.eks. 59.6552"
+                  onChange={(event) => onChange("latitude", event.target.value)}
+                  placeholder="59.6552"
                   inputMode="decimal"
+                  disabled={isSaving}
                 />
               </Field>
-            </Row>
+            </SettingsRow>
 
-            <Row title="Longitude (lengdegrad)">
+            <SettingsRow title="Lengdegrad" description="Desimalgrader mellom −180 og 180.">
               <Field>
                 <Input
                   id="longitude"
+                  aria-label="Lengdegrad"
                   value={form.longitude}
-                  onChange={(e) => onChange("longitude", e.target.value)}
-                  placeholder="f.eks. 10.7769"
+                  onChange={(event) => onChange("longitude", event.target.value)}
+                  placeholder="10.7769"
                   inputMode="decimal"
+                  disabled={isSaving}
                 />
               </Field>
-            </Row>
-          </RowList>
-        </RowPanel>
-      </PageSection>
+            </SettingsRow>
+          </SettingsPanel>
+        </SettingsSection>
 
-      <PageSection title="Feed" description="Valgfritt. Henter og viser nyheter fra en RSS-feed.">
-        <RowPanel>
-          <RowList>
-            <Row title="RSS-feed">
+        <SettingsSection
+          eyebrow="Innhold"
+          icon={<Rss />}
+          title="Nyhetsfeed"
+          description="Vis nyheter fra klubbens RSS-feed i Banebooking."
+        >
+          <SettingsPanel>
+            <SettingsRow title="RSS-feed" description="Valgfri adresse til feeden.">
               <Field>
                 <Input
                   id="feedUrl"
+                  aria-label="RSS-feed"
                   value={form.feedUrl}
-                  onChange={(e) => onChange("feedUrl", e.target.value)}
+                  onChange={(event) => onChange("feedUrl", event.target.value)}
                   placeholder="https://www.aastk.no/?feed=rss2"
                   inputMode="url"
                   type="url"
+                  disabled={isSaving}
                 />
               </Field>
-            </Row>
+            </SettingsRow>
 
-            <Row title="Aldergrense for feedinnslag (dager)">
+            <SettingsRow title="Vis innlegg i" description="Antall dager, fra 1 til 150.">
               <Field data-invalid={!!feedSynligAntallDagerError}>
                 <Input
                   id="feedSynligAntallDager"
+                  aria-label="Antall dager feedinnlegg vises"
                   value={form.feedSynligAntallDager}
-                  onChange={(e) => onChange("feedSynligAntallDager", e.target.value)}
+                  onChange={(event) => onChange("feedSynligAntallDager", event.target.value)}
                   type="number"
                   inputMode="numeric"
                   min={1}
@@ -172,27 +196,23 @@ export default function KlubbInnstillingerContent({
                   step={1}
                   onBlur={() => onBlurField("feedSynligAntallDager")}
                   aria-invalid={!!feedSynligAntallDagerError}
+                  disabled={isSaving}
                 />
                 {feedSynligAntallDagerError ? (
                   <FieldError>{feedSynligAntallDagerError}</FieldError>
                 ) : null}
               </Field>
-            </Row>
-          </RowList>
-        </RowPanel>
-      </PageSection>
+            </SettingsRow>
+          </SettingsPanel>
+        </SettingsSection>
 
-      <FormActions variant="sticky" align="left" spaced={false} className="w-full">
-        <ServerFeil feil={mutasjonFeil} />
-        <FormSubmitButton
-          isLoading={isSaving}
-          disabled={!canSubmit}
-          loadingText="Lagrer..."
-          fullWidth
-        >
-          Lagre endringer
-        </FormSubmitButton>
-      </FormActions>
-    </FormLayout>
+        <AdminFormActions embedded={false}>
+          <ServerFeil feil={mutasjonFeil} />
+          <AdminFormSubmitButton isLoading={isSaving} disabled={!canSubmit} loadingText="Lagrer…">
+            Lagre endringer
+          </AdminFormSubmitButton>
+        </AdminFormActions>
+      </SettingsStack>
+    </AdminSettingsForm>
   );
 }

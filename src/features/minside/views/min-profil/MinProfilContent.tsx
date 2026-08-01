@@ -1,14 +1,26 @@
 import type { ReactNode } from "react";
 
-import PageSection from "@/components/sections/PageSection";
-import { RowPanel, RowList, Row, InfoRow } from "@/components/rows";
-import { FormActions, FormLayout, FormSubmitButton } from "@/components/forms";
-
+import {
+  AdminFormActions,
+  AdminFormSubmitButton,
+  AdminSettingsForm,
+  SettingsPanel,
+  SettingsRow,
+  SettingsSection,
+  SettingsStack,
+  SettingsValue,
+} from "@/components/admin";
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ServerFeil } from "@/components/errors";
+import { RecordStatus } from "@/components/records";
 
 export type Mode = "epost" | "navn";
 
@@ -37,9 +49,7 @@ type Props = {
   medlemskapType?: string | null;
   medlemskapBekreftetDato?: string | null;
 
-  // NYTT: ferdig knapp (dialog-trigger) sendes inn fra view
   deleteAction: ReactNode;
-  isDeleteDisabled?: boolean;
 };
 
 const MEDLEMSKAP_TYPE_LABELS: Record<string, string> = {
@@ -67,106 +77,116 @@ export default function MinProfilContent({
   medlemskapType,
   medlemskapBekreftetDato,
   deleteAction,
-  isDeleteDisabled = false,
 }: Props) {
   return (
-    <FormLayout
-      density="default"
-      onSubmit={(e) => {
-        e.preventDefault();
-        onSubmit();
-      }}
-    >
-      <PageSection title="Innstillinger" description="Velg hva som vises som navnet ditt i appen.">
-        <RowPanel>
-          <RowList>
-            <Row title="Visningsnavn">
-              <RadioGroup
+    <SettingsStack>
+      <AdminSettingsForm
+        onSubmit={(event) => {
+          event.preventDefault();
+          onSubmit();
+        }}
+      >
+        <SettingsSection
+          eyebrow="Profil"
+          title="Slik vises du"
+          description="Velg navnet andre ser i Banebooking."
+        >
+          <SettingsPanel>
+            <SettingsRow
+              title="Visningsnavn"
+              description="Bruk e-postadressen din eller skriv inn et eget navn."
+            >
+              <Select
                 value={mode}
-                onValueChange={(v) => onSetMode(v === "epost" ? "epost" : "navn")}
-                className="space-y-2"
+                onValueChange={(value) => onSetMode(value === "epost" ? "epost" : "navn")}
+                disabled={isSaving}
               >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="epost" id="visningsnavn-epost" />
-                  <Label htmlFor="visningsnavn-epost">E-post ({epost})</Label>
-                </div>
-
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="navn" id="visningsnavn-navn" />
-                  <Label htmlFor="visningsnavn-navn">Eget navn</Label>
-                </div>
-              </RadioGroup>
-            </Row>
+                <SelectTrigger id="visningsnavn-mode" aria-label="Type visningsnavn">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="epost">Bruk e-postadresse</SelectItem>
+                  <SelectItem value="navn">Bruk eget navn</SelectItem>
+                </SelectContent>
+              </Select>
+            </SettingsRow>
 
             {mode === "navn" ? (
-              <Row>
+              <SettingsRow title="Eget navn" description={`Mellom 3 og ${maxLength} tegn.`}>
                 <Field data-invalid={!!error}>
                   <Input
                     id="visningsnavn"
+                    aria-label="Eget visningsnavn"
                     value={visningsnavn}
-                    onChange={(e) => onChangeVisningsnavn(e.target.value)}
-                    placeholder={`F.eks. Ola Nordmann (maks ${maxLength} tegn)`}
+                    onChange={(event) => onChangeVisningsnavn(event.target.value)}
+                    placeholder="For eksempel Ola Nordmann"
                     maxLength={maxLength}
                     autoComplete="name"
                     aria-invalid={!!error}
+                    disabled={isSaving}
                   />
                   {error ? <FieldError>{error}</FieldError> : null}
                 </Field>
-              </Row>
+              </SettingsRow>
             ) : null}
-          </RowList>
-        </RowPanel>
-      </PageSection>
+          </SettingsPanel>
 
-      <PageSection
-        title="Konto"
-        description="Kontoinformasjon og tilgang. Enkelte opplysninger administreres av klubben."
+          <AdminFormActions>
+            <ServerFeil feil={serverFeil} />
+            <AdminFormSubmitButton isLoading={isSaving} disabled={!canSubmit} loadingText="Lagrer…">
+              Lagre endringer
+            </AdminFormSubmitButton>
+          </AdminFormActions>
+        </SettingsSection>
+      </AdminSettingsForm>
+
+      <SettingsSection
+        eyebrow="Konto"
+        title="Kontoinformasjon"
+        description="Tilgang og opplysninger som administreres av klubben."
       >
-        <RowPanel>
-          <RowList>
-            <InfoRow label="Brukernavn / ID" value={epost} />
-            <InfoRow label="Tilgang" value={rollerText} />
-            {medlemskapBekreftelseLabel && fulltNavn ? (
-              <InfoRow label="Navn (medlemskap)" value={fulltNavn} />
-            ) : null}
-            {medlemskapBekreftelseLabel && medlemskapType ? (
-              <InfoRow
-                label="Type medlemskap"
-                value={MEDLEMSKAP_TYPE_LABELS[medlemskapType] ?? medlemskapType}
-              />
-            ) : null}
-            {medlemskapBekreftelseLabel && medlemskapBekreftetDato ? (
-              <InfoRow
-                label="Medlemskap bekreftet"
-                value={new Date(medlemskapBekreftetDato).toLocaleDateString("nb-NO")}
-              />
-            ) : null}
+        <SettingsPanel>
+          <SettingsRow title="E-post">
+            <SettingsValue>{epost}</SettingsValue>
+          </SettingsRow>
+          <SettingsRow title="Tilgang">
+            <SettingsValue>{rollerText}</SettingsValue>
+          </SettingsRow>
+          {medlemskapBekreftelseLabel ? (
+            <SettingsRow title="Medlemskap">
+              <RecordStatus tone="available">{medlemskapBekreftelseLabel}</RecordStatus>
+            </SettingsRow>
+          ) : null}
+          {medlemskapBekreftelseLabel && fulltNavn ? (
+            <SettingsRow title="Navn i medlemskapet">
+              <SettingsValue>{fulltNavn}</SettingsValue>
+            </SettingsRow>
+          ) : null}
+          {medlemskapBekreftelseLabel && medlemskapType ? (
+            <SettingsRow title="Type medlemskap">
+              <SettingsValue>
+                {MEDLEMSKAP_TYPE_LABELS[medlemskapType] ?? medlemskapType}
+              </SettingsValue>
+            </SettingsRow>
+          ) : null}
+          {medlemskapBekreftelseLabel && medlemskapBekreftetDato ? (
+            <SettingsRow title="Bekreftet">
+              <SettingsValue>
+                {new Date(medlemskapBekreftetDato).toLocaleDateString("nb-NO")}
+              </SettingsValue>
+            </SettingsRow>
+          ) : null}
+        </SettingsPanel>
+      </SettingsSection>
 
-            {/* Destruktiv handling som egen rad i Konto */}
-            <Row
-              title="Slett min bruker"
-              description="Sletter bruker og all tilknyttet data permanent."
-              right={
-                <div className={isDeleteDisabled ? "pointer-events-none opacity-60" : ""}>
-                  {deleteAction}
-                </div>
-              }
-            />
-          </RowList>
-        </RowPanel>
-      </PageSection>
-
-      <FormActions variant="sticky" align="left" spaced={false} className="w-full">
-        <ServerFeil feil={serverFeil} />
-        <FormSubmitButton
-          isLoading={isSaving}
-          disabled={!canSubmit}
-          fullWidth
-          loadingText="Lagrer..."
-        >
-          Lagre endringer
-        </FormSubmitButton>
-      </FormActions>
-    </FormLayout>
+      <SettingsSection
+        eyebrow="Fareområde"
+        title="Slett bruker"
+        description="Sletter brukeren og all tilknyttet data permanent. Handlingen kan ikke angres."
+        tone="danger"
+      >
+        <AdminFormActions>{deleteAction}</AdminFormActions>
+      </SettingsSection>
+    </SettingsStack>
   );
 }

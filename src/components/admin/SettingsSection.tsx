@@ -8,6 +8,7 @@ type Props = {
   icon?: ReactNode;
   children: ReactNode;
   embedded?: boolean;
+  tone?: "default" | "danger";
   className?: string;
 };
 
@@ -18,11 +19,13 @@ export default function SettingsSection({
   icon,
   children,
   embedded = false,
+  tone = "default",
   className,
 }: Props) {
   return (
     <section
       className={cn("settings-section", embedded && "settings-section--embedded", className)}
+      data-tone={tone}
     >
       <header className="settings-section__header">
         {icon ? (

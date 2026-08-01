@@ -1,14 +1,30 @@
 import { useState } from "react";
+import { CircleAlert } from "lucide-react";
 
-import { FormSkeleton } from "@/components/loading";
+import { AdminPageLoading, AdminPageState } from "@/components/admin";
+import { RecordListState } from "@/components/records";
+import { Button } from "@/components/ui/button";
 import { SlettMegDialog } from "@/features/minside/components";
 import { useMeg } from "@/hooks/useMeg";
 
 import MinProfilContent, { type Mode } from "./MinProfilContent";
 import { MAX_VISNINGSNAVN_LENGTH, validateVisningsnavn } from "./visningsnavn";
 
+const ROLLE_LABELS = {
+  Medlem: "Medlem",
+  Utvidet: "Utvidet bruker",
+  KlubbAdmin: "Klubbadministrator",
+} as const;
+
 export default function MinProfilView() {
-  const { bruker, laster: lasterMeg, oppdaterVisningsnavn, slettMeg } = useMeg();
+  const {
+    bruker,
+    laster: lasterMeg,
+    error: megFeil,
+    refetch,
+    oppdaterVisningsnavn,
+    slettMeg,
+  } = useMeg();
   const { mutateAsync, isPending } = oppdaterVisningsnavn;
 
   const [mode, setMode] = useState<Mode>("epost");
@@ -31,7 +47,26 @@ export default function MinProfilView() {
     setError(null);
   }
 
-  if (lasterMeg || !bruker) return <FormSkeleton />;
+  if (lasterMeg) return <AdminPageLoading label="Laster profil" />;
+
+  if (megFeil || !bruker) {
+    return (
+      <AdminPageState>
+        <RecordListState
+          icon={<CircleAlert aria-hidden="true" />}
+          title="Kunne ikke laste profilen"
+          description={megFeil?.message ?? "Prøv igjen om litt."}
+          action={
+            <Button type="button" variant="outline" onClick={() => void refetch()}>
+              Prøv igjen
+            </Button>
+          }
+          tone="danger"
+          role="alert"
+        />
+      </AdminPageState>
+    );
+  }
 
   const valgtVisningsnavn = mode === "epost" ? bruker.epost : visningsnavn.trim();
 
@@ -56,7 +91,7 @@ export default function MinProfilView() {
   return (
     <MinProfilContent
       epost={bruker.epost}
-      rollerText={bruker.roller.join(", ")}
+      rollerText={bruker.roller.map((rolle) => ROLLE_LABELS[rolle]).join(", ")}
       mode={mode}
       onSetMode={(m) => {
         setMode(m);
@@ -77,8 +112,7 @@ export default function MinProfilView() {
       fulltNavn={bruker.fulltNavn}
       medlemskapType={bruker.medlemskapType}
       medlemskapBekreftetDato={bruker.medlemskapBekreftetDato}
-      deleteAction={<SlettMegDialog slettMeg={slettMeg} />}
-      isDeleteDisabled={isPending}
+      deleteAction={<SlettMegDialog slettMeg={slettMeg} disabled={isPending} />}
     />
   );
 }

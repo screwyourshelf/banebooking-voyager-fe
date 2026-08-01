@@ -12,23 +12,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import type { UseMutationResult } from "@tanstack/react-query";
-import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { ServerFeil } from "@/components/errors";
 
 type Props = {
   slettMeg: UseMutationResult<void, Error, void>;
-  fullWidth?: boolean;
   disabled?: boolean;
-  className?: string;
 };
 
-export default function SlettMegDialog({
-  slettMeg,
-  fullWidth = false,
-  disabled = false,
-  className,
-}: Props) {
+export default function SlettMegDialog({ slettMeg, disabled = false }: Props) {
   const { signOut } = useAuth();
   const [open, setOpen] = useState(false);
 
@@ -47,11 +39,7 @@ export default function SlettMegDialog({
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button
-          variant="destructive"
-          disabled={disabled || isBusy}
-          className={cn(fullWidth && "w-full", className)}
-        >
+        <Button variant="destructive" disabled={disabled || isBusy}>
           {isBusy ? "Sletter..." : "Slett min bruker"}
         </Button>
       </AlertDialogTrigger>

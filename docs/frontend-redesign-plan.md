@@ -60,6 +60,8 @@ oppdaterte primitiver må sammenlignes manuelt før eksisterende kode erstattes.
 - Knapper i en slot har innholdsbestemt bredde og flyter til høyre.
 - Tekstknapper bruker normalt ikke dekorative ikoner. Ikoner beholdes i navigasjon,
   datavisning, leverandøridentitet og rene ikonverktøy.
+- Ikoner brukes bare når de tydeliggjør funksjon eller status. Seksjonsfaner og vanlige
+  innstillingsoverskrifter skal normalt stole på teksthierarkiet alene.
 
 ### Lister og slots
 
@@ -96,6 +98,10 @@ POC-en dekker nå:
   bookingoverstyringer.
 - `Grener` med responsiv entitetsliste, felles editor for ny/rediger og delte
   bookinginnstillinger.
+- `Klubbinnstillinger` med responsiv klubbprofil, medlemskapsstatus og delt
+  underområdenavigasjon.
+- `Min side` med responsiv profil, kontoinformasjon, persondata og delt
+  underområdenavigasjon.
 - Delte valg- og listeprimitiver samt sentrale design-tokens.
 
 ## Migreringsrekkefølge
@@ -117,13 +123,14 @@ POC-en dekker nå:
 
 1. `Mine tider` — fullført som første slice etter POC-en.
 2. Bookingbekreftelse, feiltilstander og reglement.
-3. `Min side`, innlogging og kontorelaterte flater.
+3. `Min side` — fullført for profil og persondata; innlogging og øvrige kontoflater gjenstår.
 
 `Mine tider` bekrefter at slotkort, status og destruktive handlinger kan gjenbrukes utenfor
 `Book bane`. Reservasjoner grupperes etter dato, og hver rad følger bookinglistens
 informasjonsrekkefølge med tid/vær, bane, status og eventuell detaljhandling. Siden bruker
-samme arbeidsbredde som booking for å unngå layoutskift. Bookingbekreftelse, feiltilstander
-og reglement er neste naturlige slice.
+samme arbeidsbredde som booking for å unngå layoutskift. `Min side` gjenbruker samme
+sidehierarki, settings-seksjoner, status og handlinger som administrasjonsflatene uten lokal
+profilstyling. Bookingbekreftelse, feiltilstander og reglement gjenstår i fasen.
 
 ### Fase 3 — Arrangementer
 
@@ -140,16 +147,20 @@ programmet grupperes etter dato i det utvidede kortet.
 
 1. Baner — fullført.
 2. Grener — fullført.
-3. Kunngjøringer.
-4. Klubbinnstillinger.
+3. Klubbinnstillinger — fullført.
+4. Kunngjøringer.
 
 `Brukere` er referanse for responsive adminlister, men nye sider skal gjenbruke delte
 mønstre fremfor å kopiere hele siden. `Baner` etablerer et liste–redigeringsmønster med
 fullbreddes record-rader, responsivt grenfilter, grønn opprettelseshandling, samme fokuserte
 editor for ny og rediger, og ikonbaserte settings-seksjoner. Editoren er helskjerm på mobil
 og avgrenset på desktop. `Grener` viderefører mønsteret med grenens åpningstid og
-bookingregler i record-raden og samme editor for opprettelse og redigering. `Kunngjøringer`
-er neste avgrensede administrasjonsslice.
+bookingregler i record-raden og samme editor for opprettelse og redigering.
+`Klubbinnstillinger` bruker de samme settings-seksjonene i en vanlig sideflate. Reelle
+underområder bruker `Tabs` med den delte `section`-varianten, som også er tatt i bruk på
+`Min side`. Varianten bruker den grønne kontrollflaten og en tydelig oransje understrek for
+valgt område. Destruktive innstillingsområder bruker den delte `danger`-tonen på
+`SettingsSection`. `Kunngjøringer` er neste avgrensede administrasjonsslice.
 
 ### Fase 5 — Turnering
 

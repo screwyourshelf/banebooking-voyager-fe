@@ -1,6 +1,7 @@
 # Frontend-redesign: handover til neste Codex-task
 
-> **Status:** Fundament, `Mine tider`, `Arrangementer`, `Baner` og `Grener`-slice klar
+> **Status:** Fundament, `Mine tider`, `Arrangementer`, `Baner`, `Grener`,
+> `Klubbinnstillinger` og `Min side`-slice klare
 > **Sist oppdatert:** 2026-08-01
 > **Repo:** `/Users/andreas/Dev/banebooking/frontend`
 > **Branch:** `feature/frontend-design-poc`
@@ -214,6 +215,68 @@ Sentrale filer:
 - `src/components/admin/SettingsFields.tsx`
 - `src/components/admin/SettingsSection.tsx`
 
+### Klubbinnstillinger
+
+- Siden bruker samme `AdminPage`-hierarki og arbeidsbredde som Baner og Grener.
+- `Klubbprofil` og `Medlemskap` er reelle underområder og bruker den delte, Radix-baserte
+  `section`-varianten av `Tabs` i stedet for lokale faneklasser. Valgt område har den felles
+  oransje valgmarkøren.
+- Klubbprofilen bruker delte `SettingsSection`-kort for klubbinformasjon, vær/posisjon og
+  nyhetsfeed. Skjemaet har ingen lokale `className`-koblinger eller inline-stiler.
+- Medlemskap viser aktiv/inaktiv bekreftelsesperiode med felles statusregler. Opprettelse
+  bruker grønn primærhandling, mens deaktivering bruker den felles destruktive varianten.
+- Lasting, API-feil med retry, feltvalidering, mutasjonsfeil og manglende tilgang har egne
+  tilstander i den delte flaten.
+- `klubb:admin` styrer hele siden og samsvarer med navigasjonen og backendens
+  administrasjonspolicy. Utvidet og Bruker får en eksplisitt tilgangstilstand ved direkte
+  URL.
+- Eksisterende klubb-, feed- og medlemskapskontrakter samt aktiverings-/deaktiveringsflyt er
+  beholdt.
+
+Sentrale filer:
+
+- `src/features/klubb/pages/KlubbPage.tsx`
+- `src/features/klubb/views/klubb-innstillinger/KlubbInnstillingerView.tsx`
+- `src/features/klubb/views/klubb-innstillinger/KlubbInnstillingerContent.tsx`
+- `src/features/klubb/views/medlemskap-innstillinger/MedlemskapInnstillingerView.tsx`
+- `src/features/klubb/views/medlemskap-innstillinger/MedlemskapInnstillingerContent.tsx`
+- `src/features/klubb/hooks/useMedlemskapAdmin.ts`
+- `src/components/navigation/Tabs.tsx`
+- `src/components/admin/AdminForm.tsx`
+
+### Min side
+
+- Profil og persondata bruker samme sidehierarki, arbeidsbredde og `section`-faner som
+  Klubbinnstillinger. Det er ikke innført en egen profilvariant av mønsteret.
+- Seksjonsfanene bruker klubbens grønne kontrollflate med oransje understrek for valgt
+  område. Fanene bruker ikke dekorative ikoner.
+- Visningsnavn bruker den delte Radix-baserte `Select`-primitiven i en vanlig settings-rad.
+  Lagringshandlingen ligger i samme settings-kort som feltet. Eget navn beholder
+  eksisterende validering og API-kontrakt.
+- Kontoopplysninger, roller og eventuell medlemskapsbekreftelse vises gjennom delte
+  `SettingsSection`, `SettingsRow`, `SettingsValue` og `RecordStatus`.
+- Vilkårsstatus og dataeksport bruker de samme status- og handlingsreglene som øvrige
+  løftede flater. Nedlasting beholder eksisterende JSON-kontrakt.
+- Sletting bruker `SettingsSection` sin delte `danger`-tone, den felles destruktive
+  knappevarianten og eksisterende bekreftelsesdialog. Fareområdet kan gjenbrukes for andre
+  irreversible innstillinger. Ingen sletting ble sendt under visuell kontroll.
+- Lasting og API-feil med retry har egne delte tilstander. Profil- og persondataflatene har
+  ingen lokale `className`-koblinger eller inline-stiler.
+- Admin, Utvidet og Bruker har samme profilfunksjoner; rolledataene kommer fortsatt fra
+  `/bruker/meg`.
+
+Sentrale filer:
+
+- `src/features/minside/pages/MinSidePage.tsx`
+- `src/features/minside/views/min-profil/MinProfilView.tsx`
+- `src/features/minside/views/min-profil/MinProfilContent.tsx`
+- `src/features/minside/views/persondata/PersondataView.tsx`
+- `src/features/minside/components/SlettMegDialog.tsx`
+- `src/components/navigation/Tabs.tsx`
+- `src/components/admin/AdminForm.tsx`
+- `src/components/admin/SettingsFields.tsx`
+- `src/components/admin/SettingsSection.tsx`
+
 ### Delte designmønstre
 
 - `src/styles/design-system.css` er et lite, ordnet importpunkt.
@@ -238,6 +301,13 @@ Sentrale filer:
 - `ChoiceStrip` gir Book bane ett delt, semantisk lag for horisontale valgknapper.
 - `AdminEntityCollection` og `AdminEditorDialog` gir administrasjonssider et gjenbrukbart
   liste–redigeringsmønster som prioriterer mobil uten å innføre sidespesifikk styling.
+- `Tabs` sin `section`-variant gir både administrasjons- og kontoflater en tilgjengelig
+  underområdenavigasjon med felles mobil-/desktopgeometri, grønn kontrollflate og oransje
+  understrek for valgt område.
+- `SettingsSection` sin `danger`-tone gir irreversible innstillinger ett felles fareområde
+  uten at features lager lokale røde kort.
+- `AdminSettingsForm` og `AdminFormActions` lar vanlige innstillingssider bruke samme
+  skjema- og handlingshierarki som editorene uten lokale layoutklasser.
 - `AdminPage`, `AdminEntityCollection`, `AdminEditorDialog`, `AdminForm` og `SettingsFields`
   eier
   presentasjonsklassene for administrasjonsflater. Features komponerer semantiske komponenter
@@ -294,6 +364,14 @@ Sentrale filer:
 - `Grener` er kontrollert med Admin, Utvidet og Bruker på direkte URL. Liste, editor,
   opprettelsesvalidering og utkast er kontrollert uten å sende mutasjoner.
 - `Grener` er visuelt kontrollert på mobil og desktop i lyst og mørkt tema.
+- `Klubbinnstillinger` er kontrollert med Admin, Utvidet og Bruker på direkte URL.
+  Klubbprofil, medlemskap, lokal feltvalidering og handlingshierarki er kontrollert uten å
+  sende mutasjoner.
+- `Klubbinnstillinger` er visuelt kontrollert på mobil og desktop i lyst og mørkt tema.
+- `Min side` er kontrollert med Admin, Utvidet og Bruker. Profilvalg, lokal validering,
+  vilkårsstatus, dataeksportens tilgjengelighet og slettedialog er kontrollert uten å sende
+  mutasjoner eller nedlasting.
+- `Min side` er visuelt kontrollert på mobil og desktop i lyst og mørkt tema.
 - Lyst og mørkt tema er kontrollert.
 - Aktivitetsoverstyring er kontrollert for tennis, padel og bordtennis.
 - Den endelige normaltilstanden for `Mine tider` lastet uten feil eller advarsler i
@@ -319,6 +397,9 @@ Dette er ikke introdusert som en funksjonell feil i redesignarbeidet.
 - Alle tre grener i testdataene er aktive. Inaktiv status, tomtilstand og API-feil er derfor
   kartlagt i kode, mens opprettelsesvalidering og editor er visuelt kontrollert uten å lagre
   testdata.
+- Testklubben har ingen aktiv medlemskapsbekreftelse. Aktiv periode og destruktiv
+  deaktivering er kartlagt i kode; inaktiv status og aktiveringsskjemaet er visuelt
+  kontrollert uten å endre testdata.
 - Gjentatt åpning av utviklingsinnloggingens konto-/rolledialog kan fortsatt gi Radix-
   advarselen `Missing Description or aria-describedby={undefined}` i Vite-konsollen. Den
   normale sidevisningen er ren; dialogadvarselen bør avgrenses og rettes i en egen liten
