@@ -472,110 +472,11 @@
   }
 
   .booking-court-switcher {
+    --choice-strip-text: var(--activity-text);
+    --choice-strip-muted: var(--activity-muted);
+    --choice-strip-indicator: var(--activity-accent);
     grid-column: 1 / -1;
-    min-width: 0;
     margin-top: 0.125rem;
-    border-top: 1px solid color-mix(in srgb, var(--activity-text) 14%, transparent);
-    background: transparent;
-    padding-top: 0.5rem;
-  }
-
-  .booking-court-switcher__scroller {
-    display: flex;
-    min-width: 0;
-    gap: 0.25rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  .booking-court-switcher__scroller::-webkit-scrollbar {
-    display: none;
-  }
-
-  .booking-court-switcher__tab {
-    position: relative;
-    display: inline-flex;
-    min-width: 0;
-    min-height: 2.25rem;
-    flex: 1 0 auto;
-    align-items: center;
-    justify-content: center;
-    gap: 0.35rem;
-    overflow: hidden;
-    border: 0;
-    border-radius: 0.625rem;
-    background: transparent;
-    padding: 0.35rem 0.65rem;
-    color: var(--activity-muted);
-    font-size: var(--app-type-body-sm);
-    font-weight: 680;
-    white-space: nowrap;
-    transition:
-      background-color 160ms ease,
-      color 160ms ease,
-      box-shadow 160ms ease;
-  }
-
-  .booking-court-switcher__tab::after {
-    position: absolute;
-    right: 0.65rem;
-    bottom: 0.15rem;
-    left: 0.65rem;
-    height: 2px;
-    border-radius: 999px;
-    background: transparent;
-    content: "";
-  }
-
-  .booking-court-switcher__tab:hover {
-    background: color-mix(in srgb, var(--activity-text) 8%, transparent);
-    color: var(--activity-text);
-  }
-
-  .booking-court-switcher__tab[data-active="true"] {
-    background: color-mix(in srgb, var(--activity-text) 13%, transparent);
-    color: var(--activity-text);
-    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--activity-text) 14%, transparent);
-  }
-
-  .booking-court-switcher__tab[data-active="true"]::after {
-    background: var(--activity-accent);
-  }
-
-  .booking-court-switcher__name {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-
-  .booking-court-switcher__availability {
-    display: inline-flex;
-    flex: 0 0 auto;
-    align-items: center;
-    gap: 0.2rem;
-    color: var(--status-available-on-strong);
-    font-size: var(--app-type-label);
-    font-weight: 750;
-  }
-
-  .booking-court-switcher__dot {
-    width: 0.4rem;
-    height: 0.4rem;
-    border-radius: 999px;
-    background: var(--activity-accent);
-  }
-
-  .booking-court-switcher__availability[data-empty="true"] {
-    color: var(--activity-muted);
-  }
-
-  .booking-court-switcher__availability[data-empty="true"] .booking-court-switcher__dot {
-    background: color-mix(in srgb, var(--activity-text) 28%, transparent);
-  }
-
-  .booking-court-switcher[data-many="true"] .booking-court-switcher__tab {
-    min-width: 7.5rem;
-    flex: 0 0 auto;
   }
 
   .booking-schedule__columns {
@@ -659,7 +560,7 @@
     line-height: 1.15;
   }
 
-  .booking-slot__time strong {
+  .booking-slot__time-start {
     font-size: var(--app-type-body-lg);
     font-weight: 760;
     letter-spacing: -0.02em;
@@ -1132,23 +1033,6 @@
     opacity: 0.64;
   }
 
-  .user-directory-row__trigger {
-    min-width: 0;
-    min-height: 4.75rem;
-    align-items: center;
-    border-radius: 0;
-    padding: 0.75rem 0.875rem;
-  }
-
-  .user-directory-row__trigger:hover {
-    background: var(--app-surface-subtle);
-  }
-
-  .user-directory-row__trigger > [data-slot="accordion-trigger-icon"] {
-    margin-left: 0.5rem;
-    color: var(--app-ink-faint);
-  }
-
   .user-directory-row__summary {
     min-width: 0;
     flex: 1;
@@ -1551,8 +1435,7 @@
     white-space: nowrap;
   }
 
-  .mine-booking__time-range strong {
-    color: var(--app-ink);
+  .mine-booking__time-start {
     font-size: var(--app-type-body);
     font-weight: 760;
     line-height: 1.2;
@@ -1616,28 +1499,6 @@
   }
 
   /* Club arrangement overview */
-  .arrangements__filters {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-    border-bottom: 1px solid color-mix(in srgb, var(--app-control-text) 14%, transparent);
-    padding: 0.625rem 0.875rem 0.75rem;
-  }
-
-  .arrangements__filters legend {
-    flex: 0 0 auto;
-    color: var(--app-control-muted);
-    font-size: var(--app-type-caption);
-    font-weight: 730;
-  }
-
-  .arrangements__filter-choices {
-    display: flex;
-    min-width: 0;
-    flex-wrap: wrap;
-    gap: 0.4rem;
-  }
-
   .arrangements__list {
     gap: var(--app-record-gap);
     padding-block: 0.75rem 1rem;
@@ -1663,8 +1524,7 @@
     line-height: 1.25;
   }
 
-  .arrangement-card__date strong {
-    color: var(--app-ink);
+  .arrangement-card__date-start {
     font-size: var(--app-type-body-sm);
     font-weight: 750;
     white-space: nowrap;

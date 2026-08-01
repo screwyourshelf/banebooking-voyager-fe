@@ -11,13 +11,17 @@ type FormState = {
   grenId: string;
 };
 
+type Props = {
+  onCreated: () => void;
+};
+
 function validateNavn(navn: string): string | null {
   const v = navn.trim();
   if (!v) return "Navn er påkrevd.";
   return null;
 }
 
-export default function NyBaneView() {
+export default function NyBaneView({ onCreated }: Props) {
   const { opprettBane } = useBaner();
   const { grener } = useGrener(false);
 
@@ -73,6 +77,7 @@ export default function NyBaneView() {
         grenId: grener.length === 1 ? grener[0].id : "",
       });
       setTouched({ navn: false });
+      onCreated();
     } catch {
       // feil vises inline via opprettBane.error
     }

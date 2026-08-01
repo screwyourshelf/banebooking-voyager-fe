@@ -2,7 +2,7 @@ import { useId, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { RecordStatus } from "@/components/records";
+import { RecordAccent, RecordStatus } from "@/components/records";
 import { SlettArrangementDialog } from "@/features/arrangement-admin/components";
 import type { ArrangementRespons, DagMedSlotsRespons } from "@/types";
 import { dagerIgjenTekst } from "@/utils/datoUtils";
@@ -140,7 +140,7 @@ export default function ArrangementRow({ arrangement, onAvlys }: Props) {
   const summary = (
     <div className="record-card__summary arrangement-card__summary">
       <span className="arrangement-card__date">
-        <strong>{dates.start}</strong>
+        <RecordAccent className="arrangement-card__date-start">{dates.start}</RecordAccent>
         {dates.end ? <small>– {dates.end}</small> : null}
       </span>
 

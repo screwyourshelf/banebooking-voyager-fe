@@ -107,6 +107,108 @@
       font-size: var(--app-type-body-lg);
     }
 
+    .admin-page__content {
+      gap: 1.5rem;
+    }
+
+    .admin-page__intro {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .admin-page__create {
+      flex: 0 0 auto;
+    }
+
+    .admin-page__heading {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .admin-page__heading .page-heading__title {
+      font-size: 3rem;
+    }
+
+    .admin-page__heading .page-heading__description {
+      font-size: 1.125rem;
+    }
+
+    .settings-section {
+      border-radius: 1.5rem;
+    }
+
+    .settings-section--embedded {
+      border-radius: 0;
+    }
+
+    .settings-section__header {
+      padding: 1rem 1.25rem;
+    }
+
+    .settings-section__header h2 {
+      font-size: var(--app-type-body-lg);
+    }
+
+    .settings-row:not(.settings-row--switch) {
+      display: grid;
+      grid-template-columns: minmax(12rem, 0.65fr) minmax(15rem, 1fr);
+      align-items: start;
+      gap: 1.5rem;
+      padding: 1rem 1.25rem;
+    }
+
+    .settings-row:not(.settings-row--switch) > div:last-child {
+      margin-top: 0 !important;
+    }
+
+    .settings-row--switch {
+      padding: 1rem 1.25rem;
+    }
+
+    .admin-form__actions {
+      padding: 0.875rem 1rem;
+    }
+
+    .admin-form__submit {
+      width: auto;
+      min-width: 9rem;
+    }
+
+    .admin-entity-list {
+      padding-inline: 1.5rem;
+    }
+
+    .admin-entity-row {
+      gap: 1rem;
+    }
+
+    .admin-entity-row__trailing {
+      gap: 0.75rem;
+    }
+
+    .admin-editor-dialog {
+      inset: auto !important;
+      top: 50% !important;
+      left: 50% !important;
+      width: min(52rem, calc(100% - 2rem)) !important;
+      max-width: none !important;
+      height: min(48rem, calc(100dvh - 2rem));
+      translate: -50% -50% !important;
+      transform: none !important;
+      border-radius: 1.5rem !important;
+    }
+
+    .admin-editor-dialog__header {
+      padding: 1rem 1.25rem;
+    }
+
+    .admin-editor-dialog__heading [data-slot="dialog-title"] {
+      font-size: 2rem;
+    }
+
     .booking-page__heading {
       flex-direction: column;
       align-items: flex-start;
@@ -256,15 +358,6 @@
       text-transform: uppercase;
     }
 
-    .user-directory-row__trigger {
-      min-height: 4.625rem;
-      padding: 0.875rem 1.5rem;
-    }
-
-    .user-directory-row__trigger > [data-slot="accordion-trigger-icon"] {
-      margin-left: 1rem;
-    }
-
     .user-directory-row__summary {
       display: grid;
       grid-template-columns:
@@ -398,6 +491,31 @@
       min-width: 11rem;
     }
 
+    .record-choice-filter {
+      padding: 0.75rem 1.5rem 0.875rem;
+    }
+
+    .record-choice-filter__mobile-heading {
+      display: none;
+    }
+
+    .record-choice-filter__content,
+    .record-choice-filter[data-open="false"] .record-choice-filter__content,
+    .record-choice-filter[data-open="true"] .record-choice-filter__content {
+      display: flex;
+      flex-wrap: nowrap;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 0;
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .record-choice-filter__content legend {
+      width: auto;
+      flex: 0 0 auto;
+    }
+
     .record-card__static,
     .record-card__trigger {
       min-height: 5.25rem;
@@ -482,10 +600,6 @@
       padding-top: 0;
     }
 
-    .arrangements__filters {
-      padding: 0.75rem 1.5rem 0.875rem;
-    }
-
     .arrangements__list {
       padding-block: 1rem 1.5rem;
     }
@@ -494,7 +608,7 @@
       grid-template-columns: 9rem minmax(14rem, 1fr) auto;
     }
 
-    .arrangement-card__date strong,
+    .arrangement-card__date-start,
     .arrangement-card__identity strong {
       font-size: var(--app-type-body);
     }

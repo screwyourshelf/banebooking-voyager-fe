@@ -1,6 +1,6 @@
 # Frontend-redesign: handover til neste Codex-task
 
-> **Status:** Fundament, `Mine tider` og `Arrangementer`-slice klar
+> **Status:** Fundament, `Mine tider`, `Arrangementer` og `Baner`-slice klar
 > **Sist oppdatert:** 2026-07-31
 > **Repo:** `/Users/andreas/Dev/banebooking/frontend`
 > **Branch:** `feature/frontend-design-poc`
@@ -133,6 +133,54 @@ Sentrale filer:
 - `src/features/brukere/views/brukere-liste/BrukereListeContent.tsx`
 - `src/features/brukere/views/brukere-liste/RedigerBrukerDialog.tsx`
 
+### Baner
+
+- Siden har samme sidehierarki og arbeidsbredde som øvrig administrasjon.
+- `Ny bane` er en grønn sidehandling ved sidehodet. Opprettelse og redigering bruker samme
+  `AdminEditorDialog`: helskjerm med `Alle baner` på mobil og avgrenset dialog på desktop.
+- Baneoversikten bruker en delt `AdminEntityCollection` med fullbreddes record-rader, fast
+  informasjonsrekkefølge, status og viderepil. Mønsteret er laget for tilsvarende
+  administrasjonssider som `Grener`, ikke som en lokal banevelger.
+- Valg av bane åpner et fokusert `AdminEditorDialog`: helskjerm med lokal tilbakehandling på
+  mobil og en avgrenset dialog på desktop. Listen forblir sidens stabile startpunkt.
+- Grenfilteret bruker delt `RecordChoiceFilter` i den grønne kontrollflaten. På mobil åpnes
+  valgene med samme `Filtre`-mønster som Brukere; på desktop er valgene synlige direkte.
+- Redigeringsskjemaet går direkte fra banevalg til felter. Gjentatt seksjons- og hjelpetekst
+  er fjernet; forklaring beholdes bare for sortering og avvik fra standardregler.
+- Opprettelse og redigering deler ikonbaserte `SettingsSection`-seksjoner for
+  baneinformasjon, tilgjengelighet og eventuelle bookingavvik.
+- Felt, status og bookingoverstyringer bruker delte settings-rader og -seksjoner. De seks
+  overstyringene åpnes bare når administratoren aktiverer dem. Lange skjema ruller internt,
+  mens lagringshandlingen ligger tilgjengelig nederst.
+- Utkast beholdes per bane når redigeringsflaten lukkes, og raden merkes `Ulagret` slik at
+  lokal tilstand ikke blir usynlig for administratoren.
+- Baner-featuret inneholder ingen lokale `className`-koblinger, inline-stiler eller
+  hardkodede designverdier. Delte `Admin*`- og `Settings*`-komponenter eier koblingen til
+  designmønstrene.
+- Opprettelse og redigering beholder eksisterende validering, utkast per bane, API-kontrakter
+  og lagringsflyt.
+- `baner:admin` styrer både navigasjon og sideinnhold. Utvidet og Bruker får en eksplisitt
+  tilgangstilstand ved direkte URL i stedet for et redigeringsskjema som backend senere
+  avviser.
+- Alle settings-brytere har nå tilgjengelige navn og samme oransje valgindikator som
+  `FilterSwitch`, styrt sentralt gjennom det delte `SwitchRow`-laget.
+
+Sentrale filer:
+
+- `src/features/baner/pages/BanerPage.tsx`
+- `src/features/baner/views/rediger-bane/RedigerBaneView.tsx`
+- `src/features/baner/views/rediger-bane/RedigerBaneContent.tsx`
+- `src/features/baner/views/ny-bane/NyBaneContent.tsx`
+- `src/features/baner/views/ny-bane/NyBaneDialog.tsx`
+- `src/components/admin/AdminPage.tsx`
+- `src/components/admin/AdminEntityCollection.tsx`
+- `src/components/admin/AdminEditorDialog.tsx`
+- `src/components/admin/AdminForm.tsx`
+- `src/components/admin/SettingsFields.tsx`
+- `src/components/admin/SettingsSection.tsx`
+- `src/components/records/RecordChoiceFilter.tsx`
+- `src/components/records/RecordText.tsx`
+
 ### Delte designmønstre
 
 - `src/styles/design-system.css` er et lite, ordnet importpunkt.
@@ -141,12 +189,25 @@ Sentrale filer:
 - `ControlChoice` gir felles geometri og valgtilstand.
 - `FilterSwitch` gir vedvarende av/på-filtre samme Radix-bryter, etikettstruktur og oransje
   valgmarkør på tvers av flater.
+- `SwitchRow` gir innstillingsfelter den samme oransje valgmarkøren; features skal ikke
+  overstyre bryterfarge lokalt.
 - `RecordCollectionToolbar` gir listeflater samme opptelling, beskrivelse og handlinger på
   den grønne kontrollflaten.
 - `record-list` og `record-card` gir felles ramme for slots og søkeresultater.
+- `RecordAccent` og `RecordEyebrow` gir record-radene én felles oransje informasjonsmarkør:
+  tid i Book/Mine tider, dato i Arrangementer, rolle i Brukere og gren i Baner.
+- `RecordChoiceFilter` gir record-samlinger samme responsive valgfilter. Arrangementer og
+  Baner bruker komponenten uten lokale filtervarianter.
 - `RecordStatus` og `RecordListState` gir semantiske statuser og listetilstander uten at
   features bruker shadcn-varianter som produkt-API.
 - `PageHeader` gir felles sidehierarki.
+- `ChoiceStrip` gir Book bane ett delt, semantisk lag for horisontale valgknapper.
+- `AdminEntityCollection` og `AdminEditorDialog` gir administrasjonssider et gjenbrukbart
+  liste–redigeringsmønster som prioriterer mobil uten å innføre sidespesifikk styling.
+- `AdminPage`, `AdminEntityCollection`, `AdminEditorDialog`, `AdminForm` og `SettingsFields`
+  eier
+  presentasjonsklassene for administrasjonsflater. Features komponerer semantiske komponenter
+  og skal ikke koble seg direkte til `admin-*`- eller `settings-*`-klassene.
 - Appskallet viser ikke en global breadcrumb. Dype flater skal få lokale tilbakehandlinger
   når de redesignes.
 - Shadcn/Radix-primitiver er beholdt i `src/components/ui/`.
@@ -165,6 +226,8 @@ Sentrale filer:
 - `src/components/records/RecordListState.tsx`
 - `src/components/records/RecordCollectionToolbar.tsx`
 - `src/components/layout/PageHeader.tsx`
+- `src/components/admin/SettingsSection.tsx`
+- `src/components/navigation/Tabs.tsx`
 - `src/components/ui/button.tsx`
 - `src/components/ui/accordion.tsx`
 
@@ -190,6 +253,10 @@ Sentrale filer:
 - Kommende, gjennomførte, tomtilstand, lasting, API-feil og avbestilling er kontrollert.
 - `Arrangementer` er kontrollert offentlig og med Admin, Utvidet og Bruker. Program,
   historikkbryter, direkteåpning og kapabilitetsstyrt avlysning er kontrollert.
+- `Baner` er kontrollert med Admin, Utvidet og Bruker på direkte URL. Banevalg,
+  redigeringsutkast, opprettelsesvalidering og bookingoverstyringer er kontrollert uten å
+  sende mutasjoner.
+- `Baner` er visuelt kontrollert på mobil og desktop i lyst og mørkt tema.
 - Lyst og mørkt tema er kontrollert.
 - Aktivitetsoverstyring er kontrollert for tennis, padel og bordtennis.
 - Den endelige normaltilstanden for `Mine tider` lastet uten feil eller advarsler i
@@ -209,6 +276,9 @@ Dette er ikke introdusert som en funksjonell feil i redesignarbeidet.
 - Testdataene inneholder nå ett kommende arrangement uten turnering og bare én gren.
   Historiske kort, grenfilter med flere valg og turneringshandlingene er derfor kartlagt i
   kode, men ikke visuelt utløst med dagens fixture.
+- Alle åtte baner i testdataene er aktive og bruker standardregler. Inaktiv status og lagret
+  bookingoverstyring er derfor kartlagt i kode; overstyringsskjemaet er visuelt kontrollert
+  som et lokalt utkast uten å lagre testdata.
 - Gjentatt åpning av utviklingsinnloggingens konto-/rolledialog kan fortsatt gi Radix-
   advarselen `Missing Description or aria-describedby={undefined}` i Vite-konsollen. Den
   normale sidevisningen er ren; dialogadvarselen bør avgrenses og rettes i en egen liten
@@ -220,25 +290,27 @@ Dette er ikke introdusert som en funksjonell feil i redesignarbeidet.
 
 ### Mål
 
-Fullfør booking- og kontoflyten med bookingbekreftelse, bookingfeil og reglement som neste
-avgrensede vertikale slice.
+Redesign `Grener` som neste avgrensede administrasjonsslice ved å bygge videre på mønstrene
+fra `Baner`.
 
 ### Foreslått rekkefølge
 
-1. Kartlegg bekreftelse, avviste bookinger, API-feil og reglementflyten uten å endre
-   bookingreglene.
-2. Gjenbruk delte statuser, listetilstander og handlingsvarianter.
-3. Legg kun til nye semantiske mønstre når eksisterende record- og handlingsmønstre ikke
-   dekker behovet.
+1. Kartlegg grenstatus, bookingregler, opprettelse, redigering og relevante API-feil.
+2. Gjenbruk administrasjonssidehodet, den grønne opprettelseshandlingen,
+   `AdminEntityCollection`, `RecordChoiceFilter`, felles `AdminEditorDialog` for ny/rediger
+   og ikonbasert `SettingsSection` fra `Baner`.
+3. Behold eksisterende gren- og bookingkontrakter; ikke flytt regler mellom frontend og
+   backend.
 4. Løs mobil, desktop og lyst/mørkt tema i samme slice.
-5. Kontroller relevante innloggings- og kapabilitetstilstander.
+5. Kontroller Admin, Utvidet og Bruker gjennom utviklingsinnloggingen.
 6. Kjør tekniske kontroller og visuell nettleserkontroll.
 
 ### Ikke gjør i samme task
 
 - Ikke start arrangementadministrasjon, turnering eller backend-redesign samtidig.
 - Ikke fjern Radix/shadcn-primitiver som fortsatt gir tilgjengelig interaksjon.
-- Ikke koble aktivitetsfarger til en ny backend-kontrakt uten en separat beslutning.
+- Ikke koble aktivitetsfarger eller grenmetadata til en ny backend-kontrakt uten en separat
+  beslutning.
 - Ikke endre booking- eller autorisasjonsregler som del av den visuelle migreringen.
 
 ## Nyttige kommandoer

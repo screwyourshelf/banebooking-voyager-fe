@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import { Ban, CalendarDays, Tag, UserRound } from "lucide-react";
 import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { RecordEyebrow } from "@/components/records";
 import type { BrukerRespons, RolleType } from "@/features/brukere/types";
 
 const MEDLEMSKAP_TYPE_LABELS: Record<string, string> = {
@@ -73,7 +74,7 @@ export default function BrukerListeRad({
       className="record-card user-directory-row"
       data-account-status={kontoStatus}
     >
-      <AccordionTrigger className="user-directory-row__trigger hover:no-underline">
+      <AccordionTrigger className="record-card__trigger user-directory-row__trigger hover:no-underline">
         <div className="user-directory-row__summary">
           <div className="user-directory-row__identity">
             <span className="user-directory-row__avatar" aria-hidden="true">
@@ -92,7 +93,7 @@ export default function BrukerListeRad({
                 </span>
               ) : null}
               <span className="user-directory-row__mobile-meta">
-                <span>{rolle}</span>
+                <RecordEyebrow className="user-directory-row__mobile-role">{rolle}</RecordEyebrow>
                 <span data-membership-status={medlemskapStatus}>{medlemskapTekst}</span>
                 {kontoStatus !== "aktiv" ? (
                   <span data-account-status={kontoStatus}>{kontoStatusTekst}</span>
@@ -101,7 +102,9 @@ export default function BrukerListeRad({
             </span>
           </div>
 
-          <span className="user-directory-row__cell user-directory-row__role">{rolle}</span>
+          <RecordEyebrow className="user-directory-row__cell user-directory-row__role">
+            {rolle}
+          </RecordEyebrow>
           <span
             className="user-directory-row__cell user-directory-row__membership"
             data-membership-status={medlemskapStatus}

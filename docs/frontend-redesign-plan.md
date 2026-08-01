@@ -92,6 +92,8 @@ POC-en dekker nå:
 - `Arrangementer` med offentlig og innlogget liste, programvisning, historikkfilter og
   kapabilitetsstyrte handlinger.
 - `Brukere` med responsivt søk, filtre, resultatkort og redigeringsdialog.
+- `Baner` med responsiv entitetsliste, fokusert redigering, opprettelse og valgfrie
+  bookingoverstyringer.
 - Delte valg- og listeprimitiver samt sentrale design-tokens.
 
 ## Migreringsrekkefølge
@@ -103,6 +105,8 @@ POC-en dekker nå:
 - `record-list`/`record-card` er beholdt som delte CSS-mønstre; status, listetilstander og
   vedvarende filterbrytere har fått semantiske komponenter der type- og atferdsverdien er
   reell.
+- Record-rader deler en oransje informasjonsmarkør gjennom `RecordAccent`/`RecordEyebrow`,
+  mens `RecordChoiceFilter` gir samme responsive valgfilter i Baner og Arrangementer.
 - Kartlegg direkte bruk av `components/ui` og lokale Tailwind-varianter som bør erstattes av
   semantiske komponenter.
 - Behold fungerende domenelogikk uendret.
@@ -132,12 +136,16 @@ programmet grupperes etter dato i det utvidede kortet.
 
 ### Fase 4 — Resterende administrasjon
 
-1. Baner og grener.
-2. Kunngjøringer.
-3. Klubbinnstillinger.
+1. Baner — fullført.
+2. Grener.
+3. Kunngjøringer.
+4. Klubbinnstillinger.
 
 `Brukere` er referanse for responsive adminlister, men nye sider skal gjenbruke delte
-mønstre fremfor å kopiere hele siden.
+mønstre fremfor å kopiere hele siden. `Baner` etablerer et liste–redigeringsmønster med
+fullbreddes record-rader, responsivt grenfilter, grønn opprettelseshandling, samme fokuserte
+editor for ny og rediger, og ikonbaserte settings-seksjoner. Editoren er helskjerm på mobil
+og avgrenset på desktop. `Grener` skal bygge videre på disse semantiske mønstrene.
 
 ### Fase 5 — Turnering
 

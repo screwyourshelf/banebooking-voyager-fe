@@ -9,6 +9,7 @@ import { Stack, Inline } from "@/components/layout";
 import WeatherInfo from "@/components/WeatherInfo";
 import { Button } from "@/components/ui/button";
 import SlotListSkeleton from "@/components/loading/SlotListSkeleton";
+import { RecordAccent } from "@/components/records";
 import KobleTilArrangementDialog from "./KobleTilArrangementDialog";
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
@@ -78,7 +79,7 @@ function BookingSlotRow({ slot, currentUser, onBook, onFjern }: SlotRowProps) {
     <>
       <div className="booking-slot__summary booking-slot__summary--mobile">
         <div className="booking-slot__time booking-slot__time--mobile">
-          <strong>{startTid}</strong>
+          <RecordAccent className="booking-slot__time-start">{startTid}</RecordAccent>
           <span className="sr-only">til {sluttTid}</span>
           {slot.værSymbol || typeof slot.temperatur === "number" ? (
             <span className="booking-slot__time-weather">
@@ -104,7 +105,7 @@ function BookingSlotRow({ slot, currentUser, onBook, onFjern }: SlotRowProps) {
 
       <div className="booking-slot__summary booking-slot__summary--desktop">
         <div className="booking-slot__time">
-          <strong>{startTid}</strong>
+          <RecordAccent className="booking-slot__time-start">{startTid}</RecordAccent>
           <span>– {sluttTid}</span>
         </div>
 

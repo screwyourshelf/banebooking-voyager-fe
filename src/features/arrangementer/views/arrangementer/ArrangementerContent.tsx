@@ -1,10 +1,10 @@
 import { useMemo, useState } from "react";
 import { CalendarDays, CalendarX, RefreshCw } from "lucide-react";
 import { usePagination } from "@/hooks/usePagination";
-import ControlChoice from "@/components/controls/ControlChoice";
 import FilterSwitch from "@/components/controls/FilterSwitch";
 import { Inline } from "@/components/layout";
 import {
+  RecordChoiceFilter,
   RecordCollectionSkeleton,
   RecordCollectionToolbar,
   RecordListState,
@@ -90,20 +90,14 @@ export default function ArrangementerContent({
       />
 
       {grener.length > 1 ? (
-        <fieldset className="control-surface arrangements__filters">
-          <legend>Gren</legend>
-          <div className="arrangements__filter-choices">
-            {grener.map((gren) => (
-              <ControlChoice
-                key={gren}
-                selected={grenFilter.includes(gren)}
-                onClick={() => toggleGren(gren)}
-              >
-                {gren}
-              </ControlChoice>
-            ))}
-          </div>
-        </fieldset>
+        <RecordChoiceFilter
+          label="Gren"
+          options={grener.map((gren) => ({ value: gren, label: gren }))}
+          selectedValues={grenFilter}
+          onToggle={toggleGren}
+          onReset={() => setGrenFilter([])}
+          disabled={isFetching}
+        />
       ) : null}
 
       <div className="record-collection__body">

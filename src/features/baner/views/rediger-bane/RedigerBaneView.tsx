@@ -1,9 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
+import { MapPin, RefreshCw } from "lucide-react";
 import { useBaner } from "@/hooks/useBaner";
 import { useGrener } from "@/hooks/useGrener";
 
-import { FormSkeleton } from "@/components/loading";
-import { QueryFeil } from "@/components/errors";
+import {
+  AdminEditorDialog,
+  AdminEntityCollection,
+  AdminEntityList,
+  AdminEntityRow,
+} from "@/components/admin";
+import {
+  RecordChoiceFilter,
+  RecordCollectionSkeleton,
+  RecordListState,
+} from "@/components/records";
+import { Button } from "@/components/ui/button";
 import RedigerBaneContent from "./RedigerBaneContent";
 import { loadValgtBaneId, saveValgtBaneId } from "./storage";
 import type { BaneRespons, OppdaterBaneBookingInnstillingerForespørsel } from "@/types";
@@ -75,6 +86,8 @@ export default function RedigerBaneView() {
 
   const [redigerte, setRedigerte] = useState<Record<string, BaneFormData>>({});
   const [manuellBaneId, setValgtBaneId] = useState<string | null>(() => loadValgtBaneId());
+  const [editorOpen, setEditorOpen] = useState(false);
+  const [grenFilter, setGrenFilter] = useState<string[]>([]);
 
   const [touched, setTouched] = useState<Record<string, TouchedState>>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
@@ -142,25 +155,11 @@ export default function RedigerBaneView() {
 
   const [overstyringAktivDraft, setOverstyringAktivDraft] = useState<Record<string, boolean>>({});
 
-  // Reset dependent state when bane selection changes (render-time adjust)
+  // Validation feedback belongs to the open editor, while drafts are preserved per bane.
   const [prevValgtBaneId, setPrevValgtBaneId] = useState(valgtBaneId);
   if (valgtBaneId !== prevValgtBaneId) {
     setPrevValgtBaneId(valgtBaneId);
     setSubmitAttempted(false);
-    if (valgtBaneId) {
-      setOverstyringDrafts((prev) => {
-        if (!prev[valgtBaneId]) return prev;
-        const ny = { ...prev };
-        delete ny[valgtBaneId];
-        return ny;
-      });
-      setOverstyringAktivDraft((prev) => {
-        if (!(valgtBaneId in prev)) return prev;
-        const ny = { ...prev };
-        delete ny[valgtBaneId];
-        return ny;
-      });
-    }
   }
 
   const serverOverstyring: OverstyringFormData | null = useMemo(() => {
@@ -352,39 +351,173 @@ export default function RedigerBaneView() {
     }
   }
 
-  if (isLoading || loadingGrener) return <FormSkeleton />;
+  if (isLoading || loadingGrener) {
+    return (
+      <AdminEntityCollection
+        icon={<MapPin aria-hidden="true" />}
+        title="Laster baner…"
+        description="Henter klubbens baneoversikt"
+      >
+        <RecordCollectionSkeleton ariaLabel="Laster baner" rows={4} />
+      </AdminEntityCollection>
+    );
+  }
+
+  if (error) {
+    return (
+      <AdminEntityCollection
+        icon={<MapPin aria-hidden="true" />}
+        title="Baner"
+        description="Klubbens baneoversikt"
+      >
+        <RecordListState
+          icon={<RefreshCw aria-hidden="true" />}
+          title="Kunne ikke hente banene"
+          description={error.message}
+          tone="danger"
+          role="alert"
+          action={
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => void refetch()}
+              disabled={isFetching}
+            >
+              {isFetching ? "Prøver igjen…" : "Prøv igjen"}
+            </Button>
+          }
+        />
+      </AdminEntityCollection>
+    );
+  }
+
+  const grenValg = [...new Set(baner.map((bane) => bane.grenNavn))]
+    .sort((a, b) => a.localeCompare(b, "nb-NO"))
+    .map((gren) => ({ value: gren, label: gren }));
+  const filtrerteBaner =
+    grenFilter.length === 0 ? baner : baner.filter((bane) => grenFilter.includes(bane.grenNavn));
+  const antallTekst = `${filtrerteBaner.length} ${filtrerteBaner.length === 1 ? "bane" : "baner"}`;
+  const listeBeskrivelse =
+    grenFilter.length > 0
+      ? `${grenFilter.length} ${grenFilter.length === 1 ? "gren" : "grener"} valgt`
+      : "Velg en bane for å redigere";
+  const editorNavn = redigerteVerdier?.navn.trim() || valgtBane?.navn || "Bane";
+  const editorAktiv = redigerteVerdier?.aktiv ?? valgtBane?.aktiv ?? false;
 
   return (
-    <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
-      <RedigerBaneContent
-        baner={baner}
-        grener={grener}
-        valgtBaneId={valgtBaneId}
-        onChangeValgtBaneId={setValgtBaneId}
-        valgtBane={valgtBane}
-        redigerteVerdier={redigerteVerdier}
-        onChangeFelt={(felt, verdi) => {
-          if (!valgtBane) return;
-          håndterEndring(valgtBane.id, felt, verdi);
-        }}
-        navnError={navnError}
-        onBlurNavn={() => {
-          if (!valgtBaneId) return;
-          touchField(valgtBaneId, "navn");
-        }}
-        overstyringAktivert={overstyringAktivert}
-        onToggleOverstyringAktivert={handleToggleOverstyringAktivert}
-        klubbDefault={klubbDefault}
-        overstyring={overstyring}
-        onToggleOverstyring={handleToggleOverstyring}
-        onChangeOverstyring={handleChangeOverstyring}
-        canSubmit={canSubmit}
-        isSaving={isSaving}
-        onSubmit={() => void onSubmit()}
-        mutasjonFeil={
-          oppdaterBane.error?.message ?? oppdaterBookingInnstillinger.error?.message ?? null
+    <>
+      <AdminEntityCollection
+        icon={<MapPin aria-hidden="true" />}
+        title={antallTekst}
+        description={listeBeskrivelse}
+        filters={
+          grenValg.length > 1 ? (
+            <RecordChoiceFilter
+              label="Gren"
+              options={grenValg}
+              selectedValues={grenFilter}
+              onToggle={(gren) =>
+                setGrenFilter((current) =>
+                  current.includes(gren)
+                    ? current.filter((item) => item !== gren)
+                    : [...current, gren]
+                )
+              }
+              onReset={() => setGrenFilter([])}
+              disabled={isSaving}
+            />
+          ) : undefined
         }
-      />
-    </QueryFeil>
+      >
+        {filtrerteBaner.length === 0 ? (
+          <RecordListState
+            icon={<MapPin aria-hidden="true" />}
+            title={baner.length === 0 ? "Ingen baner ennå" : "Ingen baner for valgt gren"}
+            description={
+              baner.length === 0
+                ? "Bruk knappen Ny bane for å opprette den første."
+                : "Velg en annen gren eller nullstill filteret."
+            }
+            action={
+              baner.length > 0 ? (
+                <Button type="button" variant="outline" size="sm" onClick={() => setGrenFilter([])}>
+                  Nullstill filter
+                </Button>
+              ) : undefined
+            }
+          />
+        ) : (
+          <AdminEntityList>
+            {filtrerteBaner.map((bane) => {
+              const baneDraft = redigerte[bane.id];
+              const erEndret = Boolean(
+                baneDraft ||
+                overstyringDrafts[bane.id] ||
+                Object.hasOwn(overstyringAktivDraft, bane.id)
+              );
+              const beskrivelse = baneDraft ? baneDraft.beskrivelse : bane.beskrivelse;
+
+              return (
+                <AdminEntityRow
+                  key={bane.id}
+                  title={baneDraft?.navn.trim() || bane.navn}
+                  meta={bane.grenNavn}
+                  description={beskrivelse || undefined}
+                  status={erEndret ? "Ulagret" : bane.aktiv ? "Aktiv" : "Inaktiv"}
+                  statusTone={erEndret ? "warning" : bane.aktiv ? "available" : "past"}
+                  onSelect={() => {
+                    setValgtBaneId(bane.id);
+                    setEditorOpen(true);
+                  }}
+                  disabled={isSaving}
+                />
+              );
+            })}
+          </AdminEntityList>
+        )}
+      </AdminEntityCollection>
+
+      {valgtBane ? (
+        <AdminEditorDialog
+          open={editorOpen}
+          onOpenChange={(open) => {
+            if (!isSaving) setEditorOpen(open);
+          }}
+          backLabel="Alle baner"
+          eyebrow="Rediger bane"
+          title={editorNavn}
+          description={`${valgtBane.grenNavn} · ${editorAktiv ? "Aktiv" : "Inaktiv"}`}
+          closeDisabled={isSaving}
+        >
+          <RedigerBaneContent
+            grener={grener}
+            valgtBane={valgtBane}
+            redigerteVerdier={redigerteVerdier}
+            onChangeFelt={(felt, verdi) => {
+              if (!valgtBane) return;
+              håndterEndring(valgtBane.id, felt, verdi);
+            }}
+            navnError={navnError}
+            onBlurNavn={() => {
+              if (!valgtBaneId) return;
+              touchField(valgtBaneId, "navn");
+            }}
+            overstyringAktivert={overstyringAktivert}
+            onToggleOverstyringAktivert={handleToggleOverstyringAktivert}
+            klubbDefault={klubbDefault}
+            overstyring={overstyring}
+            onToggleOverstyring={handleToggleOverstyring}
+            onChangeOverstyring={handleChangeOverstyring}
+            canSubmit={canSubmit}
+            isSaving={isSaving}
+            onSubmit={() => void onSubmit()}
+            mutasjonFeil={
+              oppdaterBane.error?.message ?? oppdaterBookingInnstillinger.error?.message ?? null
+            }
+          />
+        </AdminEditorDialog>
+      ) : null}
+    </>
   );
 }

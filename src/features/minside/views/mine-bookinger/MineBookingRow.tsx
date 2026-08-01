@@ -1,7 +1,7 @@
 import { Timer, Wind } from "lucide-react";
 import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { RecordStatus } from "@/components/records";
+import { RecordAccent, RecordStatus } from "@/components/records";
 import WeatherInfo from "@/components/WeatherInfo";
 import type { MinBookingRespons } from "@/types";
 
@@ -39,7 +39,7 @@ export default function MineBookingRow({
     <div className="record-card__summary mine-booking__summary">
       <span className="mine-booking__time">
         <span className="mine-booking__time-range">
-          <strong>{start}</strong>
+          <RecordAccent className="mine-booking__time-start">{start}</RecordAccent>
           <span>–{end}</span>
         </span>
 
