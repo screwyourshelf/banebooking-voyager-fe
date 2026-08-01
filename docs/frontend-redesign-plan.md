@@ -1,7 +1,7 @@
 # Frontend-redesign: plan og retningslinjer
 
 > **Status:** Aktiv redesign
-> **Sist oppdatert:** 2026-07-31
+> **Sist oppdatert:** 2026-08-01
 > **Arbeidsbranch:** `feature/frontend-design-poc`
 
 Dette dokumentet er autoritativt for visuell utforming og UI-arkitektur mens redesignen
@@ -94,6 +94,8 @@ POC-en dekker nå:
 - `Brukere` med responsivt søk, filtre, resultatkort og redigeringsdialog.
 - `Baner` med responsiv entitetsliste, fokusert redigering, opprettelse og valgfrie
   bookingoverstyringer.
+- `Grener` med responsiv entitetsliste, felles editor for ny/rediger og delte
+  bookinginnstillinger.
 - Delte valg- og listeprimitiver samt sentrale design-tokens.
 
 ## Migreringsrekkefølge
@@ -137,7 +139,7 @@ programmet grupperes etter dato i det utvidede kortet.
 ### Fase 4 — Resterende administrasjon
 
 1. Baner — fullført.
-2. Grener.
+2. Grener — fullført.
 3. Kunngjøringer.
 4. Klubbinnstillinger.
 
@@ -145,7 +147,9 @@ programmet grupperes etter dato i det utvidede kortet.
 mønstre fremfor å kopiere hele siden. `Baner` etablerer et liste–redigeringsmønster med
 fullbreddes record-rader, responsivt grenfilter, grønn opprettelseshandling, samme fokuserte
 editor for ny og rediger, og ikonbaserte settings-seksjoner. Editoren er helskjerm på mobil
-og avgrenset på desktop. `Grener` skal bygge videre på disse semantiske mønstrene.
+og avgrenset på desktop. `Grener` viderefører mønsteret med grenens åpningstid og
+bookingregler i record-raden og samme editor for opprettelse og redigering. `Kunngjøringer`
+er neste avgrensede administrasjonsslice.
 
 ### Fase 5 — Turnering
 

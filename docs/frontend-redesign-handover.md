@@ -1,7 +1,7 @@
 # Frontend-redesign: handover til neste Codex-task
 
-> **Status:** Fundament, `Mine tider`, `Arrangementer` og `Baner`-slice klar
-> **Sist oppdatert:** 2026-07-31
+> **Status:** Fundament, `Mine tider`, `Arrangementer`, `Baner` og `Grener`-slice klar
+> **Sist oppdatert:** 2026-08-01
 > **Repo:** `/Users/andreas/Dev/banebooking/frontend`
 > **Branch:** `feature/frontend-design-poc`
 > **Utgangspunkt:** `main` på `dbf08f5`
@@ -181,6 +181,39 @@ Sentrale filer:
 - `src/components/records/RecordChoiceFilter.tsx`
 - `src/components/records/RecordText.tsx`
 
+### Grener
+
+- Siden viderefører det samme liste–redigeringsmønsteret som `Baner`: oversikten er det
+  stabile startpunktet, mens valg av gren åpner en fokusert editor.
+- Grenoversikten bruker `AdminEntityCollection` og fullbreddes record-rader med åpningstid
+  som oransje informasjonsmarkør, tydelig navn, kompakt oppsummering av bookingregler,
+  status og viderepil.
+- `Ny gren` og redigering bruker samme `AdminEditorDialog`: helskjerm med `Alle grener` på
+  mobil og avgrenset dialog på desktop.
+- Opprettelse og redigering deler `GrenEditorContent`. Navn, reglement, sortering, status og
+  bookingregler bruker de samme `Settings*`-komponentene som Baner i stedet for lokale
+  skjema- eller brytervarianter.
+- Utkast beholdes per gren når editoren lukkes, og tilhørende rad merkes `Ulagret`.
+- Lasting, API-feil med retry, tomtilstand, mutasjonsfeil og manglende tilgang har egne
+  tilstander i den delte flaten.
+- `grener:admin` styrer sideinnhold og opprettelseshandling. Utvidet og Bruker får en
+  eksplisitt tilgangstilstand ved direkte URL.
+- Eksisterende opprettelses- og oppdateringskontrakter, validering og bookingregler er
+  beholdt uendret.
+- Grener-featuret inneholder ingen lokale `className`-koblinger eller inline-stiler.
+
+Sentrale filer:
+
+- `src/features/grener/pages/GrenerPage.tsx`
+- `src/features/grener/GrenEditorContent.tsx`
+- `src/features/grener/views/rediger-gren/RedigerGrenView.tsx`
+- `src/features/grener/views/ny-gren/NyGrenView.tsx`
+- `src/features/grener/views/ny-gren/NyGrenDialog.tsx`
+- `src/components/admin/AdminEntityCollection.tsx`
+- `src/components/admin/AdminEditorDialog.tsx`
+- `src/components/admin/SettingsFields.tsx`
+- `src/components/admin/SettingsSection.tsx`
+
 ### Delte designmønstre
 
 - `src/styles/design-system.css` er et lite, ordnet importpunkt.
@@ -194,8 +227,9 @@ Sentrale filer:
 - `RecordCollectionToolbar` gir listeflater samme opptelling, beskrivelse og handlinger på
   den grønne kontrollflaten.
 - `record-list` og `record-card` gir felles ramme for slots og søkeresultater.
-- `RecordAccent` og `RecordEyebrow` gir record-radene én felles oransje informasjonsmarkør:
-  tid i Book/Mine tider, dato i Arrangementer, rolle i Brukere og gren i Baner.
+- `RecordAccent` og `RecordEyebrow` gir vanlige record-rader én felles oransje
+  informasjonsmarkør: tid i Book/Mine tider, dato i Arrangementer og rolle i Brukere.
+  `AdminEntityRow` følger samme regel med gren i Baner og åpningstid i Grener.
 - `RecordChoiceFilter` gir record-samlinger samme responsive valgfilter. Arrangementer og
   Baner bruker komponenten uten lokale filtervarianter.
 - `RecordStatus` og `RecordListState` gir semantiske statuser og listetilstander uten at
@@ -257,6 +291,9 @@ Sentrale filer:
   redigeringsutkast, opprettelsesvalidering og bookingoverstyringer er kontrollert uten å
   sende mutasjoner.
 - `Baner` er visuelt kontrollert på mobil og desktop i lyst og mørkt tema.
+- `Grener` er kontrollert med Admin, Utvidet og Bruker på direkte URL. Liste, editor,
+  opprettelsesvalidering og utkast er kontrollert uten å sende mutasjoner.
+- `Grener` er visuelt kontrollert på mobil og desktop i lyst og mørkt tema.
 - Lyst og mørkt tema er kontrollert.
 - Aktivitetsoverstyring er kontrollert for tennis, padel og bordtennis.
 - Den endelige normaltilstanden for `Mine tider` lastet uten feil eller advarsler i
@@ -279,6 +316,9 @@ Dette er ikke introdusert som en funksjonell feil i redesignarbeidet.
 - Alle åtte baner i testdataene er aktive og bruker standardregler. Inaktiv status og lagret
   bookingoverstyring er derfor kartlagt i kode; overstyringsskjemaet er visuelt kontrollert
   som et lokalt utkast uten å lagre testdata.
+- Alle tre grener i testdataene er aktive. Inaktiv status, tomtilstand og API-feil er derfor
+  kartlagt i kode, mens opprettelsesvalidering og editor er visuelt kontrollert uten å lagre
+  testdata.
 - Gjentatt åpning av utviklingsinnloggingens konto-/rolledialog kan fortsatt gi Radix-
   advarselen `Missing Description or aria-describedby={undefined}` i Vite-konsollen. Den
   normale sidevisningen er ren; dialogadvarselen bør avgrenses og rettes i en egen liten
@@ -290,17 +330,17 @@ Dette er ikke introdusert som en funksjonell feil i redesignarbeidet.
 
 ### Mål
 
-Redesign `Grener` som neste avgrensede administrasjonsslice ved å bygge videre på mønstrene
-fra `Baner`.
+Redesign `Kunngjøringer` som neste avgrensede administrasjonsslice ved å bygge videre på
+det konsoliderte designfundamentet.
 
 ### Foreslått rekkefølge
 
-1. Kartlegg grenstatus, bookingregler, opprettelse, redigering og relevante API-feil.
+1. Kartlegg publiseringsstatus, målgrupper, tidsstyring, opprettelse, redigering og relevante
+   API-feil.
 2. Gjenbruk administrasjonssidehodet, den grønne opprettelseshandlingen,
-   `AdminEntityCollection`, `RecordChoiceFilter`, felles `AdminEditorDialog` for ny/rediger
-   og ikonbasert `SettingsSection` fra `Baner`.
-3. Behold eksisterende gren- og bookingkontrakter; ikke flytt regler mellom frontend og
-   backend.
+   `AdminEntityCollection`, felles `AdminEditorDialog` og semantiske skjemamønstre der de
+   passer domenet.
+3. Behold eksisterende kunngjøringskontrakter og publiseringsregler.
 4. Løs mobil, desktop og lyst/mørkt tema i samme slice.
 5. Kontroller Admin, Utvidet og Bruker gjennom utviklingsinnloggingen.
 6. Kjør tekniske kontroller og visuell nettleserkontroll.

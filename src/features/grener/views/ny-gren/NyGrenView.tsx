@@ -1,23 +1,15 @@
 import { useMemo, useState } from "react";
 import { useGrener } from "@/hooks/useGrener";
+import GrenEditorContent, { type GrenFormData } from "@/features/grener/GrenEditorContent";
 
-import NyGrenContent from "./NyGrenContent";
-
-type FormState = {
-  navn: string;
-  banereglement: string;
-  sortering: string;
-  aapningstid: number;
-  stengetid: number;
-  maksPerDag: number;
-  maksTotalt: number;
-  dagerFremITid: number;
-  slotLengdeMinutter: number;
+type Props = {
+  onCreated: () => void;
 };
 
-const defaultForm: FormState = {
+const defaultForm: GrenFormData = {
   navn: "",
   banereglement: "",
+  aktiv: true,
   sortering: "0",
   aapningstid: 7,
   stengetid: 22,
@@ -28,38 +20,28 @@ const defaultForm: FormState = {
 };
 
 function validateNavn(navn: string): string | null {
-  const v = navn.trim();
-  if (!v) return "Navn er påkrevd.";
-  return null;
+  return navn.trim() ? null : "Navn er påkrevd.";
 }
 
-function hourToTime(h: number): string {
-  return `${String(h).padStart(2, "0")}:00`;
+function hourToTime(hour: number): string {
+  return `${String(hour).padStart(2, "0")}:00`;
 }
 
-export default function NyGrenView() {
+export default function NyGrenView({ onCreated }: Props) {
   const { opprettGren } = useGrener();
-
-  const [form, setForm] = useState<FormState>({ ...defaultForm });
-  const [touched, setTouched] = useState<{ navn: boolean }>({ navn: false });
-  const errors = useMemo(() => ({ navn: validateNavn(form.navn) }), [form.navn]);
-
+  const [form, setForm] = useState<GrenFormData>({ ...defaultForm });
+  const [touched, setTouched] = useState(false);
+  const navnError = validateNavn(form.navn);
   const isDirty = useMemo(() => form.navn.trim().length > 0, [form.navn]);
-  const isValid = useMemo(() => !errors.navn, [errors.navn]);
-  const canSubmit = isDirty && isValid;
-  const navnError = touched.navn ? errors.navn : null;
+  const canSubmit = isDirty && !navnError;
 
-  function onChange<K extends keyof FormState>(key: K, value: FormState[K]) {
-    setForm((f) => ({ ...f, [key]: value }));
-  }
-
-  function touchNavn() {
-    setTouched((t) => (t.navn ? t : { ...t, navn: true }));
+  function onChange<K extends keyof GrenFormData>(key: K, value: GrenFormData[K]) {
+    setForm((current) => ({ ...current, [key]: value }));
   }
 
   async function onSubmit() {
-    touchNavn();
-    if (!isValid) return;
+    setTouched(true);
+    if (navnError) return;
 
     const sortering = parseInt(form.sortering, 10);
 
@@ -77,21 +59,25 @@ export default function NyGrenView() {
       });
 
       setForm({ ...defaultForm });
-      setTouched({ navn: false });
+      setTouched(false);
+      onCreated();
     } catch {
-      // feil vises inline via opprettGren.error
+      // Feilen vises i skjemaet.
     }
   }
 
   return (
-    <NyGrenContent
+    <GrenEditorContent
       form={form}
       onChange={onChange}
+      showActive={false}
       canSubmit={canSubmit}
       isSaving={opprettGren.isPending}
       onSubmit={() => void onSubmit()}
-      navnError={navnError}
-      onBlurNavn={touchNavn}
+      submitLabel="Opprett gren"
+      loadingText="Oppretter…"
+      navnError={touched ? navnError : null}
+      onBlurNavn={() => setTouched(true)}
       mutasjonFeil={opprettGren.error?.message ?? null}
     />
   );
