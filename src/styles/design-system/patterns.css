@@ -993,6 +993,47 @@
     opacity: 0.55;
   }
 
+  .settings-choice-group {
+    --control-choice-border: var(--app-line);
+    --control-choice-bg: var(--app-surface);
+    --control-choice-text: var(--app-ink-soft);
+    --control-choice-hover-bg: var(--app-surface-subtle);
+    --control-choice-hover-text: var(--app-ink);
+    --control-choice-selected-border: color-mix(
+      in srgb,
+      var(--app-choice-indicator) 42%,
+      var(--app-line)
+    );
+    --control-choice-selected-bg: color-mix(
+      in srgb,
+      var(--app-choice-indicator) 8%,
+      var(--app-surface)
+    );
+    --control-choice-selected-text: var(--app-ink);
+    --control-choice-indicator: var(--app-choice-indicator);
+
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .settings-choice-group .control-choice {
+    min-height: 2.5rem;
+  }
+
+  .settings-control-frame {
+    width: fit-content;
+    max-width: 100%;
+    overflow-x: auto;
+    border: 1px solid var(--app-line);
+    border-radius: 0.875rem;
+    background: var(--app-surface);
+  }
+
+  .settings-row [data-slot="textarea"] {
+    resize: vertical;
+  }
+
   .settings-range {
     width: 100%;
     accent-color: var(--app-brand);
@@ -1161,6 +1202,28 @@
     color: var(--app-ink-faint);
   }
 
+  .admin-action-row[data-muted="true"] {
+    opacity: 0.58;
+  }
+
+  .admin-action-row__summary {
+    gap: 0.75rem;
+  }
+
+  .admin-action-row__summary .record-status {
+    flex: 0 0 auto;
+  }
+
+  .admin-action-row__actions {
+    gap: 0.5rem;
+    margin-inline: 0.75rem;
+    padding-block: 0.625rem 0.75rem;
+  }
+
+  .admin-action-row__actions [data-slot="button"] {
+    min-width: 5.5rem;
+  }
+
   .admin-editor-dialog {
     inset: 0 !important;
     display: flex !important;
@@ -1226,6 +1289,10 @@
     flex-direction: column;
     overflow-y: auto;
     overscroll-behavior: contain;
+  }
+
+  .admin-editor-dialog__body > .section-tabs {
+    padding: 0.75rem;
   }
 
   .admin-editor-dialog__body .admin-editor-form,

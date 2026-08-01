@@ -181,6 +181,10 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    .settings-choice-group .control-choice {
+      min-width: 4.25rem;
+    }
+
     .admin-form__actions {
       padding: 0.875rem 1rem;
     }
@@ -211,6 +215,14 @@
       gap: 0.75rem;
     }
 
+    .admin-action-row__summary {
+      padding-block: 0.875rem;
+    }
+
+    .admin-action-row__actions {
+      margin-inline: 1.5rem;
+    }
+
     .admin-editor-dialog {
       inset: auto !important;
       top: 50% !important;
@@ -221,6 +233,15 @@
       translate: -50% -50% !important;
       transform: none !important;
       border-radius: 1.5rem !important;
+    }
+
+    .admin-editor-dialog[data-size="wide"] {
+      width: min(68rem, calc(100% - 2rem)) !important;
+      height: min(54rem, calc(100dvh - 2rem));
+    }
+
+    .admin-editor-dialog__body > .section-tabs {
+      padding: 1rem 1.25rem 1.25rem;
     }
 
     .admin-editor-dialog__header {

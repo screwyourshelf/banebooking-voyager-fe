@@ -1,6 +1,6 @@
 # Frontend-redesign: handover til neste Codex-task
 
-> **Status:** Fundament, `Mine tider`, `Arrangementer`, `Baner`, `Grener`,
+> **Status:** Fundament, `Mine tider`, `Arrangementer`, `Arrangementadministrasjon`, `Baner`, `Grener`,
 > `Klubbinnstillinger`, `Min side`, `Kunngjøringer`, `Vilkår` og guard-flater klare
 > **Sist oppdatert:** 2026-08-01
 > **Repo:** `/Users/andreas/Dev/banebooking/frontend`
@@ -118,6 +118,50 @@ Sentrale filer:
 - `src/features/arrangementer/views/arrangementer/ArrangementRow.tsx`
 - `src/features/arrangementer/views/arrangementer/useArrangementer.ts`
 - `src/features/arrangementer/views/arrangementer/useAvlysArrangement.ts`
+
+### Arrangementadministrasjon
+
+- Siden følger samme liste–redigeringsmønster som Baner og Grener. En fullbreddes
+  arrangementsliste er det stabile startpunktet; `Nytt arrangement` og valg av en rad åpner
+  samme fokuserte editorfamilie.
+- Oversikten bruker grønn `AdminEntityCollection`, oransje datoaksent, felles status,
+  historikkbryter og delt grenfilter. Mobil viser fullbreddes record-rader; desktop bruker
+  hele arbeidsbredden uten layoutskift.
+- Editorens `wide`-størrelse er en sentral variant av `AdminEditorDialog` for avanserte
+  arbeidsflater. Den er fortsatt helskjerm på mobil og kan gjenbrukes av eksempelvis
+  turneringsadministrasjon.
+- Informasjon og bookinger er separate `section`-faner med grønn kontrollflate og oransje
+  valgtmarkør. Metadata lagres fortsatt separat og regenererer ikke bookinger.
+- Ny og rediger bruker samme settings-hierarki for gren, kategori, intern beskrivelse og
+  publisering. Redigering samler turneringskobling og et tydelig felles fareområde for
+  avlysning i informasjonsfanen.
+- Gjentakende og manuelt oppsett bruker `SettingsRadioGroup`, `SettingsChoiceGroup`,
+  settings-brytere og samme grønne handlingshierarki. De bygger fortsatt den konkrete
+  bookinglisten og beholder konflikt-/slotlengdelogikken uendret.
+- Bookinglisten bruker `AdminEntityCollection`, `record-list` og den nye delte
+  `AdminActionRow` i stedet for en lokal tabell. Dato, tidsrom, bane, status og tekstbaserte
+  rediger-/avlyshandlinger følger samme informasjonsrekkefølge på mobil og desktop.
+- Redigering av én booking bruker den delte editoren og settings-feltene. Avlysning bruker
+  det eksisterende bekreftelsesforløpet komponert med delt fareområde og bryter.
+- `arrangement:se` styrer tilgang til siden, som før. Eksisterende API-kontrakter for
+  opprettelse, metadata, bookingliste, enkeltendringer, batch-opprettelse, avlysning og
+  turnering er beholdt.
+- Hele `src/features/arrangement-admin/` er fri for lokale `className`-koblinger og
+  inline-stiler; presentasjonen eies av delte semantiske komponenter og designsystemet.
+
+Sentrale filer:
+
+- `src/features/arrangement-admin/pages/ArrangementPage.tsx`
+- `src/features/arrangement-admin/views/ArrangementAdminOverview.tsx`
+- `src/features/arrangement-admin/views/arrangement/OpprettArrangementView.tsx`
+- `src/features/arrangement-admin/views/rediger-arrangement/RedigerArrangementView.tsx`
+- `src/features/arrangement-admin/components/BookingListe/BookingListe.tsx`
+- `src/features/arrangement-admin/components/BookingListe/BookingRad.tsx`
+- `src/features/arrangement-admin/components/GjentakendeOppsett/GjentakendeOppsett.tsx`
+- `src/features/arrangement-admin/components/ManueltOppsett/ManueltOppsett.tsx`
+- `src/components/admin/AdminEntityCollection.tsx`
+- `src/components/admin/AdminEditorDialog.tsx`
+- `src/components/admin/SettingsFields.tsx`
 
 ### Brukeradministrasjon
 
@@ -364,6 +408,8 @@ Sentrale filer:
   overstyre bryterfarge lokalt.
 - `SettingsRadioGroup` gir innstillingsskjemaer ett felles Radix-basert radiovalg med samme
   oransje valgmarkør, temaoppførsel og responsive geometri.
+- `SettingsChoiceGroup` gir fler-valg i avanserte skjemaer samme `ControlChoice`-geometri
+  og oransje valgtmarkør uten feature-lokale knapperekker.
 - `RecordCollectionToolbar` gir listeflater samme opptelling, beskrivelse og handlinger på
   den grønne kontrollflaten.
 - `record-list` og `record-card` gir felles ramme for slots og søkeresultater.
@@ -378,6 +424,10 @@ Sentrale filer:
 - `ChoiceStrip` gir Book bane ett delt, semantisk lag for horisontale valgknapper.
 - `AdminEntityCollection` og `AdminEditorDialog` gir administrasjonssider et gjenbrukbart
   liste–redigeringsmønster som prioriterer mobil uten å innføre sidespesifikk styling.
+- `AdminActionRow` gir ikke-selekterbare administrasjonsrader samme record-ramme og et
+  høyrejustert handlingsområde. Arrangementets bookingliste er første bruker.
+- `AdminEditorDialog` sin `wide`-variant gir komplekse editorer større arbeidsflate på
+  desktop uten å endre den felles helskjermmodellen på mobil.
 - `Tabs` sin `section`-variant gir både administrasjons- og kontoflater en tilgjengelig
   underområdenavigasjon med felles mobil-/desktopgeometri, grønn kontrollflate og oransje
   understrek for valgt område.
@@ -413,6 +463,8 @@ Sentrale filer:
 - `src/components/layout/PageHeader.tsx`
 - `src/components/layout/ContentDocument.tsx`
 - `src/components/admin/SettingsFields.tsx`
+- `src/components/admin/AdminEntityCollection.tsx`
+- `src/components/admin/AdminEditorDialog.tsx`
 - `src/components/admin/SettingsSection.tsx`
 - `src/components/navigation/Tabs.tsx`
 - `src/components/ui/button.tsx`
@@ -440,6 +492,15 @@ Sentrale filer:
 - Kommende, gjennomførte, tomtilstand, lasting, API-feil og avbestilling er kontrollert.
 - `Arrangementer` er kontrollert offentlig og med Admin, Utvidet og Bruker. Program,
   historikkbryter, direkteåpning og kapabilitetsstyrt avlysning er kontrollert.
+- `Arrangementadministrasjon` er visuelt kontrollert med Admin på mobil og desktop i lyst
+  og mørkt tema. Oversikt, grenfilter, historikkbryter, opprett-editor, rediger-editor,
+  informasjons-/bookingfaner, gjentakende og manuelt oppsett, eksisterende bookingliste,
+  enkeltbookingeditor og avlysningsdialog er kontrollert uten å sende mutasjoner.
+- Utvidet har fortsatt navigasjon og `arrangement:se`; den aktive obligatoriske
+  kunngjøringen stopper rollen før siden uten en ny lesebekreftelse. Bruker skjuler
+  navigasjonen og får den nye delte tilgangstilstanden ved direkte URL.
+- Mobiloversikt, begge editorlag og kalender har full bredde uten horisontal overflow.
+  Desktopeditorens sentrale `wide`-variant er kontrollert ved 1440 px.
 - `Baner` er kontrollert med Admin, Utvidet og Bruker på direkte URL. Banevalg,
   redigeringsutkast, opprettelsesvalidering og bookingoverstyringer er kontrollert uten å
   sende mutasjoner.
@@ -488,9 +549,10 @@ Dette er ikke introdusert som en funksjonell feil i redesignarbeidet.
 - Desktop er kontrollert, men mobil har fått mest produktdesignarbeid i POC-en.
 - Aktivitetsfarger er foreløpig mappet fra slug i frontend.
 - Det finnes ingen automatisert visuell regresjonstest ennå.
-- Testdataene inneholder nå ett kommende arrangement uten turnering og bare én gren.
-  Historiske kort, grenfilter med flere valg og turneringshandlingene er derfor kartlagt i
-  kode, men ikke visuelt utløst med dagens fixture.
+- Testdataene inneholder ett aktivt arrangement uten turnering, 17 eksisterende bookinger
+  og tre grener. Grenfilter, bookingrader og handlinger er visuelt kontrollert;
+  turneringsadministrasjon, historiske rader, konfliktstatus og lagrede forslag er kartlagt
+  i kode, men ikke utløst ved å endre fixture.
 - Alle åtte baner i testdataene er aktive og bruker standardregler. Inaktiv status og lagret
   bookingoverstyring er derfor kartlagt i kode; overstyringsskjemaet er visuelt kontrollert
   som et lokalt utkast uten å lagre testdata.
@@ -500,9 +562,8 @@ Dette er ikke introdusert som en funksjonell feil i redesignarbeidet.
 - Testklubben har en aktiv medlemskapsperiode (`Sesong 2026`). Medlemsguarden er visuelt og
   funksjonelt kontrollert frem til innsending; ingen medlemsbekreftelse eller destruktiv
   deaktivering ble sendt under kontrollen.
-- Testklubben har ingen aktiv kunngjøring. Aktiv status, bekreftelsesliste, deaktivering og
-  den obligatoriske lesebekreftelsen er derfor kartlagt i kode, mens inaktiv status og
-  opprettelsesflaten er kontrollert uten å publisere eller endre testdata.
+- Testklubben har en aktiv kunngjøring. Den obligatoriske leseflaten er kontrollert uten å
+  sende nye bekreftelser i arrangementadministrasjonsslicen.
 - Testdataene har ingen sperret bruker. Sperret-flaten er derfor visuelt kontrollert på
   direkte URL, mens guardbetingelsen og prioriteringen er kartlagt i kode.
 - Gjentatt åpning av utviklingsinnloggingens konto-/rolledialog kan fortsatt gi Radix-

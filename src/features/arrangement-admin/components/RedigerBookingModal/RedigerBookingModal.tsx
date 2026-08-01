@@ -1,15 +1,17 @@
 import { useState } from "react";
-
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-} from "@/components/ui/dialog";
+  AdminEditorDialog,
+  AdminFormActions,
+  AdminSettingsForm,
+  SettingsPanel,
+  SettingsRow,
+  SettingsSection,
+  SettingsStack,
+  SettingsValue,
+} from "@/components/admin";
+import DatoVelger from "@/components/DatoVelger";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
+import { Field } from "@/components/ui/field";
 import {
   Select,
   SelectContent,
@@ -17,11 +19,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import DatoVelger from "@/components/DatoVelger";
-
 import type { BaneRespons } from "@/types";
-import { genererTidspunkter } from "../../views/arrangement/arrangementUtils";
 import type { LokalBooking } from "../../types";
+import { genererTidspunkter } from "../../views/arrangement/arrangementUtils";
 
 export type RedigerBookingVerdier = {
   dato: string;
@@ -32,48 +32,39 @@ export type RedigerBookingVerdier = {
 };
 
 type Props = {
-  /** Booking som redigeres – null betyr lukket modal. */
   booking: LokalBooking | null;
   baner: BaneRespons[];
   onBekreft: (id: string, verdier: RedigerBookingVerdier) => void;
   onAvbryt: () => void;
 };
 
-function getSlotLengde(bane: BaneRespons): number {
+function getSlotLength(court: BaneRespons): number {
   return (
-    bane.bookingOverstyring?.slotLengdeMinutter ?? bane.bookingInnstillinger.slotLengdeMinutter
+    court.bookingOverstyring?.slotLengdeMinutter ?? court.bookingInnstillinger.slotLengdeMinutter
   );
 }
 
-function leggTilMinutter(tid: string, minutter: number): string {
-  const [h, m] = tid.split(":").map(Number);
-  const total = h * 60 + m + minutter;
+function addMinutes(time: string, minutes: number): string {
+  const [hours, currentMinutes] = time.split(":").map(Number);
+  const total = hours * 60 + currentMinutes + minutes;
   return `${String(Math.floor(total / 60) % 24).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`;
 }
 
-function datoTekstTilDate(s: string): Date {
-  const [y, mo, d] = s.split("-").map(Number);
-  return new Date(y, mo - 1, d);
+function toDate(value: string): Date {
+  const [year, month, day] = value.split("-").map(Number);
+  return new Date(year, month - 1, day);
 }
 
-function dateTilTekst(d: Date): string {
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+function toDateText(date: Date): string {
+  return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
-/**
- * Remountes via key={bookingId} når en ny booking velges for redigering.
- * Bruker lazy useState-initializers fra booking-propen – ingen render-fase setState.
- */
 export default function RedigerBookingModal({ booking, baner, onBekreft, onAvbryt }: Props) {
-  const [dato, setDato] = useState<Date>(() =>
-    booking ? datoTekstTilDate(booking.dato) : new Date()
-  );
-  const [valgtBaneId, setValgtBaneId] = useState<string>(() => booking?.baneId ?? "");
-  const [valgtStartTid, setValgtStartTid] = useState<string>(() => booking?.startTid ?? "");
-
-  const valgtBane = baner.find((b) => b.id === valgtBaneId);
-  const slotLengde = valgtBane ? getSlotLengde(valgtBane) : 60;
-
+  const [dato, setDato] = useState<Date>(() => (booking ? toDate(booking.dato) : new Date()));
+  const [valgtBaneId, setValgtBaneId] = useState(() => booking?.baneId ?? "");
+  const [valgtStartTid, setValgtStartTid] = useState(() => booking?.startTid ?? "");
+  const valgtBane = baner.find((bane) => bane.id === valgtBaneId);
+  const slotLengde = valgtBane ? getSlotLength(valgtBane) : 60;
   const tidspunkter = valgtBane
     ? genererTidspunkter(
         valgtBane.bookingInnstillinger.aapningstid || "08:00",
@@ -81,20 +72,18 @@ export default function RedigerBookingModal({ booking, baner, onBekreft, onAvbry
         slotLengde
       )
     : [];
-
-  const sluttTid = valgtStartTid ? leggTilMinutter(valgtStartTid, slotLengde) : "";
-
+  const sluttTid = valgtStartTid ? addMinutes(valgtStartTid, slotLengde) : "";
   const kanBekrefte = !!dato && !!valgtBaneId && !!valgtStartTid;
 
-  const håndterBaneEndring = (baneId: string) => {
-    setValgtBaneId(baneId);
+  const handleCourtChange = (courtId: string) => {
+    setValgtBaneId(courtId);
     setValgtStartTid("");
   };
 
-  const håndterBekreft = () => {
-    if (!booking || !kanBekrefte || !valgtBane) return;
+  const handleSubmit = () => {
+    if (!booking || !valgtBane || !kanBekrefte) return;
     onBekreft(booking.id, {
-      dato: dateTilTekst(dato),
+      dato: toDateText(dato),
       startTid: valgtStartTid,
       sluttTid,
       baneId: valgtBaneId,
@@ -103,74 +92,86 @@ export default function RedigerBookingModal({ booking, baner, onBekreft, onAvbry
   };
 
   return (
-    <Dialog open={!!booking} onOpenChange={(open) => !open && onAvbryt()}>
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Rediger booking</DialogTitle>
-          <DialogDescription className="sr-only">
-            Endre dato, bane og tidspunkt for bookingen.
-          </DialogDescription>
-        </DialogHeader>
+    <AdminEditorDialog
+      open={!!booking}
+      onOpenChange={(open) => !open && onAvbryt()}
+      backLabel="Til bookinglisten"
+      eyebrow="Booking"
+      title="Rediger booking"
+      description="Endre dato, bane og tidspunkt for denne bookingen."
+    >
+      <AdminSettingsForm
+        onSubmit={(event) => {
+          event.preventDefault();
+          handleSubmit();
+        }}
+      >
+        <SettingsStack>
+          <SettingsSection
+            title="Tid og bane"
+            description="Sluttiden beregnes fra banens slotlengde."
+          >
+            <SettingsPanel>
+              <SettingsRow title="Dato">
+                <DatoVelger value={dato} onChange={setDato} visNavigering />
+              </SettingsRow>
 
-        <div className="space-y-4 py-2">
-          {/* Dato */}
-          <div className="space-y-1.5">
-            <Label htmlFor="rediger-dato">Dato</Label>
-            <DatoVelger value={dato} onChange={setDato} visNavigering />
-          </div>
+              <SettingsRow title="Bane">
+                <Field>
+                  <Select value={valgtBaneId} onValueChange={handleCourtChange}>
+                    <SelectTrigger id="rediger-bane">
+                      <SelectValue placeholder="Velg bane…" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {baner.map((bane) => (
+                        <SelectItem key={bane.id} value={bane.id}>
+                          {bane.navn}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
+              </SettingsRow>
 
-          {/* Bane */}
-          <div className="space-y-1.5">
-            <Label htmlFor="rediger-bane">Bane</Label>
-            <Select value={valgtBaneId} onValueChange={håndterBaneEndring}>
-              <SelectTrigger id="rediger-bane">
-                <SelectValue placeholder="Velg bane…" />
-              </SelectTrigger>
-              <SelectContent>
-                {baner.map((b) => (
-                  <SelectItem key={b.id} value={b.id}>
-                    {b.navn}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+              <SettingsRow title="Starttid">
+                <Field>
+                  <Select
+                    value={valgtStartTid}
+                    onValueChange={setValgtStartTid}
+                    disabled={!valgtBaneId}
+                  >
+                    <SelectTrigger id="rediger-starttid">
+                      <SelectValue placeholder="Velg tidspunkt…" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {tidspunkter.map((time) => (
+                        <SelectItem key={time} value={time}>
+                          {time}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
+              </SettingsRow>
 
-          {/* StartTid */}
-          <div className="space-y-1.5">
-            <Label htmlFor="rediger-starttid">Starttidspunkt</Label>
-            <Select value={valgtStartTid} onValueChange={setValgtStartTid} disabled={!valgtBaneId}>
-              <SelectTrigger id="rediger-starttid">
-                <SelectValue placeholder="Velg tidspunkt…" />
-              </SelectTrigger>
-              <SelectContent>
-                {tidspunkter.map((t) => (
-                  <SelectItem key={t} value={t}>
-                    {t}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+              {sluttTid ? (
+                <SettingsRow title="Sluttid" description={`${slotLengde} minutters slot`}>
+                  <SettingsValue>{sluttTid}</SettingsValue>
+                </SettingsRow>
+              ) : null}
+            </SettingsPanel>
+          </SettingsSection>
+        </SettingsStack>
 
-          {/* SluttTid (beregnet, read-only) */}
-          {sluttTid && (
-            <p className="text-sm text-muted-foreground">
-              Sluttid: <span className="font-medium text-foreground">{sluttTid}</span> ({slotLengde}{" "}
-              min)
-            </p>
-          )}
-        </div>
-
-        <DialogFooter>
+        <AdminFormActions>
           <Button type="button" variant="outline" onClick={onAvbryt}>
             Avbryt
           </Button>
-          <Button type="button" disabled={!kanBekrefte} onClick={håndterBekreft}>
+          <Button type="submit" disabled={!kanBekrefte}>
             Lagre endring
           </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </AdminFormActions>
+      </AdminSettingsForm>
+    </AdminEditorDialog>
   );
 }

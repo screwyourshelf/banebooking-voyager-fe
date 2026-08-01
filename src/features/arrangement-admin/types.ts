@@ -5,7 +5,7 @@ export type LokalBookingStatus = "ukjent" | "ledig" | "konflikt" | "aktiv" | "sl
 export type LokalBookingKilde = "generert" | "manuell" | "eksisterende";
 
 export type LokalBooking = {
-  /** Lokal UUID – crypto.randomUUID(). Brukes som React key og for oppdatering/fjerning. */
+  /** Lokal unik id. Brukes som React key og for oppdatering/fjerning. */
   id: string;
   /** Booking-id fra backend. Finnes kun for bookinger lastet fra eksisterende arrangement. */
   eksternId?: string;

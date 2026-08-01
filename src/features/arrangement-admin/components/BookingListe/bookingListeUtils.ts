@@ -1,5 +1,23 @@
 import type { LokalBooking } from "../../types";
 
+let lokalBookingIdSekvens = 0;
+
+/**
+ * Lager en unik id for bookinger som bare finnes i klientens arbeidsliste.
+ *
+ * randomUUID er ikke tilgjengelig når appen åpnes via en ukryptert LAN-adresse,
+ * slik den ofte gjør under mobiltesting. Fallbacken trenger ikke være en UUID;
+ * den skal bare være stabil og unik i den lokale editorøkten.
+ */
+export function lagLokalBookingId(): string {
+  if (typeof globalThis.crypto?.randomUUID === "function") {
+    return globalThis.crypto.randomUUID();
+  }
+
+  lokalBookingIdSekvens += 1;
+  return `lokal-booking-${Date.now().toString(36)}-${lokalBookingIdSekvens.toString(36)}-${Math.random().toString(36).slice(2)}`;
+}
+
 /**
  * Stabil nøkkel for én booking-kombinasjon.
  * Brukes til deduplisering, merge og conflict tracking.

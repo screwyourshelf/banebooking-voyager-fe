@@ -107,11 +107,8 @@ export function useArrangement(valgtGrenId: string) {
         } else {
           toast.success(`${result.antallOpprettet} bookinger opprettet.`);
         }
-
-        // Hvis du har en liste over "kommende arrangementer", invalidér den her:
-        // await queryClient.invalidateQueries({ queryKey: ["kommende-arrangementer", slug] });
-        // eller (hvis dere fortsatt bruker den gamle):
-        // await queryClient.invalidateQueries({ queryKey: ["arrangementer", slug] });
+        await queryClient.invalidateQueries({ queryKey: ["arrangementer-admin", slug] });
+        await queryClient.invalidateQueries({ queryKey: ["arrangementer", slug] });
       },
       retry: false,
     }
@@ -133,6 +130,7 @@ export function useArrangement(valgtGrenId: string) {
 
     opprett,
     opprettFeil: opprettMutation.error,
+    isCreating: opprettMutation.isPending,
 
     isLoading: loadingGrener || loadingBaner,
     isLoadingForhandsvisning,

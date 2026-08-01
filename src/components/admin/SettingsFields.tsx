@@ -3,6 +3,7 @@ import { Row, RowList, RowPanel, SwitchRow } from "@/components/rows";
 import { Field } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import ControlChoice from "@/components/controls/ControlChoice";
 
 export function SettingsStack({
   children,
@@ -92,6 +93,45 @@ export function SettingsRadioGroup({
       })}
     </RadioGroup>
   );
+}
+
+type ChoiceOption = {
+  value: string;
+  label: ReactNode;
+  disabled?: boolean;
+};
+
+export function SettingsChoiceGroup({
+  label,
+  options,
+  selectedValues,
+  onToggle,
+  disabled = false,
+}: {
+  label: string;
+  options: readonly ChoiceOption[];
+  selectedValues: readonly string[];
+  onToggle: (value: string) => void;
+  disabled?: boolean;
+}) {
+  return (
+    <div className="settings-choice-group" role="group" aria-label={label}>
+      {options.map((option) => (
+        <ControlChoice
+          key={option.value}
+          selected={selectedValues.includes(option.value)}
+          onClick={() => onToggle(option.value)}
+          disabled={disabled || option.disabled}
+        >
+          {option.label}
+        </ControlChoice>
+      ))}
+    </div>
+  );
+}
+
+export function SettingsControlFrame({ children }: { children: ReactNode }) {
+  return <div className="settings-control-frame">{children}</div>;
 }
 
 type RangeProps = Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "className"> & {

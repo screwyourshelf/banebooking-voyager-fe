@@ -19,6 +19,7 @@ type Props = {
   description: string;
   children: ReactNode;
   closeDisabled?: boolean;
+  size?: "default" | "wide";
 };
 
 export default function AdminEditorDialog({
@@ -30,10 +31,11 @@ export default function AdminEditorDialog({
   description,
   children,
   closeDisabled = false,
+  size = "default",
 }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="admin-editor-dialog" showCloseButton={false}>
+      <DialogContent className="admin-editor-dialog" data-size={size} showCloseButton={false}>
         <DialogHeader className="admin-editor-dialog__header">
           <DialogClose asChild>
             <Button

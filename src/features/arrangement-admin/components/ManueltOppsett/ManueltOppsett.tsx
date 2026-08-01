@@ -1,55 +1,57 @@
 import { useMemo, useState } from "react";
 import { nb } from "date-fns/locale";
-import { PlusCircle, TriangleAlert } from "lucide-react";
-
-import { Calendar } from "@/components/ui/calendar";
-import { RowPanel, RowList, Row } from "@/components/rows";
+import {
+  AdminFormActions,
+  SettingsChoiceGroup,
+  SettingsControlFrame,
+  SettingsPanel,
+  SettingsRow,
+  SettingsSwitchRow,
+  SettingsText,
+} from "@/components/admin";
+import { RecordStatus } from "@/components/records";
 import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-
+import { Calendar } from "@/components/ui/calendar";
 import type { BaneRespons } from "@/types";
 import { tilDatoTekst } from "@/utils/datoUtils";
-
+import type { LokalBooking } from "../../types";
+import { lagLokalBookingId } from "../BookingListe/bookingListeUtils";
 import {
   beregnTidspunkterForBaner,
   grupperBanerEtterSlotLengde,
   type SlotLengdeGruppe,
 } from "../../views/arrangement/arrangementUtils";
-import type { LokalBooking } from "../../types";
 
 type Props = {
   baner: BaneRespons[];
   onLeggTil: (bookinger: LokalBooking[]) => void;
 };
 
-function leggTilMinutter(tid: string, minutter: number): string {
-  const [h, m] = tid.split(":").map(Number);
-  const total = h * 60 + m + minutter;
+function addMinutes(time: string, minutes: number): string {
+  const [hours, currentMinutes] = time.split(":").map(Number);
+  const total = hours * 60 + currentMinutes + minutes;
   return `${String(Math.floor(total / 60) % 24).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`;
 }
 
-/** Genererer dato × bane × tidspunkt – ingen ukedag-logikk. */
-function genererFraDatoer(
-  datoer: Date[],
-  slotGrupper: SlotLengdeGruppe[],
-  tidspunkterPerGruppe: Record<number, string[]>
+function generateBookings(
+  dates: Date[],
+  groups: SlotLengdeGruppe[],
+  timesByGroup: Record<number, string[]>
 ): LokalBooking[] {
-  const bookinger: LokalBooking[] = [];
-  for (const dato of datoer) {
-    const datoStr = tilDatoTekst(dato);
-    for (const gruppe of slotGrupper) {
-      const tidspunkter = tidspunkterPerGruppe[gruppe.slotLengdeMinutter] ?? [];
-      for (const startTid of tidspunkter) {
-        const sluttTid = leggTilMinutter(startTid, gruppe.slotLengdeMinutter);
-        for (let bi = 0; bi < gruppe.baneIder.length; bi++) {
-          bookinger.push({
-            id: crypto.randomUUID(),
-            dato: datoStr,
-            startTid,
-            sluttTid,
-            baneId: gruppe.baneIder[bi],
-            baneNavn: gruppe.baneNavn[bi],
+  const bookings: LokalBooking[] = [];
+  for (const date of dates) {
+    const dateText = tilDatoTekst(date);
+    for (const group of groups) {
+      for (const startTime of timesByGroup[group.slotLengdeMinutter] ?? []) {
+        const endTime = addMinutes(startTime, group.slotLengdeMinutter);
+        for (let index = 0; index < group.baneIder.length; index++) {
+          bookings.push({
+            id: lagLokalBookingId(),
+            dato: dateText,
+            startTid: startTime,
+            sluttTid: endTime,
+            baneId: group.baneIder[index],
+            baneNavn: group.baneNavn[index],
             status: "ukjent",
             kilde: "manuell",
           });
@@ -57,22 +59,20 @@ function genererFraDatoer(
       }
     }
   }
-  return bookinger;
+  return bookings;
 }
 
 function toggleItem<T>(item: T, set: React.Dispatch<React.SetStateAction<T[]>>) {
-  set((prev) => (prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]));
+  set((current) =>
+    current.includes(item) ? current.filter((value) => value !== item) : [...current, item]
+  );
 }
 
 export default function ManueltOppsett({ baner, onLeggTil }: Props) {
   const [valgteDataer, setValgteDataer] = useState<Date[]>([]);
   const [valgteBaneIder, setValgteBaneIder] = useState<string[]>([]);
-
-  // Per-gruppe tidspunkter (baner med ulik slot-lengde)
   const [tidspunkterPerGruppe, setTidspunkterPerGruppe] = useState<Record<number, string[]>>({});
   const [allePerGruppe, setAllePerGruppe] = useState<Record<number, boolean>>({});
-
-  // Ikke-gruppert: felles tidspunkter
   const [valgteTidspunkter, setValgteTidspunkter] = useState<string[]>([]);
   const [alleTidspunkter, setAlleTidspunkter] = useState(false);
 
@@ -81,62 +81,62 @@ export default function ManueltOppsett({ baner, onLeggTil }: Props) {
     [baner, valgteBaneIder]
   );
   const erGruppert = slotGrupper.length > 1;
-
   const tidspunktResultat = useMemo(
     () => beregnTidspunkterForBaner(baner, valgteBaneIder),
     [baner, valgteBaneIder]
   );
   const tilgjengeligeTidspunkter = tidspunktResultat.tidspunkter;
 
-  // Fjern tidspunkter som faller bort ved banevalg-endring
   const [prevTilgjengeligeTidspunkter, setPrevTilgjengeligeTidspunkter] =
     useState(tilgjengeligeTidspunkter);
   if (tilgjengeligeTidspunkter !== prevTilgjengeligeTidspunkter) {
     setPrevTilgjengeligeTidspunkter(tilgjengeligeTidspunkter);
     if (!erGruppert) {
-      setValgteTidspunkter((prev) => prev.filter((t) => tilgjengeligeTidspunkter.includes(t)));
+      setValgteTidspunkter((current) =>
+        current.filter((time) => tilgjengeligeTidspunkter.includes(time))
+      );
     }
   }
 
-  // Opprydding: hold per-gruppe-state i sync med aktive grupper (render-time adjust)
   const [prevSlotGrupper, setPrevSlotGrupper] = useState(slotGrupper);
   if (slotGrupper !== prevSlotGrupper) {
     setPrevSlotGrupper(slotGrupper);
     if (erGruppert) {
-      setTidspunkterPerGruppe((prev) => {
+      setTidspunkterPerGruppe((current) => {
         const next: Record<number, string[]> = {};
-        for (const g of slotGrupper) {
-          next[g.slotLengdeMinutter] = (prev[g.slotLengdeMinutter] ?? []).filter((t) =>
-            g.tidspunkter.includes(t)
+        for (const group of slotGrupper) {
+          next[group.slotLengdeMinutter] = (current[group.slotLengdeMinutter] ?? []).filter(
+            (time) => group.tidspunkter.includes(time)
           );
         }
         return next;
       });
-      setAllePerGruppe((prev) => {
+      setAllePerGruppe((current) => {
         const next: Record<number, boolean> = {};
-        for (const g of slotGrupper)
-          next[g.slotLengdeMinutter] = prev[g.slotLengdeMinutter] ?? false;
-        return next;
-      });
-    }
-  }
-
-  // Sync "alle" → velg alle tidspunkter i grupperte modus (render-time adjust)
-  const [prevAllePerGruppe, setPrevAllePerGruppe] = useState(allePerGruppe);
-  if (allePerGruppe !== prevAllePerGruppe) {
-    setPrevAllePerGruppe(allePerGruppe);
-    if (erGruppert) {
-      setTidspunkterPerGruppe((prev) => {
-        const next = { ...prev };
-        for (const g of slotGrupper) {
-          if (allePerGruppe[g.slotLengdeMinutter]) next[g.slotLengdeMinutter] = g.tidspunkter;
+        for (const group of slotGrupper) {
+          next[group.slotLengdeMinutter] = current[group.slotLengdeMinutter] ?? false;
         }
         return next;
       });
     }
   }
 
-  // Effektiv tidspunkt-mapping brukt til generering og teller
+  const [prevAllePerGruppe, setPrevAllePerGruppe] = useState(allePerGruppe);
+  if (allePerGruppe !== prevAllePerGruppe) {
+    setPrevAllePerGruppe(allePerGruppe);
+    if (erGruppert) {
+      setTidspunkterPerGruppe((current) => {
+        const next = { ...current };
+        for (const group of slotGrupper) {
+          if (allePerGruppe[group.slotLengdeMinutter]) {
+            next[group.slotLengdeMinutter] = group.tidspunkter;
+          }
+        }
+        return next;
+      });
+    }
+  }
+
   const effektivTidspunkterPerGruppe: Record<number, string[]> = erGruppert
     ? tidspunkterPerGruppe
     : slotGrupper.length === 1
@@ -146,183 +146,156 @@ export default function ManueltOppsett({ baner, onLeggTil }: Props) {
             : valgteTidspunkter,
         }
       : {};
-
   const antallBookinger =
     valgteDataer.length *
-    slotGrupper.reduce((sum, g) => {
-      const aktive = effektivTidspunkterPerGruppe[g.slotLengdeMinutter] ?? [];
-      return sum + g.baneIder.length * aktive.length;
-    }, 0);
-
+    slotGrupper.reduce(
+      (total, group) =>
+        total +
+        group.baneIder.length *
+          (effektivTidspunkterPerGruppe[group.slotLengdeMinutter] ?? []).length,
+      0
+    );
   const kanLeggeTil =
     valgteDataer.length > 0 &&
     valgteBaneIder.length > 0 &&
     (erGruppert
       ? slotGrupper.some(
-          (g: SlotLengdeGruppe) =>
-            allePerGruppe[g.slotLengdeMinutter] ||
-            (tidspunkterPerGruppe[g.slotLengdeMinutter] ?? []).length > 0
+          (group: SlotLengdeGruppe) =>
+            allePerGruppe[group.slotLengdeMinutter] ||
+            (tidspunkterPerGruppe[group.slotLengdeMinutter] ?? []).length > 0
         )
       : alleTidspunkter || valgteTidspunkter.length > 0);
 
-  const håndterLeggTil = () => {
+  const requirements = [
+    valgteDataer.length === 0 ? "minst én dato" : null,
+    valgteBaneIder.length === 0 ? "minst én bane" : null,
+    valgteBaneIder.length > 0 && !alleTidspunkter && valgteTidspunkter.length === 0 && !erGruppert
+      ? "minst ett tidspunkt"
+      : null,
+    valgteBaneIder.length > 0 &&
+    erGruppert &&
+    !slotGrupper.some(
+      (group) =>
+        allePerGruppe[group.slotLengdeMinutter] ||
+        (tidspunkterPerGruppe[group.slotLengdeMinutter] ?? []).length > 0
+    )
+      ? "minst ett tidspunkt"
+      : null,
+  ].filter(Boolean);
+
+  const handleAdd = () => {
     if (!kanLeggeTil) return;
-    onLeggTil(genererFraDatoer(valgteDataer, slotGrupper, effektivTidspunkterPerGruppe));
-    // Tilbakestill datoer – behold bane + tidspunkt for rask batch-innlegging
+    onLeggTil(generateBookings(valgteDataer, slotGrupper, effektivTidspunkterPerGruppe));
     setValgteDataer([]);
   };
 
   return (
-    <div className="space-y-3">
-      <RowPanel>
-        <RowList>
-          {/* Datovelger */}
-          <Row title="Velg dato(er)" description="Klikk for å velge én eller flere datoer.">
+    <>
+      <SettingsPanel>
+        <SettingsRow title="Datoer" description="Velg én eller flere datoer i kalenderen.">
+          <SettingsControlFrame>
             <Calendar
               mode="multiple"
               selected={valgteDataer}
-              onSelect={(datoer) => setValgteDataer(datoer ?? [])}
+              onSelect={(dates) => setValgteDataer(dates ?? [])}
               locale={nb}
-              className="rounded-md border w-fit"
             />
-            {valgteDataer.length > 0 && (
-              <p className="text-xs text-muted-foreground mt-1">
-                {valgteDataer.length} dato{valgteDataer.length !== 1 ? "er" : ""} valgt
-              </p>
-            )}
-          </Row>
+          </SettingsControlFrame>
+          <SettingsText>
+            {valgteDataer.length === 0
+              ? "Ingen datoer valgt."
+              : `${valgteDataer.length} dato${valgteDataer.length === 1 ? "" : "er"} valgt.`}
+          </SettingsText>
+        </SettingsRow>
 
-          {/* Banevalg */}
-          <Row title="Bane(r)">
-            <div className="flex flex-wrap gap-2">
-              {baner.map((b) => (
-                <Button
-                  key={b.id}
-                  type="button"
-                  variant={valgteBaneIder.includes(b.id) ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => toggleItem(b.id, setValgteBaneIder)}
-                >
-                  {b.navn}
-                </Button>
-              ))}
-            </div>
-          </Row>
+        <SettingsRow title="Baner" description="Velg én eller flere baner.">
+          <SettingsChoiceGroup
+            label="Baner"
+            options={baner.map((bane) => ({ value: bane.id, label: bane.navn }))}
+            selectedValues={valgteBaneIder}
+            onToggle={(value) => toggleItem(value, setValgteBaneIder)}
+          />
+        </SettingsRow>
 
-          {/* Advarsel ved ulike slot-lengder */}
-          {tidspunktResultat.advarselTekst && (
-            <div className="px-2 py-2">
-              <Alert className="border-amber-200 bg-amber-50 text-amber-700 [&>svg]:text-amber-700">
-                <TriangleAlert />
-                <AlertDescription>{tidspunktResultat.advarselTekst}</AlertDescription>
-              </Alert>
-            </div>
-          )}
+        {tidspunktResultat.advarselTekst ? (
+          <SettingsRow title="Ulike slotlengder" description={tidspunktResultat.advarselTekst}>
+            <RecordStatus tone="warning">Kontroller tidene</RecordStatus>
+          </SettingsRow>
+        ) : null}
 
-          {/* Tidspunkter – chip-grid */}
-          {erGruppert
-            ? slotGrupper.map((gruppe) => {
-                const sl = gruppe.slotLengdeMinutter;
-                const valgte = tidspunkterPerGruppe[sl] ?? [];
-                const alle = allePerGruppe[sl] ?? false;
-                return (
-                  <Row
-                    key={sl}
-                    title={`Tidspunkter – ${sl} min`}
-                    description={gruppe.baneNavn.join(", ")}
-                    right={
-                      <Switch
-                        checked={alle}
-                        onCheckedChange={(v) => setAllePerGruppe((prev) => ({ ...prev, [sl]: v }))}
-                      />
-                    }
-                  >
-                    <div className="flex flex-wrap gap-2">
-                      {gruppe.tidspunkter.map((tid) => (
-                        <Button
-                          key={tid}
-                          type="button"
-                          variant={valgte.includes(tid) ? "default" : "outline"}
-                          size="sm"
-                          onClick={() =>
-                            setTidspunkterPerGruppe((prev) => ({
-                              ...prev,
-                              [sl]: valgte.includes(tid)
-                                ? valgte.filter((t) => t !== tid)
-                                : [...valgte, tid],
-                            }))
-                          }
-                          disabled={alle}
-                        >
-                          {tid}
-                        </Button>
-                      ))}
-                    </div>
-                  </Row>
-                );
-              })
-            : valgteBaneIder.length > 0 && (
-                <Row
-                  title="Tidspunkter"
-                  right={<Switch checked={alleTidspunkter} onCheckedChange={setAlleTidspunkter} />}
-                >
-                  <div className="flex flex-wrap gap-2">
-                    {tilgjengeligeTidspunkter.map((tid) => (
-                      <Button
-                        key={tid}
-                        type="button"
-                        variant={
-                          alleTidspunkter || valgteTidspunkter.includes(tid) ? "default" : "outline"
-                        }
-                        size="sm"
-                        onClick={() => toggleItem(tid, setValgteTidspunkter)}
-                        disabled={alleTidspunkter}
-                      >
-                        {tid}
-                      </Button>
-                    ))}
-                  </div>
-                </Row>
-              )}
-        </RowList>
-      </RowPanel>
+        {erGruppert ? (
+          slotGrupper.flatMap((group) => {
+            const slotLength = group.slotLengdeMinutter;
+            const allTimes = allePerGruppe[slotLength] ?? false;
+            const selectedTimes = tidspunkterPerGruppe[slotLength] ?? [];
+            return [
+              <SettingsSwitchRow
+                key={`all-${slotLength}`}
+                title={`Alle tidspunkter · ${slotLength} min`}
+                description={group.baneNavn.join(", ")}
+                checked={allTimes}
+                onCheckedChange={(checked) =>
+                  setAllePerGruppe((current) => ({ ...current, [slotLength]: checked }))
+                }
+              />,
+              <SettingsRow
+                key={`times-${slotLength}`}
+                title={`Tidspunkter · ${slotLength} min`}
+                description={group.baneNavn.join(", ")}
+              >
+                <SettingsChoiceGroup
+                  label={`Tidspunkter for ${slotLength} minutter`}
+                  options={group.tidspunkter.map((time) => ({ value: time, label: time }))}
+                  selectedValues={allTimes ? group.tidspunkter : selectedTimes}
+                  onToggle={(value) =>
+                    setTidspunkterPerGruppe((current) => ({
+                      ...current,
+                      [slotLength]: selectedTimes.includes(value)
+                        ? selectedTimes.filter((time) => time !== value)
+                        : [...selectedTimes, value],
+                    }))
+                  }
+                  disabled={allTimes}
+                />
+              </SettingsRow>,
+            ];
+          })
+        ) : valgteBaneIder.length > 0 ? (
+          <>
+            <SettingsSwitchRow
+              title="Alle tidspunkter"
+              description="Bruk alle tilgjengelige starttider for valgte baner."
+              checked={alleTidspunkter}
+              onCheckedChange={setAlleTidspunkter}
+            />
+            <SettingsRow title="Tidspunkter" description="Velg starttidene som skal legges til.">
+              <SettingsChoiceGroup
+                label="Tidspunkter"
+                options={tilgjengeligeTidspunkter.map((time) => ({ value: time, label: time }))}
+                selectedValues={alleTidspunkter ? tilgjengeligeTidspunkter : valgteTidspunkter}
+                onToggle={(value) => toggleItem(value, setValgteTidspunkter)}
+                disabled={alleTidspunkter}
+              />
+            </SettingsRow>
+          </>
+        ) : null}
 
-      {!kanLeggeTil && (
-        <ul className="text-xs text-muted-foreground list-disc list-inside space-y-0.5 px-1">
-          {valgteDataer.length === 0 && <li>Velg minst én dato</li>}
-          {valgteBaneIder.length === 0 && <li>Velg minst én bane</li>}
-          {valgteBaneIder.length > 0 &&
-            !alleTidspunkter &&
-            valgteTidspunkter.length === 0 &&
-            !erGruppert && <li>Velg minst ett tidspunkt</li>}
-          {valgteBaneIder.length > 0 &&
-            erGruppert &&
-            !slotGrupper.some(
-              (g) =>
-                allePerGruppe[g.slotLengdeMinutter] ||
-                (tidspunkterPerGruppe[g.slotLengdeMinutter] ?? []).length > 0
-            ) && <li>Velg minst ett tidspunkt</li>}
-        </ul>
-      )}
+        <SettingsRow title={kanLeggeTil ? "Klart til å legge til" : "Før du kan legge til"}>
+          <SettingsText>
+            {kanLeggeTil
+              ? `${antallBookinger} booking${antallBookinger === 1 ? "" : "er"} legges i listen.`
+              : `Velg ${requirements.join(", ")}.`}
+          </SettingsText>
+        </SettingsRow>
+      </SettingsPanel>
 
-      {kanLeggeTil && (
-        <p className="text-xs text-muted-foreground px-1">
-          {antallBookinger} booking{antallBookinger !== 1 ? "er" : ""} vil legges til i liste
-        </p>
-      )}
-
-      <Button
-        type="button"
-        variant="outline"
-        disabled={!kanLeggeTil}
-        onClick={håndterLeggTil}
-        className="w-full"
-      >
-        <PlusCircle className="size-4 mr-1.5" />
-        {kanLeggeTil
-          ? `Legg til ${antallBookinger} booking${antallBookinger !== 1 ? "er" : ""} i liste`
-          : "Legg til i booking-liste"}
-      </Button>
-    </div>
+      <AdminFormActions>
+        <Button type="button" disabled={!kanLeggeTil} onClick={handleAdd}>
+          {kanLeggeTil
+            ? `Legg til ${antallBookinger} booking${antallBookinger === 1 ? "" : "er"}`
+            : "Legg til i bookinglisten"}
+        </Button>
+      </AdminFormActions>
+    </>
   );
 }

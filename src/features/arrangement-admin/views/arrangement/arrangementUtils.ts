@@ -12,6 +12,7 @@ import type {
 } from "@/types";
 import type { BaneRespons } from "@/types";
 import type { LokalBooking } from "../../types";
+import { lagLokalBookingId } from "../../components/BookingListe/bookingListeUtils";
 
 export function finnTilgjengeligeUkedager(datoFra: Date, datoTil: Date): DayOfWeek[] {
   return finnDayOfWeeksIPeriode(datoFra, datoTil);
@@ -234,7 +235,7 @@ export function genererLokalBookinger({
 
         for (let bi = 0; bi < gruppe.baneIder.length; bi++) {
           bookinger.push({
-            id: crypto.randomUUID(),
+            id: lagLokalBookingId(),
             dato,
             startTid,
             sluttTid,

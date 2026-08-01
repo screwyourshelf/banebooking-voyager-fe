@@ -1,4 +1,9 @@
-export { AdminEntityCollection, AdminEntityList, AdminEntityRow } from "./AdminEntityCollection";
+export {
+  AdminActionRow,
+  AdminEntityCollection,
+  AdminEntityList,
+  AdminEntityRow,
+} from "./AdminEntityCollection";
 export { default as AdminEditorDialog } from "./AdminEditorDialog";
 export {
   AdminEditorForm,
@@ -9,6 +14,8 @@ export {
 export { default as AdminPage, AdminPageLoading, AdminPageState } from "./AdminPage";
 export {
   SettingsPanel,
+  SettingsChoiceGroup,
+  SettingsControlFrame,
   SettingsRadioGroup,
   SettingsRange,
   SettingsRow,

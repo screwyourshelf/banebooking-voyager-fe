@@ -93,6 +93,8 @@ POC-en dekker nå:
   kapabilitetsstyrt avbestilling.
 - `Arrangementer` med offentlig og innlogget liste, programvisning, historikkfilter og
   kapabilitetsstyrte handlinger.
+- `Arrangementadministrasjon` med liste–redigeringsflyt, felles editor for ny/rediger,
+  bookingoppsett og fullbreddes bookingrader.
 - `Brukere` med responsivt søk, filtre, resultatkort og redigeringsdialog.
 - `Baner` med responsiv entitetsliste, fokusert redigering, opprettelse og valgfrie
   bookingoverstyringer.
@@ -147,12 +149,16 @@ beholdt. Bookingbekreftelse, feiltilstander og reglement gjenstår i fasen.
 
 1. Arrangementsliste og detaljvisning — fullført.
 2. Påmelding og avmelding.
-3. Opprettelse og administrasjon.
+3. Opprettelse og administrasjon — fullført visuelt med eksisterende funksjonell modell.
 
 Funksjonell modell i `arrangement-admin-refaktor.md` beholdes. Visuell utforming følger
 denne redesignplanen. Arrangementsliste og detaljvisning bruker samme fullbreddes
 record-collection som `Mine tider`: dato, identitet og status har fast rekkefølge, mens
-programmet grupperes etter dato i det utvidede kortet.
+programmet grupperes etter dato i det utvidede kortet. Arrangementadministrasjon bruker
+samme liste–redigeringsmønster som Baner og Grener: oversikten er stabil, ny/rediger åpnes i
+en fokusert editor, og informasjon og bookinger har separate lagringsflyter. Bookinglisten
+er fortsatt source of truth og bruker delte record-rader i stedet for en egen mobiltabell.
+Gjentakende og manuelt oppsett deler sentrale valg-, settings- og handlingsmønstre.
 
 ### Fase 4 — Resterende administrasjon
 

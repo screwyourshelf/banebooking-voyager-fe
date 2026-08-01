@@ -26,12 +26,19 @@ export function useRedigerArrangement(valgtId: string | null, valgtGrenId: strin
   const { grener, isLoading: loadingGrener } = useGrener(false);
   const { baner, isLoading: loadingBaner } = useBaner(false);
 
-  const { data: arrangementer, isLoading: loadingArrangementer } = useApiQuery<
-    ArrangementRespons[]
-  >(["arrangementer-admin", slug], `/klubb/${slug}/arrangementer`, {
-    requireAuth: true,
-    staleTime: 30_000,
-  });
+  const {
+    data: arrangementer,
+    isLoading: loadingArrangementer,
+    error: arrangementerFeil,
+    refetch: refetchArrangementer,
+  } = useApiQuery<ArrangementRespons[]>(
+    ["arrangementer-admin", slug],
+    `/klubb/${slug}/arrangementer`,
+    {
+      requireAuth: true,
+      staleTime: 30_000,
+    }
+  );
 
   const arrangement = useMemo(
     () => arrangementer?.find((a) => a.id === valgtId) ?? null,
@@ -98,6 +105,8 @@ export function useRedigerArrangement(valgtId: string | null, valgtGrenId: strin
 
   return {
     arrangementer,
+    arrangementerFeil,
+    refetchArrangementer,
     arrangement,
     grener,
     baner,
