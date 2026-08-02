@@ -2440,6 +2440,19 @@
     border-radius: 0 !important;
   }
 
+  .record-card__row {
+    display: flex;
+    min-width: 0;
+    align-items: stretch;
+  }
+
+  .record-card__row-action {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    padding-right: 0.5rem;
+  }
+
   .record-card__trigger-header {
     display: flex;
     min-width: 0;
@@ -2470,47 +2483,11 @@
     pointer-events: none;
   }
 
-  .record-card__disclosure-header {
-    display: flex;
-    flex: 0 0 auto;
-    align-items: stretch;
-  }
-
-  .record-card__disclosure-toggle {
-    display: grid;
-    width: 3rem;
-    place-items: center;
-    border: 0;
-    border-left: 1px solid transparent;
-    background: transparent;
-    color: var(--app-ink-faint);
-    transition:
-      background-color 160ms ease,
-      color 160ms ease;
-  }
-
-  .record-card__disclosure-toggle:hover {
-    background: var(--app-surface-subtle);
-    color: var(--app-ink);
-  }
-
-  .record-card__disclosure-toggle:focus-visible {
-    outline: 2px solid var(--app-focus);
-    outline-offset: -3px;
-  }
-
-  .record-card__disclosure-toggle svg {
-    width: 1rem;
-    height: 1rem;
-  }
-
   .record-card__disclosure-close-icon,
-  .record-card__disclosure-toggle[aria-expanded="true"] .record-card__disclosure-open-icon,
   .record-card__trigger[aria-expanded="true"] .record-card__disclosure-open-icon {
     display: none;
   }
 
-  .record-card__disclosure-toggle[aria-expanded="true"] .record-card__disclosure-close-icon,
   .record-card__trigger[aria-expanded="true"] .record-card__disclosure-close-icon {
     display: block;
   }
@@ -2525,6 +2502,7 @@
 
   .record-card__summary[data-layout="slot"] {
     grid-template-columns: 5.75rem minmax(0, 1fr);
+    column-gap: 1rem;
   }
 
   .record-card__summary[data-layout="time"] {
@@ -2599,16 +2577,23 @@
   }
 
   .record-status {
+    --record-status-inline-padding: var(--app-status-inline-padding);
+
     display: inline-flex;
     width: fit-content;
     max-width: 100%;
     align-items: center;
     border-radius: 999px;
-    padding: 0.28rem 0.55rem;
+    padding: 0.28rem var(--record-status-inline-padding);
     font-size: var(--app-type-caption);
     font-weight: 720;
     line-height: 1;
     white-space: nowrap;
+  }
+
+  .record-status[data-align="text-start"] {
+    margin-inline-start: calc(-1 * var(--record-status-inline-padding));
+    padding-block: 0.18rem;
   }
 
   .record-status[data-tone="available"] {

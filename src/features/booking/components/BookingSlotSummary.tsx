@@ -30,7 +30,9 @@ export default function BookingSlotSummary({ slot, presentation }: Props) {
 
       <div className="booking-slot__content" data-status={presentation.status}>
         {presentation.status === "arrangement" ? (
-          <RecordStatus tone="event">{presentation.hovedtekst}</RecordStatus>
+          <RecordStatus tone="event" align="text-start">
+            {presentation.hovedtekst}
+          </RecordStatus>
         ) : (
           <span className="booking-slot__primary-text">{presentation.hovedtekst}</span>
         )}

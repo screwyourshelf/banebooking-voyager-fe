@@ -12,11 +12,12 @@ export type RecordStatusTone =
 type Props = {
   tone: RecordStatusTone;
   children: ReactNode;
+  align?: "default" | "text-start";
 };
 
-export default function RecordStatus({ tone, children }: Props) {
+export default function RecordStatus({ tone, children, align = "default" }: Props) {
   return (
-    <span className="record-status" data-tone={tone}>
+    <span className="record-status" data-tone={tone} data-align={align}>
       {children}
     </span>
   );

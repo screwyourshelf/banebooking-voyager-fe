@@ -69,11 +69,21 @@
       padding-bottom: 0;
       background:
         linear-gradient(
-          115deg,
+          90deg,
           var(--app-workspace-overlay-start),
+          var(--app-workspace-overlay-middle) 50%,
           var(--app-workspace-overlay-end)
         ),
-        url("/backgrounds/workspace-tennis.webp") center / cover fixed;
+        linear-gradient(var(--app-workspace-image-scrim), var(--app-workspace-image-scrim)),
+        url("/backgrounds/workspace-tennis.webp") center / cover;
+    }
+
+    .app-shell__workspace .page-heading__title {
+      color: var(--app-control-text);
+    }
+
+    .app-shell__workspace .page-heading__description {
+      color: var(--app-control-muted);
     }
 
     .error-shell {
@@ -81,11 +91,13 @@
       place-items: center;
       background:
         linear-gradient(
-          115deg,
+          90deg,
           var(--app-workspace-overlay-start),
+          var(--app-workspace-overlay-middle) 50%,
           var(--app-workspace-overlay-end)
         ),
-        url("/backgrounds/workspace-tennis.webp") center / cover fixed;
+        linear-gradient(var(--app-workspace-image-scrim), var(--app-workspace-image-scrim)),
+        url("/backgrounds/workspace-tennis.webp") center / cover;
     }
 
     .app-sidebar {
@@ -560,10 +572,6 @@
 
     .booking-page {
       gap: 1.5rem;
-    }
-
-    .booking-slot__quick-action {
-      margin-right: 0.5rem;
     }
   }
 }

@@ -65,11 +65,17 @@ record-komponenter. Features skal ikke bruke interne `record-*`-klasser direkte.
 ## Viktige implementasjonsvalg
 
 - Desktop bruker sidefelt uten separat toppbar. Mobil bruker toppfelt og bunnnavigasjon.
+- Desktopbakgrunnen bygger på lagdelingen fra `aastk.no`: et tydelig bilde, et mørkt 20
+  %-scrim og en mørk retningsgradient. Desktopens sideintroduksjon bruker lys tekst,
+  løsningen eies av appskallet, og mobil laster ikke bakgrunnsressursen.
 - Tema etableres før første paint. Appskall og sidegeometri beholdes under lasting.
 - Ruter er lazy-lastet, og tunge avhengigheter som rikteksteditoren lastes ved behov.
 - Bookingens gren-, dag- og banevalg bruker samme kontrollpanelfamilie som øvrige filtre.
 - Record-lister skifter fra kort til kompakte rader ut fra beholderbredde, ikke bare
   viewportbredde.
+- Ekspanderbare record-lister bruker hele sammendragsraden som trigger. Hurtighandlinger
+  rendres som separate søskenkontroller gjennom `RecordCard`, uten lokale
+  disclosure-varianter.
 - Baner og Grener deler arbeidsområde og fanemønster, men beholder egne ruter og ansvar.
 - Arrangementbeskrivelsen i bookinglisten er offentlig informasjon. Avbestilling og andre
   handlinger er fortsatt kapabilitetsstyrt.

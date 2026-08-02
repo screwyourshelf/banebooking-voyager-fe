@@ -115,8 +115,10 @@ som rikteksteditoren, lastes først når arbeidsflaten faktisk viser dem.
 POC-en dekker nå:
 
 - Responsivt appskall med desktop-sidefelt og mobil bunnnavigasjon.
-- Dempet, tematilpasset bildebakgrunn i desktoparbeidsflaten; innholdsflatene beholder
-  kontrast og mobil laster ikke bakgrunnsressursen.
+- Desktoparbeidsflaten bygger på lagdelingen fra `aastk.no`: bildet beholder farge og
+  kontrast, mens et mørkt 20 %-scrim og en mørk venstre–høyre-gradient sikrer lesbarhet.
+  Sideintroduksjonen bruker lys tekst, innholdsflatene bærer sin egen kontrast, og mobil
+  laster ikke bakgrunnsressursen.
 - Produksjonsbygget har ansvarsdelt Vite/Rolldown-chunking. React, Radix og den valgfrie
   rikteksteditoren ligger i separate cachebare pakker uten chunkvarsel, og editoren lastes
   først når publiseringsfeltet vises.
@@ -177,6 +179,9 @@ POC-en dekker nå:
   for både flervalgsfiltre og obligatoriske enkeltvalg.
 - Record-listene bruker containerstyrt tetthet: kort på smale arbeidsflater og en kompakt,
   separatorbasert radpresentasjon når selve samlingen er bred nok.
+- Ekspanderbare record-rader bruker hele sammendragsflaten som felles trigger. Eventuelle
+  hurtighandlinger, som `Book`, ligger separat og endrer ikke radens klikk- eller
+  tastaturoppførsel.
 - Nye delte behov skal gå gjennom semantiske komponenter. Direkte bruk av tekniske
   `components/ui`-primitiver er tillatt inne i slike komponenter og i funksjonelt
   spesialiserte flater der et nytt generelt mønster ikke er begrunnet.

@@ -29,7 +29,6 @@ export {
   RecordCardActions,
   RecordCardButton,
   RecordCardDetails,
-  RecordCardDisclosureToggle,
   RecordCardStatic,
   RecordCardSummary,
   RecordCardTrigger,

@@ -32,8 +32,10 @@
 
   /* Product roles */
   --app-canvas: #f2f3ed;
-  --app-workspace-overlay-start: rgb(242 243 237 / 0.6);
-  --app-workspace-overlay-end: rgb(242 243 237 / 0.72);
+  --app-workspace-overlay-start: oklch(0.21 0.034 264.665);
+  --app-workspace-overlay-middle: oklch(0.21 0.034 264.665 / 0.6);
+  --app-workspace-overlay-end: oklch(0.21 0.034 264.665 / 0);
+  --app-workspace-image-scrim: oklch(0.21 0.034 264.665 / 0.2);
   --app-surface: #ffffff;
   --app-surface-subtle: #f7f8f3;
   --app-surface-raised: #ffffff;
@@ -84,6 +86,7 @@
   --app-space-sm: 0.5rem;
   --app-space-md: 0.75rem;
   --app-space-lg: 1rem;
+  --app-status-inline-padding: 0.55rem;
   --app-toast-offset: 5rem;
   --app-record-gap: 0.5rem;
   --app-record-padding-inline: 0.5rem;
@@ -199,8 +202,6 @@
 
 .dark {
   --app-canvas: #0f1611;
-  --app-workspace-overlay-start: rgb(15 22 17 / 0.68);
-  --app-workspace-overlay-end: rgb(15 22 17 / 0.78);
   --app-surface: #151e17;
   --app-surface-subtle: #1a251d;
   --app-surface-raised: #1d2920;

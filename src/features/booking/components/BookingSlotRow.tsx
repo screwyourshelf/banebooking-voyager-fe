@@ -3,8 +3,8 @@ import {
   RecordAccordionCard,
   RecordCard,
   RecordCardDetails,
-  RecordCardDisclosureToggle,
   RecordCardStatic,
+  RecordCardTrigger,
 } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import type { BookingSlotRespons } from "@/types";
@@ -25,7 +25,6 @@ function BookingSlotRow({ slot, isAuthenticated, onBook, onFjern }: Props) {
   const quickAction = presentation.kanHurtigbooke ? (
     <Button
       size="sm"
-      className="booking-slot__quick-action"
       onClick={() => onBook?.(slot)}
       aria-label={`Book tiden ${presentation.startTid} til ${presentation.sluttTid}`}
     >
@@ -36,23 +35,14 @@ function BookingSlotRow({ slot, isAuthenticated, onBook, onFjern }: Props) {
   if (!presentation.harDetaljer) {
     return (
       <RecordCard muted={slot.erPassert}>
-        <div className="booking-slot__row">
-          <RecordCardStatic>{summary}</RecordCardStatic>
-          {quickAction}
-        </div>
+        <RecordCardStatic action={quickAction}>{summary}</RecordCardStatic>
       </RecordCard>
     );
   }
 
   return (
     <RecordAccordionCard value={presentation.slotKey} muted={slot.erPassert}>
-      <div className="booking-slot__row">
-        <RecordCardStatic>{summary}</RecordCardStatic>
-        {quickAction}
-        <RecordCardDisclosureToggle
-          ariaLabel={`Vis detaljer for ${presentation.startTid} til ${presentation.sluttTid}`}
-        />
-      </div>
+      <RecordCardTrigger action={quickAction}>{summary}</RecordCardTrigger>
 
       <RecordCardDetails>
         <BookingSlotDetails

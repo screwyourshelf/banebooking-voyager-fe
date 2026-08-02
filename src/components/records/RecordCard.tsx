@@ -20,6 +20,7 @@ type CardButtonProps = ChildrenProps & {
 
 type StaticProps = ChildrenProps & {
   layout?: "default" | "content-action";
+  action?: ReactNode;
 };
 
 type AccordionCardProps = ChildrenProps & {
@@ -31,8 +32,8 @@ type SummaryProps = ChildrenProps & {
   layout?: "default" | "slot" | "time" | "date";
 };
 
-type DisclosureProps = {
-  ariaLabel: string;
+type TriggerProps = ChildrenProps & {
+  action?: ReactNode;
 };
 
 export function RecordCard({ children, as: Tag = "div", muted = false }: CardProps) {
@@ -76,42 +77,43 @@ export function RecordAccordionCard({ children, value, muted = false }: Accordio
   );
 }
 
-export function RecordCardStatic({ children, layout = "default" }: StaticProps) {
-  return (
+export function RecordCardStatic({ children, layout = "default", action }: StaticProps) {
+  const content = (
     <div className="record-card__static" data-layout={layout}>
       {children}
     </div>
   );
-}
 
-export function RecordCardTrigger({ children }: ChildrenProps) {
+  if (!action) return content;
+
   return (
-    <AccordionPrimitive.Header className="record-card__trigger-header">
-      <AccordionPrimitive.Trigger className="record-card__trigger">
-        {children}
-        <ChevronDown
-          aria-hidden="true"
-          data-slot="accordion-trigger-icon"
-          className="record-card__disclosure-open-icon"
-        />
-        <ChevronUp
-          aria-hidden="true"
-          data-slot="accordion-trigger-icon"
-          className="record-card__disclosure-close-icon"
-        />
-      </AccordionPrimitive.Trigger>
-    </AccordionPrimitive.Header>
+    <div className="record-card__row">
+      {content}
+      <div className="record-card__row-action">{action}</div>
+    </div>
   );
 }
 
-export function RecordCardDisclosureToggle({ ariaLabel }: DisclosureProps) {
+export function RecordCardTrigger({ children, action }: TriggerProps) {
   return (
-    <AccordionPrimitive.Header className="record-card__disclosure-header">
-      <AccordionPrimitive.Trigger className="record-card__disclosure-toggle" aria-label={ariaLabel}>
-        <ChevronDown aria-hidden="true" className="record-card__disclosure-open-icon" />
-        <ChevronUp aria-hidden="true" className="record-card__disclosure-close-icon" />
-      </AccordionPrimitive.Trigger>
-    </AccordionPrimitive.Header>
+    <div className="record-card__row">
+      <AccordionPrimitive.Header className="record-card__trigger-header">
+        <AccordionPrimitive.Trigger className="record-card__trigger">
+          {children}
+          <ChevronDown
+            aria-hidden="true"
+            data-slot="accordion-trigger-icon"
+            className="record-card__disclosure-open-icon"
+          />
+          <ChevronUp
+            aria-hidden="true"
+            data-slot="accordion-trigger-icon"
+            className="record-card__disclosure-close-icon"
+          />
+        </AccordionPrimitive.Trigger>
+      </AccordionPrimitive.Header>
+      {action ? <div className="record-card__row-action">{action}</div> : null}
+    </div>
   );
 }
 
