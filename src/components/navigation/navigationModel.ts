@@ -5,6 +5,7 @@ import {
   CalendarPlus,
   CircleUser,
   Megaphone,
+  Newspaper,
   Settings,
   Shapes,
   Users,
@@ -53,6 +54,14 @@ const navigationItems: AppNavigationItem[] = [
     section: "overview",
     end: true,
     mobilePrimaryOrder: 3,
+  },
+  {
+    id: "news",
+    to: "nyheter",
+    label: "Nyheter",
+    icon: Newspaper,
+    section: "overview",
+    end: true,
   },
   {
     id: "my-bookings",

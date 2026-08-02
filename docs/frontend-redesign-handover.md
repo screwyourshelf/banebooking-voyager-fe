@@ -67,7 +67,9 @@ Sentrale filer:
 - Slots viser starttid, kompakt vær, hovedstatus og eventuell sekundær forklaring.
 - `Ledig` og `Opptatt` er hovedstatus; eier, navn og arrangement er forklarende varianter.
 - Slot-handlinger bruker felles hierarki og flyter til høyre.
-- Varsler fra feed/RSS er tilbake i appskallet og på bookingsiden.
+- Bookingflaten inneholder bare bookingrelatert innhold. RSS-nyheter ligger på en egen
+  offentlig `Nyheter`-side og nås via ordinær navigasjon og en nøytral avissnarvei i
+  toppbaren.
 - `Se bookingregler` åpner den delte editorflaten og viser grenens reelle banereglement,
   bookinggrenser, åpningstid og slotlengde i `ContentDocument`.
 - Vellykket booking og avbestilling bekreftes primært ved at sloten umiddelbart endrer
@@ -97,7 +99,26 @@ Sentrale filer:
 - `src/features/booking/hooks/useBookingSelection.ts`
 - `src/features/booking/hooks/useBookingMutations.ts`
 - `src/features/booking/activityTheme.ts`
-- `src/features/feed/components/FeedNotice.tsx`
+
+### Nyheter
+
+- RSS-feeden presenteres som klubbnyheter, ikke som uleste varsler.
+- Bjelle, antallsbadge og sidedrawer er fjernet fordi feedkontrakten ikke har lest/ulest-
+  status og innholdet egner seg bedre som en egen leseflate.
+- Siden bruker samme `record-collection`/`record-list`/`record-card`-system som de øvrige
+  redesignede listene. Dato, tittel, kort ingress og ekstern handling har fast hierarki.
+- Den nyeste saken gjentas ikke på `Book bane`, slik at bookingkontrollene kommer tidligere
+  i mobilvisningen.
+- Nyheter er offentlig tilgjengelig fra hovedmenyen. Toppbaren beholder en nøytral
+  avissnarvei uten badge, slik at også utloggede mobilbrukere har direkte tilgang.
+
+Sentrale filer:
+
+- `src/features/feed/pages/NyheterPage.tsx`
+- `src/features/feed/views/nyheter/NyheterView.tsx`
+- `src/features/feed/views/nyheter/NyheterContent.tsx`
+- `src/features/feed/views/nyheter/NyhetRow.tsx`
+- `src/features/feed/feedPresentation.ts`
 
 ### Mine tider
 
@@ -586,6 +607,10 @@ Sentrale filer:
   øvrige administrasjonsflatene.
 - `Vilkår` er kontrollert offentlig og innlogget på mobil og desktop i lyst og mørkt tema.
   Langtekstflaten har avgrenset lesebredde på desktop og fyller mobilens innholdsflate.
+- `Nyheter` er kontrollert offentlig på 320 og 390 px mobilbredde samt 1440 px desktop i
+  lyst og mørkt tema. Record-radens generelle `content-action`-layout lar handlingen flyte
+  til høyre og bryte kontrollert under innholdet på den smaleste bredden. Toppbarsnarveien,
+  desktopnavigasjonen og den ryddede bookingflaten er kontrollert mot den reelle RSS-feeden.
 - Medlemsbekreftelse er utløst gjennom den reelle guarden med Bruker og Utvidet. Mobil og
   desktop, lyst og mørkt tema, fullt navn, fire medlemskapstyper, valgt tilstand og aktivert
   hovedhandling er kontrollert uten å sende bekreftelsen. Flaten har ingen horisontal
@@ -655,13 +680,13 @@ Dette er ikke introdusert som en funksjonell feil i redesignarbeidet.
 
 ### Mål
 
-Løft de gjenværende appskall- og brukerunderflytene uten å endre de godkjente hovedsidene:
-varslingsskuffen og brukeradministrasjonens sperre-, historikk- og slettedialoger.
+Løft de gjenværende brukerunderflytene uten å endre de godkjente hovedsidene:
+brukeradministrasjonens sperre-, historikk- og slettedialoger.
 
 ### Foreslått rekkefølge
 
-1. Kartlegg varslingsskuffens og brukerhandlingenes lasting, tomtilstander, feil,
-   bekreftelser og tilbakeveier på mobil og desktop.
+1. Kartlegg brukerhandlingenes lasting, tomtilstander, feil, bekreftelser og tilbakeveier på
+   mobil og desktop.
 2. Gjenbruk delte record-, editor-, settings- og fareområdemønstre. Ikke endre den
    godkjente brukerlisten eller dens informasjonsstruktur.
 3. Behold eksisterende feed-, bruker-, sperre- og slettingkontrakter.

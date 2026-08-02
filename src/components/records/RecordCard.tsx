@@ -16,6 +16,10 @@ type CardButtonProps = ChildrenProps & {
   ariaLabel: string;
 };
 
+type StaticProps = ChildrenProps & {
+  layout?: "default" | "content-action";
+};
+
 type AccordionCardProps = ChildrenProps & {
   value: string;
   muted?: boolean;
@@ -66,8 +70,12 @@ export function RecordAccordionCard({ children, value, muted = false }: Accordio
   );
 }
 
-export function RecordCardStatic({ children }: ChildrenProps) {
-  return <div className="record-card__static">{children}</div>;
+export function RecordCardStatic({ children, layout = "default" }: StaticProps) {
+  return (
+    <div className="record-card__static" data-layout={layout}>
+      {children}
+    </div>
+  );
 }
 
 export function RecordCardTrigger({ children }: ChildrenProps) {

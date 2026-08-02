@@ -13,6 +13,7 @@ export function useFeed() {
   return {
     feed: query.data ?? [],
     isLoading: query.isLoading,
+    isFetching: query.isFetching,
     error: query.error,
     refetch: query.refetch,
   };

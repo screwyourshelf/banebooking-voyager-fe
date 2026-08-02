@@ -2,7 +2,6 @@ import { PageHeader } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { ReglementDialog } from "@/features/booking/components";
 import { resolveBookingActivityTheme } from "@/features/booking/activityTheme";
-import { FeedNotice } from "@/features/feed/components";
 import BookingSchedule from "./BookingSchedule";
 import type { BookingContentProps } from "./bookingViewTypes";
 
@@ -25,8 +24,6 @@ export default function BookingContent(props: BookingContentProps) {
           </ReglementDialog>
         }
       />
-
-      <FeedNotice />
 
       <div className="booking-workspace">
         <BookingSchedule {...props} valgtGren={valgtGren} />

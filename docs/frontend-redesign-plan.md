@@ -93,7 +93,8 @@ POC-en dekker nå:
 
 - Responsivt appskall med desktop-sidefelt og mobil bunnnavigasjon.
 - Samlet innlogging/kontomeny, lyst/mørkt tema og utviklingsinnlogging.
-- RSS-/feedvarsler i det nye appskallet.
+- Offentlig `Nyheter`-side for RSS-feeden, med ordinær navigasjon og en nøytral
+  toppbarsnarvei uten varslingsbadge.
 - `Book bane` med mobiltilpassede valg, aktivitetsfarger og ny slotvisning.
 - `Mine tider` med kommende og gjennomførte reservasjoner, delte record-kort og
   kapabilitetsstyrt avbestilling.

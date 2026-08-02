@@ -53,25 +53,6 @@
     gap: 0.375rem;
   }
 
-  .app-topbar__notification-count {
-    position: absolute;
-    top: calc(var(--app-space-2xs) * -1);
-    right: calc(var(--app-space-2xs) * -1);
-    display: grid;
-    min-width: var(--app-topbar-notification-count-size);
-    height: var(--app-topbar-notification-count-size);
-    place-items: center;
-    border-radius: 999px;
-    background: var(--app-accent-strong);
-    padding-inline: var(--app-space-xs);
-    color: var(--app-accent-contrast);
-    font-size: var(--app-type-micro);
-    font-variant-numeric: tabular-nums;
-    font-weight: 800;
-    line-height: 1;
-    box-shadow: var(--app-shadow-sm);
-  }
-
   .app-topbar__account {
     display: none;
   }
@@ -2094,6 +2075,20 @@
 
   .record-card__trigger {
     border-radius: 0 !important;
+  }
+
+  .record-card__static[data-layout="content-action"] {
+    flex-wrap: wrap;
+    align-items: flex-start !important;
+  }
+
+  .record-card__static[data-layout="content-action"] > :first-child {
+    min-width: 0;
+    flex: 1 1 12rem;
+  }
+
+  .record-card__static[data-layout="content-action"] > :last-child:not(:first-child) {
+    margin-left: auto;
   }
 
   .record-card__trigger > [data-slot="accordion-trigger-icon"] {

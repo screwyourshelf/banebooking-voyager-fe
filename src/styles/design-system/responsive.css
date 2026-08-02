@@ -516,18 +516,6 @@
       gap: 1.5rem;
     }
 
-    .feed-notice {
-      grid-template-columns: auto minmax(0, 1fr) auto;
-      align-items: center;
-      padding: 1rem 1.125rem;
-    }
-
-    .feed-notice__more {
-      grid-column: auto;
-      margin-top: 0;
-      padding-inline: 0.75rem;
-    }
-
     .booking-workspace {
       border-radius: 1.5rem;
     }

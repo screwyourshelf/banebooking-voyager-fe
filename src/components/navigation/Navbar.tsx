@@ -1,4 +1,4 @@
-import { CircleUser, LogIn, LogOut } from "lucide-react";
+import { CircleUser, LogIn, LogOut, Newspaper } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,6 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { NotifikasjonDrawer } from "@/features/feed/components";
 import { useAuth } from "@/hooks/useAuth";
 import { useKlubb } from "@/hooks/useKlubb";
 import { prefetchRoute } from "@/utils/prefetchRoute";
@@ -39,7 +38,11 @@ export default function Navbar() {
           <ModeToggle />
         </span>
 
-        <NotifikasjonDrawer />
+        <Button asChild variant="ghost" size="icon">
+          <Link to="nyheter" aria-label="Nyheter" {...prefetch("nyheter")}>
+            <Newspaper className="size-[var(--app-topbar-action-icon-size)]" />
+          </Link>
+        </Button>
 
         <div className="app-topbar__account">
           <DropdownMenu>

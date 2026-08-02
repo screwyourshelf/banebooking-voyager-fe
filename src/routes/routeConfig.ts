@@ -18,6 +18,7 @@ const loadBookingPage = () => import("@/features/booking/pages/BookingPage");
 const loadMinSidePage = () => import("@/features/minside/pages/MinSidePage");
 const loadMineBookingerPage = () => import("@/features/minside/pages/MineBookingerPage");
 const loadArrangementerPage = () => import("@/features/arrangementer/pages/ArrangementerPage");
+const loadNyheterPage = () => import("@/features/feed/pages/NyheterPage");
 const loadArrangementAdminPage = () => import("@/features/arrangement-admin/pages/ArrangementPage");
 const loadTurneringPage = () => import("@/features/turnering/pages/TurneringPage");
 
@@ -38,6 +39,7 @@ const BookingPage = lazy(loadBookingPage);
 const MinSidePage = lazy(loadMinSidePage);
 const MineBookingerPage = lazy(loadMineBookingerPage);
 const ArrangementerPage = lazy(loadArrangementerPage);
+const NyheterPage = lazy(loadNyheterPage);
 const ArrangementAdminPage = lazy(loadArrangementAdminPage);
 const TurneringPage = lazy(loadTurneringPage);
 
@@ -90,6 +92,13 @@ export const routeConfig: RouteConfig[] = [
     breadcrumb: "Arrangementer",
     component: ArrangementerPage,
     loader: loadArrangementerPage,
+  },
+
+  {
+    path: "nyheter",
+    breadcrumb: "Nyheter",
+    component: NyheterPage,
+    loader: loadNyheterPage,
   },
 
   {
