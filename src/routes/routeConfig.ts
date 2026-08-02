@@ -1,5 +1,7 @@
 ﻿import { lazy, type ComponentType } from "react";
 
+import { createCachedRouteLoader } from "./createCachedRouteLoader";
+
 export interface RouteConfig {
   path: string;
   breadcrumb: string;
@@ -14,23 +16,40 @@ export interface RouteConfig {
   Page loaders (brukes til både lazy og prefetch)
 */
 
-const loadBookingPage = () => import("@/features/booking/pages/BookingPage");
-const loadLoginPage = () => import("@/features/auth/pages/LoginPage");
-const loadMinSidePage = () => import("@/features/minside/pages/MinSidePage");
-const loadMineBookingerPage = () => import("@/features/minside/pages/MineBookingerPage");
-const loadArrangementerPage = () => import("@/features/arrangementer/pages/ArrangementerPage");
-const loadNyheterPage = () => import("@/features/feed/pages/NyheterPage");
-const loadArrangementAdminPage = () => import("@/features/arrangement-admin/pages/ArrangementPage");
-const loadTurneringPage = () => import("@/features/turnering/pages/TurneringPage");
+const loadBookingPage = createCachedRouteLoader(
+  () => import("@/features/booking/pages/BookingPage")
+);
+const loadLoginPage = createCachedRouteLoader(() => import("@/features/auth/pages/LoginPage"));
+const loadMinSidePage = createCachedRouteLoader(
+  () => import("@/features/minside/pages/MinSidePage")
+);
+const loadMineBookingerPage = createCachedRouteLoader(
+  () => import("@/features/minside/pages/MineBookingerPage")
+);
+const loadArrangementerPage = createCachedRouteLoader(
+  () => import("@/features/arrangementer/pages/ArrangementerPage")
+);
+const loadNyheterPage = createCachedRouteLoader(() => import("@/features/feed/pages/NyheterPage"));
+const loadArrangementAdminPage = createCachedRouteLoader(
+  () => import("@/features/arrangement-admin/pages/ArrangementPage")
+);
+const loadTurneringPage = createCachedRouteLoader(
+  () => import("@/features/turnering/pages/TurneringPage")
+);
 
-const loadKlubbPage = () => import("@/features/klubb/pages/KlubbPage");
-const loadBanerPage = () => import("@/features/baner/pages/BanerPage");
-const loadBrukerePage = () => import("@/features/brukere/pages/BrukerePage");
-const loadGrenerPage = () => import("@/features/grener/pages/GrenerPage");
-const loadKunngjøringerAdminPage = () =>
-  import("@/features/kunngjøringer/pages/KunngjøringerAdminPage");
+const loadKlubbPage = createCachedRouteLoader(() => import("@/features/klubb/pages/KlubbPage"));
+const loadBanerPage = createCachedRouteLoader(() => import("@/features/baner/pages/BanerPage"));
+const loadBrukerePage = createCachedRouteLoader(
+  () => import("@/features/brukere/pages/BrukerePage")
+);
+const loadGrenerPage = createCachedRouteLoader(() => import("@/features/grener/pages/GrenerPage"));
+const loadKunngjøringerAdminPage = createCachedRouteLoader(
+  () => import("@/features/kunngjøringer/pages/KunngjøringerAdminPage")
+);
 
-const loadVilkaarPage = () => import("@/features/policy/pages/VilkaarPage");
+const loadVilkaarPage = createCachedRouteLoader(
+  () => import("@/features/policy/pages/VilkaarPage")
+);
 
 /*
   Lazy components
