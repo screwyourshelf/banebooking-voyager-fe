@@ -24,7 +24,10 @@ Dokumenter i `docs/archive/` er historiske og skal ikke brukes som gjeldende pla
 ### Appskall og navigasjon
 
 - Desktop har fast sidenavigasjon og bred arbeidsflate. Den tidligere toppbaren er fjernet
-  på desktop; tema og konto ligger samlet i en fast verktøyfot i sidefeltet.
+  på desktop; tema og konto ligger samlet øverst i sidefeltet før hovednavigasjonen.
+- Desktoparbeidsflaten bruker en dempet, tematilpasset tennisbakgrunn. Den er et appskall-
+  ansvar, ikke lokal sidestyling, og lastes ikke på mobil. Bildet er nedskalert og
+  komprimert til 1800 px / ca. 312 kB; et gammelt ubrukt bilde preloads ikke lenger.
 - Mobil har toppfelt, fast bunnnavigasjon og samlet `Mer`-/kontomeny.
 - Lyst/mørkt tema er alltid tilgjengelig: som ikonverktøy på mobil og som navngitt handling
   i desktop-sidefeltet.
@@ -36,16 +39,39 @@ Dokumenter i `docs/archive/` er historiske og skal ikke brukes som gjeldende pla
 - De redesignede arbeidsflatene bruker responsive typografitokens: mobil beholder den
   kompakte skalaen, mens desktop løfter metadata, kontroller, brødtekst og seksjonstitler
   ett trinn. Shadcn-komponentkoden, navigasjonen og Turnering er ikke endret av skalaen.
+- Første innlasting går nå direkte fra en tematilpasset HTML-bootflate til React. Bootflaten
+  fjernes i en layout-effekt etter første React-commit, slik at det ikke oppstår en blank
+  frame mellom statisk HTML og appen. Temaet leses i dokumenthodet og bekreftes med
+  `useLayoutEffect`, så kald innlasting i mørkt tema starter mørkt.
+- `AppBoot` starter appskall og rutedata parallelt med klubbkontrollen i stedet for å
+  returnere `null`. Tilgangsguardene bruker en delt side-skeleton, og `AppShell` har en lokal
+  Suspense-grense rundt `Outlet`; navigasjon og appgeometri blir derfor stående når en
+  rutechunk eller brukerdata lastes. Den tidligere 500 ms innfadingen av første arbeidsflate
+  er fjernet.
+- `AppFrameSkeleton`, `RouteContentSkeleton` og `PageContentSkeleton` speiler nå
+  sidefelt/topplinje, sidehode, grønn record-header og resultatlistens bredde. Booking og
+  Brukere bruker samme loadingfamilie i stedet for den gamle smale, generiske
+  `ListSkeleton`-flaten.
+- Gjeldende lazy-rute startes før React mountes. Navigasjonslenker forhåndslaster ruter ved
+  tastaturfokus, hover og touch. Offentlige API-kall venter ikke lenger på Supabase når det
+  ikke finnes en token; eksisterende token sendes fortsatt med, og beskyttede kall beholder
+  sesjonskravet. `AuthProvider` synkroniserer token ved første sessionsvar slik at den første
+  beskyttede forespørselen slipper en ekstra sesjonsoppslagrunde.
 
 Sentrale filer:
 
 - `src/app/AppShell.tsx`
+- `src/app/AppBoot.tsx`
+- `src/app/BootHandoff.tsx`
+- `src/components/loading/AppFrameSkeleton.tsx`
+- `src/components/loading/PageContentSkeleton.tsx`
 - `src/components/navigation/AppSidebar.tsx`
 - `src/components/navigation/MobileBottomNav.tsx`
 - `src/components/navigation/SidebarUtilities.tsx`
 - `src/components/navigation/navigationModel.ts`
 - `src/components/navigation/LoginPanel.tsx`
 - `src/features/auth/pages/LoginPage.tsx`
+- `src/utils/prefetchRoute.ts`
 
 ### Innlogging for lokal POC
 
@@ -78,21 +104,29 @@ Sentrale filer:
   `RecordControlPanel`; booking har ingen lokal kontrollflate eller parallell CSS.
 - `Bookingregler` er en delt, tertiær konteksthandling ved antall ledige tider. Dialogen
   navngir valgt bane og viser dens effektive bookingregler, inkludert eventuelle
-  baneoverstyringer, uten å fylle selve valgflaten med en ekstra kontrollgruppe.
+  baneoverstyringer, uten å vise det separate banereglementet eller fylle selve valgflaten
+  med en ekstra kontrollgruppe.
 - Valgt aktivitet styrer understrek på alle bookingvalg:
   - tennis: oransje;
   - padel: grønn;
   - bordtennis: blågrå.
 - Antall ledige tider tilhører resultatheaderen, ikke valgt baneknapp. Banevalgene viser kun
   sammenlignbare banenavn.
-- Slots viser starttid, kompakt vær, hovedstatus og eventuell sekundær forklaring.
+- Slots viser start- og sluttid gjennom samme delte tidsintervall som `Mine tider`, kompakt
+  vær, hovedstatus og eventuell sekundær forklaring. En egen ekspanderkontroll ligger alltid
+  helt til høyre, uavhengig av om raden også har en `Book`-knapp.
 - `Ledig` og `Opptatt` er hovedstatus; eier, navn og arrangement er forklarende varianter.
+- `Ledig`/`Opptatt` beregnes fra faktisk bookinginnhold (`bookingId`, booker eller
+  fjernkapabilitet), ikke fra om den innloggede brukeren har `booking:book`. Når et medlem
+  når bookinggrensen, forblir øvrige tomme slots `Ledig`, Book-handlingen skjules og
+  detaljflaten forklarer begrensningen. Dette hindrer at én booking tilsynelatende gjør alle
+  andre tider opptatt.
 - Slot-handlinger bruker felles hierarki og flyter til høyre.
 - Bookingflaten inneholder bare bookingrelatert innhold. RSS-nyheter ligger på en egen
   offentlig `Nyheter`-side og nås via ordinær navigasjon og en nøytral avissnarvei i
   toppbaren.
-- `Se bookingregler` åpner den delte editorflaten og viser grenens reelle banereglement,
-  bookinggrenser, åpningstid og slotlengde i `ContentDocument`.
+- `Se bookingregler` åpner den delte editorflaten og viser kun effektive bookinggrenser,
+  åpningstid og slotlengde i `ContentDocument`.
 - Vellykket booking og avbestilling bekreftes primært ved at sloten umiddelbart endrer
   status. Det vises ingen toast for disse handlingene. Mutasjonsfeil vises ved slotlisten,
   mens innlastingsfeil beholder sidehodet og kontrollene med en eksplisitt
@@ -148,7 +182,9 @@ Sentrale filer:
   detaljhandling.
 - Siden bruker samme felles arbeidsbredde som booking, slik at navigasjon mellom flatene ikke
   gir et tydelig breddehopp på desktop.
-- Kommende reservasjoner vises først; historikk kan hentes med ett felles kontrollvalg.
+- Kommende reservasjoner vises først med nærmeste reservasjon øverst. Historiske
+  reservasjoner sorteres motsatt, med den nyeste passerte først, og kan hentes med ett
+  felles kontrollvalg.
 - Tomtilstand, lasting, API-feil og mutasjonsfeil har bevisste tilstander i samme flate.
 - `booking:fjern` fra hver reservasjon avgjør om avbestilling vises; det finnes ingen lokal
   rolletabell for handlingen.
@@ -203,8 +239,12 @@ Sentrale filer:
 - Ny og rediger bruker samme settings-hierarki for gren, kategori, intern beskrivelse og
   publisering. Redigering samler turneringskobling og et tydelig felles fareområde for
   avlysning i informasjonsfanen.
+- Tiptap/ProseMirror er skilt fra arrangementruten og behovslastes først når
+  publiseringseditoren faktisk rendres. Oversikten og editorens øvrige felt laster derfor
+  ikke riktekstpakken på forhånd.
 - Gjentakende og manuelt oppsett bruker `SettingsRadioGroup`, `SettingsChoiceGroup`,
-  settings-brytere og samme grønne handlingshierarki. De bygger fortsatt den konkrete
+  settings-brytere og samme grønne handlingshierarki. Manuelt flerdatovalg går gjennom
+  `DatoFlervelger` i stedet for en lokal kalenderinnpakning. De bygger fortsatt den konkrete
   bookinglisten og beholder konflikt-/slotlengdelogikken uendret.
 - Bookinglisten bruker `AdminEntityCollection`, `record-list` og den nye delte
   `AdminActionRow` i stedet for en lokal tabell. Dato, tidsrom, bane, status og tekstbaserte
@@ -234,10 +274,17 @@ Sentrale filer:
 ### Brukeradministrasjon
 
 - Mobil har grønn kontrollflate med nøytralt søkefelt og sammenleggbare filtre.
-- Desktop har bredt søk/filterområde og tabellorientert informasjon.
+- Desktop har bredt søk/filterområde og samme record-informasjon som mobil.
+- Det delte kontrollpanelet tilbyr sortering på nyeste opprettet, eldste opprettet og navn.
+- Opprettet- og medlemskapsdatoer bruker appens felles `dd.mm.åååå`-format.
+- Brukerens synlige treffrad viser rolle og opprettet dato. Medlemskapsbekreftelse ligger i
+  detaljflaten, slik at søkelisten prioriterer stabil identitet og når kontoen ble opprettet.
 - Brukertreff bruker samme listekort-ramme som booking-slots.
 - Medlemskap uten bekreftelse heter `Ikke bekreftet`.
-- Redigeringsdialog og destruktive handlinger følger nye designroller.
+- Redigering, manuell sperring og sperrehistorikk bruker samme grønne
+  `AdminEditorDialog`, settings-rader, status og handlingshierarki som øvrig administrasjon.
+  Datovelgeren uten forrige/neste-navigasjon bruker nå full bredde; den tidligere
+  avkortingen av `Aktiv til` er fjernet sentralt.
 
 Sentrale filer:
 
@@ -252,7 +299,9 @@ Sentrale filer:
 - `Ny bane` er en grønn sidehandling ved sidehodet. Opprettelse og redigering bruker samme
   `AdminEditorDialog`: helskjerm med `Alle baner` på mobil og avgrenset dialog på desktop.
 - Baneoversikten bruker en delt `AdminEntityCollection` med fullbreddes record-rader, fast
-  informasjonsrekkefølge, status og viderepil. Mønsteret er laget for tilsvarende
+  informasjonsrekkefølge, status og viderepil. Opp-/ned-handlinger styrer rekkefølgen per
+  gren som medlemmene møter i bookingoversikten; rått sorteringstall er fjernet fra
+  skjemaet. Mønsteret er laget for tilsvarende
   administrasjonssider som `Grener`, ikke som en lokal banevelger.
 - Valg av bane åpner et fokusert `AdminEditorDialog`: helskjerm med lokal tilbakehandling på
   mobil og en avgrenset dialog på desktop. Listen forblir sidens stabile startpunkt.
@@ -420,12 +469,13 @@ Sentrale filer:
 
 ### Kunngjøringer
 
-- Administrasjonssiden bruker samme `AdminPage`-hierarki og `SettingsSection`-mønster som
-  Klubbinnstillinger og Min side. Det er ikke opprettet en lokal kunngjøringsvariant.
-- Ingen aktiv kunngjøring vises som en nøytral status. Opprettelse bruker delte
-  settings-rader, grønn primærhandling og felles feilflate uten lokale klasser.
-- En aktiv kunngjøring viser budskap, tidsrom og bekreftelsesfremdrift gjennom delte
-  status- og settings-komponenter. Hver bekreftelse er en vanlig settings-rad.
+- Administrasjonssiden bruker samme `AdminPage`-, `AdminEntityCollection`- og
+  liste–editorflyt som Baner og Arrangementadministrasjon. Det er ikke opprettet en lokal
+  kunngjøringsvariant.
+- Ingen aktiv kunngjøring vises som en nøytral listetilstand. `Ny` åpner en felles grønn
+  editor med settings-rader, grønn primærhandling og felles feilflate uten lokale klasser.
+- En aktiv kunngjøring vises som en record-rad og åpner budskap, tidsrom og
+  bekreftelsesfremdrift i samme editorfamilie. Hver bekreftelse er en vanlig settings-rad.
 - Deaktivering ligger i `SettingsSection` sin felles `danger`-tone og beholder eksisterende
   destruktive API-flyt.
 - Den obligatoriske kunngjøringen bruker samme sidehierarki og den delte
@@ -435,11 +485,15 @@ Sentrale filer:
   får en eksplisitt tilgangstilstand.
 - Eksisterende kontrakter for aktiv kunngjøring, opprettelse, deaktivering og bekreftelse er
   beholdt.
+- Dagens API eksponerer bare den aktive kunngjøringen. Historiske/utløpte kunngjøringer er
+  derfor ikke fremstilt som om de kan listes; det krever et eget backend-endepunkt senere.
 
 Sentrale filer:
 
 - `src/features/kunngjøringer/pages/KunngjøringerAdminPage.tsx`
 - `src/features/kunngjøringer/views/KunngjøringerAdminView.tsx`
+- `src/features/kunngjøringer/components/KunngjøringEditorDialog.tsx`
+- `src/features/kunngjøringer/components/KunngjøringDetailsDialog.tsx`
 - `src/features/kunngjøringer/pages/KunngjøringPage.tsx`
 - `src/features/kunngjøringer/hooks/useKunngjøringAdmin.ts`
 - `src/components/layout/ContentDocument.tsx`
@@ -490,8 +544,11 @@ Sentrale filer:
 - `RecordLeadingValue` og `RecordEyebrow` gir vanlige record-rader én felles oransje
   informasjonsmarkør: tid i Book/Mine tider, dato i Arrangementer og rolle i Brukere.
   `AdminEntityRow` følger samme regel med gren i Baner og åpningstid i Grener.
+- `RecordTimeRange` gir Book og Mine tider identisk presentasjon av start–slutt, mens
+  `RecordCardDisclosureToggle` gir bookingraden en stabil ekspanderkontroll helt til høyre.
 - `RecordControlPanel` gir record-samlinger samme responsive kontrollflate. Arrangementer,
   Baner og Brukere bruker flervalgsmodus, mens Booking bruker obligatorisk enkeltvalgsmodus.
+  Den samme flaten eier også et valgfritt, Radix-basert sorteringsvalg.
 - `RecordCollection` er container for en felles bred listetetthet. Smale flater beholder
   luftige record-kort, mens brede samlinger bruker lavere rader, faste informasjonskolonner
   og separatorer uten individuelle kortskygger. Dette gjelder etter faktisk arbeidsbredde,
@@ -503,8 +560,12 @@ Sentrale filer:
   liste–redigeringsmønster som prioriterer mobil uten å innføre sidespesifikk styling.
 - `AdminActionRow` gir ikke-selekterbare administrasjonsrader samme record-ramme og et
   høyrejustert handlingsområde. Arrangementets bookingliste er første bruker.
+- `AdminOrderedEntityRow` gir administrerbare entitetslister felles opp-/ned-handlinger uten
+  nestede knapper. Baner er første bruker.
 - `AdminEditorDialog` sin `wide`-variant gir komplekse editorer større arbeidsflate på
   desktop uten å endre den felles helskjermmodellen på mobil.
+- `AdminEditorDialog` eier grønn dialogheader og en innholdstilpasset `compact`-variant for
+  korte redigerings-, regel- og sperreflyter.
 - `Tabs` sin `section`-variant gir både administrasjons- og kontoflater en tilgjengelig
   underområdenavigasjon med felles mobil-/desktopgeometri, grønn kontrollflate og oransje
   understrek for valgt område.
@@ -512,12 +573,21 @@ Sentrale filer:
   uten at features lager lokale røde kort.
 - `AdminSettingsForm` og `AdminFormActions` lar vanlige innstillingssider bruke samme
   skjema- og handlingshierarki som editorene uten lokale layoutklasser.
-- `ContentDocument` gir vilkår, reglement og obligatoriske beskjeder én responsiv
+- `ContentDocument` gir vilkår, bookingregler og obligatoriske beskjeder én responsiv
   langtekstflate med felles lesebredde, seksjoner, lenker og temaoppførsel.
-- `ContentDocumentFacts` gir reglement og tilsvarende dokumenter en felles kompakt
+- `ContentDocumentFacts` gir bookingregler og tilsvarende dokumenter en felles kompakt
   nøkkel–verdi-visning uten at features kobler seg direkte til presentasjonsklasser.
-- `DatePickerPopover` samler Radix-popover, kalender, datogrense og lukkeatferd for alle
-  datovelgere. Det hindrer lokale popover-varianter og samtidige dialoglag.
+- `DatoVelger` er det semantiske enkeltfeltet for dato og komponerer `DatePickerPopover`,
+  som samler Radix-popover, norsk kalender, datogrense og lukkeatferd. Booking gjenbruker
+  popover-laget med sin egen semantiske kontrollknapp. `DatoFlervelger` dekker det reelle
+  flerdatobehovet i manuelt arrangementsoppsett med samme kalender og sentrale ramme.
+  Kunngjøringer og medlemsbekreftelse bruker ikke lenger nettleserens rå datofelt.
+- Lagrede datoer vises med formatteringen i `datoUtils`. Innsending fra de nye velgerne går
+  via `tilDatoTekst` før ISO-konvertering, slik at eksisterende date-only API-kontrakter er
+  beholdt uten tidssoneforskyvning.
+- Designsystemkontrollen avviser nye rå datofelt og direkte feature-import av
+  kalenderprimitiven. Turnering er fortsatt eksplisitt unntatt fordi området ikke inngår i
+  denne redesignen.
 - `ActionFeedback` gir vedvarende, kontekstuell tilbakemelding med felles `success`, `info`,
   `warning` og `danger`-toner. Den bruker ikke dekorative ikoner og har felles live-regioner.
 - `MutationFeedback` prioriterer feil foran suksess og brukes i skjemaets handlingsområde
@@ -549,6 +619,9 @@ Sentrale filer:
 - `src/components/controls/ControlChoice.tsx`
 - `src/components/controls/FilterSwitch.tsx`
 - `src/components/controls/DatePickerPopover.tsx`
+- `src/components/controls/kalenderLokalisering.ts`
+- `src/components/DatoVelger.tsx`
+- `src/components/DatoFlervelger.tsx`
 - `src/components/records/RecordCollectionHeader.tsx`
 - `src/components/records/RecordControlPanel.tsx`
 - `src/components/feedback/ActionFeedback.tsx`
@@ -596,6 +669,11 @@ Sentrale filer:
 - `npm run build` passerer.
 - `git diff --check` passerer.
 - Booking og brukeradmin er visuelt kontrollert på mobil og desktop.
+- Denne arbeidspakken er kontrollert på 390 px mobil og 1440 px desktop. Bookingens
+  tidsintervall, faste ekspanderkontroll, bookingregler, brukerfiltre/sortering,
+  brukerredigering, sperredialog, banerekkefølge, kunngjøringseditor, desktopbakgrunn,
+  sidemeny samt lyst/mørkt tema er kontrollert uten å sende mutasjoner.
+- Nettleserkonsollen er kontrollert uten feil etter gjennomgangen.
 - Bookingens nye valgmodus er kontrollert offentlig og med Admin på 320 og 390 px mobil
   samt 1440 px desktop i lyst og mørkt tema. Permanent synlige valg, grenbytte, `I morgen`,
   vilkårlig kalenderdato, automatisk banevalg og umiddelbar oppdatering av ledige tider er
@@ -665,8 +743,9 @@ Sentrale filer:
 - Den endelige normaltilstanden for `Mine tider` lastet uten feil eller advarsler i
   nettleserkonsollen.
 
-Vite viser fortsatt et ikke-blokkerende varsel om at React-chunken er større enn 500 kB.
-Dette er ikke introdusert som en funksjonell feil i redesignarbeidet.
+- Vites tidligere chunkvarsel er løst uten å heve varselgrensen. Den feilgrupperte
+  React-chunken er redusert fra ca. 711 kB til ca. 229 kB; Radix er ca. 132 kB og den
+  behovslastede editorpakken ca. 410 kB. Alle produksjonschunker er under 500 kB.
 
 ## Kjent gjeld og avgrensninger
 
@@ -695,31 +774,32 @@ Dette er ikke introdusert som en funksjonell feil i redesignarbeidet.
 - Testklubben har en aktiv medlemskapsperiode (`Sesong 2026`). Medlemsguarden er visuelt og
   funksjonelt kontrollert frem til innsending; ingen medlemsbekreftelse eller destruktiv
   deaktivering ble sendt under kontrollen.
-- Testklubben har en aktiv kunngjøring. Den obligatoriske leseflaten er kontrollert uten å
-  sende nye bekreftelser i arrangementadministrasjonsslicen.
+- Testklubben hadde ingen aktiv kunngjøring i siste kontroll. Tomtilstanden og
+  opprettelsesdialogen er kontrollert uten å publisere testdata; aktiv detaljvisning er
+  kartlagt mot den eksisterende responskontrakten.
 - Testdataene har ingen sperret bruker. Sperret-flaten er derfor visuelt kontrollert på
   direkte URL, mens guardbetingelsen og prioriteringen er kartlagt i kode.
 - Gjentatt åpning av utviklingsinnloggingens konto-/rolledialog kan fortsatt gi Radix-
   advarselen `Missing Description or aria-describedby={undefined}` i Vite-konsollen. Den
   normale sidevisningen er ren; dialogadvarselen bør avgrenses og rettes i en egen liten
   tilgjengelighetsoppgave.
-- Resterende sider er ikke migrert og kan derfor avvike tydelig fra appskallet.
+- Turnering er fortsatt uttrykkelig utenfor POC-redesignet og kan derfor avvike tydelig fra
+  appskallet.
 - Backendens planlagte overgang bort fra flere klubber/tenants inngår ikke i denne branchen.
 
 ## Anbefalt neste oppgave
 
 ### Mål
 
-Løft de gjenværende brukerunderflytene uten å endre de godkjente hovedsidene:
-brukeradministrasjonens sperre-, historikk- og slettedialoger.
+Ta en avgrenset regresjonsrunde på eventuelle nye funn uten å starte Turnering. De
+gjenværende brukerunderflytene for redigering, sperring og sperrehistorikk bruker nå det
+delte dialog- og settings-systemet.
 
 ### Foreslått rekkefølge
 
-1. Kartlegg brukerhandlingenes lasting, tomtilstander, feil, bekreftelser og tilbakeveier på
-   mobil og desktop.
-2. Gjenbruk delte record-, editor-, settings- og fareområdemønstre. Ikke endre den
-   godkjente brukerlisten eller dens informasjonsstruktur.
-3. Behold eksisterende feed-, bruker-, sperre- og slettingkontrakter.
+1. Reproduser funnet i både mobil- og desktopbredde før endring.
+2. Gjenbruk delte record-, editor-, settings- og fareområdemønstre fremfor lokale varianter.
+3. Behold eksisterende API-, rolle- og autorisasjonskontrakter.
 4. Løs mobil, desktop og lyst/mørkt tema i samme slice.
 5. Kontroller relevante roller og både vellykkede og avbrutte flyter.
 6. Kjør tekniske kontroller og visuell nettleserkontroll.

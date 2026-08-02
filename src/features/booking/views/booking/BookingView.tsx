@@ -1,4 +1,4 @@
-import { ListSkeleton } from "@/components/loading";
+import { PageContentSkeleton } from "@/components/loading";
 import { useBooking } from "@/features/booking/hooks/useBooking";
 import { useBookingSelection } from "@/features/booking/hooks/useBookingSelection";
 import { useAuth } from "@/hooks/useAuth";
@@ -27,7 +27,7 @@ export default function BookingView() {
   const booking = useBooking(selection.valgtDatoStr, selection.valgtBaneId);
 
   if (loadingBaner || loadingGrener) {
-    return <ListSkeleton />;
+    return <PageContentSkeleton label="Laster booking" rows={5} controls />;
   }
 
   function handleSlotsRetry() {

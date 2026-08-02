@@ -6,7 +6,7 @@ import { RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import { SlettMegDialog } from "@/features/minside/components";
 import { useMeg } from "@/hooks/useMeg";
-import { formaterRolle } from "@/utils/brukerPresentation";
+import { formaterRoller } from "@/utils/brukerPresentation";
 
 import MinProfilContent, { type Mode } from "./MinProfilContent";
 import { MAX_VISNINGSNAVN_LENGTH, validateVisningsnavn } from "./visningsnavn";
@@ -86,7 +86,7 @@ export default function MinProfilView() {
   return (
     <MinProfilContent
       epost={bruker.epost}
-      rollerText={bruker.roller.map(formaterRolle).join(", ")}
+      rollerText={formaterRoller(bruker.roller, "Ingen klubbrolle")}
       mode={mode}
       onSetMode={(m) => {
         reset();

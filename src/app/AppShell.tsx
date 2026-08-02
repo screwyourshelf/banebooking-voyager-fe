@@ -1,7 +1,8 @@
+import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import { GlobalFeedbackToaster } from "@/components/feedback";
+import { RouteContentSkeleton } from "@/components/loading";
 import { AppSidebar, MobileBottomNav, Navbar } from "@/components/navigation";
-import "@/styles/animate-fadeIn.css";
 
 export default function AppShell() {
   return (
@@ -17,9 +18,9 @@ export default function AppShell() {
           </header>
 
           <main className="app-shell__main">
-            <div className="animate__animated animate__fadeIn animate__faster">
+            <Suspense fallback={<RouteContentSkeleton label="Laster siden" />}>
               <Outlet />
-            </div>
+            </Suspense>
           </main>
         </div>
       </div>

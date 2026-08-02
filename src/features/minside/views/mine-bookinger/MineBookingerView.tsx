@@ -5,7 +5,7 @@ import { useBookingActions } from "@/features/minside/hooks/useBookingActions";
 import type { MinBookingRespons } from "@/types";
 
 import MineBookingerContent from "./MineBookingerContent";
-import { sortBookingerNyesteFoerst } from "./bookingSort";
+import { sortBookingerEtterRelevans } from "./bookingSort";
 
 export default function MineBookingerTab() {
   const [visHistoriske, setVisHistoriske] = useState(false);
@@ -20,7 +20,7 @@ export default function MineBookingerTab() {
   const { fjernAsync, isPending, error: fjernFeil } = useBookingActions();
 
   const visteBookinger = useMemo(() => {
-    return sortBookingerNyesteFoerst(bookinger);
+    return sortBookingerEtterRelevans(bookinger);
   }, [bookinger]);
 
   async function handleFjern(slot: MinBookingRespons) {

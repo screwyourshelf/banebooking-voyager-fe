@@ -40,7 +40,7 @@ function pickErrorMessage(data: unknown): string | null {
 
 api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
   // Alltid legg til token hvis tilgjengelig (gir backend full kontekst).
-  // requireAuth styrer kun om manglende token er en feil.
+  // requireAuth styrer om vi må vente på gjenoppretting av en manglende sesjon.
   const developmentSession = hentUtviklingssession();
   if (developmentSession) {
     setAuthHeader(config, developmentSession.accessToken, "DevelopmentBearer");
@@ -50,6 +50,12 @@ api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
   const token = localStorage.getItem("supabase_token");
   if (token) {
     setAuthHeader(config, token);
+    return config;
+  }
+
+  // Offentlige kall skal ikke vente på at Supabase gjenoppretter en sesjon.
+  // En allerede tilgjengelig token blir fortsatt sendt med for full kontekst.
+  if (config.requireAuth === false) {
     return config;
   }
 

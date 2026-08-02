@@ -1,17 +1,15 @@
 import { useMemo, useState } from "react";
-import { nb } from "date-fns/locale";
 import {
   AdminFormActions,
   SettingsChoiceGroup,
-  SettingsControlFrame,
   SettingsPanel,
   SettingsRow,
   SettingsSwitchRow,
   SettingsText,
 } from "@/components/admin";
+import DatoFlervelger from "@/components/DatoFlervelger";
 import { RecordStatus } from "@/components/records";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
 import type { BaneRespons } from "@/types";
 import { tilDatoTekst } from "@/utils/datoUtils";
 import type { LokalBooking } from "../../types";
@@ -194,14 +192,11 @@ export default function ManueltOppsett({ baner, onLeggTil }: Props) {
     <>
       <SettingsPanel>
         <SettingsRow title="Datoer" description="Velg én eller flere datoer i kalenderen.">
-          <SettingsControlFrame>
-            <Calendar
-              mode="multiple"
-              selected={valgteDataer}
-              onSelect={(dates) => setValgteDataer(dates ?? [])}
-              locale={nb}
-            />
-          </SettingsControlFrame>
+          <DatoFlervelger
+            value={valgteDataer}
+            onChange={setValgteDataer}
+            ariaLabel="Velg datoer for bookingene"
+          />
           <SettingsText>
             {valgteDataer.length === 0
               ? "Ingen datoer valgt."

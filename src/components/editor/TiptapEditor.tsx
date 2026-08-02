@@ -19,13 +19,13 @@ import {
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-type Props = {
+export type TiptapEditorProps = {
   content: string;
   onChange: (json: string) => void;
   className?: string;
 };
 
-export default function TiptapEditor({ content, onChange, className }: Props) {
+export default function TiptapEditor({ content, onChange, className }: TiptapEditorProps) {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({

@@ -28,7 +28,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import TiptapEditor from "@/components/editor/TiptapEditor";
+import LazyTiptapEditor from "@/components/editor/LazyTiptapEditor";
 import {
   ARRANGEMENT_KATEGORI_VALG,
   formaterAntallBanetider,
@@ -492,7 +492,7 @@ export default function RedigerArrangementView({
                             </Field>
                           </SettingsRow>
                           <SettingsRow title="Presentasjon på nettsiden">
-                            <TiptapEditor
+                            <LazyTiptapEditor
                               content={nettsideBeskrivelse}
                               onChange={(content) => {
                                 resetMetadataFeedback();

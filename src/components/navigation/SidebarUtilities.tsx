@@ -1,4 +1,4 @@
-import { CircleUser, LogIn, LogOut } from "lucide-react";
+import { CalendarCheck, CircleUser, LogIn, LogOut } from "lucide-react";
 import { Link } from "react-router-dom";
 
 import {
@@ -10,29 +10,20 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/useAuth";
 import { useBruker } from "@/hooks/useBruker";
-import { formaterRolle } from "@/utils/brukerPresentation";
-import { prefetchRoute } from "@/utils/prefetchRoute";
+import { formaterRoller } from "@/utils/brukerPresentation";
+import { routePrefetchProps } from "@/utils/prefetchRoute";
 
 import ModeToggle from "./ModeToggle";
-
-function prefetch(path: string) {
-  return {
-    onMouseEnter: () => prefetchRoute(path),
-    onTouchStart: () => prefetchRoute(path),
-  };
-}
 
 export default function SidebarUtilities() {
   const { currentUser, signOut } = useAuth();
   const { bruker } = useBruker();
 
   const accountLabel = currentUser?.name || currentUser?.email || "Din konto";
-  const roleLabel = bruker?.roller.length
-    ? bruker.roller.map(formaterRolle).join(", ")
-    : "Innlogget";
+  const roleLabel = formaterRoller(bruker?.roller, "Innlogget");
 
   return (
-    <div className="app-sidebar__footer">
+    <div className="app-sidebar__utilities">
       <ModeToggle presentation="sidebar" />
 
       {currentUser ? (
@@ -68,7 +59,14 @@ export default function SidebarUtilities() {
             <DropdownMenuSeparator />
 
             <DropdownMenuItem asChild>
-              <Link to="minside" {...prefetch("minside")}>
+              <Link to="bookinger" {...routePrefetchProps("bookinger")}>
+                <CalendarCheck className="mr-2 size-4" />
+                Mine tider
+              </Link>
+            </DropdownMenuItem>
+
+            <DropdownMenuItem asChild>
+              <Link to="minside" {...routePrefetchProps("minside")}>
                 <CircleUser className="mr-2 size-4" />
                 Min side
               </Link>
@@ -88,7 +86,7 @@ export default function SidebarUtilities() {
           className="app-sidebar__utility"
           aria-label="Logg inn"
           title="Logg inn"
-          {...prefetch("login")}
+          {...routePrefetchProps("login")}
         >
           <span className="app-sidebar__utility-icon" aria-hidden="true">
             <LogIn />

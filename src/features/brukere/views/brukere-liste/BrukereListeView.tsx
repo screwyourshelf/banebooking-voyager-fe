@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ListSkeleton } from "@/components/loading";
+import { PageContentSkeleton } from "@/components/loading";
 
 import { useBruker } from "@/hooks/useBruker";
 import { useAdminBrukere } from "@/features/brukere/hooks/useAdminBrukere";
@@ -16,6 +16,7 @@ import type {
   RolleType,
   MedlemskapFilterType,
   BrukerRespons,
+  BrukerSortering,
   EditState,
 } from "@/features/brukere/types";
 import { QueryFeil } from "@/components/errors";
@@ -62,6 +63,7 @@ export default function BrukereListeView() {
   const [visSlettede, setVisSlettede] = useState(false);
   const [rolleFilter, setRolleFilter] = useState<RolleType[]>([]);
   const [medlemskapFilter, setMedlemskapFilter] = useState<MedlemskapFilterType[]>([]);
+  const [sortering, setSortering] = useState<BrukerSortering>("nyeste");
 
   // Dialog
   const [aktivBruker, setAktivBruker] = useState<BrukerRespons | null>(null);
@@ -71,7 +73,7 @@ export default function BrukereListeView() {
   const filtrerteBrukere = useMemo(() => {
     const q = query.toLowerCase().trim();
 
-    return brukere
+    const filtrert = brukere
       .filter((b) => {
         if (!visSlettede && erSlettetEpost(b.epost)) return false;
         return true;
@@ -90,7 +92,9 @@ export default function BrukereListeView() {
         const erBekreftet = !!b.medlemskapBekreftetDato;
         return medlemskapFilter.includes(erBekreftet ? "bekreftet" : "ikke-bekreftet");
       });
-  }, [brukere, query, visSlettede, rolleFilter, medlemskapFilter]);
+
+    return [...filtrert].sort((a, b) => sammenlignBrukere(a, b, sortering));
+  }, [brukere, query, visSlettede, rolleFilter, medlemskapFilter, sortering]);
 
   const åpenRedigering = (b: BrukerRespons) => {
     setAktivBruker(b);
@@ -146,7 +150,9 @@ export default function BrukereListeView() {
     setSperreBruker(b);
   };
 
-  if (lasterBruker) return <ListSkeleton />;
+  if (lasterBruker) {
+    return <PageContentSkeleton label="Kontrollerer brukertilgang" rows={6} controls />;
+  }
 
   if (brukerFeil) {
     return (
@@ -182,6 +188,8 @@ export default function BrukereListeView() {
           onToggleRolle={toggleRolle}
           medlemskapFilter={medlemskapFilter}
           onToggleMedlemskap={toggleMedlemskap}
+          sortering={sortering}
+          onSorteringChange={setSortering}
           onResetFilters={nullstillFiltre}
           filtrerteBrukere={filtrerteBrukere}
           lasterListe={lasterListe}
@@ -243,4 +251,19 @@ export default function BrukereListeView() {
       </div>
     </QueryFeil>
   );
+}
+
+function sammenlignBrukere(a: BrukerRespons, b: BrukerRespons, sortering: BrukerSortering) {
+  if (sortering === "navn") {
+    const aNavn = a.visningsnavn?.trim() || a.fulltNavn?.trim() || a.epost;
+    const bNavn = b.visningsnavn?.trim() || b.fulltNavn?.trim() || b.epost;
+    return aNavn.localeCompare(bNavn, "nb-NO", { sensitivity: "base" });
+  }
+
+  const aTid = a.opprettetTid ? new Date(a.opprettetTid).getTime() : Number.NaN;
+  const bTid = b.opprettetTid ? new Date(b.opprettetTid).getTime() : Number.NaN;
+  if (Number.isNaN(aTid)) return Number.isNaN(bTid) ? 0 : 1;
+  if (Number.isNaN(bTid)) return -1;
+
+  return sortering === "nyeste" ? bTid - aTid : aTid - bTid;
 }

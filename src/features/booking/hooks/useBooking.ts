@@ -14,7 +14,7 @@ export function useBooking(dato: string, baneId: string) {
     queryKey,
     `/klubb/${slug}/kalender?baneId=${baneId}&dato=${dato}`,
     {
-      requireAuth: true,
+      requireAuth: false,
       enabled,
       staleTime: 5_000,
       refetchInterval: 30_000,

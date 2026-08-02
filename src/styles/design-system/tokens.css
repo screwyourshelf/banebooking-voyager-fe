@@ -32,6 +32,8 @@
 
   /* Product roles */
   --app-canvas: #f2f3ed;
+  --app-workspace-overlay-start: rgb(242 243 237 / 0.6);
+  --app-workspace-overlay-end: rgb(242 243 237 / 0.72);
   --app-surface: #ffffff;
   --app-surface-subtle: #f7f8f3;
   --app-surface-raised: #ffffff;
@@ -197,6 +199,8 @@
 
 .dark {
   --app-canvas: #0f1611;
+  --app-workspace-overlay-start: rgb(15 22 17 / 0.68);
+  --app-workspace-overlay-end: rgb(15 22 17 / 0.78);
   --app-surface: #151e17;
   --app-surface-subtle: #1a251d;
   --app-surface-raised: #1d2920;

@@ -1,4 +1,6 @@
 import type { MouseEventHandler, ReactNode } from "react";
+import { Accordion as AccordionPrimitive } from "radix-ui";
+import { ChevronDown, ChevronUp } from "lucide-react";
 import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 type ChildrenProps = {
@@ -27,6 +29,10 @@ type AccordionCardProps = ChildrenProps & {
 
 type SummaryProps = ChildrenProps & {
   layout?: "default" | "slot" | "time" | "date";
+};
+
+type DisclosureProps = {
+  ariaLabel: string;
 };
 
 export function RecordCard({ children, as: Tag = "div", muted = false }: CardProps) {
@@ -83,6 +89,17 @@ export function RecordCardTrigger({ children }: ChildrenProps) {
     <AccordionTrigger className="record-card__trigger hover:no-underline">
       {children}
     </AccordionTrigger>
+  );
+}
+
+export function RecordCardDisclosureToggle({ ariaLabel }: DisclosureProps) {
+  return (
+    <AccordionPrimitive.Header className="record-card__disclosure-header">
+      <AccordionPrimitive.Trigger className="record-card__disclosure-toggle" aria-label={ariaLabel}>
+        <ChevronDown aria-hidden="true" className="record-card__disclosure-open-icon" />
+        <ChevronUp aria-hidden="true" className="record-card__disclosure-close-icon" />
+      </AccordionPrimitive.Trigger>
+    </AccordionPrimitive.Header>
   );
 }
 

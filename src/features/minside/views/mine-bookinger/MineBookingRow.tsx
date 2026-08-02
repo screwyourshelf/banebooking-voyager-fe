@@ -8,8 +8,8 @@ import {
   RecordCardStatic,
   RecordCardSummary,
   RecordCardTrigger,
-  RecordLeadingValue,
   RecordStatus,
+  RecordTimeRange,
 } from "@/components/records";
 import WeatherInfo from "@/components/WeatherInfo";
 import type { MinBookingRespons } from "@/types";
@@ -46,26 +46,24 @@ export default function MineBookingRow({
 
   const summary = (
     <RecordCardSummary layout="time">
-      <span className="mine-booking__time">
-        <span className="mine-booking__time-range">
-          <span className="mine-booking__time-start">
-            <RecordLeadingValue>{start}</RecordLeadingValue>
-          </span>
-          <span>–{end}</span>
-        </span>
-
-        {hasWeather ? (
-          <WeatherInfo
-            værSymbol={booking.værSymbol}
-            temperatur={booking.temperatur}
-            vind={booking.vind}
-            compact
-          />
-        ) : null}
-      </span>
+      <RecordTimeRange
+        start={start}
+        end={end}
+        accessory={
+          hasWeather ? (
+            <WeatherInfo
+              værSymbol={booking.værSymbol}
+              temperatur={booking.temperatur}
+              vind={booking.vind}
+              compact
+            />
+          ) : null
+        }
+      />
 
       <span className="mine-booking__identity">
         <span className="mine-booking__court">{booking.baneNavn}</span>
+        <span className="mine-booking__branch">{booking.grenNavn}</span>
       </span>
 
       <RecordStatus tone={booking.erPassert ? "past" : "own"}>

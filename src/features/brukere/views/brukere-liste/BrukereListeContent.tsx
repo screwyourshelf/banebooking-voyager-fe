@@ -10,8 +10,13 @@ import {
   RecordStatus,
 } from "@/components/records";
 import { Button } from "@/components/ui/button";
-import { MEDLEMSKAP_FILTER_VALG } from "@/features/brukere/types";
-import type { BrukerRespons, MedlemskapFilterType, RolleType } from "@/features/brukere/types";
+import { BRUKER_SORTERING_VALG, MEDLEMSKAP_FILTER_VALG } from "@/features/brukere/types";
+import type {
+  BrukerRespons,
+  BrukerSortering,
+  MedlemskapFilterType,
+  RolleType,
+} from "@/features/brukere/types";
 import { ROLLE_VALG } from "@/utils/brukerPresentation";
 import BrukerListeRad from "./BrukerListeRad";
 
@@ -24,6 +29,8 @@ type Props = {
   onToggleRolle: (rolle: RolleType) => void;
   medlemskapFilter: MedlemskapFilterType[];
   onToggleMedlemskap: (filter: MedlemskapFilterType) => void;
+  sortering: BrukerSortering;
+  onSorteringChange: (sortering: BrukerSortering) => void;
   onResetFilters: () => void;
   filtrerteBrukere: BrukerRespons[];
   lasterListe: boolean;
@@ -44,6 +51,8 @@ export default function BrukereListeContent({
   onToggleRolle,
   medlemskapFilter,
   onToggleMedlemskap,
+  sortering,
+  onSorteringChange,
   onResetFilters,
   filtrerteBrukere,
   lasterListe,
@@ -54,7 +63,7 @@ export default function BrukereListeContent({
   renderSperrAction,
   onÅpneSperreHistorikk,
 }: Props) {
-  const filterKey = `${query}|${visSlettede}|${rolleFilter.join(",")}|${medlemskapFilter.join(",")}`;
+  const filterKey = `${query}|${visSlettede}|${rolleFilter.join(",")}|${medlemskapFilter.join(",")}|${sortering}`;
   const {
     synlige: synligeBrukere,
     harFlere,
@@ -109,6 +118,12 @@ export default function BrukereListeContent({
             onToggle: (value) => onToggleMedlemskap(value as MedlemskapFilterType),
           },
         ],
+        sort: {
+          label: "Sorter etter",
+          value: sortering,
+          options: BRUKER_SORTERING_VALG,
+          onValueChange: (value) => onSorteringChange(value as BrukerSortering),
+        },
         onReset: onResetFilters,
       }}
     >

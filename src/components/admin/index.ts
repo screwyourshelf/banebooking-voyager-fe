@@ -3,6 +3,7 @@ export {
   AdminActionRow,
   AdminEntityCollection,
   AdminEntityList,
+  AdminOrderedEntityRow,
   AdminEntityRow,
 } from "./AdminEntityCollection";
 export { default as AdminEditorDialog } from "./AdminEditorDialog";
@@ -16,7 +17,6 @@ export { default as AdminPage, AdminPageLoading, AdminPageState } from "./AdminP
 export {
   SettingsPanel,
   SettingsChoiceGroup,
-  SettingsControlFrame,
   SettingsRadioGroup,
   SettingsRange,
   SettingsRow,

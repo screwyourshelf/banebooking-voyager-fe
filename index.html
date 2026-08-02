@@ -14,20 +14,27 @@
     <link rel="preconnect" href="https://wfklkakrogxbhozxhtqd.supabase.co" crossorigin />
     <link rel="dns-prefetch" href="https://wfklkakrogxbhozxhtqd.supabase.co" />
 
-    <!-- Preload background image -->
-    <link
-      rel="preload"
-      as="image"
-      href="/backgrounds/bg-3.avif"
-      type="image/avif"
-      fetchpriority="high"
-    />
+    <script>
+      (() => {
+        try {
+          const storedTheme = localStorage.getItem("vite-ui-theme");
+          document.documentElement.classList.add(storedTheme === "dark" ? "dark" : "light");
+        } catch {
+          document.documentElement.classList.add("light");
+        }
+      })();
+    </script>
 
     <style>
       html {
         height: 100%;
-        background: #0b3a4a;
+        background: #f2f3ed;
       }
+
+      html.dark {
+        background: #0f1611;
+      }
+
       body {
         height: 100%;
         margin: 0;
@@ -40,18 +47,27 @@
         inset: 0;
         display: grid;
         place-items: center;
-        background: #0b3a4a;
-        color: white;
+        background: inherit;
+        color: #173c25;
         font-family: system-ui, sans-serif;
+      }
+
+      html.dark #boot {
+        color: white;
       }
 
       .boot-loader {
         width: 36px;
         height: 36px;
-        border: 3px solid rgba(255, 255, 255, 0.2);
-        border-top-color: white;
+        border: 3px solid rgb(23 60 37 / 0.18);
+        border-top-color: currentColor;
         border-radius: 50%;
         animation: spin 0.8s linear infinite;
+      }
+
+      html.dark .boot-loader {
+        border-color: rgb(255 255 255 / 0.2);
+        border-top-color: currentColor;
       }
 
       @keyframes spin {
@@ -73,19 +89,26 @@
 
       .boot-recovery p {
         margin: 0 0 1rem;
-        color: rgba(255, 255, 255, 0.8);
+        color: currentColor;
+        opacity: 0.78;
         line-height: 1.5;
       }
 
       .boot-recovery button {
-        border: 1px solid rgba(255, 255, 255, 0.35);
+        border: 1px solid rgb(23 60 37 / 0.25);
         border-radius: 0.5rem;
         padding: 0.65rem 1rem;
-        background: white;
-        color: #0b3a4a;
+        background: #173c25;
+        color: white;
         font: inherit;
         font-weight: 600;
         cursor: pointer;
+      }
+
+      html.dark .boot-recovery button {
+        border-color: rgb(255 255 255 / 0.35);
+        background: white;
+        color: #173c25;
       }
     </style>
 
@@ -194,9 +217,9 @@
       })();
     </script>
 
-    <link rel="icon" href="%BASE_URL%favicon.svg?v=2" type="image/svg+xml" />
-    <link rel="icon" href="%BASE_URL%favicon.ico?v=2" sizes="any" />
-    <link rel="apple-touch-icon" href="%BASE_URL%apple-touch-icon.png?v=2" />
+    <link rel="icon" href="%BASE_URL%favicon.svg?v=3" type="image/svg+xml" />
+    <link rel="icon" href="%BASE_URL%favicon.ico?v=3" sizes="any" />
+    <link rel="apple-touch-icon" href="%BASE_URL%apple-touch-icon.png?v=3" />
   </head>
 
   <body>

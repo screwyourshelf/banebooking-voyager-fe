@@ -10,6 +10,7 @@ import {
 } from "@/components/records";
 import type { BrukerRespons, RolleType } from "@/features/brukere/types";
 import { formaterMedlemskapType, formaterRolle } from "@/utils/brukerPresentation";
+import { formatDatoKort } from "@/utils/datoUtils";
 
 type Props = {
   bruker: BrukerRespons;
@@ -39,11 +40,6 @@ function hentInitialer(bruker: BrukerRespons) {
   return bruker.epost?.slice(0, 2).toLocaleUpperCase("nb-NO") || "?";
 }
 
-function formatDato(dato?: string | null) {
-  if (!dato) return null;
-  return new Date(dato).toLocaleDateString("nb-NO");
-}
-
 export default function BrukerListeRad({
   bruker,
   currentBrukerId,
@@ -61,8 +57,10 @@ export default function BrukerListeRad({
   const hovednavn = bruker.visningsnavn?.trim() || bruker.fulltNavn?.trim() || bruker.epost;
   const visEpost = hovednavn !== bruker.epost;
 
-  const medlemskapStatus = bruker.medlemskapBekreftetDato ? "bekreftet" : "mangler";
   const medlemskapTekst = bruker.medlemskapBekreftetDato ? "Bekreftet" : "Ikke bekreftet";
+  const opprettetTekst = bruker.opprettetTid
+    ? `Opprettet ${formatDatoKort(bruker.opprettetTid)}`
+    : "Opprettet dato mangler";
 
   const kontoStatus = slettet ? "slettet" : bruker.erSperret ? "sperret" : "aktiv";
   const kontoStatusTekst = slettet ? "Slettet" : bruker.erSperret ? "Sperret" : "Aktiv";
@@ -89,7 +87,7 @@ export default function BrukerListeRad({
               ) : null}
               <span className="user-directory-row__metadata">
                 <RecordEyebrow>{formaterRolle(rolle)}</RecordEyebrow>
-                <span data-membership-status={medlemskapStatus}>{medlemskapTekst}</span>
+                <span>{opprettetTekst}</span>
                 {kontoStatus !== "aktiv" ? (
                   <span data-account-status={kontoStatus}>{kontoStatusTekst}</span>
                 ) : null}
@@ -107,7 +105,9 @@ export default function BrukerListeRad({
                 <CalendarDays aria-hidden="true" />
                 Opprettet
               </dt>
-              <dd>{formatDato(bruker.opprettetTid) ?? "Ikke tilgjengelig"}</dd>
+              <dd>
+                {bruker.opprettetTid ? formatDatoKort(bruker.opprettetTid) : "Ikke tilgjengelig"}
+              </dd>
             </div>
 
             <div>
@@ -128,7 +128,7 @@ export default function BrukerListeRad({
                   ? formaterMedlemskapType(bruker.medlemskapType)
                   : medlemskapTekst}
                 {bruker.medlemskapBekreftetDato
-                  ? ` · ${formatDato(bruker.medlemskapBekreftetDato)}`
+                  ? ` · ${formatDatoKort(bruker.medlemskapBekreftetDato)}`
                   : null}
               </dd>
             </div>

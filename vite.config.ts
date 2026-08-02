@@ -55,50 +55,56 @@ export default defineConfig(({ mode }) => {
 
       cssCodeSplit: true,
 
-      rollupOptions: {
+      rolldownOptions: {
         output: {
           // Unike URL-er for hele modulgrafen hindrer at nettleseren blander
           // JavaScript fra forskjellige produksjonsdeployeringer.
           entryFileNames: `assets/[name]-${releaseId}-[hash].js`,
           chunkFileNames: `assets/[name]-${releaseId}-[hash].js`,
 
-          manualChunks(id) {
-            if (!id.includes("node_modules")) return;
-
-            // React + router
-            if (id.includes("react") || id.includes("react-dom") || id.includes("react-router")) {
-              return "react";
-            }
-
-            // Radix / shadcn primitives
-            if (id.includes("@radix-ui") || id.includes("radix-ui")) {
-              return "radix";
-            }
-
-            // React Query
-            if (id.includes("@tanstack")) {
-              return "query";
-            }
-
-            // Supabase client
-            if (id.includes("@supabase")) {
-              return "supabase";
-            }
-
-            // Forms
-            if (id.includes("react-hook-form") || id.includes("@hookform") || id.includes("zod")) {
-              return "forms";
-            }
-
-            // Date utils
-            if (id.includes("date-fns")) {
-              return "date";
-            }
-
-            // Icons
-            if (id.includes("lucide-react")) {
-              return "icons";
-            }
+          codeSplitting: {
+            groups: [
+              {
+                name: "react",
+                test: /node_modules[\\/](?:react|react-dom|react-router|react-router-dom|scheduler)[\\/]/,
+                priority: 100,
+              },
+              {
+                name: "editor",
+                test: /node_modules[\\/](?:@tiptap[\\/]|prosemirror-[^\\/]+[\\/]|orderedmap[\\/]|w3c-keyname[\\/])/,
+                priority: 90,
+              },
+              {
+                name: "radix",
+                test: /node_modules[\\/](?:@radix-ui[\\/]|radix-ui[\\/]|@floating-ui[\\/]|react-remove-scroll(?:-bar)?[\\/]|react-style-singleton[\\/]|aria-hidden[\\/]|use-callback-ref[\\/]|use-sidecar[\\/])/,
+                priority: 80,
+              },
+              {
+                name: "query",
+                test: /node_modules[\\/]@tanstack[\\/]/,
+                priority: 70,
+              },
+              {
+                name: "supabase",
+                test: /node_modules[\\/]@supabase[\\/]/,
+                priority: 70,
+              },
+              {
+                name: "forms",
+                test: /node_modules[\\/](?:react-hook-form[\\/]|@hookform[\\/]|zod[\\/])/,
+                priority: 70,
+              },
+              {
+                name: "date",
+                test: /node_modules[\\/]date-fns[\\/]/,
+                priority: 70,
+              },
+              {
+                name: "icons",
+                test: /node_modules[\\/]lucide-react[\\/]/,
+                priority: 70,
+              },
+            ],
           },
         },
       },

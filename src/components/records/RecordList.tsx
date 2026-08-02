@@ -17,6 +17,16 @@ type AccordionListProps = {
   ariaLabel?: string;
 };
 
+type DateGroupProps = {
+  children: ReactNode;
+};
+
+type DateGroupHeadingProps = {
+  date: string;
+  label: string;
+  relativeLabel?: string | null;
+};
+
 export function RecordList({ children, loading = false, ariaLabel, role }: ListProps) {
   return (
     <div
@@ -51,6 +61,29 @@ export function RecordAccordionList({
       aria-busy={loading || undefined}
       aria-label={ariaLabel}
     >
+      {children}
+    </Accordion>
+  );
+}
+
+export function RecordDateGroup({ children }: DateGroupProps) {
+  return <section className="record-date-group">{children}</section>;
+}
+
+export function RecordDateGroupHeading({ date, label, relativeLabel }: DateGroupHeadingProps) {
+  return (
+    <h2 className="record-date-group__heading">
+      <time dateTime={date}>
+        {relativeLabel ? <strong>{relativeLabel}</strong> : null}
+        <span>{label}</span>
+      </time>
+    </h2>
+  );
+}
+
+export function RecordDateGroupList({ children }: DateGroupProps) {
+  return (
+    <Accordion type="single" collapsible className="record-date-groups">
       {children}
     </Accordion>
   );

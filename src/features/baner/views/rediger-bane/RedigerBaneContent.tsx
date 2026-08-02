@@ -92,7 +92,6 @@ export default function RedigerBaneContent({
   const navn = redigerteVerdier?.navn ?? valgtBane?.navn ?? "";
   const beskrivelse = redigerteVerdier?.beskrivelse ?? valgtBane?.beskrivelse ?? "";
   const aktiv = redigerteVerdier?.aktiv ?? valgtBane?.aktiv ?? false;
-  const sortering = redigerteVerdier?.sortering ?? String(valgtBane?.sortering ?? 0);
   const grenId = redigerteVerdier?.grenId ?? valgtBane?.grenId ?? "";
   const grenNavn = grener.find((gren) => gren.id === grenId)?.navn;
 
@@ -160,20 +159,6 @@ export default function RedigerBaneContent({
                     disabled={isSaving}
                     value={beskrivelse}
                     onChange={(event) => onChangeFelt("beskrivelse", event.target.value)}
-                    autoComplete="off"
-                  />
-                </Field>
-              </SettingsRow>
-
-              <SettingsRow title="Sortering" description="Lavest vises først.">
-                <Field>
-                  <Input
-                    id="sortering"
-                    aria-label="Sortering"
-                    type="number"
-                    disabled={isSaving}
-                    value={sortering}
-                    onChange={(event) => onChangeFelt("sortering", event.target.value)}
                     autoComplete="off"
                   />
                 </Field>

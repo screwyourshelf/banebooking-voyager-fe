@@ -1,4 +1,5 @@
 import { CalendarPlus } from "lucide-react";
+import DatoVelger from "@/components/DatoVelger";
 import {
   AdminFormActions,
   AdminFormSubmitButton,
@@ -15,13 +16,14 @@ import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import type { MedlemskapStatusRespons } from "@/types";
+import { formatDatoKort } from "@/utils/datoUtils";
 
 type Props = {
   status: MedlemskapStatusRespons | null;
   label: string;
   onLabelChange: (value: string) => void;
-  gyldigTil: string;
-  onGyldigTilChange: (value: string) => void;
+  gyldigTil: Date | null;
+  onGyldigTilChange: (value: Date) => void;
   onAktiver: () => void;
   aktiverLaster: boolean;
   aktiverFeil: string | null;
@@ -29,10 +31,6 @@ type Props = {
   deaktiverLaster: boolean;
   deaktiverFeil: string | null;
 };
-
-function formaterDato(value: string) {
-  return new Date(value).toLocaleDateString("nb-NO");
-}
 
 export default function MedlemskapInnstillingerContent({
   status,
@@ -73,10 +71,10 @@ export default function MedlemskapInnstillingerContent({
           {aktivBekreftelse ? (
             <>
               <SettingsRow title="Startet">
-                <SettingsValue>{formaterDato(aktivBekreftelse.opprettetTidspunkt)}</SettingsValue>
+                <SettingsValue>{formatDatoKort(aktivBekreftelse.opprettetTidspunkt)}</SettingsValue>
               </SettingsRow>
               <SettingsRow title="Gyldig til">
-                <SettingsValue>{formaterDato(aktivBekreftelse.gyldigTil)}</SettingsValue>
+                <SettingsValue>{formatDatoKort(aktivBekreftelse.gyldigTil)}</SettingsValue>
               </SettingsRow>
               <SettingsRow title="Bekreftet">
                 <SettingsValue>
@@ -117,16 +115,13 @@ export default function MedlemskapInnstillingerContent({
               </SettingsRow>
 
               <SettingsRow title="Gyldig til" description="Dato perioden utløper.">
-                <Field>
-                  <Input
-                    id="medlemskap-gyldig-til"
-                    aria-label="Gyldig til"
-                    type="date"
-                    value={gyldigTil}
-                    onChange={(event) => onGyldigTilChange(event.target.value)}
-                    disabled={aktiverLaster}
-                  />
-                </Field>
+                <DatoVelger
+                  value={gyldigTil}
+                  onChange={onGyldigTilChange}
+                  visNavigering={false}
+                  ariaLabel="Velg gyldighetsdato"
+                  disabled={aktiverLaster}
+                />
               </SettingsRow>
             </SettingsPanel>
 

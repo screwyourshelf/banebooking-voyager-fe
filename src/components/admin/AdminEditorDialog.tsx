@@ -21,7 +21,7 @@ type Props = {
   children: ReactNode;
   trigger?: ReactNode;
   closeDisabled?: boolean;
-  size?: "default" | "wide";
+  size?: "compact" | "default" | "wide";
 };
 
 export default function AdminEditorDialog({
@@ -40,7 +40,7 @@ export default function AdminEditorDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
       <DialogContent className="admin-editor-dialog" data-size={size} showCloseButton={false}>
-        <DialogHeader className="admin-editor-dialog__header">
+        <DialogHeader className="control-surface admin-editor-dialog__header">
           <DialogClose asChild>
             <Button
               type="button"

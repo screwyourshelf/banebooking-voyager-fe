@@ -139,10 +139,6 @@ export function SettingsChoiceGroup({
   );
 }
 
-export function SettingsControlFrame({ children }: { children: ReactNode }) {
-  return <div className="settings-control-frame">{children}</div>;
-}
-
 type RangeProps = Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "className"> & {
   labels?: ReactNode;
 };

@@ -67,6 +67,25 @@
 
     .app-shell__workspace {
       padding-bottom: 0;
+      background:
+        linear-gradient(
+          115deg,
+          var(--app-workspace-overlay-start),
+          var(--app-workspace-overlay-end)
+        ),
+        url("/backgrounds/workspace-tennis.webp") center / cover fixed;
+    }
+
+    .error-shell {
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(
+          115deg,
+          var(--app-workspace-overlay-start),
+          var(--app-workspace-overlay-end)
+        ),
+        url("/backgrounds/workspace-tennis.webp") center / cover fixed;
     }
 
     .app-sidebar {
@@ -84,7 +103,6 @@
     }
 
     .app-sidebar__brand .navbar-brand__name,
-    .app-sidebar__product,
     .app-sidebar__label,
     .app-sidebar__link > span {
       display: none;
@@ -109,8 +127,9 @@
       box-shadow: inset 0 3px 0 var(--app-nav-indicator-on-dark);
     }
 
-    .app-sidebar__footer {
-      padding-top: 1rem;
+    .app-sidebar__utilities {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
     }
 
     .app-sidebar__utility {
@@ -253,6 +272,15 @@
       gap: 0.75rem;
     }
 
+    .admin-ordered-entity-row {
+      min-height: 5.25rem;
+    }
+
+    .admin-ordered-entity-row__select {
+      gap: 1rem;
+      padding: 0.75rem 1.5rem;
+    }
+
     .admin-action-row__footer {
       margin-inline: 1.5rem;
     }
@@ -272,6 +300,12 @@
     .admin-editor-dialog[data-size="wide"] {
       width: min(68rem, calc(100% - 2rem)) !important;
       height: min(54rem, calc(100dvh - 2rem));
+    }
+
+    .admin-editor-dialog[data-size="compact"] {
+      width: min(34rem, calc(100% - 2rem)) !important;
+      height: auto;
+      max-height: min(44rem, calc(100dvh - 2rem));
     }
 
     .admin-editor-dialog__body > .section-tabs {
@@ -327,16 +361,6 @@
       gap: 1rem 1.5rem;
     }
 
-    .user-editor-dialog {
-      max-width: 28rem !important;
-      padding: 1.25rem !important;
-    }
-
-    .user-editor-dialog__footer {
-      margin-inline: -1.25rem;
-      margin-bottom: -1.25rem;
-    }
-
     .record-collection-page {
       gap: 1.5rem;
     }
@@ -370,6 +394,19 @@
 
     .record-collection__toolbar-actions .filter-switch {
       min-width: 11rem;
+    }
+
+    .page-content-skeleton__controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      gap: var(--app-space-lg);
+      padding: 0 1.5rem 0.875rem;
+    }
+
+    .page-content-skeleton__controls > span {
+      width: 12rem;
+      height: 3.25rem;
     }
 
     .record-filter-panel {
@@ -423,6 +460,10 @@
       gap: 0.75rem;
     }
 
+    .record-filter-panel__sort {
+      flex: 0 1 15rem;
+    }
+
     .record-filter-panel__reset {
       align-self: center;
       margin-left: auto;
@@ -443,7 +484,7 @@
     }
 
     .record-card__summary[data-layout="slot"] {
-      grid-template-columns: 6rem minmax(10rem, 1fr);
+      grid-template-columns: 7rem minmax(10rem, 1fr);
       gap: 1.25rem;
     }
 
@@ -456,7 +497,7 @@
     }
 
     .record-card__details {
-      padding: 1rem 1.5rem 1.25rem !important;
+      padding: 1.25rem 1.5rem 1.5rem !important;
     }
 
     .record-collection-skeleton {
@@ -478,13 +519,13 @@
       padding: 0.75rem 1.5rem;
     }
 
-    .mine-bookings__groups {
+    .record-date-groups {
       gap: 1.25rem;
       padding-block: 1rem 1.5rem;
     }
 
-    .mine-bookings__date-heading {
-      padding-inline: 1.5rem;
+    .record-date-group__heading {
+      padding-inline: 1rem;
     }
 
     .mine-booking__detail-content {
@@ -522,11 +563,7 @@
     }
 
     .booking-slot__quick-action {
-      margin-right: 1.5rem;
-    }
-
-    .booking-slot-list__past-toggle {
-      margin-bottom: 0;
+      margin-right: 0.5rem;
     }
   }
 }
@@ -561,14 +598,9 @@
     }
 
     .app-sidebar__brand .navbar-brand__name,
-    .app-sidebar__product,
     .app-sidebar__label,
     .app-sidebar__link > span {
       display: initial;
-    }
-
-    .app-sidebar__product {
-      display: block;
     }
 
     .app-sidebar__section {
@@ -590,8 +622,9 @@
       box-shadow: inset 3px 0 0 var(--app-nav-indicator-on-dark);
     }
 
-    .app-sidebar__footer {
-      padding-top: 1.25rem;
+    .app-sidebar__utilities {
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.25rem;
     }
 
     .app-sidebar__utility {
@@ -671,7 +704,7 @@
     }
 
     .record-collection .record-card__details {
-      padding: 0.875rem 1.5rem 1rem !important;
+      padding: 1.125rem 1.5rem 1.25rem !important;
     }
   }
 }

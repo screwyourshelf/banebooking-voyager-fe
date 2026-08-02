@@ -27,6 +27,7 @@ export type AppNavigationItem = {
   requiresAuth?: boolean;
   requiredAnyCapability?: string[];
   mobilePrimaryOrder?: number;
+  mobileSecondary?: "include" | "exclude";
   activePaths?: string[];
 };
 
@@ -62,6 +63,7 @@ const navigationItems: AppNavigationItem[] = [
     icon: Newspaper,
     section: "overview",
     end: true,
+    mobileSecondary: "exclude",
   },
   {
     id: "my-bookings",
@@ -72,6 +74,7 @@ const navigationItems: AppNavigationItem[] = [
     end: true,
     requiresAuth: true,
     mobilePrimaryOrder: 2,
+    mobileSecondary: "include",
   },
   {
     id: "profile",
@@ -177,7 +180,11 @@ export function buildMobileSecondaryNavigation(
   return buildNavigationSections(authenticated, capabilities)
     .map((section) => ({
       ...section,
-      items: section.items.filter((item) => !primaryItemIds.has(item.id)),
+      items: section.items.filter(
+        (item) =>
+          item.mobileSecondary === "include" ||
+          (item.mobileSecondary !== "exclude" && !primaryItemIds.has(item.id))
+      ),
     }))
     .filter((section) => section.items.length > 0);
 }

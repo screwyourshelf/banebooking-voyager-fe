@@ -25,26 +25,28 @@ export default function BookingSlotDetails({ slot, presentation, onBook, onFjern
         </p>
       ) : null}
 
-      <RecordCardActions>
-        {presentation.kanKobleTilArrangement ? (
-          <KobleTilArrangementDialog
-            valgtId={null}
-            onVelg={(arrangementId) => {
-              if (arrangementId) onBook?.(slot, arrangementId);
-            }}
-          >
-            <Button variant="outline" size="sm">
-              Koble til arrangement
-            </Button>
-          </KobleTilArrangementDialog>
-        ) : null}
+      {presentation.kanKobleTilArrangement || presentation.kanFjerne ? (
+        <RecordCardActions>
+          {presentation.kanKobleTilArrangement ? (
+            <KobleTilArrangementDialog
+              valgtId={null}
+              onVelg={(arrangementId) => {
+                if (arrangementId) onBook?.(slot, arrangementId);
+              }}
+            >
+              <Button variant="outline" size="sm">
+                Koble til arrangement
+              </Button>
+            </KobleTilArrangementDialog>
+          ) : null}
 
-        {presentation.kanFjerne ? (
-          <Button variant="destructive" size="sm" onClick={() => onFjern?.(slot)}>
-            Avbestill
-          </Button>
-        ) : null}
-      </RecordCardActions>
+          {presentation.kanFjerne ? (
+            <Button variant="destructive" size="sm" onClick={() => onFjern?.(slot)}>
+              Avbestill
+            </Button>
+          ) : null}
+        </RecordCardActions>
+      ) : null}
     </Stack>
   );
 }

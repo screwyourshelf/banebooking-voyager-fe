@@ -5,8 +5,16 @@ import process from "node:process";
 const projectRoot = process.cwd();
 const sourceRoot = path.join(projectRoot, "src");
 const recordsRoot = path.join(sourceRoot, "components", "records");
+const tournamentRoot = path.join(sourceRoot, "features", "turnering");
 const recordCollectionHeaderPath = path.join(recordsRoot, "RecordCollectionHeader.tsx");
 const filterSwitchPath = path.join(sourceRoot, "components", "controls", "FilterSwitch.tsx");
+const datePickerPopoverPath = path.join(
+  sourceRoot,
+  "components",
+  "controls",
+  "DatePickerPopover.tsx"
+);
+const multiDatePickerPath = path.join(sourceRoot, "components", "DatoFlervelger.tsx");
 const allowedComponentFiles = new Set([filterSwitchPath]);
 const allowedCssFiles = new Set([
   path.join(sourceRoot, "styles", "design-system", "patterns.css"),
@@ -64,6 +72,30 @@ for (const filePath of sourceFiles) {
   const source = await readFile(filePath, "utf8");
 
   if (isComponentSource) {
+    if (
+      filePath !== datePickerPopoverPath &&
+      filePath !== multiDatePickerPath &&
+      /from\s+["']@\/components\/ui\/calendar["']/.test(source)
+    ) {
+      apiViolations.push({
+        filePath,
+        line: lineFor(source, source.search(/@\/components\/ui\/calendar/)),
+        message: "importerer kalenderprimitiven direkte",
+      });
+    }
+
+    if (
+      !filePath.startsWith(`${tournamentRoot}${path.sep}`) &&
+      /type\s*=\s*["'](?:date|datetime-local)["']/.test(source)
+    ) {
+      const index = source.search(/type\s*=\s*["'](?:date|datetime-local)["']/);
+      apiViolations.push({
+        filePath,
+        line: lineFor(source, index),
+        message: "bruker et rått dato-/tidspunktfelt",
+      });
+    }
+
     if (
       filePath !== recordCollectionHeaderPath &&
       /from\s+["']@\/components\/controls\/FilterSwitch["']/.test(source)
@@ -137,9 +169,7 @@ for (const filePath of sourceFiles) {
 }
 
 if (violations.length > 0 || apiViolations.length > 0) {
-  console.error(
-    "Record-lister og filtre har én lukket komponentvei gjennom src/components/records."
-  );
+  console.error("Designsystemets lukkede komponentveier er brutt.");
 
   for (const violation of violations) {
     console.error(
@@ -154,7 +184,7 @@ if (violations.length > 0 || apiViolations.length > 0) {
   }
 
   console.error(
-    "Send toggle-, filter- og valgdata til RecordCollectionHeader/AdminEntityCollection; ikke bygg lokal JSX eller CSS."
+    "Bruk de semantiske record-, filter- og datokomponentene; ikke bygg lokale varianter."
   );
   process.exit(1);
 }

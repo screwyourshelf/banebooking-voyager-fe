@@ -4,6 +4,7 @@ import { AdminPageLoading, AdminPageState } from "@/components/admin";
 import { RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import { useMedlemskapAdmin } from "@/features/klubb/hooks/useMedlemskapAdmin";
+import { tilDatoTekst } from "@/utils/datoUtils";
 
 import MedlemskapInnstillingerContent from "./MedlemskapInnstillingerContent";
 
@@ -23,15 +24,18 @@ export default function MedlemskapInnstillingerView() {
   } = useMedlemskapAdmin();
 
   const [label, setLabel] = useState("");
-  const [gyldigTil, setGyldigTil] = useState("");
+  const [gyldigTil, setGyldigTil] = useState<Date | null>(null);
 
   const handleAktiver = async () => {
     const trimmed = label.trim();
     if (!trimmed || !gyldigTil) return;
     try {
-      await aktiver({ label: trimmed, gyldigTil: new Date(gyldigTil).toISOString() });
+      await aktiver({
+        label: trimmed,
+        gyldigTil: new Date(tilDatoTekst(gyldigTil)).toISOString(),
+      });
       setLabel("");
-      setGyldigTil("");
+      setGyldigTil(null);
     } catch {
       // Feilen vises i skjemaet.
     }

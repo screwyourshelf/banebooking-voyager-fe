@@ -1,18 +1,25 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { ServerFeil } from "@/components/errors";
-import { ShieldCheck, UserRound } from "lucide-react";
-
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-
-import type { BrukerRespons, RolleType, EditState } from "@/features/brukere/types";
+  AdminEditorDialog,
+  AdminEditorForm,
+  AdminFormActions,
+  AdminFormSubmitButton,
+  SettingsPanel,
+  SettingsRow,
+  SettingsSection,
+  SettingsStack,
+} from "@/components/admin";
+import { ServerFeil } from "@/components/errors";
+import { Button } from "@/components/ui/button";
+import { Field } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { BrukerRespons, EditState, RolleType } from "@/features/brukere/types";
 import { ROLLE_VALG } from "@/utils/brukerPresentation";
 
 type Props = {
@@ -35,70 +42,80 @@ export default function RedigerBrukerDialog({
   serverFeil,
 }: Props) {
   return (
-    <Dialog
+    <AdminEditorDialog
       open
-      onOpenChange={(open) => {
-        if (!open) onClose();
-      }}
+      onOpenChange={(open) => !open && onClose()}
+      backLabel="Alle brukere"
+      eyebrow="Bruker"
+      title="Rediger bruker"
+      description={aktivBruker.epost}
+      closeDisabled={isSaving}
+      size="compact"
     >
-      <DialogContent className="user-editor-dialog">
-        <DialogHeader className="user-editor-dialog__header">
-          <DialogTitle>Rediger bruker</DialogTitle>
-          <DialogDescription>Oppdater visningsnavn og rolle.</DialogDescription>
-        </DialogHeader>
+      <AdminEditorForm
+        onSubmit={(event) => {
+          event.preventDefault();
+          onSave();
+        }}
+      >
+        <SettingsStack embedded>
+          <SettingsSection
+            embedded
+            eyebrow="Profil og tilgang"
+            title={aktivBruker.visningsnavn || "Bruker uten visningsnavn"}
+            description="Oppdater navnet som vises i klubben og hvilken tilgang brukeren har."
+          >
+            <SettingsPanel>
+              <SettingsRow title="Visningsnavn">
+                <Field>
+                  <Input
+                    id="visningsnavn"
+                    aria-label="Visningsnavn"
+                    value={edit.visningsnavn}
+                    onChange={(event) => onEditChange({ visningsnavn: event.target.value })}
+                    placeholder="Valgfritt"
+                    disabled={isSaving}
+                  />
+                </Field>
+              </SettingsRow>
 
-        <div className="user-editor-dialog__identity">
-          <span aria-hidden="true">
-            <UserRound />
-          </span>
-          <div>
-            <strong>{aktivBruker.visningsnavn || "Bruker uten visningsnavn"}</strong>
-            <small>{aktivBruker.epost}</small>
-          </div>
-        </div>
+              <SettingsRow
+                title="Rolle"
+                description="Rollen styrer hvilke deler av administrasjonen brukeren kan åpne."
+              >
+                <Field>
+                  <Select
+                    value={edit.rolle}
+                    onValueChange={(value) => onEditChange({ rolle: value as RolleType })}
+                    disabled={isSaving}
+                  >
+                    <SelectTrigger id="brukerrolle" aria-label="Rolle">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {ROLLE_VALG.map((rolle) => (
+                        <SelectItem key={rolle.value} value={rolle.value}>
+                          {rolle.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
+              </SettingsRow>
+            </SettingsPanel>
+          </SettingsSection>
 
-        <div className="user-editor-dialog__fields">
-          <label htmlFor="visningsnavn">
-            <span>Visningsnavn</span>
-            <Input
-              id="visningsnavn"
-              value={edit.visningsnavn}
-              onChange={(event) => onEditChange({ visningsnavn: event.target.value })}
-              placeholder="Valgfritt"
-            />
-          </label>
-
-          <label htmlFor="brukerrolle">
-            <span>Rolle</span>
-            <select
-              id="brukerrolle"
-              className="user-editor-dialog__select"
-              value={edit.rolle}
-              onChange={(event) => onEditChange({ rolle: event.target.value as RolleType })}
-            >
-              {ROLLE_VALG.map((rolle) => (
-                <option key={rolle.value} value={rolle.value}>
-                  {rolle.label}
-                </option>
-              ))}
-            </select>
-            <small>
-              <ShieldCheck aria-hidden="true" />
-              Rollen styrer hvilke deler av administrasjonen brukeren kan åpne.
-            </small>
-          </label>
-        </div>
-
-        <DialogFooter className="user-editor-dialog__footer">
-          <ServerFeil feil={serverFeil} />
-          <Button variant="outline" onClick={onClose} disabled={isSaving}>
-            Avbryt
-          </Button>
-          <Button onClick={onSave} disabled={isSaving}>
-            {isSaving ? "Lagrer..." : "Lagre"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          <AdminFormActions>
+            <ServerFeil feil={serverFeil} />
+            <Button type="button" variant="outline" onClick={onClose} disabled={isSaving}>
+              Avbryt
+            </Button>
+            <AdminFormSubmitButton isLoading={isSaving} loadingText="Lagrer…">
+              Lagre
+            </AdminFormSubmitButton>
+          </AdminFormActions>
+        </SettingsStack>
+      </AdminEditorForm>
+    </AdminEditorDialog>
   );
 }

@@ -7,8 +7,9 @@ import {
   AdminEditorDialog,
   AdminEntityCollection,
   AdminEntityList,
-  AdminEntityRow,
+  AdminOrderedEntityRow,
 } from "@/components/admin";
+import { MutationFeedback } from "@/components/feedback";
 import { RecordCollectionSkeleton, RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import RedigerBaneContent from "./RedigerBaneContent";
@@ -84,6 +85,47 @@ export default function RedigerBaneView() {
   const [manuellBaneId, setValgtBaneId] = useState<string | null>(() => loadValgtBaneId());
   const [editorOpen, setEditorOpen] = useState(false);
   const [grenFilter, setGrenFilter] = useState<string[]>([]);
+  const [reorderLaster, setReorderLaster] = useState(false);
+  const [reorderFeil, setReorderFeil] = useState<string | null>(null);
+  const [reorderLagret, setReorderLagret] = useState(false);
+
+  const sorterteBaner = useMemo(
+    () =>
+      [...baner].sort(
+        (a, b) =>
+          a.grenNavn.localeCompare(b.grenNavn, "nb-NO") ||
+          a.sortering - b.sortering ||
+          a.navn.localeCompare(b.navn, "nb-NO")
+      ),
+    [baner]
+  );
+
+  const banerPerGren = useMemo(() => {
+    const grupperteBaner = new Map<string, BaneRespons[]>();
+
+    for (const bane of sorterteBaner) {
+      const gruppe = grupperteBaner.get(bane.grenId);
+      if (gruppe) {
+        gruppe.push(bane);
+      } else {
+        grupperteBaner.set(bane.grenId, [bane]);
+      }
+    }
+
+    return grupperteBaner;
+  }, [sorterteBaner]);
+
+  const plasseringPerBane = useMemo(() => {
+    const plasseringer = new Map<string, { indeks: number; antall: number }>();
+
+    for (const gruppe of banerPerGren.values()) {
+      gruppe.forEach((bane, indeks) => {
+        plasseringer.set(bane.id, { indeks, antall: gruppe.length });
+      });
+    }
+
+    return plasseringer;
+  }, [banerPerGren]);
 
   const [touched, setTouched] = useState<Record<string, TouchedState>>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
@@ -93,7 +135,7 @@ export default function RedigerBaneView() {
   const valgtBaneId =
     manuellBaneId != null && baner.some((b) => b.id === manuellBaneId)
       ? manuellBaneId
-      : (baner[0]?.id ?? null);
+      : (sorterteBaner[0]?.id ?? null);
 
   const valgtBane: BaneRespons | null = useMemo(
     () => baner.find((b) => b.id === valgtBaneId) ?? null,
@@ -119,16 +161,19 @@ export default function RedigerBaneView() {
 
   function håndterEndring(id: string, felt: keyof BaneFormData, verdi: string | boolean) {
     resetBaneFeedback();
-    setRedigerte((prev) => ({
-      ...prev,
-      [id]: {
-        ...(prev[id] ??
-          (baner.find((b) => b.id === id)
-            ? tilFormData(baner.find((b) => b.id === id)!)
-            : undefined)),
-        [felt]: verdi,
-      },
-    }));
+    setRedigerte((prev) => {
+      const lagretBane = baner.find((bane) => bane.id === id);
+      const gjeldendeVerdier = prev[id] ?? (lagretBane ? tilFormData(lagretBane) : null);
+      if (!gjeldendeVerdier) return prev;
+
+      return {
+        ...prev,
+        [id]: {
+          ...gjeldendeVerdier,
+          [felt]: verdi,
+        },
+      };
+    });
   }
 
   const draft: BaneFormData | null = useMemo(() => {
@@ -281,12 +326,69 @@ export default function RedigerBaneView() {
 
   const isDirty = baneDirty || overstyringDirty;
   const canSubmit = isDirty && isValid;
-  const isSaving = oppdaterBane.isPending || oppdaterBookingInnstillinger.isPending;
+  const isSaving =
+    reorderLaster || oppdaterBane.isPending || oppdaterBookingInnstillinger.isPending;
 
   function resetBaneFeedback() {
     setLagretBaneId(null);
     oppdaterBane.reset();
     oppdaterBookingInnstillinger.reset();
+  }
+
+  async function handleFlyttBane(bane: BaneRespons, retning: -1 | 1) {
+    const banerIGren = banerPerGren.get(bane.grenId) ?? [];
+    const indeks = banerIGren.findIndex((item) => item.id === bane.id);
+    const nabo = banerIGren[indeks + retning];
+    if (indeks < 0 || !nabo || reorderLaster) return;
+
+    const nyRekkefølge = [...banerIGren];
+    [nyRekkefølge[indeks], nyRekkefølge[indeks + retning]] = [
+      nyRekkefølge[indeks + retning],
+      nyRekkefølge[indeks],
+    ];
+    const oppdateringer = nyRekkefølge
+      .map((item, sortering) => ({ item, sortering }))
+      .filter(({ item, sortering }) => item.sortering !== sortering);
+
+    setReorderLaster(true);
+    setReorderFeil(null);
+    setReorderLagret(false);
+    oppdaterBane.reset();
+
+    try {
+      await Promise.all(
+        oppdateringer.map(({ item, sortering }) =>
+          oppdaterBane.mutateAsync({
+            id: item.id,
+            dto: {
+              grenId: item.grenId,
+              navn: item.navn,
+              beskrivelse: item.beskrivelse,
+              aktiv: item.aktiv,
+              sortering,
+            },
+          })
+        )
+      );
+
+      setRedigerte((current) => {
+        const next = { ...current };
+        for (const { item, sortering } of oppdateringer) {
+          if (next[item.id]) next[item.id] = { ...next[item.id], sortering: String(sortering) };
+        }
+        return next;
+      });
+      setReorderLagret(true);
+    } catch (error) {
+      setReorderFeil(
+        error instanceof Error
+          ? error.message
+          : "Kunne ikke lagre hele rekkefølgen. Listen hentes på nytt."
+      );
+      await refetch();
+    } finally {
+      setReorderLaster(false);
+    }
   }
 
   // --- Submit ---
@@ -404,7 +506,9 @@ export default function RedigerBaneView() {
     .sort((a, b) => a.localeCompare(b, "nb-NO"))
     .map((gren) => ({ value: gren, label: gren }));
   const filtrerteBaner =
-    grenFilter.length === 0 ? baner : baner.filter((bane) => grenFilter.includes(bane.grenNavn));
+    grenFilter.length === 0
+      ? sorterteBaner
+      : sorterteBaner.filter((bane) => grenFilter.includes(bane.grenNavn));
   const antallTekst = `${filtrerteBaner.length} ${filtrerteBaner.length === 1 ? "bane" : "baner"}`;
   const listeBeskrivelse =
     grenFilter.length > 0
@@ -460,34 +564,49 @@ export default function RedigerBaneView() {
             }
           />
         ) : (
-          <AdminEntityList>
-            {filtrerteBaner.map((bane) => {
-              const baneDraft = redigerte[bane.id];
-              const erEndret = Boolean(
-                baneDraft ||
-                overstyringDrafts[bane.id] ||
-                Object.hasOwn(overstyringAktivDraft, bane.id)
-              );
-              const beskrivelse = baneDraft ? baneDraft.beskrivelse : bane.beskrivelse;
+          <>
+            <MutationFeedback
+              error={reorderFeil}
+              errorTitle="Kunne ikke lagre rekkefølgen"
+              success={reorderLagret}
+              successTitle="Rekkefølgen er lagret"
+              successDescription="Bookingoversikten bruker den nye rekkefølgen."
+            />
+            <AdminEntityList>
+              {filtrerteBaner.map((bane) => {
+                const baneDraft = redigerte[bane.id];
+                const erEndret = Boolean(
+                  baneDraft ||
+                  overstyringDrafts[bane.id] ||
+                  Object.hasOwn(overstyringAktivDraft, bane.id)
+                );
+                const beskrivelse = baneDraft ? baneDraft.beskrivelse : bane.beskrivelse;
 
-              return (
-                <AdminEntityRow
-                  key={bane.id}
-                  title={baneDraft?.navn.trim() || bane.navn}
-                  meta={bane.grenNavn}
-                  description={beskrivelse || undefined}
-                  status={erEndret ? "Ulagret" : bane.aktiv ? "Aktiv" : "Inaktiv"}
-                  statusTone={erEndret ? "warning" : bane.aktiv ? "available" : "past"}
-                  onSelect={() => {
-                    resetBaneFeedback();
-                    setValgtBaneId(bane.id);
-                    setEditorOpen(true);
-                  }}
-                  disabled={isSaving}
-                />
-              );
-            })}
-          </AdminEntityList>
+                const plassering = plasseringPerBane.get(bane.id);
+
+                return (
+                  <AdminOrderedEntityRow
+                    key={bane.id}
+                    title={baneDraft?.navn.trim() || bane.navn}
+                    meta={bane.grenNavn}
+                    description={beskrivelse || undefined}
+                    status={erEndret ? "Ulagret" : bane.aktiv ? "Aktiv" : "Inaktiv"}
+                    statusTone={erEndret ? "warning" : bane.aktiv ? "available" : "past"}
+                    onSelect={() => {
+                      resetBaneFeedback();
+                      setValgtBaneId(bane.id);
+                      setEditorOpen(true);
+                    }}
+                    disabled={isSaving}
+                    onMoveUp={() => void handleFlyttBane(bane, -1)}
+                    onMoveDown={() => void handleFlyttBane(bane, 1)}
+                    disableMoveUp={!plassering || plassering.indeks === 0}
+                    disableMoveDown={!plassering || plassering.indeks === plassering.antall - 1}
+                  />
+                );
+              })}
+            </AdminEntityList>
+          </>
         )}
       </AdminEntityCollection>
 

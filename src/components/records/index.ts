@@ -5,20 +5,31 @@ export type {
   RecordCollectionSelection,
   RecordCollectionToggle,
 } from "./RecordCollectionHeader";
-export type { RecordControlGroup, RecordControlOption } from "./RecordControlPanel";
+export type {
+  RecordControlGroup,
+  RecordControlOption,
+  RecordSortControl,
+} from "./RecordControlPanel";
 export {
   RecordCollection,
   RecordCollectionBody,
   RecordCollectionPagination,
 } from "./RecordCollection";
 export { default as RecordCollectionSkeleton } from "./RecordCollectionSkeleton";
-export { RecordAccordionList, RecordList } from "./RecordList";
+export {
+  RecordAccordionList,
+  RecordDateGroup,
+  RecordDateGroupHeading,
+  RecordDateGroupList,
+  RecordList,
+} from "./RecordList";
 export {
   RecordAccordionCard,
   RecordCard,
   RecordCardActions,
   RecordCardButton,
   RecordCardDetails,
+  RecordCardDisclosureToggle,
   RecordCardStatic,
   RecordCardSummary,
   RecordCardTrigger,
@@ -26,4 +37,4 @@ export {
 export { default as RecordListState } from "./RecordListState";
 export { default as RecordStatus } from "./RecordStatus";
 export type { RecordStatusTone } from "./RecordStatus";
-export { RecordEyebrow, RecordLeadingValue } from "./RecordText";
+export { RecordEyebrow, RecordLeadingValue, RecordTimeRange } from "./RecordText";

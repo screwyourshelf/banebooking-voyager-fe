@@ -3,7 +3,6 @@ import { AdminEditorDialog } from "@/components/admin";
 import {
   ContentDocument,
   ContentDocumentFacts,
-  ContentDocumentIntro,
   ContentDocumentSection,
   type ContentDocumentFact,
 } from "@/components/layout/ContentDocument";
@@ -33,7 +32,8 @@ export default function ReglementDialog({ children, gren, bane }: Props) {
       backLabel="Til booking"
       eyebrow="Booking"
       title={title}
-      description="Les reglementet og grensene som gjelder før du booker."
+      description="Se grensene, tidene og varigheten som gjelder når du booker."
+      size="compact"
     >
       {gren && bookingRegler ? (
         <ReglementContent gren={gren} bookingRegler={bookingRegler} />
@@ -51,23 +51,17 @@ function ReglementContent({
 }) {
   return (
     <ContentDocument>
-      <ContentDocumentIntro>{getReglementIntro(gren)}</ContentDocumentIntro>
-
-      <ContentDocumentSection title="Bookinggrenser">
+      <ContentDocumentSection
+        title="Hvor mye du kan booke"
+        description={`Dette gjelder når du booker ${gren.navn.toLocaleLowerCase("nb-NO")}.`}
+      >
         <ContentDocumentFacts items={getBookingLimitFacts(bookingRegler)} />
       </ContentDocumentSection>
 
-      <ContentDocumentSection title="Tid og varighet">
+      <ContentDocumentSection title="Når du kan booke">
         <ContentDocumentFacts items={getTimeFacts(bookingRegler)} />
       </ContentDocumentSection>
     </ContentDocument>
-  );
-}
-
-function getReglementIntro(gren: GrenRespons) {
-  return (
-    gren.banereglement.trim() ||
-    `Disse standardreglene gjelder for booking av ${gren.navn.toLocaleLowerCase("nb-NO")}.`
   );
 }
 

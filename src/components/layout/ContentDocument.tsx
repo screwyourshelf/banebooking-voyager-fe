@@ -15,14 +15,17 @@ export function ContentDocumentIntro({ children }: { children: ReactNode }) {
 
 export function ContentDocumentSection({
   title,
+  description,
   children,
 }: {
   title: string;
+  description?: string;
   children: ReactNode;
 }) {
   return (
     <section className="content-document__section">
       <h2>{title}</h2>
+      {description ? <p className="content-document__section-description">{description}</p> : null}
       <div className="content-document__body">{children}</div>
     </section>
   );

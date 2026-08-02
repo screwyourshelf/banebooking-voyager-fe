@@ -23,7 +23,6 @@ import type { GrenRespons } from "@/types";
 type FormState = {
   navn: string;
   beskrivelse: string;
-  sortering: string;
   grenId: string;
 };
 

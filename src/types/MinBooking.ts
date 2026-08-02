@@ -1,5 +1,7 @@
 export type MinBookingRespons = {
   bookingId: string;
+  grenId: string;
+  grenNavn: string;
   baneId: string;
   baneNavn: string;
   dato: string;

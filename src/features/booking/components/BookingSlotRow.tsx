@@ -3,8 +3,8 @@ import {
   RecordAccordionCard,
   RecordCard,
   RecordCardDetails,
+  RecordCardDisclosureToggle,
   RecordCardStatic,
-  RecordCardTrigger,
 } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import type { BookingSlotRespons } from "@/types";
@@ -47,8 +47,11 @@ function BookingSlotRow({ slot, isAuthenticated, onBook, onFjern }: Props) {
   return (
     <RecordAccordionCard value={presentation.slotKey} muted={slot.erPassert}>
       <div className="booking-slot__row">
-        <RecordCardTrigger>{summary}</RecordCardTrigger>
+        <RecordCardStatic>{summary}</RecordCardStatic>
         {quickAction}
+        <RecordCardDisclosureToggle
+          ariaLabel={`Vis detaljer for ${presentation.startTid} til ${presentation.sluttTid}`}
+        />
       </div>
 
       <RecordCardDetails>

@@ -1,7 +1,10 @@
 import { useMemo, useState } from "react";
 import { isBefore, isSameDay, startOfDay } from "date-fns";
-import { Inline } from "@/components/layout";
-import { RecordAccordionList, RecordCollectionSkeleton } from "@/components/records";
+import {
+  RecordAccordionList,
+  RecordCollectionPagination,
+  RecordCollectionSkeleton,
+} from "@/components/records";
 import { Button } from "@/components/ui/button";
 import type { BookingSlotRespons } from "@/types";
 import { grupperSlots } from "@/utils/bookingUtils";
@@ -74,11 +77,11 @@ export function BookingSlotListAccordion({
       )}
 
       {erIDag && antallPasserte > 0 ? (
-        <Inline justify="center" className="booking-slot-list__past-toggle">
+        <RecordCollectionPagination>
           <Button variant="outline" size="sm" onClick={handleTogglePasserte}>
             {visPasserte ? "Skjul passerte" : `Vis passerte (${antallPasserte})`}
           </Button>
-        </Inline>
+        </RecordCollectionPagination>
       ) : null}
     </>
   );

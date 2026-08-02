@@ -10,6 +10,10 @@ export function formaterRolle(rolle: RolleType) {
   return ROLLE_VALG.find((valg) => valg.value === rolle)?.label ?? rolle;
 }
 
+export function formaterRoller(roller: readonly RolleType[] | null | undefined, fallback: string) {
+  return roller?.length ? roller.map(formaterRolle).join(", ") : fallback;
+}
+
 export const MEDLEMSKAP_TYPE_VALG = [
   { value: "BarnJunior", label: "Barn/junior (inntil 19 år)" },
   { value: "StudentVernepliktig", label: "Student/vernepliktig" },

@@ -38,6 +38,11 @@ Lagdelingen skal være:
 Shadcn-generatoren skal ikke kjøres ukritisk over lokalt tilpassede komponenter. Nye eller
 oppdaterte primitiver må sammenlignes manuelt før eksisterende kode erstattes.
 
+Produksjonsbygget skal beholde rutenes lazy-grenser og dele tunge tekniske avhengigheter
+etter presise pakkegrenser. En generell tekstmatch på `react` skal ikke samle Radix,
+teksteditor, kalender og andre React-baserte pakker i samme chunk. Tunge valgfrie verktøy,
+som rikteksteditoren, lastes først når arbeidsflaten faktisk viser dem.
+
 ## Visuelle regler
 
 ### Farger
@@ -49,6 +54,9 @@ oppdaterte primitiver må sammenlignes manuelt før eksisterende kode erstattes.
   tennis er oransje, padel er grønn og bordtennis er blågrå.
 - Statusfarger brukes kun for status. Destruktiv handling bruker én felles lysrød variant
   med rød tekst.
+- Slotstatus beskriver faktisk tilgjengelighet, ikke brukerens handlingsrettighet. En fysisk
+  ledig tid forblir `Ledig` selv om medlemmet har nådd bookinggrensen; kapabiliteten styrer
+  om handlingen vises og en detaljforklaring beskriver begrensningen.
 - Aktivitetsfarger endrer bare farger, aldri struktur, størrelse eller oppførsel.
 
 ### Handlinger
@@ -62,6 +70,18 @@ oppdaterte primitiver må sammenlignes manuelt før eksisterende kode erstattes.
   datavisning, leverandøridentitet og rene ikonverktøy.
 - Ikoner brukes bare når de tydeliggjør funksjon eller status. Seksjonsfaner og vanlige
   innstillingsoverskrifter skal normalt stole på teksthierarkiet alene.
+
+### Dato og kalender
+
+- Enkeltstående datofelt skal bruke `DatoVelger`, som komponerer appens felles
+  `DatePickerPopover` og norske kalender. Redesignede features skal ikke bruke rå
+  `input[type="date"]` eller pakke kalenderprimitiven lokalt.
+- Booking kan komponere `DatePickerPopover` med sin egen semantiske valgknapp fordi datoen
+  inngår i det samlede bookingpanelet; kalender, locale og valgoppførsel er fortsatt felles.
+- Valg av flere datoer skal bruke `DatoFlervelger`. Forskjellen er funksjonell
+  enkeltvalg/flervalg, ikke en lokal visuell variant.
+- Datoer som sendes til API skal fortsatt følge eksisterende kontrakt. Visning av lagrede
+  datoer bruker de delte formatteringsfunksjonene i `datoUtils`.
 
 ### Lister og slots
 
@@ -86,8 +106,8 @@ oppdaterte primitiver må sammenlignes manuelt før eksisterende kode erstattes.
 - Appskallet bruker ikke en global breadcrumb-rad. Aktiv side i hovednavigasjonen og en
   tydelig sidetittel gir orientering; dype detalj- og redigeringsflater skal bruke en lokal
   tilbakehandling når den trengs.
-- Desktop bruker sidefeltet som samlet navigasjonsflate. Tema og konto ligger i en fast
-  verktøyfot, og arbeidsflaten har ingen separat toppbar. Mobil beholder toppfeltet for
+- Desktop bruker sidefeltet som samlet navigasjonsflate. Tema og konto ligger samlet øverst
+  før hovednavigasjonen, og arbeidsflaten har ingen separat toppbar. Mobil beholder toppfeltet for
   klubbidentitet, tema og nyheter samt bunnnavigasjonen.
 
 ## Status for POC
@@ -95,6 +115,18 @@ oppdaterte primitiver må sammenlignes manuelt før eksisterende kode erstattes.
 POC-en dekker nå:
 
 - Responsivt appskall med desktop-sidefelt og mobil bunnnavigasjon.
+- Dempet, tematilpasset bildebakgrunn i desktoparbeidsflaten; innholdsflatene beholder
+  kontrast og mobil laster ikke bakgrunnsressursen.
+- Produksjonsbygget har ansvarsdelt Vite/Rolldown-chunking. React, Radix og den valgfrie
+  rikteksteditoren ligger i separate cachebare pakker uten chunkvarsel, og editoren lastes
+  først når publiseringsfeltet vises.
+- Oppstarten har et sammenhengende boot- og loadingforløp: lagret tema brukes før første
+  paint, HTML-bootflaten fjernes først når React har committet, appskallet står stabilt mens
+  bare arbeidsflaten viser en geometrisk tilsvarende skeleton, og den gamle
+  førstegangs-fade-animasjonen er fjernet.
+- Gjeldende rutechunk forhåndslastes ved oppstart og navigasjonsmål varmes på fokus, hover
+  og touch. Offentlige klubb-, gren-, bane- og kalenderkall kan starte parallelt med
+  gjenoppretting av innloggingen; beskyttede data venter fortsatt på gyldig sesjon.
 - Én dedikert innloggingsside for mobil og desktop, samlet desktopkonto i sidefeltet,
   lyst/mørkt tema og utviklingsinnlogging.
 - Offentlig `Nyheter`-side for RSS-feeden, med ordinær navigasjon og en nøytral
@@ -106,9 +138,10 @@ POC-en dekker nå:
   kapabilitetsstyrte handlinger.
 - `Arrangementadministrasjon` med liste–redigeringsflyt, felles editor for ny/rediger,
   bookingoppsett og fullbreddes bookingrader.
-- `Brukere` med responsivt søk, filtre, resultatkort og redigeringsdialog.
-- `Baner` med responsiv entitetsliste, fokusert redigering, opprettelse og valgfrie
-  bookingoverstyringer.
+- `Brukere` med responsivt søk, filtre, sortering, resultatkort og felles dialogfamilie for
+  redigering, sperring og sperrehistorikk.
+- `Baner` med responsiv entitetsliste, direkte administrasjon av presentasjonsrekkefølge,
+  fokusert redigering, opprettelse og valgfrie bookingoverstyringer.
 - `Grener` med responsiv entitetsliste, felles editor for ny/rediger og delte
   bookinginnstillinger.
 - `Baner` og `Grener` samlet i ett administrasjonsområde med delt sidehode og
@@ -124,6 +157,8 @@ POC-en dekker nå:
 - Guard-flatene `Sperret`, obligatorisk kunngjøring og medlemsbekreftelse med samme
   sidehierarki, leseflate, status- og skjemamønstre som de øvrige løftede sidene.
 - Delte valg- og listeprimitiver samt sentrale design-tokens.
+- Felles norsk dato- og kalendervelger for enkeltvalg og flervalg; Kunngjøringer,
+  medlemsbekreftelse, booking, sperring og arrangementoppsett følger samme komponentlag.
 
 ## Migreringsrekkefølge
 
@@ -227,6 +262,8 @@ små, verifiserbare deler.
 3. Utvid designsystemet semantisk hvis et reelt nytt mønster mangler.
 4. Implementer mobil og desktop i samme slice.
 5. Kontroller lyst og mørkt tema, tomtilstand, lasting, feil og relevante roller.
+   Loadingflater skal reservere appskallets og sluttinnholdets geometri; `null` eller en
+   generisk sentrert skeleton er ikke en gyldig førstegangsflate i en løftet arbeidsflyt.
 6. Kjør `npm run check`, `npm run build` og `git diff --check`.
 7. Gjør visuell nettleserkontroll før commit.
 8. Fjern erstattet lokal styling og ubrukte komponenter når slicen er trygg.

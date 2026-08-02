@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react";
 import { CalendarCheck, CalendarX, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 import { usePagination } from "@/hooks/usePagination";
@@ -7,11 +8,13 @@ import {
   RecordCollectionHeader,
   RecordCollectionPagination,
   RecordCollectionSkeleton,
+  RecordDateGroup,
+  RecordDateGroupHeading,
+  RecordDateGroupList,
   RecordList,
   RecordListState,
 } from "@/components/records";
 import { ServerFeil } from "@/components/errors";
-import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import type { MinBookingRespons } from "@/types";
 import { harHandling } from "@/utils/handlingUtils";
@@ -90,17 +93,46 @@ export default function MineBookingerContent({
   onFjern,
   serverFeil,
 }: Props) {
+  const [grenFilter, setGrenFilter] = useState<string[]>([]);
+
+  const grener = useMemo(
+    () =>
+      [
+        ...new Map(
+          bookinger.map((booking) => [
+            booking.grenId,
+            { value: booking.grenId, label: booking.grenNavn },
+          ])
+        ).values(),
+      ].sort((a, b) => a.label.localeCompare(b.label, "nb-NO")),
+    [bookinger]
+  );
+
+  const filtrerteBookinger = useMemo(() => {
+    if (grenFilter.length === 0) return bookinger;
+    return bookinger.filter((booking) => grenFilter.includes(booking.grenId));
+  }, [bookinger, grenFilter]);
+
+  function toggleGren(grenId: string) {
+    setGrenFilter((current) =>
+      current.includes(grenId)
+        ? current.filter((currentGrenId) => currentGrenId !== grenId)
+        : [...current, grenId]
+    );
+  }
+
   const {
     synlige: synligeBookinger,
     harFlere,
     gjenstaar,
     visFlere,
-  } = usePagination(bookinger, 10, visHistoriske);
+  } = usePagination(filtrerteBookinger, 10, `${String(visHistoriske)}|${grenFilter.join(",")}`);
 
   const antallTekst = isLoading
     ? "Laster tider…"
-    : `${bookinger.length} ${bookinger.length === 1 ? "tid" : "tider"}`;
+    : `${filtrerteBookinger.length} ${filtrerteBookinger.length === 1 ? "tid" : "tider"}`;
   const bookingGroups = groupBookingsByDate(synligeBookinger);
+  const harFiltrertTomtilstand = bookinger.length > 0 && filtrerteBookinger.length === 0;
 
   return (
     <RecordCollection ariaLabel="Oversikt over mine tider" busy={isLoading}>
@@ -114,6 +146,23 @@ export default function MineBookingerContent({
           onCheckedChange: onToggleVisHistoriske,
           disabled: isFetching,
         }}
+        filter={
+          grener.length > 1 || grenFilter.length > 0
+            ? {
+                label: "Filtrer på gren",
+                groups: [
+                  {
+                    label: "Gren",
+                    options: grener,
+                    selectedValues: grenFilter,
+                    onToggle: toggleGren,
+                  },
+                ],
+                onReset: () => setGrenFilter([]),
+                disabled: isFetching,
+              }
+            : undefined
+        }
       />
 
       <RecordCollectionBody>
@@ -140,33 +189,48 @@ export default function MineBookingerContent({
               </Button>
             }
           />
-        ) : bookinger.length === 0 ? (
+        ) : filtrerteBookinger.length === 0 ? (
           <RecordListState
             icon={<CalendarX aria-hidden="true" />}
-            title={visHistoriske ? "Ingen tider ennå" : "Ingen kommende tider"}
+            title={
+              harFiltrertTomtilstand
+                ? "Ingen tider for valgt gren"
+                : visHistoriske
+                  ? "Ingen tider ennå"
+                  : "Ingen kommende tider"
+            }
             description={
-              visHistoriske
-                ? "Når du booker en bane, vises kommende og tidligere tider her."
-                : "Finn en ledig tid som passer, så dukker den opp her med en gang."
+              harFiltrertTomtilstand
+                ? "Velg en annen gren eller nullstill filteret."
+                : visHistoriske
+                  ? "Når du booker en bane, vises kommende og tidligere tider her."
+                  : "Finn en ledig tid som passer, så dukker den opp her med en gang."
             }
             action={
-              <Button asChild size="sm">
-                <Link to="..">Book en bane</Link>
-              </Button>
+              harFiltrertTomtilstand ? (
+                <Button type="button" variant="outline" size="sm" onClick={() => setGrenFilter([])}>
+                  Nullstill filter
+                </Button>
+              ) : (
+                <Button asChild size="sm">
+                  <Link to="..">Book en bane</Link>
+                </Button>
+              )
             }
           />
         ) : (
           <>
-            <Accordion type="single" collapsible className="mine-bookings__groups">
+            <RecordDateGroupList>
               {bookingGroups.map((group) => {
                 const heading = getDateHeading(group.date);
 
                 return (
-                  <section key={group.date} className="mine-bookings__date-group">
-                    <h2 className="mine-bookings__date-heading">
-                      {heading.relative ? <strong>{heading.relative}</strong> : null}
-                      <time dateTime={group.date}>{heading.full}</time>
-                    </h2>
+                  <RecordDateGroup key={group.date}>
+                    <RecordDateGroupHeading
+                      date={group.date}
+                      label={heading.full}
+                      relativeLabel={heading.relative}
+                    />
 
                     <RecordList loading={isFetching || isPending}>
                       {group.bookings.map((booking) => (
@@ -183,10 +247,10 @@ export default function MineBookingerContent({
                         />
                       ))}
                     </RecordList>
-                  </section>
+                  </RecordDateGroup>
                 );
               })}
-            </Accordion>
+            </RecordDateGroupList>
 
             {harFlere ? (
               <RecordCollectionPagination>

@@ -22,15 +22,16 @@ export function utledSlotStatus(slot: KalenderSlotRespons, erInnlogget: boolean)
   if (slot.arrangementTittel) return "arrangement";
   if (erInnlogget && slot.erEier === true) return "din_booking";
 
-  const erBooket = !!slot.booketAv || harHandling(slot.kapabiliteter, Kapabiliteter.booking.fjern);
-
-  if (erBooket) return "opptatt";
-
-  if (erInnlogget && !harHandling(slot.kapabiliteter, Kapabiliteter.booking.book)) {
-    return "opptatt";
-  }
+  if (erSlotBooket(slot)) return "opptatt";
 
   return "ledig";
+}
+
+export function erSlotBooket(slot: KalenderSlotRespons) {
+  return (
+    Boolean(slot.bookingId || slot.booketAv) ||
+    harHandling(slot.kapabiliteter, Kapabiliteter.booking.fjern)
+  );
 }
 
 export function utledSlotVisning(slot: KalenderSlotRespons, erInnlogget: boolean): SlotVisning {

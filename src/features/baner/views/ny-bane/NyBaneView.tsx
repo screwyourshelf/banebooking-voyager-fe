@@ -7,7 +7,6 @@ import NyBaneContent from "./NyBaneContent";
 type FormState = {
   navn: string;
   beskrivelse: string;
-  sortering: string;
   grenId: string;
 };
 
@@ -22,13 +21,12 @@ function validateNavn(navn: string): string | null {
 }
 
 export default function NyBaneView({ onCreated }: Props) {
-  const { opprettBane } = useBaner();
+  const { baner, opprettBane } = useBaner();
   const { grener } = useGrener(false);
 
   const [form, setForm] = useState<FormState>({
     navn: "",
     beskrivelse: "",
-    sortering: "0",
     grenId: "",
   });
   const [touched, setTouched] = useState<{ navn: boolean }>({ navn: false });
@@ -60,20 +58,23 @@ export default function NyBaneView({ onCreated }: Props) {
     if (!isValid) return;
 
     const navn = form.navn.trim();
-    const sortering = parseInt(form.sortering, 10);
+    const sortering =
+      Math.max(
+        -1,
+        ...baner.filter((bane) => bane.grenId === effectiveGrenId).map((bane) => bane.sortering)
+      ) + 1;
 
     try {
       await opprettBane.mutateAsync({
         navn,
         beskrivelse: form.beskrivelse,
-        sortering: Number.isFinite(sortering) ? sortering : 0,
+        sortering,
         grenId: effectiveGrenId,
       });
 
       setForm({
         navn: "",
         beskrivelse: "",
-        sortering: "0",
         grenId: grener.length === 1 ? grener[0].id : "",
       });
       setTouched({ navn: false });

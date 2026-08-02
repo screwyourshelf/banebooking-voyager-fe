@@ -1,7 +1,8 @@
 import { useState, type ComponentProps, type ReactNode } from "react";
-import { nb } from "date-fns/locale";
+import { startOfDay } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { norskeKalenderEtiketter, norskKalenderLocale } from "./kalenderLokalisering";
 
 type Props = {
   children: ReactNode;
@@ -19,9 +20,10 @@ export default function DatePickerPopover({
   align = "center",
 }: Props) {
   const [open, setOpen] = useState(false);
+  const minimumDate = minDate ? startOfDay(minDate) : undefined;
 
   function handleSelect(date: Date | undefined) {
-    if (!date || (minDate && date < minDate)) return;
+    if (!date || (minimumDate && date < minimumDate)) return;
 
     onChange(date);
     setOpen(false);
@@ -30,13 +32,15 @@ export default function DatePickerPopover({
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>{children}</PopoverTrigger>
-      <PopoverContent className="date-picker-popover w-auto p-0" align={align}>
+      <PopoverContent className="date-picker-popover" align={align}>
         <Calendar
           mode="single"
           selected={value ?? undefined}
+          defaultMonth={value ?? undefined}
           onSelect={handleSelect}
-          locale={nb}
-          hidden={minDate ? { before: minDate } : undefined}
+          locale={norskKalenderLocale}
+          labels={norskeKalenderEtiketter}
+          hidden={minimumDate ? { before: minimumDate } : undefined}
         />
       </PopoverContent>
     </Popover>

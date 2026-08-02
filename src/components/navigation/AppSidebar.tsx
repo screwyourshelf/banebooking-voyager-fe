@@ -3,6 +3,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useBruker } from "@/hooks/useBruker";
 import { useKlubb } from "@/hooks/useKlubb";
+import { routePrefetchProps } from "@/utils/prefetchRoute";
 
 import NavbarBrandMedKlubb from "./NavbarBrandMedKlubb";
 import {
@@ -14,10 +15,11 @@ import SidebarUtilities from "./SidebarUtilities";
 
 function SidebarSection({ section }: { section: AppNavigationSection }) {
   const { pathname } = useLocation();
+  const showLabel = section.id !== "overview";
 
   return (
     <nav className="app-sidebar__section" aria-label={section.label}>
-      <div className="app-sidebar__label">{section.label}</div>
+      {showLabel ? <div className="app-sidebar__label">{section.label}</div> : null}
       {section.items.map((item) => {
         const { id, to, label, icon: Icon, end, activePaths } = item;
         const content = (
@@ -30,6 +32,7 @@ function SidebarSection({ section }: { section: AppNavigationSection }) {
           className: "app-sidebar__link",
           "aria-label": label,
           title: label,
+          ...routePrefetchProps(to),
         };
 
         return activePaths ? (
@@ -65,16 +68,15 @@ export default function AppSidebar() {
           tone="inverted"
           className="text-lg"
         />
-        <div className="app-sidebar__product">Banebooking</div>
       </div>
+
+      <SidebarUtilities />
 
       <div className="app-sidebar__navigation">
         {sections.map((section) => (
           <SidebarSection key={section.id} section={section} />
         ))}
       </div>
-
-      <SidebarUtilities />
     </div>
   );
 }

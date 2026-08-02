@@ -3,6 +3,13 @@ import { ListFilter, Search, X } from "lucide-react";
 import ControlChoice from "@/components/controls/ControlChoice";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 type RenderControlProps = {
   selected: boolean;
@@ -30,11 +37,19 @@ export type RecordSearchControl = {
   onValueChange: (value: string) => void;
 };
 
+export type RecordSortControl = {
+  label: string;
+  value: string;
+  options: readonly RecordControlOption[];
+  onValueChange: (value: string) => void;
+};
+
 export type RecordControlPanelProps = {
   mode?: "filter" | "selection";
   label: string;
   groups: readonly RecordControlGroup[];
   search?: RecordSearchControl;
+  sort?: RecordSortControl;
   onReset?: () => void;
   disabled?: boolean;
   defaultOpen?: boolean;
@@ -50,6 +65,7 @@ export default function RecordControlPanel({
   label,
   groups,
   search,
+  sort,
   onReset,
   disabled = false,
   defaultOpen = false,
@@ -80,6 +96,7 @@ export default function RecordControlPanel({
       data-trigger={trigger}
       data-indicator={indicator}
       data-has-search={Boolean(search)}
+      data-has-sort={Boolean(sort)}
       data-open={panelOpen}
     >
       {trigger === "panel" ? (
@@ -164,6 +181,24 @@ export default function RecordControlPanel({
             </div>
           </fieldset>
         ))}
+
+        {sort ? (
+          <div className="record-filter-panel__sort">
+            <span>{sort.label}</span>
+            <Select value={sort.value} onValueChange={sort.onValueChange} disabled={disabled}>
+              <SelectTrigger aria-label={sort.label}>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {sort.options.map((option) => (
+                  <SelectItem key={option.value} value={option.value}>
+                    {option.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        ) : null}
 
         {mode === "filter" && hasActiveFilters && onReset ? (
           <Button

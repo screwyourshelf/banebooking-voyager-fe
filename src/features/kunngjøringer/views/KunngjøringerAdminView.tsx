@@ -1,36 +1,18 @@
 import { useState } from "react";
-import { CircleAlert } from "lucide-react";
+import { CircleAlert, Megaphone, Plus } from "lucide-react";
 import {
-  AdminFormActions,
-  AdminFormSubmitButton,
+  AdminEntityCollection,
+  AdminEntityList,
+  AdminEntityRow,
   AdminPageLoading,
   AdminPageState,
-  AdminSettingsForm,
-  SettingsPanel,
-  SettingsRow,
-  SettingsSection,
-  SettingsStack,
-  SettingsText,
-  SettingsValue,
 } from "@/components/admin";
-import { ServerFeil } from "@/components/errors";
-import { RecordListState, RecordStatus, type RecordStatusTone } from "@/components/records";
+import { RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+import KunngjøringDetailsDialog from "@/features/kunngjøringer/components/KunngjøringDetailsDialog";
+import KunngjøringEditorDialog from "@/features/kunngjøringer/components/KunngjøringEditorDialog";
 import { useKunngjøringAdmin } from "@/features/kunngjøringer/hooks/useKunngjøringAdmin";
-
-function formaterDato(value: string) {
-  return new Date(value).toLocaleDateString("nb-NO");
-}
-
-function formaterTidspunkt(value: string) {
-  return new Date(value).toLocaleString("nb-NO", {
-    dateStyle: "short",
-    timeStyle: "short",
-  });
-}
+import { formatDatoKort } from "@/utils/datoUtils";
 
 export default function KunngjøringerAdminView() {
   const {
@@ -46,41 +28,8 @@ export default function KunngjøringerAdminView() {
     deaktiverLaster,
     deaktiverFeil,
   } = useKunngjøringAdmin();
-
-  const [tittel, setTittel] = useState("");
-  const [tekst, setTekst] = useState("");
-  const [utløper, setUtløper] = useState("");
-
-  const canCreate = Boolean(tittel.trim() && tekst.trim() && utløper);
-
-  const handleOpprett = async () => {
-    const trimmetTittel = tittel.trim();
-    const trimmetTekst = tekst.trim();
-    if (!trimmetTittel || !trimmetTekst || !utløper) return;
-
-    try {
-      await opprett({
-        tittel: trimmetTittel,
-        tekst: trimmetTekst,
-        utløperTidspunkt: new Date(utløper).toISOString(),
-      });
-      setTittel("");
-      setTekst("");
-      setUtløper("");
-    } catch {
-      // Feilen vises i skjemaets felles feilflate.
-    }
-  };
-
-  const handleDeaktiver = async () => {
-    if (!aktiv) return;
-
-    try {
-      await deaktiver(aktiv.id);
-    } catch {
-      // Feilen vises i fareområdets felles feilflate.
-    }
-  };
+  const [createOpen, setCreateOpen] = useState(false);
+  const [detailsOpen, setDetailsOpen] = useState(false);
 
   if (laster) return <AdminPageLoading label="Laster kunngjøringer" />;
 
@@ -108,163 +57,65 @@ export default function KunngjøringerAdminView() {
     );
   }
 
-  const bekreftelseTone: RecordStatusTone = !aktiv?.antallMålgruppe
-    ? "past"
-    : aktiv.antallBekreftelser >= aktiv.antallMålgruppe
-      ? "available"
-      : "warning";
+  const newButton = (
+    <Button
+      type="button"
+      size="sm"
+      onClick={() => setCreateOpen(true)}
+      disabled={Boolean(aktiv)}
+      title={aktiv ? "Deaktiver den aktive kunngjøringen før du oppretter en ny" : undefined}
+    >
+      <Plus aria-hidden="true" />
+      Ny
+    </Button>
+  );
 
   return (
-    <SettingsStack>
-      <SettingsSection
-        eyebrow="Status"
-        title={aktiv?.tittel ?? "Ingen aktiv kunngjøring"}
-        description={
-          aktiv
-            ? "Brukere som ikke har bekreftet, må lese den før de går videre."
-            : "Ingen kunngjøring krever bekreftelse nå."
-        }
+    <>
+      <AdminEntityCollection
+        icon={<Megaphone aria-hidden="true" />}
+        title={aktiv ? "1 aktiv kunngjøring" : "Ingen aktiv kunngjøring"}
+        description="Informasjon som krever bekreftelse"
+        contextAction={newButton}
       >
-        <SettingsPanel>
-          <SettingsRow title="Status">
-            <RecordStatus tone={aktiv ? "available" : "past"}>
-              {aktiv ? "Aktiv" : "Ingen aktiv"}
-            </RecordStatus>
-          </SettingsRow>
+        {aktiv ? (
+          <AdminEntityList>
+            <AdminEntityRow
+              title={aktiv.tittel}
+              meta={`Utløper ${formatDatoKort(aktiv.utløperTidspunkt)}`}
+              description={`${aktiv.antallBekreftelser} av ${aktiv.antallMålgruppe} har bekreftet`}
+              status="Aktiv"
+              statusTone="available"
+              onSelect={() => setDetailsOpen(true)}
+            />
+          </AdminEntityList>
+        ) : (
+          <RecordListState
+            icon={<Megaphone aria-hidden="true" />}
+            title="Klar for neste beskjed"
+            description="Opprett en kunngjøring når alle brukere må lese viktig informasjon."
+          />
+        )}
+      </AdminEntityCollection>
 
-          {aktiv ? (
-            <>
-              <SettingsRow title="Budskap">
-                <SettingsText>{aktiv.tekst}</SettingsText>
-              </SettingsRow>
-              <SettingsRow title="Publisert">
-                <SettingsValue>{formaterDato(aktiv.opprettetTidspunkt)}</SettingsValue>
-              </SettingsRow>
-              <SettingsRow title="Utløpsdato">
-                <SettingsValue>{formaterDato(aktiv.utløperTidspunkt)}</SettingsValue>
-              </SettingsRow>
-            </>
-          ) : null}
-        </SettingsPanel>
-      </SettingsSection>
+      <KunngjøringEditorDialog
+        open={createOpen}
+        onOpenChange={setCreateOpen}
+        onCreate={opprett}
+        isLoading={opprettLaster}
+        error={opprettFeil?.message ?? null}
+      />
 
       {aktiv ? (
-        <>
-          <SettingsSection
-            eyebrow="Målgruppe"
-            title="Bekreftelser"
-            description="Se hvem som har bekreftet kunngjøringen."
-          >
-            <SettingsPanel>
-              <SettingsRow title="Fremdrift">
-                <RecordStatus tone={bekreftelseTone}>
-                  {aktiv.antallBekreftelser} av {aktiv.antallMålgruppe} bekreftet
-                </RecordStatus>
-              </SettingsRow>
-
-              {aktiv.bekreftelser.map((bekreftelse) => (
-                <SettingsRow
-                  key={bekreftelse.epost}
-                  title={bekreftelse.visningsnavn}
-                  description={bekreftelse.epost}
-                >
-                  <SettingsValue>{formaterTidspunkt(bekreftelse.bekreftetTidspunkt)}</SettingsValue>
-                </SettingsRow>
-              ))}
-            </SettingsPanel>
-          </SettingsSection>
-
-          <SettingsSection
-            eyebrow="Fareområde"
-            title="Deaktiver kunngjøring"
-            description="Brukere som ikke har bekreftet, blir ikke lenger blokkert."
-            tone="danger"
-          >
-            <AdminFormActions>
-              <ServerFeil feil={deaktiverFeil?.message ?? null} />
-              <Button
-                type="button"
-                variant="destructive"
-                onClick={() => void handleDeaktiver()}
-                disabled={deaktiverLaster}
-              >
-                {deaktiverLaster ? "Deaktiverer…" : "Deaktiver kunngjøring"}
-              </Button>
-            </AdminFormActions>
-          </SettingsSection>
-        </>
-      ) : (
-        <AdminSettingsForm
-          onSubmit={(event) => {
-            event.preventDefault();
-            void handleOpprett();
-          }}
-        >
-          <SettingsSection
-            eyebrow="Opprett"
-            title="Ny kunngjøring"
-            description="Alle innloggede brukere må lese og bekrefte før de kan bruke appen."
-          >
-            <SettingsPanel>
-              <SettingsRow title="Tittel" description="Kort overskrift for kunngjøringen.">
-                <Field>
-                  <Input
-                    id="kunngjøring-tittel"
-                    aria-label="Tittel"
-                    value={tittel}
-                    onChange={(event) => setTittel(event.target.value)}
-                    placeholder="Viktig informasjon"
-                    maxLength={200}
-                    disabled={opprettLaster}
-                  />
-                </Field>
-              </SettingsRow>
-
-              <SettingsRow title="Budskap" description="Innholdet brukerne må lese og bekrefte.">
-                <Field>
-                  <Textarea
-                    id="kunngjøring-tekst"
-                    aria-label="Budskap"
-                    value={tekst}
-                    onChange={(event) => setTekst(event.target.value)}
-                    placeholder="Skriv kunngjøringsteksten her…"
-                    maxLength={5000}
-                    rows={6}
-                    disabled={opprettLaster}
-                  />
-                </Field>
-              </SettingsRow>
-
-              <SettingsRow
-                title="Utløpsdato"
-                description="Kunngjøringen deaktiveres etter denne datoen."
-              >
-                <Field>
-                  <Input
-                    id="kunngjøring-utløper"
-                    aria-label="Utløpsdato"
-                    type="date"
-                    value={utløper}
-                    onChange={(event) => setUtløper(event.target.value)}
-                    disabled={opprettLaster}
-                  />
-                </Field>
-              </SettingsRow>
-            </SettingsPanel>
-
-            <AdminFormActions>
-              <ServerFeil feil={opprettFeil?.message ?? null} />
-              <AdminFormSubmitButton
-                isLoading={opprettLaster}
-                disabled={!canCreate}
-                loadingText="Publiserer…"
-              >
-                Publiser kunngjøring
-              </AdminFormSubmitButton>
-            </AdminFormActions>
-          </SettingsSection>
-        </AdminSettingsForm>
-      )}
-    </SettingsStack>
+        <KunngjøringDetailsDialog
+          open={detailsOpen}
+          onOpenChange={setDetailsOpen}
+          announcement={aktiv}
+          onDeactivate={() => deaktiver(aktiv.id)}
+          isLoading={deaktiverLaster}
+          error={deaktiverFeil?.message ?? null}
+        />
+      ) : null}
+    </>
   );
 }

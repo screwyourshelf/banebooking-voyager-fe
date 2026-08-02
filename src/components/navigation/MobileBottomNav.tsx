@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/drawer";
 import { useAuth } from "@/hooks/useAuth";
 import { useBruker } from "@/hooks/useBruker";
+import { routePrefetchProps } from "@/utils/prefetchRoute";
 
 import {
   buildMobilePrimaryNavigation,
@@ -52,6 +53,7 @@ function MobileMenuSection({
           const sharedProps = {
             className: "mobile-menu__link",
             onClick: onNavigate,
+            ...routePrefetchProps(to),
           };
 
           return activePaths ? (
@@ -86,13 +88,24 @@ export default function MobileBottomNav() {
     return (
       <nav className="mobile-bottom-nav" aria-label="Hovednavigasjon">
         {primaryItems.map(({ id, to, label, icon: Icon, end }) => (
-          <NavLink key={id} to={to} end={end} className="mobile-bottom-nav__link">
+          <NavLink
+            key={id}
+            to={to}
+            end={end}
+            className="mobile-bottom-nav__link"
+            {...routePrefetchProps(to)}
+          >
             <Icon className="size-5" aria-hidden="true" />
             <span>{label === "Book bane" ? "Book" : label}</span>
           </NavLink>
         ))}
 
-        <NavLink to="login" end className="mobile-bottom-nav__link">
+        <NavLink
+          to="login"
+          end
+          className="mobile-bottom-nav__link"
+          {...routePrefetchProps("login")}
+        >
           <LogIn className="size-5" aria-hidden="true" />
           <span>Logg inn</span>
         </NavLink>
@@ -108,7 +121,13 @@ export default function MobileBottomNav() {
     <Drawer direction="bottom" modal open={open} onOpenChange={setOpen}>
       <nav className="mobile-bottom-nav" aria-label="Hovednavigasjon">
         {primaryItems.map(({ id, to, label, icon: Icon, end }) => (
-          <NavLink key={id} to={to} end={end} className="mobile-bottom-nav__link">
+          <NavLink
+            key={id}
+            to={to}
+            end={end}
+            className="mobile-bottom-nav__link"
+            {...routePrefetchProps(to)}
+          >
             <Icon className="size-5" aria-hidden="true" />
             <span>{label === "Book bane" ? "Book" : label}</span>
           </NavLink>

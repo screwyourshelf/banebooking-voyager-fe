@@ -14,8 +14,8 @@ export default function ModeToggle({ presentation = "icon" }: ModeToggleProps) {
 
   if (presentation === "sidebar") {
     return (
-      <Button
-        variant="ghost"
+      <button
+        type="button"
         className="app-sidebar__utility"
         onClick={() => setTheme(isDark ? "light" : "dark")}
         aria-label={actionLabel}
@@ -29,7 +29,7 @@ export default function ModeToggle({ presentation = "icon" }: ModeToggleProps) {
           <strong>{isDark ? "Lyst tema" : "Mørkt tema"}</strong>
           <small>Bytt utseende</small>
         </span>
-      </Button>
+      </button>
     );
   }
 

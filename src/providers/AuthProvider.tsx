@@ -32,6 +32,15 @@ function fraUtviklingssession(session: DevelopmentLoginResponse): AuthenticatedU
   };
 }
 
+function synkroniserSupabaseToken(accessToken?: string) {
+  if (accessToken) {
+    localStorage.setItem("supabase_token", accessToken);
+    return;
+  }
+
+  localStorage.removeItem("supabase_token");
+}
+
 async function lesFeilmelding(response: Response) {
   try {
     const data = (await response.json()) as { melding?: unknown; message?: unknown };
@@ -61,6 +70,7 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
     if (!hentUtviklingssession()) {
       void supabase.auth.getSession().then(({ data }) => {
         if (!alive || hentUtviklingssession()) return;
+        synkroniserSupabaseToken(data.session?.access_token);
         setCurrentUser(fraSupabase(data.session?.user ?? null));
         setReady(true);
       });
@@ -73,8 +83,10 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 
       const localSession = hentUtviklingssession();
       if (localSession) {
+        synkroniserSupabaseToken();
         setCurrentUser(fraUtviklingssession(localSession));
       } else {
+        synkroniserSupabaseToken(session?.access_token);
         setCurrentUser(fraSupabase(session?.user ?? null));
       }
       setReady(true);
