@@ -9,16 +9,6 @@ import AuthProvider from "./providers/AuthProvider";
 import { prefetchCurrentRoute } from "./utils/prefetchRoute";
 import "./index.css";
 
-const recoveryUrl = new URL(window.location.href);
-if (recoveryUrl.searchParams.has("_app_reload")) {
-  recoveryUrl.searchParams.delete("_app_reload");
-  window.history.replaceState(
-    window.history.state,
-    "",
-    `${recoveryUrl.pathname}${recoveryUrl.search}${recoveryUrl.hash}`
-  );
-}
-
 prefetchCurrentRoute();
 
 const queryClient = new QueryClient({

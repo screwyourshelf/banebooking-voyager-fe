@@ -120,10 +120,41 @@
         const recoveryMessageDelayMs = 30_000;
         let recoveryStarted = false;
 
-        function reloadLatestVersion() {
+        async function reloadLatestVersion(button) {
           const url = new URL(window.location.href);
           url.searchParams.set(recoveryQueryParameter, Date.now().toString());
-          window.location.replace(url);
+
+          if (button) {
+            button.disabled = true;
+            button.setAttribute("aria-busy", "true");
+            button.textContent = "Laster nyeste versjon…";
+          }
+
+          try {
+            const response = await fetch(url.toString(), {
+              cache: "no-store",
+              headers: { Accept: "text/html" },
+            });
+            if (!response.ok) {
+              throw new Error(`Kunne ikke hente appen (${response.status}).`);
+            }
+
+            const html = await response.text();
+            if (!html.includes('id="root"') || !html.includes('type="module"')) {
+              throw new Error("Svaret inneholdt ikke Banebooking-appen.");
+            }
+
+            window.history.replaceState(
+              window.history.state,
+              "",
+              `${url.pathname}${url.search}${url.hash}`
+            );
+            document.open();
+            document.write(html);
+            document.close();
+          } catch {
+            window.location.replace(url.toString());
+          }
         }
 
         function canRecoverAutomatically() {
@@ -172,7 +203,7 @@
             } catch {
               // Safari kan blokkere nettleserlagring i enkelte moduser.
             }
-            reloadLatestVersion();
+            void reloadLatestVersion(button);
           });
 
           content.append(title, description, button);
@@ -186,7 +217,7 @@
           recoveryStarted = true;
 
           if (canRecoverAutomatically()) {
-            reloadLatestVersion();
+            void reloadLatestVersion();
             return;
           }
 
