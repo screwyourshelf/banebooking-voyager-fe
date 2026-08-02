@@ -50,6 +50,7 @@ export function SettingsText({ children }: { children: ReactNode }) {
 type RadioOption = {
   value: string;
   label: ReactNode;
+  description?: ReactNode;
 };
 
 export function SettingsRadioGroup({
@@ -58,12 +59,14 @@ export function SettingsRadioGroup({
   value,
   onValueChange,
   disabled = false,
+  layout = "grid",
 }: {
   label: string;
   options: readonly RadioOption[];
   value: string;
   onValueChange: (value: string) => void;
   disabled?: boolean;
+  layout?: "grid" | "stacked";
 }) {
   const groupId = useId();
 
@@ -74,6 +77,7 @@ export function SettingsRadioGroup({
       onValueChange={onValueChange}
       disabled={disabled}
       className="settings-radio-group"
+      data-layout={layout}
     >
       {options.map((option) => {
         const optionId = `${groupId}-${option.value}`;
@@ -87,7 +91,12 @@ export function SettingsRadioGroup({
             data-disabled={disabled || undefined}
           >
             <RadioGroupItem id={optionId} value={option.value} />
-            <span>{option.label}</span>
+            <span className="settings-radio-option__copy">
+              <span className="settings-radio-option__label">{option.label}</span>
+              {option.description ? (
+                <span className="settings-radio-option__description">{option.description}</span>
+              ) : null}
+            </span>
           </Label>
         );
       })}

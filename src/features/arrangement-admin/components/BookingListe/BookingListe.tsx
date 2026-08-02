@@ -5,6 +5,7 @@ import { RecordListState } from "@/components/records";
 import type { LokalBooking } from "../../types";
 import { sorterBookinger, tellKonflikter } from "./bookingListeUtils";
 import BookingRad from "./BookingRad";
+import { formaterAntallBanetider } from "@/utils/arrangementPresentation";
 
 type Props = {
   bookinger: LokalBooking[];
@@ -38,12 +39,12 @@ export default function BookingListe({ bookinger, onRediger, onFjernEllerAvlys }
   return (
     <AdminEntityCollection
       icon={<CalendarClock aria-hidden="true" />}
-      title={`${antallAktive} booking${antallAktive === 1 ? "" : "er"}`}
+      title={formaterAntallBanetider(antallAktive)}
       description={summary || "Ingen tider er lagt til ennå."}
     >
       {sorterte.length === 0 ? (
         <RecordListState
-          title="Bookinglisten er tom"
+          title="Ingen banetider ennå"
           description="Bruk oppsettet over for å legge til konkrete tider."
         />
       ) : (

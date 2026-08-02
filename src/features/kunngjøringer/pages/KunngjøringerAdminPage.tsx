@@ -1,14 +1,13 @@
-import { CircleAlert, ShieldX } from "lucide-react";
-import { AdminPage, AdminPageLoading, AdminPageState } from "@/components/admin";
+import { ShieldX } from "lucide-react";
+import { AdminAccessError, AdminPage, AdminPageLoading, AdminPageState } from "@/components/admin";
 import { RecordListState } from "@/components/records";
-import { Button } from "@/components/ui/button";
 import KunngjøringerAdminView from "@/features/kunngjøringer/views/KunngjøringerAdminView";
 import { useBruker } from "@/hooks/useBruker";
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
 
 export default function KunngjøringerAdminPage() {
-  const { bruker, laster, feil, refetch } = useBruker();
+  const { bruker, laster, feil, isFetching, refetch } = useBruker();
   const canAdministerAnnouncements = harHandling(
     bruker?.kapabiliteter,
     Kapabiliteter.kunngjøring.admin
@@ -18,30 +17,17 @@ export default function KunngjøringerAdminPage() {
     <AdminPage
       eyebrow="Administrasjon"
       title="Kunngjøringer"
-      description="Publiser viktig informasjon som innloggede brukere må lese og bekrefte."
+      description="Styr informasjon som må leses og bekreftes før brukerne går videre."
     >
       {laster ? (
         <AdminPageLoading label="Kontrollerer tilgang" />
       ) : feil ? (
-        <AdminPageState>
-          <RecordListState
-            icon={<CircleAlert aria-hidden="true" />}
-            title="Kunne ikke kontrollere tilgangen"
-            description={feil}
-            action={
-              <Button type="button" variant="outline" onClick={() => void refetch()}>
-                Prøv igjen
-              </Button>
-            }
-            tone="danger"
-            role="alert"
-          />
-        </AdminPageState>
+        <AdminAccessError feil={feil} isFetching={isFetching} onRetry={() => void refetch()} />
       ) : !canAdministerAnnouncements ? (
         <AdminPageState>
           <RecordListState
             icon={<ShieldX aria-hidden="true" />}
-            title="Du har ikke tilgang til Kunngjøringer"
+            title="Du har ikke tilgang til kunngjøringer"
             description="En klubbadministrator må gi deg tilgang før du kan administrere kunngjøringer."
             tone="danger"
           />

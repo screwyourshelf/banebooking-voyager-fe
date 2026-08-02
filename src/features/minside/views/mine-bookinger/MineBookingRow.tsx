@@ -1,7 +1,16 @@
 import { Timer, Wind } from "lucide-react";
-import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { RecordAccent, RecordStatus } from "@/components/records";
+import {
+  RecordAccordionCard,
+  RecordCard,
+  RecordCardActions,
+  RecordCardDetails,
+  RecordCardStatic,
+  RecordCardSummary,
+  RecordCardTrigger,
+  RecordLeadingValue,
+  RecordStatus,
+} from "@/components/records";
 import WeatherInfo from "@/components/WeatherInfo";
 import type { MinBookingRespons } from "@/types";
 
@@ -36,10 +45,12 @@ export default function MineBookingRow({
     typeof booking.vind === "number";
 
   const summary = (
-    <div className="record-card__summary mine-booking__summary">
+    <RecordCardSummary layout="time">
       <span className="mine-booking__time">
         <span className="mine-booking__time-range">
-          <RecordAccent className="mine-booking__time-start">{start}</RecordAccent>
+          <span className="mine-booking__time-start">
+            <RecordLeadingValue>{start}</RecordLeadingValue>
+          </span>
           <span>–{end}</span>
         </span>
 
@@ -60,28 +71,22 @@ export default function MineBookingRow({
       <RecordStatus tone={booking.erPassert ? "past" : "own"}>
         {booking.erPassert ? "Gjennomført" : "Kommende"}
       </RecordStatus>
-    </div>
+    </RecordCardSummary>
   );
 
   if (!canCancel) {
     return (
-      <div className="record-card record-card-row mine-booking" data-past={booking.erPassert}>
-        <div className="record-card__static mine-booking__static">{summary}</div>
-      </div>
+      <RecordCard>
+        <RecordCardStatic>{summary}</RecordCardStatic>
+      </RecordCard>
     );
   }
 
   return (
-    <AccordionItem
-      value={bookingKey}
-      className="record-card record-card-row mine-booking"
-      data-past={booking.erPassert}
-    >
-      <AccordionTrigger className="record-card__trigger mine-booking__trigger hover:no-underline">
-        {summary}
-      </AccordionTrigger>
+    <RecordAccordionCard value={bookingKey}>
+      <RecordCardTrigger>{summary}</RecordCardTrigger>
 
-      <AccordionContent className="record-card__details mine-booking__details">
+      <RecordCardDetails>
         <div className="mine-booking__detail-content">
           <dl className="mine-booking__facts">
             <div>
@@ -109,7 +114,7 @@ export default function MineBookingRow({
             ) : null}
           </dl>
 
-          <div className="record-card__actions mine-booking__actions">
+          <RecordCardActions>
             <Button
               type="button"
               variant="destructive"
@@ -119,9 +124,9 @@ export default function MineBookingRow({
             >
               {isPending ? "Avbestiller…" : "Avbestill"}
             </Button>
-          </div>
+          </RecordCardActions>
         </div>
-      </AccordionContent>
-    </AccordionItem>
+      </RecordCardDetails>
+    </RecordAccordionCard>
   );
 }

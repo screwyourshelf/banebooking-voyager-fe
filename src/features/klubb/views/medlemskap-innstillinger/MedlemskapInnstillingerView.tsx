@@ -45,14 +45,14 @@ export default function MedlemskapInnstillingerView() {
     }
   };
 
-  if (laster) return <AdminPageLoading label="Laster medlemskapsinnstillinger" />;
+  if (laster) return <AdminPageLoading label="Laster medlemsinnstillinger" />;
 
   if (error) {
     return (
       <AdminPageState>
         <RecordListState
           icon={<RefreshCw aria-hidden="true" />}
-          title="Kunne ikke hente medlemskapsstatus"
+          title="Kunne ikke laste status for medlemsbekreftelse"
           description={error.message}
           tone="danger"
           role="alert"

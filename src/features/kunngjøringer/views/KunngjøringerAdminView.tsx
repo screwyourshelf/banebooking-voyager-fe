@@ -121,8 +121,8 @@ export default function KunngjøringerAdminView() {
         title={aktiv?.tittel ?? "Ingen aktiv kunngjøring"}
         description={
           aktiv
-            ? "Kunngjøringen blokkerer brukere som ikke har bekreftet den."
-            : "Brukerne kan bruke appen uten å bekrefte en kunngjøring."
+            ? "Brukere som ikke har bekreftet, må lese den før de går videre."
+            : "Ingen kunngjøring krever bekreftelse nå."
         }
       >
         <SettingsPanel>
@@ -137,10 +137,10 @@ export default function KunngjøringerAdminView() {
               <SettingsRow title="Budskap">
                 <SettingsText>{aktiv.tekst}</SettingsText>
               </SettingsRow>
-              <SettingsRow title="Opprettet">
+              <SettingsRow title="Publisert">
                 <SettingsValue>{formaterDato(aktiv.opprettetTidspunkt)}</SettingsValue>
               </SettingsRow>
-              <SettingsRow title="Utløper">
+              <SettingsRow title="Utløpsdato">
                 <SettingsValue>{formaterDato(aktiv.utløperTidspunkt)}</SettingsValue>
               </SettingsRow>
             </>
@@ -153,7 +153,7 @@ export default function KunngjøringerAdminView() {
           <SettingsSection
             eyebrow="Målgruppe"
             title="Bekreftelser"
-            description="Se hvor mange brukere som har lest kunngjøringen."
+            description="Se hvem som har bekreftet kunngjøringen."
           >
             <SettingsPanel>
               <SettingsRow title="Fremdrift">
@@ -201,8 +201,8 @@ export default function KunngjøringerAdminView() {
           }}
         >
           <SettingsSection
-            eyebrow="Ny kunngjøring"
-            title="Publiser viktig informasjon"
+            eyebrow="Opprett"
+            title="Ny kunngjøring"
             description="Alle innloggede brukere må lese og bekrefte før de kan bruke appen."
           >
             <SettingsPanel>
@@ -235,7 +235,10 @@ export default function KunngjøringerAdminView() {
                 </Field>
               </SettingsRow>
 
-              <SettingsRow title="Utløper" description="Dato kunngjøringen automatisk deaktiveres.">
+              <SettingsRow
+                title="Utløpsdato"
+                description="Kunngjøringen deaktiveres etter denne datoen."
+              >
                 <Field>
                   <Input
                     id="kunngjøring-utløper"
@@ -254,9 +257,9 @@ export default function KunngjøringerAdminView() {
               <AdminFormSubmitButton
                 isLoading={opprettLaster}
                 disabled={!canCreate}
-                loadingText="Aktiverer…"
+                loadingText="Publiserer…"
               >
-                Aktiver kunngjøring
+                Publiser kunngjøring
               </AdminFormSubmitButton>
             </AdminFormActions>
           </SettingsSection>

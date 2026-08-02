@@ -14,7 +14,7 @@ export default function NyGrenDialog({ open, onOpenChange }: Props) {
       backLabel="Alle grener"
       eyebrow="Ny gren"
       title="Opprett gren"
-      description="Legg til en aktivitet og standardregler for booking."
+      description="Angi navn og standardregler for banene i grenen."
     >
       <NyGrenView onCreated={() => onOpenChange(false)} />
     </AdminEditorDialog>

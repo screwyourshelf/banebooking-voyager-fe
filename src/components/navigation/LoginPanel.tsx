@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, KeyRound, Mail, ShieldCheck, UserRound, UserRoundCog } from "lucide-react";
 
+import { ActionFeedback, type ActionFeedbackMessage } from "@/components/feedback";
 import { FormActions, FormLayout, FormSubmitButton } from "@/components/forms";
 import { GoogleIcon, IdrettensIdIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,8 @@ export default function LoginPanel({ onLoginSuccess, showIntro = true }: LoginPa
     setEmail,
     otp,
     setOtp,
+    feedback,
+    clearFeedback,
     status,
     step,
     erBusy,
@@ -37,6 +40,9 @@ export default function LoginPanel({ onLoginSuccess, showIntro = true }: LoginPa
   } = useLogin();
   const [feilEmail, setFeilEmail] = useState<string | null>(null);
   const [feilOtp, setFeilOtp] = useState<string | null>(null);
+  const [developmentFeedback, setDevelopmentFeedback] = useState<ActionFeedbackMessage | null>(
+    null
+  );
 
   const [prevStep, setPrevStep] = useState(step);
   if (step !== prevStep) {
@@ -78,6 +84,8 @@ export default function LoginPanel({ onLoginSuccess, showIntro = true }: LoginPa
     if (!erGyldigEpost(value)) return setFeilEmail("Ugyldig e-postadresse.");
 
     setFeilEmail(null);
+    setDevelopmentFeedback(null);
+    clearFeedback();
     void sendOtp();
   }
 
@@ -89,29 +97,47 @@ export default function LoginPanel({ onLoginSuccess, showIntro = true }: LoginPa
     if (!/^\d{6}$/.test(value)) return setFeilOtp("Koden må være 6 siffer.");
 
     setFeilOtp(null);
+    setDevelopmentFeedback(null);
+    clearFeedback();
     void verifyOtp();
   }
 
   const busy = erBusy || !!developmentLoginPending;
 
   async function loggInnSomUtviklingsprofil(profil: "admin" | "utvidet" | "medlem") {
-    await signInAsDevelopmentProfile(profil);
-    onLoginSuccess?.();
+    setDevelopmentFeedback(null);
+    clearFeedback();
+
+    try {
+      await signInAsDevelopmentProfile(profil);
+      onLoginSuccess?.();
+    } catch (error) {
+      setDevelopmentFeedback({
+        tone: "danger",
+        title: "Testinnloggingen mislyktes",
+        description: error instanceof Error ? error.message : "Prøv igjen om litt.",
+      });
+    }
   }
+
+  const visibleFeedback = developmentFeedback ?? feedback;
 
   return (
     <div className="login-panel">
       {showIntro ? (
         <div className="login-panel__intro">
           <strong>Logg inn</strong>
-          <span>Bestill bane og hold oversikt over reservasjonene dine.</span>
+          <span>Book bane og hold oversikt over tidene dine.</span>
         </div>
       ) : null}
 
       <div className="login-panel__providers">
         <Button
           variant="outline"
-          onClick={handleGoogleLogin}
+          onClick={() => {
+            setDevelopmentFeedback(null);
+            void handleGoogleLogin();
+          }}
           disabled={busy}
           aria-label="Logg inn med Google"
         >
@@ -122,7 +148,10 @@ export default function LoginPanel({ onLoginSuccess, showIntro = true }: LoginPa
         {config.enableIdrettensId ? (
           <Button
             variant="outline"
-            onClick={handleIdrettensIdLogin}
+            onClick={() => {
+              setDevelopmentFeedback(null);
+              void handleIdrettensIdLogin();
+            }}
             disabled={busy}
             aria-label="Logg inn med Idrettens ID"
           >
@@ -135,6 +164,8 @@ export default function LoginPanel({ onLoginSuccess, showIntro = true }: LoginPa
       <div className="login-panel__divider">
         <span>eller</span>
       </div>
+
+      {visibleFeedback ? <ActionFeedback {...visibleFeedback} /> : null}
 
       {step === "input" ? (
         <FormLayout density="compact" className="login-panel__form" onSubmit={submitSendOtp}>
@@ -151,6 +182,8 @@ export default function LoginPanel({ onLoginSuccess, showIntro = true }: LoginPa
               onChange={(e) => {
                 setEmail(e.target.value);
                 if (feilEmail) setFeilEmail(null);
+                if (feedback) clearFeedback();
+                if (developmentFeedback) setDevelopmentFeedback(null);
               }}
               aria-invalid={!!feilEmail}
               {...emailInputProps}
@@ -178,6 +211,8 @@ export default function LoginPanel({ onLoginSuccess, showIntro = true }: LoginPa
               onChange={(e) => {
                 setOtp(e.target.value.replace(/\D/g, "").slice(0, 6));
                 if (feilOtp) setFeilOtp(null);
+                if (feedback) clearFeedback();
+                if (developmentFeedback) setDevelopmentFeedback(null);
               }}
               aria-invalid={!!feilOtp}
               {...otpInputProps}
@@ -212,12 +247,12 @@ export default function LoginPanel({ onLoginSuccess, showIntro = true }: LoginPa
             <button
               type="button"
               className="login-panel__action"
-              aria-label="Logg inn som administrator"
+              aria-label="Logg inn som klubbadministrator"
               onClick={() => void loggInnSomUtviklingsprofil("admin")}
               disabled={busy}
             >
               <ShieldCheck aria-hidden="true" />
-              <strong>Admin</strong>
+              <strong>Klubbadministrator</strong>
             </button>
 
             <button
@@ -228,18 +263,18 @@ export default function LoginPanel({ onLoginSuccess, showIntro = true }: LoginPa
               disabled={busy}
             >
               <UserRoundCog aria-hidden="true" />
-              <strong>Utvidet</strong>
+              <strong>Utvidet bruker</strong>
             </button>
 
             <button
               type="button"
               className="login-panel__action"
-              aria-label="Logg inn som vanlig bruker"
+              aria-label="Logg inn som medlem"
               onClick={() => void loggInnSomUtviklingsprofil("medlem")}
               disabled={busy}
             >
               <UserRound aria-hidden="true" />
-              <strong>Bruker</strong>
+              <strong>Medlem</strong>
             </button>
           </div>
         </details>

@@ -1,6 +1,7 @@
 import type { ReactNode } from "react";
 import Page from "@/components/Page";
 import PageHeader from "@/components/layout/PageHeader";
+import { RecordCollection } from "@/components/records";
 
 type Props = {
   eyebrow: string;
@@ -35,5 +36,5 @@ export function AdminPageLoading({ label }: { label: string }) {
 }
 
 export function AdminPageState({ children }: { children: ReactNode }) {
-  return <section className="record-collection admin-page__state">{children}</section>;
+  return <RecordCollection>{children}</RecordCollection>;
 }

@@ -6,17 +6,14 @@ import {
   AdminEntityList,
   AdminEntityRow,
 } from "@/components/admin";
-import FilterSwitch from "@/components/controls/FilterSwitch";
-import {
-  RecordChoiceFilter,
-  RecordCollectionSkeleton,
-  RecordListState,
-} from "@/components/records";
+import { ActionFeedback, type ActionFeedbackMessage } from "@/components/feedback";
+import { RecordCollectionSkeleton, RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import type { ArrangementRespons } from "@/types";
 import { useRedigerArrangement } from "../hooks/useRedigerArrangement";
 import OpprettArrangementView from "./arrangement/OpprettArrangementView";
 import RedigerArrangementView from "./rediger-arrangement/RedigerArrangementView";
+import { formaterArrangementKategori } from "@/utils/arrangementPresentation";
 
 type Props = {
   createOpen: boolean;
@@ -66,6 +63,7 @@ export default function ArrangementAdminOverview({ createOpen, onCreateOpenChang
   const [showPast, setShowPast] = useState(false);
   const [selectedBranches, setSelectedBranches] = useState<string[]>([]);
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [creationFeedback, setCreationFeedback] = useState<ActionFeedbackMessage | null>(null);
   const {
     arrangementer = [],
     arrangementerFeil,
@@ -92,34 +90,37 @@ export default function ArrangementAdminOverview({ createOpen, onCreateOpenChang
       <AdminEntityCollection
         icon={<CalendarCog aria-hidden="true" />}
         title={`${visibleArrangements.length} arrangement${visibleArrangements.length === 1 ? "" : "er"}`}
-        description={showPast ? "Aktive, kommende og gjennomførte" : "Aktive og kommende"}
-        actions={
-          <FilterSwitch
-            title="Vis passerte"
-            checked={showPast}
-            onCheckedChange={setShowPast}
-            disabled={isLoadingOverview}
-          />
-        }
-        filters={
-          grener.length > 1 ? (
-            <RecordChoiceFilter
-              label="Grener"
-              options={grener.map((gren) => ({ value: gren.slug, label: gren.navn }))}
-              selectedValues={selectedBranches}
-              onToggle={(value) =>
-                setSelectedBranches((current) =>
-                  current.includes(value)
-                    ? current.filter((branch) => branch !== value)
-                    : [...current, value]
-                )
+        description={showPast ? "Alle arrangementer" : "Aktive og kommende"}
+        toggle={{
+          title: "Vis tidligere",
+          checked: showPast,
+          onCheckedChange: setShowPast,
+          disabled: isLoadingOverview,
+        }}
+        filter={
+          grener.length > 1
+            ? {
+                label: "Filtrer på gren",
+                groups: [
+                  {
+                    label: "Gren",
+                    options: grener.map((gren) => ({ value: gren.slug, label: gren.navn })),
+                    selectedValues: selectedBranches,
+                    onToggle: (value) =>
+                      setSelectedBranches((current) =>
+                        current.includes(value)
+                          ? current.filter((branch) => branch !== value)
+                          : [...current, value]
+                      ),
+                  },
+                ],
+                onReset: () => setSelectedBranches([]),
+                disabled: isLoadingOverview,
               }
-              onReset={() => setSelectedBranches([])}
-              disabled={isLoadingOverview}
-            />
-          ) : undefined
+            : undefined
         }
       >
+        {creationFeedback ? <ActionFeedback {...creationFeedback} /> : null}
         {isLoadingOverview ? (
           <RecordCollectionSkeleton ariaLabel="Laster arrangementer" rows={4} layout="date" />
         ) : arrangementerFeil ? (
@@ -138,16 +139,16 @@ export default function ArrangementAdminOverview({ createOpen, onCreateOpenChang
         ) : visibleArrangements.length === 0 ? (
           <RecordListState
             icon={<CalendarX2 aria-hidden="true" />}
-            title={showPast ? "Ingen arrangementer" : "Ingen aktive arrangementer"}
+            title={showPast ? "Ingen arrangementer ennå" : "Ingen aktive arrangementer"}
             description={
               showPast
                 ? "Opprett et arrangement for å legge til tider."
-                : "Vis passerte eller opprett et nytt arrangement."
+                : "Vis tidligere eller opprett et nytt arrangement."
             }
             action={
               !showPast && arrangementer.some((arrangement) => arrangement.erPassert) ? (
                 <Button type="button" variant="outline" onClick={() => setShowPast(true)}>
-                  Vis passerte
+                  Vis tidligere
                 </Button>
               ) : undefined
             }
@@ -156,7 +157,10 @@ export default function ArrangementAdminOverview({ createOpen, onCreateOpenChang
           <AdminEntityList>
             {visibleArrangements.map((arrangement) => {
               const status = getStatus(arrangement);
-              const metadata = [arrangement.grenNavn, arrangement.kategori]
+              const metadata = [
+                arrangement.grenNavn,
+                formaterArrangementKategori(arrangement.kategori),
+              ]
                 .filter(Boolean)
                 .join(" · ");
 
@@ -183,10 +187,15 @@ export default function ArrangementAdminOverview({ createOpen, onCreateOpenChang
         backLabel="Alle arrangementer"
         eyebrow="Nytt arrangement"
         title="Opprett arrangement"
-        description="Legg inn informasjon og bygg den konkrete bookinglisten før du oppretter."
+        description="Legg inn informasjon og bygg listen over banetider."
         size="wide"
       >
-        <OpprettArrangementView onCreated={() => onCreateOpenChange(false)} />
+        <OpprettArrangementView
+          onCreated={(feedback) => {
+            setCreationFeedback(feedback);
+            onCreateOpenChange(false);
+          }}
+        />
       </AdminEditorDialog>
 
       <AdminEditorDialog

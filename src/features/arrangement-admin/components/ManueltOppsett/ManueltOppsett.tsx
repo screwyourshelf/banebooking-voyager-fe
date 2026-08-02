@@ -15,6 +15,7 @@ import { Calendar } from "@/components/ui/calendar";
 import type { BaneRespons } from "@/types";
 import { tilDatoTekst } from "@/utils/datoUtils";
 import type { LokalBooking } from "../../types";
+import { formaterAntallBanetider } from "@/utils/arrangementPresentation";
 import { lagLokalBookingId } from "../BookingListe/bookingListeUtils";
 import {
   beregnTidspunkterForBaner,
@@ -218,7 +219,7 @@ export default function ManueltOppsett({ baner, onLeggTil }: Props) {
         </SettingsRow>
 
         {tidspunktResultat.advarselTekst ? (
-          <SettingsRow title="Ulike slotlengder" description={tidspunktResultat.advarselTekst}>
+          <SettingsRow title="Ulik varighet" description={tidspunktResultat.advarselTekst}>
             <RecordStatus tone="warning">Kontroller tidene</RecordStatus>
           </SettingsRow>
         ) : null}
@@ -283,7 +284,7 @@ export default function ManueltOppsett({ baner, onLeggTil }: Props) {
         <SettingsRow title={kanLeggeTil ? "Klart til å legge til" : "Før du kan legge til"}>
           <SettingsText>
             {kanLeggeTil
-              ? `${antallBookinger} booking${antallBookinger === 1 ? "" : "er"} legges i listen.`
+              ? `${formaterAntallBanetider(antallBookinger)} legges i listen.`
               : `Velg ${requirements.join(", ")}.`}
           </SettingsText>
         </SettingsRow>
@@ -292,8 +293,8 @@ export default function ManueltOppsett({ baner, onLeggTil }: Props) {
       <AdminFormActions>
         <Button type="button" disabled={!kanLeggeTil} onClick={handleAdd}>
           {kanLeggeTil
-            ? `Legg til ${antallBookinger} booking${antallBookinger === 1 ? "" : "er"}`
-            : "Legg til i bookinglisten"}
+            ? `Legg til ${formaterAntallBanetider(antallBookinger)}`
+            : "Legg til i listen"}
         </Button>
       </AdminFormActions>
     </>

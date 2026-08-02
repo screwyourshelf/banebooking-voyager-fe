@@ -2,9 +2,8 @@ import { format, addDays, subDays } from "date-fns";
 import { nb } from "date-fns/locale";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import DatePickerPopover from "@/components/controls/DatePickerPopover";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 type Props = {
   value: Date | null;
@@ -16,14 +15,14 @@ type Props = {
 export default function DatoVelger({ value, onChange, minDate, visNavigering = true }: Props) {
   const visningsformat = value ? format(value, "EEE d. MMMM", { locale: nb }) : "Velg dato";
 
-  const forrigeDag = () => {
+  const handleForrigeDag = () => {
     if (!value) return;
     const ny = subDays(value, 1);
     if (minDate && ny < minDate) return;
     onChange(ny);
   };
 
-  const nesteDag = () => {
+  const handleNesteDag = () => {
     if (!value) return;
     onChange(addDays(value, 1));
   };
@@ -38,40 +37,24 @@ export default function DatoVelger({ value, onChange, minDate, visNavigering = t
           variant="outline"
           size="icon"
           aria-label="Forrige dag"
-          onClick={forrigeDag}
+          onClick={handleForrigeDag}
           className="date-switcher__nav"
           disabled={disablePrev}
         >
-          <ChevronLeft className="h-4 w-4" />
+          <ChevronLeft />
         </Button>
       ) : null}
 
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            type="button"
-            variant="outline"
-            aria-label="Velg dato"
-            className="date-switcher__value"
-          >
-            <span>{visningsformat}</span>
-          </Button>
-        </PopoverTrigger>
-
-        <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            mode="single"
-            selected={value ?? undefined}
-            onSelect={(dato) => {
-              if (!dato) return;
-              if (minDate && dato < minDate) return;
-              onChange(dato);
-            }}
-            locale={nb}
-            hidden={minDate ? { before: minDate } : undefined}
-          />
-        </PopoverContent>
-      </Popover>
+      <DatePickerPopover value={value} onChange={onChange} minDate={minDate} align="start">
+        <Button
+          type="button"
+          variant="outline"
+          aria-label="Velg dato"
+          className="date-switcher__value"
+        >
+          <span>{visningsformat}</span>
+        </Button>
+      </DatePickerPopover>
 
       {visNavigering ? (
         <Button
@@ -79,11 +62,11 @@ export default function DatoVelger({ value, onChange, minDate, visNavigering = t
           variant="outline"
           size="icon"
           aria-label="Neste dag"
-          onClick={nesteDag}
+          onClick={handleNesteDag}
           className="date-switcher__nav"
           disabled={!value}
         >
-          <ChevronRight className="h-4 w-4" />
+          <ChevronRight />
         </Button>
       ) : null}
     </div>

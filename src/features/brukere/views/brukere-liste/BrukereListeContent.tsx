@@ -1,11 +1,18 @@
 import type { ReactNode } from "react";
-import { CircleAlert, SearchX, UsersRound } from "lucide-react";
+import { SearchX, UsersRound } from "lucide-react";
 import { usePagination } from "@/hooks/usePagination";
-import { Inline } from "@/components/layout";
-import { Accordion } from "@/components/ui/accordion";
+import { AdminEntityCollection } from "@/components/admin";
+import {
+  RecordAccordionList,
+  RecordCollectionPagination,
+  RecordCollectionSkeleton,
+  RecordListState,
+  RecordStatus,
+} from "@/components/records";
 import { Button } from "@/components/ui/button";
+import { MEDLEMSKAP_FILTER_VALG } from "@/features/brukere/types";
 import type { BrukerRespons, MedlemskapFilterType, RolleType } from "@/features/brukere/types";
-import BrukerFilterPanel from "./BrukerFilterPanel";
+import { ROLLE_VALG } from "@/utils/brukerPresentation";
 import BrukerListeRad from "./BrukerListeRad";
 
 type Props = {
@@ -60,65 +67,69 @@ export default function BrukereListeContent({
   const antallTilOppfølging = filtrerteBrukere.filter(
     (bruker) => bruker.erSperret || bruker.måBekrefteMedlemskap
   ).length;
-  const antallTekst = `${filtrerteBrukere.length} ${filtrerteBrukere.length === 1 ? "bruker" : "brukere"}`;
+  const antallTekst = lasterListe
+    ? "Laster brukere…"
+    : `${filtrerteBrukere.length} ${filtrerteBrukere.length === 1 ? "bruker" : "brukere"}`;
 
   return (
-    <section className="user-directory" aria-label="Brukeroversikt">
-      <BrukerFilterPanel
-        query={query}
-        onQueryChange={onQueryChange}
-        visSlettede={visSlettede}
-        onVisSlettedeChange={onVisSlettedeChange}
-        rolleFilter={rolleFilter}
-        onToggleRolle={onToggleRolle}
-        medlemskapFilter={medlemskapFilter}
-        onToggleMedlemskap={onToggleMedlemskap}
-        onReset={onResetFilters}
-      />
-
-      <div className="user-directory__result-heading" aria-live="polite">
-        <div>
-          <UsersRound aria-hidden="true" />
-          <span>
-            <strong>{antallTekst}</strong>
-            <small>{harAktiveFiltre ? "treffer valgene dine" : "registrert i klubben"}</small>
-          </span>
-        </div>
-
-        {antallTilOppfølging > 0 ? (
-          <span className="user-directory__attention">
-            <CircleAlert aria-hidden="true" />
-            {antallTilOppfølging} trenger oppfølging
-          </span>
-        ) : null}
-      </div>
-
+    <AdminEntityCollection
+      icon={<UsersRound aria-hidden="true" />}
+      title={antallTekst}
+      description="Medlemskap, roller og tilgang"
+      summaryStatus={
+        !lasterListe && antallTilOppfølging > 0 ? (
+          <RecordStatus tone="warning">{antallTilOppfølging} trenger oppfølging</RecordStatus>
+        ) : undefined
+      }
+      toggle={{
+        title: "Vis slettede",
+        checked: visSlettede,
+        onCheckedChange: onVisSlettedeChange,
+        disabled: lasterListe,
+      }}
+      filter={{
+        label: "Filtrer brukere",
+        search: {
+          label: "Søk etter bruker",
+          placeholder: "Søk på navn eller e-post",
+          value: query,
+          onValueChange: onQueryChange,
+        },
+        groups: [
+          {
+            label: "Rolle",
+            options: ROLLE_VALG,
+            selectedValues: rolleFilter,
+            onToggle: (value) => onToggleRolle(value as RolleType),
+          },
+          {
+            label: "Medlemskap",
+            options: MEDLEMSKAP_FILTER_VALG,
+            selectedValues: medlemskapFilter,
+            onToggle: (value) => onToggleMedlemskap(value as MedlemskapFilterType),
+          },
+        ],
+        onReset: onResetFilters,
+      }}
+    >
       {lasterListe ? (
-        <div className="user-directory__state" role="status">
-          Laster brukere…
-        </div>
+        <RecordCollectionSkeleton ariaLabel="Laster brukere" rows={6} />
       ) : filtrerteBrukere.length === 0 ? (
-        <div className="user-directory__empty">
-          <SearchX aria-hidden="true" />
-          <strong>Ingen brukere funnet</strong>
-          <p>Prøv et annet søk eller fjern noen av filtrene.</p>
-          {harAktiveFiltre ? (
-            <Button type="button" variant="outline" size="sm" onClick={onResetFilters}>
-              Nullstill filtre
-            </Button>
-          ) : null}
-        </div>
+        <RecordListState
+          icon={<SearchX aria-hidden="true" />}
+          title="Ingen brukere funnet"
+          description="Prøv et annet søk eller fjern noen av filtrene."
+          action={
+            harAktiveFiltre ? (
+              <Button type="button" variant="outline" size="sm" onClick={onResetFilters}>
+                Nullstill filtre
+              </Button>
+            ) : undefined
+          }
+        />
       ) : (
         <>
-          <div className="user-directory__table-heading" aria-hidden="true">
-            <span>Bruker</span>
-            <span>Rolle</span>
-            <span>Medlemskap</span>
-            <span>Status</span>
-            <span />
-          </div>
-
-          <Accordion type="single" collapsible className="record-list user-directory__list">
+          <RecordAccordionList ariaLabel="Brukere">
             {synligeBrukere.map((bruker) => (
               <BrukerListeRad
                 key={bruker.id}
@@ -131,17 +142,17 @@ export default function BrukereListeContent({
                 onÅpneSperreHistorikk={onÅpneSperreHistorikk}
               />
             ))}
-          </Accordion>
+          </RecordAccordionList>
 
           {harFlere ? (
-            <Inline justify="center" className="user-directory__pagination">
+            <RecordCollectionPagination>
               <Button variant="outline" size="sm" onClick={visFlere}>
                 Vis flere ({gjenstaar} gjenstår)
               </Button>
-            </Inline>
+            </RecordCollectionPagination>
           ) : null}
         </>
       )}
-    </section>
+    </AdminEntityCollection>
   );
 }

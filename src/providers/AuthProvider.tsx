@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { AuthContext } from "@/auth/AuthContext";
 import type {
   AuthenticatedUser,
@@ -109,9 +108,8 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         setReady(true);
 
         await supabase.auth.signOut({ scope: "local" }).catch(() => undefined);
-        toast.success(`Innlogget som ${session.user.name}`);
       } catch (error) {
-        toast.error(error instanceof Error ? error.message : "Kunne ikke logge inn.");
+        throw error instanceof Error ? error : new Error("Kunne ikke logge inn.");
       } finally {
         setDevelopmentLoginPending(null);
       }

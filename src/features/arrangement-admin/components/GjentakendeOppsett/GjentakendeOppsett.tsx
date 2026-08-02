@@ -209,7 +209,7 @@ export default function GjentakendeOppsett({ baner, onGenerer }: Props) {
         </SettingsRow>
 
         {tidspunktResultat.advarselTekst ? (
-          <SettingsRow title="Ulike slotlengder" description={tidspunktResultat.advarselTekst}>
+          <SettingsRow title="Ulik varighet" description={tidspunktResultat.advarselTekst}>
             <RecordStatus tone="warning">Kontroller tidene</RecordStatus>
           </SettingsRow>
         ) : null}
@@ -274,7 +274,7 @@ export default function GjentakendeOppsett({ baner, onGenerer }: Props) {
 
       <AdminFormActions>
         <Button type="button" disabled={!kanGenerere} onClick={handleGenerate}>
-          Legg forslag i bookinglisten
+          Legg forslag i listen
         </Button>
       </AdminFormActions>
     </>

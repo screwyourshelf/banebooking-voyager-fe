@@ -1,5 +1,5 @@
 import { ShieldX } from "lucide-react";
-import { AdminPage, AdminPageLoading, AdminPageState } from "@/components/admin";
+import { AdminAccessError, AdminPage, AdminPageLoading, AdminPageState } from "@/components/admin";
 import Tabs from "@/components/navigation/Tabs";
 import { RecordListState } from "@/components/records";
 import KlubbInnstillingerView from "@/features/klubb/views/klubb-innstillinger/KlubbInnstillingerView";
@@ -9,22 +9,24 @@ import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
 
 export default function KlubbPage() {
-  const { bruker, laster } = useBruker();
+  const { bruker, laster, feil, isFetching, refetch } = useBruker();
   const canAdministerClub = harHandling(bruker?.kapabiliteter, Kapabiliteter.klubb.admin);
 
   return (
     <AdminPage
       eyebrow="Administrasjon"
       title="Klubbinnstillinger"
-      description="Administrer klubbprofil, tjenester og medlemskapsbekreftelse."
+      description="Oppdater klubbprofilen og styr tjenester og medlemsbekreftelse."
     >
       {laster ? (
         <AdminPageLoading label="Kontrollerer tilgang" />
+      ) : feil ? (
+        <AdminAccessError feil={feil} isFetching={isFetching} onRetry={() => void refetch()} />
       ) : !canAdministerClub ? (
         <AdminPageState>
           <RecordListState
             icon={<ShieldX aria-hidden="true" />}
-            title="Du har ikke tilgang til Klubbinnstillinger"
+            title="Du har ikke tilgang til klubbinnstillinger"
             description="En klubbadministrator må gi deg tilgang før du kan endre klubbens innstillinger."
             tone="danger"
           />

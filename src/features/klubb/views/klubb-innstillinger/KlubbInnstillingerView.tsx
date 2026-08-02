@@ -56,6 +56,8 @@ export default function KlubbInnstillingerView() {
     oppdaterKlubb,
     oppdaterKlubbLaster,
     oppdaterKlubbFeil,
+    oppdaterKlubbLagret,
+    resetOppdaterKlubb,
   } = useKlubb();
 
   const [form, setForm] = useState<KlubbFormData>({
@@ -125,7 +127,7 @@ export default function KlubbInnstillingerView() {
       <AdminPageState>
         <RecordListState
           icon={<RefreshCw aria-hidden="true" />}
-          title="Kunne ikke hente klubbinnstillingene"
+          title="Kunne ikke laste klubbinnstillingene"
           description={error?.message ?? "Prøv å hente innstillingene på nytt."}
           tone="danger"
           role="alert"
@@ -146,6 +148,7 @@ export default function KlubbInnstillingerView() {
   }
 
   const onChange = <K extends keyof KlubbFormData>(key: K, value: KlubbFormData[K]) => {
+    resetOppdaterKlubb();
     setForm((f) => ({ ...f, [key]: value }));
   };
 
@@ -202,6 +205,7 @@ export default function KlubbInnstillingerView() {
       errors={errors}
       onBlurField={touchField}
       mutasjonFeil={oppdaterKlubbFeil?.message ?? null}
+      lagret={oppdaterKlubbLagret && !isDirty}
     />
   );
 }

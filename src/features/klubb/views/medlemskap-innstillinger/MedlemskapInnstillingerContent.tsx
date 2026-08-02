@@ -54,7 +54,7 @@ export default function MedlemskapInnstillingerContent({
       <SettingsSection
         eyebrow="Medlemskap"
         title="Bekreftelsesperiode"
-        description="Se om medlemmene må bekrefte medlemskapet sitt."
+        description="Følg status og hvor mange som har fullført."
       >
         <SettingsPanel>
           <SettingsRow
@@ -98,7 +98,7 @@ export default function MedlemskapInnstillingerContent({
           <SettingsSection
             eyebrow="Ny periode"
             icon={<CalendarPlus />}
-            title="Start medlemskapsbekreftelse"
+            title="Start medlemsbekreftelse"
             description="Alle medlemmer må bekrefte innen sluttdatoen."
           >
             <SettingsPanel>
@@ -145,7 +145,7 @@ export default function MedlemskapInnstillingerContent({
       ) : (
         <SettingsSection
           eyebrow="Kontroll"
-          title="Avslutt bekreftelsesperiode"
+          title="Avslutt medlemsbekreftelsen"
           description="Tidligere bekreftelser beholdes når perioden avsluttes."
           tone="danger"
         >

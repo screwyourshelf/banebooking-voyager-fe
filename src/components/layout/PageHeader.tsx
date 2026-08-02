@@ -18,9 +18,9 @@ export default function PageHeader({ eyebrow, title, description, actions, class
       </div>
 
       {description || actions ? (
-        <div>
+        <div className="page-heading__support">
           {description ? <p className="page-heading__description">{description}</p> : null}
-          {actions}
+          {actions ? <div className="page-heading__actions">{actions}</div> : null}
         </div>
       ) : null}
     </header>

@@ -16,9 +16,9 @@ export default function KunngjøringPage() {
   if (laster) {
     return (
       <AdminPage
-        eyebrow="Viktig beskjed"
+        eyebrow="Fra klubben"
         title="Kunngjøring"
-        description="Laster informasjon fra klubben."
+        description="Les og bekreft før du går videre."
       >
         <AdminPageLoading label="Laster kunngjøring" />
       </AdminPage>
@@ -28,9 +28,9 @@ export default function KunngjøringPage() {
   if (brukerFeil) {
     return (
       <AdminPage
-        eyebrow="Viktig beskjed"
+        eyebrow="Fra klubben"
         title="Kunngjøring"
-        description="Informasjonen må lastes før du kan fortsette."
+        description="Les og bekreft før du går videre."
       >
         <AdminPageState>
           <RecordListState
@@ -64,9 +64,9 @@ export default function KunngjøringPage() {
 
   return (
     <AdminPage
-      eyebrow="Viktig beskjed"
+      eyebrow="Fra klubben"
       title={kunngjøring.tittel}
-      description="Les informasjonen fra klubben før du fortsetter."
+      description="Les og bekreft før du går videre."
       action={<RecordStatus tone="warning">Må bekreftes</RecordStatus>}
     >
       <ContentDocument>

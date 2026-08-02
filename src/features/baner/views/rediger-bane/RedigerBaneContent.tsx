@@ -11,7 +11,7 @@ import {
   SettingsSwitchRow,
   SettingsValue,
 } from "@/components/admin";
-import { ServerFeil } from "@/components/errors";
+import { MutationFeedback } from "@/components/feedback";
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -57,6 +57,7 @@ type Props = {
   isSaving: boolean;
   onSubmit: () => void;
   mutasjonFeil?: string | null;
+  lagret?: boolean;
 };
 
 const slotValues = [30, 45, 60, 90];
@@ -86,6 +87,7 @@ export default function RedigerBaneContent({
   isSaving,
   onSubmit,
   mutasjonFeil,
+  lagret = false,
 }: Props) {
   const navn = redigerteVerdier?.navn ?? valgtBane?.navn ?? "";
   const beskrivelse = redigerteVerdier?.beskrivelse ?? valgtBane?.beskrivelse ?? "";
@@ -383,7 +385,11 @@ export default function RedigerBaneContent({
           ) : null}
 
           <AdminFormActions>
-            <ServerFeil feil={mutasjonFeil} />
+            <MutationFeedback
+              error={mutasjonFeil}
+              success={lagret}
+              successTitle="Baneinnstillingene er lagret"
+            />
             <AdminFormSubmitButton isLoading={isSaving} disabled={!canSubmit} loadingText="Lagrer…">
               Lagre endringer
             </AdminFormSubmitButton>

@@ -1,5 +1,4 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import type {
@@ -32,7 +31,6 @@ export function useMedlemskapAdmin() {
     MedlemskapBekreftelseRespons
   >("post", `/klubb/${slug}/medlemskap/aktiver`, {
     onSuccess: async () => {
-      toast.success("Medlemskapbekreftelse aktivert");
       await queryClient.invalidateQueries({ queryKey: statusKey });
       await queryClient.invalidateQueries({ queryKey: brukerKey });
     },
@@ -45,7 +43,6 @@ export function useMedlemskapAdmin() {
     `/klubb/${slug}/medlemskap/aktiver`,
     {
       onSuccess: async () => {
-        toast.success("Medlemskapbekreftelse deaktivert");
         await queryClient.invalidateQueries({ queryKey: statusKey });
         await queryClient.invalidateQueries({ queryKey: brukerKey });
       },

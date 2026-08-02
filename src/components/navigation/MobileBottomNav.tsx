@@ -1,6 +1,6 @@
 import { LogIn, LogOut, MoreHorizontal } from "lucide-react";
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink, useLocation } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -19,6 +19,7 @@ import LoginPanel from "./LoginPanel";
 import {
   buildMobilePrimaryNavigation,
   buildMobileSecondaryNavigation,
+  isNavigationItemCurrent,
   type AppNavigationSection,
 } from "./navigationModel";
 
@@ -31,6 +32,7 @@ function MobileMenuSection({
 }) {
   const headingId = `mobile-menu-${section.id}`;
   const showHeading = section.id !== "personal";
+  const { pathname } = useLocation();
 
   return (
     <section
@@ -40,12 +42,34 @@ function MobileMenuSection({
     >
       {showHeading ? <h3 id={headingId}>{section.label}</h3> : null}
       <div className="mobile-menu__links">
-        {section.items.map(({ id, to, label, icon: Icon, end }) => (
-          <NavLink key={id} to={to} end={end} className="mobile-menu__link" onClick={onNavigate}>
-            <Icon aria-hidden="true" />
-            <span>{label}</span>
-          </NavLink>
-        ))}
+        {section.items.map((item) => {
+          const { id, to, label, icon: Icon, end, activePaths } = item;
+          const content = (
+            <>
+              <Icon aria-hidden="true" />
+              <span>{label}</span>
+            </>
+          );
+          const sharedProps = {
+            className: "mobile-menu__link",
+            onClick: onNavigate,
+          };
+
+          return activePaths ? (
+            <Link
+              key={id}
+              to={to}
+              {...sharedProps}
+              aria-current={isNavigationItemCurrent(item, pathname) ? "page" : undefined}
+            >
+              {content}
+            </Link>
+          ) : (
+            <NavLink key={id} to={to} end={end} {...sharedProps}>
+              {content}
+            </NavLink>
+          );
+        })}
       </div>
     </section>
   );
@@ -63,7 +87,7 @@ export default function MobileBottomNav() {
     ? currentUser.name && currentUser.email
       ? currentUser.email
       : "Konto og innstillinger"
-    : "Bestill bane og se reservasjonene dine.";
+    : "Book bane og se tidene dine.";
 
   return (
     <Drawer direction="bottom" modal open={open} onOpenChange={setOpen}>

@@ -40,7 +40,7 @@ export default function MineBookingerTab() {
       <PageHeader
         eyebrow="Min konto"
         title="Mine tider"
-        description="Se kommende reservasjoner, finn detaljer og hold oversikt over det du har spilt."
+        description="Hold oversikt over det du har booket og spilt."
         className="record-collection-page__heading"
       />
 

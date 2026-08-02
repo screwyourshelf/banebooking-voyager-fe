@@ -12,6 +12,7 @@ import {
   SettingsStack,
   SettingsValue,
 } from "@/components/admin";
+import { ServerFeil } from "@/components/errors";
 import { RecordListState, RecordStatus } from "@/components/records";
 import { Button } from "@/components/ui/button";
 
@@ -22,15 +23,16 @@ export default function PersondataView() {
   const { bruker, laster, error, refetch, lastNedEgenData, slettMeg } = useMeg();
 
   const [lasterNed, setLasterNed] = useState(false);
+  const [nedlastingsFeil, setNedlastingsFeil] = useState<string | null>(null);
 
-  if (laster) return <AdminPageLoading label="Laster persondata" />;
+  if (laster) return <AdminPageLoading label="Laster dataene dine" />;
 
   if (error || !bruker) {
     return (
       <AdminPageState>
         <RecordListState
           icon={<CircleAlert aria-hidden="true" />}
-          title="Kunne ikke laste persondata"
+          title="Kunne ikke laste dataene dine"
           description={error?.message ?? "Prøv igjen om litt."}
           action={
             <Button type="button" variant="outline" onClick={() => void refetch()}>
@@ -49,7 +51,12 @@ export default function PersondataView() {
 
     try {
       setLasterNed(true);
+      setNedlastingsFeil(null);
       await lastNedEgenData();
+    } catch (error) {
+      setNedlastingsFeil(
+        error instanceof Error ? error.message : "Kunne ikke laste ned dataene dine."
+      );
     } finally {
       setLasterNed(false);
     }
@@ -60,7 +67,7 @@ export default function PersondataView() {
       <SettingsSection
         eyebrow="Personvern"
         title="Vilkår og samtykke"
-        description="Se hvilke vilkår som er registrert på kontoen din."
+        description="Se når og hvilken versjon du godtok."
       >
         <SettingsPanel>
           <SettingsRow title="Status" description="Vilkårene aksepteres ved første innlogging.">
@@ -94,14 +101,12 @@ export default function PersondataView() {
         description="Last ned opplysningene Banebooking har lagret om deg."
       >
         <SettingsPanel>
-          <SettingsRow
-            title="Datafil"
-            description="JSON med registrerte kontoopplysninger og bookinger."
-          >
+          <SettingsRow title="Datafil" description="JSON med kontoopplysninger og bookede tider.">
             <RecordStatus tone="past">JSON</RecordStatus>
           </SettingsRow>
         </SettingsPanel>
         <AdminFormActions>
+          <ServerFeil feil={nedlastingsFeil} title="Datafilen kunne ikke lastes ned" />
           <Button
             type="button"
             onClick={handleLastNed}

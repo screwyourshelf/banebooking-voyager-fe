@@ -1,8 +1,8 @@
 import axios, { AxiosError, AxiosHeaders, type InternalAxiosRequestConfig } from "axios";
+import { hentUtviklingssession } from "@/auth/developmentSession";
+import { notifySessionExpired } from "@/components/feedback/globalFeedback";
 import { supabase } from "@/supabase";
 import { signOutAndRedirect } from "@/utils/authUtils";
-import { toast } from "sonner";
-import { hentUtviklingssession } from "@/auth/developmentSession";
 
 const rawBase = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 const baseURL = import.meta.env.MODE === "development" || !rawBase ? "/api" : `${rawBase}/api`;
@@ -83,7 +83,7 @@ api.interceptors.response.use(
       if (!isHandling401) {
         isHandling401 = true;
         try {
-          toast.error("Du er logget ut. Vennligst logg inn igjen.");
+          notifySessionExpired();
           await signOutAndRedirect();
         } finally {
           // i tilfelle signOutAndRedirect feiler av en eller annen grunn

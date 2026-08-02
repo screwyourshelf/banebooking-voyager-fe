@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { useApiMutation } from "@/hooks/useApiMutation";
@@ -94,19 +93,8 @@ export function useArrangement(valgtGrenId: string) {
     "post",
     `/klubb/${slug}/arrangement`,
     {
-      onSuccess: async (result) => {
+      onSuccess: async () => {
         clearForhandsvisning();
-        if (result.antallOpprettet === 0) {
-          toast.warning("Ingen bookinger ble opprettet – alle tidspunkter er allerede booket.");
-        } else if (result.konflikter.length > 0) {
-          toast.warning(
-            `${result.antallOpprettet} bookinger opprettet. ${result.konflikter.length} tidspunkt${
-              result.konflikter.length === 1 ? "" : "er"
-            } hadde konflikter og ble hoppet over.`
-          );
-        } else {
-          toast.success(`${result.antallOpprettet} bookinger opprettet.`);
-        }
         await queryClient.invalidateQueries({ queryKey: ["arrangementer-admin", slug] });
         await queryClient.invalidateQueries({ queryKey: ["arrangementer", slug] });
       },

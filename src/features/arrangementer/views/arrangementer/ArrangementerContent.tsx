@@ -1,15 +1,15 @@
 import { useMemo, useState } from "react";
 import { CalendarDays, CalendarX, RefreshCw } from "lucide-react";
 import { usePagination } from "@/hooks/usePagination";
-import FilterSwitch from "@/components/controls/FilterSwitch";
-import { Inline } from "@/components/layout";
 import {
-  RecordChoiceFilter,
+  RecordAccordionList,
+  RecordCollection,
+  RecordCollectionBody,
+  RecordCollectionHeader,
+  RecordCollectionPagination,
   RecordCollectionSkeleton,
-  RecordCollectionToolbar,
   RecordListState,
 } from "@/components/records";
-import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import type { ArrangementRespons } from "@/types";
 
@@ -65,48 +65,48 @@ export default function ArrangementerContent({
   } = usePagination(filteredArrangements, 10, `${String(visHistoriske)}|${grenFilter.join(",")}`);
 
   const countLabel = isLoading
-    ? "Henter arrangementer…"
+    ? "Laster arrangementer…"
     : `${filteredArrangements.length} ${filteredArrangements.length === 1 ? "arrangement" : "arrangementer"}`;
   const hasFilteredEmptyState = arrangementer.length > 0 && filteredArrangements.length === 0;
 
   return (
-    <section
-      className="record-collection arrangements"
-      aria-label="Arrangementsoversikt"
-      aria-busy={isLoading}
-    >
-      <RecordCollectionToolbar
+    <RecordCollection ariaLabel="Arrangementsoversikt" busy={isLoading}>
+      <RecordCollectionHeader
         icon={<CalendarDays />}
         title={countLabel}
-        description={visHistoriske ? "Kommende og gjennomførte" : "Kommende arrangementer"}
-        actions={
-          <FilterSwitch
-            title="Vis tidligere"
-            checked={visHistoriske}
-            onCheckedChange={onToggleVisHistoriske}
-            disabled={isFetching}
-          />
+        description={visHistoriske ? "Kommende og tidligere" : "Kommende"}
+        toggle={{
+          title: "Vis tidligere",
+          checked: visHistoriske,
+          onCheckedChange: onToggleVisHistoriske,
+          disabled: isFetching,
+        }}
+        filter={
+          grener.length > 1
+            ? {
+                label: "Filtrer på gren",
+                groups: [
+                  {
+                    label: "Gren",
+                    options: grener.map((gren) => ({ value: gren, label: gren })),
+                    selectedValues: grenFilter,
+                    onToggle: toggleGren,
+                  },
+                ],
+                onReset: () => setGrenFilter([]),
+                disabled: isFetching,
+              }
+            : undefined
         }
       />
 
-      {grener.length > 1 ? (
-        <RecordChoiceFilter
-          label="Gren"
-          options={grener.map((gren) => ({ value: gren, label: gren }))}
-          selectedValues={grenFilter}
-          onToggle={toggleGren}
-          onReset={() => setGrenFilter([])}
-          disabled={isFetching}
-        />
-      ) : null}
-
-      <div className="record-collection__body">
+      <RecordCollectionBody>
         {isLoading ? (
           <RecordCollectionSkeleton ariaLabel="Laster arrangementer" layout="date" />
         ) : queryError ? (
           <RecordListState
             icon={<RefreshCw aria-hidden="true" />}
-            title="Kunne ikke hente arrangementene"
+            title="Kunne ikke laste arrangementene"
             description={queryError}
             tone="danger"
             role="alert"
@@ -136,7 +136,7 @@ export default function ArrangementerContent({
               hasFilteredEmptyState
                 ? "Velg en annen gren eller nullstill filteret."
                 : visHistoriske
-                  ? "Når klubben oppretter arrangementer, finner du både kommende og gjennomførte her."
+                  ? "Når klubben publiserer noe, vises kommende og tidligere arrangementer her."
                   : "Nye arrangementer dukker opp her når de blir publisert av klubben."
             }
             action={
@@ -149,29 +149,27 @@ export default function ArrangementerContent({
           />
         ) : (
           <>
-            <Accordion
-              type="single"
-              collapsible
-              className="record-list arrangements__list"
+            <RecordAccordionList
               value={openId}
               onValueChange={setOpenId}
-              data-loading={isFetching}
+              loading={isFetching}
+              ariaLabel="Arrangementer"
             >
               {visibleArrangements.map((arrangement) => (
                 <ArrangementRow key={arrangement.id} arrangement={arrangement} onAvlys={onAvlys} />
               ))}
-            </Accordion>
+            </RecordAccordionList>
 
             {harFlere ? (
-              <Inline justify="center" className="record-collection__pagination">
+              <RecordCollectionPagination>
                 <Button type="button" variant="outline" size="sm" onClick={visFlere}>
                   Vis flere ({gjenstaar} gjenstår)
                 </Button>
-              </Inline>
+              </RecordCollectionPagination>
             ) : null}
           </>
         )}
-      </div>
-    </section>
+      </RecordCollectionBody>
+    </RecordCollection>
   );
 }

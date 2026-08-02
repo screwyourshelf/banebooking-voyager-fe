@@ -1,5 +1,55 @@
 @media (min-width: 48rem) {
   @layer components {
+    :is(
+      .admin-page,
+      .admin-editor-dialog,
+      .booking-page,
+      .record-collection-page,
+      .user-admin-page
+    ) {
+      --app-type-caption: var(--app-type-caption-comfortable);
+      --app-type-label: var(--app-type-label-comfortable);
+      --app-type-body-sm: var(--app-type-body-sm-comfortable);
+      --app-type-body: var(--app-type-body-comfortable);
+      --app-type-body-lg: var(--app-type-body-lg-comfortable);
+      --app-type-heading-sm: var(--app-type-heading-sm-comfortable);
+      --app-type-heading-md: var(--app-type-heading-md-comfortable);
+    }
+
+    .action-feedback {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .action-feedback__action {
+      justify-self: end;
+    }
+
+    .action-feedback__action > button,
+    .action-feedback__action > a {
+      width: auto;
+    }
+
+    [data-slot="alert-dialog-footer"]:has(> .action-feedback) {
+      grid-template-columns: minmax(0, 1fr) auto auto;
+    }
+
+    [data-slot="alert-dialog-footer"] > .action-feedback {
+      grid-column: 1 / -1;
+    }
+
+    [data-slot="alert-dialog-footer"]:has(> .action-feedback) > [data-slot="alert-dialog-cancel"] {
+      grid-column: 2;
+    }
+
+    [data-slot="alert-dialog-footer"]:has(> .action-feedback) > [data-slot="alert-dialog-action"] {
+      grid-column: 3;
+    }
+
+    [data-slot="alert-dialog-footer"]:has(> .action-feedback) > [data-slot="alert-dialog-cancel"],
+    [data-slot="alert-dialog-footer"]:has(> .action-feedback) > [data-slot="alert-dialog-action"] {
+      width: auto;
+    }
+
     .app-shell__frame {
       display: grid;
       grid-template-columns: var(--app-sidebar-rail-width) minmax(0, 1fr);
@@ -129,11 +179,11 @@
     }
 
     .admin-page__heading .page-heading__title {
-      font-size: 3rem;
+      font-size: var(--app-type-page-title);
     }
 
     .admin-page__heading .page-heading__description {
-      font-size: 1.125rem;
+      font-size: var(--app-type-body-lg);
     }
 
     .section-tabs {
@@ -181,6 +231,10 @@
       grid-template-columns: repeat(2, minmax(0, 1fr));
     }
 
+    .settings-radio-group[data-layout="stacked"] {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
     .settings-choice-group .control-choice {
       min-width: 4.25rem;
     }
@@ -203,11 +257,7 @@
       padding: 1.25rem 1.5rem;
     }
 
-    .admin-entity-list {
-      padding-inline: 1.5rem;
-    }
-
-    .admin-entity-row {
+    .record-card-button {
       gap: 1rem;
     }
 
@@ -215,11 +265,7 @@
       gap: 0.75rem;
     }
 
-    .admin-action-row__summary {
-      padding-block: 0.875rem;
-    }
-
-    .admin-action-row__actions {
+    .admin-action-row__footer {
       margin-inline: 1.5rem;
     }
 
@@ -249,7 +295,7 @@
     }
 
     .admin-editor-dialog__heading [data-slot="dialog-title"] {
-      font-size: 2rem;
+      font-size: 2rem !important;
     }
 
     .booking-page__heading {
@@ -259,11 +305,11 @@
     }
 
     .booking-page__heading .page-heading__title {
-      font-size: 3rem;
+      font-size: var(--app-type-page-title);
     }
 
     .booking-page__heading .page-heading__description {
-      font-size: 1.125rem;
+      font-size: var(--app-type-body-lg);
     }
 
     .user-admin-page__content {
@@ -277,216 +323,20 @@
     }
 
     .user-admin-page__heading .page-heading__title {
-      font-size: 3rem;
+      font-size: var(--app-type-page-title);
     }
 
     .user-admin-page__heading .page-heading__description {
-      font-size: 1.125rem;
-    }
-
-    .user-directory {
-      border-radius: 1.5rem;
-    }
-
-    .user-filter-panel {
-      --control-choice-border: var(--app-line);
-      --control-choice-bg: var(--app-surface);
-      --control-choice-text: var(--app-ink-soft);
-      --control-choice-hover-bg: var(--muted);
-      --control-choice-hover-text: var(--app-ink);
-      --control-choice-selected-border: color-mix(
-        in srgb,
-        var(--app-choice-indicator) 48%,
-        var(--app-line)
-      );
-      --control-choice-selected-bg: color-mix(
-        in srgb,
-        var(--app-choice-indicator) 8%,
-        var(--app-surface)
-      );
-      --control-choice-selected-text: var(--app-ink);
-      --control-choice-indicator: var(--app-choice-indicator);
-      --filter-switch-bg: color-mix(in srgb, var(--app-surface) 72%, transparent);
-      --filter-switch-text: var(--app-ink);
-      --filter-switch-muted: var(--app-ink-faint);
-      border-bottom-color: var(--app-line);
-      background: var(--app-surface-subtle);
-      color: var(--app-ink);
-      padding: 1.25rem 1.5rem;
-    }
-
-    .user-filter-panel__search > svg {
-      color: var(--app-ink-faint);
-    }
-
-    .user-filter-panel__search [data-slot="input"] {
-      border-color: var(--app-line-strong) !important;
-      background: var(--app-surface) !important;
-      color: var(--app-ink);
-    }
-
-    .user-filter-panel__search [data-slot="input"]::placeholder {
-      color: var(--app-ink-faint) !important;
-    }
-
-    .user-filter-panel__clear-search {
-      color: var(--app-ink-faint);
-    }
-
-    .user-filter-panel__clear-search:hover {
-      background: var(--muted);
-      color: var(--app-ink);
-    }
-
-    .user-filter-panel__search-row {
-      display: block;
-    }
-
-    .user-filter-panel__search {
-      max-width: 34rem;
-    }
-
-    .user-filter-panel__mobile-toggle-wrap {
-      display: none;
-    }
-
-    .user-filter-panel__filters,
-    .user-filter-panel__filters[data-open="false"],
-    .user-filter-panel__filters[data-open="true"] {
-      display: grid;
-      grid-template-columns: auto auto minmax(11rem, 1fr) auto;
-      align-items: end;
-      gap: 1.25rem;
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top-color: var(--app-line);
-    }
-
-    .user-filter-panel__group legend {
-      color: var(--app-ink-faint);
-    }
-
-    .user-filter-panel__deleted {
-      min-width: 11rem;
-    }
-
-    .user-filter-panel__reset {
-      align-self: center;
-      color: var(--app-brand) !important;
-    }
-
-    .user-directory__result-heading {
-      min-height: 4.5rem;
-      padding: 0.875rem 1.5rem;
-    }
-
-    .user-directory__result-heading small {
-      display: block;
-    }
-
-    .user-directory__table-heading {
-      display: grid;
-      grid-template-columns:
-        minmax(12rem, 1.45fr) minmax(5.5rem, 0.45fr) minmax(8rem, 0.65fr)
-        minmax(5.5rem, 0.35fr) 1rem;
-      align-items: center;
-      gap: 1rem;
-      border-bottom: 1px solid var(--app-line);
-      background: var(--app-surface-subtle);
-      padding: 0.55rem 1.5rem;
-      color: var(--app-ink-faint);
-      font-size: var(--app-type-caption);
-      font-weight: 720;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      font-size: var(--app-type-body-lg);
     }
 
     .user-directory-row__summary {
-      display: grid;
-      grid-template-columns:
-        minmax(12rem, 1.45fr) minmax(5.5rem, 0.45fr) minmax(8rem, 0.65fr)
-        minmax(5.5rem, 0.35fr);
-      align-items: center;
       gap: 1rem;
-    }
-
-    .user-directory-row__mobile-meta {
-      display: none;
-    }
-
-    .user-directory-row__cell {
-      display: flex;
-      min-width: 0;
-      align-items: center;
-      gap: 0.45rem;
-      color: var(--app-ink-soft);
-      font-size: var(--app-type-label);
-      font-weight: 620;
-      line-height: 1.3;
-    }
-
-    .user-directory-row__role {
-      width: fit-content;
-      border-radius: 999px;
-      background: var(--status-busy-bg);
-      padding: 0.3rem 0.55rem;
-      color: var(--status-busy-text);
-    }
-
-    .user-directory-row__membership i,
-    .user-directory-row__account-status i {
-      width: 0.45rem;
-      height: 0.45rem;
-      flex: 0 0 auto;
-      border-radius: 999px;
-      background: var(--app-line-strong);
-    }
-
-    .user-directory-row__membership[data-membership-status="bekreftet"] {
-      color: var(--status-available-text);
-    }
-
-    .user-directory-row__membership[data-membership-status="bekreftet"] i,
-    .user-directory-row__account-status[data-account-status="aktiv"] i {
-      background: var(--status-available-indicator);
-    }
-
-    .user-directory-row__membership[data-membership-status="mangler"] {
-      color: var(--status-warning-text);
-    }
-
-    .user-directory-row__membership[data-membership-status="mangler"] i {
-      background: var(--status-warning-indicator);
-    }
-
-    .user-directory-row__account-status[data-account-status="sperret"],
-    .user-directory-row__account-status[data-account-status="slettet"] {
-      color: var(--status-danger-text);
-    }
-
-    .user-directory-row__account-status[data-account-status="sperret"] i,
-    .user-directory-row__account-status[data-account-status="slettet"] i {
-      background: var(--status-danger-indicator);
-    }
-
-    .user-directory-row__details {
-      padding: 1rem 1.5rem 1.25rem;
     }
 
     .user-directory-row__detail-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1rem 1.5rem;
-    }
-
-    .user-directory-row__actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 0.5rem;
-    }
-
-    .user-directory-row__actions [data-slot="button"] {
-      width: auto;
-      padding-inline: 0.75rem;
     }
 
     .user-editor-dialog {
@@ -510,11 +360,11 @@
     }
 
     .record-collection-page__heading .page-heading__title {
-      font-size: 3rem;
+      font-size: var(--app-type-page-title);
     }
 
     .record-collection-page__heading .page-heading__description {
-      font-size: 1.125rem;
+      font-size: var(--app-type-body-lg);
     }
 
     .record-collection {
@@ -526,43 +376,57 @@
       padding: 0.875rem 1.5rem;
     }
 
-    .record-collection__summary-copy small {
-      display: block;
-    }
-
     .record-collection__toolbar-actions .filter-switch {
       min-width: 11rem;
     }
 
-    .record-choice-filter {
+    .record-filter-panel {
       padding: 0.75rem 1.5rem 0.875rem;
     }
 
-    .record-choice-filter__mobile-heading {
+    .record-filter-panel:not([data-has-search="true"]) .record-filter-panel__top,
+    .record-filter-panel__toggle {
       display: none;
     }
 
-    .record-choice-filter__content,
-    .record-choice-filter[data-open="false"] .record-choice-filter__content,
-    .record-choice-filter[data-open="true"] .record-choice-filter__content {
+    .record-filter-panel__search {
+      max-width: 34rem;
+    }
+
+    .record-filter-panel__content,
+    .record-filter-panel[data-open="false"] .record-filter-panel__content,
+    .record-filter-panel[data-open="true"] .record-filter-panel__content {
       display: flex;
-      flex-wrap: nowrap;
-      align-items: center;
-      gap: 0.75rem;
+      flex-wrap: wrap;
+      align-items: end;
+      gap: var(--app-space-lg);
       margin-top: 0;
       border-top: 0;
       padding-top: 0;
     }
 
-    .record-choice-filter__content legend {
-      width: auto;
-      flex: 0 0 auto;
+    .record-filter-panel[data-has-search="true"] .record-filter-panel__content {
+      margin-top: var(--app-space-md);
+      border-top: 1px solid color-mix(in srgb, var(--app-control-text) 14%, transparent);
+      padding-top: var(--app-space-md);
+    }
+
+    .record-filter-panel:not([data-has-search="true"]) .record-filter-panel__group {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .record-filter-panel__reset {
+      align-self: center;
+      margin-left: auto;
     }
 
     .record-card__static,
     .record-card__trigger {
-      min-height: 5.25rem;
-      padding: 0.75rem 1.5rem;
+      min-height: 5.25rem !important;
+      padding: 0.75rem 1.5rem !important;
     }
 
     .record-card__trigger > [data-slot="accordion-trigger-icon"] {
@@ -573,8 +437,21 @@
       gap: 1rem;
     }
 
+    .record-card__summary[data-layout="slot"] {
+      grid-template-columns: 6rem minmax(10rem, 1fr);
+      gap: 1.25rem;
+    }
+
+    .record-card__summary[data-layout="time"] {
+      grid-template-columns: 7rem minmax(12rem, 1fr) auto;
+    }
+
+    .record-card__summary[data-layout="date"] {
+      grid-template-columns: 9rem minmax(14rem, 1fr) auto;
+    }
+
     .record-card__details {
-      padding-inline: 1.5rem;
+      padding: 1rem 1.5rem 1.25rem !important;
     }
 
     .record-collection-skeleton {
@@ -605,26 +482,6 @@
       padding-inline: 1.5rem;
     }
 
-    .mine-booking__summary {
-      grid-template-columns: 7rem minmax(12rem, 1fr) auto;
-    }
-
-    .mine-booking__time {
-      font-size: var(--app-type-label);
-    }
-
-    .mine-booking__time-range strong {
-      font-size: var(--app-type-body-lg);
-    }
-
-    .mine-booking__court {
-      font-size: var(--app-type-body);
-    }
-
-    .mine-booking__details {
-      padding-block: 1rem;
-    }
-
     .mine-booking__detail-content {
       display: flex;
       align-items: flex-end;
@@ -635,29 +492,6 @@
     .mine-booking__facts {
       width: min(28rem, 100%);
       gap: 1.5rem;
-    }
-
-    .mine-booking__actions {
-      flex: 0 0 auto;
-      border-top: 0;
-      padding-top: 0;
-    }
-
-    .arrangements__list {
-      padding-block: 1rem 1.5rem;
-    }
-
-    .arrangement-card__summary {
-      grid-template-columns: 9rem minmax(14rem, 1fr) auto;
-    }
-
-    .arrangement-card__date-start,
-    .arrangement-card__identity strong {
-      font-size: var(--app-type-body);
-    }
-
-    .arrangement-card__details {
-      padding-block: 1rem 1.25rem;
     }
 
     .arrangement-card__detail-content {
@@ -682,22 +516,6 @@
       gap: 1.5rem;
     }
 
-    .booking-controls {
-      display: block;
-    }
-
-    .booking-control-section {
-      padding: 1.125rem 1.25rem;
-    }
-
-    .booking-control-section__heading {
-      margin-bottom: 0.75rem;
-    }
-
-    .booking-control-section__heading strong {
-      display: block;
-    }
-
     .feed-notice {
       grid-template-columns: auto minmax(0, 1fr) auto;
       align-items: center;
@@ -710,167 +528,25 @@
       padding-inline: 0.75rem;
     }
 
-    .booking-date-nav__scroller {
-      display: grid;
-      grid-template-columns: repeat(6, minmax(0, 1fr));
-      overflow: visible;
-    }
-
-    .booking-date-nav__day {
-      display: flex;
-      min-width: 0;
-      padding-inline: 0.65rem;
-    }
-
-    .booking-date-nav__day:nth-child(n + 5) {
-      display: flex;
-    }
-
-    .booking-date-nav__day span {
-      font-size: var(--app-type-caption);
-    }
-
     .booking-workspace {
       border-radius: 1.5rem;
     }
 
-    .booking-schedule__eyebrow {
-      display: block;
-    }
-
-    .booking-schedule__summary {
-      display: block;
-    }
-
-    .booking-schedule__title--desktop {
-      display: block;
-    }
-
-    .booking-schedule__meta {
-      margin-top: 0.2rem;
-    }
-
-    .booking-schedule__meta-activity {
-      display: none;
-    }
-
-    .booking-schedule__actions {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-    }
-
-    .booking-mobile-controls {
-      display: none;
-    }
-
-    .booking-court-switcher {
-      display: none;
+    .booking-primary-controls {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
     }
 
     .booking-schedule__header {
       padding: 1.25rem 1.5rem;
     }
 
-    .booking-schedule__columns {
-      display: grid;
-      grid-template-columns: 6.75rem minmax(10rem, 1fr) 7.5rem;
-      gap: 1.25rem;
-      padding: 0.625rem 1.5rem;
-    }
-
-    .booking-schedule__columns span:last-child {
-      justify-self: end;
-    }
-
     .booking-schedule__body {
       padding: 0;
     }
 
-    .booking-slot-list {
-      gap: var(--app-record-gap);
-    }
-
-    .booking-slot {
-      background: var(--app-surface);
-    }
-
-    .booking-slot:hover {
-      background: var(--app-surface-subtle);
-    }
-
-    .booking-slot__trigger {
-      min-height: 4.625rem;
-      padding: 1rem 1.5rem;
-    }
-
-    .booking-slot__summary {
-      grid-template-columns: 6.75rem minmax(10rem, 1fr) auto;
-      gap: 1.25rem;
-    }
-
-    .booking-slot__summary--mobile {
-      display: none;
-    }
-
-    .booking-slot__summary--desktop {
-      display: grid;
-    }
-
-    .booking-slot__time {
-      flex-direction: row;
-      align-items: baseline;
-      gap: 0.3rem;
-    }
-
-    .booking-slot__time > span:not(.sr-only) {
-      margin-top: 0;
-    }
-
-    .booking-slot__status {
-      display: inline-flex;
-    }
-
-    .booking-slot__status[data-hidden="true"] {
-      display: none;
-    }
-
-    .booking-slot__weather--desktop {
-      display: flex;
-      min-width: 7.5rem;
-      align-items: center;
-      justify-content: flex-end;
-    }
-
-    .booking-slot__meta {
-      display: flex;
-      min-width: 8rem;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 1rem;
-    }
-
     .booking-slot__quick-action {
       margin-right: 1.5rem;
-    }
-
-    .booking-slot__details {
-      padding: 1rem 1.5rem;
-    }
-
-    .booking-slot__actions {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: flex-end;
-      gap: 0.5rem;
-      margin: 0;
-      border-top: 1px solid var(--app-line);
-      padding-top: 0.5rem;
-    }
-
-    .booking-slot__detail-action {
-      width: auto;
-      min-height: 2rem;
     }
 
     .booking-slot-list__past-toggle {
@@ -963,51 +639,8 @@
       padding: 0.75rem 2.5rem 3rem;
     }
 
-    .booking-control-section {
-      padding: 1.25rem 1.5rem;
-    }
-
-    .booking-filter-panel {
-      position: static;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      padding: 0;
-    }
-
-    .booking-choice-list {
-      flex-direction: row;
-      overflow-x: auto;
-    }
-
-    .booking-choice {
-      width: auto;
-      justify-content: center;
-      border-radius: 0.55rem;
-    }
-
-    .booking-slot__summary {
-      grid-template-columns: 7rem minmax(12rem, 1fr) auto;
-    }
-
-    .booking-schedule__columns {
-      grid-template-columns: 7rem minmax(12rem, 1fr) 7.5rem;
-    }
-  }
-}
-
-@media (min-width: 84rem) {
-  @layer components {
-    .booking-controls {
-      display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-    }
-
-    .booking-filter-panel {
-      grid-template-columns: minmax(0, 1fr) minmax(6rem, 0.25fr);
-    }
-
-    .booking-control-section + .booking-control-section {
-      border-top: 0;
-      border-left: 1px solid var(--app-line);
+    .record-card__summary[data-layout="slot"] {
+      grid-template-columns: 7rem minmax(12rem, 1fr);
     }
   }
 }

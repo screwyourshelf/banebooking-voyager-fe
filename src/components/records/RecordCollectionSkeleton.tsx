@@ -1,32 +1,31 @@
-import { cn } from "@/lib/utils";
+import { RecordCard } from "./RecordCard";
+import { RecordList } from "./RecordList";
 
 type Props = {
   ariaLabel: string;
   rows?: number;
   layout?: "time" | "date";
-  className?: string;
 };
 
-export default function RecordCollectionSkeleton({
-  ariaLabel,
-  rows = 3,
-  layout = "time",
-  className,
-}: Props) {
+export default function RecordCollectionSkeleton({ ariaLabel, rows = 3, layout = "time" }: Props) {
   return (
     <div
-      className={cn("record-list record-collection-skeleton", className)}
+      className="record-collection-skeleton"
       data-layout={layout}
       role="status"
       aria-label={ariaLabel}
     >
-      {Array.from({ length: rows }, (_, index) => (
-        <div key={index} className="record-card record-collection-skeleton__row">
-          <span />
-          <span />
-          <span />
-        </div>
-      ))}
+      <RecordList>
+        {Array.from({ length: rows }, (_, index) => (
+          <RecordCard key={index}>
+            <div className="record-collection-skeleton__row" aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </div>
+          </RecordCard>
+        ))}
+      </RecordList>
     </div>
   );
 }

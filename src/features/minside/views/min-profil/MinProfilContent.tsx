@@ -19,8 +19,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { ServerFeil } from "@/components/errors";
+import { MutationFeedback } from "@/components/feedback";
 import { RecordStatus } from "@/components/records";
+import { formaterMedlemskapType } from "@/utils/brukerPresentation";
 
 export type Mode = "epost" | "navn";
 
@@ -40,6 +41,7 @@ type Props = {
   isSaving: boolean;
   error: string | null;
   serverFeil?: string | null;
+  lagret?: boolean;
 
   onSubmit: () => void;
 
@@ -50,13 +52,6 @@ type Props = {
   medlemskapBekreftetDato?: string | null;
 
   deleteAction: ReactNode;
-};
-
-const MEDLEMSKAP_TYPE_LABELS: Record<string, string> = {
-  BarnJunior: "Barn/junior (inntil 19 år)",
-  StudentVernepliktig: "Student/vernepliktig",
-  Voksen: "Voksen",
-  Familie: "Familiemedlemskap",
 };
 
 export default function MinProfilContent({
@@ -71,6 +66,7 @@ export default function MinProfilContent({
   isSaving,
   error,
   serverFeil,
+  lagret = false,
   onSubmit,
   medlemskapBekreftelseLabel,
   fulltNavn,
@@ -132,7 +128,11 @@ export default function MinProfilContent({
           </SettingsPanel>
 
           <AdminFormActions>
-            <ServerFeil feil={serverFeil} />
+            <MutationFeedback
+              error={serverFeil}
+              success={lagret}
+              successTitle="Visningsnavnet er lagret"
+            />
             <AdminFormSubmitButton isLoading={isSaving} disabled={!canSubmit} loadingText="Lagrer…">
               Lagre endringer
             </AdminFormSubmitButton>
@@ -149,7 +149,7 @@ export default function MinProfilContent({
           <SettingsRow title="E-post">
             <SettingsValue>{epost}</SettingsValue>
           </SettingsRow>
-          <SettingsRow title="Tilgang">
+          <SettingsRow title="Rolle">
             <SettingsValue>{rollerText}</SettingsValue>
           </SettingsRow>
           {medlemskapBekreftelseLabel ? (
@@ -163,10 +163,8 @@ export default function MinProfilContent({
             </SettingsRow>
           ) : null}
           {medlemskapBekreftelseLabel && medlemskapType ? (
-            <SettingsRow title="Type medlemskap">
-              <SettingsValue>
-                {MEDLEMSKAP_TYPE_LABELS[medlemskapType] ?? medlemskapType}
-              </SettingsValue>
+            <SettingsRow title="Medlemskapstype">
+              <SettingsValue>{formaterMedlemskapType(medlemskapType)}</SettingsValue>
             </SettingsRow>
           ) : null}
           {medlemskapBekreftelseLabel && medlemskapBekreftetDato ? (
@@ -181,8 +179,8 @@ export default function MinProfilContent({
 
       <SettingsSection
         eyebrow="Fareområde"
-        title="Slett bruker"
-        description="Sletter brukeren og all tilknyttet data permanent. Handlingen kan ikke angres."
+        title="Slett konto"
+        description="Sletter kontoen og alle tilknyttede data permanent. Handlingen kan ikke angres."
         tone="danger"
       >
         <AdminFormActions>{deleteAction}</AdminFormActions>

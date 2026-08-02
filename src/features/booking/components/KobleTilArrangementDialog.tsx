@@ -1,98 +1,141 @@
-import { useState } from "react";
+import type { ReactNode } from "react";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+  AdminEditorDialog,
+  AdminFormActions,
+  AdminSettingsForm,
+  SettingsPanel,
+  SettingsRadioGroup,
+  SettingsRow,
+  SettingsSection,
+  SettingsStack,
+} from "@/components/admin";
+import { RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
-import { useAktiveArrangementer } from "../hooks/useAktiveArrangementer";
+import { useArrangementBookingDialog } from "../hooks/useArrangementBookingDialog";
+import type { AktivtArrangementRespons } from "@/types";
 
 type Props = {
   valgtId: string | null;
   onVelg: (id: string | null, tittel?: string) => void;
-  children: React.ReactNode;
+  children: ReactNode;
+};
+
+type SelectionProps = {
+  arrangementer: AktivtArrangementRespons[];
+  valgtArrangementId: string | null;
+  isLoading: boolean;
+  isFetching: boolean;
+  error: Error | null;
+  onArrangementChange: (arrangementId: string) => void;
+  onRetry: () => void;
 };
 
 export default function KobleTilArrangementDialog({ valgtId, onVelg, children }: Props) {
-  const [open, setOpen] = useState(false);
-  const [lokaltValgtId, setLokaltValgtId] = useState<string | null>(valgtId);
+  const dialog = useArrangementBookingDialog({ valgtId, onVelg });
 
-  const { data, isLoading } = useAktiveArrangementer(open);
+  return (
+    <AdminEditorDialog
+      open={dialog.open}
+      onOpenChange={dialog.handleOpenChange}
+      trigger={children}
+      backLabel="Til booking"
+      eyebrow="Booking"
+      title="Koble til arrangement"
+      description="Velg hvilket aktivt arrangement tiden skal høre til."
+    >
+      <AdminSettingsForm
+        onSubmit={(event) => {
+          event.preventDefault();
+          dialog.handleSubmit();
+        }}
+      >
+        <SettingsStack>
+          <SettingsSection
+            title="Aktive arrangementer"
+            description="Valget gjelder bare denne tiden."
+          >
+            <ArrangementSelection
+              arrangementer={dialog.arrangementer}
+              valgtArrangementId={dialog.valgtArrangementId}
+              isLoading={dialog.isLoading}
+              isFetching={dialog.isFetching}
+              error={dialog.error}
+              onArrangementChange={dialog.handleArrangementChange}
+              onRetry={() => void dialog.refetch()}
+            />
+          </SettingsSection>
+        </SettingsStack>
 
-  function handleOpenChange(isOpen: boolean) {
-    if (isOpen) setLokaltValgtId(valgtId);
-    setOpen(isOpen);
+        <AdminFormActions>
+          <Button
+            type="submit"
+            disabled={!dialog.valgtArrangementId || dialog.isLoading || Boolean(dialog.error)}
+          >
+            Koble til valgt arrangement
+          </Button>
+        </AdminFormActions>
+      </AdminSettingsForm>
+    </AdminEditorDialog>
+  );
+}
+
+function ArrangementSelection({
+  arrangementer,
+  valgtArrangementId,
+  isLoading,
+  isFetching,
+  error,
+  onArrangementChange,
+  onRetry,
+}: SelectionProps) {
+  if (isLoading) {
+    return <RecordListState title="Laster arrangementer…" />;
   }
 
-  function handleBekreft() {
-    const valgt = data?.find((a) => a.id === lokaltValgtId);
-    onVelg(lokaltValgtId, valgt?.tittel);
-    setOpen(false);
+  if (error) {
+    return (
+      <RecordListState
+        title="Kunne ikke laste arrangementene"
+        description={error.message}
+        tone="danger"
+        role="alert"
+        action={
+          <Button type="button" variant="outline" size="sm" onClick={onRetry} disabled={isFetching}>
+            {isFetching ? "Prøver igjen…" : "Prøv igjen"}
+          </Button>
+        }
+      />
+    );
+  }
+
+  if (arrangementer.length === 0) {
+    return (
+      <RecordListState
+        title="Ingen aktive arrangementer"
+        description="Opprett eller aktiver et arrangement før du kobler tiden til det."
+      />
+    );
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-
-      <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-hidden">
-        <DialogHeader>
-          <DialogTitle>Koble til arrangement</DialogTitle>
-          <DialogDescription className="sr-only">
-            Velg et arrangement å knytte bookingen til
-          </DialogDescription>
-        </DialogHeader>
-
-        <p className="text-sm text-muted-foreground">
-          Velg et pågående arrangement å knytte bookingen til, eller bekreft uten tilknytning.
-        </p>
-
-        <div className="max-h-[50dvh] overflow-y-auto pr-1">
-          {isLoading && (
-            <p className="text-sm text-muted-foreground italic">Henter arrangementer…</p>
-          )}
-
-          {!isLoading && data?.length === 0 && (
-            <p className="text-sm text-muted-foreground italic">
-              Ingen aktive arrangementer funnet.
-            </p>
-          )}
-
-          {data && data.length > 0 && (
-            <ul className="space-y-1 pb-1">
-              {data.map((arr) => (
-                <li key={arr.id}>
-                  <button
-                    type="button"
-                    aria-label="Velg arrangement"
-                    onClick={() => setLokaltValgtId(lokaltValgtId === arr.id ? null : arr.id)}
-                    className={`w-full overflow-hidden rounded-md border px-3 py-2 text-left text-sm transition-colors ${
-                      lokaltValgtId === arr.id
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border hover:bg-muted"
-                    }`}
-                  >
-                    <div className="font-medium">{arr.tittel}</div>
-                    {arr.beskrivelse && (
-                      <div className="mt-0.5 truncate text-xs opacity-70">{arr.beskrivelse}</div>
-                    )}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          )}
-        </div>
-
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
-            Avbryt
-          </Button>
-          <Button onClick={handleBekreft}>Bekreft</Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+    <SettingsPanel>
+      <SettingsRow title="Arrangement" description="Velg ett arrangement fra listen.">
+        <SettingsRadioGroup
+          label="Aktive arrangementer"
+          layout="stacked"
+          options={arrangementer.map(toRadioOption)}
+          value={valgtArrangementId ?? ""}
+          onValueChange={onArrangementChange}
+        />
+      </SettingsRow>
+    </SettingsPanel>
   );
+}
+
+function toRadioOption(arrangement: AktivtArrangementRespons) {
+  return {
+    value: arrangement.id,
+    label: arrangement.tittel,
+    description: arrangement.beskrivelse || "Aktivt arrangement",
+  };
 }

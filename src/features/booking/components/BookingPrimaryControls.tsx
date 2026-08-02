@@ -1,9 +1,8 @@
 import { addDays, format, isSameDay, startOfDay } from "date-fns";
 import { nb } from "date-fns/locale";
 
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import ControlChoice from "@/components/controls/ControlChoice";
+import DatePickerPopover from "@/components/controls/DatePickerPopover";
 
 import type { GrenRespons } from "@/types";
 
@@ -15,7 +14,7 @@ type Props = {
   onDatoChange: (dato: Date | null) => void;
 };
 
-export default function BookingMobileControls({
+export default function BookingPrimaryControls({
   grener,
   valgtGrenId,
   onGrenChange,
@@ -31,13 +30,13 @@ export default function BookingMobileControls({
   const vistDatoLang = format(vistDato, "d. MMMM", { locale: nb });
 
   return (
-    <div className="booking-mobile-controls">
-      <div className="booking-mobile-controls__group">
-        <div className="booking-mobile-controls__activities" aria-label="Velg aktivitet">
+    <div className="booking-primary-controls">
+      <div className="booking-primary-controls__group">
+        <div className="booking-primary-controls__activities" aria-label="Velg gren">
           {grener.map((gren) => (
             <ControlChoice
               key={gren.id}
-              className="booking-mobile-controls__activity"
+              className="booking-primary-controls__activity"
               selected={gren.id === valgtGrenId}
               onClick={() => onGrenChange(gren.id)}
             >
@@ -47,43 +46,31 @@ export default function BookingMobileControls({
         </div>
       </div>
 
-      <div className="booking-mobile-controls__group">
-        <div className="booking-mobile-controls__quick-dates" aria-label="Velg dag">
+      <div className="booking-primary-controls__group">
+        <div className="booking-primary-controls__quick-dates" aria-label="Velg dag">
           <ControlChoice
-            className="booking-mobile-controls__quick-date"
+            className="booking-primary-controls__quick-date"
             selected={valgtDato ? isSameDay(valgtDato, iDag) : false}
             onClick={() => onDatoChange(iDag)}
           >
             I dag
           </ControlChoice>
           <ControlChoice
-            className="booking-mobile-controls__quick-date"
+            className="booking-primary-controls__quick-date"
             selected={valgtDato ? isSameDay(valgtDato, iMorgen) : false}
             onClick={() => onDatoChange(iMorgen)}
           >
             I morgen
           </ControlChoice>
-          <Popover>
-            <PopoverTrigger asChild>
-              <ControlChoice
-                className="booking-mobile-controls__quick-date"
-                selected={erAnnenDato}
-                aria-label={`Velg dato. Viser ${vistDatoLang}`}
-              >
-                {vistDatoKort}
-              </ControlChoice>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0" align="end">
-              <Calendar
-                mode="single"
-                selected={valgtDato ?? undefined}
-                locale={nb}
-                onSelect={(dato) => {
-                  if (dato) onDatoChange(dato);
-                }}
-              />
-            </PopoverContent>
-          </Popover>
+          <DatePickerPopover value={valgtDato} onChange={onDatoChange} align="end">
+            <ControlChoice
+              className="booking-primary-controls__quick-date"
+              selected={erAnnenDato}
+              aria-label={`Velg dato. Viser ${vistDatoLang}`}
+            >
+              {vistDatoKort}
+            </ControlChoice>
+          </DatePickerPopover>
         </div>
       </div>
     </div>

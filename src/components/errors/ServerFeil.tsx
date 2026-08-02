@@ -1,16 +1,18 @@
-import { AlertCircle } from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { ActionFeedback } from "@/components/feedback";
 
 type Props = {
   feil?: string | null;
+  title?: string;
 };
 
-export function ServerFeil({ feil }: Props) {
+export function ServerFeil({ feil, title }: Props) {
   if (!feil) return null;
+
   return (
-    <Alert variant="destructive">
-      <AlertCircle className="h-4 w-4" />
-      <AlertDescription>{feil}</AlertDescription>
-    </Alert>
+    <ActionFeedback
+      tone="danger"
+      title={title ?? "Handlingen kunne ikke fullføres"}
+      description={feil}
+    />
   );
 }

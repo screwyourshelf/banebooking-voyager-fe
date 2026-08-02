@@ -1,16 +1,15 @@
 import type { ReactNode } from "react";
 import { Ban, CalendarDays, Tag, UserRound } from "lucide-react";
-import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { RecordEyebrow } from "@/components/records";
+import {
+  RecordAccordionCard,
+  RecordCardActions,
+  RecordCardDetails,
+  RecordCardTrigger,
+  RecordEyebrow,
+} from "@/components/records";
 import type { BrukerRespons, RolleType } from "@/features/brukere/types";
-
-const MEDLEMSKAP_TYPE_LABELS: Record<string, string> = {
-  BarnJunior: "Barn/junior (inntil 19 år)",
-  StudentVernepliktig: "Student/vernepliktig",
-  Voksen: "Voksen",
-  Familie: "Familiemedlemskap",
-};
+import { formaterMedlemskapType, formaterRolle } from "@/utils/brukerPresentation";
 
 type Props = {
   bruker: BrukerRespons;
@@ -69,12 +68,8 @@ export default function BrukerListeRad({
   const kontoStatusTekst = slettet ? "Slettet" : bruker.erSperret ? "Sperret" : "Aktiv";
 
   return (
-    <AccordionItem
-      value={bruker.id}
-      className="record-card user-directory-row"
-      data-account-status={kontoStatus}
-    >
-      <AccordionTrigger className="record-card__trigger user-directory-row__trigger hover:no-underline">
+    <RecordAccordionCard value={bruker.id} muted={slettet}>
+      <RecordCardTrigger>
         <div className="user-directory-row__summary">
           <div className="user-directory-row__identity">
             <span className="user-directory-row__avatar" aria-hidden="true">
@@ -92,8 +87,8 @@ export default function BrukerListeRad({
                   {bruker.epost}
                 </span>
               ) : null}
-              <span className="user-directory-row__mobile-meta">
-                <RecordEyebrow className="user-directory-row__mobile-role">{rolle}</RecordEyebrow>
+              <span className="user-directory-row__metadata">
+                <RecordEyebrow>{formaterRolle(rolle)}</RecordEyebrow>
                 <span data-membership-status={medlemskapStatus}>{medlemskapTekst}</span>
                 {kontoStatus !== "aktiv" ? (
                   <span data-account-status={kontoStatus}>{kontoStatusTekst}</span>
@@ -101,117 +96,101 @@ export default function BrukerListeRad({
               </span>
             </span>
           </div>
-
-          <RecordEyebrow className="user-directory-row__cell user-directory-row__role">
-            {rolle}
-          </RecordEyebrow>
-          <span
-            className="user-directory-row__cell user-directory-row__membership"
-            data-membership-status={medlemskapStatus}
-          >
-            <i aria-hidden="true" />
-            {medlemskapTekst}
-          </span>
-          <span
-            className="user-directory-row__cell user-directory-row__account-status"
-            data-account-status={kontoStatus}
-          >
-            <i aria-hidden="true" />
-            {kontoStatusTekst}
-          </span>
         </div>
-      </AccordionTrigger>
+      </RecordCardTrigger>
 
-      <AccordionContent className="user-directory-row__details">
-        <dl className="user-directory-row__detail-grid">
-          <div>
-            <dt>
-              <CalendarDays aria-hidden="true" />
-              Opprettet
-            </dt>
-            <dd>{formatDato(bruker.opprettetTid) ?? "Ikke tilgjengelig"}</dd>
-          </div>
+      <RecordCardDetails>
+        <div className="user-directory-row__detail-content">
+          <dl className="user-directory-row__detail-grid">
+            <div>
+              <dt>
+                <CalendarDays aria-hidden="true" />
+                Opprettet
+              </dt>
+              <dd>{formatDato(bruker.opprettetTid) ?? "Ikke tilgjengelig"}</dd>
+            </div>
 
-          <div>
-            <dt>
-              <UserRound aria-hidden="true" />
-              Visningsnavn
-            </dt>
-            <dd>{bruker.visningsnavn || "Ikke satt"}</dd>
-          </div>
-
-          <div>
-            <dt>
-              <Tag aria-hidden="true" />
-              Medlemskap
-            </dt>
-            <dd>
-              {bruker.medlemskapType
-                ? (MEDLEMSKAP_TYPE_LABELS[bruker.medlemskapType] ?? bruker.medlemskapType)
-                : medlemskapTekst}
-              {bruker.medlemskapBekreftetDato
-                ? ` · ${formatDato(bruker.medlemskapBekreftetDato)}`
-                : null}
-            </dd>
-          </div>
-
-          {bruker.fulltNavn ? (
             <div>
               <dt>
                 <UserRound aria-hidden="true" />
-                Navn i medlemskapet
+                Visningsnavn
               </dt>
-              <dd>{bruker.fulltNavn}</dd>
+              <dd>{bruker.visningsnavn || "Ikke satt"}</dd>
             </div>
-          ) : null}
 
-          {bruker.antallAktiveSperrer !== undefined ? (
             <div>
               <dt>
-                <Ban aria-hidden="true" />
-                Sperrehistorikk
+                <Tag aria-hidden="true" />
+                Medlemskap
               </dt>
               <dd>
-                {onÅpneSperreHistorikk ? (
-                  <button
-                    type="button"
-                    className="user-directory-row__history-link"
-                    onClick={(event) => {
-                      event.stopPropagation();
-                      onÅpneSperreHistorikk(bruker);
-                    }}
-                  >
-                    {bruker.antallAktiveSperrer === 0
-                      ? "Ingen aktive sperrer"
-                      : `${bruker.antallAktiveSperrer} aktive sperrer`}
-                  </button>
-                ) : bruker.antallAktiveSperrer === 0 ? (
-                  "Ingen aktive sperrer"
-                ) : (
-                  `${bruker.antallAktiveSperrer} aktive sperrer`
-                )}
+                {bruker.medlemskapType
+                  ? formaterMedlemskapType(bruker.medlemskapType)
+                  : medlemskapTekst}
+                {bruker.medlemskapBekreftetDato
+                  ? ` · ${formatDato(bruker.medlemskapBekreftetDato)}`
+                  : null}
               </dd>
             </div>
-          ) : null}
-        </dl>
 
-        {kanRedigere && erKlubbAdmin ? (
-          <div className="user-directory-row__actions">
-            <Button
-              type="button"
-              size="sm"
-              onClick={(event) => {
-                event.stopPropagation();
-                onRedigerBruker(bruker);
-              }}
-            >
-              Rediger
-            </Button>
-            {renderSperrAction?.(bruker)}
-            {renderSlettAction?.(bruker)}
-          </div>
-        ) : null}
-      </AccordionContent>
-    </AccordionItem>
+            {bruker.fulltNavn ? (
+              <div>
+                <dt>
+                  <UserRound aria-hidden="true" />
+                  Navn i medlemskapet
+                </dt>
+                <dd>{bruker.fulltNavn}</dd>
+              </div>
+            ) : null}
+
+            {bruker.antallAktiveSperrer !== undefined ? (
+              <div>
+                <dt>
+                  <Ban aria-hidden="true" />
+                  Sperrehistorikk
+                </dt>
+                <dd>
+                  {onÅpneSperreHistorikk ? (
+                    <button
+                      type="button"
+                      className="user-directory-row__history-link"
+                      onClick={(event) => {
+                        event.stopPropagation();
+                        onÅpneSperreHistorikk(bruker);
+                      }}
+                    >
+                      {bruker.antallAktiveSperrer === 0
+                        ? "Ingen aktive sperrer"
+                        : `${bruker.antallAktiveSperrer} aktive sperrer`}
+                    </button>
+                  ) : bruker.antallAktiveSperrer === 0 ? (
+                    "Ingen aktive sperrer"
+                  ) : (
+                    `${bruker.antallAktiveSperrer} aktive sperrer`
+                  )}
+                </dd>
+              </div>
+            ) : null}
+          </dl>
+
+          {kanRedigere && erKlubbAdmin ? (
+            <RecordCardActions>
+              <Button
+                type="button"
+                size="sm"
+                onClick={(event) => {
+                  event.stopPropagation();
+                  onRedigerBruker(bruker);
+                }}
+              >
+                Rediger
+              </Button>
+              {renderSperrAction?.(bruker)}
+              {renderSlettAction?.(bruker)}
+            </RecordCardActions>
+          ) : null}
+        </div>
+      </RecordCardDetails>
+    </RecordAccordionCard>
   );
 }

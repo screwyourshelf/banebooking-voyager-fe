@@ -29,7 +29,13 @@ function erSlettetEpost(epost?: string | null) {
 }
 
 export default function BrukereListeView() {
-  const { bruker, laster: lasterBruker } = useBruker();
+  const {
+    bruker,
+    laster: lasterBruker,
+    feil: brukerFeil,
+    isFetching: brukerFetching,
+    refetch: refetchBruker,
+  } = useBruker();
 
   const {
     brukere,
@@ -142,6 +148,17 @@ export default function BrukereListeView() {
 
   if (lasterBruker) return <ListSkeleton />;
 
+  if (brukerFeil) {
+    return (
+      <QueryFeil
+        error={brukerFeil}
+        isFetching={brukerFetching}
+        onRetry={() => void refetchBruker()}
+        title="Kunne ikke kontrollere tilgangen"
+      />
+    );
+  }
+
   if (!erKlubbAdmin && !harLeseTilgang) {
     return <p className="user-admin-page__access-error">Du har ikke tilgang til denne siden.</p>;
   }
@@ -152,7 +169,7 @@ export default function BrukereListeView() {
         <PageHeader
           eyebrow="Administrasjon"
           title="Brukere"
-          description="Finn medlemmer, følg opp medlemskap og administrer tilganger."
+          description="Følg opp medlemskap, roller og tilgang til klubben."
           className="user-admin-page__heading"
         />
 

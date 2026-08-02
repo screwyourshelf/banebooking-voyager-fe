@@ -16,7 +16,7 @@ export default function MinSidePage() {
     <AdminPage
       eyebrow="Min konto"
       title="Min side"
-      description="Administrer visningsnavn, kontoinformasjon og persondata."
+      description="Oppdater profilen og få innsyn i dataene som er lagret om deg."
     >
       <Tabs
         variant="section"

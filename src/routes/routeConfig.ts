@@ -110,7 +110,7 @@ export const routeConfig: RouteConfig[] = [
 
   {
     path: "admin",
-    breadcrumb: "Admin",
+    breadcrumb: "Administrasjon",
     children: [
       {
         path: "klubb",
@@ -121,14 +121,14 @@ export const routeConfig: RouteConfig[] = [
       },
       {
         path: "baner",
-        breadcrumb: "Baner",
+        breadcrumb: "Baner og grener",
         protected: true,
         component: BanerPage,
         loader: loadBanerPage,
       },
       {
         path: "grener",
-        breadcrumb: "Grener",
+        breadcrumb: "Baner og grener",
         protected: true,
         component: GrenerPage,
         loader: loadGrenerPage,

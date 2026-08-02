@@ -75,7 +75,7 @@ export function beregnTidspunkterForBaner(
   const tidspunkter = genererTidspunkter(start, slutt, maxSlot);
 
   const advarselTekst = harUlik
-    ? `De valgte banene har ulike slot-lengder (${unikeSlotLengder.join(" og ")} min). Tidspunktene er tilpasset til ${maxSlot} min mellomrom for å unngå overlappende bookinger. For mer fleksible tidspunkter, opprett separate arrangementer per bane-type.`
+    ? `De valgte banene har ulik varighet (${unikeSlotLengder.join(" og ")} min). Starttidene vises med ${maxSlot} minutters mellomrom for å unngå overlapp. Opprett separate arrangementer per banetype hvis du trenger andre starttider.`
     : undefined;
 
   return { tidspunkter, harUlikSlotLengde: harUlik, advarselTekst };

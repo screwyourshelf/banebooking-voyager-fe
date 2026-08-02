@@ -1,5 +1,4 @@
 import { useMemo, useState } from "react";
-import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { useApiMutation } from "@/hooks/useApiMutation";
@@ -88,10 +87,8 @@ export function useRedigerArrangement(valgtId: string | null, valgtGrenId: strin
     "put",
     `/klubb/${slug}/arrangement/${valgtId ?? ""}`,
     {
-      onSuccess: async (result) => {
+      onSuccess: async () => {
         clearForhandsvisning();
-        const melding = `${result.antallOpprettet} bookinger oppdatert`;
-        toast.success(melding);
         await queryClient.invalidateQueries({ queryKey: ["arrangementer-admin", slug] });
       },
       retry: false,

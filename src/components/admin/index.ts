@@ -1,3 +1,4 @@
+export { default as AdminAccessError } from "./AdminAccessError";
 export {
   AdminActionRow,
   AdminEntityCollection,

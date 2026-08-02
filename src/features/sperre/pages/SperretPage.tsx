@@ -22,7 +22,7 @@ export default function SperretPage() {
       <AdminPage
         eyebrow="Tilgang"
         title="Kontoen er sperret"
-        description="Laster informasjon fra klubben."
+        description="Du kan ikke bruke Banebooking før klubben opphever sperren."
       >
         <AdminPageLoading label="Laster sperreinformasjon" />
       </AdminPage>
@@ -34,7 +34,7 @@ export default function SperretPage() {
       <AdminPage
         eyebrow="Tilgang"
         title="Kontoen er sperret"
-        description="Informasjonen må lastes før du kan gå videre."
+        description="Du kan ikke bruke Banebooking før klubben opphever sperren."
       >
         <AdminPageState>
           <RecordListState
@@ -58,7 +58,7 @@ export default function SperretPage() {
     <AdminPage
       eyebrow="Tilgang"
       title="Kontoen er sperret"
-      description={`Tilgangen din til ${klubb.navn} er stengt.`}
+      description="Du kan ikke bruke Banebooking før klubben opphever sperren."
       action={<RecordStatus tone="danger">Sperret</RecordStatus>}
     >
       <ContentDocument>
@@ -68,8 +68,8 @@ export default function SperretPage() {
 
         <SettingsSection
           eyebrow="Konto"
-          title="Slik går du videre"
-          description="Klubben må avklare sperren før tilgangen kan åpnes igjen."
+          title="Kontakt klubben"
+          description="Klubben må avklare eller oppheve sperren."
           embedded
           tone="danger"
         >

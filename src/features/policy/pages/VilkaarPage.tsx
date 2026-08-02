@@ -14,7 +14,7 @@ export default function VilkaarPage() {
       <AdminPage
         eyebrow="Personvern"
         title="Vilkår for bruk"
-        description="Laster gjeldende vilkår."
+        description="Les om ansvar, personvern og bruk av tjenesten."
       >
         <AdminPageLoading label="Laster vilkår" />
       </AdminPage>
@@ -26,7 +26,7 @@ export default function VilkaarPage() {
       <AdminPage
         eyebrow="Personvern"
         title="Vilkår for bruk"
-        description="Vilkårene gjelder for bruk av Banebooking."
+        description="Les om ansvar, personvern og bruk av tjenesten."
       >
         <AdminPageState>
           <RecordListState
@@ -50,7 +50,7 @@ export default function VilkaarPage() {
     <AdminPage
       eyebrow="Personvern"
       title="Vilkår for bruk"
-      description={`Gjeldende vilkår for bruk av Banebooking i ${klubb.navn}.`}
+      description="Les om ansvar, personvern og bruk av tjenesten."
       action={<RecordStatus tone="past">Oppdatert {AKTIV_VILKAAR.visningsDato}</RecordStatus>}
     >
       <ContentDocument>
@@ -61,8 +61,8 @@ export default function VilkaarPage() {
 
         <ContentDocumentSection title="1. Bruk av tjenesten">
           <p>
-            Banebooking er et verktøy for reservasjon av baner i <strong>{klubb.navn}</strong>. For
-            å kunne booke baner må du være medlem, eller ha fått tilgang av klubbens administrator.
+            Banebooking lar deg booke baner i <strong>{klubb.navn}</strong>. Du må være medlem eller
+            ha fått tilgang av en klubbadministrator.
           </p>
           <p>
             Ved å gjennomføre en booking bekrefter du at du og eventuelle medspillere har gyldig
@@ -70,7 +70,7 @@ export default function VilkaarPage() {
           </p>
         </ContentDocumentSection>
 
-        <ContentDocumentSection title="2. Brukerkonto og innlogging">
+        <ContentDocumentSection title="2. Konto og innlogging">
           <p>
             Innlogging i tjenesten skjer via e-post eller tredjepartsleverandører for autentisering,
             for eksempel Google. For å holde brukeren innlogget mellom økter benyttes lokal lagring
@@ -80,16 +80,16 @@ export default function VilkaarPage() {
 
         <ContentDocumentSection title="3. Personopplysninger">
           <p>
-            Vi lagrer nødvendige personopplysninger som navn, e-postadresse og bookingaktiviteter
-            for å kunne levere tjenesten. Du kan når som helst se, laste ned eller slette dataene
-            dine via <em>Min side</em>.
+            Vi lagrer nødvendige personopplysninger som navn, e-postadresse og bookinghistorikk for
+            å kunne levere tjenesten. Du kan når som helst se, laste ned eller slette dataene dine
+            via <em>Min side</em>.
           </p>
         </ContentDocumentSection>
 
         <ContentDocumentSection title="4. Bruk, ansvar og misbruk">
           <p>
             Ved misbruk av bookingløsningen eller brudd på klubbens retningslinjer kan tilgangen bli
-            begrenset eller fjernet av klubbens administrator.
+            begrenset eller fjernet av en klubbadministrator.
           </p>
           <p>
             {klubb.navn} tar ikke ansvar for tap, kostnader eller ulemper som følge av tekniske

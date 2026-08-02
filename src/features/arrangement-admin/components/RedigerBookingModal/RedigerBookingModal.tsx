@@ -95,10 +95,10 @@ export default function RedigerBookingModal({ booking, baner, onBekreft, onAvbry
     <AdminEditorDialog
       open={!!booking}
       onOpenChange={(open) => !open && onAvbryt()}
-      backLabel="Til bookinglisten"
-      eyebrow="Booking"
-      title="Rediger booking"
-      description="Endre dato, bane og tidspunkt for denne bookingen."
+      backLabel="Til listen"
+      eyebrow="Banetid"
+      title="Rediger banetid"
+      description="Endre dato, bane eller starttid."
     >
       <AdminSettingsForm
         onSubmit={(event) => {
@@ -109,7 +109,7 @@ export default function RedigerBookingModal({ booking, baner, onBekreft, onAvbry
         <SettingsStack>
           <SettingsSection
             title="Tid og bane"
-            description="Sluttiden beregnes fra banens slotlengde."
+            description="Sluttiden beregnes ut fra banens varighet."
           >
             <SettingsPanel>
               <SettingsRow title="Dato">
@@ -155,7 +155,7 @@ export default function RedigerBookingModal({ booking, baner, onBekreft, onAvbry
               </SettingsRow>
 
               {sluttTid ? (
-                <SettingsRow title="Sluttid" description={`${slotLengde} minutters slot`}>
+                <SettingsRow title="Sluttid" description={`${slotLengde} minutter`}>
                   <SettingsValue>{sluttTid}</SettingsValue>
                 </SettingsRow>
               ) : null}

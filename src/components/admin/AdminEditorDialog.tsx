@@ -7,6 +7,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
+  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 
@@ -18,6 +19,7 @@ type Props = {
   title: string;
   description: string;
   children: ReactNode;
+  trigger?: ReactNode;
   closeDisabled?: boolean;
   size?: "default" | "wide";
 };
@@ -30,11 +32,13 @@ export default function AdminEditorDialog({
   title,
   description,
   children,
+  trigger,
   closeDisabled = false,
   size = "default",
 }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
+      {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
       <DialogContent className="admin-editor-dialog" data-size={size} showCloseButton={false}>
         <DialogHeader className="admin-editor-dialog__header">
           <DialogClose asChild>

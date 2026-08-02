@@ -40,16 +40,15 @@ export default function SlettMegDialog({ slettMeg, disabled = false }: Props) {
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
         <Button variant="destructive" disabled={disabled || isBusy}>
-          {isBusy ? "Sletter..." : "Slett min bruker"}
+          {isBusy ? "Sletter…" : "Slett kontoen min"}
         </Button>
       </AlertDialogTrigger>
 
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Er du sikker?</AlertDialogTitle>
+          <AlertDialogTitle>Slett kontoen?</AlertDialogTitle>
           <AlertDialogDescription>
-            Dette vil slette din bruker og all tilknytning permanent. Denne handlingen kan ikke
-            angres.
+            Dette sletter kontoen og alle tilknyttede data permanent. Handlingen kan ikke angres.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
@@ -57,10 +56,8 @@ export default function SlettMegDialog({ slettMeg, disabled = false }: Props) {
           <ServerFeil feil={slettMeg.error?.message ?? null} />
           <AlertDialogCancel disabled={isBusy}>Avbryt</AlertDialogCancel>
 
-          <AlertDialogAction asChild>
-            <Button variant="destructive" onClick={handleDelete} disabled={isBusy}>
-              {isBusy ? "Sletter..." : "Slett bruker"}
-            </Button>
+          <AlertDialogAction variant="destructive" onClick={handleDelete} disabled={isBusy}>
+            {isBusy ? "Sletter…" : "Slett konto"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

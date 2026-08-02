@@ -8,7 +8,6 @@ import {
   Settings,
   Shapes,
   Users,
-  Workflow,
 } from "lucide-react";
 import type { ComponentType } from "react";
 
@@ -27,6 +26,7 @@ export type AppNavigationItem = {
   requiresAuth?: boolean;
   requiredAnyCapability?: string[];
   mobilePrimaryOrder?: number;
+  activePaths?: string[];
 };
 
 export type AppNavigationSection = {
@@ -83,22 +83,14 @@ const navigationItems: AppNavigationItem[] = [
     requiredAnyCapability: [Kapabiliteter.brukere.admin, Kapabiliteter.brukere.lese],
   },
   {
-    id: "courts",
+    id: "courts-and-activities",
     to: "admin/baner",
-    label: "Baner",
-    icon: Workflow,
-    section: "admin",
-    end: true,
-    requiredAnyCapability: [Kapabiliteter.baner.admin],
-  },
-  {
-    id: "activities-admin",
-    to: "admin/grener",
-    label: "Grener",
+    label: "Baner og grener",
     icon: Shapes,
     section: "admin",
     end: true,
-    requiredAnyCapability: [Kapabiliteter.grener.admin],
+    activePaths: ["admin/baner", "admin/grener"],
+    requiredAnyCapability: [Kapabiliteter.baner.admin, Kapabiliteter.grener.admin],
   },
   {
     id: "announcements",
@@ -179,4 +171,17 @@ export function buildMobileSecondaryNavigation(
       items: section.items.filter((item) => !primaryItemIds.has(item.id)),
     }))
     .filter((section) => section.items.length > 0);
+}
+
+export function isNavigationItemCurrent(item: AppNavigationItem, pathname: string) {
+  if (!item.activePaths) return false;
+
+  const normalizedPathname = pathname.replace(/\/+$/, "");
+
+  return item.activePaths.some((path) => {
+    const normalizedPath = path.replace(/^\/+|\/+$/g, "");
+    const pathSuffix = `/${normalizedPath}`;
+
+    return normalizedPathname.endsWith(pathSuffix) || normalizedPathname.includes(`${pathSuffix}/`);
+  });
 }

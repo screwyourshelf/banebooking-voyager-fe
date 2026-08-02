@@ -1,25 +1,25 @@
-import { useMemo, useState } from "react";
+import { useState } from "react";
+import type { ActionFeedbackMessage } from "@/components/feedback";
 import { supabase } from "../supabase";
-import { toast } from "sonner";
 
 type Step = "input" | "verify";
-type Status = "idle" | "sending" | "sent" | "verifying" | "done" | "error";
+type Status = "idle" | "sending" | "verifying" | "done" | "error";
 
 export function useLogin() {
   const [email, setEmail] = useState("");
   const [otp, setOtp] = useState("");
   const [step, setStep] = useState<Step>("input");
   const [status, setStatus] = useState<Status>("idle");
+  const [feedback, setFeedback] = useState<ActionFeedbackMessage | null>(null);
 
-  const erBusy = useMemo(() => status === "sending" || status === "verifying", [status]);
+  const erBusy = status === "sending" || status === "verifying";
 
-  const redirectTo = useMemo(() => {
-    const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
-    return `${window.location.origin}${base}/auth/callback`;
-  }, []);
+  const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
+  const redirectTo = `${window.location.origin}${base}/auth/callback`;
 
   const handleGoogleLogin = async () => {
     if (erBusy) return;
+    setFeedback(null);
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
@@ -30,7 +30,13 @@ export function useLogin() {
       },
     });
 
-    if (error) toast.error(error.message);
+    if (error) {
+      setFeedback({
+        tone: "danger",
+        title: "Innloggingen kunne ikke startes",
+        description: error.message,
+      });
+    }
   };
 
   // Idrettens ID (OIDC via Buypass/NIF) — custom Supabase provider
@@ -39,6 +45,7 @@ export function useLogin() {
   // Ref: https://supabase.com/docs/guides/auth/custom-oidc-providers
   const handleIdrettensIdLogin = async () => {
     if (erBusy) return;
+    setFeedback(null);
 
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "custom:idrettens-id",
@@ -48,21 +55,13 @@ export function useLogin() {
       },
     });
 
-    if (error) toast.error(error.message);
-  };
-
-  const handleFacebookLogin = async () => {
-    if (erBusy) return;
-
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "facebook",
-      options: {
-        redirectTo,
-        scopes: "email",
-      },
-    });
-
-    if (error) toast.error(error.message);
+    if (error) {
+      setFeedback({
+        tone: "danger",
+        title: "Innloggingen kunne ikke startes",
+        description: error.message,
+      });
+    }
   };
 
   const sendOtp = async () => {
@@ -71,11 +70,16 @@ export function useLogin() {
     const epost = email.trim();
     if (!epost) {
       setStatus("error");
-      toast.error("E-post mangler");
+      setFeedback({
+        tone: "danger",
+        title: "E-post mangler",
+        description: "Skriv inn e-postadressen du vil motta koden på.",
+      });
       return;
     }
 
     setStatus("sending");
+    setFeedback(null);
 
     const { error } = await supabase.auth.signInWithOtp({
       email: epost,
@@ -86,14 +90,22 @@ export function useLogin() {
     });
 
     if (error) {
-      toast.error("Kunne ikke sende kode: " + error.message);
       setStatus("error");
+      setFeedback({
+        tone: "danger",
+        title: "Koden kunne ikke sendes",
+        description: error.message,
+      });
       return;
     }
 
-    toast.success("Kode sendt – sjekk e-posten din");
     setStep("verify");
     setStatus("idle");
+    setFeedback({
+      tone: "info",
+      title: "Koden er sendt",
+      description: `Sjekk innboksen til ${epost}.`,
+    });
   };
 
   const verifyOtp = async () => {
@@ -104,11 +116,16 @@ export function useLogin() {
 
     if (!epost || !token) {
       setStatus("error");
-      toast.error("Mangler e-post eller kode");
+      setFeedback({
+        tone: "danger",
+        title: "Koden mangler",
+        description: "Skriv inn den sekssifrede koden fra e-posten.",
+      });
       return;
     }
 
     setStatus("verifying");
+    setFeedback(null);
 
     const { error } = await supabase.auth.verifyOtp({
       email: epost,
@@ -117,21 +134,17 @@ export function useLogin() {
     });
 
     if (error) {
-      toast.error("Feil kode: " + error.message);
       setStatus("error");
+      setFeedback({
+        tone: "danger",
+        title: "Koden kunne ikke bekreftes",
+        description: error.message,
+      });
       return;
     }
 
-    toast.success("Innlogging fullført!");
     setStatus("done");
     window.location.reload();
-  };
-
-  const reset = () => {
-    setEmail("");
-    setOtp("");
-    setStep("input");
-    setStatus("idle");
   };
 
   return {
@@ -139,16 +152,14 @@ export function useLogin() {
     setEmail,
     otp,
     setOtp,
+    feedback,
+    clearFeedback: () => setFeedback(null),
     status,
-    setStatus,
     step,
-    setStep,
     erBusy,
     handleGoogleLogin,
     handleIdrettensIdLogin,
-    handleFacebookLogin,
     sendOtp,
     verifyOtp,
-    reset,
   };
 }

@@ -1,13 +1,23 @@
 import { useId, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { RecordAccent, RecordStatus } from "@/components/records";
+import {
+  RecordAccordionCard,
+  RecordCard,
+  RecordCardActions,
+  RecordCardDetails,
+  RecordCardStatic,
+  RecordCardSummary,
+  RecordCardTrigger,
+  RecordLeadingValue,
+  RecordStatus,
+} from "@/components/records";
 import { SlettArrangementDialog } from "@/features/arrangement-admin/components";
 import type { ArrangementRespons, DagMedSlotsRespons } from "@/types";
 import { dagerIgjenTekst } from "@/utils/datoUtils";
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
+import { formaterArrangementKategori } from "@/utils/arrangementPresentation";
 
 type Props = {
   arrangement: ArrangementRespons;
@@ -113,10 +123,11 @@ export default function ArrangementRow({ arrangement, onAvlys }: Props) {
   const visibleDays = upcomingDays.slice(0, visibleDayCount);
   const hasMoreDays = upcomingDays.length > visibleDayCount;
   const dates = formatDateRange(arrangement);
+  const categoryLabel = formaterArrangementKategori(arrangement.kategori);
   const categoryDiffersFromTitle =
-    arrangement.kategori.toLocaleLowerCase("nb-NO") !==
+    categoryLabel.toLocaleLowerCase("nb-NO") !==
     arrangement.tittel.trim().toLocaleLowerCase("nb-NO");
-  const metadata = [arrangement.grenNavn, categoryDiffersFromTitle ? arrangement.kategori : null]
+  const metadata = [arrangement.grenNavn, categoryDiffersFromTitle ? categoryLabel : null]
     .filter(Boolean)
     .join(" · ");
 
@@ -138,9 +149,11 @@ export default function ArrangementRow({ arrangement, onAvlys }: Props) {
     (!arrangement.erPassert && !programSummary);
 
   const summary = (
-    <div className="record-card__summary arrangement-card__summary">
+    <RecordCardSummary layout="date">
       <span className="arrangement-card__date">
-        <RecordAccent className="arrangement-card__date-start">{dates.start}</RecordAccent>
+        <span className="arrangement-card__date-start">
+          <RecordLeadingValue>{dates.start}</RecordLeadingValue>
+        </span>
         {dates.end ? <small>– {dates.end}</small> : null}
       </span>
 
@@ -152,31 +165,22 @@ export default function ArrangementRow({ arrangement, onAvlys }: Props) {
       <RecordStatus tone={arrangement.erPassert ? "past" : "event"}>
         {arrangement.erPassert ? "Gjennomført" : nextDate ? dagerIgjenTekst(nextDate) : "Kommende"}
       </RecordStatus>
-    </div>
+    </RecordCardSummary>
   );
 
   if (!hasDetails) {
     return (
-      <div
-        className="record-card record-card-row arrangement-card"
-        data-past={arrangement.erPassert}
-      >
-        <div className="record-card__static arrangement-card__static">{summary}</div>
-      </div>
+      <RecordCard>
+        <RecordCardStatic>{summary}</RecordCardStatic>
+      </RecordCard>
     );
   }
 
   return (
-    <AccordionItem
-      value={arrangement.id}
-      className="record-card record-card-row arrangement-card"
-      data-past={arrangement.erPassert}
-    >
-      <AccordionTrigger className="record-card__trigger arrangement-card__trigger hover:no-underline">
-        {summary}
-      </AccordionTrigger>
+    <RecordAccordionCard value={arrangement.id}>
+      <RecordCardTrigger>{summary}</RecordCardTrigger>
 
-      <AccordionContent className="record-card__details arrangement-card__details">
+      <RecordCardDetails>
         <div className="arrangement-card__detail-content">
           {description ? <p className="arrangement-card__description">{description}</p> : null}
 
@@ -257,7 +261,7 @@ export default function ArrangementRow({ arrangement, onAvlys }: Props) {
           ) : null}
 
           {hasActions ? (
-            <div className="record-card__actions arrangement-card__actions">
+            <RecordCardActions>
               {canManageTournament ? (
                 <Button
                   type="button"
@@ -290,10 +294,10 @@ export default function ArrangementRow({ arrangement, onAvlys }: Props) {
                   }
                 />
               ) : null}
-            </div>
+            </RecordCardActions>
           ) : null}
         </div>
-      </AccordionContent>
-    </AccordionItem>
+      </RecordCardDetails>
+    </RecordAccordionCard>
   );
 }

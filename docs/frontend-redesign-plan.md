@@ -74,9 +74,15 @@ oppdaterte primitiver må sammenlignes manuelt før eksisterende kode erstattes.
 ### Responsivitet
 
 - Mobil prioriterer dagens tilgjengelighet, korte valgveier og tommelvennlige handlinger.
-- Desktop skal bruke arbeidsflaten, støtte flere kolonner og gi høyere informasjonstetthet.
-- Mobil skal ikke være en krympet desktop, og desktop skal ikke være en oppblåst mobil.
+- Mobil og desktop skal bruke samme visuelle vokabular, ordlyd og informasjonsrekkefølge.
+- Desktop skal bruke den ekstra arbeidsflaten til rom og funksjonelt begrunnede kolonner, ikke
+  til egne farger, tabelloverskrifter eller forklaringer som bare finnes på stor skjerm.
+- Responsive forskjeller skal løse arbeidsform eller plassbehov; de skal ikke innføre en egen
+  desktopvariant av produktets semantiske komponenter.
 - Mobil og desktop ferdigstilles og kontrolleres i samme utviklingsslice.
+- Typografien bruker en kompakt skala på mobil og en kontrollert, ett trinn større
+  `comfortable`-skala i de redesignede arbeidsflatene fra desktop-breakpointet. Navigasjon
+  og Turnering beholder sin eksisterende skala.
 - Appskallet bruker ikke en global breadcrumb-rad. Aktiv side i hovednavigasjonen og en
   tydelig sidetittel gir orientering; dype detalj- og redigeringsflater skal bruke en lokal
   tilbakehandling når den trengs.
@@ -100,6 +106,8 @@ POC-en dekker nå:
   bookingoverstyringer.
 - `Grener` med responsiv entitetsliste, felles editor for ny/rediger og delte
   bookinginnstillinger.
+- `Baner` og `Grener` samlet i ett administrasjonsområde med delt sidehode og
+  ruteorienterte seksjonsfaner, uten å blande entitetene i samme liste.
 - `Klubbinnstillinger` med responsiv klubbprofil, medlemskapsstatus og delt
   underområdenavigasjon.
 - `Min side` med responsiv profil, kontoinformasjon, persondata og delt
@@ -118,9 +126,12 @@ POC-en dekker nå:
 
 - `design-system.css` er delt i tokens, primitiver, delte mønstre, migrerte sammensetninger
   og responsive tilpasninger. Importrekkefølgen er stabil, og styling er ikke delt per side.
-- `record-list`/`record-card` er beholdt som delte CSS-mønstre; status, listetilstander og
-  vedvarende filterbrytere har fått semantiske komponenter der type- og atferdsverdien er
-  reell.
+- `RecordCollection`, `RecordList` og `RecordCard` er det lukkede semantiske API-et for
+  listeflater. De eier bredde, avstand, kortflate, hover, detaljflate og handlingsrad;
+  features leverer innhold og tilstand uten lokale rotklasser eller `className`-smutthull.
+- De underliggende `record-*`-klassene er interne implementasjonsdetaljer. En CI-kontroll
+  avviser direkte bruk utenfor `src/components/records/` og de sentrale pattern-/responsive-
+  filene.
 - Record-rader deler en oransje informasjonsmarkør gjennom `RecordAccent`/`RecordEyebrow`,
   mens `RecordChoiceFilter` gir samme responsive valgfilter i Baner og Arrangementer.
 - Kartlegg direkte bruk av `components/ui` og lokale Tailwind-varianter som bør erstattes av
@@ -130,7 +141,7 @@ POC-en dekker nå:
 ### Fase 2 — Fullfør booking- og kontoflyten
 
 1. `Mine tider` — fullført som første slice etter POC-en.
-2. Bookingbekreftelse, feiltilstander og reglement.
+2. Bookingbekreftelse, feiltilstander og reglement — fullført.
 3. `Min side` — fullført for profil og persondata; innlogging og øvrige kontoflater gjenstår.
 4. Guard-flater — fullført for sperret konto, obligatorisk kunngjøring og
    medlemsbekreftelse.
@@ -143,7 +154,13 @@ sidehierarki, settings-seksjoner, status og handlinger som administrasjonsflaten
 profilstyling. Guard-flatene bruker samme hierarki og den delte langtekstflaten, mens
 medlemskapstypen bruker et felles Radix-basert radiovalg for innstillingsskjemaer. Den
 eksisterende prioriteten `Sperret` → `Kunngjøring` → `Medlemskap` og alle API-kontrakter er
-beholdt. Bookingbekreftelse, feiltilstander og reglement gjenstår i fasen.
+beholdt. Bookingens bekreftelser, feiltilstander og reglement bruker nå de samme delte
+tilbakemeldings-, editor- og langtekstmønstrene som de øvrige løftede flatene.
+
+Tilbakemeldingssystemet følger én regel på tvers av de redesignede flatene: oppdatert
+innhold er primær bekreftelse, uklare mutasjonsresultater får vedvarende inline-feedback,
+og query-/autorisasjonsfeil beholder kontekst og retry. Toast er reservert for globale
+hendelser uten lokal eier, foreløpig sesjonsutløp. Turnering er ikke migrert i POC-en.
 
 ### Fase 3 — Arrangementer
 
@@ -176,7 +193,9 @@ bookingregler i record-raden og samme editor for opprettelse og redigering.
 `Klubbinnstillinger` bruker de samme settings-seksjonene i en vanlig sideflate. Reelle
 underområder bruker `Tabs` med den delte `section`-varianten, som også er tatt i bruk på
 `Min side`. Varianten bruker den grønne kontrollflaten og en tydelig oransje understrek for
-valgt område. Destruktive innstillingsområder bruker den delte `danger`-tonen på
+valgt område. `Baner` og `Grener` ligger i ett navigasjonspunkt og bruker den samme
+visuelle varianten som rutenavigasjon mellom to separate arbeidsflater. Eksisterende
+direktelenker og autorisasjonsgrenser er beholdt. Destruktive innstillingsområder bruker den delte `danger`-tonen på
 `SettingsSection`. `Kunngjøringer` gjenbruker det samme settings-hierarkiet for status,
 opprettelse og bekreftelser. Deaktivering bruker det delte fareområdet. Obligatoriske
 kunngjøringer og `Vilkår` deler `ContentDocument`, en avgrenset langtekstflate for
@@ -210,6 +229,7 @@ En side er ferdig migrert når:
 - handlinger og status følger de semantiske rollene;
 - siden ikke introduserer tilfeldige farger, knappetyper eller lokale designvarianter;
 - relevante delte komponenter brukes;
+- feature-kode ikke kobler seg direkte til beskyttede `record-*`-klasser;
 - tekniske kontroller og visuell kontroll passerer.
 
 ## Avgrensninger

@@ -1,5 +1,4 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useSlug } from "@/hooks/useSlug";
@@ -29,7 +28,6 @@ export function useKunngjøringAdmin() {
     `/klubb/${slug}/kunngjøringer`,
     {
       onSuccess: async () => {
-        toast.success("Kunngjøring aktivert");
         await queryClient.invalidateQueries({ queryKey: kunngjøringKey });
         await queryClient.invalidateQueries({ queryKey: brukerKey });
       },
@@ -42,7 +40,6 @@ export function useKunngjøringAdmin() {
     (id: string) => `/klubb/${slug}/kunngjøringer/${id}`,
     {
       onSuccess: async () => {
-        toast.success("Kunngjøring deaktivert");
         await queryClient.invalidateQueries({ queryKey: kunngjøringKey });
         await queryClient.invalidateQueries({ queryKey: brukerKey });
       },

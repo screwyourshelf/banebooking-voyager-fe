@@ -71,10 +71,8 @@ export default function SlettBrukerDialog({
           <ServerFeil feil={serverFeil} />
           <AlertDialogCancel disabled={loading}>Avbryt</AlertDialogCancel>
 
-          <AlertDialogAction asChild>
-            <Button variant="destructive" onClick={handleDelete} disabled={loading}>
-              {loading ? "Sletter..." : "Slett bruker"}
-            </Button>
+          <AlertDialogAction variant="destructive" onClick={handleDelete} disabled={loading}>
+            {loading ? "Sletter..." : "Slett bruker"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

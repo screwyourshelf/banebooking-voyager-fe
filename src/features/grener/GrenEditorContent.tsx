@@ -11,7 +11,7 @@ import {
   SettingsSwitchRow,
   SettingsValue,
 } from "@/components/admin";
-import { ServerFeil } from "@/components/errors";
+import { MutationFeedback } from "@/components/feedback";
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -41,6 +41,7 @@ type Props = {
   navnError: string | null;
   onBlurNavn: () => void;
   mutasjonFeil?: string | null;
+  lagret?: boolean;
 };
 
 const slotValues = [30, 45, 60, 90];
@@ -65,6 +66,7 @@ export default function GrenEditorContent({
   navnError,
   onBlurNavn,
   mutasjonFeil,
+  lagret = false,
 }: Props) {
   const slotIndex = Math.max(0, slotValues.indexOf(form.slotLengdeMinutter));
 
@@ -257,7 +259,11 @@ export default function GrenEditorContent({
         </SettingsSection>
 
         <AdminFormActions>
-          <ServerFeil feil={mutasjonFeil} />
+          <MutationFeedback
+            error={mutasjonFeil}
+            success={lagret}
+            successTitle="Greninnstillingene er lagret"
+          />
           <AdminFormSubmitButton
             isLoading={isSaving}
             disabled={!canSubmit}

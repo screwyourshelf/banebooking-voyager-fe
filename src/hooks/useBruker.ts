@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useRef } from "react";
-import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import type { BrukerRespons } from "@/types";
@@ -21,9 +20,6 @@ export function useBruker() {
     "post",
     `/klubb/${slug}/bruker/vilkaar`,
     {
-      onError: (err) => {
-        console.warn("Feil ved oppdatering av vilkår:", err);
-      },
       onSettled: () => {
         void brukerQuery.refetch();
       },
@@ -51,25 +47,10 @@ export function useBruker() {
     }
   }, [brukerQuery.data, brukerQuery.isLoading, vilkaarMutation.isPending, mutateVilkaar]);
 
-  const toastetFeilRef = useRef(false);
-
-  useEffect(() => {
-    const err = brukerQuery.error;
-
-    if (!err) {
-      toastetFeilRef.current = false;
-      return;
-    }
-
-    if (toastetFeilRef.current) return;
-
-    toast.error(err.message ?? "Kunne ikke hente bruker");
-    toastetFeilRef.current = true;
-  }, [brukerQuery.error]);
-
   return {
     bruker: brukerQuery.data ?? null,
     laster: brukerQuery.isLoading,
+    isFetching: brukerQuery.isFetching,
     feil: brukerQuery.error ? brukerQuery.error.message : null,
     refetch: brukerQuery.refetch,
   };

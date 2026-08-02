@@ -1,5 +1,4 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import type { KlubbRespons, OppdaterKlubbForespørsel } from "@/types";
@@ -20,8 +19,6 @@ export function useKlubb() {
     `/klubb/${slug}`,
     {
       onSuccess: () => {
-        toast.success("Klubb oppdatert");
-
         void queryClient.invalidateQueries({ queryKey: ["klubb", slug] });
         void queryClient.invalidateQueries({ queryKey: ["feed", slug] });
       },
@@ -39,5 +36,7 @@ export function useKlubb() {
     oppdaterKlubb: oppdaterKlubbMutation.mutateAsync,
     oppdaterKlubbLaster: oppdaterKlubbMutation.isPending,
     oppdaterKlubbFeil: oppdaterKlubbMutation.error,
+    oppdaterKlubbLagret: oppdaterKlubbMutation.isSuccess,
+    resetOppdaterKlubb: oppdaterKlubbMutation.reset,
   };
 }

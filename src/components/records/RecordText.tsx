@@ -1,15 +1,13 @@
 import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
 
 type Props = {
   children: ReactNode;
-  className?: string;
 };
 
-export function RecordAccent({ children, className }: Props) {
-  return <strong className={cn("record-card__accent", className)}>{children}</strong>;
+export function RecordLeadingValue({ children }: Props) {
+  return <strong className="record-card__leading-value">{children}</strong>;
 }
 
-export function RecordEyebrow({ children, className }: Props) {
-  return <span className={cn("record-card__eyebrow", className)}>{children}</span>;
+export function RecordEyebrow({ children }: Props) {
+  return <span className="record-card__eyebrow">{children}</span>;
 }

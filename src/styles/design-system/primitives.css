@@ -20,6 +20,10 @@
       "cv05" 1;
   }
 
+  small {
+    font-size: inherit;
+  }
+
   ::selection {
     background: var(--app-brand-soft);
     color: var(--app-brand-strong);

@@ -22,13 +22,13 @@ export default function FeedNotice() {
   const ingress = tekstFraRss(nyeste.innhold);
 
   return (
-    <aside className="feed-notice" aria-label="Melding fra klubben">
+    <aside className="feed-notice" aria-label="Nyhet fra klubben">
       <div className="feed-notice__icon" aria-hidden="true">
         <Megaphone className="size-5" />
       </div>
 
       <div className="feed-notice__content">
-        <div className="feed-notice__eyebrow">Fra klubben</div>
+        <div className="feed-notice__eyebrow">Nyheter fra klubben</div>
         <a
           href={nyeste.lenke}
           target="_blank"

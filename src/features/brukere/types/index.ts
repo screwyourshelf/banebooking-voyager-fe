@@ -13,5 +13,3 @@ export type EditState = {
   rolle: RolleType;
   visningsnavn: string;
 };
-
-export const ROLLER: RolleType[] = ["Medlem", "Utvidet", "KlubbAdmin"];

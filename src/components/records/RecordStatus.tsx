@@ -1,5 +1,4 @@
-import type { HTMLAttributes } from "react";
-import { cn } from "@/lib/utils";
+import type { ReactNode } from "react";
 
 export type RecordStatusTone =
   | "available"
@@ -10,13 +9,14 @@ export type RecordStatusTone =
   | "warning"
   | "danger";
 
-type Props = HTMLAttributes<HTMLSpanElement> & {
+type Props = {
   tone: RecordStatusTone;
+  children: ReactNode;
 };
 
-export default function RecordStatus({ tone, className, children, ...props }: Props) {
+export default function RecordStatus({ tone, children }: Props) {
   return (
-    <span className={cn("record-status", className)} data-tone={tone} {...props}>
+    <span className="record-status" data-tone={tone}>
       {children}
     </span>
   );

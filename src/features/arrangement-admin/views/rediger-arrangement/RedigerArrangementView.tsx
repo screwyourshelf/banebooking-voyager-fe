@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { toast } from "sonner";
 
 import {
   AdminFormActions,
@@ -15,6 +14,7 @@ import {
   SettingsText,
 } from "@/components/admin";
 import { ServerFeil } from "@/components/errors";
+import { ActionFeedback, type ActionFeedbackMessage } from "@/components/feedback";
 import { TabsLazyMount } from "@/components/navigation/Tabs";
 import { RecordCollectionSkeleton, RecordListState, RecordStatus } from "@/components/records";
 import { Button } from "@/components/ui/button";
@@ -29,6 +29,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import TiptapEditor from "@/components/editor/TiptapEditor";
+import {
+  ARRANGEMENT_KATEGORI_VALG,
+  formaterAntallBanetider,
+} from "@/utils/arrangementPresentation";
 
 import { useNavigate } from "react-router-dom";
 
@@ -53,19 +57,6 @@ import type { RedigerBookingVerdier } from "../../components/RedigerBookingModal
 import type { LokalBooking } from "../../types";
 
 import type { ArrangementKategori } from "@/types";
-
-const KATEGORIER = [
-  "Trening",
-  "Turnering",
-  "Klubbmersterskap",
-  "Kurs",
-  "Lagkamp",
-  "Stigespill",
-  "Dugnad",
-  "Vedlikehold",
-  "Sosialt",
-  "Annet",
-] as const satisfies readonly ArrangementKategori[];
 
 export default function RedigerArrangementView({
   arrangementId,
@@ -118,15 +109,22 @@ export default function RedigerArrangementView({
     lagreMetadata,
     isLoading: lagreMetadataLoading,
     feil: lagreFeil,
+    lagret: metadataLagret,
+    resetTilbakemelding: resetMetadataFeedback,
   } = useOppdaterArrangementMetadata(valgtId);
 
   const navigate = useNavigate();
   const opprettTurnering = useOpprettTurnering();
 
-  const { slettBooking } = useSlettArrangementBooking(valgtId);
-  const { leggTilBooking, batchLeggTil } = useLeggTilArrangementBooking(valgtId);
+  const { slettBooking, feil: slettBookingFeil } = useSlettArrangementBooking(valgtId);
+  const {
+    leggTilBooking,
+    batchLeggTil,
+    feil: leggTilBookingFeil,
+  } = useLeggTilArrangementBooking(valgtId);
   const { avlys: avlysArrangement } = useAvlysArrangement(valgtId);
   const [oppretterForslag, setOppretterForslag] = useState(false);
+  const [bookingFeedback, setBookingFeedback] = useState<ActionFeedbackMessage | null>(null);
 
   // Ref for å unngå stale closure i håndterGenererForslag
   const bookingListeRef = useRef<LokalBooking[]>([]);
@@ -185,6 +183,7 @@ export default function RedigerArrangementView({
 
   // Gjentakende oppsett: legg til som forslag i BookingListe (preview før commit)
   const håndterGenererForslag = async (nye: LokalBooking[]) => {
+    setBookingFeedback(null);
     leggTil(nye);
 
     const snapshot = bookingListeRef.current;
@@ -207,6 +206,7 @@ export default function RedigerArrangementView({
 
   // Manuelt oppsett: legg til i staging + kjør konfliktsjekk (samme flow som gjentakende)
   const håndterManueltLeggTil = async (nye: LokalBooking[]) => {
+    setBookingFeedback(null);
     leggTil(nye);
 
     const snapshot = bookingListeRef.current;
@@ -237,6 +237,7 @@ export default function RedigerArrangementView({
   const håndterOpprettForslag = async () => {
     const snapshot = [...stagede];
     setOppretterForslag(true);
+    setBookingFeedback(null);
     try {
       const resultat = await batchLeggTil(
         snapshot.map((b) => ({
@@ -259,12 +260,24 @@ export default function RedigerArrangementView({
           .map((f) => f.feilmelding)
           .filter((v, i, arr) => arr.indexOf(v) === i) // unike meldinger
           .join(", ");
-        toast.error(
-          `${resultat.feilet.length} av ${snapshot.length} bookinger feilet: ${feiledeMeldinger}`
-        );
+        setBookingFeedback({
+          tone: "warning",
+          title: `${resultat.feilet.length} av ${snapshot.length} banetider kunne ikke opprettes`,
+          description: feiledeMeldinger,
+        });
       } else {
-        toast.success(`${snapshot.length} bookinger opprettet.`);
+        setBookingFeedback({
+          tone: "success",
+          title: `${formaterAntallBanetider(snapshot.length)} ble opprettet`,
+          description: "De nye tidene vises nå i listen.",
+        });
       }
+    } catch (error) {
+      setBookingFeedback({
+        tone: "danger",
+        title: "Banetidene kunne ikke opprettes",
+        description: error instanceof Error ? error.message : "Prøv igjen om litt.",
+      });
     } finally {
       setOppretterForslag(false);
     }
@@ -272,6 +285,7 @@ export default function RedigerArrangementView({
 
   // Eksisterende: immediate DELETE + re-fetch. Lokal/staged: fjern fra state.
   const håndterFjernEllerAvlys = (id: string) => {
+    setBookingFeedback(null);
     const booking = bookinger.find((b) => b.id === id);
     if (!booking) return;
     if (booking.kilde === "eksisterende") {
@@ -289,6 +303,7 @@ export default function RedigerArrangementView({
   const håndterRediger = (id: string) => setRedigeringsMålId(id);
 
   const håndterRedigerBekreft = async (id: string, verdier: RedigerBookingVerdier) => {
+    setBookingFeedback(null);
     setRedigeringsMålId(null);
     const booking = bookinger.find((b) => b.id === id);
     if (!booking) return;
@@ -358,7 +373,7 @@ export default function RedigerArrangementView({
   };
 
   if (isLoading || isLoadingArrangementer || !arrangement) {
-    return <AdminPageLoading label="Laster arrangementeditor" />;
+    return <AdminPageLoading label="Laster arrangementskjemaet" />;
   }
 
   return (
@@ -382,12 +397,12 @@ export default function RedigerArrangementView({
                 <SettingsStack>
                   <SettingsSection
                     title="Arrangement"
-                    description="Metadata kan lagres uten at bookingene regenereres."
+                    description="Informasjonen kan lagres uten å endre banetidene."
                   >
                     <SettingsPanel>
                       {grener.length > 1 ? (
                         <SettingsRow
-                          title="Gren for nye bookinger"
+                          title="Gren for nye banetider"
                           description="Endrer bare hvilke baner du kan legge til videre."
                         >
                           <Field>
@@ -411,15 +426,18 @@ export default function RedigerArrangementView({
                         <Field>
                           <Select
                             value={kategori}
-                            onValueChange={(value) => setKategori(value as ArrangementKategori)}
+                            onValueChange={(value) => {
+                              resetMetadataFeedback();
+                              setKategori(value as ArrangementKategori);
+                            }}
                           >
                             <SelectTrigger id="kategori">
                               <SelectValue placeholder="Velg kategori…" />
                             </SelectTrigger>
                             <SelectContent>
-                              {KATEGORIER.map((category) => (
-                                <SelectItem key={category} value={category}>
-                                  {category}
+                              {ARRANGEMENT_KATEGORI_VALG.map((category) => (
+                                <SelectItem key={category.value} value={category.value}>
+                                  {category.label}
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -432,7 +450,10 @@ export default function RedigerArrangementView({
                           <Textarea
                             id="beskrivelse"
                             value={beskrivelse}
-                            onChange={(event) => setBeskrivelse(event.target.value)}
+                            onChange={(event) => {
+                              resetMetadataFeedback();
+                              setBeskrivelse(event.target.value);
+                            }}
                           />
                         </Field>
                       </SettingsRow>
@@ -448,7 +469,10 @@ export default function RedigerArrangementView({
                         title="Vis på nettsiden"
                         description="Publiser med egen tittel og presentasjonstekst."
                         checked={publisertPåNettsiden}
-                        onCheckedChange={setPublisertPåNettsiden}
+                        onCheckedChange={(checked) => {
+                          resetMetadataFeedback();
+                          setPublisertPåNettsiden(checked);
+                        }}
                       />
 
                       {publisertPåNettsiden ? (
@@ -458,7 +482,10 @@ export default function RedigerArrangementView({
                               <Input
                                 id="nettside-tittel"
                                 value={nettsideTittel}
-                                onChange={(event) => setNettsideTittel(event.target.value)}
+                                onChange={(event) => {
+                                  resetMetadataFeedback();
+                                  setNettsideTittel(event.target.value);
+                                }}
                                 placeholder="F.eks. Vårturnering 2026"
                                 maxLength={100}
                               />
@@ -467,7 +494,10 @@ export default function RedigerArrangementView({
                           <SettingsRow title="Presentasjon på nettsiden">
                             <TiptapEditor
                               content={nettsideBeskrivelse}
-                              onChange={setNettsideBeskrivelse}
+                              onChange={(content) => {
+                                resetMetadataFeedback();
+                                setNettsideBeskrivelse(content);
+                              }}
                             />
                           </SettingsRow>
                         </>
@@ -515,7 +545,7 @@ export default function RedigerArrangementView({
                   <SettingsSection
                     eyebrow="Fareområde"
                     title="Avlys arrangement"
-                    description="Alle tilknyttede bookinger slettes. Handlingen må bekreftes."
+                    description="Alle tilknyttede banetider slettes. Handlingen må bekreftes."
                     tone="danger"
                   >
                     <SettingsPanel>
@@ -540,6 +570,13 @@ export default function RedigerArrangementView({
                 </SettingsStack>
 
                 <AdminFormActions>
+                  {metadataLagret ? (
+                    <ActionFeedback
+                      tone="success"
+                      title="Informasjonen er lagret"
+                      description="Arrangementoversikten er oppdatert."
+                    />
+                  ) : null}
                   <ServerFeil feil={lagreFeil?.message ?? null} />
                   <AdminFormSubmitButton isLoading={lagreMetadataLoading} loadingText="Lagrer…">
                     Lagre informasjon
@@ -550,11 +587,11 @@ export default function RedigerArrangementView({
           },
           {
             value: "bookinger",
-            label: "Bookinger",
+            label: "Tider",
             content: (
               <SettingsStack>
                 <SettingsSection
-                  title="Legg til bookinger"
+                  title="Legg til banetider"
                   description="Nye tider legges først som forslag og lagres separat."
                 >
                   <SettingsPanel>
@@ -589,13 +626,13 @@ export default function RedigerArrangementView({
 
                 {isLoadingBookinger ? (
                   <RecordCollectionSkeleton
-                    ariaLabel="Laster arrangementets bookinger"
+                    ariaLabel="Laster arrangementets banetider"
                     rows={5}
                     layout="date"
                   />
                 ) : bookingerFeil ? (
                   <RecordListState
-                    title="Kunne ikke laste bookingene"
+                    title="Kunne ikke laste banetidene"
                     description={bookingerFeil.message}
                     tone="danger"
                     role="alert"
@@ -608,13 +645,19 @@ export default function RedigerArrangementView({
                   />
                 )}
 
+                {bookingFeedback ? <ActionFeedback {...bookingFeedback} /> : null}
+                <ServerFeil
+                  feil={slettBookingFeil?.message ?? leggTilBookingFeil?.message ?? null}
+                  title="Listen over banetider kunne ikke oppdateres"
+                />
+
                 {stagede.length > 0 ? (
                   <SettingsSection
                     title="Forslag klare"
-                    description="Forslagene skrives ikke til backend før du bekrefter."
+                    description="Forslagene lagres først når du bekrefter."
                   >
                     <SettingsPanel>
-                      <SettingsRow title="Ulagrede bookinger">
+                      <SettingsRow title="Ulagrede tider">
                         <RecordStatus tone="event">{stagede.length} forslag</RecordStatus>
                       </SettingsRow>
                     </SettingsPanel>

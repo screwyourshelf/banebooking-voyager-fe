@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Plus, ShieldX } from "lucide-react";
-import { AdminPage, AdminPageLoading, AdminPageState } from "@/components/admin";
+import { AdminAccessError, AdminPageLoading, AdminPageState } from "@/components/admin";
 import { RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
+import BanerOgGrenerWorkspace from "@/features/baner-og-grener/components/BanerOgGrenerWorkspace";
 import NyGrenDialog from "@/features/grener/views/ny-gren/NyGrenDialog";
 import RedigerGrenView from "@/features/grener/views/rediger-gren/RedigerGrenView";
 import { useBruker } from "@/hooks/useBruker";
@@ -11,14 +12,17 @@ import { Kapabiliteter } from "@/utils/kapabiliteter";
 
 export default function GrenerPage() {
   const [createOpen, setCreateOpen] = useState(false);
-  const { bruker, laster } = useBruker();
+  const { bruker, laster, feil, isFetching, refetch } = useBruker();
   const canAdministerActivities = harHandling(bruker?.kapabiliteter, Kapabiliteter.grener.admin);
+  const canAdministerCourts = harHandling(bruker?.kapabiliteter, Kapabiliteter.baner.admin);
 
   return (
-    <AdminPage
-      eyebrow="Administrasjon"
-      title="Grener"
-      description="Administrer aktiviteter og standardregler for booking."
+    <BanerOgGrenerWorkspace
+      activeSection="grener"
+      availableSections={{
+        baner: canAdministerCourts,
+        grener: canAdministerActivities,
+      }}
       action={
         canAdministerActivities ? (
           <Button type="button" onClick={() => setCreateOpen(true)}>
@@ -30,11 +34,13 @@ export default function GrenerPage() {
     >
       {laster ? (
         <AdminPageLoading label="Kontrollerer tilgang" />
+      ) : feil ? (
+        <AdminAccessError feil={feil} isFetching={isFetching} onRetry={() => void refetch()} />
       ) : !canAdministerActivities ? (
         <AdminPageState>
           <RecordListState
             icon={<ShieldX aria-hidden="true" />}
-            title="Du har ikke tilgang til Grener"
+            title="Du har ikke tilgang til grener"
             description="En klubbadministrator må gi deg tilgang før du kan administrere grener."
             tone="danger"
           />
@@ -46,6 +52,6 @@ export default function GrenerPage() {
       {canAdministerActivities ? (
         <NyGrenDialog open={createOpen} onOpenChange={setCreateOpen} />
       ) : null}
-    </AdminPage>
+    </BanerOgGrenerWorkspace>
   );
 }

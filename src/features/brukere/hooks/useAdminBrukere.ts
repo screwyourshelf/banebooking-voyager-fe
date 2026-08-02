@@ -1,5 +1,4 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import type { BrukerRespons } from "@/types";
@@ -33,7 +32,6 @@ export function useAdminBrukere() {
     ({ brukerId }) => `/klubb/${slug}/bruker/admin/bruker/${brukerId}`,
     {
       onSuccess: async () => {
-        toast.success("Bruker oppdatert");
         await queryClient.invalidateQueries({ queryKey: brukereKey });
       },
       retry: false,
@@ -54,7 +52,6 @@ export function useAdminBrukere() {
     ({ brukerId }) => `/klubb/${slug}/bruker/admin/bruker/${brukerId}`,
     {
       onSuccess: async () => {
-        toast.success("Bruker slettet");
         await queryClient.invalidateQueries({ queryKey: brukereKey });
       },
       retry: false,

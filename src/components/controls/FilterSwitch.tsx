@@ -1,14 +1,12 @@
 import { useId } from "react";
-import { cn } from "@/lib/utils";
 import { Switch } from "@/components/ui/switch";
 
-type Props = {
+export type FilterSwitchProps = {
   title: string;
   description?: string;
   checked: boolean;
   onCheckedChange: (checked: boolean) => void;
   disabled?: boolean;
-  className?: string;
 };
 
 export default function FilterSwitch({
@@ -17,12 +15,11 @@ export default function FilterSwitch({
   checked,
   onCheckedChange,
   disabled = false,
-  className,
-}: Props) {
+}: FilterSwitchProps) {
   const descriptionId = useId();
 
   return (
-    <label className={cn("filter-switch", className)}>
+    <label className="filter-switch">
       <span className="filter-switch__copy">
         <strong className="filter-switch__title">{title}</strong>
         {description ? (

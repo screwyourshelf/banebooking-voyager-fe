@@ -1,86 +1,66 @@
-import { useEffect, useState, useMemo } from "react";
-import { format } from "date-fns";
-
 import { ListSkeleton } from "@/components/loading";
-import { QueryFeil } from "@/components/errors";
+import { useBooking } from "@/features/booking/hooks/useBooking";
+import { useBookingSelection } from "@/features/booking/hooks/useBookingSelection";
+import { useAuth } from "@/hooks/useAuth";
 import { useBaner } from "@/hooks/useBaner";
 import { useGrener } from "@/hooks/useGrener";
-import { useBooking } from "@/features/booking/hooks/useBooking";
-import { useAuth } from "@/hooks/useAuth";
-
 import BookingContent from "./BookingContent";
 
 export default function BookingView() {
-  const { grener, isLoading: loadingGrener } = useGrener(false);
-  const { baner, isLoading: loadingBaner } = useBaner(false);
-  const [manuellGrenId, setValgtGrenId] = useState<string | null>(null);
-  const [manuellBaneId, setValgtBaneId] = useState<string | null>(null);
-  const [valgtDato, setValgtDato] = useState<Date | null>(new Date());
-
+  const {
+    grener,
+    isLoading: loadingGrener,
+    isFetching: fetchingGrener,
+    error: grenerError,
+    refetch: refetchGrener,
+  } = useGrener(false);
+  const {
+    baner,
+    isLoading: loadingBaner,
+    isFetching: fetchingBaner,
+    error: banerError,
+    refetch: refetchBaner,
+  } = useBaner(false);
   const { currentUser } = useAuth();
 
-  const standardGrenId =
-    grener.find((gren) => baner.some((bane) => bane.grenId === gren.id))?.id ?? grener[0]?.id ?? "";
-  const valgtGrenId = manuellGrenId ?? standardGrenId;
-
-  const valgtDatoStr = useMemo(
-    () => (valgtDato ? format(valgtDato, "yyyy-MM-dd") : ""),
-    [valgtDato]
-  );
-
-  const filtrerteBaner = useMemo(
-    () => (valgtGrenId ? baner.filter((b) => b.grenId === valgtGrenId) : baner),
-    [baner, valgtGrenId]
-  );
-
-  const valgtBaneId =
-    manuellBaneId != null && filtrerteBaner.some((b) => b.id === manuellBaneId)
-      ? manuellBaneId
-      : (filtrerteBaner[0]?.id ?? "");
-
-  const {
-    slots,
-    onBook,
-    onFjern,
-    isLoading: loadingBooking,
-    isFetching,
-    error: bookingError,
-    hentBookinger,
-    bookFeil,
-    fjernFeil,
-  } = useBooking(valgtDatoStr, valgtBaneId);
-
-  const serverFeil = bookFeil?.message ?? fjernFeil?.message ?? null;
-
-  useEffect(() => {
-    if (valgtDato) {
-      localStorage.setItem("valgtDato", valgtDato.toISOString());
-    }
-  }, [valgtDato]);
+  const selection = useBookingSelection({ grener, baner });
+  const booking = useBooking(selection.valgtDatoStr, selection.valgtBaneId);
 
   if (loadingBaner || loadingGrener) {
     return <ListSkeleton />;
   }
 
+  function handleSlotsRetry() {
+    void booking.refetch();
+  }
+
+  function handleSetupRetry() {
+    void Promise.all([refetchGrener(), refetchBaner()]);
+  }
+
   return (
-    <QueryFeil error={bookingError} isFetching={isFetching} onRetry={() => void hentBookinger()}>
-      <BookingContent
-        grener={grener}
-        valgtGrenId={valgtGrenId}
-        onGrenChange={setValgtGrenId}
-        baner={filtrerteBaner}
-        valgtBaneId={valgtBaneId}
-        onBaneChange={setValgtBaneId}
-        valgtDato={valgtDato}
-        onDatoChange={setValgtDato}
-        slots={slots}
-        isLoading={loadingBooking}
-        isFetching={isFetching}
-        currentUser={currentUser}
-        onBook={onBook}
-        onFjern={onFjern}
-        serverFeil={serverFeil}
-      />
-    </QueryFeil>
+    <BookingContent
+      grener={grener}
+      valgtGrenId={selection.valgtGrenId}
+      onGrenChange={selection.handleGrenChange}
+      baner={selection.filtrerteBaner}
+      valgtBaneId={selection.valgtBaneId}
+      onBaneChange={selection.handleBaneChange}
+      valgtDato={selection.valgtDato}
+      onDatoChange={selection.handleDatoChange}
+      slots={booking.slots}
+      isLoading={booking.isLoading}
+      isFetching={booking.isFetching}
+      isSetupFetching={fetchingGrener || fetchingBaner}
+      isAuthenticated={Boolean(currentUser)}
+      onBook={booking.bookSlot}
+      onFjern={booking.cancelBooking}
+      setupFeil={grenerError?.message ?? banerError?.message ?? null}
+      queryFeil={booking.error?.message ?? null}
+      bookFeil={booking.bookFeil?.message ?? null}
+      fjernFeil={booking.fjernFeil?.message ?? null}
+      onSetupRetry={handleSetupRetry}
+      onSlotsRetry={handleSlotsRetry}
+    />
   );
 }

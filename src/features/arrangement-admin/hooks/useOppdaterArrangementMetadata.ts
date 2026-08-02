@@ -1,4 +1,3 @@
-import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { useApiMutation } from "@/hooks/useApiMutation";
@@ -22,7 +21,6 @@ export function useOppdaterArrangementMetadata(arrangementId: string) {
     OppdaterArrangementMetadataRespons
   >("patch", `/klubb/${slug}/arrangement/${arrangementId}/metadata`, {
     onSuccess: async () => {
-      toast.success("Metadata lagret.");
       await queryClient.invalidateQueries({ queryKey: ["arrangementer-admin", slug] });
     },
     retry: false,
@@ -35,5 +33,7 @@ export function useOppdaterArrangementMetadata(arrangementId: string) {
     lagreMetadata,
     isLoading: mutation.isPending,
     feil: mutation.error,
+    lagret: mutation.isSuccess,
+    resetTilbakemelding: mutation.reset,
   };
 }

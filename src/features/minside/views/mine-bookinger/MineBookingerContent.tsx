@@ -1,14 +1,16 @@
 import { CalendarCheck, CalendarX, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 import { usePagination } from "@/hooks/usePagination";
-import FilterSwitch from "@/components/controls/FilterSwitch";
 import {
+  RecordCollection,
+  RecordCollectionBody,
+  RecordCollectionHeader,
+  RecordCollectionPagination,
   RecordCollectionSkeleton,
-  RecordCollectionToolbar,
+  RecordList,
   RecordListState,
 } from "@/components/records";
 import { ServerFeil } from "@/components/errors";
-import { Inline } from "@/components/layout";
 import { Accordion } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import type { MinBookingRespons } from "@/types";
@@ -96,31 +98,25 @@ export default function MineBookingerContent({
   } = usePagination(bookinger, 10, visHistoriske);
 
   const antallTekst = isLoading
-    ? "Henter tider…"
+    ? "Laster tider…"
     : `${bookinger.length} ${bookinger.length === 1 ? "tid" : "tider"}`;
   const bookingGroups = groupBookingsByDate(synligeBookinger);
 
   return (
-    <section
-      className="record-collection mine-bookings"
-      aria-label="Reservasjonsoversikt"
-      aria-busy={isLoading}
-    >
-      <RecordCollectionToolbar
+    <RecordCollection ariaLabel="Oversikt over mine tider" busy={isLoading}>
+      <RecordCollectionHeader
         icon={<CalendarCheck />}
         title={antallTekst}
-        description={visHistoriske ? "Kommende og gjennomførte" : "Kommende reservasjoner"}
-        actions={
-          <FilterSwitch
-            title="Vis tidligere"
-            checked={visHistoriske}
-            onCheckedChange={onToggleVisHistoriske}
-            disabled={isFetching}
-          />
-        }
+        description={visHistoriske ? "Kommende og tidligere tider" : "Kommende tider"}
+        toggle={{
+          title: "Vis tidligere",
+          checked: visHistoriske,
+          onCheckedChange: onToggleVisHistoriske,
+          disabled: isFetching,
+        }}
       />
 
-      <div className="record-collection__body">
+      <RecordCollectionBody>
         <ServerFeil feil={serverFeil} />
 
         {isLoading ? (
@@ -128,7 +124,7 @@ export default function MineBookingerContent({
         ) : queryError ? (
           <RecordListState
             icon={<RefreshCw aria-hidden="true" />}
-            title="Kunne ikke hente tidene dine"
+            title="Kunne ikke laste tidene dine"
             description={queryError}
             tone="danger"
             role="alert"
@@ -147,10 +143,10 @@ export default function MineBookingerContent({
         ) : bookinger.length === 0 ? (
           <RecordListState
             icon={<CalendarX aria-hidden="true" />}
-            title={visHistoriske ? "Ingen reservasjoner ennå" : "Ingen kommende tider"}
+            title={visHistoriske ? "Ingen tider ennå" : "Ingen kommende tider"}
             description={
               visHistoriske
-                ? "Når du booker en bane, finner du både kommende og gjennomførte tider her."
+                ? "Når du booker en bane, vises kommende og tidligere tider her."
                 : "Finn en ledig tid som passer, så dukker den opp her med en gang."
             }
             action={
@@ -161,12 +157,7 @@ export default function MineBookingerContent({
           />
         ) : (
           <>
-            <Accordion
-              type="single"
-              collapsible
-              className="mine-bookings__groups"
-              data-loading={isFetching || isPending}
-            >
+            <Accordion type="single" collapsible className="mine-bookings__groups">
               {bookingGroups.map((group) => {
                 const heading = getDateHeading(group.date);
 
@@ -177,7 +168,7 @@ export default function MineBookingerContent({
                       <time dateTime={group.date}>{heading.full}</time>
                     </h2>
 
-                    <div className="record-list mine-bookings__date-list">
+                    <RecordList loading={isFetching || isPending}>
                       {group.bookings.map((booking) => (
                         <MineBookingRow
                           key={buildBookingKey(booking)}
@@ -191,22 +182,22 @@ export default function MineBookingerContent({
                           onCancel={onFjern}
                         />
                       ))}
-                    </div>
+                    </RecordList>
                   </section>
                 );
               })}
             </Accordion>
 
             {harFlere ? (
-              <Inline justify="center" className="record-collection__pagination">
+              <RecordCollectionPagination>
                 <Button type="button" variant="outline" size="sm" onClick={visFlere}>
                   Vis flere ({gjenstaar} gjenstår)
                 </Button>
-              </Inline>
+              </RecordCollectionPagination>
             ) : null}
           </>
         )}
-      </div>
-    </section>
+      </RecordCollectionBody>
+    </RecordCollection>
   );
 }

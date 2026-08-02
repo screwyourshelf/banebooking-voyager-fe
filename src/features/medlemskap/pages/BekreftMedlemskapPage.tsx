@@ -22,13 +22,7 @@ import { Input } from "@/components/ui/input";
 import { useBekreftMedlemskap } from "@/hooks/useBekreftMedlemskap";
 import { useBruker } from "@/hooks/useBruker";
 import { useKlubb } from "@/hooks/useKlubb";
-
-const MEDLEMSKAP_TYPER = [
-  { value: "BarnJunior", label: "Barn/junior (inntil 19 år)" },
-  { value: "StudentVernepliktig", label: "Student/vernepliktig" },
-  { value: "Voksen", label: "Voksen" },
-  { value: "Familie", label: "Familiemedlemskap" },
-] as const;
+import { MEDLEMSKAP_TYPE_VALG } from "@/utils/brukerPresentation";
 
 export default function BekreftMedlemskapPage() {
   const {
@@ -48,9 +42,9 @@ export default function BekreftMedlemskapPage() {
       <AdminPage
         eyebrow="Medlemskap"
         title="Bekreft medlemskap"
-        description="Laster medlemskapsinformasjon fra klubben."
+        description="Oppgi medlemskapstype og navnet medlemskapet står på."
       >
-        <AdminPageLoading label="Laster medlemskapsbekreftelse" />
+        <AdminPageLoading label="Laster medlemsbekreftelse" />
       </AdminPage>
     );
   }
@@ -60,12 +54,12 @@ export default function BekreftMedlemskapPage() {
       <AdminPage
         eyebrow="Medlemskap"
         title="Bekreft medlemskap"
-        description="Informasjonen må lastes før du kan bekrefte medlemskapet."
+        description="Oppgi medlemskapstype og navnet medlemskapet står på."
       >
         <AdminPageState>
           <RecordListState
             icon={<CircleAlert aria-hidden="true" />}
-            title="Kunne ikke laste medlemskapsinformasjonen"
+            title="Kunne ikke laste medlemsinformasjonen"
             description={klubbFeil?.message ?? brukerFeil ?? "Prøv igjen om litt."}
             action={
               <Button
@@ -104,7 +98,7 @@ export default function BekreftMedlemskapPage() {
     <AdminPage
       eyebrow="Medlemskap"
       title="Bekreft medlemskap"
-      description="Bekreft at medlemskapet ditt er betalt for gjeldende sesong."
+      description="Oppgi medlemskapstype og navnet medlemskapet står på."
       action={
         <RecordStatus tone="warning">
           {bruker?.medlemskapBekreftelseLabel ?? "Må bekreftes"}
@@ -121,7 +115,7 @@ export default function BekreftMedlemskapPage() {
             <p>
               Ikke medlem ennå?{" "}
               <a href={klubb.nettside} target="_blank" rel="noopener noreferrer">
-                Se medlemskap og priser på klubbens hjemmeside
+                Se medlemskap og priser på klubbens nettside
               </a>
               .
             </p>
@@ -158,10 +152,10 @@ export default function BekreftMedlemskapPage() {
                 </Field>
               </SettingsRow>
 
-              <SettingsRow title="Type medlemskap" description="Velg medlemskapet du har betalt.">
+              <SettingsRow title="Medlemskapstype" description="Velg medlemskapet du har betalt.">
                 <SettingsRadioGroup
-                  label="Type medlemskap"
-                  options={MEDLEMSKAP_TYPER}
+                  label="Medlemskapstype"
+                  options={MEDLEMSKAP_TYPE_VALG}
                   value={medlemskapType}
                   onValueChange={setMedlemskapType}
                   disabled={laster || vellykket}

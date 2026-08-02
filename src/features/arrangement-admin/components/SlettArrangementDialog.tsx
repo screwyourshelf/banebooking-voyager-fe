@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { SettingsPanel, SettingsSection, SettingsSwitchRow } from "@/components/admin";
-import { Button } from "@/components/ui/button";
 import { ServerFeil } from "@/components/errors";
 import {
   AlertDialog,
@@ -61,8 +60,8 @@ export default function SlettArrangementDialog({
           <AlertDialogTitle>Avlys arrangement</AlertDialogTitle>
           <AlertDialogDescription>
             {harTurnering
-              ? `Er du sikker på at du vil avlyse «${tittel}»? Alle tilknyttede bookinger vil slettes, og arrangementet kobles fra turneringen.`
-              : `Er du sikker på at du vil avlyse «${tittel}»? Alle tilknyttede bookinger vil slettes.`}
+              ? `Er du sikker på at du vil avlyse «${tittel}»? Alle tilknyttede banetider slettes, og arrangementet kobles fra turneringen.`
+              : `Er du sikker på at du vil avlyse «${tittel}»? Alle tilknyttede banetider slettes.`}
           </AlertDialogDescription>
         </AlertDialogHeader>
         {harTurnering && (
@@ -85,14 +84,12 @@ export default function SlettArrangementDialog({
         <AlertDialogFooter>
           <ServerFeil feil={feil} />
           <AlertDialogCancel disabled={isDeleting}>Avbryt</AlertDialogCancel>
-          <AlertDialogAction asChild>
-            <Button
-              variant="destructive"
-              disabled={isDeleting || (harTurnering && !bekreftTurnering)}
-              onClick={handleDelete}
-            >
-              {isDeleting ? "Avlyser..." : "Ja, avlys"}
-            </Button>
+          <AlertDialogAction
+            variant="destructive"
+            disabled={isDeleting || (harTurnering && !bekreftTurnering)}
+            onClick={handleDelete}
+          >
+            {isDeleting ? "Avlyser..." : "Ja, avlys"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

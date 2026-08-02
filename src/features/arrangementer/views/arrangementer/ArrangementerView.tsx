@@ -25,7 +25,7 @@ export default function ArrangementerView() {
       <PageHeader
         eyebrow="Klubben"
         title="Arrangementer"
-        description="Se hva som skjer i klubben, og åpne programmet for tider og baner."
+        description="Se hva som skjer, når det starter og hvilke baner som brukes."
         className="record-collection-page__heading"
       />
 

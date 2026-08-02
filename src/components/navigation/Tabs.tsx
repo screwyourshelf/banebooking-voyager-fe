@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 import { Tabs as RadixTabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { cn } from "@/lib/utils";
 
@@ -140,6 +141,54 @@ export function TabsLazyMount({
 
       {/* Render kun aktivt innhold */}
       <div className={isSection ? "section-tabs__content" : "mt-0"}>{activeItem.content}</div>
+    </RadixTabs>
+  );
+}
+
+export type RouteTabItem = {
+  value: string;
+  label: string;
+  to: string;
+};
+
+type RouteTabsProps = {
+  items: RouteTabItem[];
+  value: string;
+  ariaLabel: string;
+  children: ReactNode;
+};
+
+export function RouteTabs({ items, value, ariaLabel, children }: RouteTabsProps) {
+  const navigate = useNavigate();
+  const hasActiveItem = items.some((item) => item.value === value);
+
+  if (items.length === 0 || !hasActiveItem) return children;
+
+  const handleValueChange = (nextValue: string) => {
+    const nextItem = items.find((item) => item.value === nextValue);
+    if (!nextItem || nextValue === value) return;
+
+    void navigate(nextItem.to, { relative: "path" });
+  };
+
+  return (
+    <RadixTabs className="section-tabs" value={value} onValueChange={handleValueChange}>
+      <TabsList
+        variant="line"
+        aria-label={ariaLabel}
+        className="section-tabs__list"
+        data-count={items.length}
+      >
+        {items.map((item) => (
+          <TabsTrigger key={item.value} value={item.value} className="section-tabs__trigger">
+            {item.label}
+          </TabsTrigger>
+        ))}
+      </TabsList>
+
+      <TabsContent value={value} className="section-tabs__content">
+        {children}
+      </TabsContent>
     </RadixTabs>
   );
 }

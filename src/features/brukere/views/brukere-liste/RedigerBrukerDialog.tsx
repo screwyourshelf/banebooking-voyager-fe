@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog";
 
 import type { BrukerRespons, RolleType, EditState } from "@/features/brukere/types";
+import { ROLLE_VALG } from "@/utils/brukerPresentation";
 
 type Props = {
   aktivBruker: BrukerRespons;
@@ -43,7 +44,7 @@ export default function RedigerBrukerDialog({
       <DialogContent className="user-editor-dialog">
         <DialogHeader className="user-editor-dialog__header">
           <DialogTitle>Rediger bruker</DialogTitle>
-          <DialogDescription>Oppdater navn og tilgangsnivå.</DialogDescription>
+          <DialogDescription>Oppdater visningsnavn og rolle.</DialogDescription>
         </DialogHeader>
 
         <div className="user-editor-dialog__identity">
@@ -75,9 +76,11 @@ export default function RedigerBrukerDialog({
               value={edit.rolle}
               onChange={(event) => onEditChange({ rolle: event.target.value as RolleType })}
             >
-              <option value="Medlem">Medlem</option>
-              <option value="Utvidet">Utvidet</option>
-              <option value="KlubbAdmin">KlubbAdmin</option>
+              {ROLLE_VALG.map((rolle) => (
+                <option key={rolle.value} value={rolle.value}>
+                  {rolle.label}
+                </option>
+              ))}
             </select>
             <small>
               <ShieldCheck aria-hidden="true" />

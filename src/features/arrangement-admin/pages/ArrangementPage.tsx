@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Plus, ShieldX } from "lucide-react";
-import { AdminPage, AdminPageLoading, AdminPageState } from "@/components/admin";
+import { AdminAccessError, AdminPage, AdminPageLoading, AdminPageState } from "@/components/admin";
 import { RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import ArrangementAdminOverview from "@/features/arrangement-admin/views/ArrangementAdminOverview";
@@ -10,14 +10,14 @@ import { Kapabiliteter } from "@/utils/kapabiliteter";
 
 export default function ArrangementPage() {
   const [createOpen, setCreateOpen] = useState(false);
-  const { bruker, laster } = useBruker();
+  const { bruker, laster, feil, isFetching, refetch } = useBruker();
   const canManageArrangements = harHandling(bruker?.kapabiliteter, Kapabiliteter.arrangement.se);
 
   return (
     <AdminPage
       eyebrow="Administrasjon"
-      title="Arrangementer"
-      description="Opprett arrangementer og administrer informasjon, turnering og bookede tider."
+      title="Administrer arrangementer"
+      description="Planlegg program, legg til banetider og styr publisering."
       action={
         canManageArrangements ? (
           <Button type="button" onClick={() => setCreateOpen(true)}>
@@ -29,6 +29,8 @@ export default function ArrangementPage() {
     >
       {laster ? (
         <AdminPageLoading label="Kontrollerer tilgang" />
+      ) : feil ? (
+        <AdminAccessError feil={feil} isFetching={isFetching} onRetry={() => void refetch()} />
       ) : !canManageArrangements ? (
         <AdminPageState>
           <RecordListState

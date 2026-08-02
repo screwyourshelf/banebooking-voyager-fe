@@ -1,5 +1,4 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-import { toast } from "sonner";
 
 import {
   AdminFormActions,
@@ -14,6 +13,7 @@ import {
   SettingsSwitchRow,
 } from "@/components/admin";
 import { ServerFeil } from "@/components/errors";
+import { ActionFeedback, type ActionFeedbackMessage } from "@/components/feedback";
 import { TabsLazyMount } from "@/components/navigation/Tabs";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
@@ -27,6 +27,10 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import TiptapEditor from "@/components/editor/TiptapEditor";
+import {
+  ARRANGEMENT_KATEGORI_VALG,
+  formaterAntallBanetider,
+} from "@/utils/arrangementPresentation";
 
 import { useArrangement } from "../../hooks/useArrangement";
 import { useBookingListe } from "../../hooks/useBookingListe";
@@ -42,21 +46,13 @@ import type { LokalBooking } from "../../types";
 
 import type { ArrangementKategori, DayOfWeek, OpprettArrangementForespørsel } from "@/types";
 
-const KATEGORIER = [
-  "Trening",
-  "Turnering",
-  "Klubbmersterskap",
-  "Kurs",
-  "Lagkamp",
-  "Stigespill",
-  "Dugnad",
-  "Vedlikehold",
-  "Sosialt",
-  "Annet",
-] as const satisfies readonly ArrangementKategori[];
+type Props = {
+  onCreated?: (feedback: ActionFeedbackMessage) => void;
+};
 
-export default function OpprettArrangementView({ onCreated }: { onCreated?: () => void }) {
+export default function OpprettArrangementView({ onCreated }: Props) {
   const [valgtGrenId, setValgtGrenId] = useState("");
+  const [opprettFeedback, setOpprettFeedback] = useState<ActionFeedbackMessage | null>(null);
 
   const {
     grener,
@@ -114,6 +110,7 @@ export default function OpprettArrangementView({ onCreated }: { onCreated?: () =
    * 4. Merge status tilbake – API er kun brukt for å enriche, ikke erstatte listen
    */
   const håndterGenerer = async (nye: LokalBooking[]) => {
+    setOpprettFeedback(null);
     leggTil(nye);
 
     // Snapshot: eksisterende bookinger fra ref + nye (de som faktisk ble lagt til)
@@ -179,6 +176,7 @@ export default function OpprettArrangementView({ onCreated }: { onCreated?: () =
   };
 
   const håndterFjernEllerAvlys = (id: string) => {
+    setOpprettFeedback(null);
     const booking = bookinger.find((b) => b.id === id);
     if (!booking) return;
     if (booking.kilde === "eksisterende") {
@@ -193,9 +191,15 @@ export default function OpprettArrangementView({ onCreated }: { onCreated?: () =
     const aktiveBookinger = bookinger.filter((b) => !b.erSlettet);
 
     if (aktiveBookinger.length === 0) {
-      toast.warning("Legg til minst én booking før du oppretter arrangementet.");
+      setOpprettFeedback({
+        tone: "warning",
+        title: "Arrangementet mangler banetider",
+        description: "Legg til minst én banetid før du oppretter arrangementet.",
+      });
       return;
     }
+
+    setOpprettFeedback(null);
 
     // Utled ukedager og periode fra booking-datoene (brukes kun for metadata på arrangementet)
     const JS_DAY_TO_DOW: DayOfWeek[] = [
@@ -263,13 +267,33 @@ export default function OpprettArrangementView({ onCreated }: { onCreated?: () =
           })
         );
       }
-      if (result.antallOpprettet > 0) onCreated?.();
+      if (result.antallOpprettet === 0) {
+        setOpprettFeedback({
+          tone: "warning",
+          title: "Ingen banetider ble opprettet",
+          description:
+            "Alle valgte tidspunkter var allerede opptatt. Juster forslagene og prøv igjen.",
+        });
+        return;
+      }
+
+      const konfliktAntall = result.konflikter.length;
+      onCreated?.({
+        tone: konfliktAntall > 0 ? "warning" : "success",
+        title: "Arrangementet er opprettet",
+        description:
+          konfliktAntall > 0
+            ? `${formaterAntallBanetider(result.antallOpprettet)} ble opprettet. ${konfliktAntall} tidspunkt${
+                konfliktAntall === 1 ? "" : "er"
+              } ble hoppet over på grunn av konflikter.`
+            : `${formaterAntallBanetider(result.antallOpprettet)} ble opprettet.`,
+      });
     } catch {
       // feil vises via opprettFeil
     }
   };
 
-  if (isLoading) return <AdminPageLoading label="Laster arrangementeditor" />;
+  if (isLoading) return <AdminPageLoading label="Laster arrangementskjemaet" />;
 
   return (
     <>
@@ -325,9 +349,9 @@ export default function OpprettArrangementView({ onCreated }: { onCreated?: () =
                               <SelectValue placeholder="Velg kategori…" />
                             </SelectTrigger>
                             <SelectContent>
-                              {KATEGORIER.map((category) => (
-                                <SelectItem key={category} value={category}>
-                                  {category}
+                              {ARRANGEMENT_KATEGORI_VALG.map((category) => (
+                                <SelectItem key={category.value} value={category.value}>
+                                  {category.label}
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -389,14 +413,14 @@ export default function OpprettArrangementView({ onCreated }: { onCreated?: () =
                 </SettingsStack>
 
                 <AdminFormActions>
-                  <Button type="submit">Neste: Bookinger</Button>
+                  <Button type="submit">Neste: Tider</Button>
                 </AdminFormActions>
               </AdminSettingsForm>
             ),
           },
           {
             value: "bookinger",
-            label: "Bookinger",
+            label: "Tider",
             content: (
               <AdminSettingsForm
                 onSubmit={(event) => {
@@ -408,7 +432,7 @@ export default function OpprettArrangementView({ onCreated }: { onCreated?: () =
                   <SettingsSection
                     eyebrow="Steg 2"
                     title="Velg oppsett"
-                    description="Begge metodene legger konkrete forslag i den samme bookinglisten."
+                    description="Begge metodene legger konkrete forslag i den samme listen."
                   >
                     <SettingsPanel>
                       <SettingsRow title="Oppsettstype">
@@ -448,6 +472,7 @@ export default function OpprettArrangementView({ onCreated }: { onCreated?: () =
                 </SettingsStack>
 
                 <AdminFormActions>
+                  {opprettFeedback ? <ActionFeedback {...opprettFeedback} /> : null}
                   <ServerFeil feil={opprettFeil?.message ?? null} />
                   <AdminFormSubmitButton
                     isLoading={isCreating || sjekkKonflikterLoading}

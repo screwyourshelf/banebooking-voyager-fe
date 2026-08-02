@@ -3,4 +3,9 @@ export { default as Inline } from "./Inline";
 export { default as CardSection } from "./CardSection";
 export { default as SectionHeading } from "./SectionHeading";
 export { default as PageHeader } from "./PageHeader";
-export { ContentDocument, ContentDocumentIntro, ContentDocumentSection } from "./ContentDocument";
+export {
+  ContentDocument,
+  ContentDocumentFacts,
+  ContentDocumentIntro,
+  ContentDocumentSection,
+} from "./ContentDocument";

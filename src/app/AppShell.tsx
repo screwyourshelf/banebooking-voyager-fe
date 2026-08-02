@@ -1,5 +1,5 @@
 import { Outlet } from "react-router-dom";
-import { Toaster } from "sonner";
+import { GlobalFeedbackToaster } from "@/components/feedback";
 import { AppSidebar, MobileBottomNav, Navbar } from "@/components/navigation";
 import "@/styles/animate-fadeIn.css";
 
@@ -26,12 +26,7 @@ export default function AppShell() {
 
       <MobileBottomNav />
 
-      <Toaster
-        position="top-center"
-        offset={{ top: "35vh" }}
-        mobileOffset={{ top: "35vh" }}
-        duration={1500}
-      />
+      <GlobalFeedbackToaster />
     </div>
   );
 }

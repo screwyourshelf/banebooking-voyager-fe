@@ -6,15 +6,10 @@ import { RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import { SlettMegDialog } from "@/features/minside/components";
 import { useMeg } from "@/hooks/useMeg";
+import { formaterRolle } from "@/utils/brukerPresentation";
 
 import MinProfilContent, { type Mode } from "./MinProfilContent";
 import { MAX_VISNINGSNAVN_LENGTH, validateVisningsnavn } from "./visningsnavn";
-
-const ROLLE_LABELS = {
-  Medlem: "Medlem",
-  Utvidet: "Utvidet bruker",
-  KlubbAdmin: "Klubbadministrator",
-} as const;
 
 export default function MinProfilView() {
   const {
@@ -25,7 +20,7 @@ export default function MinProfilView() {
     oppdaterVisningsnavn,
     slettMeg,
   } = useMeg();
-  const { mutateAsync, isPending } = oppdaterVisningsnavn;
+  const { mutateAsync, isPending, isSuccess, reset } = oppdaterVisningsnavn;
 
   const [mode, setMode] = useState<Mode>("epost");
   const [visningsnavn, setVisningsnavn] = useState("");
@@ -91,20 +86,23 @@ export default function MinProfilView() {
   return (
     <MinProfilContent
       epost={bruker.epost}
-      rollerText={bruker.roller.map((rolle) => ROLLE_LABELS[rolle]).join(", ")}
+      rollerText={bruker.roller.map(formaterRolle).join(", ")}
       mode={mode}
       onSetMode={(m) => {
+        reset();
         setMode(m);
         setError(null);
       }}
       visningsnavn={visningsnavn}
       onChangeVisningsnavn={(value) => {
+        reset();
         setVisningsnavn(value);
         if (error) setError(null);
       }}
       maxLength={MAX_VISNINGSNAVN_LENGTH}
       error={error}
       serverFeil={oppdaterVisningsnavn.error?.message ?? null}
+      lagret={isSuccess && !canSubmit}
       canSubmit={canSubmit}
       isSaving={isPending}
       onSubmit={() => void lagreVisningsnavn()}

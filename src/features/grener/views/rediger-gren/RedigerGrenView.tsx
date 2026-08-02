@@ -54,6 +54,7 @@ export default function RedigerGrenView() {
   const [editorOpen, setEditorOpen] = useState(false);
   const [touched, setTouched] = useState<Record<string, TouchedState>>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
+  const [lagretGrenId, setLagretGrenId] = useState<string | null>(null);
 
   const valgtGrenId =
     manuellGrenId != null && grener.some((gren) => gren.id === manuellGrenId)
@@ -89,6 +90,8 @@ export default function RedigerGrenView() {
 
   function onChange<K extends keyof GrenFormData>(key: K, value: GrenFormData[K]) {
     if (!valgtGrenId || !valgtGren) return;
+    setLagretGrenId(null);
+    oppdaterGren.reset();
     setRedigerte((current) => ({
       ...current,
       [valgtGrenId]: {
@@ -150,6 +153,7 @@ export default function RedigerGrenView() {
         return next;
       });
       setSubmitAttempted(false);
+      setLagretGrenId(valgtGrenId);
     } catch {
       // Feilen vises i skjemaet.
     }
@@ -159,8 +163,8 @@ export default function RedigerGrenView() {
     return (
       <AdminEntityCollection
         icon={<Shapes aria-hidden="true" />}
-        title="Laster grener…"
-        description="Henter klubbens aktiviteter"
+        title="Grener"
+        description="Velg en gren for å redigere"
       >
         <RecordCollectionSkeleton ariaLabel="Laster grener" rows={3} />
       </AdminEntityCollection>
@@ -172,11 +176,11 @@ export default function RedigerGrenView() {
       <AdminEntityCollection
         icon={<Shapes aria-hidden="true" />}
         title="Grener"
-        description="Klubbens aktiviteter"
+        description="Velg en gren for å redigere"
       >
         <RecordListState
           icon={<RefreshCw aria-hidden="true" />}
-          title="Kunne ikke hente grenene"
+          title="Kunne ikke laste grenene"
           description={error.message}
           tone="danger"
           role="alert"
@@ -228,6 +232,8 @@ export default function RedigerGrenView() {
                   status={erEndret ? "Ulagret" : values.aktiv ? "Aktiv" : "Inaktiv"}
                   statusTone={erEndret ? "warning" : values.aktiv ? "available" : "past"}
                   onSelect={() => {
+                    setLagretGrenId(null);
+                    oppdaterGren.reset();
                     setValgtGrenId(gren.id);
                     setEditorOpen(true);
                   }}
@@ -265,6 +271,7 @@ export default function RedigerGrenView() {
               if (valgtGrenId) touchNavn(valgtGrenId);
             }}
             mutasjonFeil={oppdaterGren.error?.message ?? null}
+            lagret={lagretGrenId === valgtGrenId && !isDirty}
           />
         </AdminEditorDialog>
       ) : null}

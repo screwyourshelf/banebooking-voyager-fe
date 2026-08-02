@@ -1,7 +1,8 @@
 # Frontend-redesign: handover til neste Codex-task
 
-> **Status:** Fundament, `Mine tider`, `Arrangementer`, `Arrangementadministrasjon`, `Baner`, `Grener`,
-> `Klubbinnstillinger`, `Min side`, `Kunngjøringer`, `Vilkår` og guard-flater klare
+> **Status:** Fundament, bookingunderflyter, `Mine tider`, `Arrangementer`,
+> `Arrangementadministrasjon`, `Baner`, `Grener`, `Klubbinnstillinger`, `Min side`,
+> `Kunngjøringer`, `Vilkår` og guard-flater klare
 > **Sist oppdatert:** 2026-08-01
 > **Repo:** `/Users/andreas/Dev/banebooking/frontend`
 > **Branch:** `feature/frontend-design-poc`
@@ -25,6 +26,11 @@ Dokumenter i `docs/archive/` er historiske og skal ikke brukes som gjeldende pla
 - Mobil har toppfelt, fast bunnnavigasjon og samlet `Mer`-/kontomeny.
 - Lyst/mørkt tema er alltid tilgjengelig som ikonverktøy.
 - Navigasjonsmodell og labels er samlet, slik at mobil og desktop bruker samme struktur.
+- `Baner` og `Grener` er samlet i navigasjonspunktet `Baner og grener`. Arbeidsflaten
+  beholder separate ruter og lister, men deler sidehode og ruteorienterte seksjonsfaner.
+- De redesignede arbeidsflatene bruker responsive typografitokens: mobil beholder den
+  kompakte skalaen, mens desktop løfter metadata, kontroller, brødtekst og seksjonstitler
+  ett trinn. Shadcn-komponentkoden, navigasjonen og Turnering er ikke endret av skalaen.
 
 Sentrale filer:
 
@@ -62,13 +68,34 @@ Sentrale filer:
 - `Ledig` og `Opptatt` er hovedstatus; eier, navn og arrangement er forklarende varianter.
 - Slot-handlinger bruker felles hierarki og flyter til høyre.
 - Varsler fra feed/RSS er tilbake i appskallet og på bookingsiden.
+- `Se bookingregler` åpner den delte editorflaten og viser grenens reelle banereglement,
+  bookinggrenser, åpningstid og slotlengde i `ContentDocument`.
+- Vellykket booking og avbestilling bekreftes primært ved at sloten umiddelbart endrer
+  status. Det vises ingen toast for disse handlingene. Mutasjonsfeil vises ved slotlisten,
+  mens innlastingsfeil beholder sidehodet og kontrollene med en eksplisitt
+  prøv-igjen-handling.
+- `Koble til arrangement` bruker samme `AdminEditorDialog`, settings-rader og Radix-baserte
+  radiovalg som andre editorer. Den tidligere lokale Tailwind-dialogvarianten er fjernet.
+- Bookingvisningen er delt i komposisjon, kontroller og resultatflate. Valgtilstand,
+  spørringer og optimistiske mutasjoner ligger i dedikerte hooks, mens slotens
+  kapabiliteter og presentasjon beregnes i rene funksjoner før raden rendres.
+- Historikkfilteret memoiserer gruppering og synlige slots, og hver slotrad er memoisert.
+  Død lokaltilstand og effekter som bare synkroniserte utledbar state er fjernet.
 
 Sentrale filer:
 
 - `src/features/booking/views/booking/BookingContent.tsx`
-- `src/features/booking/components/BookingMobileControls.tsx`
+- `src/features/booking/views/booking/BookingSchedule.tsx`
+- `src/features/booking/components/BookingPrimaryControls.tsx`
 - `src/features/booking/components/BookingCourtSwitcher.tsx`
 - `src/features/booking/components/BookingSlotListAccordion.tsx`
+- `src/features/booking/components/BookingSlotRow.tsx`
+- `src/features/booking/components/bookingSlotPresentation.ts`
+- `src/features/booking/components/ReglementDialog.tsx`
+- `src/features/booking/components/KobleTilArrangementDialog.tsx`
+- `src/features/booking/hooks/useBooking.ts`
+- `src/features/booking/hooks/useBookingSelection.ts`
+- `src/features/booking/hooks/useBookingMutations.ts`
 - `src/features/booking/activityTheme.ts`
 - `src/features/feed/components/FeedNotice.tsx`
 
@@ -78,7 +105,7 @@ Sentrale filer:
 - Reservasjoner grupperes etter dato; datoflisen gjentas ikke i hver rad.
 - Mobilraden følger bookinglistens rekkefølge: tid og vær, bane, status og eventuell
   detaljhandling.
-- Siden bruker samme fulle arbeidsbredde som booking, slik at navigasjon mellom flatene ikke
+- Siden bruker samme felles arbeidsbredde som booking, slik at navigasjon mellom flatene ikke
   gir et tydelig breddehopp på desktop.
 - Kommende reservasjoner vises først; historikk kan hentes med ett felles kontrollvalg.
 - Tomtilstand, lasting, API-feil og mutasjonsfeil har bevisste tilstander i samme flate.
@@ -412,7 +439,13 @@ Sentrale filer:
   og oransje valgtmarkør uten feature-lokale knapperekker.
 - `RecordCollectionToolbar` gir listeflater samme opptelling, beskrivelse og handlinger på
   den grønne kontrollflaten.
-- `record-list` og `record-card` gir felles ramme for slots og søkeresultater.
+- `RecordCollection`, `RecordList`, `RecordAccordionList` og `RecordCard`-familien gir
+  listeflater en lukket kontrakt for full bredde, vertikal avstand, kortflate, hover,
+  detaljflate og høyrejusterte handlinger. Booking, Mine tider, Arrangementer, Brukere,
+  Baner, Grener og arrangementadministrasjon bruker samme API.
+- Features kan ikke legge `className` eller `style` på record-røttene. Direkte bruk av de
+  underliggende `record-*`-klassene avvises av `npm run design-system:check`, som også kjøres
+  gjennom `npm run check`. Innholdsoppsettet inni kortet kan fortsatt være domenespesifikt.
 - `RecordAccent` og `RecordEyebrow` gir vanlige record-rader én felles oransje
   informasjonsmarkør: tid i Book/Mine tider, dato i Arrangementer og rolle i Brukere.
   `AdminEntityRow` følger samme regel med gren i Baner og åpningstid i Grener.
@@ -437,6 +470,20 @@ Sentrale filer:
   skjema- og handlingshierarki som editorene uten lokale layoutklasser.
 - `ContentDocument` gir vilkår, reglement og obligatoriske beskjeder én responsiv
   langtekstflate med felles lesebredde, seksjoner, lenker og temaoppførsel.
+- `ContentDocumentFacts` gir reglement og tilsvarende dokumenter en felles kompakt
+  nøkkel–verdi-visning uten at features kobler seg direkte til presentasjonsklasser.
+- `DatePickerPopover` samler Radix-popover, kalender, datogrense og lukkeatferd for alle
+  datovelgere. Det hindrer lokale popover-varianter og samtidige dialoglag.
+- `ActionFeedback` gir vedvarende, kontekstuell tilbakemelding med felles `success`, `info`,
+  `warning` og `danger`-toner. Den bruker ikke dekorative ikoner og har felles live-regioner.
+- `MutationFeedback` prioriterer feil foran suksess og brukes i skjemaets handlingsområde
+  når resultatet ikke er tydelig nok gjennom den oppdaterte flaten alene.
+- `QueryFeil`, `RecordListState`, `AdminAccessError` og guard-feil gir lasting og
+  autorisasjonskontroll en vedvarende feil med retry. En API-feil skal aldri tolkes som
+  manglende tilgang.
+- `GlobalFeedbackToaster` er reservert for hendelser uten lokal eier, nå kun sesjonsutløp i
+  de redesignede flatene. Vanlig opprettelse, lagring, sletting, booking og avbestilling skal
+  ikke bruke toast.
 - `SettingsText` viser lengre, skrivebeskyttet innhold i vanlige settings-rader uten lokal
   tekststyling.
 - `AdminPage`, `AdminEntityCollection`, `AdminEditorDialog`, `AdminForm` og `SettingsFields`
@@ -457,9 +504,19 @@ Sentrale filer:
 - `src/styles/design-system/responsive.css`
 - `src/components/controls/ControlChoice.tsx`
 - `src/components/controls/FilterSwitch.tsx`
+- `src/components/controls/DatePickerPopover.tsx`
+- `src/components/feedback/ActionFeedback.tsx`
+- `src/components/feedback/MutationFeedback.tsx`
+- `src/components/feedback/FeedbackToaster.tsx`
+- `src/components/errors/QueryFeil.tsx`
+- `src/components/admin/AdminAccessError.tsx`
 - `src/components/records/RecordStatus.tsx`
 - `src/components/records/RecordListState.tsx`
+- `src/components/records/RecordCollection.tsx`
 - `src/components/records/RecordCollectionToolbar.tsx`
+- `src/components/records/RecordList.tsx`
+- `src/components/records/RecordCard.tsx`
+- `scripts/check-design-system-boundaries.mjs`
 - `src/components/layout/PageHeader.tsx`
 - `src/components/layout/ContentDocument.tsx`
 - `src/components/admin/SettingsFields.tsx`
@@ -479,8 +536,13 @@ Sentrale filer:
 - `Avbestill`/`Sperr`/`Slett` bruker samme destruktive variant.
 - Tekstknapper har normalt ikke dekorative ikoner.
 - Slots og resultatrader fyller hele beholderbredden; luft legges kun mellom radene.
-- Mobil og desktop skal løses bevisst, ikke som skalerte kopier.
+- Mobil og desktop bruker samme visuelle vokabular; responsive avvik skal være funksjonelt
+  begrunnet i arbeidsform eller plass.
 - Sider skal ikke innføre nye tilfeldige farger eller lange lokale Tailwind-varianter.
+- Synlig tilstandsendring er primær tilbakemelding. Bruk `MutationFeedback` når resultatet
+  ellers er uklart, og behold feilen til brukeren prøver igjen eller endrer input.
+- Toast skal bare brukes for en global hendelse som ikke har en naturlig plass i gjeldende
+  flate. Rutinemessige CRUD-bekreftelser skal ikke bruke toast.
 
 ## Verifisert ved handover
 
@@ -535,6 +597,16 @@ Sentrale filer:
   ikke utløst ved å mutere testdata i denne slicen.
 - Lyst og mørkt tema er kontrollert.
 - Aktivitetsoverstyring er kontrollert for tennis, padel og bordtennis.
+- Bookingreglement er kontrollert offentlig og som Admin og Bruker på mobil og desktop i
+  lyst og mørkt tema. Grenens egne regler og bookinggrenser vises uten lokal dialogstyling.
+- Vellykket booking og avbestilling er funksjonelt kontrollert med Admin. Slotens status er
+  primær bekreftelse, ingen toast vises, og testbookingen ble avbestilt igjen etter kontrollen.
+- Inline lagringsbekreftelse er kontrollert i Klubbinnstillinger på mobil og desktop i lyst
+  og mørkt tema. Bekreftelsen forsvinner ved ny redigering og vises igjen etter lagring.
+  Testverdien for feedens synlighet ble satt tilbake til `100` etter kontrollen.
+- `booking:kobleTilArrangement` ble ikke eksponert på ledige slots i den kjørende lokale
+  API-responsen. Dialogens data-, feil- og tomtilstander er derfor kartlagt i kode, men
+  selve dialogen er ikke utløst via bookinglisten i denne kontrollen.
 - Den endelige normaltilstanden for `Mine tider` lastet uten feil eller advarsler i
   nettleserkonsollen.
 
@@ -546,7 +618,13 @@ Dette er ikke introdusert som en funksjonell feil i redesignarbeidet.
 - `migrated-compositions.css` og `responsive.css` samler fortsatt flere migrerte flater for å
   bevare kaskaden. Videre oppdeling skal skje etter mønster og ansvar, ikke per side.
 - Flere gamle sider bruker fortsatt lokale Tailwind-klasser og direkte shadcn-varianter.
-- Desktop er kontrollert, men mobil har fått mest produktdesignarbeid i POC-en.
+- Turnering beholder foreløpig sine eksisterende toast-kall og er uttrykkelig utenfor denne
+  POC-migreringen.
+- De primære arbeidsflatene bruker nå samme visuelle vokabular på mobil og desktop. Booking
+  bruker én grønn kontrollflate, én banevelger og én slotpresentasjon på begge størrelser;
+  Brukere bruker samme grønne filterflate og kompakte radmetadata uten en egen desktoptabell.
+  Record-verktøylinjene viser ikke ekstra desktoptekst, og Book bane, Mine tider,
+  Arrangementer og administrasjonssidene deler `xl` som arbeidsbredde.
 - Aktivitetsfarger er foreløpig mappet fra slug i frontend.
 - Det finnes ingen automatisert visuell regresjonstest ennå.
 - Testdataene inneholder ett aktivt arrangement uten turnering, 17 eksisterende bookinger
@@ -577,27 +655,25 @@ Dette er ikke introdusert som en funksjonell feil i redesignarbeidet.
 
 ### Mål
 
-Fullfør booking- og kontoflyten med bookingbekreftelse, feiltilstander og reglement som
-neste avgrensede slice.
+Løft de gjenværende appskall- og brukerunderflytene uten å endre de godkjente hovedsidene:
+varslingsskuffen og brukeradministrasjonens sperre-, historikk- og slettedialoger.
 
 ### Foreslått rekkefølge
 
-1. Kartlegg bookingbekreftelse, reglement, alle API-feil og tilbakeveier på mobil og
-   desktop.
-2. Gjenbruk bookingens record-/statusregler, eksisterende handlingshierarki og
-   `ContentDocument` for reglement der mønsteret passer.
-3. Behold eksisterende booking-, bekreftelses- og regelkontrakter.
+1. Kartlegg varslingsskuffens og brukerhandlingenes lasting, tomtilstander, feil,
+   bekreftelser og tilbakeveier på mobil og desktop.
+2. Gjenbruk delte record-, editor-, settings- og fareområdemønstre. Ikke endre den
+   godkjente brukerlisten eller dens informasjonsstruktur.
+3. Behold eksisterende feed-, bruker-, sperre- og slettingkontrakter.
 4. Løs mobil, desktop og lyst/mørkt tema i samme slice.
 5. Kontroller relevante roller og både vellykkede og avbrutte flyter.
 6. Kjør tekniske kontroller og visuell nettleserkontroll.
 
 ### Ikke gjør i samme task
 
-- Ikke start arrangementadministrasjon, turnering eller backend-redesign samtidig.
+- Ikke start turnering eller backend-redesign samtidig.
 - Ikke fjern Radix/shadcn-primitiver som fortsatt gir tilgjengelig interaksjon.
-- Ikke koble aktivitetsfarger eller grenmetadata til en ny backend-kontrakt uten en separat
-  beslutning.
-- Ikke endre booking- eller autorisasjonsregler som del av den visuelle migreringen.
+- Ikke endre bruker- eller autorisasjonsregler som del av den visuelle migreringen.
 
 ## Nyttige kommandoer
 

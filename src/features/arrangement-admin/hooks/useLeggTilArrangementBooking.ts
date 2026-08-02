@@ -1,4 +1,3 @@
-import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { useApiMutation } from "@/hooks/useApiMutation";
@@ -24,7 +23,7 @@ export type BatchLeggTilResultat = {
  * og POST /api/klubb/{slug}/arrangement/{arrangementId}/bookinger/batch (bulk).
  *
  * Tilbyr to operasjoner:
- *  - leggTilBooking: enkelt kall med suksess-toast + re-fetch (manuelt oppsett)
+ *  - leggTilBooking: enkelt kall med re-fetch (manuelt oppsett)
  *  - batchLeggTil:   ett batch-kall, returnerer detaljert {suksess, feilet}.
  */
 export function useLeggTilArrangementBooking(arrangementId: string) {
@@ -41,20 +40,19 @@ export function useLeggTilArrangementBooking(arrangementId: string) {
       }),
     ]);
 
-  // Enkelt-mutasjon med toast – brukes av manuelt oppsett
+  // Enkeltmutasjon – brukes av manuelt oppsett.
   const mutation = useApiMutation<LeggTilArrangementBookingForespørsel, ArrangementBookingRespons>(
     "post",
     `/klubb/${slug}/arrangement/${arrangementId}/bookinger`,
     {
       onSuccess: async () => {
-        toast.success("Booking opprettet.");
         await invalidere();
       },
       retry: false,
     }
   );
 
-  /** Enkelt kall – toast ved suksess, kaster ved feil. */
+  /** Enkelt kall som kaster ved feil. */
   const leggTilBooking = (forespørsel: LeggTilArrangementBookingForespørsel) =>
     mutation.mutateAsync(forespørsel);
 

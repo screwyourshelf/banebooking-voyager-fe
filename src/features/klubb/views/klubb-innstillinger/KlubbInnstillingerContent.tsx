@@ -8,7 +8,7 @@ import {
   SettingsSection,
   SettingsStack,
 } from "@/components/admin";
-import { ServerFeil } from "@/components/errors";
+import { MutationFeedback } from "@/components/feedback";
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
@@ -36,6 +36,7 @@ type Props = {
   };
   onBlurField: (key: "navn" | "kontaktEpost" | "feedSynligAntallDager") => void;
   mutasjonFeil?: string | null;
+  lagret?: boolean;
 };
 
 export default function KlubbInnstillingerContent({
@@ -48,6 +49,7 @@ export default function KlubbInnstillingerContent({
   errors,
   onBlurField,
   mutasjonFeil,
+  lagret = false,
 }: Props) {
   const navnError = touched.navn ? errors.navn : null;
   const kontaktEpostError = touched.kontaktEpost ? errors.kontaktEpost : null;
@@ -106,7 +108,7 @@ export default function KlubbInnstillingerContent({
               </Field>
             </SettingsRow>
 
-            <SettingsRow title="Nettside" description="Valgfri lenke til klubbens hjemmeside.">
+            <SettingsRow title="Nettside" description="Valgfri lenke til klubbens nettside.">
               <Field>
                 <Input
                   id="nettside"
@@ -127,7 +129,7 @@ export default function KlubbInnstillingerContent({
           eyebrow="Sted"
           icon={<MapPin />}
           title="Vær og posisjon"
-          description="Koordinatene brukes til lokal værinformasjon i bookinglisten."
+          description="Koordinatene brukes til lokal værinformasjon i Book bane."
         >
           <SettingsPanel>
             <SettingsRow title="Breddegrad" description="Desimalgrader mellom −90 og 90.">
@@ -207,7 +209,11 @@ export default function KlubbInnstillingerContent({
         </SettingsSection>
 
         <AdminFormActions embedded={false}>
-          <ServerFeil feil={mutasjonFeil} />
+          <MutationFeedback
+            error={mutasjonFeil}
+            success={lagret}
+            successTitle="Klubbinnstillingene er lagret"
+          />
           <AdminFormSubmitButton isLoading={isSaving} disabled={!canSubmit} loadingText="Lagrer…">
             Lagre endringer
           </AdminFormSubmitButton>

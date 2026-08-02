@@ -30,10 +30,15 @@ export default function NotifikasjonDrawer({ trigger = "icon" }: Props) {
             Se alle ({feed.length})
           </Button>
         ) : (
-          <Button variant="ghost" size="icon" className="relative" aria-label="Klubbmeldinger">
-            <BellRing />
-            <span className="absolute -top-0 -right-0 flex h-4 w-4 items-center justify-center rounded-full bg-destructive text-[10px] font-bold text-destructive-foreground">
-              {feed.length}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="relative"
+            aria-label={`Nyheter fra klubben, ${feed.length} ${feed.length === 1 ? "nyhet" : "nyheter"}`}
+          >
+            <BellRing className="size-[var(--app-topbar-action-icon-size)]" />
+            <span className="app-topbar__notification-count" aria-hidden="true">
+              {feed.length > 99 ? "99+" : feed.length}
             </span>
           </Button>
         )}
@@ -41,9 +46,9 @@ export default function NotifikasjonDrawer({ trigger = "icon" }: Props) {
 
       <DrawerContent>
         <DrawerHeader>
-          <DrawerTitle>Fra klubben</DrawerTitle>
+          <DrawerTitle>Nyheter fra klubben</DrawerTitle>
           <DrawerDescription>
-            {`${feed.length} melding${feed.length === 1 ? "" : "er"}`}
+            {`${feed.length} ${feed.length === 1 ? "nyhet" : "nyheter"}`}
           </DrawerDescription>
         </DrawerHeader>
 
