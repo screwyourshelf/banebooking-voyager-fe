@@ -1,4 +1,3 @@
-import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 
 import { useApiMutation } from "@/hooks/useApiMutation";
@@ -20,7 +19,6 @@ export function useSlettArrangementBooking(arrangementId: string) {
     (bookingId) => `/klubb/${slug}/arrangement/${arrangementId}/bookinger/${bookingId}`,
     {
       onSuccess: async () => {
-        toast.success("Booking fjernet.");
         await Promise.all([
           queryClient.invalidateQueries({
             queryKey: ["arrangement-bookinger", slug, arrangementId],

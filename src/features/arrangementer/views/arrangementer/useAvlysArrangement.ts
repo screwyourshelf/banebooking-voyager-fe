@@ -1,7 +1,6 @@
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useSlug } from "@/hooks/useSlug";
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import type { SlettArrangementRespons, ArrangementRespons } from "@/types";
 
 type AvlysVars = { arrangementId: string };
@@ -19,9 +18,6 @@ export function useAvlysArrangement() {
     "delete",
     ({ arrangementId }) => `/klubb/${slug}/arrangement/${arrangementId}`,
     {
-      onSuccess: (result) => {
-        toast.success(`Arrangement avlyst – ${result.antallBookingerSlettet} bookinger fjernet.`);
-      },
       onSettled: invalidate,
     }
   );

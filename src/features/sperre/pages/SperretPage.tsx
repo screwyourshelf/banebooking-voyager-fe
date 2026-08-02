@@ -1,38 +1,93 @@
-import { ShieldX, Mail } from "lucide-react";
+import { CircleAlert } from "lucide-react";
+import {
+  AdminFormActions,
+  AdminPage,
+  AdminPageLoading,
+  AdminPageState,
+  SettingsPanel,
+  SettingsRow,
+  SettingsSection,
+  SettingsText,
+} from "@/components/admin";
+import { ContentDocument, ContentDocumentIntro } from "@/components/layout";
+import { RecordListState, RecordStatus } from "@/components/records";
+import { Button } from "@/components/ui/button";
 import { useKlubb } from "@/hooks/useKlubb";
-import { ErrorDisplay } from "@/components/errors";
 
 export default function SperretPage() {
-  const { data: klubb, isLoading } = useKlubb();
+  const { data: klubb, isLoading, error, refetch } = useKlubb();
 
   if (isLoading) {
-    return null;
+    return (
+      <AdminPage
+        eyebrow="Tilgang"
+        title="Kontoen er sperret"
+        description="Du kan ikke bruke Banebooking før klubben opphever sperren."
+      >
+        <AdminPageLoading label="Laster sperreinformasjon" />
+      </AdminPage>
+    );
+  }
+
+  if (error || !klubb) {
+    return (
+      <AdminPage
+        eyebrow="Tilgang"
+        title="Kontoen er sperret"
+        description="Du kan ikke bruke Banebooking før klubben opphever sperren."
+      >
+        <AdminPageState>
+          <RecordListState
+            icon={<CircleAlert aria-hidden="true" />}
+            title="Kunne ikke laste sperreinformasjonen"
+            description={error?.message ?? "Prøv igjen om litt."}
+            action={
+              <Button type="button" variant="outline" onClick={() => void refetch()}>
+                Prøv igjen
+              </Button>
+            }
+            tone="danger"
+            role="alert"
+          />
+        </AdminPageState>
+      </AdminPage>
+    );
   }
 
   return (
-    <ErrorDisplay
-      icon={ShieldX}
-      title="Kontoen din er låst"
-      description={`Du er låst ute fra ${klubb?.navn ?? "klubben"} og kan ikke booke baner eller melde deg på arrangementer.`}
+    <AdminPage
+      eyebrow="Tilgang"
+      title="Kontoen er sperret"
+      description="Du kan ikke bruke Banebooking før klubben opphever sperren."
+      action={<RecordStatus tone="danger">Sperret</RecordStatus>}
     >
-      <div className="rounded-md border p-4 space-y-2 text-sm w-full max-w-xs text-left">
-        <div className="space-y-1">
-          <div className="text-xs text-muted-foreground">Hva gjør jeg nå?</div>
-          <p className="text-sm">
-            Ta kontakt med {klubb?.navn ?? "klubben"} for å få mer informasjon og løse situasjonen.
-          </p>
-        </div>
+      <ContentDocument>
+        <ContentDocumentIntro>
+          Du kan ikke booke baner eller melde deg på arrangementer mens sperren er aktiv.
+        </ContentDocumentIntro>
 
-        {klubb?.kontaktEpost && (
-          <a
-            href={`mailto:${klubb.kontaktEpost}`}
-            className="flex items-center gap-2 text-sm font-medium hover:underline pt-1"
-          >
-            <Mail className="h-4 w-4 shrink-0" />
-            {klubb.kontaktEpost}
-          </a>
-        )}
-      </div>
-    </ErrorDisplay>
+        <SettingsSection
+          eyebrow="Konto"
+          title="Kontakt klubben"
+          description="Klubben må avklare eller oppheve sperren."
+          embedded
+          tone="danger"
+        >
+          <SettingsPanel>
+            <SettingsRow title="Neste steg">
+              <SettingsText>Ta kontakt med {klubb.navn} for mer informasjon.</SettingsText>
+            </SettingsRow>
+          </SettingsPanel>
+
+          {klubb.kontaktEpost ? (
+            <AdminFormActions>
+              <Button asChild variant="outline">
+                <a href={`mailto:${klubb.kontaktEpost}`}>Kontakt klubben</a>
+              </Button>
+            </AdminFormActions>
+          ) : null}
+        </SettingsSection>
+      </ContentDocument>
+    </AdminPage>
   );
 }

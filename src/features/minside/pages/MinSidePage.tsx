@@ -1,4 +1,4 @@
-import Page from "@/components/Page";
+import { AdminPage } from "@/components/admin";
 import Tabs from "@/components/navigation/Tabs";
 import { useSearchParams } from "react-router-dom";
 
@@ -13,14 +13,28 @@ export default function MinSidePage() {
   const defaultTab = tabParam && validTabs.includes(tabParam) ? tabParam : "profil";
 
   return (
-    <Page>
+    <AdminPage
+      eyebrow="Min konto"
+      title="Min side"
+      description="Oppdater profilen og få innsyn i dataene som er lagret om deg."
+    >
       <Tabs
+        variant="section"
+        ariaLabel="Områder på Min side"
         defaultValue={defaultTab}
         items={[
-          { value: "profil", label: "Profil", content: <MinProfilView /> },
-          { value: "persondata", label: "Data", content: <PersondataView /> },
+          {
+            value: "profil",
+            label: "Profil",
+            content: <MinProfilView />,
+          },
+          {
+            value: "persondata",
+            label: "Data",
+            content: <PersondataView />,
+          },
         ]}
       />
-    </Page>
+    </AdminPage>
   );
 }

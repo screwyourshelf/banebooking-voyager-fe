@@ -1,200 +1,267 @@
+import { useMemo, useState } from "react";
+import { CalendarCheck, CalendarX, RefreshCw } from "lucide-react";
+import { Link } from "react-router-dom";
 import { usePagination } from "@/hooks/usePagination";
-import PageSection from "@/components/sections/PageSection";
-import { Stack, Inline } from "@/components/layout";
-import { RowPanel, RowList } from "@/components/rows";
-import SwitchRow from "@/components/rows/SwitchRow";
-import { ServerFeil } from "@/components/errors";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
-import { AccordionDetailGrid, AccordionDetailRow, AccordionActions } from "@/components/accordion";
-import WeatherInfo from "@/components/WeatherInfo";
-import { Badge } from "@/components/ui/badge";
+  RecordCollection,
+  RecordCollectionBody,
+  RecordCollectionHeader,
+  RecordCollectionPagination,
+  RecordCollectionSkeleton,
+  RecordDateGroup,
+  RecordDateGroupHeading,
+  RecordDateGroupList,
+  RecordList,
+  RecordListState,
+} from "@/components/records";
+import { ServerFeil } from "@/components/errors";
 import { Button } from "@/components/ui/button";
-import { formatDatoKort, dagerIgjenTekst } from "@/utils/datoUtils";
-import { Timer, Calendar, XCircle } from "lucide-react";
 import type { MinBookingRespons } from "@/types";
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
 
-function formatKort(t: string) {
-  const [h, m] = t.slice(0, 5).split(":");
-  return m === "00" ? h : `${h}:${m}`;
-}
-
+import MineBookingRow from "./MineBookingRow";
 import { buildBookingKey } from "./bookingSort";
 
 type Props = {
   visHistoriske: boolean;
   onToggleVisHistoriske: (value: boolean) => void;
-
   bookinger: MinBookingRespons[];
+  isLoading: boolean;
+  queryError: string | null;
+  isFetching: boolean;
+  onRetry: () => void;
   isPending: boolean;
-
-  onFjern: (slot: MinBookingRespons) => void;
+  onFjern: (booking: MinBookingRespons) => void;
   serverFeil: string | null;
 };
+
+type BookingGroup = {
+  date: string;
+  bookings: MinBookingRespons[];
+};
+
+function parseLocalDate(date: string) {
+  return new Date(`${date.slice(0, 10)}T00:00:00`);
+}
+
+function capitalize(value: string) {
+  return value.charAt(0).toLocaleUpperCase("nb-NO") + value.slice(1);
+}
+
+function getDateHeading(date: string) {
+  const parsed = parseLocalDate(date);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const dayDifference = Math.round((parsed.getTime() - today.getTime()) / 86_400_000);
+  const full = parsed.toLocaleDateString("nb-NO", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+
+  return {
+    relative: dayDifference === 0 ? "I dag" : dayDifference === 1 ? "I morgen" : null,
+    full: capitalize(full),
+  };
+}
+
+function groupBookingsByDate(bookings: MinBookingRespons[]): BookingGroup[] {
+  return bookings.reduce<BookingGroup[]>((groups, booking) => {
+    const date = booking.dato.slice(0, 10);
+    const currentGroup = groups.at(-1);
+
+    if (currentGroup?.date === date) {
+      currentGroup.bookings.push(booking);
+    } else {
+      groups.push({ date, bookings: [booking] });
+    }
+
+    return groups;
+  }, []);
+}
 
 export default function MineBookingerContent({
   visHistoriske,
   onToggleVisHistoriske,
   bookinger,
+  isLoading,
+  queryError,
+  isFetching,
+  onRetry,
   isPending,
   onFjern,
   serverFeil,
 }: Props) {
+  const [grenFilter, setGrenFilter] = useState<string[]>([]);
+
+  const grener = useMemo(
+    () =>
+      [
+        ...new Map(
+          bookinger.map((booking) => [
+            booking.grenId,
+            { value: booking.grenId, label: booking.grenNavn },
+          ])
+        ).values(),
+      ].sort((a, b) => a.label.localeCompare(b.label, "nb-NO")),
+    [bookinger]
+  );
+
+  const filtrerteBookinger = useMemo(() => {
+    if (grenFilter.length === 0) return bookinger;
+    return bookinger.filter((booking) => grenFilter.includes(booking.grenId));
+  }, [bookinger, grenFilter]);
+
+  function toggleGren(grenId: string) {
+    setGrenFilter((current) =>
+      current.includes(grenId)
+        ? current.filter((currentGrenId) => currentGrenId !== grenId)
+        : [...current, grenId]
+    );
+  }
+
   const {
     synlige: synligeBookinger,
     harFlere,
     gjenstaar,
     visFlere,
-  } = usePagination(bookinger, 10, visHistoriske);
+  } = usePagination(filtrerteBookinger, 10, `${String(visHistoriske)}|${grenFilter.join(",")}`);
 
-  const hasBookinger = bookinger.length > 0;
-
-  const tomTekst = visHistoriske
-    ? "Du har ingen registrerte bookinger."
-    : "Du har ingen kommende bookinger.";
+  const antallTekst = isLoading
+    ? "Laster tider…"
+    : `${filtrerteBookinger.length} ${filtrerteBookinger.length === 1 ? "tid" : "tider"}`;
+  const bookingGroups = groupBookingsByDate(synligeBookinger);
+  const harFiltrertTomtilstand = bookinger.length > 0 && filtrerteBookinger.length === 0;
 
   return (
-    <PageSection
-      title="Bookinger"
-      description="Oversikt over dine kommende og tidligere bookinger."
-    >
-      <RowPanel>
-        <RowList>
-          <SwitchRow
-            title="Vis også tidligere bookinger"
-            checked={visHistoriske}
-            onCheckedChange={onToggleVisHistoriske}
-            density="compact"
-          />
-        </RowList>
-      </RowPanel>
+    <RecordCollection ariaLabel="Oversikt over mine tider" busy={isLoading}>
+      <RecordCollectionHeader
+        icon={<CalendarCheck />}
+        title={antallTekst}
+        description={visHistoriske ? "Kommende og tidligere tider" : "Kommende tider"}
+        toggle={{
+          title: "Vis tidligere",
+          checked: visHistoriske,
+          onCheckedChange: onToggleVisHistoriske,
+          disabled: isFetching,
+        }}
+        filter={
+          grener.length > 1 || grenFilter.length > 0
+            ? {
+                label: "Filtrer på gren",
+                groups: [
+                  {
+                    label: "Gren",
+                    options: grener,
+                    selectedValues: grenFilter,
+                    onToggle: toggleGren,
+                  },
+                ],
+                onReset: () => setGrenFilter([]),
+                disabled: isFetching,
+              }
+            : undefined
+        }
+      />
 
-      {!hasBookinger ? (
-        <p className="text-sm text-muted-foreground italic mt-4">{tomTekst}</p>
-      ) : (
-        <>
-          <ServerFeil feil={serverFeil} />
-          <Accordion
-            type="single"
-            collapsible
-            className={`space-y-1 mt-2 ${isPending ? "pointer-events-none opacity-60" : ""}`}
-          >
-            {synligeBookinger.map((b) => {
-              const key = buildBookingKey(b);
-              const tid = `${b.startTid.slice(0, 5)} – ${b.sluttTid.slice(0, 5)}`;
-              const tidKort = `${formatKort(b.startTid)}–${formatKort(b.sluttTid)}`;
-              const kanFjerne = harHandling(b.kapabiliteter, Kapabiliteter.booking.fjern);
-              const harVaer =
-                !!b.værSymbol || typeof b.temperatur === "number" || typeof b.vind === "number";
+      <RecordCollectionBody>
+        <ServerFeil feil={serverFeil} />
 
-              const [startH, startM] = b.startTid.split(":").map(Number);
-              const [sluttH, sluttM] = b.sluttTid.split(":").map(Number);
-              const varighet = sluttH * 60 + sluttM - (startH * 60 + startM);
-
-              return (
-                <AccordionItem
-                  key={key}
-                  value={key}
-                  className={`rounded-md border bg-background px-2 last:border-b shadow-sm ${b.erPassert ? "opacity-50" : ""}`}
-                >
-                  <AccordionTrigger className="hover:no-underline">
-                    <Stack gap="xs" className="items-start">
-                      <Inline gap="md">
-                        <span className="font-medium">{b.baneNavn}</span>
-                        <span className="font-medium sm:hidden">{tidKort}</span>
-                        <span className="font-medium hidden sm:inline">{tid}</span>
-                        <WeatherInfo værSymbol={b.værSymbol} iconOnly />
-                        {b.erPassert ? (
-                          <Badge variant="outline" className="text-xs">
-                            Gjennomført
-                          </Badge>
-                        ) : (
-                          <Badge variant="secondary" className="text-xs">
-                            {dagerIgjenTekst(b.dato)}
-                          </Badge>
-                        )}
-                      </Inline>
-                      <span className="text-xs text-muted-foreground">
-                        {formatDatoKort(b.dato)}
-                      </span>
-                    </Stack>
-                  </AccordionTrigger>
-
-                  <AccordionContent>
-                    <Stack gap="sm">
-                      <AccordionDetailGrid>
-                        <AccordionDetailRow icon={Calendar} label="Dato">
-                          {formatDatoKort(b.dato)}
-                        </AccordionDetailRow>
-
-                        <AccordionDetailRow icon={Timer} label="Varighet">
-                          {varighet} min
-                        </AccordionDetailRow>
-
-                        {harVaer && (
-                          <div className="flex items-start gap-2 sm:col-span-2">
-                            {b.værSymbol && (
-                              <img
-                                src={`${import.meta.env.BASE_URL}weather-symbols/svg/${b.værSymbol}.svg`}
-                                alt={b.værSymbol}
-                                width={16}
-                                height={16}
-                                className="select-none mt-0.5 shrink-0"
-                                draggable={false}
-                              />
-                            )}
-                            <div>
-                              <div className="text-xs font-medium text-muted-foreground">Vær</div>
-                              <div className="text-sm">
-                                {typeof b.temperatur === "number" && <span>{b.temperatur}°c</span>}
-                                {typeof b.temperatur === "number" &&
-                                  typeof b.vind === "number" &&
-                                  " · "}
-                                {typeof b.vind === "number" && <span>{b.vind} m/s</span>}
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </AccordionDetailGrid>
-
-                      {kanFjerne && (
-                        <AccordionActions>
-                          <Button
-                            variant="outline"
-                            size="sm"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              onFjern(b);
-                            }}
-                            className="flex items-center gap-2 text-sm"
-                          >
-                            <XCircle className="size-4" />
-                            Avbestill
-                          </Button>
-                        </AccordionActions>
-                      )}
-                    </Stack>
-                  </AccordionContent>
-                </AccordionItem>
-              );
-            })}
-          </Accordion>
-
-          {harFlere && (
-            <Inline justify="center" className="mt-4">
-              <Button variant="outline" size="sm" onClick={visFlere}>
-                Vis flere ({gjenstaar} gjenstår)
+        {isLoading ? (
+          <RecordCollectionSkeleton ariaLabel="Laster tider" rows={4} />
+        ) : queryError ? (
+          <RecordListState
+            icon={<RefreshCw aria-hidden="true" />}
+            title="Kunne ikke laste tidene dine"
+            description={queryError}
+            tone="danger"
+            role="alert"
+            action={
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={onRetry}
+                disabled={isFetching}
+              >
+                {isFetching ? "Prøver igjen…" : "Prøv igjen"}
               </Button>
-            </Inline>
-          )}
-        </>
-      )}
-    </PageSection>
+            }
+          />
+        ) : filtrerteBookinger.length === 0 ? (
+          <RecordListState
+            icon={<CalendarX aria-hidden="true" />}
+            title={
+              harFiltrertTomtilstand
+                ? "Ingen tider for valgt gren"
+                : visHistoriske
+                  ? "Ingen tider ennå"
+                  : "Ingen kommende tider"
+            }
+            description={
+              harFiltrertTomtilstand
+                ? "Velg en annen gren eller nullstill filteret."
+                : visHistoriske
+                  ? "Når du booker en bane, vises kommende og tidligere tider her."
+                  : "Finn en ledig tid som passer, så dukker den opp her med en gang."
+            }
+            action={
+              harFiltrertTomtilstand ? (
+                <Button type="button" variant="outline" size="sm" onClick={() => setGrenFilter([])}>
+                  Nullstill filter
+                </Button>
+              ) : (
+                <Button asChild size="sm">
+                  <Link to="..">Book en bane</Link>
+                </Button>
+              )
+            }
+          />
+        ) : (
+          <>
+            <RecordDateGroupList>
+              {bookingGroups.map((group) => {
+                const heading = getDateHeading(group.date);
+
+                return (
+                  <RecordDateGroup key={group.date}>
+                    <RecordDateGroupHeading
+                      date={group.date}
+                      label={heading.full}
+                      relativeLabel={heading.relative}
+                    />
+
+                    <RecordList loading={isFetching || isPending}>
+                      {group.bookings.map((booking) => (
+                        <MineBookingRow
+                          key={buildBookingKey(booking)}
+                          bookingKey={buildBookingKey(booking)}
+                          booking={booking}
+                          canCancel={harHandling(
+                            booking.kapabiliteter,
+                            Kapabiliteter.booking.fjern
+                          )}
+                          isPending={isPending}
+                          onCancel={onFjern}
+                        />
+                      ))}
+                    </RecordList>
+                  </RecordDateGroup>
+                );
+              })}
+            </RecordDateGroupList>
+
+            {harFlere ? (
+              <RecordCollectionPagination>
+                <Button type="button" variant="outline" size="sm" onClick={visFlere}>
+                  Vis flere ({gjenstaar} gjenstår)
+                </Button>
+              </RecordCollectionPagination>
+            ) : null}
+          </>
+        )}
+      </RecordCollectionBody>
+    </RecordCollection>
   );
 }

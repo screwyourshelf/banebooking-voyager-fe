@@ -1,92 +1,91 @@
-import { format, addDays, subDays } from "date-fns";
+import { addDays, format, startOfDay, subDays } from "date-fns";
 import { nb } from "date-fns/locale";
-import { CalendarIcon, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import DatePickerPopover from "@/components/controls/DatePickerPopover";
 import { Button } from "@/components/ui/button";
-import { Calendar } from "@/components/ui/calendar";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 
 type Props = {
   value: Date | null;
   onChange: (date: Date) => void;
   minDate?: Date;
   visNavigering?: boolean;
+  ariaLabel?: string;
+  disabled?: boolean;
 };
 
-export default function DatoVelger({ value, onChange, minDate, visNavigering = true }: Props) {
-  const visningsformat = value ? format(value, "dd.MM.yyyy", { locale: nb }) : "Velg dato";
+function storForbokstav(value: string) {
+  return value.charAt(0).toUpperCase() + value.slice(1);
+}
 
-  const forrigeDag = () => {
+export default function DatoVelger({
+  value,
+  onChange,
+  minDate,
+  visNavigering = true,
+  ariaLabel = "Velg dato",
+  disabled = false,
+}: Props) {
+  const minimumDate = minDate ? startOfDay(minDate) : undefined;
+  const visningsformat = value
+    ? storForbokstav(format(value, "EEE d. MMMM", { locale: nb }))
+    : "Velg dato";
+
+  const handleForrigeDag = () => {
     if (!value) return;
     const ny = subDays(value, 1);
-    if (minDate && ny < minDate) return;
+    if (minimumDate && ny < minimumDate) return;
     onChange(ny);
   };
 
-  const nesteDag = () => {
+  const handleNesteDag = () => {
     if (!value) return;
     onChange(addDays(value, 1));
   };
 
-  const disablePrev = !value || (!!minDate && subDays(value, 1) < minDate);
+  const disablePrev = disabled || !value || (!!minimumDate && subDays(value, 1) < minimumDate);
 
   return (
-    <div className="flex gap-1 items-center">
-      <Popover>
-        <PopoverTrigger asChild>
-          <Button
-            type="button"
-            variant="outline"
-            aria-label="Velg dato"
-            className="h-8 px-2 text-sm w-[10rem] justify-start text-left"
-          >
-            <CalendarIcon className="mr-2 h-4 w-4" />
-            {visningsformat}
-          </Button>
-        </PopoverTrigger>
+    <div className="date-switcher" data-navigation={visNavigering || undefined}>
+      {visNavigering ? (
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          aria-label="Forrige dag"
+          onClick={handleForrigeDag}
+          className="date-switcher__nav"
+          disabled={disablePrev}
+        >
+          <ChevronLeft />
+        </Button>
+      ) : null}
 
-        <PopoverContent className="w-auto p-0" align="start">
-          <Calendar
-            mode="single"
-            selected={value ?? undefined}
-            onSelect={(dato) => {
-              if (!dato) return;
-              if (minDate && dato < minDate) return;
-              onChange(dato);
-            }}
-            locale={nb}
-            hidden={minDate ? { before: minDate } : undefined}
-          />
-        </PopoverContent>
-      </Popover>
+      <DatePickerPopover value={value} onChange={onChange} minDate={minimumDate} align="start">
+        <Button
+          type="button"
+          variant="outline"
+          aria-label={ariaLabel}
+          className="date-switcher__value"
+          disabled={disabled}
+        >
+          <span>{visningsformat}</span>
+        </Button>
+      </DatePickerPopover>
 
-      {visNavigering && (
-        <div className="flex gap-2">
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            aria-label="Forrige dag"
-            onClick={forrigeDag}
-            className="h-8 w-8"
-            disabled={disablePrev}
-          >
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-
-          <Button
-            type="button"
-            variant="outline"
-            size="icon"
-            aria-label="Neste dag"
-            onClick={nesteDag}
-            className="h-8 w-8"
-            disabled={!value}
-          >
-            <ChevronRight className="h-4 w-4" />
-          </Button>
-        </div>
-      )}
+      {visNavigering ? (
+        <Button
+          type="button"
+          variant="outline"
+          size="icon"
+          aria-label="Neste dag"
+          onClick={handleNesteDag}
+          className="date-switcher__nav"
+          disabled={disabled || !value}
+        >
+          <ChevronRight />
+        </Button>
+      ) : null}
     </div>
   );
 }

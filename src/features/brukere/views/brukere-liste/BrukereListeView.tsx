@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { ListSkeleton } from "@/components/loading";
+import { PageContentSkeleton } from "@/components/loading";
 
 import { useBruker } from "@/hooks/useBruker";
 import { useAdminBrukere } from "@/features/brukere/hooks/useAdminBrukere";
@@ -16,9 +16,11 @@ import type {
   RolleType,
   MedlemskapFilterType,
   BrukerRespons,
+  BrukerSortering,
   EditState,
 } from "@/features/brukere/types";
 import { QueryFeil } from "@/components/errors";
+import PageHeader from "@/components/layout/PageHeader";
 import BrukereListeContent from "./BrukereListeContent";
 import RedigerBrukerDialog from "./RedigerBrukerDialog";
 
@@ -28,7 +30,13 @@ function erSlettetEpost(epost?: string | null) {
 }
 
 export default function BrukereListeView() {
-  const { bruker, laster: lasterBruker } = useBruker();
+  const {
+    bruker,
+    laster: lasterBruker,
+    feil: brukerFeil,
+    isFetching: brukerFetching,
+    refetch: refetchBruker,
+  } = useBruker();
 
   const {
     brukere,
@@ -55,6 +63,7 @@ export default function BrukereListeView() {
   const [visSlettede, setVisSlettede] = useState(false);
   const [rolleFilter, setRolleFilter] = useState<RolleType[]>([]);
   const [medlemskapFilter, setMedlemskapFilter] = useState<MedlemskapFilterType[]>([]);
+  const [sortering, setSortering] = useState<BrukerSortering>("nyeste");
 
   // Dialog
   const [aktivBruker, setAktivBruker] = useState<BrukerRespons | null>(null);
@@ -64,7 +73,7 @@ export default function BrukereListeView() {
   const filtrerteBrukere = useMemo(() => {
     const q = query.toLowerCase().trim();
 
-    return brukere
+    const filtrert = brukere
       .filter((b) => {
         if (!visSlettede && erSlettetEpost(b.epost)) return false;
         return true;
@@ -83,7 +92,9 @@ export default function BrukereListeView() {
         const erBekreftet = !!b.medlemskapBekreftetDato;
         return medlemskapFilter.includes(erBekreftet ? "bekreftet" : "ikke-bekreftet");
       });
-  }, [brukere, query, visSlettede, rolleFilter, medlemskapFilter]);
+
+    return [...filtrert].sort((a, b) => sammenlignBrukere(a, b, sortering));
+  }, [brukere, query, visSlettede, rolleFilter, medlemskapFilter, sortering]);
 
   const åpenRedigering = (b: BrukerRespons) => {
     setAktivBruker(b);
@@ -115,6 +126,13 @@ export default function BrukereListeView() {
     setMedlemskapFilter((prev) => (prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m]));
   }
 
+  function nullstillFiltre() {
+    setQuery("");
+    setVisSlettede(false);
+    setRolleFilter([]);
+    setMedlemskapFilter([]);
+  }
+
   const handleSlettBruker = (brukerId: string) => async () => {
     await slett(brukerId);
   };
@@ -132,19 +150,35 @@ export default function BrukereListeView() {
     setSperreBruker(b);
   };
 
-  if (lasterBruker) return <ListSkeleton />;
+  if (lasterBruker) {
+    return <PageContentSkeleton label="Kontrollerer brukertilgang" rows={6} controls />;
+  }
+
+  if (brukerFeil) {
+    return (
+      <QueryFeil
+        error={brukerFeil}
+        isFetching={brukerFetching}
+        onRetry={() => void refetchBruker()}
+        title="Kunne ikke kontrollere tilgangen"
+      />
+    );
+  }
 
   if (!erKlubbAdmin && !harLeseTilgang) {
-    return (
-      <p className="text-sm text-destructive px-2 py-2 text-center">
-        Du har ikke tilgang til denne siden.
-      </p>
-    );
+    return <p className="user-admin-page__access-error">Du har ikke tilgang til denne siden.</p>;
   }
 
   return (
     <QueryFeil error={brukereError} isFetching={brukereFetching} onRetry={() => void hentBrukere()}>
-      <>
+      <div className="user-admin-page__content">
+        <PageHeader
+          eyebrow="Administrasjon"
+          title="Brukere"
+          description="Følg opp medlemskap, roller og tilgang til klubben."
+          className="user-admin-page__heading"
+        />
+
         <BrukereListeContent
           query={query}
           onQueryChange={setQuery}
@@ -154,6 +188,9 @@ export default function BrukereListeView() {
           onToggleRolle={toggleRolle}
           medlemskapFilter={medlemskapFilter}
           onToggleMedlemskap={toggleMedlemskap}
+          sortering={sortering}
+          onSorteringChange={setSortering}
+          onResetFilters={nullstillFiltre}
           filtrerteBrukere={filtrerteBrukere}
           lasterListe={lasterListe}
           currentBrukerId={bruker?.id}
@@ -211,7 +248,22 @@ export default function BrukereListeView() {
             serverFeil={oppdaterFeil?.message ?? null}
           />
         ) : null}
-      </>
+      </div>
     </QueryFeil>
   );
+}
+
+function sammenlignBrukere(a: BrukerRespons, b: BrukerRespons, sortering: BrukerSortering) {
+  if (sortering === "navn") {
+    const aNavn = a.visningsnavn?.trim() || a.fulltNavn?.trim() || a.epost;
+    const bNavn = b.visningsnavn?.trim() || b.fulltNavn?.trim() || b.epost;
+    return aNavn.localeCompare(bNavn, "nb-NO", { sensitivity: "base" });
+  }
+
+  const aTid = a.opprettetTid ? new Date(a.opprettetTid).getTime() : Number.NaN;
+  const bTid = b.opprettetTid ? new Date(b.opprettetTid).getTime() : Number.NaN;
+  if (Number.isNaN(aTid)) return Number.isNaN(bTid) ? 0 : 1;
+  if (Number.isNaN(bTid)) return -1;
+
+  return sortering === "nyeste" ? bTid - aTid : aTid - bTid;
 }

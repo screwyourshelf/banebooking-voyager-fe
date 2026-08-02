@@ -1,0 +1,729 @@
+@media (min-width: 48rem) {
+  @layer components {
+    :is(
+      .admin-page,
+      .admin-editor-dialog,
+      .booking-page,
+      .login-page,
+      .record-collection-page,
+      .user-admin-page
+    ) {
+      --app-type-caption: var(--app-type-caption-comfortable);
+      --app-type-label: var(--app-type-label-comfortable);
+      --app-type-body-sm: var(--app-type-body-sm-comfortable);
+      --app-type-body: var(--app-type-body-comfortable);
+      --app-type-body-lg: var(--app-type-body-lg-comfortable);
+      --app-type-heading-sm: var(--app-type-heading-sm-comfortable);
+      --app-type-heading-md: var(--app-type-heading-md-comfortable);
+    }
+
+    .action-feedback {
+      grid-template-columns: minmax(0, 1fr) auto;
+    }
+
+    .action-feedback__action {
+      justify-self: end;
+    }
+
+    .action-feedback__action > button,
+    .action-feedback__action > a {
+      width: auto;
+    }
+
+    [data-slot="alert-dialog-footer"]:has(> .action-feedback) {
+      grid-template-columns: minmax(0, 1fr) auto auto;
+    }
+
+    [data-slot="alert-dialog-footer"] > .action-feedback {
+      grid-column: 1 / -1;
+    }
+
+    [data-slot="alert-dialog-footer"]:has(> .action-feedback) > [data-slot="alert-dialog-cancel"] {
+      grid-column: 2;
+    }
+
+    [data-slot="alert-dialog-footer"]:has(> .action-feedback) > [data-slot="alert-dialog-action"] {
+      grid-column: 3;
+    }
+
+    [data-slot="alert-dialog-footer"]:has(> .action-feedback) > [data-slot="alert-dialog-cancel"],
+    [data-slot="alert-dialog-footer"]:has(> .action-feedback) > [data-slot="alert-dialog-action"] {
+      width: auto;
+    }
+
+    .app-shell__frame {
+      display: grid;
+      grid-template-columns: var(--app-sidebar-rail-width) minmax(0, 1fr);
+    }
+
+    .app-shell__sidebar {
+      position: sticky;
+      top: 0;
+      display: block;
+      height: 100svh;
+      overflow: hidden;
+      background: var(--app-sidebar);
+    }
+
+    .app-shell__workspace {
+      padding-bottom: 0;
+      background:
+        linear-gradient(
+          90deg,
+          var(--app-workspace-overlay-start),
+          var(--app-workspace-overlay-middle) 50%,
+          var(--app-workspace-overlay-end)
+        ),
+        linear-gradient(var(--app-workspace-image-scrim), var(--app-workspace-image-scrim)),
+        url("/backgrounds/workspace-tennis.webp") center / cover;
+    }
+
+    .app-shell__workspace .page-heading__title {
+      color: var(--app-control-text);
+    }
+
+    .app-shell__workspace .page-heading__description {
+      color: var(--app-control-muted);
+    }
+
+    .error-shell {
+      display: grid;
+      place-items: center;
+      background:
+        linear-gradient(
+          90deg,
+          var(--app-workspace-overlay-start),
+          var(--app-workspace-overlay-middle) 50%,
+          var(--app-workspace-overlay-end)
+        ),
+        linear-gradient(var(--app-workspace-image-scrim), var(--app-workspace-image-scrim)),
+        url("/backgrounds/workspace-tennis.webp") center / cover;
+    }
+
+    .app-sidebar {
+      padding: 1rem 0.625rem;
+    }
+
+    .app-sidebar__brand {
+      display: flex;
+      justify-content: center;
+      padding: 0.25rem 0 1.25rem;
+    }
+
+    .app-sidebar__brand .navbar-brand {
+      justify-content: center;
+    }
+
+    .app-sidebar__brand .navbar-brand__name,
+    .app-sidebar__label,
+    .app-sidebar__link > span {
+      display: none;
+    }
+
+    .app-sidebar__section {
+      gap: 0.375rem;
+    }
+
+    .app-sidebar__section + .app-sidebar__section {
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgb(255 255 255 / 0.12);
+    }
+
+    .app-sidebar__link {
+      justify-content: center;
+      padding: 0.625rem;
+    }
+
+    .app-sidebar__link[aria-current="page"] {
+      box-shadow: inset 0 3px 0 var(--app-nav-indicator-on-dark);
+    }
+
+    .app-sidebar__utilities {
+      margin-bottom: 1rem;
+      padding-bottom: 1rem;
+    }
+
+    .app-sidebar__utility {
+      justify-content: center;
+      padding: 0.625rem;
+    }
+
+    .app-sidebar__utility-copy {
+      display: none;
+    }
+
+    .mobile-bottom-nav {
+      display: none;
+    }
+
+    .app-shell__topbar {
+      display: none;
+    }
+
+    .page-frame {
+      padding: 1.75rem 2rem 2.5rem;
+    }
+
+    .page-heading {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .page-heading__description {
+      font-size: var(--app-type-body-lg);
+    }
+
+    .admin-page__content {
+      gap: 1.5rem;
+    }
+
+    .admin-page__intro {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .admin-page__create {
+      flex: 0 0 auto;
+    }
+
+    .admin-page__heading {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .admin-page__heading .page-heading__title {
+      font-size: var(--app-type-page-title);
+    }
+
+    .admin-page__heading .page-heading__description {
+      font-size: var(--app-type-body-lg);
+    }
+
+    .section-tabs {
+      gap: 1.5rem;
+    }
+
+    .section-tabs__list {
+      width: fit-content !important;
+      min-width: 24rem;
+    }
+
+    .settings-section {
+      border-radius: 1.5rem;
+    }
+
+    .settings-section--embedded {
+      border-radius: 0;
+    }
+
+    .settings-section__header {
+      padding: 1rem 1.25rem;
+    }
+
+    .settings-section__header h2 {
+      font-size: var(--app-type-body-lg);
+    }
+
+    .settings-row:not(.settings-row--switch) {
+      display: grid;
+      grid-template-columns: minmax(12rem, 0.65fr) minmax(15rem, 1fr);
+      align-items: start;
+      gap: 1.5rem;
+      padding: 1rem 1.25rem;
+    }
+
+    .settings-row:not(.settings-row--switch) > div:last-child {
+      margin-top: 0 !important;
+    }
+
+    .settings-row--switch {
+      padding: 1rem 1.25rem;
+    }
+
+    .settings-radio-group {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .settings-radio-group[data-layout="stacked"] {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .settings-choice-group .control-choice {
+      min-width: 4.25rem;
+    }
+
+    .admin-form__actions {
+      padding: 0.875rem 1rem;
+    }
+
+    .admin-form__submit {
+      width: auto;
+      min-width: 9rem;
+    }
+
+    .content-document {
+      border-radius: 1.5rem;
+    }
+
+    .content-document__intro,
+    .content-document__section {
+      padding: 1.25rem 1.5rem;
+    }
+
+    .record-card-button {
+      gap: 1rem;
+    }
+
+    .admin-entity-row__trailing {
+      gap: 0.75rem;
+    }
+
+    .admin-ordered-entity-row {
+      min-height: 5.25rem;
+    }
+
+    .admin-ordered-entity-row__select {
+      gap: 1rem;
+      padding: 0.75rem 1.5rem;
+    }
+
+    .admin-action-row__footer {
+      margin-inline: 1.5rem;
+    }
+
+    .admin-editor-dialog {
+      inset: auto !important;
+      top: 50% !important;
+      left: 50% !important;
+      width: min(52rem, calc(100% - 2rem)) !important;
+      max-width: none !important;
+      height: min(48rem, calc(100dvh - 2rem));
+      translate: -50% -50% !important;
+      transform: none !important;
+      border-radius: 1.5rem !important;
+    }
+
+    .admin-editor-dialog[data-size="wide"] {
+      width: min(68rem, calc(100% - 2rem)) !important;
+      height: min(54rem, calc(100dvh - 2rem));
+    }
+
+    .admin-editor-dialog[data-size="compact"] {
+      width: min(34rem, calc(100% - 2rem)) !important;
+      height: auto;
+      max-height: min(44rem, calc(100dvh - 2rem));
+    }
+
+    .admin-editor-dialog__body > .section-tabs {
+      padding: 1rem 1.25rem 1.25rem;
+    }
+
+    .admin-editor-dialog__header {
+      padding: 1rem 1.25rem;
+    }
+
+    .admin-editor-dialog__heading [data-slot="dialog-title"] {
+      font-size: 2rem !important;
+    }
+
+    .booking-page__heading {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .booking-page__heading .page-heading__title {
+      font-size: var(--app-type-page-title);
+    }
+
+    .booking-page__heading .page-heading__description {
+      font-size: var(--app-type-body-lg);
+    }
+
+    .user-admin-page__content {
+      gap: 1.5rem;
+    }
+
+    .user-admin-page__heading {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .user-admin-page__heading .page-heading__title {
+      font-size: var(--app-type-page-title);
+    }
+
+    .user-admin-page__heading .page-heading__description {
+      font-size: var(--app-type-body-lg);
+    }
+
+    .user-directory-row__summary {
+      gap: 1rem;
+    }
+
+    .user-directory-row__detail-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem 1.5rem;
+    }
+
+    .record-collection-page {
+      gap: 1.5rem;
+    }
+
+    .record-collection-page__heading {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.5rem;
+    }
+
+    .record-collection-page__heading .page-heading__title {
+      font-size: var(--app-type-page-title);
+    }
+
+    .record-collection-page__heading .page-heading__description {
+      font-size: var(--app-type-body-lg);
+    }
+
+    .record-collection {
+      border-radius: 1.5rem;
+    }
+
+    .record-collection__toolbar {
+      min-height: 5rem;
+      padding: 0.875rem 1.5rem;
+    }
+
+    .record-collection__toolbar[data-has-context-action="true"] .record-collection__summary-icon {
+      display: grid;
+    }
+
+    .record-collection__toolbar-actions .filter-switch {
+      min-width: 11rem;
+    }
+
+    .page-content-skeleton__controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      gap: var(--app-space-lg);
+      padding: 0 1.5rem 0.875rem;
+    }
+
+    .page-content-skeleton__controls > span {
+      width: 12rem;
+      height: 3.25rem;
+    }
+
+    .record-filter-panel {
+      padding: 0.75rem 1.5rem 0.875rem;
+    }
+
+    .record-filter-panel[data-trigger="header"][data-open="false"] {
+      border-bottom: 1px solid color-mix(in srgb, var(--app-control-text) 14%, transparent);
+      padding: 0.75rem 1.5rem 0.875rem;
+    }
+
+    .record-filter-panel:not([data-has-search="true"]) .record-filter-panel__top,
+    .record-filter-panel__toggle {
+      display: none !important;
+    }
+
+    .record-filter-panel__search {
+      max-width: 34rem;
+    }
+
+    .record-filter-panel__content,
+    .record-filter-panel[data-open="false"] .record-filter-panel__content,
+    .record-filter-panel[data-open="true"] .record-filter-panel__content {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      gap: var(--app-space-lg);
+      margin-top: 0;
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    .record-filter-panel[data-has-search="true"] .record-filter-panel__content {
+      margin-top: var(--app-space-md);
+      border-top: 1px solid color-mix(in srgb, var(--app-control-text) 14%, transparent);
+      padding-top: var(--app-space-md);
+    }
+
+    .record-filter-panel[data-mode="filter"]:not([data-has-search="true"])
+      .record-filter-panel__group {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .record-filter-panel[data-mode="selection"] .record-filter-panel__group {
+      display: flex;
+      flex: 0 1 auto;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .record-filter-panel__sort {
+      flex: 0 1 15rem;
+    }
+
+    .record-filter-panel__reset {
+      align-self: center;
+      margin-left: auto;
+    }
+
+    .record-card__static,
+    .record-card__trigger {
+      min-height: 5.25rem !important;
+      padding: 0.75rem 1.5rem !important;
+    }
+
+    .record-card__trigger > [data-slot="accordion-trigger-icon"] {
+      margin-left: 1rem;
+    }
+
+    .record-card__summary {
+      gap: 1rem;
+    }
+
+    .record-card__summary[data-layout="slot"] {
+      grid-template-columns: 7rem minmax(10rem, 1fr);
+      gap: 1.25rem;
+    }
+
+    .record-card__summary[data-layout="time"] {
+      grid-template-columns: 7rem minmax(12rem, 1fr) auto;
+    }
+
+    .record-card__summary[data-layout="date"] {
+      grid-template-columns: 9rem minmax(14rem, 1fr) auto;
+    }
+
+    .record-card__details {
+      padding: 1.25rem 1.5rem 1.5rem !important;
+    }
+
+    .record-collection-skeleton {
+      --record-skeleton-leading-column: 7rem;
+      --record-skeleton-leading-width: 6rem;
+    }
+
+    .record-collection-skeleton[data-layout="date"] {
+      --record-skeleton-leading-column: 9rem;
+      --record-skeleton-leading-width: 7rem;
+    }
+
+    .record-collection-skeleton__row {
+      min-height: 5.25rem;
+      grid-template-columns:
+        var(--record-skeleton-leading-column) minmax(var(--record-skeleton-main-column), 1fr)
+        5.5rem;
+      gap: 1rem;
+      padding: 0.75rem 1.5rem;
+    }
+
+    .record-date-groups {
+      gap: 1.25rem;
+      padding-block: 1rem 1.5rem;
+    }
+
+    .record-date-group__heading {
+      padding-inline: 1rem;
+    }
+
+    .mine-booking__detail-content {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 2rem;
+    }
+
+    .mine-booking__facts {
+      width: min(28rem, 100%);
+      gap: 1.5rem;
+    }
+
+    .arrangement-card__detail-content {
+      gap: 1.25rem;
+    }
+
+    .arrangement-program__header {
+      padding: 0.75rem 1rem;
+    }
+
+    .arrangement-program__days {
+      padding: 1rem;
+    }
+
+    .arrangement-program__slot {
+      grid-template-columns: 8rem minmax(0, 1fr);
+      padding-inline: 0.75rem;
+      font-size: var(--app-type-label);
+    }
+
+    .booking-page {
+      gap: 1.5rem;
+    }
+  }
+}
+
+@media (min-width: 64rem) {
+  @layer components {
+    .app-shell__frame {
+      display: grid;
+      grid-template-columns: var(--app-sidebar-width) minmax(0, 1fr);
+    }
+
+    .app-shell__sidebar {
+      position: sticky;
+      top: 0;
+      display: block;
+      height: 100svh;
+      overflow: hidden;
+      background: var(--app-sidebar);
+    }
+
+    .app-sidebar {
+      padding: 1.25rem 1rem;
+    }
+
+    .app-sidebar__brand {
+      display: block;
+      padding: 0.25rem 0.5rem 1.5rem;
+    }
+
+    .app-sidebar__brand .navbar-brand {
+      justify-content: flex-start;
+    }
+
+    .app-sidebar__brand .navbar-brand__name,
+    .app-sidebar__label,
+    .app-sidebar__link > span {
+      display: initial;
+    }
+
+    .app-sidebar__section {
+      gap: 0.25rem;
+    }
+
+    .app-sidebar__section + .app-sidebar__section {
+      margin-top: 1.5rem;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .app-sidebar__link {
+      justify-content: flex-start;
+      padding: 0.625rem 0.75rem;
+    }
+
+    .app-sidebar__link[aria-current="page"] {
+      box-shadow: inset 3px 0 0 var(--app-nav-indicator-on-dark);
+    }
+
+    .app-sidebar__utilities {
+      margin-bottom: 1.25rem;
+      padding-bottom: 1.25rem;
+    }
+
+    .app-sidebar__utility {
+      justify-content: flex-start;
+      padding: 0.625rem 0.75rem;
+    }
+
+    .app-sidebar__utility-copy {
+      display: flex;
+    }
+
+    .app-shell__workspace {
+      padding-bottom: 0;
+    }
+
+    .mobile-bottom-nav {
+      display: none;
+    }
+
+    .page-frame {
+      padding: 1.75rem 2.5rem 3rem;
+    }
+
+    .record-card__summary[data-layout="slot"] {
+      grid-template-columns: 7rem minmax(12rem, 1fr);
+    }
+  }
+}
+
+/* Wide record-list density follows the collection's available workspace. */
+@layer components {
+  @container (min-width: 42rem) {
+    .record-collection .record-list {
+      gap: 0;
+      padding: 0;
+    }
+
+    .record-collection .record-card {
+      border-top: 0;
+      border-right: 0;
+      border-left: 0;
+      border-radius: 0;
+      box-shadow: none;
+    }
+
+    .record-collection .record-card:last-child {
+      border-bottom: 0;
+    }
+
+    .record-collection .record-card__static,
+    .record-collection .record-card__trigger {
+      min-height: 4.25rem !important;
+      padding: 0.5rem 1.5rem !important;
+    }
+
+    .record-collection .record-card__summary {
+      gap: 1.25rem;
+    }
+
+    .record-collection .record-card__summary[data-layout="slot"] {
+      grid-template-columns: 6.5rem minmax(10rem, 18rem);
+      justify-content: start;
+    }
+
+    .record-collection .record-card__summary[data-layout="time"] {
+      grid-template-columns: 8rem minmax(10rem, 24rem) auto;
+      justify-content: start;
+    }
+
+    .record-collection .record-card__summary[data-layout="date"] {
+      grid-template-columns: 9rem minmax(12rem, 28rem) auto;
+      justify-content: start;
+    }
+
+    .record-collection .record-card__summary .record-status {
+      justify-self: start;
+    }
+
+    .record-collection .record-card__details {
+      padding: 1.125rem 1.5rem 1.25rem !important;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}

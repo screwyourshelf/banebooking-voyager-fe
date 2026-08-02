@@ -88,6 +88,17 @@ export function formatDatoKort(datoInput: string | Date): string {
   return dato.toLocaleDateString("nb-NO", { day: "2-digit", month: "2-digit", year: "numeric" });
 }
 
+export function formatTidspunktKort(datoInput: string | Date): string {
+  const dato = new Date(datoInput);
+  return dato.toLocaleString("nb-NO", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
 export function formatDatoLang(datoStr: string): string {
   const dato = new Date(`${datoStr}T00:00:00`);
   return dato.toLocaleDateString("nb-NO", { day: "numeric", month: "long", year: "numeric" });

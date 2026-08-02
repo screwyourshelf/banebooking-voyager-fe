@@ -1,5 +1,4 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import type { GrenRespons, OpprettGrenForespørsel, OppdaterGrenForespørsel } from "@/types";
@@ -30,7 +29,6 @@ export function useGrener(inkluderInaktive = true) {
     `/klubb/${slug}/grener`,
     {
       onSuccess: () => {
-        toast.success("Gren opprettet");
         invalidateAll();
       },
     }
@@ -42,7 +40,6 @@ export function useGrener(inkluderInaktive = true) {
     {
       getBody: ({ dto }) => dto,
       onSuccess: () => {
-        toast.success("Gren oppdatert");
         invalidateAll();
       },
     }
@@ -53,7 +50,6 @@ export function useGrener(inkluderInaktive = true) {
     ({ id }) => `/klubb/${slug}/grener/${id}`,
     {
       onSuccess: () => {
-        toast.success("Gren deaktivert");
         invalidateAll();
       },
     }
@@ -65,7 +61,6 @@ export function useGrener(inkluderInaktive = true) {
     {
       getBody: () => ({}),
       onSuccess: () => {
-        toast.success("Gren aktivert");
         invalidateAll();
       },
     }

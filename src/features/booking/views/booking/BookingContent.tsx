@@ -1,127 +1,22 @@
-import DatoVelger from "@/components/DatoVelger";
-import { BookingSlotListAccordion } from "@/features/booking/components";
-import { TabsLazyMount } from "@/components/navigation";
-import { ServerFeil } from "@/components/errors";
-import { Button } from "@/components/ui/button";
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import { Filter } from "lucide-react";
+import { PageHeader } from "@/components/layout";
+import { resolveBookingActivityTheme } from "@/features/booking/activityTheme";
+import BookingSchedule from "./BookingSchedule";
+import type { BookingContentProps } from "./bookingViewTypes";
 
-import type { KalenderSlotRespons, BaneRespons, GrenRespons } from "@/types";
-import type { User } from "@supabase/supabase-js";
+export default function BookingContent(props: BookingContentProps) {
+  const valgtGren = props.grener.find((gren) => gren.id === props.valgtGrenId);
+  const activityTheme = resolveBookingActivityTheme(valgtGren?.slug);
 
-type Props = {
-  grener: GrenRespons[];
-  valgtGrenId: string;
-  onGrenChange: (grenId: string) => void;
-
-  baner: BaneRespons[];
-  valgtBaneId: string;
-  onBaneChange: (baneId: string) => void;
-
-  valgtDato: Date | null;
-  onDatoChange: (dato: Date | null) => void;
-
-  slots: KalenderSlotRespons[];
-  isLoading: boolean;
-  isFetching: boolean;
-
-  currentUser: User | null;
-
-  onBook: (slot: KalenderSlotRespons) => void;
-  onFjern: (slot: KalenderSlotRespons) => void;
-  serverFeil: string | null;
-};
-
-export default function BookingContent({
-  grener,
-  valgtGrenId,
-  onGrenChange,
-  baner,
-  valgtBaneId,
-  onBaneChange,
-  valgtDato,
-  onDatoChange,
-  slots,
-  isLoading,
-  isFetching,
-  currentUser,
-  onBook,
-  onFjern,
-  serverFeil,
-}: Props) {
   return (
-    <>
-      <div className="flex items-center gap-2 mb-2">
-        <DatoVelger
-          value={valgtDato}
-          onChange={(date) => onDatoChange(date ?? null)}
-          visNavigering={true}
-        />
-        {grener.length > 1 && (
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 shrink-0 gap-1.5"
-                aria-label="Velg gren"
-              >
-                <Filter className="h-4 w-4" />
-                {grener.find((g) => g.id === valgtGrenId)?.navn ?? "Gren"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent align="end" className="w-auto p-1">
-              <div className="flex flex-col gap-0.5">
-                {grener.map((g) => (
-                  <Button
-                    key={g.id}
-                    variant={g.id === valgtGrenId ? "default" : "ghost"}
-                    size="sm"
-                    className="justify-start text-sm"
-                    onClick={() => onGrenChange(g.id)}
-                  >
-                    {g.navn}
-                  </Button>
-                ))}
-              </div>
-            </PopoverContent>
-          </Popover>
-        )}
-      </div>
+    <div className="booking-page" data-activity-theme={activityTheme}>
+      <PageHeader
+        className="booking-page__heading"
+        eyebrow="Booking"
+        title="Book bane"
+        description="Finn en ledig tid."
+      />
 
-      <ServerFeil feil={serverFeil} />
-
-      {baner.length === 0 ? (
-        <div
-          className="rounded-lg border border-dashed px-4 py-8 text-center text-sm text-muted-foreground"
-          role="status"
-        >
-          Ingen baner er lagt til for valgt gren.
-        </div>
-      ) : (
-        <TabsLazyMount
-          items={baner.map((bane) => ({
-            value: bane.id,
-            label: bane.navn,
-            content: (
-              <div
-                className={`transition-opacity duration-200 ${isFetching && !isLoading ? "opacity-50" : "opacity-100"}`}
-              >
-                <BookingSlotListAccordion
-                  slots={slots}
-                  valgtDato={valgtDato}
-                  currentUser={currentUser ? { epost: currentUser.email ?? "" } : null}
-                  onBook={onBook}
-                  onFjern={onFjern}
-                  isLoading={isLoading}
-                />
-              </div>
-            ),
-          }))}
-          value={valgtBaneId}
-          onValueChange={onBaneChange}
-        />
-      )}
-    </>
+      <BookingSchedule {...props} valgtGren={valgtGren} />
+    </div>
   );
 }

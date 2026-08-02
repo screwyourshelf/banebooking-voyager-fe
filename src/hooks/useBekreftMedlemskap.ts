@@ -1,5 +1,4 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useSlug } from "@/hooks/useSlug";
 import type { BekreftMedlemskapForespørsel } from "@/types";
@@ -13,7 +12,6 @@ export function useBekreftMedlemskap() {
     `/klubb/${slug}/bruker/bekreft-medlemskap`,
     {
       onSuccess: async () => {
-        toast.success("Medlemskap bekreftet!");
         await queryClient.invalidateQueries({ queryKey: ["bruker", slug] });
       },
       retry: false,

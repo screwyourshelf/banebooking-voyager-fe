@@ -1,7 +1,8 @@
 import axios, { AxiosError, AxiosHeaders, type InternalAxiosRequestConfig } from "axios";
+import { hentUtviklingssession } from "@/auth/developmentSession";
+import { notifySessionExpired } from "@/components/feedback/globalFeedback";
 import { supabase } from "@/supabase";
 import { signOutAndRedirect } from "@/utils/authUtils";
-import { toast } from "sonner";
 
 const rawBase = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 const baseURL = import.meta.env.MODE === "development" || !rawBase ? "/api" : `${rawBase}/api`;
@@ -16,11 +17,11 @@ const api = axios.create({ baseURL, timeout: 20_000 });
 
 let isHandling401 = false;
 
-function setAuthHeader(config: InternalAxiosRequestConfig, token: string) {
+function setAuthHeader(config: InternalAxiosRequestConfig, token: string, scheme = "Bearer") {
   const headers =
     config.headers instanceof AxiosHeaders ? config.headers : new AxiosHeaders(config.headers);
 
-  headers.set("Authorization", `Bearer ${token}`);
+  headers.set("Authorization", `${scheme} ${token}`);
   config.headers = headers;
 }
 
@@ -39,10 +40,22 @@ function pickErrorMessage(data: unknown): string | null {
 
 api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
   // Alltid legg til token hvis tilgjengelig (gir backend full kontekst).
-  // requireAuth styrer kun om manglende token er en feil.
+  // requireAuth styrer om vi må vente på gjenoppretting av en manglende sesjon.
+  const developmentSession = hentUtviklingssession();
+  if (developmentSession) {
+    setAuthHeader(config, developmentSession.accessToken, "DevelopmentBearer");
+    return config;
+  }
+
   const token = localStorage.getItem("supabase_token");
   if (token) {
     setAuthHeader(config, token);
+    return config;
+  }
+
+  // Offentlige kall skal ikke vente på at Supabase gjenoppretter en sesjon.
+  // En allerede tilgjengelig token blir fortsatt sendt med for full kontekst.
+  if (config.requireAuth === false) {
     return config;
   }
 
@@ -76,7 +89,7 @@ api.interceptors.response.use(
       if (!isHandling401) {
         isHandling401 = true;
         try {
-          toast.error("Du er logget ut. Vennligst logg inn igjen.");
+          notifySessionExpired();
           await signOutAndRedirect();
         } finally {
           // i tilfelle signOutAndRedirect feiler av en eller annen grunn

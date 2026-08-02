@@ -15,9 +15,11 @@ export interface RouteConfig {
 */
 
 const loadBookingPage = () => import("@/features/booking/pages/BookingPage");
+const loadLoginPage = () => import("@/features/auth/pages/LoginPage");
 const loadMinSidePage = () => import("@/features/minside/pages/MinSidePage");
 const loadMineBookingerPage = () => import("@/features/minside/pages/MineBookingerPage");
 const loadArrangementerPage = () => import("@/features/arrangementer/pages/ArrangementerPage");
+const loadNyheterPage = () => import("@/features/feed/pages/NyheterPage");
 const loadArrangementAdminPage = () => import("@/features/arrangement-admin/pages/ArrangementPage");
 const loadTurneringPage = () => import("@/features/turnering/pages/TurneringPage");
 
@@ -35,9 +37,11 @@ const loadVilkaarPage = () => import("@/features/policy/pages/VilkaarPage");
 */
 
 const BookingPage = lazy(loadBookingPage);
+const LoginPage = lazy(loadLoginPage);
 const MinSidePage = lazy(loadMinSidePage);
 const MineBookingerPage = lazy(loadMineBookingerPage);
 const ArrangementerPage = lazy(loadArrangementerPage);
+const NyheterPage = lazy(loadNyheterPage);
 const ArrangementAdminPage = lazy(loadArrangementAdminPage);
 const TurneringPage = lazy(loadTurneringPage);
 
@@ -70,6 +74,13 @@ export const routeConfig: RouteConfig[] = [
   },
 
   {
+    path: "login",
+    breadcrumb: "Logg inn",
+    component: LoginPage,
+    loader: loadLoginPage,
+  },
+
+  {
     path: "minside",
     breadcrumb: "Min side",
     protected: true,
@@ -79,7 +90,7 @@ export const routeConfig: RouteConfig[] = [
 
   {
     path: "bookinger",
-    breadcrumb: "Mine bookinger",
+    breadcrumb: "Mine tider",
     protected: true,
     component: MineBookingerPage,
     loader: loadMineBookingerPage,
@@ -93,8 +104,15 @@ export const routeConfig: RouteConfig[] = [
   },
 
   {
+    path: "nyheter",
+    breadcrumb: "Nyheter",
+    component: NyheterPage,
+    loader: loadNyheterPage,
+  },
+
+  {
     path: "arrangement",
-    breadcrumb: "Arrangement",
+    breadcrumb: "Administrer arrangementer",
     protected: true,
     component: ArrangementAdminPage,
     loader: loadArrangementAdminPage,
@@ -110,25 +128,25 @@ export const routeConfig: RouteConfig[] = [
 
   {
     path: "admin",
-    breadcrumb: "Admin",
+    breadcrumb: "Administrasjon",
     children: [
       {
         path: "klubb",
-        breadcrumb: "Klubb",
+        breadcrumb: "Klubbinnstillinger",
         protected: true,
         component: KlubbPage,
         loader: loadKlubbPage,
       },
       {
         path: "baner",
-        breadcrumb: "Baner",
+        breadcrumb: "Baner og grener",
         protected: true,
         component: BanerPage,
         loader: loadBanerPage,
       },
       {
         path: "grener",
-        breadcrumb: "Grener",
+        breadcrumb: "Baner og grener",
         protected: true,
         component: GrenerPage,
         loader: loadGrenerPage,

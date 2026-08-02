@@ -1,10 +1,13 @@
 import type { MinBookingRespons } from "@/types";
 
-export function sortBookingerNyesteFoerst(bookinger: MinBookingRespons[]): MinBookingRespons[] {
+export function sortBookingerEtterRelevans(bookinger: MinBookingRespons[]): MinBookingRespons[] {
   return [...bookinger].sort((a, b) => {
-    const datoDiff = new Date(b.dato).getTime() - new Date(a.dato).getTime();
+    if (a.erPassert !== b.erPassert) return a.erPassert ? 1 : -1;
+
+    const retning = a.erPassert ? -1 : 1;
+    const datoDiff = a.dato.localeCompare(b.dato) * retning;
     if (datoDiff !== 0) return datoDiff;
-    return b.startTid.localeCompare(a.startTid);
+    return a.startTid.localeCompare(b.startTid) * retning;
   });
 }
 

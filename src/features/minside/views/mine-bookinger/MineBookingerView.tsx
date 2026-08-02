@@ -1,13 +1,11 @@
 import { useMemo, useState } from "react";
-import { ListSkeleton } from "@/components/loading";
-import { QueryFeil } from "@/components/errors";
+import PageHeader from "@/components/layout/PageHeader";
 import { useMineBookinger } from "@/features/minside/hooks/useMineBookinger";
 import { useBookingActions } from "@/features/minside/hooks/useBookingActions";
 import type { MinBookingRespons } from "@/types";
-import "animate.css";
 
 import MineBookingerContent from "./MineBookingerContent";
-import { sortBookingerNyesteFoerst } from "./bookingSort";
+import { sortBookingerEtterRelevans } from "./bookingSort";
 
 export default function MineBookingerTab() {
   const [visHistoriske, setVisHistoriske] = useState(false);
@@ -22,7 +20,7 @@ export default function MineBookingerTab() {
   const { fjernAsync, isPending, error: fjernFeil } = useBookingActions();
 
   const visteBookinger = useMemo(() => {
-    return sortBookingerNyesteFoerst(bookinger);
+    return sortBookingerEtterRelevans(bookinger);
   }, [bookinger]);
 
   async function handleFjern(slot: MinBookingRespons) {
@@ -37,18 +35,27 @@ export default function MineBookingerTab() {
     }
   }
 
-  if (isLoading) return <ListSkeleton />;
-
   return (
-    <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
+    <div className="record-collection-page">
+      <PageHeader
+        eyebrow="Min konto"
+        title="Mine tider"
+        description="Hold oversikt over det du har booket og spilt."
+        className="record-collection-page__heading"
+      />
+
       <MineBookingerContent
         visHistoriske={visHistoriske}
         onToggleVisHistoriske={setVisHistoriske}
         bookinger={visteBookinger}
+        isLoading={isLoading}
+        queryError={error?.message ?? null}
+        isFetching={isFetching}
+        onRetry={() => void refetch()}
         isPending={isPending}
         onFjern={handleFjern}
         serverFeil={fjernFeil?.message ?? null}
       />
-    </QueryFeil>
+    </div>
   );
 }

@@ -1,19 +1,11 @@
 import { useMemo, useState } from "react";
-import { FormSkeleton } from "@/components/loading";
-import { QueryFeil } from "@/components/errors";
+import { RefreshCw } from "lucide-react";
+import { AdminPageLoading, AdminPageState } from "@/components/admin";
+import { RecordListState } from "@/components/records";
+import { Button } from "@/components/ui/button";
 import { useKlubb } from "@/hooks/useKlubb";
 
-import KlubbInnstillingerContent from "./KlubbInnstillingerContent";
-
-type FormState = {
-  navn: string;
-  kontaktEpost: string;
-  nettside: string;
-  latitude: string;
-  longitude: string;
-  feedUrl: string;
-  feedSynligAntallDager: string;
-};
+import KlubbInnstillingerContent, { type KlubbFormData } from "./KlubbInnstillingerContent";
 
 type TouchedState = {
   navn: boolean;
@@ -58,14 +50,17 @@ export default function KlubbInnstillingerView() {
   const {
     data: klubb,
     isLoading,
+    isFetching,
     error,
     refetch,
     oppdaterKlubb,
     oppdaterKlubbLaster,
     oppdaterKlubbFeil,
+    oppdaterKlubbLagret,
+    resetOppdaterKlubb,
   } = useKlubb();
 
-  const [form, setForm] = useState<FormState>({
+  const [form, setForm] = useState<KlubbFormData>({
     navn: "",
     kontaktEpost: "",
     nettside: "",
@@ -126,15 +121,34 @@ export default function KlubbInnstillingerView() {
 
   const canSubmit = isDirty && isValid;
 
-  if (isLoading) return <FormSkeleton />;
-  if (!klubb)
+  if (isLoading) return <AdminPageLoading label="Laster klubbinnstillinger" />;
+  if (!klubb) {
     return (
-      <QueryFeil error={error} isFetching={false} onRetry={refetch}>
-        {null}
-      </QueryFeil>
+      <AdminPageState>
+        <RecordListState
+          icon={<RefreshCw aria-hidden="true" />}
+          title="Kunne ikke laste klubbinnstillingene"
+          description={error?.message ?? "Prøv å hente innstillingene på nytt."}
+          tone="danger"
+          role="alert"
+          action={
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => void refetch()}
+              disabled={isFetching}
+            >
+              {isFetching ? "Prøver igjen…" : "Prøv igjen"}
+            </Button>
+          }
+        />
+      </AdminPageState>
     );
+  }
 
-  const onChange = <K extends keyof FormState>(key: K, value: FormState[K]) => {
+  const onChange = <K extends keyof KlubbFormData>(key: K, value: KlubbFormData[K]) => {
+    resetOppdaterKlubb();
     setForm((f) => ({ ...f, [key]: value }));
   };
 
@@ -191,6 +205,7 @@ export default function KlubbInnstillingerView() {
       errors={errors}
       onBlurField={touchField}
       mutasjonFeil={oppdaterKlubbFeil?.message ?? null}
+      lagret={oppdaterKlubbLagret && !isDirty}
     />
   );
 }

@@ -1,19 +1,26 @@
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Field } from "@/components/ui/field";
-import { Stack } from "@/components/layout";
-import { ServerFeil } from "@/components/errors";
-
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-
-import type { BrukerRespons, RolleType, EditState } from "@/features/brukere/types";
+  AdminEditorDialog,
+  AdminEditorForm,
+  AdminFormActions,
+  AdminFormSubmitButton,
+  SettingsPanel,
+  SettingsRow,
+  SettingsSection,
+  SettingsStack,
+} from "@/components/admin";
+import { ServerFeil } from "@/components/errors";
+import { Button } from "@/components/ui/button";
+import { Field } from "@/components/ui/field";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { BrukerRespons, EditState, RolleType } from "@/features/brukere/types";
+import { ROLLE_VALG } from "@/utils/brukerPresentation";
 
 type Props = {
   aktivBruker: BrukerRespons;
@@ -35,64 +42,80 @@ export default function RedigerBrukerDialog({
   serverFeil,
 }: Props) {
   return (
-    <Dialog
+    <AdminEditorDialog
       open
-      onOpenChange={(open) => {
-        if (!open) onClose();
-      }}
+      onOpenChange={(open) => !open && onClose()}
+      backLabel="Alle brukere"
+      eyebrow="Bruker"
+      title="Rediger bruker"
+      description={aktivBruker.epost}
+      closeDisabled={isSaving}
+      size="compact"
     >
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Rediger bruker</DialogTitle>
-          <DialogDescription className="sr-only">
-            Endre visningsnavn og rolle for bruker
-          </DialogDescription>
-        </DialogHeader>
+      <AdminEditorForm
+        onSubmit={(event) => {
+          event.preventDefault();
+          onSave();
+        }}
+      >
+        <SettingsStack embedded>
+          <SettingsSection
+            embedded
+            eyebrow="Profil og tilgang"
+            title={aktivBruker.visningsnavn || "Bruker uten visningsnavn"}
+            description="Oppdater navnet som vises i klubben og hvilken tilgang brukeren har."
+          >
+            <SettingsPanel>
+              <SettingsRow title="Visningsnavn">
+                <Field>
+                  <Input
+                    id="visningsnavn"
+                    aria-label="Visningsnavn"
+                    value={edit.visningsnavn}
+                    onChange={(event) => onEditChange({ visningsnavn: event.target.value })}
+                    placeholder="Valgfritt"
+                    disabled={isSaving}
+                  />
+                </Field>
+              </SettingsRow>
 
-        <Stack gap="lg">
-          <Stack gap="xs">
-            <div className="text-xs text-muted-foreground">Bruker</div>
-            <div className="text-sm font-medium break-words">{aktivBruker.epost}</div>
-          </Stack>
+              <SettingsRow
+                title="Rolle"
+                description="Rollen styrer hvilke deler av administrasjonen brukeren kan åpne."
+              >
+                <Field>
+                  <Select
+                    value={edit.rolle}
+                    onValueChange={(value) => onEditChange({ rolle: value as RolleType })}
+                    disabled={isSaving}
+                  >
+                    <SelectTrigger id="brukerrolle" aria-label="Rolle">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {ROLLE_VALG.map((rolle) => (
+                        <SelectItem key={rolle.value} value={rolle.value}>
+                          {rolle.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </Field>
+              </SettingsRow>
+            </SettingsPanel>
+          </SettingsSection>
 
-          <Stack gap="sm">
-            <div className="text-sm font-medium">Visningsnavn</div>
-
-            <Field>
-              <Input
-                id="visningsnavn"
-                value={edit.visningsnavn}
-                onChange={(e) => onEditChange({ visningsnavn: e.target.value })}
-                placeholder="Valgfritt"
-                className="bg-background"
-              />
-            </Field>
-          </Stack>
-
-          <Stack gap="sm">
-            <div className="text-sm font-medium">Rolle</div>
-            <select
-              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-              value={edit.rolle}
-              onChange={(e) => onEditChange({ rolle: e.target.value as RolleType })}
-            >
-              <option value="Medlem">Medlem</option>
-              <option value="Utvidet">Utvidet</option>
-              <option value="KlubbAdmin">KlubbAdmin</option>
-            </select>
-          </Stack>
-        </Stack>
-
-        <DialogFooter>
-          <ServerFeil feil={serverFeil} />
-          <Button variant="outline" onClick={onClose} disabled={isSaving}>
-            Avbryt
-          </Button>
-          <Button onClick={onSave} disabled={isSaving}>
-            {isSaving ? "Lagrer..." : "Lagre"}
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+          <AdminFormActions>
+            <ServerFeil feil={serverFeil} />
+            <Button type="button" variant="outline" onClick={onClose} disabled={isSaving}>
+              Avbryt
+            </Button>
+            <AdminFormSubmitButton isLoading={isSaving} loadingText="Lagrer…">
+              Lagre
+            </AdminFormSubmitButton>
+          </AdminFormActions>
+        </SettingsStack>
+      </AdminEditorForm>
+    </AdminEditorDialog>
   );
 }

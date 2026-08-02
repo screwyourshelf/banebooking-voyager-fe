@@ -1,5 +1,4 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import { useSlug } from "@/hooks/useSlug";
 
@@ -24,9 +23,6 @@ export function useBookingActions() {
     (vars) => `/klubb/${slug}/bookinger/${vars.bookingId}`,
     {
       getBody: () => undefined,
-      onSuccess: () => {
-        toast.info("Bookingen er avbestilt.");
-      },
       onSettled: () => {
         invalidateAll();
       },

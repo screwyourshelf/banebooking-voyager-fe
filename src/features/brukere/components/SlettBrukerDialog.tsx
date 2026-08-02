@@ -52,7 +52,7 @@ export default function SlettBrukerDialog({
           variant="destructive"
           size="sm"
           disabled={disabled || loading}
-          className="flex items-center gap-2 text-sm"
+          className="user-directory-row__delete-action"
         >
           {loading ? "Sletter..." : "Slett"}
         </Button>
@@ -71,10 +71,8 @@ export default function SlettBrukerDialog({
           <ServerFeil feil={serverFeil} />
           <AlertDialogCancel disabled={loading}>Avbryt</AlertDialogCancel>
 
-          <AlertDialogAction asChild>
-            <Button variant="destructive" onClick={handleDelete} disabled={loading}>
-              {loading ? "Sletter..." : "Slett bruker"}
-            </Button>
+          <AlertDialogAction variant="destructive" onClick={handleDelete} disabled={loading}>
+            {loading ? "Sletter..." : "Slett bruker"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

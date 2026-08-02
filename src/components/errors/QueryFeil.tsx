@@ -1,40 +1,46 @@
 import type { ReactNode } from "react";
-import { useState } from "react";
-import { RefreshCw } from "lucide-react";
+import { ActionFeedback } from "@/components/feedback";
 import { Button } from "@/components/ui/button";
-import { Stack } from "@/components/layout";
-import { cn } from "@/lib/utils";
 
 type Props = {
-  error: Error | null;
+  error: Error | string | null;
   isFetching: boolean;
   onRetry: () => void;
-  children: ReactNode;
+  children?: ReactNode;
+  title?: string;
 };
 
-export function QueryFeil({ error, isFetching, onRetry, children }: Props) {
-  const [lastMessage, setLastMessage] = useState<string | null>(null);
-
-  // Latch error message during retry (render-time adjust)
-  if (error && lastMessage !== error.message) {
-    setLastMessage(error.message);
-  } else if (!error && !isFetching && lastMessage !== null) {
-    setLastMessage(null);
-  }
-
-  const message = error?.message ?? lastMessage;
+export function QueryFeil({
+  error,
+  isFetching,
+  onRetry,
+  children,
+  title = "Innholdet kunne ikke lastes",
+}: Props) {
+  const message = typeof error === "string" ? error : error?.message;
 
   if (message) {
     return (
-      <Stack gap="sm" className="items-center py-10 text-center">
-        <p className="text-sm text-muted-foreground">{message}</p>
-        <Button variant="outline" size="sm" onClick={onRetry} disabled={isFetching}>
-          <RefreshCw className={cn("h-4 w-4", isFetching && "animate-spin")} />
-          {isFetching ? "Prøver..." : "Prøv igjen"}
-        </Button>
-      </Stack>
+      <div className="query-feedback">
+        <ActionFeedback
+          tone="danger"
+          title={title}
+          description={message}
+          action={
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={onRetry}
+              disabled={isFetching}
+            >
+              {isFetching ? "Prøver igjen…" : "Prøv igjen"}
+            </Button>
+          }
+        />
+      </div>
     );
   }
 
-  return <>{children}</>;
+  return children ? <>{children}</> : null;
 }

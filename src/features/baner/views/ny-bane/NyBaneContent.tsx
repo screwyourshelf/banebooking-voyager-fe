@@ -1,10 +1,16 @@
-import PageSection from "@/components/sections/PageSection";
-import { RowPanel, RowList, Row } from "@/components/rows";
-import { FormActions, FormLayout, FormSubmitButton } from "@/components/forms";
-
+import { MapPin } from "lucide-react";
+import {
+  AdminEditorForm,
+  AdminFormActions,
+  AdminFormSubmitButton,
+  SettingsPanel,
+  SettingsRow,
+  SettingsSection,
+  SettingsStack,
+} from "@/components/admin";
+import { ServerFeil } from "@/components/errors";
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { ServerFeil } from "@/components/errors";
 import {
   Select,
   SelectContent,
@@ -17,7 +23,6 @@ import type { GrenRespons } from "@/types";
 type FormState = {
   navn: string;
   beskrivelse: string;
-  sortering: string;
   grenId: string;
 };
 
@@ -25,11 +30,9 @@ type Props = {
   form: FormState;
   onChange: <K extends keyof FormState>(key: K, value: FormState[K]) => void;
   grener: GrenRespons[];
-
   canSubmit: boolean;
   isSaving: boolean;
   onSubmit: () => void;
-
   navnError: string | null;
   onBlurNavn: () => void;
   mutasjonFeil?: string | null;
@@ -47,77 +50,86 @@ export default function NyBaneContent({
   mutasjonFeil,
 }: Props) {
   return (
-    <FormLayout
-      onSubmit={(e) => {
-        e.preventDefault();
+    <AdminEditorForm
+      onSubmit={(event) => {
+        event.preventDefault();
         onSubmit();
       }}
     >
-      <PageSection title="Ny bane">
-        <RowPanel>
-          <RowList>
-            <Row title="Gren" description="Hvilken gren banen tilhører.">
-              <Field>
-                <Select
-                  disabled={isSaving}
-                  value={form.grenId}
-                  onValueChange={(val) => onChange("grenId", val)}
-                >
-                  <SelectTrigger id="ny-grenId" className="bg-background">
-                    <SelectValue placeholder="Velg gren..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {grener.map((g) => (
-                      <SelectItem key={g.id} value={g.id}>
-                        {g.navn}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </Field>
-            </Row>
-
-            <Row title="Navn" description="Vises i bookingvisningen.">
+      <SettingsStack embedded>
+        <SettingsSection
+          embedded
+          eyebrow="Bane"
+          icon={<MapPin />}
+          title="Baneinformasjon"
+          description="Det medlemmene skal kjenne igjen i bookingoversikten."
+        >
+          <SettingsPanel>
+            <SettingsRow title="Navn">
               <Field data-invalid={!!navnError}>
                 <Input
                   id="ny-navn"
+                  aria-label="Navn"
+                  placeholder="For eksempel Bane A"
                   disabled={isSaving}
                   value={form.navn}
-                  onChange={(e) => onChange("navn", e.target.value)}
+                  onChange={(event) => onChange("navn", event.target.value)}
                   onBlur={onBlurNavn}
                   aria-invalid={!!navnError}
                   autoComplete="off"
                 />
                 {navnError ? <FieldError>{navnError}</FieldError> : null}
               </Field>
-            </Row>
+            </SettingsRow>
 
-            <Row title="Beskrivelse" description="Valgfritt.">
+            <SettingsRow title="Gren">
+              <Field>
+                <Select
+                  disabled={isSaving}
+                  value={form.grenId}
+                  onValueChange={(value) => onChange("grenId", value)}
+                >
+                  <SelectTrigger id="ny-grenId" aria-label="Gren">
+                    <SelectValue placeholder="Velg gren…" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {grener.map((gren) => (
+                      <SelectItem key={gren.id} value={gren.id}>
+                        {gren.navn}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
+            </SettingsRow>
+
+            <SettingsRow title="Beskrivelse">
               <Field>
                 <Input
                   id="ny-beskrivelse"
+                  aria-label="Beskrivelse"
+                  placeholder="For eksempel nær klubbhuset"
                   disabled={isSaving}
                   value={form.beskrivelse}
-                  onChange={(e) => onChange("beskrivelse", e.target.value)}
+                  onChange={(event) => onChange("beskrivelse", event.target.value)}
                   autoComplete="off"
                 />
               </Field>
-            </Row>
-          </RowList>
-        </RowPanel>
-      </PageSection>
+            </SettingsRow>
+          </SettingsPanel>
+        </SettingsSection>
 
-      <FormActions variant="sticky" align="left" spaced={false} className="w-full">
-        <ServerFeil feil={mutasjonFeil} />
-        <FormSubmitButton
-          fullWidth
-          isLoading={isSaving}
-          disabled={!canSubmit}
-          loadingText="Legger til..."
-        >
-          Legg til
-        </FormSubmitButton>
-      </FormActions>
-    </FormLayout>
+        <AdminFormActions>
+          <ServerFeil feil={mutasjonFeil} />
+          <AdminFormSubmitButton
+            isLoading={isSaving}
+            disabled={!canSubmit}
+            loadingText="Oppretter…"
+          >
+            Opprett bane
+          </AdminFormSubmitButton>
+        </AdminFormActions>
+      </SettingsStack>
+    </AdminEditorForm>
   );
 }

@@ -19,11 +19,7 @@ export default function AppBoot({ children }: Props) {
     }
   }, [slug]);
 
-  if (isLoading) {
-    return null;
-  }
-
-  if (error || !klubb) {
+  if (error || (!isLoading && !klubb)) {
     return (
       <ErrorShell>
         <ErrorDisplay

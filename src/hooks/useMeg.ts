@@ -1,5 +1,4 @@
 import api from "@/api/api";
-import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import type { BrukerRespons } from "@/types";
@@ -25,47 +24,38 @@ export function useMeg() {
     `/klubb/${slug}/bruker/meg`,
     {
       onSuccess: () => {
-        toast.success("Visningsnavn oppdatert");
         void megQuery.refetch();
       },
     }
   );
 
-  const slettMeg = useApiMutation<void, void>("delete", `/klubb/${slug}/bruker/meg`, {
-    onSuccess: () => toast.success("Brukeren er slettet"),
-  });
+  const slettMeg = useApiMutation<void, void>("delete", `/klubb/${slug}/bruker/meg`);
 
   const lastNedEgenData = async () => {
-    try {
-      const res = await api.get(`/klubb/${slug}/bruker/meg/egen-data`, {
-        requireAuth: true,
-        responseType: "blob",
-      });
+    const res = await api.get(`/klubb/${slug}/bruker/meg/egen-data`, {
+      requireAuth: true,
+      responseType: "blob",
+    });
 
-      const blob = res.data as Blob;
+    const blob = res.data as Blob;
 
-      // præv å hente filnavn fra Content-Disposition (backend setter filename)
-      const disposition = res.headers?.["content-disposition"] as string | undefined;
-      const match = disposition?.match(/filename\*=UTF-8''([^;]+)|filename="?([^"]+)"?/i);
-      const fileNameFromHeader = decodeURIComponent(match?.[1] ?? match?.[2] ?? "");
-      const fileName =
-        fileNameFromHeader || `banebooking-data-${new Date().toISOString().slice(0, 10)}.json`;
+    // Prøv å hente filnavn fra Content-Disposition (backend setter filename).
+    const disposition = res.headers?.["content-disposition"] as string | undefined;
+    const match = disposition?.match(/filename\*=UTF-8''([^;]+)|filename="?([^"]+)"?/i);
+    const fileNameFromHeader = decodeURIComponent(match?.[1] ?? match?.[2] ?? "");
+    const fileName =
+      fileNameFromHeader || `banebooking-data-${new Date().toISOString().slice(0, 10)}.json`;
 
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = fileName;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = fileName;
 
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
 
-      URL.revokeObjectURL(url);
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : "Kunne ikke laste ned egen data";
-
-      toast.error(message);
-    }
+    URL.revokeObjectURL(url);
   };
 
   return {

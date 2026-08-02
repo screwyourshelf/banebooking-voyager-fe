@@ -1,61 +1,8 @@
-import { useEffect, useState, useCallback } from "react";
-import { supabase } from "@/supabase";
-import { config } from "@/config";
-import type { User } from "@supabase/supabase-js";
-
-function buildRedirectUrl() {
-  if (config.tenantSlug) {
-    return window.location.origin + "/";
-  }
-
-  const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
-  const storedSlug = (localStorage.getItem("slug") ?? "").replace(/^\/+|\/+$/g, "");
-
-  // Hvis ingen slug -> gå til base-root
-  if (!storedSlug) return `${window.location.origin}${base || "/"}`;
-
-  return `${window.location.origin}${base}/${storedSlug}`;
-}
+import { useContext } from "react";
+import { AuthContext } from "@/auth/AuthContext";
 
 export function useAuth() {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [ready, setReady] = useState(false);
-
-  useEffect(() => {
-    let alive = true;
-
-    supabase.auth.getSession().then(({ data }) => {
-      if (!alive) return;
-      setCurrentUser(data.session?.user ?? null);
-      setReady(true);
-    });
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      if (!alive) return;
-      if (!session) localStorage.removeItem("supabase_token");
-      setCurrentUser(session?.user ?? null);
-      setReady(true);
-    });
-
-    return () => {
-      alive = false;
-      subscription.unsubscribe();
-    };
-  }, []);
-
-  const signOut = useCallback(async () => {
-    const redirectTo = buildRedirectUrl();
-
-    await supabase.auth.signOut();
-
-    window.location.assign(redirectTo);
-  }, []);
-
-  return {
-    currentUser,
-    ready,
-    signOut,
-  };
+  const context = useContext(AuthContext);
+  if (!context) throw new Error("useAuth må brukes innenfor AuthProvider.");
+  return context;
 }

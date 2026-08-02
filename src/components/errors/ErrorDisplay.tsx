@@ -1,6 +1,5 @@
 import type { LucideIcon } from "lucide-react";
 import type { ReactNode } from "react";
-import { Stack } from "@/components/layout";
 
 type ErrorDisplayProps = {
   icon: LucideIcon;
@@ -20,23 +19,30 @@ export function ErrorDisplay({
   const isDev = import.meta.env.DEV;
 
   return (
-    <Stack gap="xl" className="items-center py-12 px-6 text-center">
-      <Icon className="h-16 w-16 text-muted-foreground" />
+    <article className="error-display">
+      <header className="error-display__header">
+        <span className="error-display__eyebrow">Banebooking</span>
+        <span className="error-display__icon">
+          <Icon aria-hidden="true" />
+        </span>
+      </header>
 
-      <Stack gap="xs" className="items-center">
-        <h1 className="text-xl font-semibold">{title}</h1>
-        <p className="text-sm text-muted-foreground">{description}</p>
-      </Stack>
+      <div className="error-display__body">
+        <div className="error-display__copy">
+          <h1>{title}</h1>
+          <p>{description}</p>
+        </div>
 
-      {children}
+        {children ? <div className="error-display__actions">{children}</div> : null}
 
-      {isDev && error && (
-        <pre className="rounded-md border bg-muted px-4 py-3 text-xs text-left w-full min-w-0 overflow-x-auto text-destructive whitespace-pre-wrap break-words">
-          {error instanceof Error
-            ? `${error.name}: ${error.message}${error.stack ? `\n\n${error.stack}` : ""}`
-            : String(error)}
-        </pre>
-      )}
-    </Stack>
+        {isDev && error ? (
+          <pre className="error-display__details">
+            {error instanceof Error
+              ? `${error.name}: ${error.message}${error.stack ? `\n\n${error.stack}` : ""}`
+              : String(error)}
+          </pre>
+        ) : null}
+      </div>
+    </article>
   );
 }

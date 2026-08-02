@@ -1,0 +1,35 @@
+@layer base {
+  html {
+    min-width: 20rem;
+    background: var(--app-canvas);
+    font-family: var(--app-font-body);
+  }
+
+  body {
+    min-height: 100svh;
+    background: var(--app-canvas);
+    color: var(--app-ink);
+    font-size: var(--app-type-body);
+    line-height: 1.55;
+    font-optical-sizing: auto;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings:
+      "ss01" 1,
+      "cv05" 1;
+  }
+
+  small {
+    font-size: inherit;
+  }
+
+  ::selection {
+    background: var(--app-brand-soft);
+    color: var(--app-brand-strong);
+  }
+
+  :focus-visible {
+    outline-color: var(--app-focus);
+  }
+}

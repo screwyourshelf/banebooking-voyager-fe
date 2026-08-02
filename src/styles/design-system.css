@@ -1,0 +1,13 @@
+/*
+ * Banebooking design system entry point.
+ *
+ * Import order is deliberate: global roles first, then the technical base,
+ * reusable semantic patterns, migrated feature compositions and finally the
+ * responsive adaptations that preserve the established cascade.
+ */
+
+@import "./design-system/tokens.css";
+@import "./design-system/primitives.css";
+@import "./design-system/patterns.css";
+@import "./design-system/migrated-compositions.css";
+@import "./design-system/responsive.css";

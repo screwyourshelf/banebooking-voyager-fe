@@ -1,15 +1,26 @@
 import { useState } from "react";
+import { CircleAlert } from "lucide-react";
 
-import { FormSkeleton } from "@/components/loading";
+import { AdminPageLoading, AdminPageState } from "@/components/admin";
+import { RecordListState } from "@/components/records";
+import { Button } from "@/components/ui/button";
 import { SlettMegDialog } from "@/features/minside/components";
 import { useMeg } from "@/hooks/useMeg";
+import { formaterRoller } from "@/utils/brukerPresentation";
 
 import MinProfilContent, { type Mode } from "./MinProfilContent";
 import { MAX_VISNINGSNAVN_LENGTH, validateVisningsnavn } from "./visningsnavn";
 
 export default function MinProfilView() {
-  const { bruker, laster: lasterMeg, oppdaterVisningsnavn, slettMeg } = useMeg();
-  const { mutateAsync, isPending } = oppdaterVisningsnavn;
+  const {
+    bruker,
+    laster: lasterMeg,
+    error: megFeil,
+    refetch,
+    oppdaterVisningsnavn,
+    slettMeg,
+  } = useMeg();
+  const { mutateAsync, isPending, isSuccess, reset } = oppdaterVisningsnavn;
 
   const [mode, setMode] = useState<Mode>("epost");
   const [visningsnavn, setVisningsnavn] = useState("");
@@ -31,7 +42,26 @@ export default function MinProfilView() {
     setError(null);
   }
 
-  if (lasterMeg || !bruker) return <FormSkeleton />;
+  if (lasterMeg) return <AdminPageLoading label="Laster profil" />;
+
+  if (megFeil || !bruker) {
+    return (
+      <AdminPageState>
+        <RecordListState
+          icon={<CircleAlert aria-hidden="true" />}
+          title="Kunne ikke laste profilen"
+          description={megFeil?.message ?? "Prøv igjen om litt."}
+          action={
+            <Button type="button" variant="outline" onClick={() => void refetch()}>
+              Prøv igjen
+            </Button>
+          }
+          tone="danger"
+          role="alert"
+        />
+      </AdminPageState>
+    );
+  }
 
   const valgtVisningsnavn = mode === "epost" ? bruker.epost : visningsnavn.trim();
 
@@ -56,20 +86,23 @@ export default function MinProfilView() {
   return (
     <MinProfilContent
       epost={bruker.epost}
-      rollerText={bruker.roller.join(", ")}
+      rollerText={formaterRoller(bruker.roller, "Ingen klubbrolle")}
       mode={mode}
       onSetMode={(m) => {
+        reset();
         setMode(m);
         setError(null);
       }}
       visningsnavn={visningsnavn}
       onChangeVisningsnavn={(value) => {
+        reset();
         setVisningsnavn(value);
         if (error) setError(null);
       }}
       maxLength={MAX_VISNINGSNAVN_LENGTH}
       error={error}
       serverFeil={oppdaterVisningsnavn.error?.message ?? null}
+      lagret={isSuccess && !canSubmit}
       canSubmit={canSubmit}
       isSaving={isPending}
       onSubmit={() => void lagreVisningsnavn()}
@@ -77,8 +110,7 @@ export default function MinProfilView() {
       fulltNavn={bruker.fulltNavn}
       medlemskapType={bruker.medlemskapType}
       medlemskapBekreftetDato={bruker.medlemskapBekreftetDato}
-      deleteAction={<SlettMegDialog slettMeg={slettMeg} />}
-      isDeleteDisabled={isPending}
+      deleteAction={<SlettMegDialog slettMeg={slettMeg} disabled={isPending} />}
     />
   );
 }

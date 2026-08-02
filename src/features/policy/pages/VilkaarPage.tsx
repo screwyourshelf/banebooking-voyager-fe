@@ -1,106 +1,124 @@
+import { CircleAlert } from "lucide-react";
+import { AdminPage, AdminPageLoading, AdminPageState } from "@/components/admin";
+import { ContentDocument, ContentDocumentIntro, ContentDocumentSection } from "@/components/layout";
+import { RecordListState, RecordStatus } from "@/components/records";
+import { Button } from "@/components/ui/button";
 import { useKlubb } from "@/hooks/useKlubb";
-import { LoaderSkeleton } from "@/components/loading";
-import Page from "@/components/Page";
 import { AKTIV_VILKAAR } from "./vilkaar";
 
 export default function VilkaarPage() {
-  const { data: klubb, isLoading } = useKlubb();
+  const { data: klubb, isLoading, error, refetch } = useKlubb();
 
-  if (isLoading || !klubb) {
+  if (isLoading) {
     return (
-      <Page>
-        <div className="p-4">
-          <LoaderSkeleton />
-        </div>
-      </Page>
+      <AdminPage
+        eyebrow="Personvern"
+        title="Vilkår for bruk"
+        description="Les om ansvar, personvern og bruk av tjenesten."
+      >
+        <AdminPageLoading label="Laster vilkår" />
+      </AdminPage>
+    );
+  }
+
+  if (error || !klubb) {
+    return (
+      <AdminPage
+        eyebrow="Personvern"
+        title="Vilkår for bruk"
+        description="Les om ansvar, personvern og bruk av tjenesten."
+      >
+        <AdminPageState>
+          <RecordListState
+            icon={<CircleAlert aria-hidden="true" />}
+            title="Kunne ikke laste vilkårene"
+            description={error?.message ?? "Prøv igjen om litt."}
+            action={
+              <Button type="button" variant="outline" onClick={() => void refetch()}>
+                Prøv igjen
+              </Button>
+            }
+            tone="danger"
+            role="alert"
+          />
+        </AdminPageState>
+      </AdminPage>
     );
   }
 
   return (
-    <Page>
-      <header className="space-y-1 mb-4">
-        <h1 className="text-xl font-semibold">Vilkår for bruk</h1>
-        <p className="text-xs text-muted-foreground">Oppdatert: {AKTIV_VILKAAR.visningsDato}</p>
-      </header>
+    <AdminPage
+      eyebrow="Personvern"
+      title="Vilkår for bruk"
+      description="Les om ansvar, personvern og bruk av tjenesten."
+      action={<RecordStatus tone="past">Oppdatert {AKTIV_VILKAAR.visningsDato}</RecordStatus>}
+    >
+      <ContentDocument>
+        <ContentDocumentIntro>
+          Disse vilkårene gjelder for bruk av Banebooking i <strong>{klubb.navn}</strong>. Ved å
+          logge inn samtykker du til vilkårene.
+        </ContentDocumentIntro>
 
-      <p className="text-sm text-muted-foreground mb-6 max-w-prose">
-        Disse vilkårene gjelder for bruk av banebooking i <strong>{klubb.navn}</strong>. Ved å logge
-        inn samtykker du til disse vilkårene.
-      </p>
-
-      <section className="space-y-6 text-sm leading-relaxed">
-        <div>
-          <h2 className="font-semibold">1. Bruk av tjenesten</h2>
+        <ContentDocumentSection title="1. Bruk av tjenesten">
           <p>
-            Banebooking er et verktøy for reservasjon av baner i <strong>{klubb.navn}</strong>. For
-            å kunne booke baner må du være medlem, eller ha fått tilgang av klubbens administrator.
+            Banebooking lar deg booke baner i <strong>{klubb.navn}</strong>. Du må være medlem eller
+            ha fått tilgang av en klubbadministrator.
           </p>
-          <p className="mt-2">
+          <p>
             Ved å gjennomføre en booking bekrefter du at du og eventuelle medspillere har gyldig
             betalt medlemskap for inneværende år.
           </p>
-        </div>
+        </ContentDocumentSection>
 
-        <div>
-          <h2 className="font-semibold">2. Brukerkonto og innlogging</h2>
+        <ContentDocumentSection title="2. Konto og innlogging">
           <p>
-            Innlogging i tjenesten skjer via e-post eller tredjepartsleverandører for autentisering
-            (for eksempel Google). For å holde brukeren innlogget mellom økter benyttes lokal
-            lagring (localStorage) i nettleseren. Tjenesten benytter ikke informasjonskapsler
-            (cookies) til sporing eller analyse.
+            Innlogging i tjenesten skjer via e-post eller tredjepartsleverandører for autentisering,
+            for eksempel Google. For å holde brukeren innlogget mellom økter benyttes lokal lagring
+            i nettleseren. Tjenesten benytter ikke informasjonskapsler til sporing eller analyse.
           </p>
-        </div>
+        </ContentDocumentSection>
 
-        <div>
-          <h2 className="font-semibold">3. Personopplysninger</h2>
+        <ContentDocumentSection title="3. Personopplysninger">
           <p>
-            Vi lagrer nødvendige personopplysninger som navn, e-postadresse og dine
-            bookingaktiviteter for å kunne levere tjenesten. Du kan når som helst se, laste ned
-            eller slette dine data via <em>Min side</em>.
+            Vi lagrer nødvendige personopplysninger som navn, e-postadresse og bookinghistorikk for
+            å kunne levere tjenesten. Du kan når som helst se, laste ned eller slette dataene dine
+            via <em>Min side</em>.
           </p>
-        </div>
+        </ContentDocumentSection>
 
-        <div>
-          <h2 className="font-semibold">4. Bruk, ansvar og misbruk</h2>
+        <ContentDocumentSection title="4. Bruk, ansvar og misbruk">
           <p>
-            Ved misbruk av bookingløsningen eller brudd på klubbens retningslinjer, kan tilgangen
-            bli begrenset eller fjernet av klubbens administrator.
+            Ved misbruk av bookingløsningen eller brudd på klubbens retningslinjer kan tilgangen bli
+            begrenset eller fjernet av en klubbadministrator.
           </p>
-          <p className="mt-2">
+          <p>
             {klubb.navn} tar ikke ansvar for tap, kostnader eller ulemper som følge av tekniske
             feil, dobbeltbookinger eller midlertidig utilgjengelighet i systemet.
           </p>
-        </div>
+        </ContentDocumentSection>
 
-        <div>
-          <h2 className="font-semibold">5. Endringer i tjenesten</h2>
+        <ContentDocumentSection title="5. Endringer i tjenesten">
           <p>
             Funksjonalitet og vilkår kan endres over tid. Ved vesentlige endringer vil du bli bedt
             om å godta oppdaterte vilkår ved neste innlogging.
           </p>
-        </div>
+        </ContentDocumentSection>
 
-        <div>
-          <h2 className="font-semibold">6. Kontakt</h2>
+        <ContentDocumentSection title="6. Kontakt">
           <p>
             Spørsmål om tjenesten, personvern eller vilkår kan rettes til klubbens kontaktperson
-            eller via e-post til{" "}
             {klubb.kontaktEpost ? (
-              <a
-                href={`mailto:${klubb.kontaktEpost}`}
-                className="underline text-primary hover:text-primary/80"
-              >
-                {klubb.kontaktEpost}
-              </a>
+              <>
+                {" "}
+                eller via e-post til{" "}
+                <a href={`mailto:${klubb.kontaktEpost}`}>{klubb.kontaktEpost}</a>.
+              </>
             ) : (
-              <span className="italic text-muted-foreground">
-                (ingen kontaktadresse registrert)
-              </span>
+              "."
             )}
-            .
           </p>
-        </div>
-      </section>
-    </Page>
+        </ContentDocumentSection>
+      </ContentDocument>
+    </AdminPage>
   );
 }

@@ -6,13 +6,14 @@ export function useFeed() {
   const slug = useSlug();
 
   const query = useApiQuery<FeedItemRespons[]>(["feed", slug], `/klubb/${slug}/feed`, {
-    requireAuth: true,
+    requireAuth: false,
     staleTime: 60_000,
   });
 
   return {
     feed: query.data ?? [],
     isLoading: query.isLoading,
+    isFetching: query.isFetching,
     error: query.error,
     refetch: query.refetch,
   };

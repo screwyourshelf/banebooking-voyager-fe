@@ -1,43 +1,34 @@
 import { useEffect, useMemo, useState } from "react";
+import { RefreshCw, Shapes } from "lucide-react";
+import {
+  AdminEditorDialog,
+  AdminEntityCollection,
+  AdminEntityList,
+  AdminEntityRow,
+} from "@/components/admin";
+import { RecordCollectionSkeleton, RecordListState } from "@/components/records";
+import { Button } from "@/components/ui/button";
+import GrenEditorContent, { type GrenFormData } from "@/features/grener/GrenEditorContent";
 import { useGrener } from "@/hooks/useGrener";
-
-import { FormSkeleton } from "@/components/loading";
-import { QueryFeil } from "@/components/errors";
-import RedigerGrenContent from "./RedigerGrenContent";
-import { loadValgtGrenId, saveValgtGrenId } from "./storage";
 import type { GrenRespons } from "@/types";
-
-type GrenFormData = {
-  navn: string;
-  banereglement: string;
-  aktiv: boolean;
-  sortering: string;
-  aapningstid: number;
-  stengetid: number;
-  maksPerDag: number;
-  maksTotalt: number;
-  dagerFremITid: number;
-  slotLengdeMinutter: number;
-};
+import { loadValgtGrenId, saveValgtGrenId } from "./storage";
 
 type TouchedState = { navn: boolean };
 
 function validateNavn(navn: string): string | null {
-  const v = navn.trim();
-  if (!v) return "Navn er påkrevd.";
-  return null;
+  return navn.trim() ? null : "Navn er påkrevd.";
 }
 
-function timeToHour(t: string): number {
-  const h = parseInt((t ?? "").split(":")[0] ?? "0", 10);
-  return Number.isFinite(h) ? h : 0;
+function timeToHour(time: string): number {
+  const hour = parseInt((time ?? "").split(":")[0] ?? "0", 10);
+  return Number.isFinite(hour) ? hour : 0;
 }
 
-function hourToTime(h: number): string {
-  return `${String(h).padStart(2, "0")}:00`;
+function hourToTime(hour: number): string {
+  return `${String(hour).padStart(2, "0")}:00`;
 }
 
-function tilFormData(gren: GrenRespons): GrenFormData {
+function toFormData(gren: GrenRespons): GrenFormData {
   return {
     navn: gren.navn,
     banereglement: gren.banereglement,
@@ -52,108 +43,86 @@ function tilFormData(gren: GrenRespons): GrenFormData {
   };
 }
 
+function timeRange(form: GrenFormData) {
+  return `${hourToTime(form.aapningstid)}–${hourToTime(form.stengetid)}`;
+}
+
 export default function RedigerGrenView() {
   const { grener, isLoading, isFetching, error, refetch, oppdaterGren } = useGrener(true);
-
   const [redigerte, setRedigerte] = useState<Record<string, GrenFormData>>({});
   const [manuellGrenId, setValgtGrenId] = useState<string | null>(() => loadValgtGrenId());
-
+  const [editorOpen, setEditorOpen] = useState(false);
   const [touched, setTouched] = useState<Record<string, TouchedState>>({});
   const [submitAttempted, setSubmitAttempted] = useState(false);
+  const [lagretGrenId, setLagretGrenId] = useState<string | null>(null);
 
-  // Derived: validate against current grener list, fallback to first
   const valgtGrenId =
-    manuellGrenId != null && grener.some((g) => g.id === manuellGrenId)
+    manuellGrenId != null && grener.some((gren) => gren.id === manuellGrenId)
       ? manuellGrenId
       : (grener[0]?.id ?? null);
 
-  const valgtGren: GrenRespons | null = useMemo(
-    () => grener.find((g) => g.id === valgtGrenId) ?? null,
+  const valgtGren = useMemo(
+    () => grener.find((gren) => gren.id === valgtGrenId) ?? null,
     [grener, valgtGrenId]
   );
-
-  const redigerteVerdier: GrenFormData | null = useMemo(() => {
-    if (!valgtGrenId) return null;
-    return redigerte[valgtGrenId] ?? null;
-  }, [redigerte, valgtGrenId]);
+  const redigerteVerdier = valgtGrenId ? (redigerte[valgtGrenId] ?? null) : null;
+  const draft = useMemo(
+    () => (valgtGren ? (redigerteVerdier ?? toFormData(valgtGren)) : null),
+    [valgtGren, redigerteVerdier]
+  );
 
   useEffect(() => {
     saveValgtGrenId(manuellGrenId);
   }, [manuellGrenId]);
 
-  // Reset submitAttempted when selection changes (render-time adjust)
   const [prevValgtGrenId, setPrevValgtGrenId] = useState(valgtGrenId);
   if (valgtGrenId !== prevValgtGrenId) {
     setPrevValgtGrenId(valgtGrenId);
     setSubmitAttempted(false);
   }
 
-  function touchField(grenId: string, key: keyof TouchedState) {
-    setTouched((prev) => {
-      const current = prev[grenId] ?? { navn: false };
-      if (current[key]) return prev;
-      return { ...prev, [grenId]: { ...current, [key]: true } };
+  function touchNavn(grenId: string) {
+    setTouched((current) => {
+      if (current[grenId]?.navn) return current;
+      return { ...current, [grenId]: { navn: true } };
     });
   }
 
-  function håndterEndring(id: string, felt: keyof GrenFormData, verdi: string | boolean | number) {
-    setRedigerte((prev) => ({
-      ...prev,
-      [id]: {
-        ...(prev[id] ??
-          (grener.find((g) => g.id === id)
-            ? tilFormData(grener.find((g) => g.id === id)!)
-            : undefined)),
-        [felt]: verdi,
+  function onChange<K extends keyof GrenFormData>(key: K, value: GrenFormData[K]) {
+    if (!valgtGrenId || !valgtGren) return;
+    setLagretGrenId(null);
+    oppdaterGren.reset();
+    setRedigerte((current) => ({
+      ...current,
+      [valgtGrenId]: {
+        ...(current[valgtGrenId] ?? toFormData(valgtGren)),
+        [key]: value,
       },
     }));
   }
 
-  const draft: GrenFormData | null = useMemo(() => {
-    if (!valgtGren) return null;
-    return redigerteVerdier ?? tilFormData(valgtGren);
-  }, [valgtGren, redigerteVerdier]);
-
-  const errors = useMemo(() => {
-    return { navn: draft ? validateNavn(draft.navn) : null };
-  }, [draft]);
-
-  const isValid = useMemo(() => !errors.navn, [errors.navn]);
-
-  const touchedNavn = valgtGrenId ? (touched[valgtGrenId]?.navn ?? false) : false;
-  const navnError = touchedNavn || submitAttempted ? errors.navn : null;
-
-  // --- Dirty / canSubmit ---
-
+  const navnError = draft ? validateNavn(draft.navn) : null;
+  const showNavnError =
+    valgtGrenId && (touched[valgtGrenId]?.navn || submitAttempted) ? navnError : null;
   const isDirty = useMemo(() => {
     if (!valgtGren || !draft) return false;
-    return !(
-      draft.navn === valgtGren.navn &&
-      draft.banereglement === valgtGren.banereglement &&
-      draft.aktiv === valgtGren.aktiv &&
-      draft.sortering === String(valgtGren.sortering) &&
-      draft.aapningstid === timeToHour(valgtGren.bookingInnstillinger.aapningstid) &&
-      draft.stengetid === timeToHour(valgtGren.bookingInnstillinger.stengetid) &&
-      draft.maksPerDag === valgtGren.bookingInnstillinger.maksPerDag &&
-      draft.maksTotalt === valgtGren.bookingInnstillinger.maksTotalt &&
-      draft.dagerFremITid === valgtGren.bookingInnstillinger.dagerFremITid &&
-      draft.slotLengdeMinutter === valgtGren.bookingInnstillinger.slotLengdeMinutter
+    const original = toFormData(valgtGren);
+    return (Object.keys(original) as Array<keyof GrenFormData>).some(
+      (key) => draft[key] !== original[key]
     );
   }, [valgtGren, draft]);
-
-  const canSubmit = isDirty && isValid;
+  const canSubmit = isDirty && !navnError;
   const isSaving = oppdaterGren.isPending;
 
-  // --- Submit ---
-
   async function onSubmit() {
-    if (!valgtGrenId || !valgtGren || !draft) return;
+    if (!valgtGrenId || !draft || navnError || !isDirty) {
+      setSubmitAttempted(true);
+      if (valgtGrenId) touchNavn(valgtGrenId);
+      return;
+    }
 
     setSubmitAttempted(true);
-    touchField(valgtGrenId, "navn");
-    if (!isValid) return;
-    if (!isDirty) return;
-
+    touchNavn(valgtGrenId);
     const sortering = parseInt(draft.sortering, 10);
 
     try {
@@ -173,46 +142,139 @@ export default function RedigerGrenView() {
         },
       });
 
-      setRedigerte((prev) => {
-        const ny = { ...prev };
-        delete ny[valgtGrenId];
-        return ny;
+      setRedigerte((current) => {
+        const next = { ...current };
+        delete next[valgtGrenId];
+        return next;
       });
-      setTouched((prev) => {
-        const ny = { ...prev };
-        delete ny[valgtGrenId];
-        return ny;
+      setTouched((current) => {
+        const next = { ...current };
+        delete next[valgtGrenId];
+        return next;
       });
       setSubmitAttempted(false);
+      setLagretGrenId(valgtGrenId);
     } catch {
-      // feil vises inline via oppdaterGren.error
+      // Feilen vises i skjemaet.
     }
   }
 
-  if (isLoading) return <FormSkeleton />;
+  if (isLoading) {
+    return (
+      <AdminEntityCollection
+        icon={<Shapes aria-hidden="true" />}
+        title="Grener"
+        description="Velg en gren for å redigere"
+      >
+        <RecordCollectionSkeleton ariaLabel="Laster grener" rows={3} />
+      </AdminEntityCollection>
+    );
+  }
+
+  if (error) {
+    return (
+      <AdminEntityCollection
+        icon={<Shapes aria-hidden="true" />}
+        title="Grener"
+        description="Velg en gren for å redigere"
+      >
+        <RecordListState
+          icon={<RefreshCw aria-hidden="true" />}
+          title="Kunne ikke laste grenene"
+          description={error.message}
+          tone="danger"
+          role="alert"
+          action={
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => void refetch()}
+              disabled={isFetching}
+            >
+              {isFetching ? "Prøver igjen…" : "Prøv igjen"}
+            </Button>
+          }
+        />
+      </AdminEntityCollection>
+    );
+  }
+
+  const antallTekst = `${grener.length} ${grener.length === 1 ? "gren" : "grener"}`;
+  const editorNavn = draft?.navn.trim() || valgtGren?.navn || "Gren";
 
   return (
-    <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
-      <RedigerGrenContent
-        grener={grener}
-        valgtGrenId={valgtGrenId}
-        onChangeValgtGrenId={setValgtGrenId}
-        valgtGren={valgtGren}
-        redigerteVerdier={redigerteVerdier}
-        onChangeFelt={(felt, verdi) => {
-          if (!valgtGren) return;
-          håndterEndring(valgtGren.id, felt, verdi);
-        }}
-        navnError={navnError}
-        onBlurNavn={() => {
-          if (!valgtGrenId) return;
-          touchField(valgtGrenId, "navn");
-        }}
-        canSubmit={canSubmit}
-        isSaving={isSaving}
-        onSubmit={() => void onSubmit()}
-        mutasjonFeil={oppdaterGren.error?.message ?? null}
-      />
-    </QueryFeil>
+    <>
+      <AdminEntityCollection
+        icon={<Shapes aria-hidden="true" />}
+        title={antallTekst}
+        description="Velg en gren for å redigere"
+      >
+        {grener.length === 0 ? (
+          <RecordListState
+            icon={<Shapes aria-hidden="true" />}
+            title="Ingen grener ennå"
+            description="Bruk knappen Ny gren for å opprette den første."
+          />
+        ) : (
+          <AdminEntityList>
+            {grener.map((gren) => {
+              const rowDraft = redigerte[gren.id];
+              const values = rowDraft ?? toFormData(gren);
+              const erEndret = !!rowDraft;
+
+              return (
+                <AdminEntityRow
+                  key={gren.id}
+                  title={values.navn.trim() || gren.navn}
+                  meta={timeRange(values)}
+                  description={`${values.slotLengdeMinutter} min · maks ${values.maksPerDag} per dag`}
+                  status={erEndret ? "Ulagret" : values.aktiv ? "Aktiv" : "Inaktiv"}
+                  statusTone={erEndret ? "warning" : values.aktiv ? "available" : "past"}
+                  onSelect={() => {
+                    setLagretGrenId(null);
+                    oppdaterGren.reset();
+                    setValgtGrenId(gren.id);
+                    setEditorOpen(true);
+                  }}
+                  disabled={isSaving}
+                />
+              );
+            })}
+          </AdminEntityList>
+        )}
+      </AdminEntityCollection>
+
+      {valgtGren && draft ? (
+        <AdminEditorDialog
+          open={editorOpen}
+          onOpenChange={(open) => {
+            if (!isSaving) setEditorOpen(open);
+          }}
+          backLabel="Alle grener"
+          eyebrow="Rediger gren"
+          title={editorNavn}
+          description={`${draft.aktiv ? "Aktiv" : "Inaktiv"} · ${timeRange(draft)}`}
+          closeDisabled={isSaving}
+        >
+          <GrenEditorContent
+            form={draft}
+            onChange={onChange}
+            showActive
+            canSubmit={canSubmit}
+            isSaving={isSaving}
+            onSubmit={() => void onSubmit()}
+            submitLabel="Lagre endringer"
+            loadingText="Lagrer…"
+            navnError={showNavnError}
+            onBlurNavn={() => {
+              if (valgtGrenId) touchNavn(valgtGrenId);
+            }}
+            mutasjonFeil={oppdaterGren.error?.message ?? null}
+            lagret={lagretGrenId === valgtGrenId && !isDirty}
+          />
+        </AdminEditorDialog>
+      ) : null}
+    </>
   );
 }

@@ -12,23 +12,15 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import type { UseMutationResult } from "@tanstack/react-query";
-import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { ServerFeil } from "@/components/errors";
 
 type Props = {
   slettMeg: UseMutationResult<void, Error, void>;
-  fullWidth?: boolean;
   disabled?: boolean;
-  className?: string;
 };
 
-export default function SlettMegDialog({
-  slettMeg,
-  fullWidth = false,
-  disabled = false,
-  className,
-}: Props) {
+export default function SlettMegDialog({ slettMeg, disabled = false }: Props) {
   const { signOut } = useAuth();
   const [open, setOpen] = useState(false);
 
@@ -47,21 +39,16 @@ export default function SlettMegDialog({
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button
-          variant="destructive"
-          disabled={disabled || isBusy}
-          className={cn(fullWidth && "w-full", className)}
-        >
-          {isBusy ? "Sletter..." : "Slett min bruker"}
+        <Button variant="destructive" disabled={disabled || isBusy}>
+          {isBusy ? "Sletter…" : "Slett kontoen min"}
         </Button>
       </AlertDialogTrigger>
 
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Er du sikker?</AlertDialogTitle>
+          <AlertDialogTitle>Slett kontoen?</AlertDialogTitle>
           <AlertDialogDescription>
-            Dette vil slette din bruker og all tilknytning permanent. Denne handlingen kan ikke
-            angres.
+            Dette sletter kontoen og alle tilknyttede data permanent. Handlingen kan ikke angres.
           </AlertDialogDescription>
         </AlertDialogHeader>
 
@@ -69,10 +56,8 @@ export default function SlettMegDialog({
           <ServerFeil feil={slettMeg.error?.message ?? null} />
           <AlertDialogCancel disabled={isBusy}>Avbryt</AlertDialogCancel>
 
-          <AlertDialogAction asChild>
-            <Button variant="destructive" onClick={handleDelete} disabled={isBusy}>
-              {isBusy ? "Sletter..." : "Slett bruker"}
-            </Button>
+          <AlertDialogAction variant="destructive" onClick={handleDelete} disabled={isBusy}>
+            {isBusy ? "Sletter…" : "Slett konto"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

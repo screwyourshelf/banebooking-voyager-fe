@@ -3,7 +3,7 @@ import MineBookingerView from "@/features/minside/views/mine-bookinger/MineBooki
 
 export default function MineBookingerPage() {
   return (
-    <Page>
+    <Page width="xl" className="mine-bookings-page-frame">
       <MineBookingerView />
     </Page>
   );

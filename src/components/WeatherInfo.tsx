@@ -3,10 +3,19 @@ type Props = {
   temperatur?: number | null;
   vind?: number | null;
   iconOnly?: boolean;
+  compact?: boolean;
 };
 
-export default function WeatherInfo({ værSymbol, temperatur, vind, iconOnly = false }: Props) {
+export default function WeatherInfo({
+  værSymbol,
+  temperatur,
+  vind,
+  iconOnly = false,
+  compact = false,
+}: Props) {
   const harVaer = !!værSymbol || typeof temperatur === "number" || typeof vind === "number";
+  const harTemperatur = typeof temperatur === "number";
+  const harVind = typeof vind === "number";
 
   if (!harVaer) return null;
 
@@ -23,20 +32,43 @@ export default function WeatherInfo({ værSymbol, temperatur, vind, iconOnly = f
     ) : null;
   }
 
+  if (compact) {
+    return (
+      <span className="weather-info weather-info--compact">
+        {værSymbol ? (
+          <img
+            src={`${import.meta.env.BASE_URL}weather-symbols/svg/${værSymbol}.svg`}
+            alt=""
+            width={16}
+            height={16}
+            className="weather-info__icon select-none"
+            draggable={false}
+          />
+        ) : null}
+        {harTemperatur ? <span>{Math.round(temperatur)}°</span> : null}
+      </span>
+    );
+  }
+
   return (
-    <span className="flex items-center gap-1">
+    <span className="weather-info">
       {værSymbol && (
         <img
           src={`${import.meta.env.BASE_URL}weather-symbols/svg/${værSymbol}.svg`}
           alt={værSymbol}
           width={16}
           height={16}
-          className="select-none"
+          className="weather-info__icon select-none"
           draggable={false}
         />
       )}
-      {typeof temperatur === "number" && <span>{temperatur}°c</span>}
-      {typeof vind === "number" && <span>{vind} m/s</span>}
+      {harTemperatur ? <span>{Math.round(temperatur)}°</span> : null}
+      {harTemperatur && harVind ? (
+        <span className="weather-info__separator" aria-hidden="true">
+          ·
+        </span>
+      ) : null}
+      {harVind ? <span>{Math.round(vind)} m/s</span> : null}
     </span>
   );
 }

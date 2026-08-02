@@ -1,5 +1,4 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import type { BrukerSperrerRespons, SperrBrukerForespørsel } from "@/types";
@@ -38,7 +37,6 @@ export function useAdminBrukersperre() {
     {
       getBody: ({ type, årsak, aktivTil }) => ({ type, årsak, aktivTil }),
       onSuccess: async (_, payload) => {
-        toast.success("Bruker sperret");
         await queryClient.invalidateQueries({ queryKey: brukereKey });
         await queryClient.invalidateQueries({
           queryKey: ["bruker-sperrer", slug, payload.brukerId],
@@ -54,7 +52,6 @@ export function useAdminBrukersperre() {
     {
       getBody: () => undefined,
       onSuccess: async (_, payload) => {
-        toast.success("Sperre opphevet");
         await queryClient.invalidateQueries({ queryKey: brukereKey });
         await queryClient.invalidateQueries({
           queryKey: ["bruker-sperrer", slug, payload.brukerId],

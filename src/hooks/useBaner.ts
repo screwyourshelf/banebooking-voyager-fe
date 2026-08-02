@@ -1,5 +1,4 @@
 import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { useApiQuery } from "@/hooks/useApiQuery";
 import { useApiMutation } from "@/hooks/useApiMutation";
 import type {
@@ -31,7 +30,6 @@ export function useBaner(inkluderInaktive = true) {
 
   const opprettBane = useApiMutation<OpprettBaneForespørsel, void>("post", `/klubb/${slug}/baner`, {
     onSuccess: () => {
-      toast.success("Bane opprettet");
       invalidateAll();
     },
   });
@@ -42,7 +40,6 @@ export function useBaner(inkluderInaktive = true) {
     {
       getBody: ({ dto }) => dto,
       onSuccess: () => {
-        toast.success("Bane oppdatert");
         invalidateAll();
       },
     }
@@ -54,7 +51,6 @@ export function useBaner(inkluderInaktive = true) {
   >("put", ({ id }) => `/klubb/${slug}/baner/${id}/booking-innstillinger`, {
     getBody: ({ dto }) => dto,
     onSuccess: () => {
-      toast.success("Bookinginnstillinger oppdatert");
       invalidateAll();
     },
   });

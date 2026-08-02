@@ -1,20 +1,29 @@
-import PageSection from "@/components/sections/PageSection";
-import { RowPanel, RowList, Row } from "@/components/rows";
-import InfoRow from "@/components/rows/InfoRow";
-import { Stack } from "@/components/layout";
+import { CalendarPlus } from "lucide-react";
+import DatoVelger from "@/components/DatoVelger";
+import {
+  AdminFormActions,
+  AdminFormSubmitButton,
+  AdminSettingsForm,
+  SettingsPanel,
+  SettingsRow,
+  SettingsSection,
+  SettingsStack,
+  SettingsValue,
+} from "@/components/admin";
+import { ServerFeil } from "@/components/errors";
+import { RecordStatus } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
-import { ServerFeil } from "@/components/errors";
 import type { MedlemskapStatusRespons } from "@/types";
+import { formatDatoKort } from "@/utils/datoUtils";
 
 type Props = {
   status: MedlemskapStatusRespons | null;
   label: string;
   onLabelChange: (value: string) => void;
-  gyldigTil: string;
-  onGyldigTilChange: (value: string) => void;
+  gyldigTil: Date | null;
+  onGyldigTilChange: (value: Date) => void;
   onAktiver: () => void;
   aktiverLaster: boolean;
   aktiverFeil: string | null;
@@ -36,113 +45,118 @@ export default function MedlemskapInnstillingerContent({
   deaktiverLaster,
   deaktiverFeil,
 }: Props) {
-  const harAktiv = !!status?.aktivBekreftelse;
+  const aktivBekreftelse = status?.aktivBekreftelse ?? null;
 
   return (
-    <Stack gap="lg">
-      {/* STATUS */}
-      <PageSection title="Status" description="Oversikt over gjeldende bekreftelsesperiode.">
-        <RowPanel>
-          <RowList>
-            <InfoRow
-              label="Aktiv bekreftelse"
-              value={
-                harAktiv ? (
-                  <Badge
-                    variant="outline"
-                    className="text-emerald-600 border-emerald-600/30 dark:text-emerald-400 dark:border-emerald-400/30"
-                  >
-                    {status!.aktivBekreftelse!.label}
-                  </Badge>
-                ) : (
-                  <span className="italic">Ingen aktiv bekreftelse</span>
-                )
-              }
-            />
+    <SettingsStack>
+      <SettingsSection
+        eyebrow="Medlemskap"
+        title="Bekreftelsesperiode"
+        description="Følg status og hvor mange som har fullført."
+      >
+        <SettingsPanel>
+          <SettingsRow
+            title="Status"
+            description={
+              aktivBekreftelse
+                ? "Medlemmer blir bedt om å bekrefte."
+                : "Medlemmer trenger ikke å bekrefte nå."
+            }
+          >
+            <RecordStatus tone={aktivBekreftelse ? "available" : "past"}>
+              {aktivBekreftelse?.label ?? "Ingen aktiv periode"}
+            </RecordStatus>
+          </SettingsRow>
 
-            {harAktiv && (
-              <>
-                <InfoRow
-                  label="Periode"
-                  value={`Aktiv siden ${new Date(status!.aktivBekreftelse!.opprettetTidspunkt).toLocaleDateString("nb-NO")} — gyldig til ${new Date(status!.aktivBekreftelse!.gyldigTil).toLocaleDateString("nb-NO")}`}
-                />
-                <InfoRow
-                  label="Bekreftet"
-                  value={`${status!.antallBekreftet} av ${status!.antallTotalt} medlemmer`}
-                />
-              </>
-            )}
-          </RowList>
-        </RowPanel>
-      </PageSection>
+          {aktivBekreftelse ? (
+            <>
+              <SettingsRow title="Startet">
+                <SettingsValue>{formatDatoKort(aktivBekreftelse.opprettetTidspunkt)}</SettingsValue>
+              </SettingsRow>
+              <SettingsRow title="Gyldig til">
+                <SettingsValue>{formatDatoKort(aktivBekreftelse.gyldigTil)}</SettingsValue>
+              </SettingsRow>
+              <SettingsRow title="Bekreftet">
+                <SettingsValue>
+                  {status?.antallBekreftet ?? 0} av {status?.antallTotalt ?? 0} medlemmer
+                </SettingsValue>
+              </SettingsRow>
+            </>
+          ) : null}
+        </SettingsPanel>
+      </SettingsSection>
 
-      {/* AKTIVER NY */}
-      {!harAktiv && (
-        <PageSection
-          title="Aktiver bekreftelse"
-          description="Opprett en ny bekreftelsesperiode. Alle medlemmer må bekrefte sitt medlemskap."
+      {!aktivBekreftelse ? (
+        <AdminSettingsForm
+          onSubmit={(event) => {
+            event.preventDefault();
+            onAktiver();
+          }}
         >
-          <RowPanel>
-            <RowList>
-              <Row title="Periodenavn" description='F.eks. "Sesong 2026" eller "Høst 2026"'>
+          <SettingsSection
+            eyebrow="Ny periode"
+            icon={<CalendarPlus />}
+            title="Start medlemsbekreftelse"
+            description="Alle medlemmer må bekrefte innen sluttdatoen."
+          >
+            <SettingsPanel>
+              <SettingsRow title="Periodenavn" description='For eksempel "Sesong 2026".'>
                 <Field>
                   <Input
                     id="medlemskap-label"
+                    aria-label="Periodenavn"
                     value={label}
-                    onChange={(e) => onLabelChange(e.target.value)}
+                    onChange={(event) => onLabelChange(event.target.value)}
                     placeholder="Sesong 2026"
                     maxLength={100}
-                    className="bg-background"
+                    disabled={aktiverLaster}
                   />
                 </Field>
-              </Row>
+              </SettingsRow>
 
-              <Row title="Gyldig til" description="Dato bekreftelsesperioden utløper.">
-                <Field>
-                  <Input
-                    id="medlemskap-gyldig-til"
-                    type="date"
-                    value={gyldigTil}
-                    onChange={(e) => onGyldigTilChange(e.target.value)}
-                    className="bg-background"
-                  />
-                </Field>
-              </Row>
-            </RowList>
-          </RowPanel>
+              <SettingsRow title="Gyldig til" description="Dato perioden utløper.">
+                <DatoVelger
+                  value={gyldigTil}
+                  onChange={onGyldigTilChange}
+                  visNavigering={false}
+                  ariaLabel="Velg gyldighetsdato"
+                  disabled={aktiverLaster}
+                />
+              </SettingsRow>
+            </SettingsPanel>
 
-          <ServerFeil feil={aktiverFeil} />
-
-          <div className="flex justify-end mt-2">
-            <Button
-              onClick={() => void onAktiver()}
-              disabled={aktiverLaster || !label.trim() || !gyldigTil}
-            >
-              {aktiverLaster ? "Aktiverer…" : "Aktiver bekreftelse"}
-            </Button>
-          </div>
-        </PageSection>
-      )}
-
-      {/* DEAKTIVER */}
-      {harAktiv && (
-        <PageSection
-          title="Deaktiver"
-          description="Fjerner kravet om at medlemmer må bekrefte. Eksisterende bekreftelser beholdes."
+            <AdminFormActions>
+              <ServerFeil feil={aktiverFeil} />
+              <AdminFormSubmitButton
+                isLoading={aktiverLaster}
+                disabled={!label.trim() || !gyldigTil}
+                loadingText="Aktiverer…"
+              >
+                Aktiver bekreftelse
+              </AdminFormSubmitButton>
+            </AdminFormActions>
+          </SettingsSection>
+        </AdminSettingsForm>
+      ) : (
+        <SettingsSection
+          eyebrow="Kontroll"
+          title="Avslutt medlemsbekreftelsen"
+          description="Tidligere bekreftelser beholdes når perioden avsluttes."
+          tone="danger"
         >
-          <ServerFeil feil={deaktiverFeil} />
-
-          <div className="flex justify-end">
+          <AdminFormActions>
+            <ServerFeil feil={deaktiverFeil} />
             <Button
+              type="button"
               variant="destructive"
               onClick={() => void onDeaktiver()}
               disabled={deaktiverLaster}
             >
               {deaktiverLaster ? "Deaktiverer…" : "Deaktiver bekreftelse"}
             </Button>
-          </div>
-        </PageSection>
+          </AdminFormActions>
+        </SettingsSection>
       )}
-    </Stack>
+    </SettingsStack>
   );
 }

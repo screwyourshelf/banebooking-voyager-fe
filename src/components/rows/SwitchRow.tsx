@@ -1,5 +1,6 @@
 import Row from "./Row";
 import { Switch } from "@/components/ui/switch";
+import { cn } from "@/lib/utils";
 
 type Props = {
   title: string;
@@ -25,8 +26,15 @@ export default function SwitchRow({
       title={title}
       description={description}
       density={density}
-      className={className}
-      right={<Switch checked={checked} onCheckedChange={onCheckedChange} disabled={disabled} />}
+      className={cn("switch-row", className)}
+      right={
+        <Switch
+          aria-label={title}
+          checked={checked}
+          onCheckedChange={onCheckedChange}
+          disabled={disabled}
+        />
+      }
     />
   );
 }
