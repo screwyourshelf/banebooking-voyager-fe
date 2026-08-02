@@ -1,6 +1,6 @@
 # Frontend-redesign: plan og retningslinjer
 
-> **Status:** Aktiv redesign
+> **Status:** PR-kandidat for POC-leveransen
 > **Sist oppdatert:** 2026-08-02
 > **Arbeidsbranch:** `feature/frontend-design-poc`
 
@@ -177,8 +177,9 @@ POC-en dekker nå:
   for både flervalgsfiltre og obligatoriske enkeltvalg.
 - Record-listene bruker containerstyrt tetthet: kort på smale arbeidsflater og en kompakt,
   separatorbasert radpresentasjon når selve samlingen er bred nok.
-- Kartlegg direkte bruk av `components/ui` og lokale Tailwind-varianter som bør erstattes av
-  semantiske komponenter.
+- Nye delte behov skal gå gjennom semantiske komponenter. Direkte bruk av tekniske
+  `components/ui`-primitiver er tillatt inne i slike komponenter og i funksjonelt
+  spesialiserte flater der et nytt generelt mønster ikke er begrunnet.
 - Behold fungerende domenelogikk uendret.
 
 ### Fase 2 — Fullfør booking- og kontoflyten
@@ -212,11 +213,13 @@ hendelser uten lokal eier, foreløpig sesjonsutløp. Turnering er ikke migrert i
 ### Fase 3 — Arrangementer
 
 1. Arrangementsliste og detaljvisning — fullført.
-2. Påmelding og avmelding.
+2. Påmelding og avmelding — eksisterende funksjon og kapabilitetsstyring er beholdt;
+   ingen ny domeneflyt inngår i POC-en.
 3. Opprettelse og administrasjon — fullført visuelt med eksisterende funksjonell modell.
 
-Funksjonell modell i `arrangement-admin-refaktor.md` beholdes. Visuell utforming følger
-denne redesignplanen. Arrangementsliste og detaljvisning bruker samme fullbreddes
+Den historiske implementeringsplanen ligger i
+[`archive/arrangement-admin-refaktor.md`](./archive/arrangement-admin-refaktor.md); dagens
+kode og denne redesignplanen er autoritative. Arrangementsliste og detaljvisning bruker samme fullbreddes
 record-collection som `Mine tider`: dato, identitet og status har fast rekkefølge, mens
 programmet grupperes etter dato i det utvidede kortet. Arrangementadministrasjon bruker
 samme liste–redigeringsmønster som Baner og Grener: oversikten er stabil, ny/rediger åpnes i
@@ -287,4 +290,5 @@ En side er ferdig migrert når:
   klubber/tenants.
 - Aktivitetsfarger løses foreløpig fra aktivitetens slug i frontend. Backend-kontrakt for
   aktivitetsmetadata kan vurderes senere, men er ikke nødvendig for migreringen.
-- POC-en etablerer retning; resterende sider regnes fortsatt som under redesign.
+- POC-leveransen dekker de primære arbeidsflatene. Turnering og eksplisitt listet teknisk
+  gjeld er ikke del av PR-en.

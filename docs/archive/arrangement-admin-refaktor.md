@@ -1,9 +1,7 @@
 # Refaktorering: arrangement-admin
 
-> **Redesignmerknad (2026-07-31):** Dokumentets funksjonelle modell og API-avgrensninger
-> gjelder fortsatt. Konkrete layout-, knapp- og komponenteksempler er under redesign og
-> skal tilpasses [`frontend-redesign-plan.md`](./frontend-redesign-plan.md) når området
-> migreres.
+> **Arkivert:** Planen beskriver den historiske implementeringsrekkefølgen. Dagens
+> arrangementadministrasjon og API-kontrakter må leses fra kode og aktive dokumenter.
 
 ## Mål
 

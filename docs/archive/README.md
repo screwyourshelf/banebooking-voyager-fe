@@ -11,6 +11,7 @@ kode og aktive dokumenter i `docs/` før gamle instrukser brukes.
 
 | Dokument                          | Hvorfor arkivert                                  |
 | --------------------------------- | ------------------------------------------------- |
+| `arrangement-admin-refaktor.md`   | Refaktoren og de beskrevne API-gapene er fullført |
 | `api-kall-konsolidering.md`       | Tiltakene er implementert i turneringsområdet     |
 | `backend-endring-kampformat.md`   | Kampformatkontrakten er implementert              |
 | `feilhaandtering-design.md`       | Alle beskrevne migreringssteg er markert fullført |
