@@ -18,6 +18,7 @@ const protectedClasses = [
   "record-collection__body",
   "record-collection__pagination",
   "record-collection__toolbar",
+  "record-collection__context-action",
   "record-list",
   "record-list-state",
   "record-card",
@@ -40,6 +41,7 @@ const protectedClasses = [
   "record-filter-panel__content",
   "record-filter-panel__group",
   "record-filter-panel__choices",
+  "record-filter-panel__custom-control",
   "record-filter-panel__reset",
   "filter-switch",
   "filter-switch__copy",
@@ -75,14 +77,14 @@ for (const filePath of sourceFiles) {
 
     if (
       filePath !== recordCollectionHeaderPath &&
-      /from\s+["'](?:\.\/RecordFilterPanel|@\/components\/records\/RecordFilterPanel)["']/.test(
+      /from\s+["'](?:\.\/RecordControlPanel|@\/components\/records\/RecordControlPanel)["']/.test(
         source
       )
     ) {
       apiViolations.push({
         filePath,
-        line: lineFor(source, source.search(/RecordFilterPanel/)),
-        message: "importerer RecordFilterPanel direkte",
+        line: lineFor(source, source.search(/RecordControlPanel/)),
+        message: "importerer RecordControlPanel direkte",
       });
     }
 
@@ -152,7 +154,7 @@ if (violations.length > 0 || apiViolations.length > 0) {
   }
 
   console.error(
-    "Send toggle- og filterdata til RecordCollectionHeader/AdminEntityCollection; ikke bygg lokal JSX eller CSS."
+    "Send toggle-, filter- og valgdata til RecordCollectionHeader/AdminEntityCollection; ikke bygg lokal JSX eller CSS."
   );
   process.exit(1);
 }

@@ -7,20 +7,23 @@ import {
   ContentDocumentSection,
   type ContentDocumentFact,
 } from "@/components/layout/ContentDocument";
-import { RecordListState } from "@/components/records";
-import { Button } from "@/components/ui/button";
-import { useGrener } from "@/hooks/useGrener";
-import type { GrenRespons } from "@/types";
+import type { BaneRespons, GrenRespons } from "@/types";
+import type { BookingRegelRespons } from "@/types/Klubbdetaljer";
 
 type Props = {
   children: ReactNode;
-  grenId?: string;
+  gren?: GrenRespons;
+  bane?: BaneRespons;
 };
 
-export default function ReglementDialog({ children, grenId }: Props) {
+export default function ReglementDialog({ children, gren, bane }: Props) {
   const [open, setOpen] = useState(false);
-  const { grener, isLoading, isFetching, error, refetch } = useGrener(false);
-  const gren = findGren(grener, grenId);
+  const bookingRegler = resolveBookingRegler(gren, bane);
+  const title = bane
+    ? `Bookingregler for ${bane.navn}`
+    : gren
+      ? `Bookingregler for ${gren.navn}`
+      : "Bookingregler";
 
   return (
     <AdminEditorDialog
@@ -29,59 +32,36 @@ export default function ReglementDialog({ children, grenId }: Props) {
       trigger={children}
       backLabel="Til booking"
       eyebrow="Booking"
-      title={gren ? `Regler for ${gren.navn}` : "Bookingregler"}
+      title={title}
       description="Les reglementet og grensene som gjelder før du booker."
     >
-      {isLoading ? (
-        <RecordListState title="Laster bookingreglene…" />
-      ) : error ? (
-        <RecordListState
-          title="Kunne ikke laste bookingreglene"
-          description={error.message}
-          tone="danger"
-          role="alert"
-          action={
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => void refetch()}
-              disabled={isFetching}
-            >
-              {isFetching ? "Prøver igjen…" : "Prøv igjen"}
-            </Button>
-          }
-        />
-      ) : gren ? (
-        <ReglementContent gren={gren} />
-      ) : (
-        <RecordListState
-          title="Ingen regler å vise"
-          description="Det finnes ingen aktiv gren for dette banevalget."
-        />
-      )}
+      {gren && bookingRegler ? (
+        <ReglementContent gren={gren} bookingRegler={bookingRegler} />
+      ) : null}
     </AdminEditorDialog>
   );
 }
 
-function ReglementContent({ gren }: { gren: GrenRespons }) {
+function ReglementContent({
+  gren,
+  bookingRegler,
+}: {
+  gren: GrenRespons;
+  bookingRegler: BookingRegelRespons;
+}) {
   return (
     <ContentDocument>
       <ContentDocumentIntro>{getReglementIntro(gren)}</ContentDocumentIntro>
 
       <ContentDocumentSection title="Bookinggrenser">
-        <ContentDocumentFacts items={getBookingLimitFacts(gren)} />
+        <ContentDocumentFacts items={getBookingLimitFacts(bookingRegler)} />
       </ContentDocumentSection>
 
       <ContentDocumentSection title="Tid og varighet">
-        <ContentDocumentFacts items={getTimeFacts(gren)} />
+        <ContentDocumentFacts items={getTimeFacts(bookingRegler)} />
       </ContentDocumentSection>
     </ContentDocument>
   );
-}
-
-function findGren(grener: GrenRespons[], grenId?: string) {
-  return grenId ? grener.find((gren) => gren.id === grenId) : grener[0];
 }
 
 function getReglementIntro(gren: GrenRespons) {
@@ -91,8 +71,8 @@ function getReglementIntro(gren: GrenRespons) {
   );
 }
 
-function getBookingLimitFacts(gren: GrenRespons): ContentDocumentFact[] {
-  const { maksPerDag, maksTotalt, dagerFremITid } = gren.bookingInnstillinger;
+function getBookingLimitFacts(regler: BookingRegelRespons): ContentDocumentFact[] {
+  const { maksPerDag, maksTotalt, dagerFremITid } = regler;
 
   return [
     { label: "Per dag", value: `Maks ${formatCount(maksPerDag, "booking", "bookinger")}` },
@@ -104,13 +84,30 @@ function getBookingLimitFacts(gren: GrenRespons): ContentDocumentFact[] {
   ];
 }
 
-function getTimeFacts(gren: GrenRespons): ContentDocumentFact[] {
-  const { aapningstid, stengetid, slotLengdeMinutter } = gren.bookingInnstillinger;
+function getTimeFacts(regler: BookingRegelRespons): ContentDocumentFact[] {
+  const { aapningstid, stengetid, slotLengdeMinutter } = regler;
 
   return [
     { label: "Åpningstid", value: `${aapningstid}–${stengetid}` },
     { label: "Varighet", value: `${slotLengdeMinutter} minutter per booking` },
   ];
+}
+
+function resolveBookingRegler(gren?: GrenRespons, bane?: BaneRespons): BookingRegelRespons | null {
+  const standard = bane?.bookingInnstillinger ?? gren?.bookingInnstillinger;
+  if (!standard) return null;
+
+  const overstyring = bane?.bookingOverstyring;
+  if (!overstyring) return standard;
+
+  return {
+    aapningstid: overstyring.aapningstid ?? standard.aapningstid,
+    stengetid: overstyring.stengetid ?? standard.stengetid,
+    maksPerDag: overstyring.maksPerDag ?? standard.maksPerDag,
+    maksTotalt: overstyring.maksTotalt ?? standard.maksTotalt,
+    dagerFremITid: overstyring.dagerFremITid ?? standard.dagerFremITid,
+    slotLengdeMinutter: overstyring.slotLengdeMinutter ?? standard.slotLengdeMinutter,
+  };
 }
 
 function formatCount(value: number, singular: string, plural: string) {

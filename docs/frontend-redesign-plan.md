@@ -1,7 +1,7 @@
 # Frontend-redesign: plan og retningslinjer
 
 > **Status:** Aktiv redesign
-> **Sist oppdatert:** 2026-08-01
+> **Sist oppdatert:** 2026-08-02
 > **Arbeidsbranch:** `feature/frontend-design-poc`
 
 Dette dokumentet er autoritativt for visuell utforming og UI-arkitektur mens redesignen
@@ -86,13 +86,17 @@ oppdaterte primitiver må sammenlignes manuelt før eksisterende kode erstattes.
 - Appskallet bruker ikke en global breadcrumb-rad. Aktiv side i hovednavigasjonen og en
   tydelig sidetittel gir orientering; dype detalj- og redigeringsflater skal bruke en lokal
   tilbakehandling når den trengs.
+- Desktop bruker sidefeltet som samlet navigasjonsflate. Tema og konto ligger i en fast
+  verktøyfot, og arbeidsflaten har ingen separat toppbar. Mobil beholder toppfeltet for
+  klubbidentitet, tema og nyheter samt bunnnavigasjonen.
 
 ## Status for POC
 
 POC-en dekker nå:
 
 - Responsivt appskall med desktop-sidefelt og mobil bunnnavigasjon.
-- Samlet innlogging/kontomeny, lyst/mørkt tema og utviklingsinnlogging.
+- Én dedikert innloggingsside for mobil og desktop, samlet desktopkonto i sidefeltet,
+  lyst/mørkt tema og utviklingsinnlogging.
 - Offentlig `Nyheter`-side for RSS-feeden, med ordinær navigasjon og en nøytral
   toppbarsnarvei uten varslingsbadge.
 - `Book bane` med mobiltilpassede valg, aktivitetsfarger og ny slotvisning.
@@ -133,8 +137,11 @@ POC-en dekker nå:
 - De underliggende `record-*`-klassene er interne implementasjonsdetaljer. En CI-kontroll
   avviser direkte bruk utenfor `src/components/records/` og de sentrale pattern-/responsive-
   filene.
-- Record-rader deler en oransje informasjonsmarkør gjennom `RecordAccent`/`RecordEyebrow`,
-  mens `RecordChoiceFilter` gir samme responsive valgfilter i Baner og Arrangementer.
+- Record-rader deler en oransje informasjonsmarkør gjennom
+  `RecordLeadingValue`/`RecordEyebrow`. `RecordControlPanel` gir én responsiv komponentvei
+  for både flervalgsfiltre og obligatoriske enkeltvalg.
+- Record-listene bruker containerstyrt tetthet: kort på smale arbeidsflater og en kompakt,
+  separatorbasert radpresentasjon når selve samlingen er bred nok.
 - Kartlegg direkte bruk av `components/ui` og lokale Tailwind-varianter som bør erstattes av
   semantiske komponenter.
 - Behold fungerende domenelogikk uendret.
@@ -143,7 +150,11 @@ POC-en dekker nå:
 
 1. `Mine tider` — fullført som første slice etter POC-en.
 2. Bookingbekreftelse, feiltilstander og reglement — fullført.
-3. `Min side` — fullført for profil og persondata; innlogging og øvrige kontoflater gjenstår.
+   Bookingens gren-, dag- og banevalg bruker samme record-kontrollpanel som filtre på andre
+   listeflater. Valgene er alltid tilgjengelige, med stablet mobilflyt og kompakt,
+   innholdsbasert desktoplayout.
+3. `Min side` og innlogging — fullført for profil, persondata, dedikert innloggingsside og
+   samlet desktopkonto i sidefeltet.
 4. Guard-flater — fullført for sperret konto, obligatorisk kunngjøring og
    medlemsbekreftelse.
 

@@ -1,5 +1,11 @@
 export { default as RecordCollectionHeader } from "./RecordCollectionHeader";
-export type { RecordCollectionFilter, RecordCollectionToggle } from "./RecordCollectionHeader";
+export { default as RecordContextAction } from "./RecordContextAction";
+export type {
+  RecordCollectionFilter,
+  RecordCollectionSelection,
+  RecordCollectionToggle,
+} from "./RecordCollectionHeader";
+export type { RecordControlGroup, RecordControlOption } from "./RecordControlPanel";
 export {
   RecordCollection,
   RecordCollectionBody,

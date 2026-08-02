@@ -10,6 +10,7 @@ import {
   isNavigationItemCurrent,
   type AppNavigationSection,
 } from "./navigationModel";
+import SidebarUtilities from "./SidebarUtilities";
 
 function SidebarSection({ section }: { section: AppNavigationSection }) {
   const { pathname } = useLocation();
@@ -67,9 +68,13 @@ export default function AppSidebar() {
         <div className="app-sidebar__product">Banebooking</div>
       </div>
 
-      {sections.map((section) => (
-        <SidebarSection key={section.id} section={section} />
-      ))}
+      <div className="app-sidebar__navigation">
+        {sections.map((section) => (
+          <SidebarSection key={section.id} section={section} />
+        ))}
+      </div>
+
+      <SidebarUtilities />
     </div>
   );
 }

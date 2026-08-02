@@ -1,12 +1,8 @@
 import { RefreshCw } from "lucide-react";
 import { ServerFeil } from "@/components/errors";
-import { RecordListState } from "@/components/records";
+import { RecordCollection, RecordCollectionBody, RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
-import {
-  BookingCourtSwitcher,
-  BookingPrimaryControls,
-  BookingSlotListAccordion,
-} from "@/features/booking/components";
+import { BookingSelectionHeader, BookingSlotListAccordion } from "@/features/booking/components";
 import { utledSlotStatus } from "@/utils/bookingUtils";
 import type { BaneRespons, GrenRespons, KalenderSlotRespons } from "@/types";
 import type { BookingContentProps, BookingResultProps } from "./bookingViewTypes";
@@ -27,6 +23,9 @@ type HeaderProps = Pick<
   | "onDatoChange"
   | "isLoading"
   | "isFetching"
+  | "isSetupFetching"
+  | "setupFeil"
+  | "queryFeil"
 > & {
   ledigeAntall: number;
 };
@@ -41,10 +40,10 @@ export default function BookingSchedule(props: Props) {
   const ledigeAntall = getLedigeAntall(props.slots, props.isAuthenticated);
 
   return (
-    <section className="booking-schedule" aria-label="Tilgjengelige tider">
+    <RecordCollection ariaLabel="Tilgjengelige tider" busy={props.isLoading || props.isFetching}>
       <BookingScheduleHeader {...props} ledigeAntall={ledigeAntall} />
       <BookingScheduleBody {...props} />
-    </section>
+    </RecordCollection>
   );
 }
 
@@ -59,25 +58,27 @@ function BookingScheduleHeader({
   onDatoChange,
   isLoading,
   isFetching,
+  isSetupFetching,
+  setupFeil,
+  queryFeil,
   ledigeAntall,
 }: HeaderProps) {
   return (
-    <header className="control-surface booking-schedule__header">
-      <BookingPrimaryControls
-        grener={grener}
-        valgtGrenId={valgtGrenId}
-        onGrenChange={onGrenChange}
-        valgtDato={valgtDato}
-        onDatoChange={onDatoChange}
-      />
-
-      <BookingCourtSwitcher
-        baner={baner}
-        valgtBaneId={valgtBaneId}
-        onBaneChange={onBaneChange}
-        ledigeAntall={baner.length > 0 && !isLoading && !isFetching ? ledigeAntall : undefined}
-      />
-    </header>
+    <BookingSelectionHeader
+      grener={grener}
+      valgtGrenId={valgtGrenId}
+      onGrenChange={onGrenChange}
+      baner={baner}
+      valgtBaneId={valgtBaneId}
+      onBaneChange={onBaneChange}
+      valgtDato={valgtDato}
+      onDatoChange={onDatoChange}
+      ledigeAntall={ledigeAntall}
+      isLoading={isLoading}
+      isFetching={isFetching}
+      isSetupFetching={isSetupFetching}
+      hasError={Boolean(setupFeil || queryFeil)}
+    />
   );
 }
 
@@ -100,7 +101,7 @@ function BookingScheduleBody({
   onSlotsRetry,
 }: BodyProps) {
   return (
-    <div className="booking-schedule__body">
+    <RecordCollectionBody>
       <BookingMutationErrors bookFeil={bookFeil} fjernFeil={fjernFeil} />
 
       {setupFeil ? (
@@ -131,7 +132,7 @@ function BookingScheduleBody({
           />
         </div>
       )}
-    </div>
+    </RecordCollectionBody>
   );
 }
 

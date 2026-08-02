@@ -25,14 +25,6 @@
     line-height: 1.4;
   }
 
-  .booking-workspace {
-    overflow: hidden;
-    border: 1px solid var(--app-line);
-    border-radius: 1.25rem;
-    background: var(--app-surface-raised);
-    box-shadow: var(--app-shadow-md);
-  }
-
   .booking-schedule__feedback {
     display: grid;
     gap: var(--app-space-sm);
@@ -91,69 +83,6 @@
   .date-switcher__value span {
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .booking-schedule {
-    min-width: 0;
-    background: var(--app-surface-raised);
-  }
-
-  .booking-schedule__header {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
-    align-items: center;
-    gap: 0.5rem 0.75rem;
-    padding: 0.625rem 1rem 0.75rem;
-  }
-
-  .booking-primary-controls {
-    --control-choice-indicator: var(--activity-accent);
-    display: grid;
-    grid-column: 1 / -1;
-    gap: 0.5rem;
-  }
-
-  .booking-primary-controls__group {
-    min-width: 0;
-  }
-
-  .booking-primary-controls__activities {
-    display: flex;
-    min-width: 0;
-    gap: 0.375rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  .booking-primary-controls__activities::-webkit-scrollbar {
-    display: none;
-  }
-
-  .booking-primary-controls__activity {
-    min-width: 5.5rem;
-    flex: 1 0 5.5rem;
-  }
-
-  .booking-primary-controls__quick-dates {
-    display: grid;
-    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1fr) minmax(0, 1.2fr);
-    gap: 0.375rem;
-  }
-
-  .booking-primary-controls__quick-date {
-    width: 100%;
-  }
-
-  .booking-court-switcher {
-    --choice-strip-text: var(--activity-text);
-    --choice-strip-muted: var(--activity-muted);
-    --choice-strip-indicator: var(--activity-accent);
-    grid-column: 1 / -1;
-    margin-top: 0.125rem;
-  }
-
-  .booking-schedule__body {
-    padding: 0;
   }
 
   .booking-schedule__loading {

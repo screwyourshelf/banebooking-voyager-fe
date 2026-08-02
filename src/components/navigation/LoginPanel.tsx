@@ -11,6 +11,8 @@ import { Input } from "@/components/ui/input";
 import { config } from "@/config";
 import { useAuth } from "@/hooks/useAuth";
 import { useLogin } from "@/hooks/useLogin";
+import { useSlug } from "@/hooks/useSlug";
+import { buildTenantRoute } from "@/utils/tenantRoute";
 
 function erGyldigEpost(v: string) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
@@ -22,6 +24,7 @@ type LoginPanelProps = {
 };
 
 export default function LoginPanel({ onLoginSuccess, showIntro = true }: LoginPanelProps) {
+  const slug = useSlug();
   const { signInAsDevelopmentProfile, developmentLoginPending } = useAuth();
   const {
     email,
@@ -281,7 +284,8 @@ export default function LoginPanel({ onLoginSuccess, showIntro = true }: LoginPa
       ) : null}
 
       <p className="login-panel__terms">
-        Ved å logge inn samtykker du til våre <Link to="vilkaar">vilkår</Link>.
+        Ved å logge inn samtykker du til våre{" "}
+        <Link to={buildTenantRoute(slug, "vilkaar")}>vilkår</Link>.
       </p>
     </div>
   );

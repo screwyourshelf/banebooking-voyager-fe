@@ -3,7 +3,7 @@
 > **Status:** Fundament, bookingunderflyter, `Mine tider`, `Arrangementer`,
 > `Arrangementadministrasjon`, `Baner`, `Grener`, `Klubbinnstillinger`, `Min side`,
 > `Kunngjøringer`, `Vilkår` og guard-flater klare
-> **Sist oppdatert:** 2026-08-01
+> **Sist oppdatert:** 2026-08-02
 > **Repo:** `/Users/andreas/Dev/banebooking/frontend`
 > **Branch:** `feature/frontend-design-poc`
 > **Utgangspunkt:** `main` på `dbf08f5`
@@ -13,7 +13,8 @@
 1. Les `docs/frontend-redesign-plan.md` før nye UI-endringer.
 2. Bekreft branch og ren arbeidsflate med `git status --short`.
 3. Start frontend med `npm run dev -- --host 0.0.0.0` hvis den ikke allerede kjører.
-4. Bruk utviklingsinnloggingen i innloggingsmenyen for å teste Admin, Utvidet og Bruker.
+4. Bruk utviklingsinnloggingen på den dedikerte innloggingssiden for å teste Admin,
+   Utvidet og Bruker.
 5. Gjør neste arbeid som en avgrenset slice; ikke redesign flere ubeslektede sider samtidig.
 
 Dokumenter i `docs/archive/` er historiske og skal ikke brukes som gjeldende plan.
@@ -22,9 +23,13 @@ Dokumenter i `docs/archive/` er historiske og skal ikke brukes som gjeldende pla
 
 ### Appskall og navigasjon
 
-- Desktop har fast sidenavigasjon og bred arbeidsflate.
+- Desktop har fast sidenavigasjon og bred arbeidsflate. Den tidligere toppbaren er fjernet
+  på desktop; tema og konto ligger samlet i en fast verktøyfot i sidefeltet.
 - Mobil har toppfelt, fast bunnnavigasjon og samlet `Mer`-/kontomeny.
-- Lyst/mørkt tema er alltid tilgjengelig som ikonverktøy.
+- Lyst/mørkt tema er alltid tilgjengelig: som ikonverktøy på mobil og som navngitt handling
+  i desktop-sidefeltet.
+- Utloggede brukere åpner samme dedikerte `Logg inn`-side fra mobil og desktop. Beskyttede
+  ruter sender brukeren dit og returnerer til opprinnelig side etter vellykket innlogging.
 - Navigasjonsmodell og labels er samlet, slik at mobil og desktop bruker samme struktur.
 - `Baner` og `Grener` er samlet i navigasjonspunktet `Baner og grener`. Arbeidsflaten
   beholder separate ruter og lister, men deler sidehode og ruteorienterte seksjonsfaner.
@@ -37,12 +42,17 @@ Sentrale filer:
 - `src/app/AppShell.tsx`
 - `src/components/navigation/AppSidebar.tsx`
 - `src/components/navigation/MobileBottomNav.tsx`
+- `src/components/navigation/SidebarUtilities.tsx`
 - `src/components/navigation/navigationModel.ts`
 - `src/components/navigation/LoginPanel.tsx`
+- `src/features/auth/pages/LoginPage.tsx`
 
 ### Innlogging for lokal POC
 
 - Vanlig Supabase-innlogging er beholdt.
+- Leverandørvalg, e-postkode og utviklingsroller rendres på én dedikert, responsiv
+  innloggingsside. Den tidligere desktop-dropdownen og innloggingen i mobildraweren er
+  fjernet, mens autentiseringslogikk og API-kontrakter er uendret.
 - I `DEV` finnes testinnlogging for `admin`, `utvidet` og `medlem` uten Supabase-brukere.
 - Frontend kaller `POST /api/dev-auth/login`, lagrer en lokal utviklingssession og bruker
   `DevelopmentBearer` mot API-et.
@@ -58,12 +68,23 @@ Sentrale filer:
 
 ### Book bane
 
-- Mobilens grønne kontrollflate inneholder aktivitet, hurtigdato og banevalg.
+- Booking bruker samme grønne `RecordCollectionHeader` og kontrollpanel som de øvrige
+  listeflatene. Gjeldende gren, dag og bane oppsummeres sammen med antall ledige tider.
+- På mobil er gren, `I dag`, `I morgen`, `Velg dato` og bane alltid tilgjengelige. Valgene
+  oppdaterer resultatet uten innsending; de skjules ikke bak et ekstra filtersteg fordi de er
+  selve arbeidsverktøyet for booking.
+- På desktop er de samme enkeltvalgsgruppene alltid synlige og beholder innholdsbasert bredde,
+  slik at kontrollene ikke strekkes over arbeidsflaten. Filter- og valgmodus eies av én felles
+  `RecordControlPanel`; booking har ingen lokal kontrollflate eller parallell CSS.
+- `Bookingregler` er en delt, tertiær konteksthandling ved antall ledige tider. Dialogen
+  navngir valgt bane og viser dens effektive bookingregler, inkludert eventuelle
+  baneoverstyringer, uten å fylle selve valgflaten med en ekstra kontrollgruppe.
 - Valgt aktivitet styrer understrek på alle bookingvalg:
   - tennis: oransje;
   - padel: grønn;
   - bordtennis: blågrå.
-- Banevalg viser ledige tider i parentes med statusprikk.
+- Antall ledige tider tilhører resultatheaderen, ikke valgt baneknapp. Banevalgene viser kun
+  sammenlignbare banenavn.
 - Slots viser starttid, kompakt vær, hovedstatus og eventuell sekundær forklaring.
 - `Ledig` og `Opptatt` er hovedstatus; eier, navn og arrangement er forklarende varianter.
 - Slot-handlinger bruker felles hierarki og flyter til høyre.
@@ -88,8 +109,7 @@ Sentrale filer:
 
 - `src/features/booking/views/booking/BookingContent.tsx`
 - `src/features/booking/views/booking/BookingSchedule.tsx`
-- `src/features/booking/components/BookingPrimaryControls.tsx`
-- `src/features/booking/components/BookingCourtSwitcher.tsx`
+- `src/features/booking/components/BookingSelectionHeader.tsx`
 - `src/features/booking/components/BookingSlotListAccordion.tsx`
 - `src/features/booking/components/BookingSlotRow.tsx`
 - `src/features/booking/components/bookingSlotPresentation.ts`
@@ -236,7 +256,7 @@ Sentrale filer:
   administrasjonssider som `Grener`, ikke som en lokal banevelger.
 - Valg av bane åpner et fokusert `AdminEditorDialog`: helskjerm med lokal tilbakehandling på
   mobil og en avgrenset dialog på desktop. Listen forblir sidens stabile startpunkt.
-- Grenfilteret bruker delt `RecordChoiceFilter` i den grønne kontrollflaten. På mobil åpnes
+- Grenfilteret bruker delt `RecordControlPanel` i den grønne kontrollflaten. På mobil åpnes
   valgene med samme `Filtre`-mønster som Brukere; på desktop er valgene synlige direkte.
 - Redigeringsskjemaet går direkte fra banevalg til felter. Gjentatt seksjons- og hjelpetekst
   er fjernet; forklaring beholdes bare for sortering og avvik fra standardregler.
@@ -272,7 +292,7 @@ Sentrale filer:
 - `src/components/admin/SettingsFields.tsx`
 - `src/components/admin/SettingsSection.tsx`
 
-- `src/components/records/RecordChoiceFilter.tsx`
+- `src/components/records/RecordControlPanel.tsx`
 - `src/components/records/RecordText.tsx`
 
 ### Grener
@@ -458,7 +478,7 @@ Sentrale filer:
   oransje valgmarkør, temaoppførsel og responsive geometri.
 - `SettingsChoiceGroup` gir fler-valg i avanserte skjemaer samme `ControlChoice`-geometri
   og oransje valgtmarkør uten feature-lokale knapperekker.
-- `RecordCollectionToolbar` gir listeflater samme opptelling, beskrivelse og handlinger på
+- `RecordCollectionHeader` gir listeflater samme opptelling, beskrivelse og handlinger på
   den grønne kontrollflaten.
 - `RecordCollection`, `RecordList`, `RecordAccordionList` og `RecordCard`-familien gir
   listeflater en lukket kontrakt for full bredde, vertikal avstand, kortflate, hover,
@@ -467,15 +487,18 @@ Sentrale filer:
 - Features kan ikke legge `className` eller `style` på record-røttene. Direkte bruk av de
   underliggende `record-*`-klassene avvises av `npm run design-system:check`, som også kjøres
   gjennom `npm run check`. Innholdsoppsettet inni kortet kan fortsatt være domenespesifikt.
-- `RecordAccent` og `RecordEyebrow` gir vanlige record-rader én felles oransje
+- `RecordLeadingValue` og `RecordEyebrow` gir vanlige record-rader én felles oransje
   informasjonsmarkør: tid i Book/Mine tider, dato i Arrangementer og rolle i Brukere.
   `AdminEntityRow` følger samme regel med gren i Baner og åpningstid i Grener.
-- `RecordChoiceFilter` gir record-samlinger samme responsive valgfilter. Arrangementer og
-  Baner bruker komponenten uten lokale filtervarianter.
+- `RecordControlPanel` gir record-samlinger samme responsive kontrollflate. Arrangementer,
+  Baner og Brukere bruker flervalgsmodus, mens Booking bruker obligatorisk enkeltvalgsmodus.
+- `RecordCollection` er container for en felles bred listetetthet. Smale flater beholder
+  luftige record-kort, mens brede samlinger bruker lavere rader, faste informasjonskolonner
+  og separatorer uten individuelle kortskygger. Dette gjelder etter faktisk arbeidsbredde,
+  også i liggende mobil, og krever ingen sidespesifikke varianter.
 - `RecordStatus` og `RecordListState` gir semantiske statuser og listetilstander uten at
   features bruker shadcn-varianter som produkt-API.
 - `PageHeader` gir felles sidehierarki.
-- `ChoiceStrip` gir Book bane ett delt, semantisk lag for horisontale valgknapper.
 - `AdminEntityCollection` og `AdminEditorDialog` gir administrasjonssider et gjenbrukbart
   liste–redigeringsmønster som prioriterer mobil uten å innføre sidespesifikk styling.
 - `AdminActionRow` gir ikke-selekterbare administrasjonsrader samme record-ramme og et
@@ -526,6 +549,8 @@ Sentrale filer:
 - `src/components/controls/ControlChoice.tsx`
 - `src/components/controls/FilterSwitch.tsx`
 - `src/components/controls/DatePickerPopover.tsx`
+- `src/components/records/RecordCollectionHeader.tsx`
+- `src/components/records/RecordControlPanel.tsx`
 - `src/components/feedback/ActionFeedback.tsx`
 - `src/components/feedback/MutationFeedback.tsx`
 - `src/components/feedback/FeedbackToaster.tsx`
@@ -534,7 +559,7 @@ Sentrale filer:
 - `src/components/records/RecordStatus.tsx`
 - `src/components/records/RecordListState.tsx`
 - `src/components/records/RecordCollection.tsx`
-- `src/components/records/RecordCollectionToolbar.tsx`
+- `src/components/records/RecordCollectionHeader.tsx`
 - `src/components/records/RecordList.tsx`
 - `src/components/records/RecordCard.tsx`
 - `scripts/check-design-system-boundaries.mjs`
@@ -571,6 +596,11 @@ Sentrale filer:
 - `npm run build` passerer.
 - `git diff --check` passerer.
 - Booking og brukeradmin er visuelt kontrollert på mobil og desktop.
+- Bookingens nye valgmodus er kontrollert offentlig og med Admin på 320 og 390 px mobil
+  samt 1440 px desktop i lyst og mørkt tema. Permanent synlige valg, grenbytte, `I morgen`,
+  vilkårlig kalenderdato, automatisk banevalg og umiddelbar oppdatering av ledige tider er
+  kontrollert. Brukeres eksisterende flervalgsfilter er regresjonskontrollert på mobil og
+  desktop etter samlingen i `RecordControlPanel`.
 - `Mine tider` er kontrollert med Admin, Utvidet og Bruker.
 - Kommende, gjennomførte, tomtilstand, lasting, API-feil og avbestilling er kontrollert.
 - `Arrangementer` er kontrollert offentlig og med Admin, Utvidet og Bruker. Program,

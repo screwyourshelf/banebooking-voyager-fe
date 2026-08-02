@@ -15,7 +15,6 @@ import {
 import { useAuth } from "@/hooks/useAuth";
 import { useBruker } from "@/hooks/useBruker";
 
-import LoginPanel from "./LoginPanel";
 import {
   buildMobilePrimaryNavigation,
   buildMobileSecondaryNavigation,
@@ -82,12 +81,28 @@ export default function MobileBottomNav() {
   const capabilities = bruker?.kapabiliteter ?? [];
   const primaryItems = buildMobilePrimaryNavigation(!!currentUser, capabilities);
   const sections = buildMobileSecondaryNavigation(!!currentUser, capabilities);
-  const drawerTitle = currentUser ? currentUser.name || "Din konto" : "Logg inn";
-  const drawerDescription = currentUser
-    ? currentUser.name && currentUser.email
-      ? currentUser.email
-      : "Konto og innstillinger"
-    : "Book bane og se tidene dine.";
+
+  if (!currentUser) {
+    return (
+      <nav className="mobile-bottom-nav" aria-label="Hovednavigasjon">
+        {primaryItems.map(({ id, to, label, icon: Icon, end }) => (
+          <NavLink key={id} to={to} end={end} className="mobile-bottom-nav__link">
+            <Icon className="size-5" aria-hidden="true" />
+            <span>{label === "Book bane" ? "Book" : label}</span>
+          </NavLink>
+        ))}
+
+        <NavLink to="login" end className="mobile-bottom-nav__link">
+          <LogIn className="size-5" aria-hidden="true" />
+          <span>Logg inn</span>
+        </NavLink>
+      </nav>
+    );
+  }
+
+  const drawerTitle = currentUser.name || "Din konto";
+  const drawerDescription =
+    currentUser.name && currentUser.email ? currentUser.email : "Konto og innstillinger";
 
   return (
     <Drawer direction="bottom" modal open={open} onOpenChange={setOpen}>
@@ -104,14 +119,10 @@ export default function MobileBottomNav() {
             type="button"
             className="mobile-bottom-nav__link mobile-bottom-nav__menu"
             data-active={open || undefined}
-            aria-label={currentUser ? "Åpne konto og meny" : "Åpne innlogging"}
+            aria-label="Åpne konto og meny"
           >
-            {currentUser ? (
-              <MoreHorizontal className="size-5" aria-hidden="true" />
-            ) : (
-              <LogIn className="size-5" aria-hidden="true" />
-            )}
-            <span>{currentUser ? "Mer" : "Logg inn"}</span>
+            <MoreHorizontal className="size-5" aria-hidden="true" />
+            <span>Mer</span>
           </button>
         </DrawerTrigger>
       </nav>
@@ -123,36 +134,30 @@ export default function MobileBottomNav() {
         </DrawerHeader>
 
         <div className="mobile-menu__scroll">
-          {currentUser ? (
-            <div className="mobile-menu__navigation">
-              {sections.map((section) => (
-                <MobileMenuSection
-                  key={section.id}
-                  section={section}
-                  onNavigate={() => setOpen(false)}
-                />
-              ))}
-            </div>
-          ) : (
-            <LoginPanel showIntro={false} onLoginSuccess={() => setOpen(false)} />
-          )}
+          <div className="mobile-menu__navigation">
+            {sections.map((section) => (
+              <MobileMenuSection
+                key={section.id}
+                section={section}
+                onNavigate={() => setOpen(false)}
+              />
+            ))}
+          </div>
         </div>
 
-        {currentUser ? (
-          <DrawerFooter className="mobile-menu__footer">
-            <Button
-              variant="ghost"
-              className="mobile-menu__utility"
-              onClick={() => {
-                setOpen(false);
-                void signOut();
-              }}
-            >
-              <LogOut aria-hidden="true" />
-              <span>Logg ut</span>
-            </Button>
-          </DrawerFooter>
-        ) : null}
+        <DrawerFooter className="mobile-menu__footer">
+          <Button
+            variant="ghost"
+            className="mobile-menu__utility"
+            onClick={() => {
+              setOpen(false);
+              void signOut();
+            }}
+          >
+            <LogOut aria-hidden="true" />
+            <span>Logg ut</span>
+          </Button>
+        </DrawerFooter>
       </DrawerContent>
     </Drawer>
   );

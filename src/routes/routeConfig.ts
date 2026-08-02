@@ -15,6 +15,7 @@ export interface RouteConfig {
 */
 
 const loadBookingPage = () => import("@/features/booking/pages/BookingPage");
+const loadLoginPage = () => import("@/features/auth/pages/LoginPage");
 const loadMinSidePage = () => import("@/features/minside/pages/MinSidePage");
 const loadMineBookingerPage = () => import("@/features/minside/pages/MineBookingerPage");
 const loadArrangementerPage = () => import("@/features/arrangementer/pages/ArrangementerPage");
@@ -36,6 +37,7 @@ const loadVilkaarPage = () => import("@/features/policy/pages/VilkaarPage");
 */
 
 const BookingPage = lazy(loadBookingPage);
+const LoginPage = lazy(loadLoginPage);
 const MinSidePage = lazy(loadMinSidePage);
 const MineBookingerPage = lazy(loadMineBookingerPage);
 const ArrangementerPage = lazy(loadArrangementerPage);
@@ -69,6 +71,13 @@ export const routeConfig: RouteConfig[] = [
     breadcrumb: "Vilkår",
     component: VilkaarPage,
     loader: loadVilkaarPage,
+  },
+
+  {
+    path: "login",
+    breadcrumb: "Logg inn",
+    component: LoginPage,
+    loader: loadLoginPage,
   },
 
   {
