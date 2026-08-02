@@ -1,7 +1,7 @@
 import type { MouseEventHandler, ReactNode } from "react";
 import { Accordion as AccordionPrimitive } from "radix-ui";
 import { ChevronDown, ChevronUp } from "lucide-react";
-import { AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { AccordionContent, AccordionItem } from "@/components/ui/accordion";
 
 type ChildrenProps = {
   children: ReactNode;
@@ -86,9 +86,21 @@ export function RecordCardStatic({ children, layout = "default" }: StaticProps) 
 
 export function RecordCardTrigger({ children }: ChildrenProps) {
   return (
-    <AccordionTrigger className="record-card__trigger hover:no-underline">
-      {children}
-    </AccordionTrigger>
+    <AccordionPrimitive.Header className="record-card__trigger-header">
+      <AccordionPrimitive.Trigger className="record-card__trigger">
+        {children}
+        <ChevronDown
+          aria-hidden="true"
+          data-slot="accordion-trigger-icon"
+          className="record-card__disclosure-open-icon"
+        />
+        <ChevronUp
+          aria-hidden="true"
+          data-slot="accordion-trigger-icon"
+          className="record-card__disclosure-close-icon"
+        />
+      </AccordionPrimitive.Trigger>
+    </AccordionPrimitive.Header>
   );
 }
 
