@@ -1730,13 +1730,14 @@
   }
 
   .admin-editor-dialog {
-    inset: 0 !important;
+    inset: auto !important;
+    top: 50% !important;
+    left: 50% !important;
     display: flex !important;
     width: 100% !important;
     max-width: none !important;
     height: 100dvh;
     max-height: none;
-    translate: none !important;
     transform: none !important;
     flex-direction: column;
     gap: 0 !important;
