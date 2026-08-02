@@ -3,14 +3,15 @@ import type { AktivtArrangementRespons } from "@/types";
 import { useAktiveArrangementer } from "./useAktiveArrangementer";
 
 type Params = {
+  grenId: string;
   valgtId: string | null;
   onVelg: (id: string | null, tittel?: string) => void;
 };
 
-export function useArrangementBookingDialog({ valgtId, onVelg }: Params) {
+export function useArrangementBookingDialog({ grenId, valgtId, onVelg }: Params) {
   const [open, setOpen] = useState(false);
   const [valgtArrangementId, setValgtArrangementId] = useState<string | null>(valgtId);
-  const arrangementQuery = useAktiveArrangementer(open);
+  const arrangementQuery = useAktiveArrangementer(grenId, open);
 
   function handleOpenChange(isOpen: boolean) {
     if (isOpen) {

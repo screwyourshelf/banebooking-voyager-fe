@@ -9,6 +9,7 @@ import {
   RecordCardStatic,
   RecordCardSummary,
   RecordCardTrigger,
+  RecordFacts,
   RecordLeadingValue,
   RecordStatus,
 } from "@/components/records";
@@ -143,6 +144,7 @@ export default function ArrangementRow({ arrangement, onAvlys }: Props) {
   const hasActions = canManageTournament || canViewTournament || canCancel;
   const hasDetails =
     !!description ||
+    !!arrangement.booketAv ||
     !!programSummary ||
     !!arrangement.turneringStatus ||
     hasActions ||
@@ -184,17 +186,23 @@ export default function ArrangementRow({ arrangement, onAvlys }: Props) {
         <div className="arrangement-card__detail-content">
           {description ? <p className="arrangement-card__description">{description}</p> : null}
 
-          {arrangement.turneringStatus ? (
-            <dl className="arrangement-card__facts">
-              <div>
-                <dt>Turnering</dt>
-                <dd>
-                  {TURNERING_STATUS_TEKST[arrangement.turneringStatus] ??
-                    arrangement.turneringStatus}
-                </dd>
-              </div>
-            </dl>
-          ) : null}
+          <RecordFacts
+            items={[
+              ...(arrangement.booketAv
+                ? [{ label: "Booket av", value: arrangement.booketAv }]
+                : []),
+              ...(arrangement.turneringStatus
+                ? [
+                    {
+                      label: "Turnering",
+                      value:
+                        TURNERING_STATUS_TEKST[arrangement.turneringStatus] ??
+                        arrangement.turneringStatus,
+                    },
+                  ]
+                : []),
+            ]}
+          />
 
           {programSummary ? (
             <section className="arrangement-program" aria-label="Program">

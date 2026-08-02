@@ -1,22 +1,29 @@
 import { Stack } from "@/components/layout";
-import { RecordCardActions } from "@/components/records";
+import { RecordCardActions, RecordFacts } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import type { BookingSlotRespons } from "@/types";
 import type { BookingSlotPresentation } from "./bookingSlotPresentation";
 import KobleTilArrangementDialog from "./KobleTilArrangementDialog";
 
 type Props = {
+  grenId: string;
   slot: BookingSlotRespons;
   presentation: BookingSlotPresentation;
   onBook?: (slot: BookingSlotRespons, arrangementId?: string) => void;
   onFjern?: (slot: BookingSlotRespons) => void;
 };
 
-export default function BookingSlotDetails({ slot, presentation, onBook, onFjern }: Props) {
+export default function BookingSlotDetails({ grenId, slot, presentation, onBook, onFjern }: Props) {
+  const arrangementBooker = slot.arrangementTittel ? slot.booketAv?.trim() : null;
+
   return (
     <Stack gap="sm">
       {slot.arrangementBeskrivelse ? (
         <p className="booking-slot__description">{slot.arrangementBeskrivelse}</p>
+      ) : null}
+
+      {arrangementBooker ? (
+        <RecordFacts items={[{ label: "Booket av", value: arrangementBooker }]} />
       ) : null}
 
       {presentation.kanIkkeBooke ? (
@@ -29,6 +36,7 @@ export default function BookingSlotDetails({ slot, presentation, onBook, onFjern
         <RecordCardActions>
           {presentation.kanKobleTilArrangement ? (
             <KobleTilArrangementDialog
+              grenId={grenId}
               valgtId={null}
               onVelg={(arrangementId) => {
                 if (arrangementId) onBook?.(slot, arrangementId);

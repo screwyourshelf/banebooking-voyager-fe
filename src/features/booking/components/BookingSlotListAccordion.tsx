@@ -12,6 +12,7 @@ import BookingSlotRow from "./BookingSlotRow";
 import { getBookingSlotKey } from "./bookingSlotPresentation";
 
 type Props = {
+  grenId: string;
   slots: BookingSlotRespons[];
   valgtDato: Date | null;
   isAuthenticated: boolean;
@@ -21,6 +22,7 @@ type Props = {
 };
 
 export function BookingSlotListAccordion({
+  grenId,
   slots,
   valgtDato,
   isAuthenticated,
@@ -67,6 +69,7 @@ export function BookingSlotListAccordion({
           {slotsÅVise.map((slot) => (
             <BookingSlotRow
               key={getBookingSlotKey(slot)}
+              grenId={grenId}
               slot={slot}
               isAuthenticated={isAuthenticated}
               onBook={onBook}

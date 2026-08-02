@@ -13,13 +13,14 @@ import BookingSlotSummary from "./BookingSlotSummary";
 import { getBookingSlotPresentation } from "./bookingSlotPresentation";
 
 type Props = {
+  grenId: string;
   slot: BookingSlotRespons;
   isAuthenticated: boolean;
   onBook?: (slot: BookingSlotRespons, arrangementId?: string) => void;
   onFjern?: (slot: BookingSlotRespons) => void;
 };
 
-function BookingSlotRow({ slot, isAuthenticated, onBook, onFjern }: Props) {
+function BookingSlotRow({ grenId, slot, isAuthenticated, onBook, onFjern }: Props) {
   const presentation = getBookingSlotPresentation(slot, isAuthenticated);
   const summary = <BookingSlotSummary slot={slot} presentation={presentation} />;
   const quickAction = presentation.kanHurtigbooke ? (
@@ -46,6 +47,7 @@ function BookingSlotRow({ slot, isAuthenticated, onBook, onFjern }: Props) {
 
       <RecordCardDetails>
         <BookingSlotDetails
+          grenId={grenId}
           slot={slot}
           presentation={presentation}
           onBook={onBook}

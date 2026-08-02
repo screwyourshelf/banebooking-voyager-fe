@@ -32,6 +32,7 @@ type HeaderProps = Pick<
 
 type BodyProps = BookingResultProps & {
   baner: BaneRespons[];
+  valgtGrenId: string;
   valgtGren?: GrenRespons;
   valgtDato: Date | null;
 };
@@ -84,6 +85,7 @@ function BookingScheduleHeader({
 
 function BookingScheduleBody({
   baner,
+  valgtGrenId,
   valgtGren,
   valgtDato,
   slots,
@@ -123,6 +125,7 @@ function BookingScheduleBody({
       ) : (
         <div className={isFetching && !isLoading ? "booking-schedule__loading" : undefined}>
           <BookingSlotListAccordion
+            grenId={valgtGrenId}
             slots={slots}
             valgtDato={valgtDato}
             isAuthenticated={isAuthenticated}

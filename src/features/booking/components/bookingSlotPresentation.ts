@@ -26,6 +26,7 @@ export function getBookingSlotPresentation(
   const effektivSlutt = slot.bookingSluttTid ?? slot.slotSluttTid;
   const harArrangement = Boolean(slot.arrangementTittel);
   const harOffentligArrangementBeskrivelse = Boolean(slot.arrangementBeskrivelse?.trim());
+  const harArrangementBooker = harArrangement && Boolean(slot.booketAv?.trim());
   const erBooket = erSlotBooket(slot);
   const status = utledSlotStatus(slot, erInnlogget);
   const kanKobleTilArrangement = kan(Kapabiliteter.booking.kobleTilArrangement);
@@ -38,6 +39,7 @@ export function getBookingSlotPresentation(
     !kan(Kapabiliteter.booking.book);
   const harDetaljer =
     harOffentligArrangementBeskrivelse ||
+    harArrangementBooker ||
     (erInnlogget && (kanKobleTilArrangement || kanFjerne || kanIkkeBooke));
 
   return {

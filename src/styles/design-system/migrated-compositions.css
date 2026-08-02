@@ -454,25 +454,6 @@
     white-space: pre-wrap;
   }
 
-  .arrangement-card__facts {
-    display: grid;
-    width: fit-content;
-    min-width: min(100%, 12rem);
-  }
-
-  .arrangement-card__facts dt {
-    color: var(--app-ink-faint);
-    font-size: var(--app-type-caption);
-    font-weight: 680;
-  }
-
-  .arrangement-card__facts dd {
-    margin-top: 0.15rem;
-    color: var(--app-ink);
-    font-size: var(--app-type-body-sm);
-    line-height: 1.4;
-  }
-
   .arrangement-program {
     overflow: hidden;
     border: 1px solid var(--app-line);

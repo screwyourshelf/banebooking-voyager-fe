@@ -2524,6 +2524,26 @@
     padding: 0.875rem !important;
   }
 
+  .record-facts {
+    display: grid;
+    width: fit-content;
+    min-width: min(100%, 12rem);
+    gap: 0.75rem;
+  }
+
+  .record-facts dt {
+    color: var(--app-ink-faint);
+    font-size: var(--app-type-caption);
+    font-weight: 680;
+  }
+
+  .record-facts dd {
+    margin-top: 0.15rem;
+    color: var(--app-ink);
+    font-size: var(--app-type-body-sm);
+    line-height: 1.4;
+  }
+
   .record-card__actions {
     display: flex;
     flex-wrap: wrap;

@@ -15,6 +15,7 @@ import { useArrangementBookingDialog } from "../hooks/useArrangementBookingDialo
 import type { AktivtArrangementRespons } from "@/types";
 
 type Props = {
+  grenId: string;
   valgtId: string | null;
   onVelg: (id: string | null, tittel?: string) => void;
   children: ReactNode;
@@ -30,8 +31,8 @@ type SelectionProps = {
   onRetry: () => void;
 };
 
-export default function KobleTilArrangementDialog({ valgtId, onVelg, children }: Props) {
-  const dialog = useArrangementBookingDialog({ valgtId, onVelg });
+export default function KobleTilArrangementDialog({ grenId, valgtId, onVelg, children }: Props) {
+  const dialog = useArrangementBookingDialog({ grenId, valgtId, onVelg });
 
   return (
     <AdminEditorDialog
