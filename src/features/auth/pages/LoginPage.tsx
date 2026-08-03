@@ -35,14 +35,13 @@ export default function LoginPage() {
 
   return (
     <Page width="lg" className="login-page">
-      <div className="login-page__layout">
-        <PageHeader
-          eyebrow="Min konto"
-          title="Logg inn"
-          description="Book bane og hold oversikt over tidene dine."
-          className="login-page__heading"
-        />
+      <PageHeader
+        eyebrow="Min konto"
+        title="Logg inn"
+        description="Book bane og hold oversikt over tidene dine."
+      />
 
+      <div className="login-page__layout">
         <section className="login-page__surface" aria-labelledby="login-method-heading">
           <header className="control-surface login-page__surface-header">
             <strong id="login-method-heading">Velg innlogging</strong>
