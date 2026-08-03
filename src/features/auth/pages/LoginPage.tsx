@@ -39,6 +39,7 @@ export default function LoginPage() {
         eyebrow="Min konto"
         title="Logg inn"
         description="Book bane og hold oversikt over tidene dine."
+        className="login-page__heading"
       />
 
       <div className="login-page__layout">
