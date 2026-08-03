@@ -746,6 +746,14 @@
     font-variant-numeric: tabular-nums;
     letter-spacing: -0.035em;
     line-height: 1.1;
+    white-space: nowrap;
+  }
+
+  .statistics-metric__unit {
+    font-family: var(--app-font-sans);
+    font-size: 0.58em;
+    font-weight: 680;
+    letter-spacing: 0;
   }
 
   .statistics-metric__copy > span {
