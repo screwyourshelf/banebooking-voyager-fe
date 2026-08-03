@@ -25,7 +25,7 @@ export default function StatistikkPage() {
           <RecordListState
             icon={<ShieldX aria-hidden="true" />}
             title="Du har ikke tilgang til statistikk"
-            description="Statistikk er tilgjengelig for klubbadministratorer."
+            description="Statistikk er tilgjengelig for utvidede brukere og klubbadministratorer."
             tone="danger"
           />
         </AdminPageState>
