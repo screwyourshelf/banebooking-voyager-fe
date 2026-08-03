@@ -6,6 +6,7 @@ export type {
   RecordCollectionToggle,
 } from "./RecordCollectionHeader";
 export type {
+  RecordControlField,
   RecordControlGroup,
   RecordControlOption,
   RecordSortControl,

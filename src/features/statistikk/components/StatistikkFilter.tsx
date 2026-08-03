@@ -1,9 +1,12 @@
 import { format } from "date-fns";
 import { nb } from "date-fns/locale";
 import { CalendarDays, SlidersHorizontal } from "lucide-react";
-import CardSection from "@/components/layout/CardSection";
-import SectionHeading from "@/components/layout/SectionHeading";
 import DatePickerPopover from "@/components/controls/DatePickerPopover";
+import {
+  RecordCollection,
+  RecordCollectionHeader,
+  type RecordControlField,
+} from "@/components/records";
 import { SwitchRow } from "@/components/rows";
 import { Button } from "@/components/ui/button";
 import {
@@ -41,14 +44,18 @@ function isoTilDato(iso: string) {
   return new Date(`${iso}T00:00:00`);
 }
 
-function Datoknapp({ label, dato }: { label: string; dato: string }) {
+function Datoknapp({ label, dato, disabled }: { label: string; dato: string; disabled: boolean }) {
+  const formatertDato = format(isoTilDato(dato), "d. MMM yyyy", { locale: nb });
+
   return (
-    <Button type="button" variant="outline" className="statistics-controls__date-button">
+    <Button
+      type="button"
+      variant="outline"
+      aria-label={`${label}: ${formatertDato}`}
+      disabled={disabled}
+    >
       <CalendarDays aria-hidden="true" />
-      <span>
-        <small>{label}</small>
-        {format(isoTilDato(dato), "d. MMM yyyy", { locale: nb })}
-      </span>
+      <span>{formatertDato}</span>
     </Button>
   );
 }
@@ -66,105 +73,132 @@ export default function StatistikkFilter({
   onGrenChange,
   onBaneChange,
 }: Props) {
-  return (
-    <CardSection className="statistics-controls" padding="sm">
-      <SectionHeading
-        description="Velg periode og avgrens statistikken til en gren eller bane."
-        actions={<SlidersHorizontal aria-hidden="true" />}
-      >
-        Visning
-      </SectionHeading>
-
-      <div className="statistics-controls__grid">
-        <label className="statistics-controls__field">
-          <span>Periode</span>
-          <Select
-            value={periodevalg}
-            onValueChange={(value) => onPeriodevalgChange(value as StatistikkPeriodevalg)}
-            disabled={disabled}
-          >
-            <SelectTrigger aria-label="Velg periode">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {periodevalgAlternativer.map((alternativ) => (
-                <SelectItem key={alternativ.value} value={alternativ.value}>
-                  {alternativ.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </label>
-
-        <label className="statistics-controls__field">
-          <span>Gren</span>
-          <Select
-            value={filtre.grenId ?? "alle"}
-            onValueChange={(value) => onGrenChange(value === "alle" ? null : value)}
-            disabled={disabled}
-          >
-            <SelectTrigger aria-label="Velg gren">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="alle">Alle grener</SelectItem>
-              {grener.map((gren) => (
-                <SelectItem key={gren.id} value={gren.id}>
-                  {gren.navn}
-                  {gren.aktiv ? "" : " (inaktiv)"}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </label>
-
-        <label className="statistics-controls__field">
-          <span>Bane</span>
-          <Select
-            value={filtre.baneId ?? "alle"}
-            onValueChange={(value) => onBaneChange(value === "alle" ? null : value)}
-            disabled={disabled}
-          >
-            <SelectTrigger aria-label="Velg bane">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="alle">Alle baner</SelectItem>
-              {baner.map((bane) => (
-                <SelectItem key={bane.id} value={bane.id}>
-                  {bane.navn}
-                  {bane.aktiv ? "" : " (inaktiv)"}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </label>
-
+  const fields: RecordControlField[] = [
+    {
+      id: "periode",
+      label: "Periode",
+      control: (
+        <Select
+          value={periodevalg}
+          onValueChange={(value) => onPeriodevalgChange(value as StatistikkPeriodevalg)}
+          disabled={disabled}
+        >
+          <SelectTrigger aria-label="Velg periode">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {periodevalgAlternativer.map((alternativ) => (
+              <SelectItem key={alternativ.value} value={alternativ.value}>
+                {alternativ.label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      ),
+    },
+    {
+      id: "gren",
+      label: "Gren",
+      control: (
+        <Select
+          value={filtre.grenId ?? "alle"}
+          onValueChange={(value) => onGrenChange(value === "alle" ? null : value)}
+          disabled={disabled}
+        >
+          <SelectTrigger aria-label="Velg gren">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="alle">Alle grener</SelectItem>
+            {grener.map((gren) => (
+              <SelectItem key={gren.id} value={gren.id}>
+                {gren.navn}
+                {gren.aktiv ? "" : " (inaktiv)"}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      ),
+    },
+    {
+      id: "bane",
+      label: "Bane",
+      control: (
+        <Select
+          value={filtre.baneId ?? "alle"}
+          onValueChange={(value) => onBaneChange(value === "alle" ? null : value)}
+          disabled={disabled}
+        >
+          <SelectTrigger aria-label="Velg bane">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="alle">Alle baner</SelectItem>
+            {baner.map((bane) => (
+              <SelectItem key={bane.id} value={bane.id}>
+                {bane.navn}
+                {bane.aktiv ? "" : " (inaktiv)"}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+      ),
+    },
+    {
+      id: "sammenligning",
+      width: "wide",
+      control: (
         <SwitchRow
-          className="statistics-controls__comparison"
           title="Sammenlign med året før"
           description="Bruker samme datoer ett år tidligere"
           checked={filtre.sammenlignMedForrigeÅr}
           onCheckedChange={onSammenligningChange}
           disabled={disabled}
         />
-      </div>
+      ),
+    },
+  ];
 
-      {periodevalg === "egendefinert" ? (
-        <div className="statistics-controls__dates">
+  if (periodevalg === "egendefinert") {
+    fields.push(
+      {
+        id: "fra",
+        label: "Fra",
+        control: (
           <DatePickerPopover value={isoTilDato(filtre.fra)} onChange={onFraChange} align="start">
-            <Datoknapp label="Fra" dato={filtre.fra} />
+            <Datoknapp label="Fra" dato={filtre.fra} disabled={disabled} />
           </DatePickerPopover>
+        ),
+      },
+      {
+        id: "til",
+        label: "Til",
+        control: (
           <DatePickerPopover
             value={isoTilDato(filtre.til)}
             onChange={onTilChange}
             minDate={isoTilDato(filtre.fra)}
             align="start"
           >
-            <Datoknapp label="Til" dato={filtre.til} />
+            <Datoknapp label="Til" dato={filtre.til} disabled={disabled} />
           </DatePickerPopover>
-        </div>
-      ) : null}
-    </CardSection>
+        ),
+      }
+    );
+  }
+
+  return (
+    <RecordCollection ariaLabel="Statistikkfilter">
+      <RecordCollectionHeader
+        icon={<SlidersHorizontal aria-hidden="true" />}
+        title="Visning"
+        description="Velg periode og avgrens statistikken til en gren eller bane."
+        filter={{
+          label: "Filtrer statistikk",
+          fields,
+          disabled,
+        }}
+      />
+    </RecordCollection>
   );
 }

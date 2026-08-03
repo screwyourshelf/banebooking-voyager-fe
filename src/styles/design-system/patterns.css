@@ -2249,18 +2249,21 @@
     display: contents;
   }
 
+  .record-filter-panel__field,
   .record-filter-panel__sort {
     display: grid;
     min-width: min(100%, 13rem);
     gap: 0.4rem;
   }
 
+  .record-filter-panel__field > span,
   .record-filter-panel__sort > span {
     color: var(--app-control-muted);
     font-size: var(--app-type-caption);
     font-weight: 730;
   }
 
+  .record-filter-panel__field [data-slot="select-trigger"],
   .record-filter-panel__sort [data-slot="select-trigger"] {
     width: 100%;
     min-height: 2.5rem;
@@ -2268,6 +2271,15 @@
     background: color-mix(in srgb, var(--app-control-text) 8%, transparent) !important;
     color: var(--app-control-text) !important;
     font-size: var(--app-type-body-sm);
+  }
+
+  .record-filter-panel__field > [data-slot="button"] {
+    width: 100%;
+    min-height: 2.5rem;
+    justify-content: flex-start;
+    border-color: color-mix(in srgb, var(--app-control-text) 18%, transparent) !important;
+    background: color-mix(in srgb, var(--app-control-text) 8%, transparent) !important;
+    color: var(--app-control-text) !important;
   }
 
   .record-filter-panel__reset {
