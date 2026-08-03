@@ -33,6 +33,9 @@ export const Kapabiliteter = {
   medlemskap: {
     aktiver: "medlemskap:aktiver",
   },
+  statistikk: {
+    lese: "statistikk:lese",
+  },
   turnering: {
     administrer: "turnering:administrer",
     leggTilAnsvarlig: "turnering:leggTilAnsvarlig",

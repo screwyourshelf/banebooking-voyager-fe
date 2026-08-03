@@ -46,6 +46,9 @@ const loadGrenerPage = createCachedRouteLoader(() => import("@/features/grener/p
 const loadKunngjøringerAdminPage = createCachedRouteLoader(
   () => import("@/features/kunngjøringer/pages/KunngjøringerAdminPage")
 );
+const loadStatistikkPage = createCachedRouteLoader(
+  () => import("@/features/statistikk/pages/StatistikkPage")
+);
 
 const loadVilkaarPage = createCachedRouteLoader(
   () => import("@/features/policy/pages/VilkaarPage")
@@ -69,6 +72,7 @@ const BanerPage = lazy(loadBanerPage);
 const BrukerePage = lazy(loadBrukerePage);
 const GrenerPage = lazy(loadGrenerPage);
 const KunngjøringerAdminPage = lazy(loadKunngjøringerAdminPage);
+const StatistikkPage = lazy(loadStatistikkPage);
 
 const VilkaarPage = lazy(loadVilkaarPage);
 
@@ -183,6 +187,13 @@ export const routeConfig: RouteConfig[] = [
         protected: true,
         component: KunngjøringerAdminPage,
         loader: loadKunngjøringerAdminPage,
+      },
+      {
+        path: "statistikk",
+        breadcrumb: "Statistikk",
+        protected: true,
+        component: StatistikkPage,
+        loader: loadStatistikkPage,
       },
     ],
   },

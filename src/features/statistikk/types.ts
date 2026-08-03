@@ -1,0 +1,72 @@
+import type { DayOfWeek } from "@/types";
+
+export type StatistikkPeriode = {
+  fra: string;
+  til: string;
+  sammenligningFra: string | null;
+  sammenligningTil: string | null;
+};
+
+export type BookingNøkkeltall = {
+  antallBookinger: number;
+  bookedeTimer: number;
+  personligeBookinger: number;
+  arrangementbookinger: number;
+};
+
+type SammenlignbarBookingstatistikk = {
+  antallBookinger: number;
+  bookedeTimer: number;
+  sammenligningAntallBookinger: number | null;
+  sammenligningBookedeTimer: number | null;
+  endringBookedeTimerProsent: number | null;
+};
+
+export type BookingPerMåned = SammenlignbarBookingstatistikk & {
+  år: number;
+  måned: number;
+  personligeBookinger: number;
+  arrangementbookinger: number;
+};
+
+export type BookingPerGren = SammenlignbarBookingstatistikk & {
+  grenId: string;
+  grenNavn: string;
+  personligeBookinger: number;
+  arrangementbookinger: number;
+};
+
+export type BookingPerBane = SammenlignbarBookingstatistikk & {
+  baneId: string;
+  baneNavn: string;
+  grenId: string;
+  grenNavn: string;
+  personligeBookinger: number;
+  arrangementbookinger: number;
+};
+
+export type BookingPerUkedag = SammenlignbarBookingstatistikk & {
+  ukedag: DayOfWeek;
+};
+
+export type BookingstatistikkRespons = {
+  periode: StatistikkPeriode;
+  nøkkeltall: BookingNøkkeltall;
+  sammenligning: BookingNøkkeltall | null;
+  endringBookedeTimerProsent: number | null;
+  perMåned: BookingPerMåned[];
+  perGren: BookingPerGren[];
+  perBane: BookingPerBane[];
+  perUkedag: BookingPerUkedag[];
+  generertTidspunkt: string;
+};
+
+export type BookingstatistikkFiltre = {
+  fra: string;
+  til: string;
+  sammenlignMedForrigeÅr: boolean;
+  grenId: string | null;
+  baneId: string | null;
+};
+
+export type StatistikkPeriodevalg = "året-så-langt" | "forrige-år" | "siste-12" | "egendefinert";

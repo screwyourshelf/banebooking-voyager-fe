@@ -3,6 +3,7 @@ import {
   CalendarCog,
   CalendarDays,
   CalendarPlus,
+  ChartNoAxesCombined,
   CircleUser,
   Megaphone,
   Newspaper,
@@ -112,6 +113,15 @@ const navigationItems: AppNavigationItem[] = [
     section: "admin",
     end: true,
     requiredAnyCapability: [Kapabiliteter.kunngjøring.admin],
+  },
+  {
+    id: "statistics",
+    to: "admin/statistikk",
+    label: "Statistikk",
+    icon: ChartNoAxesCombined,
+    section: "admin",
+    end: true,
+    requiredAnyCapability: [Kapabiliteter.statistikk.lese],
   },
   {
     id: "events-admin",
