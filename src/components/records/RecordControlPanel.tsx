@@ -44,10 +44,18 @@ export type RecordSortControl = {
   onValueChange: (value: string) => void;
 };
 
+export type RecordControlField = {
+  id: string;
+  label?: string;
+  control: ReactNode;
+  width?: "default" | "wide";
+};
+
 export type RecordControlPanelProps = {
   mode?: "filter" | "selection";
   label: string;
-  groups: readonly RecordControlGroup[];
+  groups?: readonly RecordControlGroup[];
+  fields?: readonly RecordControlField[];
   search?: RecordSearchControl;
   sort?: RecordSortControl;
   onReset?: () => void;
@@ -63,7 +71,8 @@ export type RecordControlPanelProps = {
 export default function RecordControlPanel({
   mode = "filter",
   label,
-  groups,
+  groups = [],
+  fields = [],
   search,
   sort,
   onReset,
@@ -180,6 +189,17 @@ export default function RecordControlPanel({
               })}
             </div>
           </fieldset>
+        ))}
+
+        {fields.map((field) => (
+          <div
+            key={field.id}
+            className="record-filter-panel__field"
+            data-width={field.width ?? "default"}
+          >
+            {field.label ? <span>{field.label}</span> : null}
+            {field.control}
+          </div>
         ))}
 
         {sort ? (

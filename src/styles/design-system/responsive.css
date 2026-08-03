@@ -471,8 +471,13 @@
       gap: 0.75rem;
     }
 
+    .record-filter-panel__field,
     .record-filter-panel__sort {
       flex: 0 1 15rem;
+    }
+
+    .record-filter-panel__field[data-width="wide"] {
+      flex: 1 1 18rem;
     }
 
     .record-filter-panel__reset {
@@ -735,19 +740,6 @@
       justify-content: flex-end;
     }
 
-    .statistics-controls__grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      align-items: end;
-    }
-
-    .statistics-controls__comparison {
-      grid-column: 1 / -1;
-    }
-
-    .statistics-controls__dates {
-      grid-template-columns: repeat(2, minmax(0, 15rem));
-    }
-
     .statistics-metrics,
     .statistics-loading__metrics {
       grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -766,19 +758,6 @@
 
     .statistics-metric__copy strong {
       font-size: clamp(1.45rem, 2.2vw, 2rem);
-    }
-  }
-}
-
-@media (min-width: 72rem) {
-  @layer components {
-    .statistics-controls__grid {
-      grid-template-columns: 1.15fr 1fr 1fr 1.35fr;
-    }
-
-    .statistics-controls__comparison {
-      grid-column: auto;
-      min-height: 4.4rem;
     }
   }
 }
