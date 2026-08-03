@@ -54,7 +54,7 @@ export default function BookingerPerMånedChart({ punkter, visSammenligning }: P
               <div key={`${punkt.år}-${punkt.måned}`} className="statistics-month-chart__month">
                 <div className="statistics-month-chart__bars" aria-label={ariaLabel}>
                   <span
-                    className="statistics-month-chart__bar"
+                    className="statistics-month-chart__series"
                     data-series="current"
                     style={
                       {
@@ -62,10 +62,17 @@ export default function BookingerPerMånedChart({ punkter, visSammenligning }: P
                       } as Stolpestil
                     }
                     title={`${formatTimer(punkt.bookedeTimer)} – valgt periode`}
-                  />
+                  >
+                    {punkt.bookedeTimer > 0 ? (
+                      <span className="statistics-month-chart__value" aria-hidden="true">
+                        {formatTimer(punkt.bookedeTimer)}
+                      </span>
+                    ) : null}
+                    <span className="statistics-month-chart__bar" aria-hidden="true" />
+                  </span>
                   {visSammenligning ? (
                     <span
-                      className="statistics-month-chart__bar"
+                      className="statistics-month-chart__series"
                       data-series="previous"
                       style={
                         {
@@ -73,7 +80,14 @@ export default function BookingerPerMånedChart({ punkter, visSammenligning }: P
                         } as Stolpestil
                       }
                       title={`${formatTimer(sammenligning ?? 0)} – året før`}
-                    />
+                    >
+                      {(sammenligning ?? 0) > 0 ? (
+                        <span className="statistics-month-chart__value" aria-hidden="true">
+                          {formatTimer(sammenligning ?? 0)}
+                        </span>
+                      ) : null}
+                      <span className="statistics-month-chart__bar" aria-hidden="true" />
+                    </span>
                   ) : null}
                 </div>
                 <span className="statistics-month-chart__label">{etikett}</span>
