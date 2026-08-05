@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import api from "@/api/api";
+import api, { ApiError } from "@/api/api";
 import { useAuth } from "@/hooks/useAuth";
 import { useSlug } from "@/hooks/useSlug";
 import type { BookingBootstrapRespons } from "@/types";
@@ -12,9 +12,13 @@ export const bookingBootstrapQueryKeys = {
     ["booking-bootstrap", slug, dato, brukerIdentitet] as const,
 };
 
+export function skalBrukeLegacyBootstrapFallback(error: unknown) {
+  return error instanceof ApiError && (error.status === 404 || error.status === 405);
+}
+
 /**
- * Henter og hydrerer hele første bookingvisning. Ved utrulling mot en eldre
- * backend faller hooken tilbake til de eksisterende enkeltkallene.
+ * Henter og hydrerer hele første bookingvisning. Kun en backend som ikke har
+ * endepunktet ennå faller tilbake til de eksisterende enkeltkallene.
  */
 export function useBookingBootstrap(enabled: boolean) {
   const slug = useSlug();
@@ -38,7 +42,8 @@ export function useBookingBootstrap(enabled: boolean) {
         return true;
       } catch (error) {
         if (signal.aborted) throw error;
-        return false;
+        if (skalBrukeLegacyBootstrapFallback(error)) return false;
+        throw error;
       }
     },
     enabled: enabled && ready && Boolean(slug),

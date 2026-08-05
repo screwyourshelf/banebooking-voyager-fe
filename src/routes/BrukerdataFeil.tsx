@@ -1,4 +1,4 @@
-import { ActionFeedback } from "@/components/feedback";
+import ActionFeedback from "@/components/feedback/ActionFeedback";
 import { Button } from "@/components/ui/button";
 
 type Props = {

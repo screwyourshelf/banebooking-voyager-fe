@@ -12,7 +12,7 @@ import { AppFrameSkeleton } from "@/components/loading";
 import { ProtectedRoute } from "@/routes/ProtectedRoute";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { AppErrorBoundary } from "@/components/errors";
+import { AppErrorBoundary } from "@/components/errors/AppErrorBoundary";
 import SlugProvider from "@/providers/SlugProvider";
 import { config } from "@/config";
 import BookingBootstrapGate from "@/features/booking/components/BookingBootstrapGate";

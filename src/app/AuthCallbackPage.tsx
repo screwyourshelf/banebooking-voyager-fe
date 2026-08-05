@@ -1,7 +1,8 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { supabase } from "@/supabase";
+import { synkroniserSupabaseToken } from "@/auth/supabaseToken";
 import { config } from "@/config";
+import { getSupabaseClient } from "@/supabase";
 import type { Session } from "@supabase/supabase-js";
 
 function cleanSlug(raw: string | null): string {
@@ -46,33 +47,37 @@ export default function AuthCallbackPage() {
       navigate(destination, { replace: true });
     }
 
-    supabase.auth.getSession().then(({ data }) => {
-      if (redirected) return; // komponent allerede unmountet
+    void getSupabaseClient().then((supabase) => {
+      void supabase.auth.getSession().then(({ data }) => {
+        if (redirected) return; // komponent allerede unmountet
 
-      // Steg 1: session klar (fragment-flow, f.eks. Google)
-      if (data.session) {
-        logSessionDiagnostics(data.session);
-        redirect();
-        return;
-      }
-
-      // Steg 2: ingen session ennå — vent på SIGNED_IN (PKCE/code-flow, f.eks. Idrettens ID)
-      const {
-        data: { subscription },
-      } = supabase.auth.onAuthStateChange((event, session) => {
-        if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
-          logSessionDiagnostics(session);
-          subscription.unsubscribe();
+        // Steg 1: session klar (fragment-flow, f.eks. Google)
+        if (data.session) {
+          synkroniserSupabaseToken(data.session.access_token);
+          logSessionDiagnostics(data.session);
           redirect();
+          return;
         }
-      });
-      sub = subscription;
 
-      // Steg 3: sikkerhetsnett — redirect etter 5 sek uansett
-      timeout = setTimeout(() => {
-        console.warn("[AuthCallback] Timeout — redirect uten bekreftet session");
-        redirect();
-      }, 5000);
+        // Steg 2: ingen session ennå — vent på SIGNED_IN (PKCE/code-flow, f.eks. Idrettens ID)
+        const {
+          data: { subscription },
+        } = supabase.auth.onAuthStateChange((event, session) => {
+          if (event === "SIGNED_IN" || event === "INITIAL_SESSION") {
+            synkroniserSupabaseToken(session?.access_token);
+            logSessionDiagnostics(session);
+            subscription.unsubscribe();
+            redirect();
+          }
+        });
+        sub = subscription;
+
+        // Steg 3: sikkerhetsnett — redirect etter 5 sek uansett
+        timeout = setTimeout(() => {
+          console.warn("[AuthCallback] Timeout — redirect uten bekreftet session");
+          redirect();
+        }, 5000);
+      });
     });
 
     return () => {

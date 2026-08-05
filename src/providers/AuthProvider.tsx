@@ -7,9 +7,10 @@ import type {
   DevelopmentProfile,
 } from "@/auth/authTypes";
 import { hentUtviklingssession, lagreUtviklingssession } from "@/auth/developmentSession";
-import { supabase } from "@/supabase";
+import { harSupabaseToken, synkroniserSupabaseToken } from "@/auth/supabaseToken";
+import { getSupabaseClient, onSupabaseClientAvailable } from "@/supabase";
 import { signOutAndRedirect } from "@/utils/authUtils";
-import type { User } from "@supabase/supabase-js";
+import type { Session, SupabaseClient, User } from "@supabase/supabase-js";
 
 function fraSupabase(user: User | null): AuthenticatedUser | null {
   if (!user) return null;
@@ -32,15 +33,6 @@ function fraUtviklingssession(session: DevelopmentLoginResponse): AuthenticatedU
   };
 }
 
-function synkroniserSupabaseToken(accessToken?: string) {
-  if (accessToken) {
-    localStorage.setItem("supabase_token", accessToken);
-    return;
-  }
-
-  localStorage.removeItem("supabase_token");
-}
-
 async function lesFeilmelding(response: Response) {
   try {
     const data = (await response.json()) as { melding?: unknown; message?: unknown };
@@ -59,26 +51,19 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<AuthenticatedUser | null>(() =>
     initialDevelopmentSession ? fraUtviklingssession(initialDevelopmentSession) : null
   );
-  const [ready, setReady] = useState(() => !!initialDevelopmentSession);
+  const [ready, setReady] = useState(
+    () => Boolean(initialDevelopmentSession) || !harSupabaseToken()
+  );
   const [developmentLoginPending, setDevelopmentLoginPending] = useState<DevelopmentProfile | null>(
     null
   );
 
   useEffect(() => {
     let alive = true;
+    let started = false;
+    let authSubscription: { unsubscribe: () => void } | null = null;
 
-    if (!hentUtviklingssession()) {
-      void supabase.auth.getSession().then(({ data }) => {
-        if (!alive || hentUtviklingssession()) return;
-        synkroniserSupabaseToken(data.session?.access_token);
-        setCurrentUser(fraSupabase(data.session?.user ?? null));
-        setReady(true);
-      });
-    }
-
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
+    function applySession(session: Session | null) {
       if (!alive) return;
 
       const localSession = hentUtviklingssession();
@@ -90,11 +75,45 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
         setCurrentUser(fraSupabase(session?.user ?? null));
       }
       setReady(true);
+    }
+
+    async function recoverSession(availableClient?: SupabaseClient) {
+      if (started) return;
+      started = true;
+
+      try {
+        const supabase = availableClient ?? (await getSupabaseClient());
+        if (!alive) return;
+
+        const {
+          data: { subscription },
+        } = supabase.auth.onAuthStateChange((_event, session) => applySession(session));
+        authSubscription = subscription;
+
+        const { data } = await supabase.auth.getSession();
+        applySession(data.session);
+      } catch {
+        if (!alive) return;
+        synkroniserSupabaseToken();
+        setCurrentUser(null);
+        setReady(true);
+      }
+    }
+
+    const stopListeningForClient = onSupabaseClientAvailable((availableClient) => {
+      void recoverSession(availableClient);
     });
+
+    // En speilet token betyr at brukeren kan ha en aktiv Supabase-sesjon.
+    // Uten token er appen klar som anonym med en gang og SDK-en lastes ikke.
+    if (!hentUtviklingssession() && harSupabaseToken()) {
+      void recoverSession();
+    }
 
     return () => {
       alive = false;
-      subscription.unsubscribe();
+      stopListeningForClient();
+      authSubscription?.unsubscribe();
     };
   }, []);
 
@@ -114,11 +133,12 @@ export default function AuthProvider({ children }: { children: ReactNode }) {
 
         const session = (await response.json()) as DevelopmentLoginResponse;
         lagreUtviklingssession(session);
-        localStorage.removeItem("supabase_token");
+        synkroniserSupabaseToken();
         queryClient.clear();
         setCurrentUser(fraUtviklingssession(session));
         setReady(true);
 
+        const supabase = await getSupabaseClient();
         await supabase.auth.signOut({ scope: "local" }).catch(() => undefined);
       } catch (error) {
         throw error instanceof Error ? error : new Error("Kunne ikke logge inn.");

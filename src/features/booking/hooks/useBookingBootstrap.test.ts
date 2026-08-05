@@ -1,8 +1,10 @@
 import { QueryClient } from "@tanstack/react-query";
 import { describe, expect, it } from "vitest";
+import { ApiError } from "@/api/api";
 import type { BookingBootstrapRespons } from "@/types";
 import { hydrerBookingBootstrapCache } from "./bookingBootstrapCache";
 import { bookingQueryKeys } from "./bookingQueryKeys";
+import { skalBrukeLegacyBootstrapFallback } from "./useBookingBootstrap";
 
 const bookingInnstillinger = {
   aapningstid: "08:00",
@@ -98,5 +100,15 @@ describe("hydrerBookingBootstrapCache", () => {
     hydrerBookingBootstrapCache(queryClient, "aas", bootstrap);
 
     expect(queryClient.getQueryData(["bruker", "aas"])).toBeUndefined();
+  });
+});
+
+describe("skalBrukeLegacyBootstrapFallback", () => {
+  it.each([404, 405])("bruker fallback for status %s", (status) => {
+    expect(skalBrukeLegacyBootstrapFallback(new ApiError("Mangler", status))).toBe(true);
+  });
+
+  it.each([400, 401, 500, undefined])("skjuler ikke feil med status %s", (status) => {
+    expect(skalBrukeLegacyBootstrapFallback(new ApiError("Feil", status))).toBe(false);
   });
 });
