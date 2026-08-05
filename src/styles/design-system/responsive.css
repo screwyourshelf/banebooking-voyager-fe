@@ -746,14 +746,28 @@
       gap: 0.875rem;
     }
 
+    .statistics-member-metrics {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.875rem;
+    }
+
     .statistics-dashboard__distributions {
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 1.5rem;
     }
 
-    .statistics-month-chart__plot,
+    .statistics-hour-chart__plot,
     .statistics-loading__plot {
       height: 17rem;
+    }
+
+    .statistics-court-table [data-slot="table-container"] {
+      display: block;
+      border-top: 1px solid var(--app-line);
+    }
+
+    .statistics-comparison-table[data-layout="courts"] {
+      display: none;
     }
 
     .statistics-metric__copy strong {

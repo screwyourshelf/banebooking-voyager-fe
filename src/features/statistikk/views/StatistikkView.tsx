@@ -3,18 +3,23 @@ import { addDays, endOfYear, startOfDay, startOfYear, subYears } from "date-fns"
 import { ChartNoAxesCombined, CircleAlert, RefreshCw } from "lucide-react";
 import { AdminPageState } from "@/components/admin";
 import CardSection from "@/components/layout/CardSection";
+import Tabs from "@/components/navigation/Tabs";
 import { RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import BanestatistikkTable from "@/features/statistikk/components/BanestatistikkTable";
 import BookingerPerMånedChart from "@/features/statistikk/components/BookingerPerMånedChart";
+import BookingtypeDonut from "@/features/statistikk/components/BookingtypeDonut";
 import FordelingBarListe from "@/features/statistikk/components/FordelingBarListe";
+import Medlemsstatistikk from "@/features/statistikk/components/Medlemsstatistikk";
 import NøkkeltallGrid from "@/features/statistikk/components/NøkkeltallGrid";
 import StatistikkFilter from "@/features/statistikk/components/StatistikkFilter";
 import StatistikkLoading from "@/features/statistikk/components/StatistikkLoading";
+import TidPåDøgnetChart from "@/features/statistikk/components/TidPåDøgnetChart";
 import { useBookingstatistikk } from "@/features/statistikk/hooks/useBookingstatistikk";
 import {
   formatDatoIso,
   formatTidspunkt,
+  formatTimer,
   formatUkedag,
 } from "@/features/statistikk/statistikkPresentation";
 import type { BookingstatistikkFiltre, StatistikkPeriodevalg } from "@/features/statistikk/types";
@@ -95,13 +100,18 @@ export default function StatistikkView() {
       return {
         ...forrige,
         grenId,
-        baneId: valgtBane && grenId && valgtBane.grenId !== grenId ? null : forrige.baneId,
+        baneId: !grenId || (valgtBane && valgtBane.grenId !== grenId) ? null : forrige.baneId,
       };
     });
   }
 
   const statistikk = statistikkQuery.data;
   const lasterOppsett = lasterGrener || lasterBaner;
+  const mestBrukteUkedag = statistikk?.perUkedag.length
+    ? statistikk.perUkedag.reduce((mestBrukt, ukedag) =>
+        ukedag.bookedeTimer > mestBrukt.bookedeTimer ? ukedag : mestBrukt
+      )
+    : undefined;
 
   return (
     <div className="statistics-dashboard">
@@ -161,8 +171,6 @@ export default function StatistikkView() {
             </span>
           </div>
 
-          <NøkkeltallGrid statistikk={statistikk} />
-
           {statistikk.nøkkeltall.antallBookinger === 0 ? (
             <CardSection>
               <RecordListState
@@ -172,37 +180,74 @@ export default function StatistikkView() {
               />
             </CardSection>
           ) : (
-            <>
-              <BookingerPerMånedChart
-                punkter={statistikk.perMåned}
-                visSammenligning={Boolean(statistikk.sammenligning)}
-              />
+            <Tabs
+              variant="section"
+              ariaLabel="Statistikkområder"
+              items={[
+                {
+                  value: "banebruk",
+                  label: "Banebruk",
+                  content: (
+                    <div className="statistics-dashboard__tab-content">
+                      <NøkkeltallGrid statistikk={statistikk} />
 
-              <div className="statistics-dashboard__distributions">
-                <FordelingBarListe
-                  title="Grener"
-                  description="Bookede timer fordelt på klubbens grener."
-                  punkter={statistikk.perGren.map((gren) => ({
-                    id: gren.grenId,
-                    label: gren.grenNavn,
-                    bookedeTimer: gren.bookedeTimer,
-                    sammenligningBookedeTimer: gren.sammenligningBookedeTimer,
-                  }))}
-                />
-                <FordelingBarListe
-                  title="Ukedager"
-                  description="Når i uken banene brukes mest."
-                  punkter={statistikk.perUkedag.map((ukedag) => ({
-                    id: ukedag.ukedag,
-                    label: formatUkedag(ukedag.ukedag),
-                    bookedeTimer: ukedag.bookedeTimer,
-                    sammenligningBookedeTimer: ukedag.sammenligningBookedeTimer,
-                  }))}
-                />
-              </div>
+                      <BookingerPerMånedChart
+                        punkter={statistikk.perMåned}
+                        visSammenligning={Boolean(statistikk.sammenligning)}
+                      />
 
-              <BanestatistikkTable baner={statistikk.perBane} />
-            </>
+                      <div className="statistics-dashboard__distributions">
+                        <BookingtypeDonut nøkkeltall={statistikk.nøkkeltall} />
+                        <FordelingBarListe
+                          title="Grener"
+                          description={
+                            filtre.grenId
+                              ? "Bookede timer for valgt gren."
+                              : "Bookede timer fordelt på klubbens grener. Velg en gren for å sammenligne banene."
+                          }
+                          punkter={statistikk.perGren.map((gren) => ({
+                            id: gren.grenId,
+                            label: gren.grenNavn,
+                            bookedeTimer: gren.bookedeTimer,
+                            sammenligningBookedeTimer: gren.sammenligningBookedeTimer,
+                          }))}
+                        />
+                      </div>
+
+                      <FordelingBarListe
+                        title="Ukemønster"
+                        description="Bookede timer fordelt på ukedag."
+                        oppsummering={
+                          mestBrukteUkedag
+                            ? `Mest brukt: ${formatUkedag(mestBrukteUkedag.ukedag)} · ${formatTimer(
+                                mestBrukteUkedag.bookedeTimer
+                              )}`
+                            : undefined
+                        }
+                        punkter={statistikk.perUkedag.map((ukedag) => ({
+                          id: String(ukedag.ukedag),
+                          label: formatUkedag(ukedag.ukedag),
+                          bookedeTimer: ukedag.bookedeTimer,
+                          sammenligningBookedeTimer: ukedag.sammenligningBookedeTimer,
+                        }))}
+                      />
+
+                      <TidPåDøgnetChart
+                        punkter={statistikk.perTime}
+                        visSammenligning={Boolean(statistikk.sammenligning)}
+                      />
+
+                      {filtre.grenId ? <BanestatistikkTable baner={statistikk.perBane} /> : null}
+                    </div>
+                  ),
+                },
+                {
+                  value: "medlemmer",
+                  label: "Medlemmer",
+                  content: <Medlemsstatistikk medlemmer={statistikk.medlemmer} />,
+                },
+              ]}
+            />
           )}
         </div>
       ) : null}

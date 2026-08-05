@@ -14,11 +14,12 @@ type Props = {
   title: string;
   description: string;
   punkter: FordelingPunkt[];
+  oppsummering?: string;
 };
 
 type Stolpestil = CSSProperties & { "--statistics-bar-width": string };
 
-export default function FordelingBarListe({ title, description, punkter }: Props) {
+export default function FordelingBarListe({ title, description, punkter, oppsummering }: Props) {
   const maks = Math.max(
     1,
     ...punkter.flatMap((punkt) => [punkt.bookedeTimer, punkt.sammenligningBookedeTimer ?? 0])
@@ -29,6 +30,8 @@ export default function FordelingBarListe({ title, description, punkter }: Props
       <SectionHeading description={description} size="lg">
         {title}
       </SectionHeading>
+
+      {oppsummering ? <p className="statistics-distribution__summary">{oppsummering}</p> : null}
 
       <div className="statistics-distribution__list">
         {punkter.map((punkt) => (

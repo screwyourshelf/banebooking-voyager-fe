@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/table";
 import type { BookingPerBane } from "@/features/statistikk/types";
 import {
-  formatAntall,
+  formatAntallMedEnhet,
   formatProsent,
   formatTimer,
 } from "@/features/statistikk/statistikkPresentation";
@@ -52,13 +52,13 @@ export default function BanestatistikkTable({ baner }: Props) {
                   {formatTimer(bane.bookedeTimer)}
                 </TableCell>
                 <TableCell className="statistics-table__numeric">
-                  {formatAntall(bane.antallBookinger)}
+                  {formatAntallMedEnhet(bane.antallBookinger)}
                 </TableCell>
                 <TableCell className="statistics-table__numeric">
-                  {formatAntall(bane.personligeBookinger)}
+                  {formatAntallMedEnhet(bane.personligeBookinger)}
                 </TableCell>
                 <TableCell className="statistics-table__numeric">
-                  {formatAntall(bane.arrangementbookinger)}
+                  {formatAntallMedEnhet(bane.arrangementbookinger)}
                 </TableCell>
                 <TableCell className="statistics-table__numeric">
                   {bane.sammenligningBookedeTimer === null
@@ -82,6 +82,58 @@ export default function BanestatistikkTable({ baner }: Props) {
           })}
         </TableBody>
       </Table>
+
+      <div className="statistics-comparison-table" data-layout="courts">
+        <table aria-label="Sammenligning av baner">
+          <thead>
+            <tr>
+              <th scope="col">Bane</th>
+              <th scope="col" data-align="end">
+                Timer
+              </th>
+              <th scope="col" data-align="end">
+                Bookinger
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {baner.map((bane) => {
+              const endring = formatProsent(bane.endringBookedeTimerProsent);
+              const retning =
+                bane.endringBookedeTimerProsent === null
+                  ? undefined
+                  : bane.endringBookedeTimerProsent < 0
+                    ? "down"
+                    : "up";
+
+              return (
+                <tr key={bane.baneId}>
+                  <th scope="row">
+                    <strong>{bane.baneNavn}</strong>
+                    <small>{bane.grenNavn}</small>
+                  </th>
+                  <td data-align="end">
+                    <strong>{formatTimer(bane.bookedeTimer)}</strong>
+                    <small>
+                      {bane.sammenligningBookedeTimer === null
+                        ? "Ingen sammenligning"
+                        : `Før: ${formatTimer(bane.sammenligningBookedeTimer)}`}
+                      {endring ? <span data-direction={retning}> · {endring}</span> : null}
+                    </small>
+                  </td>
+                  <td data-align="end">
+                    <strong>{formatAntallMedEnhet(bane.antallBookinger)}</strong>
+                    <small>
+                      P: {formatAntallMedEnhet(bane.personligeBookinger)} · A:{" "}
+                      {formatAntallMedEnhet(bane.arrangementbookinger)}
+                    </small>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </CardSection>
   );
 }

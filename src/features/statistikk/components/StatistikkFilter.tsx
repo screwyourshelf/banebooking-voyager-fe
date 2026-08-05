@@ -6,6 +6,7 @@ import {
   RecordCollection,
   RecordCollectionHeader,
   type RecordControlField,
+  type RecordControlGroup,
 } from "@/components/records";
 import { SwitchRow } from "@/components/rows";
 import { Button } from "@/components/ui/button";
@@ -73,6 +74,34 @@ export default function StatistikkFilter({
   onGrenChange,
   onBaneChange,
 }: Props) {
+  const grenvalg: RecordControlGroup = {
+    label: "Gren",
+    options: [
+      { value: "alle", label: "Alle grener" },
+      ...grener.map((gren) => ({
+        value: gren.id,
+        label: `${gren.navn}${gren.aktiv ? "" : " (inaktiv)"}`,
+      })),
+    ],
+    selectedValues: [filtre.grenId ?? "alle"],
+    onToggle: (value) => onGrenChange(value === "alle" ? null : value),
+  };
+
+  const banevalg: RecordControlGroup | null = filtre.grenId
+    ? {
+        label: "Bane",
+        options: [
+          { value: "alle", label: "Alle baner" },
+          ...baner.map((bane) => ({
+            value: bane.id,
+            label: `${bane.navn}${bane.aktiv ? "" : " (inaktiv)"}`,
+          })),
+        ],
+        selectedValues: [filtre.baneId ?? "alle"],
+        onToggle: (value) => onBaneChange(value === "alle" ? null : value),
+      }
+    : null;
+
   const fields: RecordControlField[] = [
     {
       id: "periode",
@@ -90,54 +119,6 @@ export default function StatistikkFilter({
             {periodevalgAlternativer.map((alternativ) => (
               <SelectItem key={alternativ.value} value={alternativ.value}>
                 {alternativ.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      ),
-    },
-    {
-      id: "gren",
-      label: "Gren",
-      control: (
-        <Select
-          value={filtre.grenId ?? "alle"}
-          onValueChange={(value) => onGrenChange(value === "alle" ? null : value)}
-          disabled={disabled}
-        >
-          <SelectTrigger aria-label="Velg gren">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="alle">Alle grener</SelectItem>
-            {grener.map((gren) => (
-              <SelectItem key={gren.id} value={gren.id}>
-                {gren.navn}
-                {gren.aktiv ? "" : " (inaktiv)"}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      ),
-    },
-    {
-      id: "bane",
-      label: "Bane",
-      control: (
-        <Select
-          value={filtre.baneId ?? "alle"}
-          onValueChange={(value) => onBaneChange(value === "alle" ? null : value)}
-          disabled={disabled}
-        >
-          <SelectTrigger aria-label="Velg bane">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="alle">Alle baner</SelectItem>
-            {baner.map((bane) => (
-              <SelectItem key={bane.id} value={bane.id}>
-                {bane.navn}
-                {bane.aktiv ? "" : " (inaktiv)"}
               </SelectItem>
             ))}
           </SelectContent>
@@ -193,8 +174,14 @@ export default function StatistikkFilter({
         icon={<SlidersHorizontal aria-hidden="true" />}
         title="Visning"
         description="Velg periode og avgrens statistikken til en gren eller bane."
+        selection={{
+          label: "Gren- og banevalg",
+          groups: banevalg ? [grenvalg, banevalg] : [grenvalg],
+          disabled,
+          indicator: "default",
+        }}
         filter={{
-          label: "Filtrer statistikk",
+          label: "Flere filtre",
           fields,
           disabled,
         }}

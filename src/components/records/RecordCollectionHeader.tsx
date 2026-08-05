@@ -60,10 +60,10 @@ export default function RecordCollectionHeader({
         ) : null}
       </header>
 
-      {filter ? <RecordControlPanel mode="filter" {...filter} /> : null}
       {selection ? (
         <RecordControlPanel mode="selection" {...selection} open trigger="header" />
       ) : null}
+      {filter ? <RecordControlPanel mode="filter" {...filter} /> : null}
     </>
   );
 }

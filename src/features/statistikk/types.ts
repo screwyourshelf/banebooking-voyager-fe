@@ -49,6 +49,29 @@ export type BookingPerUkedag = SammenlignbarBookingstatistikk & {
   ukedag: DayOfWeek;
 };
 
+export type BookingPerTime = {
+  time: number;
+  bookedeTimer: number;
+  sammenligningBookedeTimer: number | null;
+};
+
+export type BookingToppBruker = {
+  brukerId: string;
+  navn: string;
+  epost: string;
+  antallBookinger: number;
+  bookedeTimer: number;
+  personligeBookinger: number;
+  arrangementbookinger: number;
+};
+
+export type BookingMedlemsstatistikk = {
+  aktiveBrukere: number;
+  gjennomsnittBookingerPerBruker: number;
+  gjennomsnittBookedeTimerPerBruker: number;
+  toppBrukere: BookingToppBruker[];
+};
+
 export type BookingstatistikkRespons = {
   periode: StatistikkPeriode;
   nøkkeltall: BookingNøkkeltall;
@@ -58,6 +81,8 @@ export type BookingstatistikkRespons = {
   perGren: BookingPerGren[];
   perBane: BookingPerBane[];
   perUkedag: BookingPerUkedag[];
+  perTime: BookingPerTime[];
+  medlemmer: BookingMedlemsstatistikk;
   generertTidspunkt: string;
 };
 

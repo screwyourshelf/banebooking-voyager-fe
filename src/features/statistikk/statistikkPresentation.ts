@@ -22,6 +22,14 @@ export function formatAntall(verdi: number) {
   return tallformat.format(verdi);
 }
 
+export function formatAntallMedEnhet(verdi: number) {
+  return `${formatAntall(verdi)} stk.`;
+}
+
+export function formatDesimaltall(verdi: number) {
+  return timeformat.format(verdi);
+}
+
 export function formatTimer(verdi: number) {
   return `${timeformat.format(verdi)} t`;
 }
