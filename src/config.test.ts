@@ -1,16 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { velgSupabaseKlientnøkkel } from "@/config";
+import { lesSupabasePublishableKey } from "@/config";
 
-describe("velgSupabaseKlientnøkkel", () => {
-  it("foretrekker publishable key når begge er konfigurert", () => {
-    expect(velgSupabaseKlientnøkkel("sb_publishable_ny", "legacy-anon")).toBe("sb_publishable_ny");
+describe("lesSupabasePublishableKey", () => {
+  it("bruker en ny publishable key", () => {
+    expect(lesSupabasePublishableKey(" sb_publishable_ny ")).toBe("sb_publishable_ny");
   });
 
-  it("bruker legacy anon som fallback i overgangsperioden", () => {
-    expect(velgSupabaseKlientnøkkel(undefined, "legacy-anon")).toBe("legacy-anon");
+  it("avviser legacy anon-nøkkel", () => {
+    expect(() => lesSupabasePublishableKey("legacy-anon")).toThrow("sb_publishable_");
   });
 
   it("returnerer tom verdi når ingen nøkkel er konfigurert", () => {
-    expect(velgSupabaseKlientnøkkel()).toBe("");
+    expect(lesSupabasePublishableKey()).toBe("");
   });
 });

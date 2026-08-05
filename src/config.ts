@@ -1,14 +1,17 @@
-export function velgSupabaseKlientnøkkel(publishableKey?: string, legacyAnonKey?: string) {
-  return publishableKey || legacyAnonKey || "";
+export function lesSupabasePublishableKey(value?: string) {
+  const publishableKey = value?.trim() ?? "";
+
+  if (publishableKey && !publishableKey.startsWith("sb_publishable_")) {
+    throw new Error("VITE_SUPABASE_PUBLISHABLE_KEY må starte med sb_publishable_.");
+  }
+
+  return publishableKey;
 }
 
 export const config = {
   // Auth / backend
   supabaseUrl: import.meta.env.VITE_SUPABASE_URL!,
-  supabasePublishableKey: velgSupabaseKlientnøkkel(
-    import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-    import.meta.env.VITE_SUPABASE_ANON_KEY
-  ),
+  supabasePublishableKey: lesSupabasePublishableKey(import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY),
   apiBaseUrl:
     import.meta.env.MODE === "development"
       ? "" // bruk Vite proxy
