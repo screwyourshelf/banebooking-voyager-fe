@@ -1,7 +1,14 @@
+export function velgSupabaseKlientnøkkel(publishableKey?: string, legacyAnonKey?: string) {
+  return publishableKey || legacyAnonKey || "";
+}
+
 export const config = {
   // Auth / backend
   supabaseUrl: import.meta.env.VITE_SUPABASE_URL!,
-  supabaseAnonKey: import.meta.env.VITE_SUPABASE_ANON_KEY!,
+  supabasePublishableKey: velgSupabaseKlientnøkkel(
+    import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+    import.meta.env.VITE_SUPABASE_ANON_KEY
+  ),
   apiBaseUrl:
     import.meta.env.MODE === "development"
       ? "" // bruk Vite proxy

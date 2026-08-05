@@ -14,7 +14,7 @@ const listeners = new Set<ClientListener>();
 export function getSupabaseClient(): Promise<SupabaseClient> {
   if (!clientPromise) {
     clientPromise = import("@supabase/supabase-js").then(({ createClient }) => {
-      client = createClient(config.supabaseUrl, config.supabaseAnonKey, {
+      client = createClient(config.supabaseUrl, config.supabasePublishableKey, {
         auth: {
           persistSession: true,
           autoRefreshToken: true,
