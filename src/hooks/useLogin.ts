@@ -1,6 +1,6 @@
 import { useState } from "react";
-import type { ActionFeedbackMessage } from "@/components/feedback";
-import { supabase } from "../supabase";
+import type { ActionFeedbackMessage } from "@/components/feedback/ActionFeedback";
+import { getSupabaseClient } from "@/supabase";
 
 type Step = "input" | "verify";
 type Status = "idle" | "sending" | "verifying" | "done" | "error";
@@ -21,20 +21,28 @@ export function useLogin() {
     if (erBusy) return;
     setFeedback(null);
 
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "google",
-      options: {
-        redirectTo,
-        queryParams: { access_type: "offline" },
-        scopes: "openid email",
-      },
-    });
+    try {
+      const supabase = await getSupabaseClient();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: {
+          redirectTo,
+          queryParams: { access_type: "offline" },
+          scopes: "openid email",
+        },
+      });
 
-    if (error) {
+      if (!error) return;
       setFeedback({
         tone: "danger",
         title: "Innloggingen kunne ikke startes",
         description: error.message,
+      });
+    } catch (error) {
+      setFeedback({
+        tone: "danger",
+        title: "Innloggingen kunne ikke startes",
+        description: error instanceof Error ? error.message : "Prøv igjen om litt.",
       });
     }
   };
@@ -47,19 +55,27 @@ export function useLogin() {
     if (erBusy) return;
     setFeedback(null);
 
-    const { error } = await supabase.auth.signInWithOAuth({
-      provider: "custom:idrettens-id",
-      options: {
-        redirectTo,
-        scopes: "openid email profile",
-      },
-    });
+    try {
+      const supabase = await getSupabaseClient();
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "custom:idrettens-id",
+        options: {
+          redirectTo,
+          scopes: "openid email profile",
+        },
+      });
 
-    if (error) {
+      if (!error) return;
       setFeedback({
         tone: "danger",
         title: "Innloggingen kunne ikke startes",
         description: error.message,
+      });
+    } catch (error) {
+      setFeedback({
+        tone: "danger",
+        title: "Innloggingen kunne ikke startes",
+        description: error instanceof Error ? error.message : "Prøv igjen om litt.",
       });
     }
   };
@@ -81,31 +97,41 @@ export function useLogin() {
     setStatus("sending");
     setFeedback(null);
 
-    const { error } = await supabase.auth.signInWithOtp({
-      email: epost,
-      options: {
-        shouldCreateUser: true,
-        emailRedirectTo: redirectTo,
-      },
-    });
+    try {
+      const supabase = await getSupabaseClient();
+      const { error } = await supabase.auth.signInWithOtp({
+        email: epost,
+        options: {
+          shouldCreateUser: true,
+          emailRedirectTo: redirectTo,
+        },
+      });
 
-    if (error) {
+      if (!error) {
+        setStep("verify");
+        setStatus("idle");
+        setFeedback({
+          tone: "info",
+          title: "Koden er sendt",
+          description: `Sjekk innboksen til ${epost}.`,
+        });
+        return;
+      }
+
       setStatus("error");
       setFeedback({
         tone: "danger",
         title: "Koden kunne ikke sendes",
         description: error.message,
       });
-      return;
+    } catch (error) {
+      setStatus("error");
+      setFeedback({
+        tone: "danger",
+        title: "Koden kunne ikke sendes",
+        description: error instanceof Error ? error.message : "Prøv igjen om litt.",
+      });
     }
-
-    setStep("verify");
-    setStatus("idle");
-    setFeedback({
-      tone: "info",
-      title: "Koden er sendt",
-      description: `Sjekk innboksen til ${epost}.`,
-    });
   };
 
   const verifyOtp = async () => {
@@ -127,24 +153,34 @@ export function useLogin() {
     setStatus("verifying");
     setFeedback(null);
 
-    const { error } = await supabase.auth.verifyOtp({
-      email: epost,
-      token,
-      type: "email",
-    });
+    try {
+      const supabase = await getSupabaseClient();
+      const { error } = await supabase.auth.verifyOtp({
+        email: epost,
+        token,
+        type: "email",
+      });
 
-    if (error) {
+      if (!error) {
+        setStatus("done");
+        window.location.reload();
+        return;
+      }
+
       setStatus("error");
       setFeedback({
         tone: "danger",
         title: "Koden kunne ikke bekreftes",
         description: error.message,
       });
-      return;
+    } catch (error) {
+      setStatus("error");
+      setFeedback({
+        tone: "danger",
+        title: "Koden kunne ikke bekreftes",
+        description: error instanceof Error ? error.message : "Prøv igjen om litt.",
+      });
     }
-
-    setStatus("done");
-    window.location.reload();
   };
 
   return {

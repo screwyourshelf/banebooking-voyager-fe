@@ -2,7 +2,7 @@ import { Outlet, Navigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useBruker } from "@/hooks/useBruker";
 import { RouteContentSkeleton } from "@/components/loading";
-import BrukerdataFeil from "./BrukerdataFeil";
+import BrukerdataFeil from "./LazyBrukerdataFeil";
 
 export function KunngjøringGuard() {
   const { currentUser, ready } = useAuth();

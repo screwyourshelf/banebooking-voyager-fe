@@ -1,8 +1,7 @@
 import axios, { AxiosError, AxiosHeaders, type InternalAxiosRequestConfig } from "axios";
 import { hentUtviklingssession } from "@/auth/developmentSession";
-import { notifySessionExpired } from "@/components/feedback/globalFeedback";
-import { supabase } from "@/supabase";
-import { signOutAndRedirect } from "@/utils/authUtils";
+import { hentSupabaseToken, synkroniserSupabaseToken } from "@/auth/supabaseToken";
+import { getSupabaseClient } from "@/supabase";
 
 const rawBase = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 const baseURL = import.meta.env.MODE === "development" || !rawBase ? "/api" : `${rawBase}/api`;
@@ -16,6 +15,16 @@ declare module "axios" {
 const api = axios.create({ baseURL, timeout: 20_000 });
 
 let isHandling401 = false;
+
+export class ApiError extends Error {
+  constructor(
+    message: string,
+    readonly status?: number
+  ) {
+    super(message);
+    this.name = "ApiError";
+  }
+}
 
 function setAuthHeader(config: InternalAxiosRequestConfig, token: string, scheme = "Bearer") {
   const headers =
@@ -47,7 +56,7 @@ api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
     return config;
   }
 
-  const token = localStorage.getItem("supabase_token");
+  const token = hentSupabaseToken();
   if (token) {
     setAuthHeader(config, token);
     return config;
@@ -60,10 +69,11 @@ api.interceptors.request.use(async (config: InternalAxiosRequestConfig) => {
   }
 
   // Fallback (f.eks rett etter hard reload)
+  const supabase = await getSupabaseClient();
   const { data } = await supabase.auth.getSession();
   const fresh = data.session?.access_token;
   if (fresh) {
-    localStorage.setItem("supabase_token", fresh);
+    synkroniserSupabaseToken(fresh);
     setAuthHeader(config, fresh);
   }
 
@@ -79,16 +89,20 @@ api.interceptors.response.use(
         (error.code === "ECONNABORTED" && "Forespørselen tok for lang tid") ||
         error.message ||
         "Nettverksfeil";
-      return Promise.reject(new Error(msg));
+      return Promise.reject(new ApiError(msg));
     }
 
     const status = error.response.status;
 
     if (status === 401) {
-      localStorage.removeItem("supabase_token");
+      synkroniserSupabaseToken();
       if (!isHandling401) {
         isHandling401 = true;
         try {
+          const [{ notifySessionExpired }, { signOutAndRedirect }] = await Promise.all([
+            import("@/components/feedback/globalFeedback"),
+            import("@/utils/authUtils"),
+          ]);
           notifySessionExpired();
           await signOutAndRedirect();
         } finally {
@@ -96,7 +110,7 @@ api.interceptors.response.use(
           isHandling401 = false;
         }
       }
-      return Promise.reject(new Error("Uautorisert"));
+      return Promise.reject(new ApiError("Uautorisert", status));
     }
 
     const msg =
@@ -105,7 +119,7 @@ api.interceptors.response.use(
       error.message ||
       "Ukjent feil";
 
-    return Promise.reject(new Error(msg));
+    return Promise.reject(new ApiError(msg, status));
   }
 );
 

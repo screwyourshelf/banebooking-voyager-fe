@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, KeyRound, Mail, ShieldCheck, UserRound, UserRoundCog } from "lucide-react";
 
-import { ActionFeedback, type ActionFeedbackMessage } from "@/components/feedback";
+import ActionFeedback, { type ActionFeedbackMessage } from "@/components/feedback/ActionFeedback";
 import { FormActions, FormLayout, FormSubmitButton } from "@/components/forms";
 import { GoogleIcon, IdrettensIdIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";

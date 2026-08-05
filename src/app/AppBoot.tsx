@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { Building2 } from "lucide-react";
 import { useSlug } from "@/hooks/useSlug";
 import { useKlubb } from "@/hooks/useKlubb";
-import { ErrorDisplay } from "@/components/errors";
+import { ErrorDisplay } from "@/components/errors/ErrorDisplay";
 import ErrorShell from "@/app/ErrorShell";
 
 type Props = {

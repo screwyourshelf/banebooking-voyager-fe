@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
-import { GlobalFeedbackToaster } from "@/components/feedback";
+import DeferredFeedbackToaster from "@/components/feedback/DeferredFeedbackToaster";
 import { RouteContentSkeleton } from "@/components/loading";
 import { AppSidebar, MobileBottomNav, Navbar } from "@/components/navigation";
 
@@ -27,7 +27,7 @@ export default function AppShell() {
 
       <MobileBottomNav />
 
-      <GlobalFeedbackToaster />
+      <DeferredFeedbackToaster />
     </div>
   );
 }

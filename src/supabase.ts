@@ -1,28 +1,45 @@
-import { createClient } from "@supabase/supabase-js";
+import type { SupabaseClient } from "@supabase/supabase-js";
 import { config } from "@/config";
 
-export const supabase = createClient(config.supabaseUrl, config.supabaseAnonKey, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-    flowType: "pkce",
-  },
-});
+type ClientListener = (client: SupabaseClient) => void;
 
-const {
-  data: { subscription },
-} = supabase.auth.onAuthStateChange((_event, session) => {
-  const token = session?.access_token;
-  if (token) {
-    localStorage.setItem("supabase_token", token);
-  } else {
-    localStorage.removeItem("supabase_token");
+let client: SupabaseClient | null = null;
+let clientPromise: Promise<SupabaseClient> | null = null;
+const listeners = new Set<ClientListener>();
+
+/**
+ * Laster auth-SDK-en først når en lagret sesjon eller en innloggingshandling
+ * faktisk trenger den. Offentlige bookingbesøk slipper dermed Supabase-bundlen.
+ */
+export function getSupabaseClient(): Promise<SupabaseClient> {
+  if (!clientPromise) {
+    clientPromise = import("@supabase/supabase-js").then(({ createClient }) => {
+      client = createClient(config.supabaseUrl, config.supabaseAnonKey, {
+        auth: {
+          persistSession: true,
+          autoRefreshToken: true,
+          flowType: "pkce",
+        },
+      });
+
+      listeners.forEach((listener) => listener(client!));
+      return client;
+    });
   }
-});
 
-// Viktig i Vite dev/HMR: unngå multiple subscriptions
-if (import.meta.hot) {
-  import.meta.hot.dispose(() => {
-    subscription.unsubscribe();
-  });
+  return clientPromise;
+}
+
+export function onSupabaseClientAvailable(listener: ClientListener) {
+  listeners.add(listener);
+
+  if (client) {
+    queueMicrotask(() => {
+      if (client && listeners.has(listener)) listener(client);
+    });
+  }
+
+  return () => {
+    listeners.delete(listener);
+  };
 }
