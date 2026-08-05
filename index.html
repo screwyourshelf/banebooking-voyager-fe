@@ -119,17 +119,73 @@
         const recoveryMessageDelayMs = 30_000;
         let recoveryStarted = false;
 
-        async function reloadLatestVersion(button) {
+        async function refreshStartupAssets(html, pageUrl) {
+          const parsedDocument = new DOMParser().parseFromString(html, "text/html");
+          const startupAssetPaths = Array.from(
+            parsedDocument.querySelectorAll(
+              'script[type="module"][src], link[rel="modulepreload"][href], link[rel="stylesheet"][href]'
+            )
+          )
+            .map((element) => element.getAttribute("src") ?? element.getAttribute("href"))
+            .filter(Boolean);
+
+          const startupAssetUrls = [
+            ...new Set(startupAssetPaths.map((path) => new URL(path, pageUrl).toString())),
+          ];
+
+          await Promise.all(
+            startupAssetUrls.map(async (assetUrl) => {
+              const response = await fetch(assetUrl, { cache: "reload" });
+              if (!response.ok) {
+                throw new Error(`Kunne ikke hente en oppstartsfil (${response.status}).`);
+              }
+
+              // Safari må konsumere responsen før den ferske filen er skrevet til HTTP-cachen.
+              await response.arrayBuffer();
+            })
+          );
+        }
+
+        async function resetStoredSiteData() {
+          try {
+            localStorage.clear();
+          } catch {
+            // Fortsett dersom Safari blokkerer nettleserlagring.
+          }
+
+          try {
+            sessionStorage.clear();
+          } catch {
+            // Fortsett dersom Safari blokkerer nettleserlagring.
+          }
+
+          try {
+            if ("caches" in window) {
+              const cacheNames = await window.caches.keys();
+              await Promise.all(cacheNames.map((cacheName) => window.caches.delete(cacheName)));
+            }
+          } catch {
+            // Cache Storage er et ekstra sikkerhetsnett og finnes ikke i alle Safari-versjoner.
+          }
+        }
+
+        async function reloadLatestVersion(button, resetSiteData = false) {
           const url = new URL(window.location.href);
           url.searchParams.set(recoveryQueryParameter, Date.now().toString());
 
           if (button) {
             button.disabled = true;
             button.setAttribute("aria-busy", "true");
-            button.textContent = "Laster nyeste versjon…";
+            button.textContent = resetSiteData
+              ? "Nullstiller og laster…"
+              : "Laster nyeste versjon…";
           }
 
           try {
+            if (resetSiteData) {
+              await resetStoredSiteData();
+            }
+
             const response = await fetch(url.toString(), {
               cache: "no-store",
               headers: { Accept: "text/html" },
@@ -142,6 +198,10 @@
             if (!html.includes('id="root"') || !html.includes('type="module"')) {
               throw new Error("Svaret inneholdt ikke Banebooking-appen.");
             }
+
+            // Oppdater de samme URL-ene som appen straks skal laste. En unik HTML-URL
+            // er ikke nok når Safari har beholdt en utdatert JavaScript-fil.
+            await refreshStartupAssets(html, url);
 
             window.history.replaceState(
               window.history.state,
@@ -191,18 +251,14 @@
 
           const description = document.createElement("p");
           description.textContent =
-            "En nyere versjon er tilgjengelig, eller oppstarten tok for lang tid.";
+            "En nyere versjon er tilgjengelig, eller oppstarten tok for lang tid. " +
+            "Nullstilling logger deg ut og laster alle oppstartsfilene på nytt.";
 
           const button = document.createElement("button");
           button.type = "button";
-          button.textContent = "Last inn nyeste versjon";
+          button.textContent = "Nullstill og last inn på nytt";
           button.addEventListener("click", () => {
-            try {
-              sessionStorage.removeItem(recoveryStorageKey);
-            } catch {
-              // Safari kan blokkere nettleserlagring i enkelte moduser.
-            }
-            void reloadLatestVersion(button);
+            void reloadLatestVersion(button, true);
           });
 
           content.append(title, description, button);
