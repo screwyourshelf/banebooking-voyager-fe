@@ -3,6 +3,7 @@ export * from "./BookingSlot";
 export * from "./KalenderSlot";
 export * from "./MinBooking";
 export * from "./Booking";
+export * from "./BookingBootstrap";
 export * from "./Klubbdetaljer";
 export * from "./Bruker";
 export * from "./OppdaterKlubb";

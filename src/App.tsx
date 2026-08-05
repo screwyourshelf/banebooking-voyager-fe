@@ -15,6 +15,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { AppErrorBoundary } from "@/components/errors";
 import SlugProvider from "@/providers/SlugProvider";
 import { config } from "@/config";
+import BookingBootstrapGate from "@/features/booking/components/BookingBootstrapGate";
 
 const AuthCallbackPage = lazy(() => import("./app/AuthCallbackPage"));
 const SperretPage = lazy(() => import("@/features/sperre/pages/SperretPage"));
@@ -70,9 +71,11 @@ export default function App() {
                   >
                     <Route
                       element={
-                        <AppBoot>
-                          <AppShell />
-                        </AppBoot>
+                        <BookingBootstrapGate>
+                          <AppBoot>
+                            <AppShell />
+                          </AppBoot>
+                        </BookingBootstrapGate>
                       }
                     >
                       <Route element={<SperretGuard />}>
@@ -94,9 +97,11 @@ export default function App() {
                     <Route path=":slug?" element={<SlugGate />}>
                       <Route
                         element={
-                          <AppBoot>
-                            <AppShell />
-                          </AppBoot>
+                          <BookingBootstrapGate>
+                            <AppBoot>
+                              <AppShell />
+                            </AppBoot>
+                          </BookingBootstrapGate>
                         }
                       >
                         <Route element={<SperretGuard />}>
