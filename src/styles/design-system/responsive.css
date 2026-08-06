@@ -587,7 +587,7 @@
       display: grid;
       grid-template-columns: calc(var(--app-sidebar-width) + 2rem) minmax(0, 1fr);
       isolation: isolate;
-      background: var(--app-canvas);
+      background: var(--app-sidebar);
     }
 
     .app-shell__sidebar {
