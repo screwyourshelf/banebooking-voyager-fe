@@ -1001,6 +1001,14 @@
     gap: 1rem;
   }
 
+  .section-tabs__rail {
+    display: contents;
+  }
+
+  .baner-og-grener__desktop-action {
+    display: none;
+  }
+
   .section-tabs__list {
     display: grid !important;
     width: 100% !important;
