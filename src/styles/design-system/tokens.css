@@ -24,10 +24,6 @@
 
   /* Product roles */
   --app-canvas: #f2f3ed;
-  --app-workspace-overlay-start: oklch(0.21 0.034 264.665);
-  --app-workspace-overlay-middle: oklch(0.21 0.034 264.665 / 0.6);
-  --app-workspace-overlay-end: oklch(0.21 0.034 264.665 / 0);
-  --app-workspace-image-scrim: oklch(0.21 0.034 264.665 / 0.2);
   --app-surface: #ffffff;
   --app-surface-subtle: #f7f8f3;
   --app-surface-raised: #ffffff;

@@ -539,6 +539,7 @@
   .app-sidebar__navigation {
     min-height: 0;
     flex: 1;
+    overflow-x: hidden;
     overflow-y: auto;
     overscroll-behavior: contain;
   }
