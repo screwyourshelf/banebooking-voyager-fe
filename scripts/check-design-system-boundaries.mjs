@@ -4,6 +4,7 @@ import process from "node:process";
 
 const projectRoot = process.cwd();
 const sourceRoot = path.join(projectRoot, "src");
+const stylesheetEntryPath = path.join(sourceRoot, "index.css");
 const recordsRoot = path.join(sourceRoot, "components", "records");
 const tournamentRoot = path.join(sourceRoot, "features", "turnering");
 const recordCollectionHeaderPath = path.join(recordsRoot, "RecordCollectionHeader.tsx");
@@ -168,8 +169,10 @@ for (const filePath of sourceFiles) {
   }
 }
 
-if (violations.length > 0 || apiViolations.length > 0) {
-  console.error("Designsystemets lukkede komponentveier er brutt.");
+const stylesheetViolations = await validateStylesheets(sourceFiles);
+
+if (violations.length > 0 || apiViolations.length > 0 || stylesheetViolations.length > 0) {
+  console.error("Designsystemkontrollen feilet.");
 
   for (const violation of violations) {
     console.error(
@@ -183,9 +186,15 @@ if (violations.length > 0 || apiViolations.length > 0) {
     );
   }
 
-  console.error(
-    "Bruk de semantiske record-, filter- og datokomponentene; ikke bygg lokale varianter."
-  );
+  for (const violation of stylesheetViolations) {
+    console.error(`- ${violation}`);
+  }
+
+  if (violations.length > 0 || apiViolations.length > 0) {
+    console.error(
+      "Bruk de semantiske record-, filter- og datokomponentene; ikke bygg lokale varianter."
+    );
+  }
   process.exit(1);
 }
 
@@ -217,4 +226,91 @@ function classPattern(className, stylesheet) {
 
 function lineFor(source, index) {
   return source.slice(0, Math.max(index, 0)).split("\n").length;
+}
+
+async function validateStylesheets(files) {
+  const stylesheetFiles = files.filter((filePath) => path.extname(filePath) === ".css");
+  const componentFiles = files.filter((filePath) =>
+    [".html", ".ts", ".tsx"].includes(path.extname(filePath))
+  );
+  const sourceByPath = new Map(
+    await Promise.all(files.map(async (filePath) => [filePath, await readFile(filePath, "utf8")]))
+  );
+  const componentSource = componentFiles.map((filePath) => sourceByPath.get(filePath)).join("\n");
+  const stylesheetSource = stylesheetFiles.map((filePath) => sourceByPath.get(filePath)).join("\n");
+  const issues = [];
+  const reachableStylesheets = new Set();
+
+  function visitStylesheet(filePath) {
+    if (reachableStylesheets.has(filePath)) return;
+    reachableStylesheets.add(filePath);
+
+    const source = sourceByPath.get(filePath);
+    if (!source) {
+      issues.push(
+        `${path.relative(projectRoot, filePath)} finnes ikke, men importeres av CSS-kjeden`
+      );
+      return;
+    }
+
+    for (const match of source.matchAll(/@import\s+["'](\.[^"']+\.css)["']/g)) {
+      visitStylesheet(path.resolve(path.dirname(filePath), match[1]));
+    }
+  }
+
+  visitStylesheet(stylesheetEntryPath);
+
+  for (const filePath of stylesheetFiles) {
+    if (!reachableStylesheets.has(filePath)) {
+      issues.push(`${path.relative(projectRoot, filePath)} er ikke koblet til src/index.css`);
+    }
+  }
+
+  const runtimeClasses = new Set(["ProseMirror", "selectedCell"]);
+
+  for (const filePath of stylesheetFiles) {
+    const source = sourceByPath.get(filePath);
+    const classes = new Set(
+      [...source.matchAll(/(?:^|[^A-Za-z0-9_-])\.([A-Za-z_][A-Za-z0-9_-]*)/g)].map(
+        (match) => match[1]
+      )
+    );
+
+    for (const className of classes) {
+      if (runtimeClasses.has(className) || containsToken(componentSource, className)) continue;
+      issues.push(
+        `${path.relative(projectRoot, filePath)} definerer .${className}, men klassen brukes ikke i kildekoden`
+      );
+    }
+  }
+
+  const semanticPrefix =
+    /^(?:action|admin|app|arrangement|booking|content|control|date|error|filter|guard|login|mine|mobile|navbar|news|page|query|record|section|settings|statistics|user|weather)-/;
+
+  for (const filePath of componentFiles.filter((candidate) => candidate.endsWith(".tsx"))) {
+    const source = sourceByPath.get(filePath);
+
+    for (const match of source.matchAll(/className\s*=\s*["']([^"']+)["']/g)) {
+      for (const className of match[1].split(/\s+/)) {
+        if (!className || (!className.includes("__") && !semanticPrefix.test(className))) continue;
+        if (definesClass(stylesheetSource, className)) continue;
+
+        issues.push(
+          `${path.relative(projectRoot, filePath)}:${lineFor(source, match.index)} bruker ${className} uten en tilhørende CSS-regel`
+        );
+      }
+    }
+  }
+
+  return issues;
+}
+
+function containsToken(source, token) {
+  const escaped = token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(^|[^A-Za-z0-9_-])${escaped}(?=$|[^A-Za-z0-9_-])`, "m").test(source);
+}
+
+function definesClass(source, className) {
+  const escaped = className.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`\\.${escaped}(?=$|[^A-Za-z0-9_-])`, "m").test(source);
 }

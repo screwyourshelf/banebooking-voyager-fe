@@ -928,7 +928,7 @@
   }
 
   /* Shared administration workspaces and settings forms */
-  .admin-page__content {
+  :is(.admin-page__content, .booking-page, .record-collection-page) {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -943,18 +943,23 @@
     width: fit-content;
   }
 
-  .admin-page__heading {
-    max-width: 54rem;
+  :is(.admin-page__heading, .booking-page__heading, .record-collection-page__heading) {
     gap: 0.375rem;
   }
 
-  .admin-page__heading .page-heading__title {
+  :is(.admin-page__heading, .record-collection-page__heading) {
+    max-width: 54rem;
+  }
+
+  :is(.admin-page__heading, .booking-page__heading, .record-collection-page__heading)
+    .page-heading__title {
     font-size: var(--app-type-page-title);
     letter-spacing: -0.035em;
     line-height: 1.05;
   }
 
-  .admin-page__heading .page-heading__description {
+  :is(.admin-page__heading, .booking-page__heading, .record-collection-page__heading)
+    .page-heading__description {
     max-width: 42rem;
     font-size: var(--app-type-body);
     line-height: 1.4;
@@ -1962,29 +1967,6 @@
   .switch-row {
     --primary: var(--app-choice-indicator);
     --ring: var(--app-choice-indicator);
-  }
-
-  .record-collection-page {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-  }
-
-  .record-collection-page__heading {
-    max-width: 54rem;
-    gap: 0.375rem;
-  }
-
-  .record-collection-page__heading .page-heading__title {
-    font-size: var(--app-type-page-title);
-    letter-spacing: -0.035em;
-    line-height: 1.05;
-  }
-
-  .record-collection-page__heading .page-heading__description {
-    max-width: 42rem;
-    font-size: var(--app-type-body);
-    line-height: 1.4;
   }
 
   .record-collection {

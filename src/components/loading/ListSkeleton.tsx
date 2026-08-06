@@ -2,7 +2,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export default function ListSkeleton() {
   return (
-    <div className="animate__animated animate__fadeIn animate__faster space-y-4">
+    <div className="space-y-4">
       {/* Seksjon-header */}
       <div className="space-y-1 px-2">
         <Skeleton className="h-3 w-1/3" />

@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
-import { PageContentSkeleton } from "@/components/loading";
+import { ShieldX } from "lucide-react";
+import { AdminPageLoading, AdminPageState } from "@/components/admin";
+import { RecordListState } from "@/components/records";
 
 import { useBruker } from "@/hooks/useBruker";
 import { useAdminBrukere } from "@/features/brukere/hooks/useAdminBrukere";
@@ -20,7 +22,6 @@ import type {
   EditState,
 } from "@/features/brukere/types";
 import { QueryFeil } from "@/components/errors";
-import PageHeader from "@/components/layout/PageHeader";
 import BrukereListeContent from "./BrukereListeContent";
 import RedigerBrukerDialog from "./RedigerBrukerDialog";
 
@@ -151,7 +152,7 @@ export default function BrukereListeView() {
   };
 
   if (lasterBruker) {
-    return <PageContentSkeleton label="Kontrollerer brukertilgang" rows={6} controls />;
+    return <AdminPageLoading label="Kontrollerer brukertilgang" />;
   }
 
   if (brukerFeil) {
@@ -166,19 +167,21 @@ export default function BrukereListeView() {
   }
 
   if (!erKlubbAdmin && !harLeseTilgang) {
-    return <p className="user-admin-page__access-error">Du har ikke tilgang til denne siden.</p>;
+    return (
+      <AdminPageState>
+        <RecordListState
+          icon={<ShieldX aria-hidden="true" />}
+          title="Du har ikke tilgang til brukere"
+          description="En klubbadministrator må gi deg tilgang før du kan administrere brukere."
+          tone="danger"
+        />
+      </AdminPageState>
+    );
   }
 
   return (
     <QueryFeil error={brukereError} isFetching={brukereFetching} onRetry={() => void hentBrukere()}>
-      <div className="user-admin-page__content">
-        <PageHeader
-          eyebrow="Administrasjon"
-          title="Brukere"
-          description="Følg opp medlemskap, roller og tilgang til klubben."
-          className="user-admin-page__heading"
-        />
-
+      <>
         <BrukereListeContent
           query={query}
           onQueryChange={setQuery}
@@ -248,7 +251,7 @@ export default function BrukereListeView() {
             serverFeil={oppdaterFeil?.message ?? null}
           />
         ) : null}
-      </div>
+      </>
     </QueryFeil>
   );
 }

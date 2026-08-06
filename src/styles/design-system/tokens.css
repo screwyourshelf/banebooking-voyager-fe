@@ -11,23 +11,15 @@
   /* Brand */
   --brand-50: #f2f7f0;
   --brand-100: #e1edde;
-  --brand-200: #c2dbc0;
   --brand-300: #98c094;
-  --brand-400: #6ca168;
   --brand-500: #4d854d;
   --brand-600: #376c3c;
   --brand-700: #2a5632;
-  --brand-800: #23452a;
   --brand-900: #1d3924;
-  --brand-950: #0d2013;
 
   --clay-50: #fff6ef;
   --clay-100: #fee8d7;
-  --clay-200: #fccdad;
-  --clay-300: #f8aa78;
-  --clay-400: #f08347;
   --clay-500: #df672e;
-  --clay-600: #be4d22;
   --clay-700: #983a20;
 
   /* Product roles */
@@ -52,7 +44,6 @@
   --app-accent-soft: var(--clay-100);
   --app-accent-contrast: #ffffff;
   --app-choice-indicator: var(--app-accent);
-  --app-choice-indicator-strong: var(--app-accent-strong);
   --app-focus: #4d854d;
   --app-sidebar: #173c25;
   --app-sidebar-hover: #214d30;
@@ -67,13 +58,9 @@
   --app-control-surface-strong: #23452a;
   --app-control-text: #ffffff;
   --app-control-muted: #bdd0bf;
-  --activity-surface: var(--app-control-surface);
-  --activity-surface-strong: var(--app-control-surface-strong);
   --activity-accent: #88c984;
   --activity-accent-strong: #376c3c;
   --activity-soft: #e4f3df;
-  --activity-text: #ffffff;
-  --activity-muted: #bdd0bf;
   --app-shadow-sm: 0 1px 2px rgb(18 36 23 / 0.05);
   --app-shadow-md: 0 12px 32px rgb(18 36 23 / 0.08);
   --app-shadow-lg: 0 24px 70px rgb(18 36 23 / 0.12);
@@ -150,7 +137,6 @@
   --status-available-bg: #e4f3df;
   --status-available-text: #24562a;
   --status-available-indicator: #4f9f54;
-  --status-available-on-strong: #b9e7af;
   --status-own-bg: #e4edf8;
   --status-own-text: #234d78;
   --status-event-bg: #fff0df;

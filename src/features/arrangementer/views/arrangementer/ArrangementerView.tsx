@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import PageHeader from "@/components/layout/PageHeader";
+import { RecordCollectionPage } from "@/components/records";
 
 import ArrangementerContent from "./ArrangementerContent";
 import { useArrangementer } from "./useArrangementer";
@@ -21,14 +21,11 @@ export default function ArrangementerView() {
   const defaultArrangementId = searchParams.get("arrangement") ?? undefined;
 
   return (
-    <div className="record-collection-page">
-      <PageHeader
-        eyebrow="Klubben"
-        title="Arrangementer"
-        description="Se hva som skjer, når det starter og hvilke baner som brukes."
-        className="record-collection-page__heading"
-      />
-
+    <RecordCollectionPage
+      eyebrow="Klubben"
+      title="Arrangementer"
+      description="Se hva som skjer, når det starter og hvilke baner som brukes."
+    >
       <ArrangementerContent
         visHistoriske={visHistoriske}
         onToggleVisHistoriske={setVisHistoriske}
@@ -40,6 +37,6 @@ export default function ArrangementerView() {
         onAvlys={onAvlys}
         defaultArrangementId={defaultArrangementId}
       />
-    </div>
+    </RecordCollectionPage>
   );
 }

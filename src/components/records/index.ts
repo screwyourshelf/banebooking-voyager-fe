@@ -1,4 +1,5 @@
 export { default as RecordCollectionHeader } from "./RecordCollectionHeader";
+export { default as RecordCollectionPage } from "./RecordCollectionPage";
 export { default as RecordContextAction } from "./RecordContextAction";
 export type {
   RecordCollectionFilter,

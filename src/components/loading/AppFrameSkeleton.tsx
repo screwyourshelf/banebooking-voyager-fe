@@ -2,7 +2,7 @@ import { RouteContentSkeleton } from "./PageContentSkeleton";
 
 export default function AppFrameSkeleton() {
   return (
-    <div className="app-shell app-frame-skeleton">
+    <div className="app-shell">
       <div className="app-shell__frame">
         <aside className="app-shell__sidebar" aria-hidden="true">
           <div className="app-sidebar app-frame-skeleton__sidebar-content">
