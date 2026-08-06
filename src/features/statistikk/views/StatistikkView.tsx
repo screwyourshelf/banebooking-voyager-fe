@@ -22,7 +22,12 @@ import {
   formatTimer,
   formatUkedag,
 } from "@/features/statistikk/statistikkPresentation";
-import type { BookingstatistikkFiltre, StatistikkPeriodevalg } from "@/features/statistikk/types";
+import type {
+  BookingstatistikkFiltre,
+  BookingstatistikkRespons,
+  Medlemsbookingtype,
+  StatistikkPeriodevalg,
+} from "@/features/statistikk/types";
 import { useBaner } from "@/hooks/useBaner";
 import { useGrener } from "@/hooks/useGrener";
 import { tilDatoTekst } from "@/utils/datoUtils";
@@ -60,9 +65,21 @@ function initialFiltre(): BookingstatistikkFiltre {
   };
 }
 
+type Statistikkfane = "banebruk" | "medlemmer";
+
+function velgMedlemsstatistikk(
+  statistikk: BookingstatistikkRespons,
+  bookingtype: Medlemsbookingtype
+) {
+  if (bookingtype === "alle") return statistikk.medlemmer;
+  return statistikk.medlemmerPerBookingtype[bookingtype];
+}
+
 export default function StatistikkView() {
   const [periodevalg, setPeriodevalg] = useState<StatistikkPeriodevalg>("året-så-langt");
   const [filtre, setFiltre] = useState<BookingstatistikkFiltre>(initialFiltre);
+  const [aktivFane, setAktivFane] = useState<Statistikkfane>("banebruk");
+  const [medlemsbookingtype, setMedlemsbookingtype] = useState<Medlemsbookingtype>("alle");
   const { grener, isLoading: lasterGrener } = useGrener(true);
   const { baner, isLoading: lasterBaner } = useBaner(true);
   const statistikkQuery = useBookingstatistikk(filtre);
@@ -120,6 +137,7 @@ export default function StatistikkView() {
         periodevalg={periodevalg}
         grener={grener}
         baner={tilgjengeligeBaner}
+        medlemsbookingtype={aktivFane === "medlemmer" ? medlemsbookingtype : undefined}
         disabled={lasterOppsett}
         onPeriodevalgChange={handlePeriodevalgChange}
         onFraChange={handleFraChange}
@@ -129,6 +147,7 @@ export default function StatistikkView() {
         }
         onGrenChange={handleGrenChange}
         onBaneChange={(baneId) => setFiltre((forrige) => ({ ...forrige, baneId }))}
+        onMedlemsbookingtypeChange={setMedlemsbookingtype}
       />
 
       {statistikkQuery.isLoading && !statistikk ? (
@@ -183,6 +202,8 @@ export default function StatistikkView() {
             <Tabs
               variant="section"
               ariaLabel="Statistikkområder"
+              value={aktivFane}
+              onValueChange={(value) => setAktivFane(value as Statistikkfane)}
               items={[
                 {
                   value: "banebruk",
@@ -244,7 +265,12 @@ export default function StatistikkView() {
                 {
                   value: "medlemmer",
                   label: "Medlemmer",
-                  content: <Medlemsstatistikk medlemmer={statistikk.medlemmer} />,
+                  content: (
+                    <Medlemsstatistikk
+                      medlemmer={velgMedlemsstatistikk(statistikk, medlemsbookingtype)}
+                      bookingtype={medlemsbookingtype}
+                    />
+                  ),
                 },
               ]}
             />

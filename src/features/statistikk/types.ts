@@ -72,6 +72,11 @@ export type BookingMedlemsstatistikk = {
   toppBrukere: BookingToppBruker[];
 };
 
+export type BookingMedlemsstatistikkPerBookingtype = {
+  vanlige: BookingMedlemsstatistikk;
+  arrangement: BookingMedlemsstatistikk;
+};
+
 export type BookingstatistikkRespons = {
   periode: StatistikkPeriode;
   nøkkeltall: BookingNøkkeltall;
@@ -83,6 +88,7 @@ export type BookingstatistikkRespons = {
   perUkedag: BookingPerUkedag[];
   perTime: BookingPerTime[];
   medlemmer: BookingMedlemsstatistikk;
+  medlemmerPerBookingtype: BookingMedlemsstatistikkPerBookingtype;
   generertTidspunkt: string;
 };
 
@@ -95,3 +101,5 @@ export type BookingstatistikkFiltre = {
 };
 
 export type StatistikkPeriodevalg = "året-så-langt" | "forrige-år" | "siste-12" | "egendefinert";
+
+export type Medlemsbookingtype = "alle" | "vanlige" | "arrangement";

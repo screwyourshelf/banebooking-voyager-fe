@@ -3,7 +3,7 @@ import CardSection from "@/components/layout/CardSection";
 import SectionHeading from "@/components/layout/SectionHeading";
 import { RecordListState } from "@/components/records";
 import { Card, CardContent } from "@/components/ui/card";
-import type { BookingMedlemsstatistikk } from "@/features/statistikk/types";
+import type { BookingMedlemsstatistikk, Medlemsbookingtype } from "@/features/statistikk/types";
 import {
   formatAntall,
   formatAntallMedEnhet,
@@ -13,15 +13,38 @@ import {
 
 type Props = {
   medlemmer: BookingMedlemsstatistikk;
+  bookingtype: Medlemsbookingtype;
 };
 
-export default function Medlemsstatistikk({ medlemmer }: Props) {
+const medlemsbeskrivelser: Record<
+  Medlemsbookingtype,
+  { aktive: string; rangering: string; tom: string }
+> = {
+  alle: {
+    aktive: "Med minst én booking",
+    rangering: "Rangert etter bookede timer i den valgte perioden.",
+    tom: "Ingen brukere har bookinger med de valgte filtrene.",
+  },
+  vanlige: {
+    aktive: "Med minst én vanlig booking",
+    rangering: "Rangert etter bookede timer fra vanlige bookinger.",
+    tom: "Ingen brukere har vanlige bookinger med de valgte filtrene.",
+  },
+  arrangement: {
+    aktive: "Med minst én arrangementsbooking",
+    rangering: "Rangert etter bookede timer for arrangement.",
+    tom: "Ingen brukere har arrangementsbookinger med de valgte filtrene.",
+  },
+};
+
+export default function Medlemsstatistikk({ medlemmer, bookingtype }: Props) {
+  const beskrivelser = medlemsbeskrivelser[bookingtype];
   const nøkkeltall = [
     {
       label: "Aktive brukere",
       verdi: formatAntall(medlemmer.aktiveBrukere),
       enhet: "brukere",
-      beskrivelse: "Med minst én booking",
+      beskrivelse: beskrivelser.aktive,
       ikon: UsersRound,
     },
     {
@@ -62,10 +85,7 @@ export default function Medlemsstatistikk({ medlemmer }: Props) {
 
       <CardSection className="statistics-section statistics-top-users" padding="sm">
         <div className="statistics-top-users__heading">
-          <SectionHeading
-            description="Rangert etter bookede timer i den valgte perioden."
-            size="lg"
-          >
+          <SectionHeading description={beskrivelser.rangering} size="lg">
             Topp 10 brukere
           </SectionHeading>
         </div>
@@ -74,7 +94,7 @@ export default function Medlemsstatistikk({ medlemmer }: Props) {
           <RecordListState
             icon={<UsersRound aria-hidden="true" />}
             title="Ingen aktive brukere"
-            description="Ingen brukere har bookinger med de valgte filtrene."
+            description={beskrivelser.tom}
           />
         ) : (
           <div className="statistics-comparison-table" data-layout="users">
@@ -110,10 +130,12 @@ export default function Medlemsstatistikk({ medlemmer }: Props) {
                       <td data-align="end">{formatTimer(bruker.bookedeTimer)}</td>
                       <td data-align="end">
                         <strong>{formatAntallMedEnhet(bruker.antallBookinger)}</strong>
-                        <small>
-                          P: {formatAntallMedEnhet(bruker.personligeBookinger)} · A:{" "}
-                          {formatAntallMedEnhet(bruker.arrangementbookinger)}
-                        </small>
+                        {bookingtype === "alle" ? (
+                          <small>
+                            P: {formatAntallMedEnhet(bruker.personligeBookinger)} · A:{" "}
+                            {formatAntallMedEnhet(bruker.arrangementbookinger)}
+                          </small>
+                        ) : null}
                       </td>
                     </tr>
                   );
