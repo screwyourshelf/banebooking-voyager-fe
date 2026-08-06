@@ -587,22 +587,7 @@
       display: grid;
       grid-template-columns: calc(var(--app-sidebar-width) + 2rem) minmax(0, 1fr);
       isolation: isolate;
-      background:
-        radial-gradient(circle at 82% 12%, rgb(240 131 71 / 0.2), transparent 28rem),
-        linear-gradient(100deg, rgb(8 28 18 / 0.88) 0, rgb(10 24 34 / 0.52) 34%, transparent 72%),
-        url("/backgrounds/workspace-tennis.webp") center / cover fixed;
-    }
-
-    .app-shell__frame::after {
-      position: fixed;
-      z-index: -1;
-      top: 0;
-      bottom: 0;
-      left: calc(var(--app-sidebar-width) + 2rem);
-      width: min(46rem, 54vw);
-      background: linear-gradient(90deg, rgb(10 23 32 / 0.32), transparent);
-      content: "";
-      pointer-events: none;
+      background: var(--app-canvas);
     }
 
     .app-shell__sidebar {
@@ -722,8 +707,46 @@
 
     .app-shell__workspace {
       position: relative;
+      min-height: 100svh;
+      isolation: isolate;
       padding-bottom: 0;
-      background: transparent;
+      background: var(--app-canvas);
+    }
+
+    .app-shell__workspace::before {
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 28rem;
+      background:
+        radial-gradient(circle, rgb(255 255 255 / 0.1) 1.25px, transparent 1.5px) 0 0 / 1.25rem
+          1.25rem,
+        linear-gradient(
+          90deg,
+          rgb(5 24 19 / 0.96) 0,
+          rgb(6 28 24 / 0.88) 36%,
+          rgb(9 26 29 / 0.58) 60%,
+          rgb(9 22 28 / 0.22) 100%
+        ),
+        linear-gradient(rgb(7 20 24 / 0.16), rgb(7 20 24 / 0.16)),
+        url("/backgrounds/workspace-tennis.webp") 56% 52% / cover no-repeat;
+      box-shadow: inset 0 -1px 0 rgb(255 255 255 / 0.11);
+      content: "";
+      pointer-events: none;
+    }
+
+    .app-shell__workspace::after {
+      position: absolute;
+      z-index: -1;
+      top: calc(28rem - 1px);
+      right: 0;
+      left: 0;
+      height: 4.5rem;
+      background: linear-gradient(180deg, rgb(4 16 12 / 0.16), transparent);
+      content: "";
+      pointer-events: none;
     }
 
     .app-shell__main {
@@ -744,46 +767,8 @@
 
     .admin-page__content {
       position: relative;
-      isolation: isolate;
       gap: 1.25rem;
-      padding: 1rem 1rem 1.5rem;
-    }
-
-    .admin-page__content::before {
-      position: absolute;
-      z-index: -1;
-      top: -1.25rem;
-      bottom: -2.5rem;
-      left: -1.25rem;
-      width: min(84rem, calc(100% + 2.5rem));
-      background:
-        radial-gradient(circle at 18% 8%, rgb(55 108 60 / 0.24), transparent 30rem),
-        linear-gradient(
-          116deg,
-          rgb(5 24 17 / 0.88) 0,
-          rgb(7 25 23 / 0.78) 38%,
-          rgb(10 23 28 / 0.46) 58%,
-          rgb(10 23 28 / 0.08) 76%,
-          transparent 86%
-        );
-      clip-path: polygon(0 0, 96% 0, 69% 100%, 0 100%);
-      content: "";
-      pointer-events: none;
-    }
-
-    .admin-page__content::after {
-      position: absolute;
-      z-index: -1;
-      top: -0.5rem;
-      bottom: -1.75rem;
-      left: 60%;
-      width: 1px;
-      background: linear-gradient(180deg, transparent, rgb(240 131 71 / 0.42), transparent 88%);
-      content: "";
-      opacity: 0.7;
-      pointer-events: none;
-      transform: skewX(-18deg);
-      transform-origin: top;
+      padding: 1rem 1rem 2.5rem;
     }
 
     .admin-page__intro {
@@ -859,7 +844,7 @@
     }
 
     .page-frame {
-      padding: 2.25rem 3rem 3.5rem 2rem;
+      padding: 3rem 3rem 4.5rem 2.5rem;
       animation: app-desktop-content-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
     }
 
