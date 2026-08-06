@@ -746,29 +746,44 @@
       position: relative;
       isolation: isolate;
       gap: 1.25rem;
-      padding: 1.5rem;
-      border: 1px solid rgb(255 255 255 / 0.12);
-      border-radius: 2rem;
+      padding: 1rem 1rem 1.5rem;
+    }
+
+    .admin-page__content::before {
+      position: absolute;
+      z-index: -1;
+      top: -1.25rem;
+      bottom: -2.5rem;
+      left: -1.25rem;
+      width: min(84rem, calc(100% + 2.5rem));
       background:
-        radial-gradient(circle at 90% 0, rgb(240 131 71 / 0.16), transparent 24rem),
-        linear-gradient(135deg, rgb(9 34 25 / 0.72), rgb(10 24 30 / 0.42) 58%, transparent 92%);
-      box-shadow:
-        0 36px 100px rgb(2 15 10 / 0.2),
-        inset 0 1px 0 rgb(255 255 255 / 0.08);
-      backdrop-filter: blur(10px) saturate(112%);
+        radial-gradient(circle at 18% 8%, rgb(55 108 60 / 0.24), transparent 30rem),
+        linear-gradient(
+          116deg,
+          rgb(5 24 17 / 0.88) 0,
+          rgb(7 25 23 / 0.78) 38%,
+          rgb(10 23 28 / 0.46) 58%,
+          rgb(10 23 28 / 0.08) 76%,
+          transparent 86%
+        );
+      clip-path: polygon(0 0, 96% 0, 69% 100%, 0 100%);
+      content: "";
+      pointer-events: none;
     }
 
     .admin-page__content::after {
       position: absolute;
       z-index: -1;
-      right: 1.5rem;
-      bottom: 0.9rem;
-      left: 1.5rem;
-      height: 1px;
-      background: linear-gradient(90deg, var(--app-accent), rgb(255 255 255 / 0.14), transparent);
+      top: -0.5rem;
+      bottom: -1.75rem;
+      left: 60%;
+      width: 1px;
+      background: linear-gradient(180deg, transparent, rgb(240 131 71 / 0.42), transparent 88%);
       content: "";
-      opacity: 0.55;
+      opacity: 0.7;
       pointer-events: none;
+      transform: skewX(-18deg);
+      transform-origin: top;
     }
 
     .admin-page__intro {
