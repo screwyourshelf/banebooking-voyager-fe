@@ -91,7 +91,7 @@ export default function BookingSelectionHeader({
         if (value === "tomorrow") onDatoChange(tomorrow);
       },
     },
-    ...(baner.length > 1
+    ...(baner.length > 0
       ? [
           {
             label: "Bane",
