@@ -1,7 +1,12 @@
-import { CalendarCheck, Clock3, UsersRound } from "lucide-react";
+import { CalendarCheck, Clock3, ListFilter, UsersRound } from "lucide-react";
 import CardSection from "@/components/layout/CardSection";
 import SectionHeading from "@/components/layout/SectionHeading";
-import { RecordListState } from "@/components/records";
+import {
+  RecordCollection,
+  RecordCollectionHeader,
+  RecordListState,
+  type RecordControlGroup,
+} from "@/components/records";
 import { Card, CardContent } from "@/components/ui/card";
 import type { BookingMedlemsstatistikk, Medlemsbookingtype } from "@/features/statistikk/types";
 import {
@@ -14,6 +19,7 @@ import {
 type Props = {
   medlemmer: BookingMedlemsstatistikk;
   bookingtype: Medlemsbookingtype;
+  onBookingtypeChange: (bookingtype: Medlemsbookingtype) => void;
 };
 
 const medlemsbeskrivelser: Record<
@@ -37,8 +43,18 @@ const medlemsbeskrivelser: Record<
   },
 };
 
-export default function Medlemsstatistikk({ medlemmer, bookingtype }: Props) {
+export default function Medlemsstatistikk({ medlemmer, bookingtype, onBookingtypeChange }: Props) {
   const beskrivelser = medlemsbeskrivelser[bookingtype];
+  const bookingtypevalg: RecordControlGroup = {
+    label: "Bookingtype",
+    options: [
+      { value: "alle", label: "Alle" },
+      { value: "vanlige", label: "Vanlige bookinger" },
+      { value: "arrangement", label: "Arrangement" },
+    ],
+    selectedValues: [bookingtype],
+    onToggle: (value) => onBookingtypeChange(value as Medlemsbookingtype),
+  };
   const nøkkeltall = [
     {
       label: "Aktive brukere",
@@ -63,6 +79,19 @@ export default function Medlemsstatistikk({ medlemmer, bookingtype }: Props) {
 
   return (
     <div className="statistics-dashboard__tab-content">
+      <RecordCollection ariaLabel="Filter for medlemsstatistikk">
+        <RecordCollectionHeader
+          icon={<ListFilter aria-hidden="true" />}
+          title="Medlemsfilter"
+          description="Avgrens medlemsstatistikken til vanlige bookinger eller arrangement."
+          selection={{
+            label: "Bookingtypevalg",
+            groups: [bookingtypevalg],
+            indicator: "default",
+          }}
+        />
+      </RecordCollection>
+
       <section className="statistics-member-metrics" aria-label="Medlemsnøkkeltall">
         {nøkkeltall.map(({ label, verdi, enhet, beskrivelse, ikon: Ikon }) => (
           <Card key={label} size="sm" className="statistics-metric">

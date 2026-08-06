@@ -137,7 +137,6 @@ export default function StatistikkView() {
         periodevalg={periodevalg}
         grener={grener}
         baner={tilgjengeligeBaner}
-        medlemsbookingtype={aktivFane === "medlemmer" ? medlemsbookingtype : undefined}
         disabled={lasterOppsett}
         onPeriodevalgChange={handlePeriodevalgChange}
         onFraChange={handleFraChange}
@@ -147,7 +146,6 @@ export default function StatistikkView() {
         }
         onGrenChange={handleGrenChange}
         onBaneChange={(baneId) => setFiltre((forrige) => ({ ...forrige, baneId }))}
-        onMedlemsbookingtypeChange={setMedlemsbookingtype}
       />
 
       {statistikkQuery.isLoading && !statistikk ? (
@@ -269,6 +267,7 @@ export default function StatistikkView() {
                     <Medlemsstatistikk
                       medlemmer={velgMedlemsstatistikk(statistikk, medlemsbookingtype)}
                       bookingtype={medlemsbookingtype}
+                      onBookingtypeChange={setMedlemsbookingtype}
                     />
                   ),
                 },
