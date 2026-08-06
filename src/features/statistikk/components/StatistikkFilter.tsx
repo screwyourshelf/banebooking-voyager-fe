@@ -18,13 +18,18 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import type { BaneRespons, GrenRespons } from "@/types";
-import type { BookingstatistikkFiltre, StatistikkPeriodevalg } from "@/features/statistikk/types";
+import type {
+  BookingstatistikkFiltre,
+  Medlemsbookingtype,
+  StatistikkPeriodevalg,
+} from "@/features/statistikk/types";
 
 type Props = {
   filtre: BookingstatistikkFiltre;
   periodevalg: StatistikkPeriodevalg;
   grener: GrenRespons[];
   baner: BaneRespons[];
+  medlemsbookingtype?: Medlemsbookingtype;
   disabled?: boolean;
   onPeriodevalgChange: (valg: StatistikkPeriodevalg) => void;
   onFraChange: (dato: Date) => void;
@@ -32,6 +37,7 @@ type Props = {
   onSammenligningChange: (checked: boolean) => void;
   onGrenChange: (grenId: string | null) => void;
   onBaneChange: (baneId: string | null) => void;
+  onMedlemsbookingtypeChange?: (bookingtype: Medlemsbookingtype) => void;
 };
 
 const periodevalgAlternativer: Array<{ value: StatistikkPeriodevalg; label: string }> = [
@@ -66,6 +72,7 @@ export default function StatistikkFilter({
   periodevalg,
   grener,
   baner,
+  medlemsbookingtype,
   disabled = false,
   onPeriodevalgChange,
   onFraChange,
@@ -73,6 +80,7 @@ export default function StatistikkFilter({
   onSammenligningChange,
   onGrenChange,
   onBaneChange,
+  onMedlemsbookingtypeChange,
 }: Props) {
   const grenvalg: RecordControlGroup = {
     label: "Gren",
@@ -102,7 +110,20 @@ export default function StatistikkFilter({
       }
     : null;
 
-  const utvalgsgrupper = [grenvalg, banevalg].filter(
+  const bookingtypevalg: RecordControlGroup | null = medlemsbookingtype
+    ? {
+        label: "Bookingtype",
+        options: [
+          { value: "alle", label: "Alle" },
+          { value: "vanlige", label: "Vanlige bookinger" },
+          { value: "arrangement", label: "Arrangement" },
+        ],
+        selectedValues: [medlemsbookingtype],
+        onToggle: (value) => onMedlemsbookingtypeChange?.(value as Medlemsbookingtype),
+      }
+    : null;
+
+  const utvalgsgrupper = [bookingtypevalg, grenvalg, banevalg].filter(
     (gruppe): gruppe is RecordControlGroup => gruppe !== null
   );
 
@@ -177,7 +198,11 @@ export default function StatistikkFilter({
       <RecordCollectionHeader
         icon={<SlidersHorizontal aria-hidden="true" />}
         title="Visning"
-        description="Velg periode og avgrens statistikken til en gren eller bane."
+        description={
+          medlemsbookingtype
+            ? "Velg bookingtype, periode, gren eller bane."
+            : "Velg periode og avgrens statistikken til en gren eller bane."
+        }
         selection={{
           label: "Statistikkvalg",
           groups: utvalgsgrupper,

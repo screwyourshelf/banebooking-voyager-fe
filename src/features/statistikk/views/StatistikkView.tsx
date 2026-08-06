@@ -130,27 +130,11 @@ export default function StatistikkView() {
       )
     : undefined;
 
-  return (
-    <div className="statistics-dashboard">
-      <StatistikkFilter
-        filtre={filtre}
-        periodevalg={periodevalg}
-        grener={grener}
-        baner={tilgjengeligeBaner}
-        disabled={lasterOppsett}
-        onPeriodevalgChange={handlePeriodevalgChange}
-        onFraChange={handleFraChange}
-        onTilChange={handleTilChange}
-        onSammenligningChange={(checked) =>
-          setFiltre((forrige) => ({ ...forrige, sammenlignMedForrigeÅr: checked }))
-        }
-        onGrenChange={handleGrenChange}
-        onBaneChange={(baneId) => setFiltre((forrige) => ({ ...forrige, baneId }))}
-      />
+  function renderStatistikkinnhold(fane: Statistikkfane) {
+    if (statistikkQuery.isLoading && !statistikk) return <StatistikkLoading />;
 
-      {statistikkQuery.isLoading && !statistikk ? (
-        <StatistikkLoading />
-      ) : statistikkQuery.error && !statistikk ? (
+    if (statistikkQuery.error && !statistikk) {
+      return (
         <AdminPageState>
           <RecordListState
             icon={<CircleAlert aria-hidden="true" />}
@@ -171,111 +155,142 @@ export default function StatistikkView() {
             role="alert"
           />
         </AdminPageState>
-      ) : statistikk ? (
-        <div
-          className="statistics-dashboard__results"
-          data-fetching={statistikkQuery.isFetching || undefined}
-          aria-busy={statistikkQuery.isFetching}
-        >
-          <div className="statistics-dashboard__status">
-            <span>
-              {formatDatoIso(statistikk.periode.fra)}–{formatDatoIso(statistikk.periode.til)}
-            </span>
-            <span>
-              {statistikkQuery.isFetching
-                ? "Oppdaterer…"
-                : `Beregnet ${formatTidspunkt(statistikk.generertTidspunkt)}`}
-            </span>
+      );
+    }
+
+    if (!statistikk) return null;
+
+    const faneinnhold =
+      fane === "banebruk" ? (
+        <div className="statistics-dashboard__tab-content">
+          <NøkkeltallGrid statistikk={statistikk} />
+
+          <BookingerPerMånedChart
+            punkter={statistikk.perMåned}
+            visSammenligning={Boolean(statistikk.sammenligning)}
+          />
+
+          <div className="statistics-dashboard__distributions">
+            <BookingtypeDonut nøkkeltall={statistikk.nøkkeltall} />
+            <FordelingBarListe
+              title="Grener"
+              description={
+                filtre.grenId
+                  ? "Bookede timer for valgt gren."
+                  : "Bookede timer fordelt på klubbens grener. Velg en gren for å sammenligne banene."
+              }
+              punkter={statistikk.perGren.map((gren) => ({
+                id: gren.grenId,
+                label: gren.grenNavn,
+                bookedeTimer: gren.bookedeTimer,
+                sammenligningBookedeTimer: gren.sammenligningBookedeTimer,
+              }))}
+            />
           </div>
 
-          {statistikk.nøkkeltall.antallBookinger === 0 ? (
-            <CardSection>
-              <RecordListState
-                icon={<ChartNoAxesCombined aria-hidden="true" />}
-                title="Ingen bookinger i perioden"
-                description="Prøv en annen periode, gren eller bane for å se bookingaktivitet."
-              />
-            </CardSection>
-          ) : (
-            <Tabs
-              variant="section"
-              ariaLabel="Statistikkområder"
-              value={aktivFane}
-              onValueChange={(value) => setAktivFane(value as Statistikkfane)}
-              items={[
-                {
-                  value: "banebruk",
-                  label: "Banebruk",
-                  content: (
-                    <div className="statistics-dashboard__tab-content">
-                      <NøkkeltallGrid statistikk={statistikk} />
+          <FordelingBarListe
+            title="Ukemønster"
+            description="Bookede timer fordelt på ukedag."
+            oppsummering={
+              mestBrukteUkedag
+                ? `Mest brukt: ${formatUkedag(mestBrukteUkedag.ukedag)} · ${formatTimer(
+                    mestBrukteUkedag.bookedeTimer
+                  )}`
+                : undefined
+            }
+            punkter={statistikk.perUkedag.map((ukedag) => ({
+              id: String(ukedag.ukedag),
+              label: formatUkedag(ukedag.ukedag),
+              bookedeTimer: ukedag.bookedeTimer,
+              sammenligningBookedeTimer: ukedag.sammenligningBookedeTimer,
+            }))}
+          />
 
-                      <BookingerPerMånedChart
-                        punkter={statistikk.perMåned}
-                        visSammenligning={Boolean(statistikk.sammenligning)}
-                      />
+          <TidPåDøgnetChart
+            punkter={statistikk.perTime}
+            visSammenligning={Boolean(statistikk.sammenligning)}
+          />
 
-                      <div className="statistics-dashboard__distributions">
-                        <BookingtypeDonut nøkkeltall={statistikk.nøkkeltall} />
-                        <FordelingBarListe
-                          title="Grener"
-                          description={
-                            filtre.grenId
-                              ? "Bookede timer for valgt gren."
-                              : "Bookede timer fordelt på klubbens grener. Velg en gren for å sammenligne banene."
-                          }
-                          punkter={statistikk.perGren.map((gren) => ({
-                            id: gren.grenId,
-                            label: gren.grenNavn,
-                            bookedeTimer: gren.bookedeTimer,
-                            sammenligningBookedeTimer: gren.sammenligningBookedeTimer,
-                          }))}
-                        />
-                      </div>
-
-                      <FordelingBarListe
-                        title="Ukemønster"
-                        description="Bookede timer fordelt på ukedag."
-                        oppsummering={
-                          mestBrukteUkedag
-                            ? `Mest brukt: ${formatUkedag(mestBrukteUkedag.ukedag)} · ${formatTimer(
-                                mestBrukteUkedag.bookedeTimer
-                              )}`
-                            : undefined
-                        }
-                        punkter={statistikk.perUkedag.map((ukedag) => ({
-                          id: String(ukedag.ukedag),
-                          label: formatUkedag(ukedag.ukedag),
-                          bookedeTimer: ukedag.bookedeTimer,
-                          sammenligningBookedeTimer: ukedag.sammenligningBookedeTimer,
-                        }))}
-                      />
-
-                      <TidPåDøgnetChart
-                        punkter={statistikk.perTime}
-                        visSammenligning={Boolean(statistikk.sammenligning)}
-                      />
-
-                      {filtre.grenId ? <BanestatistikkTable baner={statistikk.perBane} /> : null}
-                    </div>
-                  ),
-                },
-                {
-                  value: "medlemmer",
-                  label: "Medlemmer",
-                  content: (
-                    <Medlemsstatistikk
-                      medlemmer={velgMedlemsstatistikk(statistikk, medlemsbookingtype)}
-                      bookingtype={medlemsbookingtype}
-                      onBookingtypeChange={setMedlemsbookingtype}
-                    />
-                  ),
-                },
-              ]}
-            />
-          )}
+          {filtre.grenId ? <BanestatistikkTable baner={statistikk.perBane} /> : null}
         </div>
-      ) : null}
+      ) : (
+        <Medlemsstatistikk
+          medlemmer={velgMedlemsstatistikk(statistikk, medlemsbookingtype)}
+          bookingtype={medlemsbookingtype}
+        />
+      );
+
+    return (
+      <div
+        className="statistics-dashboard__results"
+        data-fetching={statistikkQuery.isFetching || undefined}
+        aria-busy={statistikkQuery.isFetching}
+      >
+        <div className="statistics-dashboard__status">
+          <span>
+            {formatDatoIso(statistikk.periode.fra)}–{formatDatoIso(statistikk.periode.til)}
+          </span>
+          <span>
+            {statistikkQuery.isFetching
+              ? "Oppdaterer…"
+              : `Beregnet ${formatTidspunkt(statistikk.generertTidspunkt)}`}
+          </span>
+        </div>
+
+        {statistikk.nøkkeltall.antallBookinger === 0 ? (
+          <CardSection>
+            <RecordListState
+              icon={<ChartNoAxesCombined aria-hidden="true" />}
+              title="Ingen bookinger i perioden"
+              description="Prøv en annen periode, gren eller bane for å se bookingaktivitet."
+            />
+          </CardSection>
+        ) : (
+          faneinnhold
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="statistics-dashboard">
+      <Tabs
+        variant="section"
+        ariaLabel="Statistikkområder"
+        value={aktivFane}
+        onValueChange={(value) => setAktivFane(value as Statistikkfane)}
+        controls={
+          <StatistikkFilter
+            filtre={filtre}
+            periodevalg={periodevalg}
+            grener={grener}
+            baner={tilgjengeligeBaner}
+            medlemsbookingtype={aktivFane === "medlemmer" ? medlemsbookingtype : undefined}
+            disabled={lasterOppsett}
+            onPeriodevalgChange={handlePeriodevalgChange}
+            onFraChange={handleFraChange}
+            onTilChange={handleTilChange}
+            onSammenligningChange={(checked) =>
+              setFiltre((forrige) => ({ ...forrige, sammenlignMedForrigeÅr: checked }))
+            }
+            onGrenChange={handleGrenChange}
+            onBaneChange={(baneId) => setFiltre((forrige) => ({ ...forrige, baneId }))}
+            onMedlemsbookingtypeChange={setMedlemsbookingtype}
+          />
+        }
+        items={[
+          {
+            value: "banebruk",
+            label: "Banebruk",
+            content: renderStatistikkinnhold("banebruk"),
+          },
+          {
+            value: "medlemmer",
+            label: "Medlemmer",
+            content: renderStatistikkinnhold("medlemmer"),
+          },
+        ]}
+      />
     </div>
   );
 }

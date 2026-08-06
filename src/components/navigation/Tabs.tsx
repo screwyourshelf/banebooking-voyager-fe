@@ -15,6 +15,7 @@ type TabsProps = {
   className?: string;
   variant?: "default" | "section";
   ariaLabel?: string;
+  controls?: ReactNode;
 
   /** Controlled */
   value?: string;
@@ -32,6 +33,7 @@ export default function Tabs({
   defaultValue,
   variant = "default",
   ariaLabel,
+  controls,
 }: TabsProps) {
   const first = items[0];
   if (!first) return null;
@@ -73,6 +75,8 @@ export default function Tabs({
         ))}
       </TabsList>
 
+      {controls}
+
       {items.map((item) => (
         <TabsContent
           key={item.value}
@@ -93,6 +97,7 @@ type TabsLazyMountProps = {
   className?: string;
   variant?: "default" | "section";
   ariaLabel?: string;
+  controls?: ReactNode;
 };
 
 export function TabsLazyMount({
@@ -102,6 +107,7 @@ export function TabsLazyMount({
   className = "",
   variant = "default",
   ariaLabel,
+  controls,
 }: TabsLazyMountProps) {
   if (items.length === 0) return null;
 
@@ -138,6 +144,8 @@ export function TabsLazyMount({
           </TabsTrigger>
         ))}
       </TabsList>
+
+      {controls}
 
       {/* Render kun aktivt innhold */}
       <div className={isSection ? "section-tabs__content" : "mt-0"}>{activeItem.content}</div>
