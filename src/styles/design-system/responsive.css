@@ -583,21 +583,66 @@
 @media (min-width: 64rem) {
   @layer components {
     .app-shell__frame {
+      position: relative;
       display: grid;
-      grid-template-columns: var(--app-sidebar-width) minmax(0, 1fr);
+      grid-template-columns: calc(var(--app-sidebar-width) + 2rem) minmax(0, 1fr);
+      isolation: isolate;
+      background:
+        radial-gradient(circle at 82% 12%, rgb(240 131 71 / 0.2), transparent 28rem),
+        linear-gradient(100deg, rgb(8 28 18 / 0.88) 0, rgb(10 24 34 / 0.52) 34%, transparent 72%),
+        url("/backgrounds/workspace-tennis.webp") center / cover fixed;
+    }
+
+    .app-shell__frame::after {
+      position: fixed;
+      z-index: -1;
+      top: 0;
+      bottom: 0;
+      left: calc(var(--app-sidebar-width) + 2rem);
+      width: min(46rem, 54vw);
+      background: linear-gradient(90deg, rgb(10 23 32 / 0.32), transparent);
+      content: "";
+      pointer-events: none;
     }
 
     .app-shell__sidebar {
       position: sticky;
       top: 0;
       display: block;
-      height: 100svh;
+      height: calc(100svh - 2rem);
+      margin: 1rem 0 1rem 1rem;
       overflow: hidden;
-      background: var(--app-sidebar);
+      border: 1px solid rgb(255 255 255 / 0.14);
+      border-radius: 1.5rem;
+      background:
+        linear-gradient(
+          165deg,
+          rgb(27 71 43 / 0.94),
+          rgb(10 42 26 / 0.91) 58%,
+          rgb(7 30 20 / 0.94)
+        ),
+        rgb(16 55 34 / 0.9);
+      box-shadow:
+        0 28px 80px rgb(3 17 11 / 0.42),
+        inset 0 1px 0 rgb(255 255 255 / 0.1);
+      backdrop-filter: blur(22px) saturate(125%);
     }
 
     .app-sidebar {
+      position: relative;
       padding: 1.25rem 1rem;
+    }
+
+    .app-sidebar::before {
+      position: absolute;
+      top: -8rem;
+      right: -7rem;
+      width: 16rem;
+      height: 16rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgb(240 131 71 / 0.22), transparent 68%);
+      content: "";
+      pointer-events: none;
     }
 
     .app-sidebar__brand {
@@ -626,12 +671,39 @@
     }
 
     .app-sidebar__link {
+      position: relative;
       justify-content: flex-start;
       padding: 0.625rem 0.75rem;
+      border: 1px solid transparent;
+      transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        background-color 180ms ease,
+        color 180ms ease,
+        box-shadow 180ms ease;
+    }
+
+    .app-sidebar__link:hover {
+      transform: translateX(0.2rem);
     }
 
     .app-sidebar__link[aria-current="page"] {
-      box-shadow: inset 3px 0 0 var(--app-nav-indicator-on-dark);
+      border-color: rgb(255 255 255 / 0.11);
+      background: linear-gradient(90deg, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0.07));
+      box-shadow:
+        inset 3px 0 0 var(--app-accent),
+        0 12px 30px rgb(1 18 10 / 0.22);
+    }
+
+    .app-sidebar__link[aria-current="page"]::after {
+      position: absolute;
+      right: 0.75rem;
+      width: 0.375rem;
+      height: 0.375rem;
+      border-radius: 50%;
+      background: var(--app-accent);
+      box-shadow: 0 0 0 0.25rem rgb(240 131 71 / 0.13);
+      content: "";
     }
 
     .app-sidebar__utilities {
@@ -649,7 +721,25 @@
     }
 
     .app-shell__workspace {
+      position: relative;
       padding-bottom: 0;
+      background: transparent;
+    }
+
+    .app-shell__main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .app-shell__workspace .page-heading__title {
+      text-shadow: 0 3px 24px rgb(0 0 0 / 0.28);
+    }
+
+    .app-shell__workspace .record-collection {
+      border-color: rgb(255 255 255 / 0.42);
+      box-shadow:
+        0 32px 90px rgb(4 17 12 / 0.32),
+        0 2px 0 rgb(255 255 255 / 0.24) inset;
     }
 
     .mobile-bottom-nav {
@@ -657,12 +747,37 @@
     }
 
     .page-frame {
-      padding: 1.75rem 2.5rem 3rem;
+      padding: 2.25rem 3rem 3.5rem 2rem;
+      animation: app-desktop-content-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
     }
 
     .record-card__summary[data-layout="slot"] {
       grid-template-columns: 7rem minmax(12rem, 1fr);
     }
+  }
+}
+
+@media (min-width: 64rem) and (prefers-reduced-motion: reduce) {
+  @layer components {
+    .page-frame {
+      animation: none;
+    }
+
+    .app-sidebar__link {
+      transition: none;
+    }
+  }
+}
+
+@keyframes app-desktop-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
