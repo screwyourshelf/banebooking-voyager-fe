@@ -1,13 +1,6 @@
 @media (min-width: 48rem) {
   @layer components {
-    :is(
-      .admin-page,
-      .admin-editor-dialog,
-      .booking-page,
-      .login-page,
-      .record-collection-page,
-      .user-admin-page
-    ) {
+    :is(.admin-page, .admin-editor-dialog, .booking-page, .login-page, .record-collection-page) {
       --app-type-caption: var(--app-type-caption-comfortable);
       --app-type-label: var(--app-type-label-comfortable);
       --app-type-body-sm: var(--app-type-body-sm-comfortable);
@@ -176,7 +169,7 @@
       font-size: var(--app-type-body-lg);
     }
 
-    .admin-page__content {
+    :is(.admin-page__content, .booking-page, .record-collection-page) {
       gap: 1.5rem;
     }
 
@@ -191,17 +184,19 @@
       flex: 0 0 auto;
     }
 
-    .admin-page__heading {
+    :is(.admin-page__heading, .booking-page__heading, .record-collection-page__heading) {
       flex-direction: column;
       align-items: flex-start;
       gap: 0.5rem;
     }
 
-    .admin-page__heading .page-heading__title {
+    :is(.admin-page__heading, .booking-page__heading, .record-collection-page__heading)
+      .page-heading__title {
       font-size: var(--app-type-page-title);
     }
 
-    .admin-page__heading .page-heading__description {
+    :is(.admin-page__heading, .booking-page__heading, .record-collection-page__heading)
+      .page-heading__description {
       font-size: var(--app-type-body-lg);
     }
 
@@ -331,38 +326,6 @@
       font-size: 2rem !important;
     }
 
-    .booking-page__heading {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-
-    .booking-page__heading .page-heading__title {
-      font-size: var(--app-type-page-title);
-    }
-
-    .booking-page__heading .page-heading__description {
-      font-size: var(--app-type-body-lg);
-    }
-
-    .user-admin-page__content {
-      gap: 1.5rem;
-    }
-
-    .user-admin-page__heading {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-
-    .user-admin-page__heading .page-heading__title {
-      font-size: var(--app-type-page-title);
-    }
-
-    .user-admin-page__heading .page-heading__description {
-      font-size: var(--app-type-body-lg);
-    }
-
     .user-directory-row__summary {
       gap: 1rem;
     }
@@ -370,24 +333,6 @@
     .user-directory-row__detail-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1rem 1.5rem;
-    }
-
-    .record-collection-page {
-      gap: 1.5rem;
-    }
-
-    .record-collection-page__heading {
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0.5rem;
-    }
-
-    .record-collection-page__heading .page-heading__title {
-      font-size: var(--app-type-page-title);
-    }
-
-    .record-collection-page__heading .page-heading__description {
-      font-size: var(--app-type-body-lg);
     }
 
     .record-collection {
@@ -573,31 +518,57 @@
       padding-inline: 0.75rem;
       font-size: var(--app-type-label);
     }
-
-    .booking-page {
-      gap: 1.5rem;
-    }
   }
 }
 
 @media (min-width: 64rem) {
   @layer components {
     .app-shell__frame {
+      position: relative;
       display: grid;
-      grid-template-columns: var(--app-sidebar-width) minmax(0, 1fr);
+      grid-template-columns: calc(var(--app-sidebar-width) + 2rem) minmax(0, 1fr);
+      isolation: isolate;
+      background: var(--app-sidebar);
     }
 
     .app-shell__sidebar {
       position: sticky;
       top: 0;
       display: block;
-      height: 100svh;
+      height: calc(100svh - 2rem);
+      margin: 1rem 0 1rem 1rem;
       overflow: hidden;
-      background: var(--app-sidebar);
+      border: 1px solid rgb(255 255 255 / 0.14);
+      border-radius: 1.5rem;
+      background:
+        linear-gradient(
+          165deg,
+          rgb(27 71 43 / 0.94),
+          rgb(10 42 26 / 0.91) 58%,
+          rgb(7 30 20 / 0.94)
+        ),
+        rgb(16 55 34 / 0.9);
+      box-shadow:
+        0 28px 80px rgb(3 17 11 / 0.42),
+        inset 0 1px 0 rgb(255 255 255 / 0.1);
+      backdrop-filter: blur(22px) saturate(125%);
     }
 
     .app-sidebar {
+      position: relative;
       padding: 1.25rem 1rem;
+    }
+
+    .app-sidebar::before {
+      position: absolute;
+      top: -8rem;
+      right: -7rem;
+      width: 16rem;
+      height: 16rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgb(240 131 71 / 0.22), transparent 68%);
+      content: "";
+      pointer-events: none;
     }
 
     .app-sidebar__brand {
@@ -626,12 +597,39 @@
     }
 
     .app-sidebar__link {
+      position: relative;
       justify-content: flex-start;
       padding: 0.625rem 0.75rem;
+      border: 1px solid transparent;
+      transition:
+        transform 180ms ease,
+        border-color 180ms ease,
+        background-color 180ms ease,
+        color 180ms ease,
+        box-shadow 180ms ease;
+    }
+
+    .app-sidebar__link:hover {
+      transform: translateX(0.2rem);
     }
 
     .app-sidebar__link[aria-current="page"] {
-      box-shadow: inset 3px 0 0 var(--app-nav-indicator-on-dark);
+      border-color: rgb(255 255 255 / 0.11);
+      background: linear-gradient(90deg, rgb(255 255 255 / 0.14), rgb(255 255 255 / 0.07));
+      box-shadow:
+        inset 3px 0 0 var(--app-accent),
+        0 12px 30px rgb(1 18 10 / 0.22);
+    }
+
+    .app-sidebar__link[aria-current="page"]::after {
+      position: absolute;
+      right: 0.75rem;
+      width: 0.375rem;
+      height: 0.375rem;
+      border-radius: 50%;
+      background: var(--app-accent);
+      box-shadow: 0 0 0 0.25rem rgb(240 131 71 / 0.13);
+      content: "";
     }
 
     .app-sidebar__utilities {
@@ -649,7 +647,137 @@
     }
 
     .app-shell__workspace {
+      position: relative;
+      min-height: 100svh;
+      isolation: isolate;
       padding-bottom: 0;
+      background: var(--app-canvas);
+    }
+
+    .app-shell__workspace::before {
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      right: 0;
+      left: 0;
+      height: 28rem;
+      background:
+        radial-gradient(circle, rgb(255 255 255 / 0.1) 1.25px, transparent 1.5px) 0 0 / 1.25rem
+          1.25rem,
+        linear-gradient(
+          90deg,
+          rgb(5 24 19 / 0.96) 0,
+          rgb(6 28 24 / 0.88) 36%,
+          rgb(9 26 29 / 0.58) 60%,
+          rgb(9 22 28 / 0.22) 100%
+        ),
+        linear-gradient(rgb(7 20 24 / 0.16), rgb(7 20 24 / 0.16)),
+        url("/backgrounds/workspace-tennis.webp") 56% 52% / cover no-repeat;
+      box-shadow: inset 0 -1px 0 rgb(255 255 255 / 0.11);
+      content: "";
+      pointer-events: none;
+    }
+
+    .app-shell__workspace::after {
+      position: absolute;
+      z-index: -1;
+      top: calc(28rem - 1px);
+      right: 0;
+      left: 0;
+      height: 4.5rem;
+      background: linear-gradient(180deg, rgb(4 16 12 / 0.16), transparent);
+      content: "";
+      pointer-events: none;
+    }
+
+    .app-shell__main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .app-shell__workspace .page-heading__title {
+      text-shadow: 0 3px 24px rgb(0 0 0 / 0.28);
+    }
+
+    .app-shell__workspace .record-collection {
+      border-color: rgb(255 255 255 / 0.42);
+      box-shadow:
+        0 32px 90px rgb(4 17 12 / 0.32),
+        0 2px 0 rgb(255 255 255 / 0.24) inset;
+    }
+
+    .admin-page__content {
+      position: relative;
+      gap: 1.25rem;
+      padding: 1rem 1rem 2.5rem;
+    }
+
+    .admin-page__intro {
+      align-items: center;
+    }
+
+    .section-tabs {
+      gap: 0.75rem;
+    }
+
+    .section-tabs__rail {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .section-tabs__rail::after {
+      position: absolute;
+      z-index: -1;
+      right: 0;
+      bottom: -0.75rem;
+      left: 0;
+      height: 2.5rem;
+      background: linear-gradient(180deg, rgb(10 35 25 / 0.18), transparent);
+      content: "";
+      pointer-events: none;
+    }
+
+    .section-tabs__content {
+      position: relative;
+      z-index: 1;
+    }
+
+    .baner-og-grener__desktop-action {
+      display: flex;
+      margin-left: auto;
+    }
+
+    .baner-og-grener__desktop-action [data-slot="button"] {
+      min-height: 3rem;
+      border: 1px solid rgb(255 255 255 / 0.18) !important;
+      background: var(--app-accent) !important;
+      color: var(--app-accent-contrast) !important;
+      box-shadow:
+        0 14px 32px rgb(152 58 32 / 0.28),
+        0 0 0 0.25rem rgb(240 131 71 / 0.09) !important;
+    }
+
+    .baner-og-grener__desktop-action [data-slot="button"]:hover {
+      background: var(--app-accent-strong) !important;
+    }
+
+    .admin-page__create:has(.baner-og-grener__mobile-action) {
+      display: none;
+    }
+
+    .baner-og-grener-workspace[data-section="grener"] {
+      max-width: 62rem;
+    }
+
+    .baner-og-grener-workspace[data-section="grener"] .section-tabs__rail {
+      max-width: 54rem;
+    }
+
+    .baner-og-grener-workspace[data-section="grener"] .record-collection {
+      max-width: 54rem;
     }
 
     .mobile-bottom-nav {
@@ -657,12 +785,37 @@
     }
 
     .page-frame {
-      padding: 1.75rem 2.5rem 3rem;
+      padding: 3rem 3rem 4.5rem 2.5rem;
+      animation: app-desktop-content-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
     }
 
     .record-card__summary[data-layout="slot"] {
       grid-template-columns: 7rem minmax(12rem, 1fr);
     }
+  }
+}
+
+@media (min-width: 64rem) and (prefers-reduced-motion: reduce) {
+  @layer components {
+    .page-frame {
+      animation: none;
+    }
+
+    .app-sidebar__link {
+      transition: none;
+    }
+  }
+}
+
+@keyframes app-desktop-content-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 

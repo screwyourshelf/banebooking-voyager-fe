@@ -1,4 +1,4 @@
-import { PageHeader } from "@/components/layout";
+import { RecordCollectionPage } from "@/components/records";
 import { useFeed } from "@/hooks/useFeed";
 
 import NyheterContent from "./NyheterContent";
@@ -7,14 +7,7 @@ export default function NyheterView() {
   const { feed, isLoading, isFetching, error, refetch } = useFeed();
 
   return (
-    <div className="record-collection-page">
-      <PageHeader
-        eyebrow="Klubben"
-        title="Nyheter"
-        description="Siste nytt fra klubben."
-        className="record-collection-page__heading"
-      />
-
+    <RecordCollectionPage eyebrow="Klubben" title="Nyheter" description="Siste nytt fra klubben.">
       <NyheterContent
         feed={feed}
         isLoading={isLoading}
@@ -22,6 +15,6 @@ export default function NyheterView() {
         isFetching={isFetching}
         onRetry={() => void refetch()}
       />
-    </div>
+    </RecordCollectionPage>
   );
 }

@@ -1,10 +1,14 @@
-import Page from "@/components/Page";
+import { AdminPage } from "@/components/admin";
 import BrukereListeView from "@/features/brukere/views/brukere-liste/BrukereListeView";
 
 export default function BrukerePage() {
   return (
-    <Page width="xl" className="user-admin-page">
+    <AdminPage
+      eyebrow="Administrasjon"
+      title="Brukere"
+      description="Følg opp medlemskap, roller og tilgang til klubben."
+    >
       <BrukereListeView />
-    </Page>
+    </AdminPage>
   );
 }

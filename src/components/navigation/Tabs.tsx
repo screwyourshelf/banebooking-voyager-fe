@@ -164,9 +164,10 @@ type RouteTabsProps = {
   value: string;
   ariaLabel: string;
   children: ReactNode;
+  controls?: ReactNode;
 };
 
-export function RouteTabs({ items, value, ariaLabel, children }: RouteTabsProps) {
+export function RouteTabs({ items, value, ariaLabel, children, controls }: RouteTabsProps) {
   const navigate = useNavigate();
   const hasActiveItem = items.some((item) => item.value === value);
 
@@ -181,18 +182,22 @@ export function RouteTabs({ items, value, ariaLabel, children }: RouteTabsProps)
 
   return (
     <RadixTabs className="section-tabs" value={value} onValueChange={handleValueChange}>
-      <TabsList
-        variant="line"
-        aria-label={ariaLabel}
-        className="section-tabs__list"
-        data-count={items.length}
-      >
-        {items.map((item) => (
-          <TabsTrigger key={item.value} value={item.value} className="section-tabs__trigger">
-            {item.label}
-          </TabsTrigger>
-        ))}
-      </TabsList>
+      <div className="section-tabs__rail">
+        <TabsList
+          variant="line"
+          aria-label={ariaLabel}
+          className="section-tabs__list"
+          data-count={items.length}
+        >
+          {items.map((item) => (
+            <TabsTrigger key={item.value} value={item.value} className="section-tabs__trigger">
+              {item.label}
+            </TabsTrigger>
+          ))}
+        </TabsList>
+
+        {controls}
+      </div>
 
       <TabsContent value={value} className="section-tabs__content">
         {children}

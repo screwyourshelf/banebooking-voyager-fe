@@ -48,12 +48,7 @@ export default function SlettBrukerDialog({
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <AlertDialogTrigger asChild>
-        <Button
-          variant="destructive"
-          size="sm"
-          disabled={disabled || loading}
-          className="user-directory-row__delete-action"
-        >
+        <Button variant="destructive" size="sm" disabled={disabled || loading}>
           {loading ? "Sletter..." : "Slett"}
         </Button>
       </AlertDialogTrigger>

@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import PageHeader from "@/components/layout/PageHeader";
+import { RecordCollectionPage } from "@/components/records";
 import { useMineBookinger } from "@/features/minside/hooks/useMineBookinger";
 import { useBookingActions } from "@/features/minside/hooks/useBookingActions";
 import type { MinBookingRespons } from "@/types";
@@ -36,14 +36,11 @@ export default function MineBookingerTab() {
   }
 
   return (
-    <div className="record-collection-page">
-      <PageHeader
-        eyebrow="Min konto"
-        title="Mine tider"
-        description="Hold oversikt over det du har booket og spilt."
-        className="record-collection-page__heading"
-      />
-
+    <RecordCollectionPage
+      eyebrow="Min konto"
+      title="Mine tider"
+      description="Hold oversikt over det du har booket og spilt."
+    >
       <MineBookingerContent
         visHistoriske={visHistoriske}
         onToggleVisHistoriske={setVisHistoriske}
@@ -56,6 +53,6 @@ export default function MineBookingerTab() {
         onFjern={handleFjern}
         serverFeil={fjernFeil?.message ?? null}
       />
-    </div>
+    </RecordCollectionPage>
   );
 }

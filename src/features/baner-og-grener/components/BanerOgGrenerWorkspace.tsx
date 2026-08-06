@@ -38,11 +38,20 @@ export default function BanerOgGrenerWorkspace({
       eyebrow="Administrasjon"
       title="Baner og grener"
       description="Definer klubbens bookingtilbud og reglene som gjelder."
-      action={action}
+      action={action ? <div className="baner-og-grener__mobile-action">{action}</div> : undefined}
     >
-      <RouteTabs ariaLabel="Baner og grener" items={items} value={activeSection}>
-        {children}
-      </RouteTabs>
+      <div className="baner-og-grener-workspace" data-section={activeSection}>
+        <RouteTabs
+          ariaLabel="Baner og grener"
+          items={items}
+          value={activeSection}
+          controls={
+            action ? <div className="baner-og-grener__desktop-action">{action}</div> : undefined
+          }
+        >
+          {children}
+        </RouteTabs>
+      </div>
     </AdminPage>
   );
 }
