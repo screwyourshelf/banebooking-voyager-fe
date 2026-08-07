@@ -154,7 +154,25 @@
   }
 }
 
+.booking-page {
+  background:
+    radial-gradient(
+      circle at 0 0,
+      color-mix(in srgb, var(--aas-green-100) 70%, transparent),
+      transparent 24rem
+    ),
+    radial-gradient(
+      circle at 100% 6rem,
+      color-mix(in srgb, var(--aas-blue-100) 62%, transparent),
+      transparent 22rem
+    );
+}
+
 @media (min-width: 48rem) {
+  .booking-page {
+    background: transparent;
+  }
+
   .brand-court-background {
     background:
       linear-gradient(

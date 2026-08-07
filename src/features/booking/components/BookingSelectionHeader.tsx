@@ -181,12 +181,18 @@ export default function BookingSelectionHeader({
       </CardContent>
 
       <CardFooter className="flex-wrap justify-between gap-3 border-t">
-        <Badge variant={hasError ? "destructive" : "secondary"}>{resultLabel}</Badge>
+        <Badge
+          variant={hasError ? "destructive" : "secondary"}
+          className={hasError ? undefined : "bg-primary/10 text-primary"}
+        >
+          {resultLabel}
+        </Badge>
         <ReglementDialog gren={selectedActivity} bane={selectedCourt}>
           <Button
             type="button"
             variant="ghost"
             size="sm"
+            className="text-accent-foreground"
             disabled={!selectedActivity || !selectedCourt}
           >
             Bookingregler

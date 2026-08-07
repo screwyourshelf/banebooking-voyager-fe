@@ -30,7 +30,12 @@ export default function BookingSlotSummary({ slot, presentation }: Props) {
       </div>
 
       <div className="flex min-w-0 flex-wrap items-center gap-2">
-        <Badge variant={getBadgeVariant(presentation.status)}>{presentation.hovedtekst}</Badge>
+        <Badge
+          variant={getBadgeVariant(presentation.status)}
+          className={presentation.status === "ledig" ? "bg-primary/10 text-primary" : undefined}
+        >
+          {presentation.hovedtekst}
+        </Badge>
         {presentation.sekundærtekst ? (
           <span
             className="min-w-0 truncate text-sm text-muted-foreground"

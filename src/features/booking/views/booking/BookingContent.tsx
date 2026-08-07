@@ -6,11 +6,11 @@ export default function BookingContent(props: BookingContentProps) {
   const valgtGren = props.grener.find((gren) => gren.id === props.valgtGrenId);
 
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-6 sm:px-6 lg:gap-8 lg:px-8 lg:py-10">
+    <div className="booking-page mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-6 sm:px-6 lg:gap-8 lg:px-8 lg:py-10">
       <div className="space-y-3">
         <Badge
-          variant="secondary"
-          className="md:border-white/25 md:bg-white/10 md:text-white"
+          variant="outline"
+          className="border-transparent bg-accent text-accent-foreground md:border-white/25 md:bg-white/10 md:text-white"
         >
           Booking
         </Badge>
