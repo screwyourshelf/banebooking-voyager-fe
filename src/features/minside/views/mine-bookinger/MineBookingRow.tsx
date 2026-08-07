@@ -1,16 +1,11 @@
 import { Timer, Wind } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import {
-  RecordAccordionCard,
-  RecordCard,
-  RecordCardActions,
-  RecordCardDetails,
-  RecordCardStatic,
-  RecordCardSummary,
-  RecordCardTrigger,
-  RecordStatus,
-  RecordTimeRange,
-} from "@/components/records";
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import WeatherInfo from "@/components/WeatherInfo";
 import type { MinBookingRespons } from "@/types";
 
@@ -44,64 +39,59 @@ export default function MineBookingRow({
     typeof booking.temperatur === "number" ||
     typeof booking.vind === "number";
 
-  const summary = (
-    <RecordCardSummary layout="time">
-      <RecordTimeRange
-        start={start}
-        end={end}
-        accessory={
-          hasWeather ? (
-            <WeatherInfo
-              værSymbol={booking.værSymbol}
-              temperatur={booking.temperatur}
-              vind={booking.vind}
-              compact
-            />
-          ) : null
-        }
-      />
-
-      <span className="mine-booking__identity">
-        <span className="mine-booking__court">{booking.baneNavn}</span>
-        <span className="mine-booking__branch">{booking.grenNavn}</span>
-      </span>
-
-      <RecordStatus tone={booking.erPassert ? "past" : "own"}>
-        {booking.erPassert ? "Gjennomført" : "Kommende"}
-      </RecordStatus>
-    </RecordCardSummary>
-  );
-
-  if (!canCancel) {
-    return (
-      <RecordCard>
-        <RecordCardStatic>{summary}</RecordCardStatic>
-      </RecordCard>
-    );
-  }
-
   return (
-    <RecordAccordionCard value={bookingKey}>
-      <RecordCardTrigger>{summary}</RecordCardTrigger>
+    <AccordionItem value={bookingKey}>
+      <AccordionTrigger className="px-4 py-4 hover:no-underline md:px-5">
+        <span className="grid min-w-0 flex-1 grid-cols-[1fr_auto] items-center gap-x-4 gap-y-2 md:grid-cols-[10rem_minmax(0,1fr)_auto]">
+          <span className="flex min-w-0 items-center gap-3">
+            <span className="whitespace-nowrap">
+              <strong className="text-base font-semibold">{start}</strong>
+              <span className="ml-1 text-muted-foreground">–{end}</span>
+            </span>
+            {hasWeather ? (
+              <WeatherInfo
+                værSymbol={booking.værSymbol}
+                temperatur={booking.temperatur}
+                vind={booking.vind}
+                compact
+              />
+            ) : null}
+          </span>
 
-      <RecordCardDetails>
-        <div className="mine-booking__detail-content">
-          <dl className="mine-booking__facts">
-            <div>
-              <dt>
-                <Timer aria-hidden="true" />
+          <span className="col-start-1 row-start-2 grid min-w-0 text-left md:col-start-2 md:row-start-1">
+            <span className="truncate font-medium">{booking.baneNavn}</span>
+            <span className="truncate text-xs font-normal text-muted-foreground">
+              {booking.grenNavn}
+            </span>
+          </span>
+
+          <Badge
+            variant={booking.erPassert ? "outline" : "default"}
+            className="col-start-2 row-start-2 md:col-start-3 md:row-start-1"
+          >
+            {booking.erPassert ? "Gjennomført" : "Kommende"}
+          </Badge>
+        </span>
+      </AccordionTrigger>
+
+      <AccordionContent>
+        <div className="grid gap-4 rounded-xl bg-muted/50 p-4 sm:grid-cols-[1fr_auto] sm:items-end">
+          <dl className="grid gap-3 text-sm sm:grid-cols-2">
+            <div className="space-y-1">
+              <dt className="flex items-center gap-2 text-muted-foreground">
+                <Timer aria-hidden="true" className="size-4" />
                 Varighet
               </dt>
-              <dd>{duration} minutter</dd>
+              <dd className="font-medium">{duration} minutter</dd>
             </div>
 
             {hasWeather ? (
-              <div>
-                <dt>
-                  <Wind aria-hidden="true" />
+              <div className="space-y-1">
+                <dt className="flex items-center gap-2 text-muted-foreground">
+                  <Wind aria-hidden="true" className="size-4" />
                   Vær
                 </dt>
-                <dd>
+                <dd className="font-medium">
                   <WeatherInfo
                     værSymbol={booking.værSymbol}
                     temperatur={booking.temperatur}
@@ -112,7 +102,7 @@ export default function MineBookingRow({
             ) : null}
           </dl>
 
-          <RecordCardActions>
+          {canCancel ? (
             <Button
               type="button"
               variant="destructive"
@@ -122,9 +112,9 @@ export default function MineBookingRow({
             >
               {isPending ? "Avbestiller…" : "Avbestill"}
             </Button>
-          </RecordCardActions>
+          ) : null}
         </div>
-      </RecordCardDetails>
-    </RecordAccordionCard>
+      </AccordionContent>
+    </AccordionItem>
   );
 }
