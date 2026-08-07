@@ -51,38 +51,52 @@
 
 :root {
   color-scheme: light;
+  --aas-green-50: color-mix(in oklab, #4c911f 8%, white);
+  --aas-green-100: color-mix(in oklab, #4c911f 18%, white);
+  --aas-green-300: color-mix(in oklab, #4c911f 55%, white);
+  --aas-green-500: #4c911f;
+  --aas-green-700: color-mix(in oklab, #4c911f 76%, black);
+  --aas-green-900: color-mix(in oklab, #4c911f 48%, black);
+  --aas-orange-100: color-mix(in oklab, #f28d3b 18%, white);
+  --aas-orange-500: #f28d3b;
+  --aas-orange-700: color-mix(in oklab, #f28d3b 72%, black);
+  --aas-blue-100: color-mix(in oklab, #1c4f99 16%, white);
+  --aas-blue-300: color-mix(in oklab, #1c4f99 48%, white);
+  --aas-blue-500: #1c4f99;
+  --aas-blue-700: color-mix(in oklab, #1c4f99 78%, black);
+  --aas-blue-900: color-mix(in oklab, #1c4f99 52%, black);
   --background: oklch(1 0 0);
   --foreground: #172019;
   --card: oklch(1 0 0);
   --card-foreground: #172019;
   --popover: oklch(1 0 0);
   --popover-foreground: #172019;
-  --primary: #2a5632;
+  --primary: var(--aas-green-700);
   --primary-foreground: #ffffff;
-  --secondary: #e1edde;
-  --secondary-foreground: #1d3924;
-  --muted: #edf0e9;
+  --secondary: var(--aas-blue-100);
+  --secondary-foreground: var(--aas-blue-900);
+  --muted: var(--aas-green-50);
   --muted-foreground: #536057;
-  --accent: #fee8d7;
-  --accent-foreground: #713315;
+  --accent: var(--aas-orange-100);
+  --accent-foreground: var(--aas-orange-700);
   --destructive: oklch(0.577 0.245 27.325);
   --border: #dfe3dc;
   --input: #cbd2c9;
-  --ring: #df672e;
-  --chart-1: #376c3c;
-  --chart-2: #df672e;
-  --chart-3: oklch(0.439 0 0);
+  --ring: var(--aas-orange-500);
+  --chart-1: var(--aas-green-500);
+  --chart-2: var(--aas-orange-500);
+  --chart-3: var(--aas-blue-500);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
-  --sidebar: #173c25;
+  --sidebar: var(--aas-green-900);
   --sidebar-foreground: #f7fbf6;
-  --sidebar-primary: #df672e;
-  --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #df672e;
-  --sidebar-accent-foreground: #ffffff;
+  --sidebar-primary: var(--aas-orange-500);
+  --sidebar-primary-foreground: #172019;
+  --sidebar-accent: var(--aas-orange-500);
+  --sidebar-accent-foreground: #172019;
   --sidebar-border: rgb(255 255 255 / 14%);
-  --sidebar-ring: #f28d3b;
+  --sidebar-ring: var(--aas-orange-500);
 }
 
 .dark {
@@ -93,29 +107,29 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: #98c094;
+  --primary: var(--aas-green-300);
   --primary-foreground: #102115;
-  --secondary: #253b29;
-  --secondary-foreground: #d9ead7;
+  --secondary: var(--aas-blue-900);
+  --secondary-foreground: color-mix(in oklab, var(--aas-blue-500) 26%, white);
   --muted: #253029;
   --muted-foreground: #b3bfb5;
-  --accent: #45291e;
-  --accent-foreground: #ffd2b6;
+  --accent: color-mix(in oklab, var(--aas-orange-500) 35%, black);
+  --accent-foreground: color-mix(in oklab, var(--aas-orange-500) 38%, white);
   --destructive: oklch(0.704 0.191 22.216);
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
-  --ring: #f08a50;
-  --chart-1: #84b880;
-  --chart-2: #f08a50;
-  --chart-3: oklch(0.439 0 0);
+  --ring: var(--aas-orange-500);
+  --chart-1: var(--aas-green-300);
+  --chart-2: var(--aas-orange-500);
+  --chart-3: var(--aas-blue-300);
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: #102b1b;
+  --sidebar: var(--aas-green-900);
   --sidebar-foreground: #f7fbf6;
-  --sidebar-primary: #f08a50;
-  --sidebar-primary-foreground: #2b160c;
-  --sidebar-accent: #df672e;
-  --sidebar-accent-foreground: #ffffff;
+  --sidebar-primary: var(--aas-orange-500);
+  --sidebar-primary-foreground: #172019;
+  --sidebar-accent: var(--aas-orange-500);
+  --sidebar-accent-foreground: #172019;
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
 }
@@ -137,12 +151,15 @@
     background:
       linear-gradient(
         90deg,
-        rgb(5 27 17 / 88%) 0,
-        rgb(7 31 21 / 72%) 28%,
-        rgb(10 35 25 / 56%) 62%,
-        rgb(8 28 20 / 62%) 100%
+        color-mix(in srgb, var(--aas-green-900) 90%, transparent) 0,
+        color-mix(in srgb, var(--aas-green-900) 74%, transparent) 28%,
+        color-mix(in srgb, var(--aas-green-700) 58%, transparent) 62%,
+        color-mix(in srgb, var(--aas-green-900) 64%, transparent) 100%
       ),
-      linear-gradient(rgb(6 24 16 / 12%), rgb(6 24 16 / 40%)),
+      linear-gradient(
+        color-mix(in srgb, var(--aas-green-900) 12%, transparent),
+        color-mix(in srgb, var(--aas-green-900) 42%, transparent)
+      ),
       url("/backgrounds/tennis-net.avif") center / cover fixed;
   }
 }
