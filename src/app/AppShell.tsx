@@ -13,10 +13,10 @@ import { routePrefetchProps } from "@/utils/prefetchRoute";
 
 export default function AppShell() {
   return (
-    <SidebarProvider>
+    <SidebarProvider className="brand-court-background">
       <AppSidebar />
-      <SidebarInset>
-        <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b bg-background/95 px-3 backdrop-blur sm:px-4">
+      <SidebarInset className="md:bg-transparent md:shadow-none">
+        <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b bg-background/95 px-3 backdrop-blur sm:px-4 md:rounded-t-xl">
           <SidebarTrigger />
           <Separator orientation="vertical" className="h-4" />
           <span className="text-sm font-medium">Banebooking</span>
@@ -30,7 +30,7 @@ export default function AppShell() {
           </div>
         </header>
 
-        <main className="min-h-0 flex-1 bg-muted/20">
+        <main className="min-h-0 flex-1 bg-muted/20 md:bg-transparent">
           <Suspense fallback={<RouteContentSkeleton label="Laster siden" />}>
             <Outlet />
           </Suspense>

@@ -40,7 +40,7 @@ export default function BookingSchedule(props: Props) {
         hasError={Boolean(props.setupFeil || props.queryFeil)}
       />
 
-      <Card>
+      <Card className="md:bg-card/95 md:backdrop-blur-sm">
         <CardHeader>
           <CardTitle>Tilgjengelige tider</CardTitle>
           <CardDescription>

@@ -157,7 +157,10 @@ export default function AppSidebar() {
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton size="lg" asChild tooltip={klubb?.navn ?? "Banebooking"}>
-              <NavbarBrandMedKlubb klubbnavn={klubb?.navn ?? "Banebooking"} />
+              <NavbarBrandMedKlubb
+                klubbnavn={klubb?.navn ?? "Banebooking"}
+                tone="inverted"
+              />
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>

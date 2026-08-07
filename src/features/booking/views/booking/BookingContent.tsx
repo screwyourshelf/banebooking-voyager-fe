@@ -8,12 +8,17 @@ export default function BookingContent(props: BookingContentProps) {
   return (
     <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-6 sm:px-6 lg:gap-8 lg:px-8 lg:py-10">
       <div className="space-y-3">
-        <Badge variant="outline">Booking</Badge>
+        <Badge
+          variant="outline"
+          className="md:border-white/25 md:bg-white/10 md:text-white"
+        >
+          Booking
+        </Badge>
         <div className="space-y-1.5">
-          <h1 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl">
+          <h1 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl md:text-white">
             Book bane
           </h1>
-          <p className="max-w-2xl text-base text-muted-foreground sm:text-lg">
+          <p className="max-w-2xl text-base text-muted-foreground sm:text-lg md:text-white/75">
             Velg aktivitet, dag og bane for å finne en ledig tid.
           </p>
         </div>
