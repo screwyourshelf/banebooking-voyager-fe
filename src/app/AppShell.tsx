@@ -16,7 +16,7 @@ export default function AppShell() {
     <SidebarProvider className="brand-court-background">
       <AppSidebar />
       <SidebarInset className="md:bg-transparent md:shadow-none">
-        <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b bg-background/95 px-3 backdrop-blur sm:px-4 md:rounded-t-xl">
+        <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-2 border-b bg-background/95 px-3 backdrop-blur sm:px-4 md:hidden">
           <SidebarTrigger />
           <Separator orientation="vertical" className="h-4" />
           <span className="text-sm font-medium">Banebooking</span>

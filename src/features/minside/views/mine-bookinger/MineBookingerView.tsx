@@ -36,36 +36,38 @@ export default function MineBookingerView() {
   }
 
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 pb-6 sm:px-6 md:py-6 lg:gap-8 lg:px-8 lg:py-10">
-      <header className="-mx-4 space-y-3 bg-sidebar px-4 py-6 text-sidebar-foreground sm:-mx-6 sm:px-6 md:mx-0 md:bg-transparent md:p-0">
-        <Badge
-          variant="outline"
-          className="border-transparent bg-sidebar-accent text-sidebar-accent-foreground md:border-white/25 md:bg-white/10 md:text-white"
-        >
-          Min konto
-        </Badge>
-        <div className="space-y-1.5">
-          <h1 className="font-heading text-page-title text-balance text-sidebar-foreground md:text-white">
-            Mine bookinger
-          </h1>
-          <p className="max-w-2xl text-body text-sidebar-foreground/75 md:text-lead md:text-white/75">
-            Hold oversikt over kommende og gjennomførte tider.
-          </p>
-        </div>
-      </header>
+    <div className="mx-auto w-full max-w-6xl px-4 pb-6 sm:px-6 md:py-8 lg:px-8 lg:py-10">
+      <div className="flex flex-col gap-6 md:gap-0 md:overflow-hidden md:rounded-t-3xl md:bg-card">
+        <header className="-mx-4 space-y-3 bg-sidebar px-4 py-6 text-sidebar-foreground sm:-mx-6 sm:px-6 md:mx-0 md:bg-card md:px-8 md:py-8 md:text-card-foreground">
+          <Badge
+            variant="outline"
+            className="border-transparent bg-sidebar-accent text-sidebar-accent-foreground"
+          >
+            Min konto
+          </Badge>
+          <div className="space-y-1.5">
+            <h1 className="font-heading text-page-title text-balance text-sidebar-foreground md:text-foreground">
+              Mine bookinger
+            </h1>
+            <p className="max-w-2xl text-body text-sidebar-foreground/75 md:text-lead md:text-muted-foreground">
+              Hold oversikt over kommende og gjennomførte tider.
+            </p>
+          </div>
+        </header>
 
-      <MineBookingerContent
-        visHistoriske={visHistoriske}
-        onToggleVisHistoriske={setVisHistoriske}
-        bookinger={visteBookinger}
-        isLoading={isLoading}
-        queryError={error?.message ?? null}
-        isFetching={isFetching}
-        onRetry={() => void refetch()}
-        isPending={isPending}
-        onFjern={handleFjern}
-        serverFeil={fjernFeil?.message ?? null}
-      />
+        <MineBookingerContent
+          visHistoriske={visHistoriske}
+          onToggleVisHistoriske={setVisHistoriske}
+          bookinger={visteBookinger}
+          isLoading={isLoading}
+          queryError={error?.message ?? null}
+          isFetching={isFetching}
+          onRetry={() => void refetch()}
+          isPending={isPending}
+          onFjern={handleFjern}
+          serverFeil={fjernFeil?.message ?? null}
+        />
+      </div>
     </div>
   );
 }

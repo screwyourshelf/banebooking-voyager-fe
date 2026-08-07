@@ -205,8 +205,12 @@ export default function MineBookingerContent({
   const harFiltrertTomtilstand = bookinger.length > 0 && filtrerteBookinger.length === 0;
 
   return (
-    <Card aria-busy={isLoading} aria-label="Oversikt over mine bookinger">
-      <CardHeader className="border-b">
+    <Card
+      className="md:rounded-none md:py-0 md:ring-0"
+      aria-busy={isLoading}
+      aria-label="Oversikt over mine bookinger"
+    >
+      <CardHeader className="border-b md:border-t md:pt-6">
         <div className="flex items-start gap-3">
           <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
             <CalendarCheck aria-hidden="true" className="size-5" />
@@ -283,7 +287,7 @@ export default function MineBookingerContent({
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-6 md:pb-8">
         {serverFeil ? (
           <Alert variant="destructive">
             <AlertCircle aria-hidden="true" />
