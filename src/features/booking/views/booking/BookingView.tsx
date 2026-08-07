@@ -1,4 +1,5 @@
-import { PageContentSkeleton } from "@/components/loading";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useBooking } from "@/features/booking/hooks/useBooking";
 import { useBookingSelection } from "@/features/booking/hooks/useBookingSelection";
 import { useAuth } from "@/hooks/useAuth";
@@ -27,7 +28,7 @@ export default function BookingView() {
   const booking = useBooking(selection.valgtDatoStr, selection.valgtBaneId);
 
   if (loadingBaner || loadingGrener) {
-    return <PageContentSkeleton label="Laster booking" rows={5} controls />;
+    return <BookingPageSkeleton />;
   }
 
   function handleSlotsRetry() {
@@ -62,5 +63,44 @@ export default function BookingView() {
       onSetupRetry={handleSetupRetry}
       onSlotsRetry={handleSlotsRetry}
     />
+  );
+}
+
+function BookingPageSkeleton() {
+  return (
+    <div
+      className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-6 sm:px-6 lg:px-8 lg:py-10"
+      aria-label="Laster booking"
+    >
+      <div className="space-y-3">
+        <Skeleton className="h-5 w-20 rounded-full" />
+        <Skeleton className="h-10 w-48" />
+        <Skeleton className="h-6 w-full max-w-lg" />
+      </div>
+      <Card>
+        <CardHeader>
+          <Skeleton className="h-6 w-32" />
+          <Skeleton className="h-4 w-56" />
+        </CardHeader>
+        <CardContent className="grid gap-6 lg:grid-cols-3">
+          {Array.from({ length: 3 }, (_, index) => (
+            <div key={index} className="space-y-2">
+              <Skeleton className="h-4 w-16" />
+              <Skeleton className="h-10 w-full rounded-full" />
+            </div>
+          ))}
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <Skeleton className="h-6 w-44" />
+        </CardHeader>
+        <CardContent className="space-y-3">
+          {Array.from({ length: 4 }, (_, index) => (
+            <Skeleton key={index} className="h-20 w-full rounded-2xl" />
+          ))}
+        </CardContent>
+      </Card>
+    </div>
   );
 }

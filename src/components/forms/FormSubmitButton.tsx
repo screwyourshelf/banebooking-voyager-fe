@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
+import { LoaderCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -44,7 +44,7 @@ export default function FormSubmitButton({
     >
       {isLoading ? (
         <>
-          <Spinner />
+          <LoaderCircle className="animate-spin" aria-hidden="true" />
           <span className="ml-2">{loadingText ?? children}</span>
         </>
       ) : (

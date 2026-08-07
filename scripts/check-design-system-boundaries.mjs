@@ -9,13 +9,6 @@ const recordsRoot = path.join(sourceRoot, "components", "records");
 const tournamentRoot = path.join(sourceRoot, "features", "turnering");
 const recordCollectionHeaderPath = path.join(recordsRoot, "RecordCollectionHeader.tsx");
 const filterSwitchPath = path.join(sourceRoot, "components", "controls", "FilterSwitch.tsx");
-const datePickerPopoverPath = path.join(
-  sourceRoot,
-  "components",
-  "controls",
-  "DatePickerPopover.tsx"
-);
-const multiDatePickerPath = path.join(sourceRoot, "components", "DatoFlervelger.tsx");
 const allowedComponentFiles = new Set([filterSwitchPath]);
 const allowedCssFiles = new Set([
   path.join(sourceRoot, "styles", "design-system", "patterns.css"),
@@ -73,18 +66,6 @@ for (const filePath of sourceFiles) {
   const source = await readFile(filePath, "utf8");
 
   if (isComponentSource) {
-    if (
-      filePath !== datePickerPopoverPath &&
-      filePath !== multiDatePickerPath &&
-      /from\s+["']@\/components\/ui\/calendar["']/.test(source)
-    ) {
-      apiViolations.push({
-        filePath,
-        line: lineFor(source, source.search(/@\/components\/ui\/calendar/)),
-        message: "importerer kalenderprimitiven direkte",
-      });
-    }
-
     if (
       !filePath.startsWith(`${tournamentRoot}${path.sep}`) &&
       /type\s*=\s*["'](?:date|datetime-local)["']/.test(source)
@@ -192,7 +173,7 @@ if (violations.length > 0 || apiViolations.length > 0 || stylesheetViolations.le
 
   if (violations.length > 0 || apiViolations.length > 0) {
     console.error(
-      "Bruk de semantiske record-, filter- og datokomponentene; ikke bygg lokale varianter."
+      "Bruk de beskyttede record- og filterkomponentene der legacy-designet fortsatt gjelder."
     );
   }
   process.exit(1);

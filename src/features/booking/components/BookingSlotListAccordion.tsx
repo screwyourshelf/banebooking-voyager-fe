@@ -1,11 +1,8 @@
 import { useMemo, useState } from "react";
 import { isBefore, isSameDay, startOfDay } from "date-fns";
-import {
-  RecordAccordionList,
-  RecordCollectionPagination,
-  RecordCollectionSkeleton,
-} from "@/components/records";
+import { CalendarX } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { BookingSlotRespons } from "@/types";
 import { grupperSlots } from "@/utils/bookingUtils";
 import BookingSlotRow from "./BookingSlotRow";
@@ -40,7 +37,15 @@ export function BookingSlotListAccordion({
     [slots]
   );
 
-  if (isLoading) return <RecordCollectionSkeleton ariaLabel="Laster tider" rows={5} />;
+  if (isLoading) {
+    return (
+      <div className="space-y-3" aria-label="Laster tider">
+        {Array.from({ length: 5 }, (_, index) => (
+          <Skeleton key={index} className="h-20 w-full rounded-2xl" />
+        ))}
+      </div>
+    );
+  }
 
   if (slots.length === 0) {
     return (
@@ -53,19 +58,15 @@ export function BookingSlotListAccordion({
 
   const slotsÅVise = erIDag && !visPasserte ? kommendeSlots : synligeSlots;
 
-  function handleTogglePasserte() {
-    setVisPasserte((current) => !current);
-  }
-
   return (
-    <>
+    <div className="space-y-4">
       {slotsÅVise.length === 0 ? (
         <BookingSlotEmptyState
           title="Dagens spilletider er over"
           description="Vis passerte tider eller velg neste dag."
         />
       ) : (
-        <RecordAccordionList ariaLabel="Tilgjengelige tider">
+        <div className="space-y-3" aria-label="Tilgjengelige tider">
           {slotsÅVise.map((slot) => (
             <BookingSlotRow
               key={getBookingSlotKey(slot)}
@@ -76,25 +77,31 @@ export function BookingSlotListAccordion({
               onFjern={onFjern}
             />
           ))}
-        </RecordAccordionList>
+        </div>
       )}
 
       {erIDag && antallPasserte > 0 ? (
-        <RecordCollectionPagination>
-          <Button variant="outline" size="sm" onClick={handleTogglePasserte}>
+        <div className="flex justify-center pt-1">
+          <Button variant="outline" size="sm" onClick={() => setVisPasserte((current) => !current)}>
             {visPasserte ? "Skjul passerte" : `Vis passerte (${antallPasserte})`}
           </Button>
-        </RecordCollectionPagination>
+        </div>
       ) : null}
-    </>
+    </div>
   );
 }
 
 function BookingSlotEmptyState({ title, description }: { title: string; description: string }) {
   return (
-    <div className="booking-slot__empty" role="status">
-      <div className="booking-slot__empty-title">{title}</div>
-      <p className="booking-slot__empty-copy">{description}</p>
+    <div
+      className="flex flex-col items-center gap-2 rounded-2xl border border-dashed px-6 py-12 text-center"
+      role="status"
+    >
+      <span className="flex size-10 items-center justify-center rounded-full bg-muted">
+        <CalendarX className="size-5 text-muted-foreground" aria-hidden="true" />
+      </span>
+      <p className="font-medium">{title}</p>
+      <p className="text-sm text-muted-foreground">{description}</p>
     </div>
   );
 }

@@ -141,11 +141,6 @@
     padding-inline: 1rem;
   }
 
-  .app-topbar > .navbar-brand {
-    min-width: 0;
-    flex: 1;
-  }
-
   .app-topbar__actions {
     display: flex;
     margin-left: auto;
@@ -155,16 +150,6 @@
 
   .app-topbar__theme {
     display: inline-flex;
-  }
-
-  .navbar-brand img {
-    flex: 0 0 auto;
-  }
-
-  .navbar-brand__name {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
   }
 
   /* Shared menu primitives */
@@ -522,63 +507,6 @@
     color: var(--app-sidebar-text);
   }
 
-  .app-sidebar__brand {
-    padding: 0.25rem 0.5rem 1.5rem;
-  }
-
-  .app-sidebar__section {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  .app-sidebar__section + .app-sidebar__section {
-    margin-top: 1.5rem;
-  }
-
-  .app-sidebar__navigation {
-    min-height: 0;
-    flex: 1;
-    overflow-x: hidden;
-    overflow-y: auto;
-    overscroll-behavior: contain;
-  }
-
-  .app-sidebar__label {
-    padding: 0 0.75rem 0.4rem;
-    color: var(--app-sidebar-muted);
-    font-size: var(--app-menu-meta-size);
-    font-weight: var(--app-menu-label-weight);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-  }
-
-  .app-sidebar__link {
-    display: flex;
-    min-height: 2.75rem;
-    align-items: center;
-    gap: 0.75rem;
-    border-radius: 0.75rem;
-    padding: 0.625rem 0.75rem;
-    color: var(--app-sidebar-muted);
-    font-size: var(--app-menu-item-size);
-    font-weight: var(--app-menu-item-weight);
-    transition:
-      background-color 160ms ease,
-      color 160ms ease;
-  }
-
-  .app-sidebar__link:hover {
-    background: var(--app-sidebar-hover);
-    color: var(--app-sidebar-text);
-  }
-
-  .app-sidebar__link[aria-current="page"] {
-    background: var(--app-sidebar-active);
-    color: var(--app-sidebar-text);
-    box-shadow: inset 3px 0 0 var(--app-nav-indicator-on-dark);
-  }
-
   .app-sidebar__utilities {
     display: grid;
     flex: 0 0 auto;
@@ -929,7 +857,7 @@
   }
 
   /* Shared administration workspaces and settings forms */
-  :is(.admin-page__content, .booking-page, .record-collection-page) {
+  :is(.admin-page__content, .record-collection-page) {
     display: flex;
     flex-direction: column;
     gap: 1rem;
@@ -944,7 +872,7 @@
     width: fit-content;
   }
 
-  :is(.admin-page__heading, .booking-page__heading, .record-collection-page__heading) {
+  :is(.admin-page__heading, .record-collection-page__heading) {
     gap: 0.375rem;
   }
 
@@ -952,15 +880,13 @@
     max-width: 54rem;
   }
 
-  :is(.admin-page__heading, .booking-page__heading, .record-collection-page__heading)
-    .page-heading__title {
+  :is(.admin-page__heading, .record-collection-page__heading) .page-heading__title {
     font-size: var(--app-type-page-title);
     letter-spacing: -0.035em;
     line-height: 1.05;
   }
 
-  :is(.admin-page__heading, .booking-page__heading, .record-collection-page__heading)
-    .page-heading__description {
+  :is(.admin-page__heading, .record-collection-page__heading) .page-heading__description {
     max-width: 42rem;
     font-size: var(--app-type-body);
     line-height: 1.4;

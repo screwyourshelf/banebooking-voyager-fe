@@ -34,14 +34,14 @@ export default function WeatherInfo({
 
   if (compact) {
     return (
-      <span className="weather-info weather-info--compact">
+      <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
         {værSymbol ? (
           <img
             src={`${import.meta.env.BASE_URL}weather-symbols/svg/${værSymbol}.svg`}
             alt=""
             width={16}
             height={16}
-            className="weather-info__icon select-none"
+            className="size-4 select-none"
             draggable={false}
           />
         ) : null}
@@ -51,23 +51,19 @@ export default function WeatherInfo({
   }
 
   return (
-    <span className="weather-info">
+    <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
       {værSymbol && (
         <img
           src={`${import.meta.env.BASE_URL}weather-symbols/svg/${værSymbol}.svg`}
           alt={værSymbol}
           width={16}
           height={16}
-          className="weather-info__icon select-none"
+          className="size-4 select-none"
           draggable={false}
         />
       )}
       {harTemperatur ? <span>{Math.round(temperatur)}°</span> : null}
-      {harTemperatur && harVind ? (
-        <span className="weather-info__separator" aria-hidden="true">
-          ·
-        </span>
-      ) : null}
+      {harTemperatur && harVind ? <span aria-hidden="true">·</span> : null}
       {harVind ? <span>{Math.round(vind)} m/s</span> : null}
     </span>
   );

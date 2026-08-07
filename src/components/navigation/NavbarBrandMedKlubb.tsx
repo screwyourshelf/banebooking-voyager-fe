@@ -22,7 +22,7 @@ export default function NavbarBrandMedKlubb({ klubbnavn, tone = "default", class
     <Link
       to="."
       className={cn(
-        "navbar-brand flex items-center gap-2 text-base font-semibold",
+        "flex min-w-0 items-center gap-2 font-medium",
         tone === "inverted"
           ? "text-white hover:text-white/85"
           : "text-foreground hover:text-foreground/80",
@@ -34,7 +34,7 @@ export default function NavbarBrandMedKlubb({ klubbnavn, tone = "default", class
         alt=""
         width={48}
         height={48}
-        className="h-11 w-11 rounded-sm object-contain"
+        className="size-8 shrink-0 rounded-lg object-contain"
         onError={() => {
           if (src.endsWith(".svg")) {
             setSrc(`${klubbPath}/logo.webp`);
@@ -44,7 +44,7 @@ export default function NavbarBrandMedKlubb({ klubbnavn, tone = "default", class
         }}
       />
 
-      <span className="navbar-brand__name">{klubbnavn}</span>
+      <span className="truncate">{klubbnavn}</span>
     </Link>
   );
 }

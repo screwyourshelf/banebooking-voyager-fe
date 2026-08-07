@@ -85,21 +85,6 @@
     background: var(--app-accent-soft);
   }
 
-  /* Booking workspace */
-  .booking-page__heading {
-    max-width: 48rem;
-  }
-
-  .booking-page__heading .page-heading__description {
-    max-width: 38rem;
-  }
-
-  .booking-schedule__feedback {
-    display: grid;
-    gap: var(--app-space-sm);
-    padding: var(--app-space-md) var(--app-space-md) 0;
-  }
-
   /* Club news */
   .news-card__content {
     display: flex;
@@ -128,89 +113,6 @@
     line-height: 1.45;
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 2;
-  }
-
-  .booking-schedule__loading {
-    opacity: 0.55;
-    transition: opacity 180ms ease;
-  }
-
-  /* Booking slots */
-  .booking-slot__time-weather {
-    display: inline-flex;
-    align-items: center;
-    margin-top: 0.2rem;
-    color: var(--app-ink-faint);
-    font-size: var(--app-type-caption);
-    font-weight: 600;
-    line-height: 1;
-  }
-
-  .booking-slot__time-weather .weather-info__icon {
-    width: 0.9rem;
-    height: 0.9rem;
-  }
-
-  .booking-slot__content {
-    display: flex;
-    min-width: 0;
-    flex-direction: column;
-    gap: 0.2rem;
-    padding-inline-start: var(--app-status-inline-padding);
-    text-align: start;
-  }
-
-  .booking-slot__primary-text {
-    overflow: hidden;
-    color: var(--app-ink);
-    font-size: var(--app-type-body-sm);
-    font-weight: 700;
-    line-height: 1.25;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .booking-slot__content[data-status="ledig"] .booking-slot__primary-text {
-    color: var(--status-available-text);
-  }
-
-  .booking-slot__content[data-status="passert"] .booking-slot__primary-text {
-    color: var(--status-past-text);
-  }
-
-  .booking-slot__secondary-text {
-    overflow: hidden;
-    min-width: 0;
-    color: var(--app-ink-faint);
-    font-size: var(--app-type-caption);
-    line-height: 1.25;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .booking-slot__description {
-    max-width: 52rem;
-    color: var(--app-ink-soft);
-    font-size: var(--app-type-body-sm);
-    line-height: 1.5;
-    white-space: pre-wrap;
-  }
-
-  .booking-slot__empty {
-    padding: 3rem 1rem;
-    text-align: center;
-  }
-
-  .booking-slot__empty-title {
-    color: var(--app-ink);
-    font-size: var(--app-type-body);
-    font-weight: 700;
-  }
-
-  .booking-slot__empty-copy {
-    margin-top: 0.25rem;
-    color: var(--app-ink-soft);
-    font-size: var(--app-type-body-sm);
   }
 
   /* User administration */
@@ -363,10 +265,6 @@
     text-decoration: underline;
     text-decoration-color: color-mix(in srgb, var(--app-brand) 32%, transparent);
     text-underline-offset: 0.2rem;
-  }
-
-  .record-card__time .weather-info {
-    color: var(--app-ink-faint);
   }
 
   .mine-booking__identity {
@@ -586,32 +484,6 @@
     color: var(--app-ink-faint);
     font-size: var(--app-type-body-sm);
     font-style: italic;
-  }
-
-  .weather-info {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    white-space: nowrap;
-  }
-
-  .weather-info__icon {
-    margin-right: 0.125rem;
-  }
-
-  .weather-info__separator {
-    color: var(--app-line-strong);
-  }
-
-  .weather-info--compact {
-    gap: 0.25rem;
-    color: inherit;
-    font-size: inherit;
-    font-weight: 620;
-  }
-
-  .weather-info--compact .weather-info__icon {
-    margin-right: 0;
   }
 
   /* Booking statistics */

@@ -1,5 +1,3 @@
-import { Stack } from "@/components/layout";
-import { RecordCardActions, RecordFacts } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import type { BookingSlotRespons } from "@/types";
 import type { BookingSlotPresentation } from "./bookingSlotPresentation";
@@ -17,23 +15,28 @@ export default function BookingSlotDetails({ grenId, slot, presentation, onBook,
   const arrangementBooker = slot.arrangementTittel ? slot.booketAv?.trim() : null;
 
   return (
-    <Stack gap="sm">
+    <div className="space-y-4 border-t pt-4">
       {slot.arrangementBeskrivelse ? (
-        <p className="booking-slot__description">{slot.arrangementBeskrivelse}</p>
+        <p className="max-w-3xl leading-relaxed text-muted-foreground">
+          {slot.arrangementBeskrivelse}
+        </p>
       ) : null}
 
       {arrangementBooker ? (
-        <RecordFacts items={[{ label: "Booket av", value: arrangementBooker }]} />
+        <dl className="grid gap-1 text-sm sm:grid-cols-[7rem_1fr]">
+          <dt className="text-muted-foreground">Booket av</dt>
+          <dd className="font-medium">{arrangementBooker}</dd>
+        </dl>
       ) : null}
 
       {presentation.kanIkkeBooke ? (
-        <p className="booking-slot__description">
+        <p className="text-sm text-muted-foreground">
           Du kan ikke booke denne tiden akkurat nå. Maks antall bookinger kan være nådd.
         </p>
       ) : null}
 
       {presentation.kanKobleTilArrangement || presentation.kanFjerne ? (
-        <RecordCardActions>
+        <div className="flex flex-wrap justify-end gap-2 pt-1">
           {presentation.kanKobleTilArrangement ? (
             <KobleTilArrangementDialog
               grenId={grenId}
@@ -53,8 +56,8 @@ export default function BookingSlotDetails({ grenId, slot, presentation, onBook,
               Avbestill
             </Button>
           ) : null}
-        </RecordCardActions>
+        </div>
       ) : null}
-    </Stack>
+    </div>
   );
 }
