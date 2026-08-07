@@ -38,7 +38,7 @@ export default function MineBookingerView() {
   return (
     <div className="mx-auto w-full max-w-6xl px-4 pb-6 sm:px-6 md:py-8 lg:px-8 lg:py-10">
       <div className="flex flex-col gap-6 md:gap-0 md:overflow-hidden md:rounded-t-3xl md:bg-card">
-        <header className="-mx-4 space-y-3 bg-sidebar px-4 py-6 text-sidebar-foreground sm:-mx-6 sm:px-6 md:mx-0 md:bg-card md:px-8 md:py-8 md:text-card-foreground">
+        <header className="-mx-4 space-y-3 bg-sidebar px-4 py-6 text-sidebar-foreground sm:-mx-6 sm:px-6 md:mx-0 md:px-8 md:py-8">
           <Badge
             variant="outline"
             className="border-transparent bg-sidebar-accent text-sidebar-accent-foreground"
@@ -46,10 +46,10 @@ export default function MineBookingerView() {
             Min konto
           </Badge>
           <div className="space-y-1.5">
-            <h1 className="font-heading text-page-title text-balance text-sidebar-foreground md:text-foreground">
+            <h1 className="font-heading text-page-title text-balance text-sidebar-foreground">
               Mine bookinger
             </h1>
-            <p className="max-w-2xl text-body text-sidebar-foreground/75 md:text-lead md:text-muted-foreground">
+            <p className="max-w-2xl text-body text-sidebar-foreground/75 md:text-lead">
               Hold oversikt over kommende og gjennomførte tider.
             </p>
           </div>

@@ -210,7 +210,7 @@ export default function MineBookingerContent({
       aria-busy={isLoading}
       aria-label="Oversikt over mine bookinger"
     >
-      <CardHeader className="border-b md:border-t md:pt-6">
+      <CardHeader className="border-b md:pt-6">
         <div className="flex items-start gap-3">
           <span className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
             <CalendarCheck aria-hidden="true" className="size-5" />
