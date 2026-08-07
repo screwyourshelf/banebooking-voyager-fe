@@ -42,7 +42,9 @@ export default function BookingSchedule(props: Props) {
 
       <Card className="md:bg-card/95 md:backdrop-blur-sm">
         <CardHeader>
-          <CardTitle>Tilgjengelige tider</CardTitle>
+          <CardTitle className="text-xl font-semibold tracking-tight">
+            <h2>Tilgjengelige tider</h2>
+          </CardTitle>
           <CardDescription>
             {valgtBane
               ? `${valgtBane.navn}${props.valgtGren ? ` · ${props.valgtGren.navn}` : ""}`

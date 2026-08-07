@@ -32,7 +32,7 @@ export default function ReglementDialog({ children, gren, bane }: Props) {
       <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle>{title}</DialogTitle>
+          <DialogTitle className="text-xl font-semibold tracking-tight">{title}</DialogTitle>
           <DialogDescription>
             Grenser, tider og varighet som gjelder når du booker.
           </DialogDescription>
@@ -66,7 +66,7 @@ function RuleSection({
   return (
     <section className="space-y-3">
       <div className="space-y-1">
-        <h3 className="font-medium">{title}</h3>
+        <h3 className="text-base font-semibold">{title}</h3>
         {description ? <p className="text-sm text-muted-foreground">{description}</p> : null}
       </div>
       <dl className="grid gap-3 sm:grid-cols-3">

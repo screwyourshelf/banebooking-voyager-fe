@@ -85,7 +85,9 @@ export default function BookingSelectionHeader({
   return (
     <Card className="md:bg-card/95 md:backdrop-blur-sm">
       <CardHeader>
-        <CardTitle>Velg bane og dag</CardTitle>
+        <CardTitle className="text-xl font-semibold tracking-tight">
+          <h2>Velg bane og dag</h2>
+        </CardTitle>
         <CardDescription>Endringer oppdaterer de tilgjengelige tidene automatisk.</CardDescription>
       </CardHeader>
 

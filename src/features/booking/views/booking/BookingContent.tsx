@@ -15,10 +15,10 @@ export default function BookingContent(props: BookingContentProps) {
           Booking
         </Badge>
         <div className="space-y-1.5">
-          <h1 className="font-heading text-3xl font-semibold tracking-tight sm:text-4xl md:text-white">
+          <h1 className="font-heading text-page-title text-balance md:text-white">
             Book bane
           </h1>
-          <p className="max-w-2xl text-base text-muted-foreground sm:text-lg md:text-white/75">
+          <p className="max-w-2xl text-body text-muted-foreground md:text-lead md:text-white/75">
             Velg aktivitet, dag og bane for å finne en ledig tid.
           </p>
         </div>
