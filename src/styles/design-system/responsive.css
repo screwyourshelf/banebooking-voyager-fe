@@ -461,18 +461,6 @@
       padding-inline: 1rem;
     }
 
-    .mine-booking__detail-content {
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 2rem;
-    }
-
-    .mine-booking__facts {
-      width: min(28rem, 100%);
-      gap: 1.5rem;
-    }
-
     .arrangement-card__detail-content {
       gap: 1.25rem;
     }
