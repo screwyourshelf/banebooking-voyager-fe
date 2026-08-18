@@ -300,11 +300,11 @@
       font-size: 2rem !important;
     }
 
-    .user-directory-row__summary {
+    .record-identity {
       gap: 1rem;
     }
 
-    .user-directory-row__detail-grid {
+    .record-detail-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1rem 1.5rem;
     }
@@ -463,19 +463,19 @@
       padding-inline: 1rem;
     }
 
-    .arrangement-card__detail-content {
+    .record-details-layout {
       gap: 1.25rem;
     }
 
-    .arrangement-program__header {
+    .record-program__header {
       padding: 0.75rem 1rem;
     }
 
-    .arrangement-program__days {
+    .record-program__days {
       padding: 1rem;
     }
 
-    .arrangement-program__slot {
+    .record-program__slot {
       grid-template-columns: 8rem minmax(0, 1fr);
       padding-inline: 0.75rem;
       font-size: var(--app-type-label);
@@ -588,12 +588,12 @@
       z-index: 1;
     }
 
-    .baner-og-grener__desktop-action {
+    .admin-responsive-action[data-placement="tabs"] {
       display: flex;
       margin-left: auto;
     }
 
-    .baner-og-grener__desktop-action [data-slot="button"] {
+    .admin-responsive-action[data-placement="tabs"] [data-slot="button"] {
       min-height: 3rem;
       border: 1px solid rgb(255 255 255 / 0.18) !important;
       background: var(--app-accent) !important;
@@ -603,23 +603,23 @@
         0 0 0 0.25rem rgb(240 131 71 / 0.09) !important;
     }
 
-    .baner-og-grener__desktop-action [data-slot="button"]:hover {
+    .admin-responsive-action[data-placement="tabs"] [data-slot="button"]:hover {
       background: var(--app-accent-strong) !important;
     }
 
-    .admin-page__create:has(.baner-og-grener__mobile-action) {
+    .admin-page__create:has(.admin-responsive-action[data-placement="page"]) {
       display: none;
     }
 
-    .baner-og-grener-workspace[data-section="grener"] {
+    .admin-workspace[data-section="grener"] {
       max-width: 62rem;
     }
 
-    .baner-og-grener-workspace[data-section="grener"] .section-tabs__rail {
+    .admin-workspace[data-section="grener"] .section-tabs__rail {
       max-width: 54rem;
     }
 
-    .baner-og-grener-workspace[data-section="grener"] .record-collection {
+    .admin-workspace[data-section="grener"] .record-collection {
       max-width: 54rem;
     }
 
@@ -738,7 +738,7 @@
       gap: 0.875rem;
     }
 
-    .statistics-member-metrics {
+    .statistics-metrics[data-variant="members"] {
       grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 0.875rem;
     }

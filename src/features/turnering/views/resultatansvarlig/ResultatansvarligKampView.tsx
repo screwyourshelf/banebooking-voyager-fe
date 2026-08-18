@@ -29,12 +29,12 @@ export default function ResultatansvarligKampView({ turnering }: Props) {
   }));
 
   return (
-    <div className="space-y-4">
+    <div className="app-stack app-stack--lg">
       {/* ─── Header ─── */}
       <PageSection>
         <div>
-          <h2 className="text-lg font-semibold">{turnering.arrangementTittel}</h2>
-          <div className="mt-1">
+          <h2 className="app-text-heading">{turnering.arrangementTittel}</h2>
+          <div className="app-margin-top">
             <TurneringStatusBadge status={turnering.status} />
           </div>
         </div>
@@ -46,7 +46,7 @@ export default function ResultatansvarligKampView({ turnering }: Props) {
           <Tabs items={klasseTabs} />
         </PageSection>
       ) : (
-        <p className="text-sm text-muted-foreground italic">Ingen klasser er satt opp ennå.</p>
+        <p className="app-text-empty">Ingen klasser er satt opp ennå.</p>
       )}
     </div>
   );

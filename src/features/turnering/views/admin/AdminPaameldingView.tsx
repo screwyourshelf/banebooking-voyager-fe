@@ -66,7 +66,7 @@ function AdminPaameldingKlasseTab({ turneringId, klasse, brukere }: KlasseTabPro
 
   return (
     <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
-      <div className="space-y-4">
+      <div className="app-stack app-stack--lg">
         <PageSection
           title="Påmeldinger"
           actions={
@@ -77,7 +77,7 @@ function AdminPaameldingKlasseTab({ turneringId, klasse, brukere }: KlasseTabPro
         >
           <ServerFeil feil={trekkMutation.error?.message ?? null} />
           {aktivePaameldinger.length === 0 ? (
-            <p className="text-sm text-muted-foreground italic">Ingen påmeldinger ennå.</p>
+            <p className="app-text-empty">Ingen påmeldinger ennå.</p>
           ) : (
             <RowPanel>
               <RowList>
@@ -87,9 +87,9 @@ function AdminPaameldingKlasseTab({ turneringId, klasse, brukere }: KlasseTabPro
                     title={p.spiller1Navn}
                     description={p.spiller2Navn ?? undefined}
                     right={
-                      <div className="flex items-center gap-2">
+                      <div className="app-inline">
                         {p.seed != null && (
-                          <Badge variant="outline" className="text-xs">
+                          <Badge variant="outline" className="app-text-caption">
                             #{p.seed}
                           </Badge>
                         )}
@@ -99,13 +99,13 @@ function AdminPaameldingKlasseTab({ turneringId, klasse, brukere }: KlasseTabPro
                           onClick={() => trekkMutation.mutate({ paameldingId: p.id })}
                           disabled={trekkMutation.isPending}
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="app-icon-sm" />
                         </Button>
                         <Button
                           variant="ghost"
                           size="sm"
                           onClick={() => setStatusDialogForId(p.id)}
-                          className="text-xs"
+                          className="app-text-caption"
                         >
                           Endre
                         </Button>
@@ -196,8 +196,8 @@ function AdminPaameldingDrawHandlinger({
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button size="sm" variant="outline">
-            <MoreHorizontal className="size-4" />
-            <span className="sr-only">Handlinger</span>
+            <MoreHorizontal className="app-icon-sm" />
+            <span className="app-visually-hidden">Handlinger</span>
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">

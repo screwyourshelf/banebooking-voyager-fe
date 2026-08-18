@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { Stack, Text } from "@/components/layout";
 import { RecordCardActions, RecordFacts } from "@/components/records";
 import type { BookingSlotRespons } from "@/types";
 import type { BookingSlotPresentation } from "./bookingSlotPresentation";
@@ -16,11 +17,9 @@ export default function BookingSlotDetails({ grenId, slot, presentation, onBook,
   const arrangementBooker = slot.arrangementTittel ? slot.booketAv?.trim() : null;
 
   return (
-    <div className="space-y-4">
+    <Stack gap="lg">
       {slot.arrangementBeskrivelse ? (
-        <p className="max-w-3xl leading-relaxed text-muted-foreground">
-          {slot.arrangementBeskrivelse}
-        </p>
+        <Text variant="muted">{slot.arrangementBeskrivelse}</Text>
       ) : null}
 
       {arrangementBooker ? (
@@ -28,9 +27,9 @@ export default function BookingSlotDetails({ grenId, slot, presentation, onBook,
       ) : null}
 
       {presentation.kanIkkeBooke ? (
-        <p className="text-sm text-muted-foreground">
+        <Text variant="muted">
           Du kan ikke booke denne tiden akkurat nå. Maks antall bookinger kan være nådd.
-        </p>
+        </Text>
       ) : null}
 
       {presentation.kanKobleTilArrangement || presentation.kanFjerne ? (
@@ -56,6 +55,6 @@ export default function BookingSlotDetails({ grenId, slot, presentation, onBook,
           ) : null}
         </RecordCardActions>
       ) : null}
-    </div>
+    </Stack>
   );
 }

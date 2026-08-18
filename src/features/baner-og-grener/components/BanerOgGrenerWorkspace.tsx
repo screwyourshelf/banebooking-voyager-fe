@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-import { AdminPage } from "@/components/admin";
+import { AdminPage, AdminResponsiveAction, AdminWorkspace } from "@/components/admin";
 import { RouteTabs, type RouteTabItem } from "@/components/navigation/Tabs";
 
 export type BanerOgGrenerSection = "baner" | "grener";
@@ -38,20 +38,26 @@ export default function BanerOgGrenerWorkspace({
       eyebrow="Administrasjon"
       title="Baner og grener"
       description="Definer klubbens bookingtilbud og reglene som gjelder."
-      action={action ? <div className="baner-og-grener__mobile-action">{action}</div> : undefined}
+      action={
+        action ? (
+          <AdminResponsiveAction placement="page">{action}</AdminResponsiveAction>
+        ) : undefined
+      }
     >
-      <div className="baner-og-grener-workspace" data-section={activeSection}>
+      <AdminWorkspace section={activeSection}>
         <RouteTabs
           ariaLabel="Baner og grener"
           items={items}
           value={activeSection}
           controls={
-            action ? <div className="baner-og-grener__desktop-action">{action}</div> : undefined
+            action ? (
+              <AdminResponsiveAction placement="tabs">{action}</AdminResponsiveAction>
+            ) : undefined
           }
         >
           {children}
         </RouteTabs>
-      </div>
+      </AdminWorkspace>
     </AdminPage>
   );
 }

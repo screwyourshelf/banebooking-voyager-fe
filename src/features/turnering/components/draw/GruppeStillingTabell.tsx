@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { GruppeDeltakerVisning } from "@/types";
 
@@ -19,39 +18,39 @@ export function GruppeStillingTabell({ deltakere }: Props) {
   });
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm">
+    <div className="app-scroll-x">
+      <table className="app-table">
         <thead>
-          <tr className="border-b text-muted-foreground text-xs">
-            <th className="text-left py-1 pr-2 font-medium w-6">#</th>
-            <th className="text-left py-1 pr-4 font-medium">Spiller</th>
-            <th className="text-right py-1 px-2 font-medium">
+          <tr className="app-table__head">
+            <th className="app-table__heading">#</th>
+            <th className="app-table__heading">Spiller</th>
+            <th className="app-table__heading">
               <Tooltip>
-                <TooltipTrigger className="cursor-default">K</TooltipTrigger>
+                <TooltipTrigger className="app-tooltip-trigger">K</TooltipTrigger>
                 <TooltipContent>Kamper spilt</TooltipContent>
               </Tooltip>
             </th>
-            <th className="text-right py-1 px-2 font-medium">
+            <th className="app-table__heading">
               <Tooltip>
-                <TooltipTrigger className="cursor-default">S+</TooltipTrigger>
+                <TooltipTrigger className="app-tooltip-trigger">S+</TooltipTrigger>
                 <TooltipContent>Sett vunnet</TooltipContent>
               </Tooltip>
             </th>
-            <th className="text-right py-1 px-2 font-medium">
+            <th className="app-table__heading">
               <Tooltip>
-                <TooltipTrigger className="cursor-default">S-</TooltipTrigger>
+                <TooltipTrigger className="app-tooltip-trigger">S-</TooltipTrigger>
                 <TooltipContent>Sett tapt</TooltipContent>
               </Tooltip>
             </th>
-            <th className="text-right py-1 px-2 font-medium">
+            <th className="app-table__heading">
               <Tooltip>
-                <TooltipTrigger className="cursor-default">G+</TooltipTrigger>
+                <TooltipTrigger className="app-tooltip-trigger">G+</TooltipTrigger>
                 <TooltipContent>Games vunnet</TooltipContent>
               </Tooltip>
             </th>
-            <th className="text-right py-1 px-2 font-medium">
+            <th className="app-table__heading">
               <Tooltip>
-                <TooltipTrigger className="cursor-default">G-</TooltipTrigger>
+                <TooltipTrigger className="app-tooltip-trigger">G-</TooltipTrigger>
                 <TooltipContent>Games tapt</TooltipContent>
               </Tooltip>
             </th>
@@ -61,17 +60,16 @@ export function GruppeStillingTabell({ deltakere }: Props) {
           {sortert.map((d, idx) => (
             <tr
               key={d.gruppeDeltakerId}
-              className={cn("border-b last:border-0", d.trukketSeg && "opacity-40 line-through")}
+              className="tournament-table__row"
+              data-withdrawn={d.trukketSeg || undefined}
             >
-              <td className="py-1.5 pr-2 text-muted-foreground">{idx + 1}</td>
-              <td className="py-1.5 pr-4 font-medium">{d.spillerNavn}</td>
-              <td className="text-right py-1.5 px-2">
-                {d.stilling.kampVunnet + d.stilling.kampTapt}
-              </td>
-              <td className="text-right py-1.5 px-2">{d.stilling.settVunnet}</td>
-              <td className="text-right py-1.5 px-2">{d.stilling.settTapt}</td>
-              <td className="text-right py-1.5 px-2">{d.stilling.gameVunnet}</td>
-              <td className="text-right py-1.5 px-2">{d.stilling.gameTapt}</td>
+              <td className="app-table__cell">{idx + 1}</td>
+              <td className="app-table__cell">{d.spillerNavn}</td>
+              <td className="app-table__cell">{d.stilling.kampVunnet + d.stilling.kampTapt}</td>
+              <td className="app-table__cell">{d.stilling.settVunnet}</td>
+              <td className="app-table__cell">{d.stilling.settTapt}</td>
+              <td className="app-table__cell">{d.stilling.gameVunnet}</td>
+              <td className="app-table__cell">{d.stilling.gameTapt}</td>
             </tr>
           ))}
         </tbody>

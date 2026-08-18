@@ -9,8 +9,17 @@ import {
   RecordCardStatic,
   RecordCardSummary,
   RecordCardTrigger,
+  RecordDateRange,
+  RecordDetailsLayout,
+  RecordEmptyNote,
   RecordFacts,
-  RecordLeadingValue,
+  RecordIdentity,
+  RecordProgram,
+  RecordProgramDay,
+  RecordProgramDays,
+  RecordProgramHeader,
+  RecordProgramMore,
+  RecordProgramSlot,
   RecordStatus,
 } from "@/components/records";
 import { SlettArrangementDialog } from "@/features/arrangement-admin/components";
@@ -152,17 +161,8 @@ export default function ArrangementRow({ arrangement, onAvlys }: Props) {
 
   const summary = (
     <RecordCardSummary layout="date">
-      <span className="arrangement-card__date">
-        <span className="arrangement-card__date-start">
-          <RecordLeadingValue>{dates.start}</RecordLeadingValue>
-        </span>
-        {dates.end ? <small>– {dates.end}</small> : null}
-      </span>
-
-      <span className="arrangement-card__identity">
-        <strong>{arrangement.tittel}</strong>
-        <small>{metadata}</small>
-      </span>
+      <RecordDateRange start={dates.start} end={dates.end} />
+      <RecordIdentity title={arrangement.tittel} description={metadata} />
 
       <RecordStatus tone={arrangement.erPassert ? "past" : "event"}>
         {arrangement.erPassert ? "Gjennomført" : nextDate ? dagerIgjenTekst(nextDate) : "Kommende"}
@@ -183,8 +183,8 @@ export default function ArrangementRow({ arrangement, onAvlys }: Props) {
       <RecordCardTrigger>{summary}</RecordCardTrigger>
 
       <RecordCardDetails>
-        <div className="arrangement-card__detail-content">
-          {description ? <p className="arrangement-card__description">{description}</p> : null}
+        <RecordDetailsLayout>
+          {description ? <p>{description}</p> : null}
 
           <RecordFacts
             items={[
@@ -205,67 +205,51 @@ export default function ArrangementRow({ arrangement, onAvlys }: Props) {
           />
 
           {programSummary ? (
-            <section className="arrangement-program" aria-label="Program">
-              <div className="arrangement-program__header">
-                <span>
-                  <strong>Program</strong>
-                  <small>
+            <RecordProgram>
+              <RecordProgramHeader
+                title="Program"
+                summary={
+                  <>
                     {programSummary.count} {programSummary.count === 1 ? "tid" : "tider"} ·{" "}
                     {programSummary.dayCount} {programSummary.dayCount === 1 ? "dag" : "dager"} ·{" "}
                     {programSummary.timeRange}
-                  </small>
-                </span>
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  aria-expanded={showProgram}
-                  aria-controls={programId}
-                  onClick={() => setShowProgram((visible) => !visible)}
-                >
-                  {showProgram ? "Skjul program" : "Vis program"}
-                </Button>
-              </div>
+                  </>
+                }
+                expanded={showProgram}
+                controls={programId}
+                onToggle={() => setShowProgram((visible) => !visible)}
+              />
 
               {showProgram ? (
-                <div id={programId} className="arrangement-program__days">
+                <RecordProgramDays id={programId}>
                   {visibleDays.map(({ dato, slots }) => (
-                    <section key={dato} className="arrangement-program__day">
-                      <h4>
-                        <time dateTime={dato}>{formatProgramDate(dato)}</time>
-                      </h4>
-                      <div className="arrangement-program__slots">
-                        {slots.map((slot) => (
-                          <div
-                            key={`${dato}-${slot.startTid}-${slot.sluttTid}-${slot.baneNavn.join("-")}`}
-                            className="arrangement-program__slot"
-                          >
-                            <time>
-                              {slot.startTid.slice(0, 5)}–{slot.sluttTid.slice(0, 5)}
-                            </time>
-                            <span>{formatCourts(slot.baneNavn)}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </section>
+                    <RecordProgramDay
+                      key={dato}
+                      title={<time dateTime={dato}>{formatProgramDate(dato)}</time>}
+                    >
+                      {slots.map((slot) => (
+                        <RecordProgramSlot
+                          key={`${dato}-${slot.startTid}-${slot.sluttTid}-${slot.baneNavn.join("-")}`}
+                          time={`${slot.startTid.slice(0, 5)}–${slot.sluttTid.slice(0, 5)}`}
+                        >
+                          {formatCourts(slot.baneNavn)}
+                        </RecordProgramSlot>
+                      ))}
+                    </RecordProgramDay>
                   ))}
 
                   {hasMoreDays ? (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="arrangement-program__more"
+                    <RecordProgramMore
                       onClick={() => setVisibleDayCount((count) => count + DATOER_PER_KLIKK)}
                     >
                       Vis flere datoer
-                    </Button>
+                    </RecordProgramMore>
                   ) : null}
-                </div>
+                </RecordProgramDays>
               ) : null}
-            </section>
+            </RecordProgram>
           ) : !arrangement.erPassert ? (
-            <p className="arrangement-card__no-program">Ingen kommende tider i programmet.</p>
+            <RecordEmptyNote>Ingen kommende tider i programmet.</RecordEmptyNote>
           ) : null}
 
           {hasActions ? (
@@ -304,7 +288,7 @@ export default function ArrangementRow({ arrangement, onAvlys }: Props) {
               ) : null}
             </RecordCardActions>
           ) : null}
-        </div>
+        </RecordDetailsLayout>
       </RecordCardDetails>
     </RecordAccordionCard>
   );

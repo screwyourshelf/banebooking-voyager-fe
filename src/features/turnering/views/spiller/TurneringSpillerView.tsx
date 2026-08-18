@@ -35,7 +35,7 @@ function SpillerPaameldingKlasseTab({
 
   return (
     <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
-      <div className="space-y-4">
+      <div className="app-stack app-stack--lg">
         <PageSection
           title="Påmeldinger"
           actions={
@@ -47,13 +47,13 @@ function SpillerPaameldingKlasseTab({
           }
         >
           {data && (
-            <div className="flex gap-3 text-sm text-muted-foreground mb-2">
+            <div className="app-summary-meta">
               <span>{data.antallPaameldte} påmeldt</span>
             </div>
           )}
           <ServerFeil feil={trekkMutation.error?.message ?? null} />
           {aktivePaameldinger.length === 0 ? (
-            <p className="text-sm text-muted-foreground italic">Ingen påmeldinger ennå.</p>
+            <p className="app-text-empty">Ingen påmeldinger ennå.</p>
           ) : (
             <RowPanel>
               <RowList>
@@ -63,14 +63,14 @@ function SpillerPaameldingKlasseTab({
                     title={p.spiller1Navn}
                     description={p.spiller2Navn ?? undefined}
                     right={
-                      <div className="flex items-center gap-2">
+                      <div className="app-inline">
                         {p.kanTrekkeSeg && (
                           <Button
                             variant="ghost"
                             size="sm"
                             onClick={() => trekkMutation.mutate({ paameldingId: p.id })}
                             disabled={trekkMutation.isPending}
-                            className="text-xs"
+                            className="app-text-caption"
                           >
                             Trekk meg
                           </Button>
@@ -143,12 +143,8 @@ function SpillerDrawKlasseTab({ turneringId, klasse }: DrawKlasseTabProps) {
   return (
     <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
       <PageSection title="Kampprogram">
-        {!drawData && (
-          <p className="text-sm text-muted-foreground italic">Ingen kampprogram tilgjengelig.</p>
-        )}
-        {drawData && allTabs.length === 0 && (
-          <p className="text-sm text-muted-foreground italic">Ingen grupper ennå.</p>
-        )}
+        {!drawData && <p className="app-text-empty">Ingen kampprogram tilgjengelig.</p>}
+        {drawData && allTabs.length === 0 && <p className="app-text-empty">Ingen grupper ennå.</p>}
         {drawData && allTabs.length > 0 && <Tabs items={allTabs} />}
       </PageSection>
     </QueryFeil>

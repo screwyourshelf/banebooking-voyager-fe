@@ -1,6 +1,5 @@
 import { Fragment, useState } from "react";
 import { ChevronDown } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { GruppeDeltakerVisning, RangeringsKriterium } from "@/types";
 import { useStillingsForklaring } from "../../hooks/draw/useStillingsForklaring";
@@ -45,43 +44,43 @@ export function GruppeStillingTabellMedForklaring({
   const harForklaring = !!forklaring;
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm">
+    <div className="app-scroll-x">
+      <table className="app-table">
         <thead>
-          <tr className="border-b text-muted-foreground text-xs">
-            <th className="text-left py-1 pr-2 font-medium w-6">#</th>
-            <th className="text-left py-1 pr-4 font-medium">Spiller</th>
-            <th className="text-right py-1 px-2 font-medium">
+          <tr className="app-table__head">
+            <th className="app-table__heading">#</th>
+            <th className="app-table__heading">Spiller</th>
+            <th className="app-table__heading">
               <Tooltip>
-                <TooltipTrigger className="cursor-default">K</TooltipTrigger>
+                <TooltipTrigger className="app-tooltip-trigger">K</TooltipTrigger>
                 <TooltipContent>Kamper spilt</TooltipContent>
               </Tooltip>
             </th>
-            <th className="text-right py-1 px-2 font-medium">
+            <th className="app-table__heading">
               <Tooltip>
-                <TooltipTrigger className="cursor-default">S+</TooltipTrigger>
+                <TooltipTrigger className="app-tooltip-trigger">S+</TooltipTrigger>
                 <TooltipContent>Sett vunnet</TooltipContent>
               </Tooltip>
             </th>
-            <th className="text-right py-1 px-2 font-medium">
+            <th className="app-table__heading">
               <Tooltip>
-                <TooltipTrigger className="cursor-default">S-</TooltipTrigger>
+                <TooltipTrigger className="app-tooltip-trigger">S-</TooltipTrigger>
                 <TooltipContent>Sett tapt</TooltipContent>
               </Tooltip>
             </th>
-            <th className="text-right py-1 px-2 font-medium">
+            <th className="app-table__heading">
               <Tooltip>
-                <TooltipTrigger className="cursor-default">G+</TooltipTrigger>
+                <TooltipTrigger className="app-tooltip-trigger">G+</TooltipTrigger>
                 <TooltipContent>Games vunnet</TooltipContent>
               </Tooltip>
             </th>
-            <th className="text-right py-1 px-2 font-medium">
+            <th className="app-table__heading">
               <Tooltip>
-                <TooltipTrigger className="cursor-default">G-</TooltipTrigger>
+                <TooltipTrigger className="app-tooltip-trigger">G-</TooltipTrigger>
                 <TooltipContent>Games tapt</TooltipContent>
               </Tooltip>
             </th>
-            <th className="w-5" />
+            <th className="tournament-table__disclosure" />
           </tr>
         </thead>
         <tbody>
@@ -92,38 +91,32 @@ export function GruppeStillingTabellMedForklaring({
             return (
               <Fragment key={d.gruppeDeltakerId}>
                 <tr
-                  className={cn(
-                    "border-b",
-                    d.trukketSeg && "opacity-40 line-through",
-                    harForklaring && "cursor-pointer hover:bg-muted/50 transition-colors",
-                    erÅpen && "border-b-0"
-                  )}
+                  className="tournament-table__row"
+                  data-withdrawn={d.trukketSeg || undefined}
+                  data-interactive={harForklaring || undefined}
+                  data-open={erÅpen || undefined}
                   onClick={() => harForklaring && setÅpenId(erÅpen ? null : d.gruppeDeltakerId)}
                 >
-                  <td className="py-1.5 pr-2 text-muted-foreground">{idx + 1}</td>
-                  <td className="py-1.5 pr-4 font-medium">{d.spillerNavn}</td>
-                  <td className="text-right py-1.5 px-2">
-                    {d.stilling.kampVunnet + d.stilling.kampTapt}
-                  </td>
-                  <td className="text-right py-1.5 px-2">{d.stilling.settVunnet}</td>
-                  <td className="text-right py-1.5 px-2">{d.stilling.settTapt}</td>
-                  <td className="text-right py-1.5 px-2">{d.stilling.gameVunnet}</td>
-                  <td className="text-right py-1.5 px-2">{d.stilling.gameTapt}</td>
-                  <td className="py-1.5 pl-2 text-muted-foreground">
+                  <td className="app-table__cell">{idx + 1}</td>
+                  <td className="app-table__cell">{d.spillerNavn}</td>
+                  <td className="app-table__cell">{d.stilling.kampVunnet + d.stilling.kampTapt}</td>
+                  <td className="app-table__cell">{d.stilling.settVunnet}</td>
+                  <td className="app-table__cell">{d.stilling.settTapt}</td>
+                  <td className="app-table__cell">{d.stilling.gameVunnet}</td>
+                  <td className="app-table__cell">{d.stilling.gameTapt}</td>
+                  <td className="tournament-table__disclosure-cell">
                     {harForklaring && (
                       <ChevronDown
-                        className={cn(
-                          "size-3.5 transition-transform duration-200",
-                          erÅpen && "rotate-180"
-                        )}
+                        className="tournament-table__disclosure-icon"
+                        data-open={erÅpen || undefined}
                       />
                     )}
                   </td>
                 </tr>
                 {erÅpen && plassForklaring && (
-                  <tr className="border-b bg-muted/30">
-                    <td colSpan={8} className="px-2 py-2 text-xs text-muted-foreground">
-                      <span className="font-medium text-foreground">
+                  <tr className="tournament-table__explanation-row">
+                    <td colSpan={8} className="tournament-table__explanation">
+                      <span className="tournament-table__criterion">
                         {KRITERIUM_LABEL[plassForklaring.kriterium]}
                       </span>
                       {" – "}

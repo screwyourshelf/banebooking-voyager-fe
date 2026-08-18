@@ -6,7 +6,7 @@ type Props = { turnering: TurneringRespons };
 
 export default function ResultatansvarligVenterView({ turnering }: Props) {
   return (
-    <div className="space-y-4">
+    <div className="app-stack app-stack--lg">
       <TurneringHeaderSection
         tittel={turnering.arrangementTittel}
         status={turnering.status}
@@ -14,9 +14,7 @@ export default function ResultatansvarligVenterView({ turnering }: Props) {
         sluttDato={turnering.arrangementSluttDato}
       />
       <PageSection>
-        <p className="text-sm text-muted-foreground italic">
-          Kampregistrering er tilgjengelig når draw er klart.
-        </p>
+        <p className="app-text-empty">Kampregistrering er tilgjengelig når draw er klart.</p>
       </PageSection>
     </div>
   );

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { format, parseISO } from "date-fns";
 import { nb } from "date-fns/locale";
-import { cn } from "@/lib/utils";
 import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList, Row } from "@/components/rows";
 import { Button } from "@/components/ui/button";
@@ -101,7 +100,7 @@ export default function AdminOppsettContent({
 
   const valgtBruker = brukere.find((b) => b.id === valgtBrukerId);
   return (
-    <div className="space-y-4">
+    <div className="app-stack app-stack--lg">
       {/* ─── Header ─── */}
       <TurneringHeaderSection
         tittel={turnering.arrangementTittel}
@@ -129,7 +128,7 @@ export default function AdminOppsettContent({
         }
       >
         {turnering.klasser.length === 0 ? (
-          <p className="text-sm text-muted-foreground italic">Ingen klasser lagt til.</p>
+          <p className="app-text-empty">Ingen klasser lagt til.</p>
         ) : (
           <>
             <ServerFeil feil={fjernKlasseError} />
@@ -141,9 +140,9 @@ export default function AdminOppsettContent({
                     title={klasseTypeNavn(k.klasseType)}
                     description={`${k.antallPaameldte} påmeldt${k.foreslåttStartTid ? ` · Starter ${format(parseISO(k.foreslåttStartTid), "d. MMM 'kl.' HH:mm", { locale: nb })}` : ""}`}
                     right={
-                      <div className="flex items-center gap-1">
+                      <div className="app-inline app-inline--tight">
                         <Button variant="ghost" size="sm" onClick={() => onRedigerKlasse(k)}>
-                          <Pencil className="h-4 w-4" />
+                          <Pencil className="app-icon-sm" />
                         </Button>
                         <Button
                           variant="ghost"
@@ -151,7 +150,7 @@ export default function AdminOppsettContent({
                           onClick={() => onFjernKlasse(k.id)}
                           disabled={fjernKlassePending}
                         >
-                          <Trash2 className="h-4 w-4" />
+                          <Trash2 className="app-icon-sm" />
                         </Button>
                       </div>
                     }
@@ -180,13 +179,13 @@ export default function AdminOppsettContent({
                     onClick={() => onFjernAnsvarlig(a.brukerId)}
                     disabled={fjernAnsvarligPending}
                   >
-                    <UserMinus className="h-4 w-4" />
+                    <UserMinus className="app-icon-sm" />
                   </Button>
                 }
               />
             ))}
             <Row title="Legg til ansvarlig">
-              <div className="flex gap-2">
+              <div className="app-inline">
                 <Popover
                   open={open}
                   onOpenChange={(o) => {
@@ -199,31 +198,29 @@ export default function AdminOppsettContent({
                       variant="outline"
                       role="combobox"
                       aria-expanded={open}
-                      className="flex-1 justify-between font-normal"
+                      className="app-combobox-trigger app-flex-1"
                     >
                       {valgtBruker ? (
                         valgtBruker.visningsnavn || valgtBruker.epost
                       ) : (
-                        <span className="text-muted-foreground">Velg bruker...</span>
+                        <span className="app-text-muted">Velg bruker...</span>
                       )}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                      <ChevronsUpDown className="app-icon-sm app-icon-muted" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="p-0 w-[300px]" align="start">
-                    <div className="flex items-center gap-2 border-b px-3">
-                      <Search className="h-4 w-4 shrink-0 opacity-50" />
+                  <PopoverContent className="app-combobox-popover" align="start">
+                    <div className="app-combobox-search">
+                      <Search className="app-icon-sm app-icon-muted" />
                       <Input
                         placeholder="Søk etter bruker..."
                         value={søkTekst}
                         onChange={(e) => setSøkTekst(e.target.value)}
-                        className="border-0 p-0 shadow-none focus-visible:ring-0 h-10 text-sm"
+                        className="app-combobox-input"
                       />
                     </div>
-                    <div className="max-h-[260px] overflow-y-auto p-1">
+                    <div className="app-combobox-list">
                       {filtrerteBrukere.length === 0 ? (
-                        <p className="py-6 text-center text-sm text-muted-foreground">
-                          Ingen brukere funnet.
-                        </p>
+                        <p className="app-combobox-empty">Ingen brukere funnet.</p>
                       ) : (
                         filtrerteBrukere.map((b) => (
                           <button
@@ -234,18 +231,16 @@ export default function AdminOppsettContent({
                               setOpen(false);
                               setSøkTekst("");
                             }}
-                            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm text-left hover:bg-accent hover:text-accent-foreground"
+                            className="app-combobox-option"
                           >
                             <Check
-                              className={cn(
-                                "h-4 w-4 shrink-0",
-                                b.id === valgtBrukerId ? "opacity-100" : "opacity-0"
-                              )}
+                              className="app-combobox-check"
+                              data-selected={b.id === valgtBrukerId}
                             />
-                            <div className="flex flex-col min-w-0">
-                              <span className="truncate">{b.visningsnavn || b.epost}</span>
+                            <div className="app-combobox-copy">
+                              <span className="app-text-truncate">{b.visningsnavn || b.epost}</span>
                               {b.visningsnavn && (
-                                <span className="text-xs text-muted-foreground truncate">
+                                <span className="app-text-caption app-text-truncate">
                                   {b.epost}
                                 </span>
                               )}
@@ -262,7 +257,7 @@ export default function AdminOppsettContent({
                   onClick={onLeggTilAnsvarlig}
                   disabled={leggTilAnsvarligPending || !valgtBrukerId}
                 >
-                  <UserPlus className="h-4 w-4" />
+                  <UserPlus className="app-icon-sm" />
                 </Button>
               </div>
             </Row>

@@ -85,51 +85,15 @@
     background: var(--app-accent-soft);
   }
 
-  /* Club news */
-  .news-card__content {
+  /* Shared record presentation */
+  .record-identity {
     display: flex;
     min-width: 0;
-    flex: 1;
-    flex-direction: column;
-    gap: var(--app-space-xs);
-  }
-
-  .news-card__title {
-    display: -webkit-box;
-    overflow: hidden;
-    color: var(--app-ink);
-    font-size: var(--app-type-body-sm);
-    font-weight: 730;
-    line-height: 1.3;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
-
-  .news-card__summary {
-    display: -webkit-box;
-    overflow: hidden;
-    color: var(--app-ink-faint);
-    font-size: var(--app-type-body-sm);
-    line-height: 1.45;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
-
-  /* User administration */
-  .user-directory-row__summary {
-    min-width: 0;
-    flex: 1;
-  }
-
-  .user-directory-row__identity {
-    display: grid;
-    min-width: 0;
-    grid-template-columns: 2.5rem minmax(0, 1fr);
     align-items: center;
     gap: 0.75rem;
   }
 
-  .user-directory-row__avatar {
+  .record-identity__leading {
     display: grid;
     width: 2.5rem;
     height: 2.5rem;
@@ -143,25 +107,19 @@
     letter-spacing: 0.02em;
   }
 
-  .user-directory-row__identity-copy {
+  .record-identity__copy {
     display: flex;
     min-width: 0;
     flex-direction: column;
     gap: 0.18rem;
   }
 
-  .user-directory-row__name-line {
+  .record-identity__title {
     display: flex;
+    overflow: hidden;
     min-width: 0;
     align-items: center;
     gap: 0.4rem;
-  }
-
-  .user-directory-row__name {
-    display: block;
-    overflow: hidden;
-    min-width: 0;
-    flex: 0 1 auto;
     color: var(--app-ink);
     font-size: var(--app-type-body-sm);
     font-weight: 720;
@@ -170,7 +128,7 @@
     white-space: nowrap;
   }
 
-  .user-directory-row__email {
+  .record-identity__description {
     overflow: hidden;
     color: var(--app-ink-faint);
     font-size: var(--app-type-caption);
@@ -180,17 +138,7 @@
     white-space: nowrap;
   }
 
-  .user-directory-row__self {
-    flex: 0 0 auto;
-    border-radius: 999px;
-    background: var(--status-own-bg);
-    padding: 0.2rem 0.4rem;
-    color: var(--status-own-text);
-    font-size: var(--app-type-micro);
-    font-weight: 740;
-  }
-
-  .user-directory-row__metadata {
+  .record-identity__meta {
     display: flex;
     min-width: 0;
     flex-wrap: wrap;
@@ -201,12 +149,12 @@
     font-weight: 620;
   }
 
-  .user-directory-row__metadata > span:not(:first-child) {
+  .record-identity__meta > span:not(:first-child) {
     position: relative;
     padding-left: 0.625rem;
   }
 
-  .user-directory-row__metadata > span:not(:first-child)::before {
+  .record-identity__meta > span:not(:first-child)::before {
     position: absolute;
     top: 50%;
     left: 0;
@@ -218,26 +166,22 @@
     transform: translateY(-50%);
   }
 
-  .user-directory-row__metadata [data-account-status="sperret"] {
-    color: var(--status-danger-text);
-  }
-
-  .user-directory-row__detail-content {
+  .record-details-layout {
     display: grid;
     gap: 1rem;
   }
 
-  .user-directory-row__detail-grid {
+  .record-detail-grid {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.875rem;
   }
 
-  .user-directory-row__detail-grid > div {
+  .record-detail-grid > div {
     min-width: 0;
   }
 
-  .user-directory-row__detail-grid dt {
+  .record-detail-grid dt {
     display: flex;
     align-items: center;
     gap: 0.35rem;
@@ -246,12 +190,12 @@
     font-weight: 680;
   }
 
-  .user-directory-row__detail-grid dt svg {
+  .record-detail-grid dt svg {
     width: 0.85rem;
     height: 0.85rem;
   }
 
-  .user-directory-row__detail-grid dd {
+  .record-detail-grid dd {
     overflow-wrap: anywhere;
     margin-top: 0.2rem;
     color: var(--app-ink);
@@ -259,7 +203,7 @@
     line-height: 1.4;
   }
 
-  .user-directory-row__history-link {
+  .record-link-button {
     color: var(--app-brand);
     font-weight: 650;
     text-decoration: underline;
@@ -267,8 +211,7 @@
     text-underline-offset: 0.2rem;
   }
 
-  /* Club arrangement overview */
-  .arrangement-card__date {
+  .record-date-range {
     display: flex;
     min-width: 0;
     flex-direction: column;
@@ -279,46 +222,18 @@
     line-height: 1.25;
   }
 
-  .arrangement-card__date-start {
-    white-space: nowrap;
-  }
-
-  .arrangement-card__date small {
-    white-space: nowrap;
-  }
-
-  .arrangement-card__identity {
-    display: flex;
-    min-width: 0;
-    flex-direction: column;
-    gap: 0.15rem;
-  }
-
-  .arrangement-card__identity strong {
-    overflow: hidden;
+  .record-date-range strong {
     color: var(--app-ink);
     font-size: var(--app-type-body-sm);
     font-weight: 730;
-    line-height: 1.25;
-    text-overflow: ellipsis;
     white-space: nowrap;
   }
 
-  .arrangement-card__identity small {
-    overflow: hidden;
-    color: var(--app-ink-faint);
-    font-size: var(--app-type-caption);
-    line-height: 1.25;
-    text-overflow: ellipsis;
+  .record-date-range small {
     white-space: nowrap;
   }
 
-  .arrangement-card__detail-content {
-    display: grid;
-    gap: 1rem;
-  }
-
-  .arrangement-card__description {
+  .record-details-layout > p {
     max-width: 52rem;
     color: var(--app-ink-soft);
     font-size: var(--app-type-body-sm);
@@ -326,14 +241,14 @@
     white-space: pre-wrap;
   }
 
-  .arrangement-program {
+  .record-program {
     overflow: hidden;
     border: 1px solid var(--app-line);
     border-radius: 0.875rem;
     background: var(--app-surface);
   }
 
-  .arrangement-program__header {
+  .record-program__header {
     display: flex;
     min-height: 3.75rem;
     align-items: center;
@@ -342,55 +257,55 @@
     padding: 0.625rem 0.75rem;
   }
 
-  .arrangement-program__header > span {
+  .record-program__header > span {
     display: flex;
     min-width: 0;
     flex-direction: column;
     gap: 0.1rem;
   }
 
-  .arrangement-program__header strong {
+  .record-program__header strong {
     color: var(--app-ink);
     font-size: var(--app-type-body-sm);
     font-weight: 730;
   }
 
-  .arrangement-program__header small {
+  .record-program__header small {
     color: var(--app-ink-faint);
     font-size: var(--app-type-caption);
     line-height: 1.35;
   }
 
-  .arrangement-program__header [data-slot="button"] {
+  .record-program__header [data-slot="button"] {
     flex: 0 0 auto;
   }
 
-  .arrangement-program__days {
+  .record-program__days {
     display: grid;
     gap: 0.875rem;
     border-top: 1px solid var(--app-line);
     padding: 0.75rem;
   }
 
-  .arrangement-program__day {
+  .record-program__day {
     display: grid;
     gap: 0.35rem;
   }
 
-  .arrangement-program__day h4 {
+  .record-program__day h4 {
     color: var(--app-ink);
     font-size: var(--app-type-caption);
     font-weight: 740;
   }
 
-  .arrangement-program__slots {
+  .record-program__slots {
     overflow: hidden;
     border: 1px solid var(--app-line);
     border-radius: 0.625rem;
     background: var(--app-surface-subtle);
   }
 
-  .arrangement-program__slot {
+  .record-program__slot {
     display: grid;
     min-width: 0;
     grid-template-columns: 6.75rem minmax(0, 1fr);
@@ -401,27 +316,27 @@
     line-height: 1.35;
   }
 
-  .arrangement-program__slot:not(:last-child) {
+  .record-program__slot:not(:last-child) {
     border-bottom: 1px solid var(--app-line);
   }
 
-  .arrangement-program__slot time {
+  .record-program__slot time {
     color: var(--app-ink);
     font-weight: 690;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
   }
 
-  .arrangement-program__slot span {
+  .record-program__slot span {
     min-width: 0;
   }
 
-  .arrangement-program__more {
+  .record-program__more {
     width: fit-content;
     justify-self: end;
   }
 
-  .arrangement-card__no-program {
+  .record-empty-note {
     color: var(--app-ink-faint);
     font-size: var(--app-type-body-sm);
     font-style: italic;
@@ -556,7 +471,7 @@
     gap: 1rem;
   }
 
-  .statistics-member-metrics {
+  .statistics-metrics[data-variant="members"] {
     display: grid;
     grid-template-columns: minmax(0, 1fr);
     gap: 0.625rem;
@@ -1134,4 +1049,221 @@
   .statistics-loading__plot {
     height: 14rem;
   }
+}
+/* Tournament presentation */
+.tournament-match-card,
+.tournament-bracket-match {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  border: 1px solid var(--app-line);
+  border-radius: 0.5rem;
+  background: var(--app-surface);
+  padding: 0.625rem;
+}
+
+.tournament-bracket-match {
+  width: 11rem;
+  padding: 0.5rem;
+}
+.tournament-match-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.375rem 0.5rem;
+  color: var(--app-ink-faint);
+  font-size: var(--app-type-caption);
+}
+.tournament-match-card__status {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.375rem;
+}
+.tournament-player {
+  overflow: hidden;
+  min-width: 0;
+  flex: 1;
+  font-size: var(--app-type-body-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.tournament-player[data-winner="true"],
+.tournament-score [data-winner="true"] {
+  font-weight: 600;
+}
+.tournament-player[data-loser="true"] {
+  color: var(--app-ink-faint);
+}
+.tournament-score {
+  display: flex;
+  flex-shrink: 0;
+  gap: 0.25rem;
+  font-size: var(--app-type-body-sm);
+  font-variant-numeric: tabular-nums;
+}
+.tournament-score[data-density="compact"] {
+  gap: 0.125rem;
+}
+.tournament-score > span {
+  width: 1rem;
+  text-align: center;
+}
+.tournament-result-action {
+  width: 100%;
+  border: 1px solid color-mix(in srgb, var(--app-brand) 40%, transparent);
+  border-radius: 0.25rem;
+  padding: 0.3rem 0.5rem;
+  color: var(--app-brand);
+  font-size: var(--app-type-caption);
+  font-weight: 600;
+}
+.tournament-result-action:active {
+  background: var(--app-brand-soft);
+}
+.tournament-bracket {
+  position: relative;
+}
+.tournament-bracket__rounds {
+  display: flex;
+  min-width: max-content;
+  align-items: flex-start;
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+}
+.tournament-bracket__round {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+.tournament-bracket__round-title {
+  padding-inline: 0.25rem;
+  color: var(--app-ink-faint);
+  font-size: var(--app-type-caption);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.tournament-bracket__fade {
+  position: absolute;
+  inset-block: 0;
+  right: 0;
+  width: 2rem;
+  pointer-events: none;
+  background: linear-gradient(to left, var(--app-surface), transparent);
+}
+.tournament-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.25rem 0.5rem;
+}
+.tournament-header__date {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  color: var(--app-ink-faint);
+  font-size: var(--app-type-caption);
+}
+.tournament-status-track {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  margin-top: 0.25rem;
+}
+.tournament-status-track__separator {
+  flex-shrink: 0;
+  color: color-mix(in srgb, var(--app-ink-faint) 20%, transparent);
+  font-size: var(--app-type-caption);
+  user-select: none;
+}
+.tournament-status-track__separator[data-past="true"] {
+  color: color-mix(in srgb, var(--app-ink-faint) 40%, transparent);
+}
+.tournament-status-track__item {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: 0.25rem;
+  color: color-mix(in srgb, var(--app-ink-faint) 30%, transparent);
+  font-size: var(--app-type-caption);
+}
+.tournament-status-track__item[data-current="true"] {
+  color: var(--app-ink);
+  font-weight: 600;
+}
+.tournament-status-track__item[data-past="true"] {
+  color: color-mix(in srgb, var(--app-ink-faint) 50%, transparent);
+}
+.tournament-status-track__dot {
+  width: 0.375rem;
+  height: 0.375rem;
+  flex-shrink: 0;
+  border-radius: 999px;
+  background: var(--app-brand);
+}
+.tournament-status-track__dot[data-status="Pagaar"] {
+  background: #10b981;
+}
+.tournament-status-track__dot[data-status="Oppsett"],
+.tournament-status-track__dot[data-status="Avsluttet"] {
+  background: var(--app-ink-faint);
+  opacity: 0.4;
+}
+
+@media (min-width: 40rem) {
+  .tournament-header {
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+}
+.tournament-table__row {
+  border-bottom: 1px solid var(--app-line);
+}
+.tournament-table__row:last-child {
+  border-bottom: 0;
+}
+.tournament-table__row[data-withdrawn="true"] {
+  opacity: 0.4;
+  text-decoration: line-through;
+}
+.tournament-table__row[data-interactive="true"] {
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+.tournament-table__row[data-interactive="true"]:hover {
+  background: color-mix(in srgb, var(--muted) 50%, transparent);
+}
+.tournament-table__row[data-open="true"] {
+  border-bottom: 0;
+}
+.tournament-table__disclosure {
+  width: 1.25rem;
+}
+.tournament-table__disclosure-cell {
+  padding: 0.375rem 0 0.375rem 0.5rem;
+  color: var(--app-ink-faint);
+}
+.tournament-table__disclosure-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+  transition: transform 200ms ease;
+}
+.tournament-table__disclosure-icon[data-open="true"] {
+  transform: rotate(180deg);
+}
+.tournament-table__explanation-row {
+  border-bottom: 1px solid var(--app-line);
+  background: color-mix(in srgb, var(--muted) 30%, transparent);
+}
+.tournament-table__explanation {
+  padding: 0.5rem;
+  color: var(--app-ink-faint);
+  font-size: var(--app-type-caption);
+}
+.tournament-table__criterion {
+  color: var(--app-ink);
+  font-weight: 500;
 }

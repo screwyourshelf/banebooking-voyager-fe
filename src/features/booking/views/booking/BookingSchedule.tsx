@@ -1,6 +1,7 @@
 import { AlertCircle, CalendarX, RefreshCw } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Inline, Stack } from "@/components/layout";
 import { RecordCollection, RecordCollectionBody, RecordListState } from "@/components/records";
 import { BookingSelectionHeader, BookingSlotListAccordion } from "@/features/booking/components";
 import { utledSlotStatus } from "@/utils/bookingUtils";
@@ -116,12 +117,22 @@ function BookingLoadError({
     <Alert variant="destructive">
       <AlertCircle aria-hidden="true" />
       <AlertTitle>{title}</AlertTitle>
-      <AlertDescription className="flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <span>{description}</span>
-        <Button type="button" variant="outline" size="sm" onClick={onRetry} disabled={isFetching}>
-          <RefreshCw className={isFetching ? "animate-spin" : undefined} aria-hidden="true" />
-          {isFetching ? "Prøver igjen…" : "Prøv igjen"}
-        </Button>
+      <AlertDescription>
+        <Stack gap="sm">
+          <span>{description}</span>
+          <Inline>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={onRetry}
+              disabled={isFetching}
+            >
+              <RefreshCw aria-hidden="true" />
+              {isFetching ? "Prøver igjen…" : "Prøv igjen"}
+            </Button>
+          </Inline>
+        </Stack>
       </AlertDescription>
     </Alert>
   );

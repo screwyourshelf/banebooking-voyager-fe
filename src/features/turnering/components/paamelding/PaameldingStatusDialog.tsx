@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { AppDialog } from "@/components/dialogs";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Check, ChevronsUpDown, Search } from "lucide-react";
-import { cn } from "@/lib/utils";
 import { ServerFeil } from "@/components/errors";
 import type { OppdaterPaameldingDetaljerForespørsel, BrukerRespons } from "@/types";
 
@@ -123,99 +122,203 @@ export function PaameldingStatusDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Endre – {spillerNavn}</DialogTitle>
-        </DialogHeader>
+    <AppDialog
+      open={open}
+      onOpenChange={handleClose}
+      title={`Endre – ${spillerNavn}`}
+      actions={
+        <>
+          <Button
+            variant="outline"
+            onClick={() => handleClose(false)}
+            disabled={isPending || !!isDetaljerPending}
+          >
+            Avbryt
+          </Button>
+          <Button onClick={handleLagre} disabled={!kanLagre || isPending || !!isDetaljerPending}>
+            {isPending || isDetaljerPending ? "Lagrer..." : "Lagre"}
+          </Button>
+        </>
+      }
+    >
+      <div className="app-stack app-stack--lg">
+        <div className="app-stack app-stack--xs">
+          <div className="app-inline app-inline--between">
+            <Label>Spiller 1</Label>
+            <div className="app-inline app-inline--tight">
+              <Button
+                type="button"
+                variant={spiller1Modus === "manuell" ? "secondary" : "ghost"}
+                size="sm"
+                className="app-button--compact"
+                onClick={() => setSpiller1Modus("manuell")}
+              >
+                Manuell
+              </Button>
+              <Button
+                type="button"
+                variant={spiller1Modus === "bruker" ? "secondary" : "ghost"}
+                size="sm"
+                className="app-button--compact"
+                onClick={() => setSpiller1Modus("bruker")}
+              >
+                Eksisterende
+              </Button>
+            </div>
+          </div>
+          {spiller1Modus === "bruker" ? (
+            <Popover
+              open={popover1Open}
+              onOpenChange={(o) => {
+                setPopover1Open(o);
+                if (!o) setSøkTekst1("");
+              }}
+            >
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  aria-expanded={popover1Open}
+                  className="app-combobox-trigger"
+                >
+                  {spiller1Bruker ? (
+                    spiller1Bruker.visningsnavn || spiller1Bruker.epost
+                  ) : (
+                    <span className="app-text-muted">Velg bruker...</span>
+                  )}
+                  <ChevronsUpDown className="app-icon-sm app-icon-muted" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="app-combobox-popover" align="start">
+                <div className="app-combobox-search">
+                  <Search className="app-icon-sm app-icon-muted" />
+                  <Input
+                    placeholder="Søk etter bruker..."
+                    value={søkTekst1}
+                    onChange={(e) => setSøkTekst1(e.target.value)}
+                    className="app-combobox-input"
+                  />
+                </div>
+                <div className="app-combobox-list">
+                  {filtrerteBrukere1.length === 0 ? (
+                    <p className="app-combobox-empty">Ingen brukere funnet.</p>
+                  ) : (
+                    filtrerteBrukere1.map((b) => (
+                      <button
+                        key={b.id}
+                        type="button"
+                        onClick={() => {
+                          setSpiller1BrukerId(b.id);
+                          setPopover1Open(false);
+                          setSøkTekst1("");
+                        }}
+                        className="app-combobox-option"
+                      >
+                        <Check
+                          className="app-combobox-check"
+                          data-selected={b.id === spiller1BrukerId}
+                        />
+                        <div className="app-combobox-copy">
+                          <span className="app-text-truncate">{b.visningsnavn || b.epost}</span>
+                          {b.visningsnavn && (
+                            <span className="app-text-caption app-text-truncate">{b.epost}</span>
+                          )}
+                        </div>
+                      </button>
+                    ))
+                  )}
+                </div>
+              </PopoverContent>
+            </Popover>
+          ) : (
+            <Input
+              value={spiller1NavnInput}
+              onChange={(e) => setSpiller1NavnInput(e.target.value)}
+            />
+          )}
+        </div>
 
-        <div className="space-y-4">
-          <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <Label>Spiller 1</Label>
-              <div className="flex gap-0.5">
+        {erDobbel && (
+          <div className="app-stack app-stack--xs">
+            <div className="app-inline app-inline--between">
+              <Label>Spiller 2 (valgfritt)</Label>
+              <div className="app-inline app-inline--tight">
                 <Button
                   type="button"
-                  variant={spiller1Modus === "manuell" ? "secondary" : "ghost"}
+                  variant={spiller2Modus === "manuell" ? "secondary" : "ghost"}
                   size="sm"
-                  className="h-6 px-2 text-xs"
-                  onClick={() => setSpiller1Modus("manuell")}
+                  className="app-button--compact"
+                  onClick={() => setSpiller2Modus("manuell")}
                 >
                   Manuell
                 </Button>
                 <Button
                   type="button"
-                  variant={spiller1Modus === "bruker" ? "secondary" : "ghost"}
+                  variant={spiller2Modus === "bruker" ? "secondary" : "ghost"}
                   size="sm"
-                  className="h-6 px-2 text-xs"
-                  onClick={() => setSpiller1Modus("bruker")}
+                  className="app-button--compact"
+                  onClick={() => setSpiller2Modus("bruker")}
                 >
                   Eksisterende
                 </Button>
               </div>
             </div>
-            {spiller1Modus === "bruker" ? (
+            {spiller2Modus === "bruker" ? (
               <Popover
-                open={popover1Open}
+                open={popover2Open}
                 onOpenChange={(o) => {
-                  setPopover1Open(o);
-                  if (!o) setSøkTekst1("");
+                  setPopover2Open(o);
+                  if (!o) setSøkTekst2("");
                 }}
               >
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
                     role="combobox"
-                    aria-expanded={popover1Open}
-                    className="w-full justify-between font-normal"
+                    aria-expanded={popover2Open}
+                    className="app-combobox-trigger"
                   >
-                    {spiller1Bruker ? (
-                      spiller1Bruker.visningsnavn || spiller1Bruker.epost
+                    {spiller2Bruker ? (
+                      spiller2Bruker.visningsnavn || spiller2Bruker.epost
                     ) : (
-                      <span className="text-muted-foreground">Velg bruker...</span>
+                      <span className="app-text-muted">Velg bruker...</span>
                     )}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                    <ChevronsUpDown className="app-icon-sm app-icon-muted" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="p-0 w-[300px]" align="start">
-                  <div className="flex items-center gap-2 border-b px-3">
-                    <Search className="h-4 w-4 shrink-0 opacity-50" />
+                <PopoverContent className="app-combobox-popover" align="start">
+                  <div className="app-combobox-search">
+                    <Search className="app-icon-sm app-icon-muted" />
                     <Input
                       placeholder="Søk etter bruker..."
-                      value={søkTekst1}
-                      onChange={(e) => setSøkTekst1(e.target.value)}
-                      className="border-0 p-0 shadow-none focus-visible:ring-0 h-10 text-sm"
+                      value={søkTekst2}
+                      onChange={(e) => setSøkTekst2(e.target.value)}
+                      className="app-combobox-input"
                     />
                   </div>
-                  <div className="max-h-[260px] overflow-y-auto p-1">
-                    {filtrerteBrukere1.length === 0 ? (
-                      <p className="py-6 text-center text-sm text-muted-foreground">
-                        Ingen brukere funnet.
-                      </p>
+                  <div className="app-combobox-list">
+                    {filtrerteBrukere2.length === 0 ? (
+                      <p className="app-combobox-empty">Ingen brukere funnet.</p>
                     ) : (
-                      filtrerteBrukere1.map((b) => (
+                      filtrerteBrukere2.map((b) => (
                         <button
                           key={b.id}
                           type="button"
                           onClick={() => {
-                            setSpiller1BrukerId(b.id);
-                            setPopover1Open(false);
-                            setSøkTekst1("");
+                            setSpiller2BrukerId(b.id);
+                            setPopover2Open(false);
+                            setSøkTekst2("");
                           }}
-                          className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm text-left hover:bg-accent hover:text-accent-foreground"
+                          className="app-combobox-option"
                         >
                           <Check
-                            className={cn(
-                              "h-4 w-4 shrink-0",
-                              b.id === spiller1BrukerId ? "opacity-100" : "opacity-0"
-                            )}
+                            className="app-combobox-check"
+                            data-selected={b.id === spiller2BrukerId}
                           />
-                          <div className="flex flex-col min-w-0">
-                            <span className="truncate">{b.visningsnavn || b.epost}</span>
+                          <div className="app-combobox-copy">
+                            <span className="app-text-truncate">{b.visningsnavn || b.epost}</span>
                             {b.visningsnavn && (
-                              <span className="text-xs text-muted-foreground truncate">
-                                {b.epost}
-                              </span>
+                              <span className="app-text-caption app-text-truncate">{b.epost}</span>
                             )}
                           </div>
                         </button>
@@ -226,143 +329,27 @@ export function PaameldingStatusDialog({
               </Popover>
             ) : (
               <Input
-                value={spiller1NavnInput}
-                onChange={(e) => setSpiller1NavnInput(e.target.value)}
+                value={spiller2NavnInput}
+                onChange={(e) => setSpiller2NavnInput(e.target.value)}
+                placeholder="Tomt for å fjerne"
               />
             )}
           </div>
+        )}
 
-          {erDobbel && (
-            <div className="space-y-1.5">
-              <div className="flex items-center justify-between">
-                <Label>Spiller 2 (valgfritt)</Label>
-                <div className="flex gap-0.5">
-                  <Button
-                    type="button"
-                    variant={spiller2Modus === "manuell" ? "secondary" : "ghost"}
-                    size="sm"
-                    className="h-6 px-2 text-xs"
-                    onClick={() => setSpiller2Modus("manuell")}
-                  >
-                    Manuell
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={spiller2Modus === "bruker" ? "secondary" : "ghost"}
-                    size="sm"
-                    className="h-6 px-2 text-xs"
-                    onClick={() => setSpiller2Modus("bruker")}
-                  >
-                    Eksisterende
-                  </Button>
-                </div>
-              </div>
-              {spiller2Modus === "bruker" ? (
-                <Popover
-                  open={popover2Open}
-                  onOpenChange={(o) => {
-                    setPopover2Open(o);
-                    if (!o) setSøkTekst2("");
-                  }}
-                >
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={popover2Open}
-                      className="w-full justify-between font-normal"
-                    >
-                      {spiller2Bruker ? (
-                        spiller2Bruker.visningsnavn || spiller2Bruker.epost
-                      ) : (
-                        <span className="text-muted-foreground">Velg bruker...</span>
-                      )}
-                      <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="p-0 w-[300px]" align="start">
-                    <div className="flex items-center gap-2 border-b px-3">
-                      <Search className="h-4 w-4 shrink-0 opacity-50" />
-                      <Input
-                        placeholder="Søk etter bruker..."
-                        value={søkTekst2}
-                        onChange={(e) => setSøkTekst2(e.target.value)}
-                        className="border-0 p-0 shadow-none focus-visible:ring-0 h-10 text-sm"
-                      />
-                    </div>
-                    <div className="max-h-[260px] overflow-y-auto p-1">
-                      {filtrerteBrukere2.length === 0 ? (
-                        <p className="py-6 text-center text-sm text-muted-foreground">
-                          Ingen brukere funnet.
-                        </p>
-                      ) : (
-                        filtrerteBrukere2.map((b) => (
-                          <button
-                            key={b.id}
-                            type="button"
-                            onClick={() => {
-                              setSpiller2BrukerId(b.id);
-                              setPopover2Open(false);
-                              setSøkTekst2("");
-                            }}
-                            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm text-left hover:bg-accent hover:text-accent-foreground"
-                          >
-                            <Check
-                              className={cn(
-                                "h-4 w-4 shrink-0",
-                                b.id === spiller2BrukerId ? "opacity-100" : "opacity-0"
-                              )}
-                            />
-                            <div className="flex flex-col min-w-0">
-                              <span className="truncate">{b.visningsnavn || b.epost}</span>
-                              {b.visningsnavn && (
-                                <span className="text-xs text-muted-foreground truncate">
-                                  {b.epost}
-                                </span>
-                              )}
-                            </div>
-                          </button>
-                        ))
-                      )}
-                    </div>
-                  </PopoverContent>
-                </Popover>
-              ) : (
-                <Input
-                  value={spiller2NavnInput}
-                  onChange={(e) => setSpiller2NavnInput(e.target.value)}
-                  placeholder="Tomt for å fjerne"
-                />
-              )}
-            </div>
-          )}
-
-          <div className="space-y-1.5">
-            <Label>Seed (la stå tomt for å fjerne)</Label>
-            <Input
-              type="number"
-              min={1}
-              value={seedVerdi}
-              onChange={(e) => setSeedVerdi(e.target.value)}
-              placeholder="t.eks. 1"
-            />
-          </div>
-
-          <ServerFeil feil={detaljerFeil ?? serverFeil ?? null} />
-          <div className="flex justify-end gap-2">
-            <Button
-              variant="outline"
-              onClick={() => handleClose(false)}
-              disabled={isPending || !!isDetaljerPending}
-            >
-              Avbryt
-            </Button>
-            <Button onClick={handleLagre} disabled={!kanLagre || isPending || !!isDetaljerPending}>
-              {isPending || isDetaljerPending ? "Lagrer..." : "Lagre"}
-            </Button>
-          </div>
+        <div className="app-stack app-stack--xs">
+          <Label>Seed (la stå tomt for å fjerne)</Label>
+          <Input
+            type="number"
+            min={1}
+            value={seedVerdi}
+            onChange={(e) => setSeedVerdi(e.target.value)}
+            placeholder="t.eks. 1"
+          />
         </div>
-      </DialogContent>
-    </Dialog>
+
+        <ServerFeil feil={detaljerFeil ?? serverFeil ?? null} />
+      </div>
+    </AppDialog>
   );
 }

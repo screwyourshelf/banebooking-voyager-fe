@@ -8,14 +8,20 @@ const featuresRoot = path.join(sourceRoot, "features");
 const stylesheetEntryPath = path.join(sourceRoot, "index.css");
 const tokensPath = path.join(sourceRoot, "styles", "design-system", "tokens.css");
 const recordsRoot = path.join(sourceRoot, "components", "records");
-const tournamentRoot = path.join(sourceRoot, "features", "turnering");
 const recordCollectionHeaderPath = path.join(recordsRoot, "RecordCollectionHeader.tsx");
 const filterSwitchPath = path.join(sourceRoot, "components", "controls", "FilterSwitch.tsx");
 const controlChoicePath = path.join(sourceRoot, "components", "controls", "ControlChoice.tsx");
+const dateTimeInputPath = path.join(sourceRoot, "components", "controls", "DateTimeInput.tsx");
 const pagePath = path.join(sourceRoot, "components", "Page.tsx");
 const pageHeaderPath = path.join(sourceRoot, "components", "layout", "PageHeader.tsx");
 const adminEditorDialogPath = path.join(sourceRoot, "components", "admin", "AdminEditorDialog.tsx");
 const loginPagePath = path.join(sourceRoot, "features", "auth", "pages", "LoginPage.tsx");
+const loginPageLayoutPath = path.join(
+  sourceRoot,
+  "components",
+  "navigation",
+  "LoginPageLayout.tsx"
+);
 const allowedComponentFiles = new Set([
   filterSwitchPath,
   controlChoicePath,
@@ -23,6 +29,7 @@ const allowedComponentFiles = new Set([
   pageHeaderPath,
   adminEditorDialogPath,
   loginPagePath,
+  loginPageLayoutPath,
 ]);
 const allowedCssFiles = new Set([
   path.join(sourceRoot, "styles", "design-system", "patterns.css"),
@@ -94,13 +101,8 @@ const protectedClasses = [
 ];
 
 const compositionPrimitiveAllowlist = new Map([
-  [
-    "@/components/ui/card",
-    new Set([
-      path.join(featuresRoot, "statistikk", "components", "Medlemsstatistikk.tsx"),
-      path.join(featuresRoot, "statistikk", "components", "NøkkeltallGrid.tsx"),
-    ]),
-  ],
+  ["@/components/ui/card", new Set()],
+  ["@/components/ui/dialog", new Set()],
   ["@/components/ui/tabs", new Set()],
   ["@/components/ui/toggle-group", new Set()],
   ["@/components/ui/accordion", new Set()],
@@ -108,6 +110,11 @@ const compositionPrimitiveAllowlist = new Map([
 ]);
 
 const recipeAllowlist = new Set();
+const featureStyleAllowlist = new Set([
+  path.join(featuresRoot, "statistikk", "components", "BookingerPerMånedChart.tsx"),
+  path.join(featuresRoot, "statistikk", "components", "FordelingBarListe.tsx"),
+  path.join(featuresRoot, "statistikk", "components", "TidPåDøgnetChart.tsx"),
+]);
 const strictPatternRoots = [path.join(featuresRoot, "arrangement-admin")];
 
 const strictPatternFiles = new Set([
@@ -159,6 +166,35 @@ for (const filePath of sourceFiles) {
           message: "lager feature-komposisjon via recipes; bruk det beskyttede designsystem-API-et",
         });
       }
+
+      for (const match of source.matchAll(/className\s*=\s*["']([^"']+)["']/g)) {
+        for (const className of match[1].split(/\s+/)) {
+          if (/^(?:app|statistics|tournament)-/.test(className)) continue;
+          apiViolations.push({
+            filePath,
+            line: lineFor(source, match.index),
+            message: `bruker lokal utility-klasse ${className}; bruk designsystemets semantiske API`,
+          });
+        }
+      }
+
+      for (const match of source.matchAll(/className\s*=\s*\{/g)) {
+        apiViolations.push({
+          filePath,
+          line: lineFor(source, match.index),
+          message:
+            "bygger lokale stylingvarianter dynamisk; bruk data-attributter i en sentral komponent",
+        });
+      }
+
+      for (const match of source.matchAll(/\bstyle\s*=/g)) {
+        if (featureStyleAllowlist.has(filePath)) continue;
+        apiViolations.push({
+          filePath,
+          line: lineFor(source, match.index),
+          message: "har lokal inline-styling; flytt uttrykket til designsystemet",
+        });
+      }
     }
 
     if (
@@ -176,7 +212,7 @@ for (const filePath of sourceFiles) {
     }
 
     if (
-      !filePath.startsWith(`${tournamentRoot}${path.sep}`) &&
+      filePath !== dateTimeInputPath &&
       /type\s*=\s*["'](?:date|datetime-local)["']/.test(source)
     ) {
       const index = source.search(/type\s*=\s*["'](?:date|datetime-local)["']/);
@@ -415,7 +451,7 @@ async function validateStylesheets(files) {
   }
 
   const semanticPrefix =
-    /^(?:action|admin|app|arrangement|booking|content|control|date|error|filter|guard|login|mine|mobile|navbar|news|page|query|record|section|settings|statistics|user|weather)-/;
+    /^(?:action|admin|app|arrangement|booking|content|control|date|error|filter|guard|login|mine|mobile|navbar|news|page|query|record|section|settings|statistics|tournament|user|weather)-/;
 
   for (const filePath of componentFiles.filter((candidate) => candidate.endsWith(".tsx"))) {
     const source = sourceByPath.get(filePath);

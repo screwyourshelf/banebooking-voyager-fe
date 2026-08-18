@@ -20,7 +20,7 @@ export default function TurneringSpillerContent({
   visDrawFaser,
 }: Props) {
   return (
-    <div className="space-y-4">
+    <div className="app-stack app-stack--lg">
       {/* ─── Header ─── */}
       <TurneringHeaderSection
         tittel={turnering.arrangementTittel}
@@ -31,7 +31,7 @@ export default function TurneringSpillerContent({
 
       {turnering.status === "Oppsett" && (
         <PageSection>
-          <p className="text-sm text-muted-foreground italic">Påmelding åpner snart.</p>
+          <p className="app-text-empty">Påmelding åpner snart.</p>
         </PageSection>
       )}
 
@@ -43,7 +43,7 @@ export default function TurneringSpillerContent({
 
       {(visPaamelding || visDrawFaser) && klasseTabs.length === 0 && (
         <PageSection>
-          <p className="text-sm text-muted-foreground italic">Ingen klasser er satt opp.</p>
+          <p className="app-text-empty">Ingen klasser er satt opp.</p>
         </PageSection>
       )}
     </div>

@@ -1,12 +1,7 @@
 import { type ReactNode } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { SettingsStack } from "@/components/admin";
+import { AppDialog } from "@/components/dialogs";
+import { RecordFacts } from "@/components/records";
 import { Separator } from "@/components/ui/separator";
 import type { BaneRespons, GrenRespons } from "@/types";
 import type { BookingRegelRespons } from "@/types/Klubbdetaljer";
@@ -28,29 +23,24 @@ export default function ReglementDialog({ children, gren, bane }: Props) {
       : "Bookingregler";
 
   return (
-    <Dialog>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-      <DialogContent className="sm:max-w-xl">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-semibold tracking-tight">{title}</DialogTitle>
-          <DialogDescription>
-            Grenser, tider og varighet som gjelder når du booker.
-          </DialogDescription>
-        </DialogHeader>
-
-        {gren && bookingRegler ? (
-          <div className="space-y-6 pt-2">
-            <RuleSection
-              title="Hvor mye du kan booke"
-              description={`Gjelder ${gren.navn.toLocaleLowerCase("nb-NO")}.`}
-              facts={getBookingLimitFacts(bookingRegler)}
-            />
-            <Separator />
-            <RuleSection title="Når du kan booke" facts={getTimeFacts(bookingRegler)} />
-          </div>
-        ) : null}
-      </DialogContent>
-    </Dialog>
+    <AppDialog
+      trigger={children}
+      title={title}
+      description="Grenser, tider og varighet som gjelder når du booker."
+      size="wide"
+    >
+      {gren && bookingRegler ? (
+        <SettingsStack>
+          <RuleSection
+            title="Hvor mye du kan booke"
+            description={`Gjelder ${gren.navn.toLocaleLowerCase("nb-NO")}.`}
+            facts={getBookingLimitFacts(bookingRegler)}
+          />
+          <Separator />
+          <RuleSection title="Når du kan booke" facts={getTimeFacts(bookingRegler)} />
+        </SettingsStack>
+      ) : null}
+    </AppDialog>
   );
 }
 
@@ -64,19 +54,10 @@ function RuleSection({
   facts: Fact[];
 }) {
   return (
-    <section className="space-y-3">
-      <div className="space-y-1">
-        <h3 className="text-base font-semibold">{title}</h3>
-        {description ? <p className="text-sm text-muted-foreground">{description}</p> : null}
-      </div>
-      <dl className="grid gap-3 sm:grid-cols-3">
-        {facts.map((fact) => (
-          <div key={fact.label} className="rounded-2xl bg-muted/60 p-4">
-            <dt className="text-xs text-muted-foreground">{fact.label}</dt>
-            <dd className="mt-1 font-medium">{fact.value}</dd>
-          </div>
-        ))}
-      </dl>
+    <section>
+      <h3>{title}</h3>
+      {description ? <p>{description}</p> : null}
+      <RecordFacts items={facts} />
     </section>
   );
 }

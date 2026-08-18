@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 
 import { Button } from "@/components/ui/button";
 import { useKlubb } from "@/hooks/useKlubb";
-import { mobileHeaderStyles } from "@/styles/recipes";
 import { routePrefetchProps } from "@/utils/prefetchRoute";
 
 import ModeToggle from "./ModeToggle";
@@ -13,13 +12,13 @@ export default function MobileAppHeader() {
   const { data: klubb } = useKlubb();
 
   return (
-    <header className={mobileHeaderStyles.root}>
+    <header className="app-topbar">
       <NavbarBrandMedKlubb
         klubbnavn={klubb?.navn ?? "Banebooking"}
-        className={mobileHeaderStyles.brand}
-        logoClassName={mobileHeaderStyles.logo}
+        className="app-topbar__brand"
+        logoClassName="app-topbar__logo"
       />
-      <div className={mobileHeaderStyles.actions}>
+      <div className="app-topbar__actions">
         <ModeToggle />
         <Button asChild variant="ghost" size="icon-sm">
           <Link to="nyheter" aria-label="Nyheter" {...routePrefetchProps("nyheter")}>

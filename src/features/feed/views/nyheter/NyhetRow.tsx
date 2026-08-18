@@ -1,6 +1,11 @@
 import { ArrowUpRight } from "lucide-react";
 
-import { RecordCard, RecordCardStatic, RecordEyebrow } from "@/components/records";
+import {
+  RecordCard,
+  RecordCardStatic,
+  RecordEyebrow,
+  RecordSummaryCopy,
+} from "@/components/records";
 import { Button } from "@/components/ui/button";
 import type { FeedItemRespons } from "@/types";
 
@@ -17,7 +22,7 @@ export default function NyhetRow({ item }: Props) {
   return (
     <RecordCard as="article">
       <RecordCardStatic layout="content-action">
-        <div className="news-card__content">
+        <div>
           <RecordEyebrow>
             {publishedDate ? (
               <time dateTime={item.publisertDato ?? undefined}>{publishedDate}</time>
@@ -26,8 +31,7 @@ export default function NyhetRow({ item }: Props) {
             )}
           </RecordEyebrow>
 
-          <h2 className="news-card__title">{item.tittel}</h2>
-          {summary ? <p className="news-card__summary">{summary}</p> : null}
+          <RecordSummaryCopy title={item.tittel} description={summary || undefined} />
         </div>
 
         {item.lenke ? (

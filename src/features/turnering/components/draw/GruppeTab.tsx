@@ -40,7 +40,7 @@ export function GruppeTab({
       value: "kamper",
       label: "Kamper",
       content: (
-        <div className="space-y-2">
+        <div className="app-stack app-stack--sm">
           {gruppe.kamper.map((kamp) => (
             <KampKort
               key={kamp.id}
@@ -55,10 +55,8 @@ export function GruppeTab({
   ];
 
   return (
-    <div className="space-y-2">
-      {gruppe.foreslåttBane && (
-        <p className="text-sm text-muted-foreground">Bane: {gruppe.foreslåttBane}</p>
-      )}
+    <div className="app-stack app-stack--sm">
+      {gruppe.foreslåttBane && <p className="app-text-muted">Bane: {gruppe.foreslåttBane}</p>}
       <Tabs items={items} />
     </div>
   );

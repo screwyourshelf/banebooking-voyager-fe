@@ -2,7 +2,7 @@ import { CalendarCheck, Clock3, UsersRound } from "lucide-react";
 import CardSection from "@/components/layout/CardSection";
 import SectionHeading from "@/components/layout/SectionHeading";
 import { RecordListState } from "@/components/records";
-import { Card, CardContent } from "@/components/ui/card";
+import { MetricCard, MetricGrid } from "@/components/statistics";
 import type { BookingMedlemsstatistikk, Medlemsbookingtype } from "@/features/statistikk/types";
 import {
   formatAntall,
@@ -63,25 +63,18 @@ export default function Medlemsstatistikk({ medlemmer, bookingtype }: Props) {
 
   return (
     <div className="statistics-dashboard__tab-content">
-      <section className="statistics-member-metrics" aria-label="Medlemsnøkkeltall">
+      <MetricGrid variant="members" label="Medlemsnøkkeltall">
         {nøkkeltall.map(({ label, verdi, enhet, beskrivelse, ikon: Ikon }) => (
-          <Card key={label} size="sm" className="statistics-metric">
-            <CardContent className="statistics-metric__content">
-              <span className="statistics-metric__icon" aria-hidden="true">
-                <Ikon />
-              </span>
-              <span className="statistics-metric__copy">
-                <small>{label}</small>
-                <strong>
-                  {verdi}
-                  {enhet ? <span className="statistics-metric__unit"> {enhet}</span> : null}
-                </strong>
-                <span>{beskrivelse}</span>
-              </span>
-            </CardContent>
-          </Card>
+          <MetricCard
+            key={label}
+            label={label}
+            value={verdi}
+            unit={enhet}
+            description={beskrivelse}
+            icon={<Ikon />}
+          />
         ))}
-      </section>
+      </MetricGrid>
 
       <CardSection className="statistics-section statistics-top-users" padding="sm">
         <div className="statistics-top-users__heading">

@@ -23,7 +23,7 @@ export default function AdminKampgjennomforingContent({
   klasseTabs,
 }: Props) {
   return (
-    <div className="space-y-4">
+    <div className="app-stack app-stack--lg">
       {/* ─── Header ─── */}
       <TurneringHeaderSection
         tittel={turnering.arrangementTittel}
@@ -48,7 +48,7 @@ export default function AdminKampgjennomforingContent({
         </PageSection>
       ) : (
         <PageSection>
-          <p className="text-sm text-muted-foreground italic">Ingen klasser er satt opp ennå.</p>
+          <p className="app-text-empty">Ingen klasser er satt opp ennå.</p>
         </PageSection>
       )}
     </div>

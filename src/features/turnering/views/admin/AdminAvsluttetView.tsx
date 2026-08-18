@@ -51,7 +51,7 @@ function AdminAvsluttetKlasseTab({ turneringId, klasse }: KlasseTabProps) {
     <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
       <PageSection title="Kampprogram">
         {klasse.foreslåttStartTid && (
-          <p className="text-sm text-muted-foreground">
+          <p className="app-text-muted">
             Startet{" "}
             {format(parseISO(klasse.foreslåttStartTid), "EEEE d. MMM 'kl.' HH:mm", {
               locale: nb,
@@ -59,12 +59,10 @@ function AdminAvsluttetKlasseTab({ turneringId, klasse }: KlasseTabProps) {
           </p>
         )}
 
-        {!harDraw && (
-          <p className="text-sm text-muted-foreground italic">Ingen kampprogram tilgjengelig.</p>
-        )}
+        {!harDraw && <p className="app-text-empty">Ingen kampprogram tilgjengelig.</p>}
 
         {harDraw && gruppePlanTabs.length === 0 && (
-          <p className="text-sm text-muted-foreground italic">Ingen grupper tilgjengelig.</p>
+          <p className="app-text-empty">Ingen grupper tilgjengelig.</p>
         )}
 
         {harDraw && gruppePlanTabs.length > 0 && <Tabs items={gruppePlanTabs} />}

@@ -11,6 +11,10 @@ Disse reglene er arkitektur, ikke anbefalinger.
 7. Feature-kode leverer innhold, tilstand og handlinger. Den eier ikke den overordnede visuelle grammatikken.
 8. Nye varianter opprettes først i det delte mønsteret og må fungere for minst to reelle konsumenter.
 9. Unntakslisten i designsystemkontrollen er lukket teknisk gjeld. Den skal bare reduseres, aldri utvides for å få en lokal løsning gjennom.
-10. Arrangementadministrasjonen er en beskyttet feature: lokale `className`/`style`, rå komposisjonsprimitiver og feature-recipes er ikke tillatt.
+10. Alle features er beskyttet mot lokale utility-klasser, dynamisk sammensatte stylingvarianter, rå komposisjonsprimitiver, rå dato-/tidfelt og feature-recipes.
+11. Semantiske feature-klasser må starte med `app-`, `statistics-` eller `tournament-` og ha sin eneste definisjon i `src/styles/design-system`. Feature-koden kan velge et godkjent mønster, men kan ikke definere uttrykket.
+12. Arrangementadministrasjonen, booking og mine bookinger har strengeste nivå: ingen lokale `className` eller `style` i det hele tatt.
+13. Inline `style` er bare tillatt for datadrevne CSS-variabler i de tre sentralt kontrollerte statistikkvisualiseringene. Unntakslisten er eksplisitt og skal ikke utvides.
+14. Dialog, Card, Tabs, ToggleGroup, Accordion og Sheet importeres ikke som rå komposisjonsprimitiver i features. Delte komponenter eier struktur, spacing og responsiv oppførsel.
 
 `npm run design-system:check` håndhever grensene. En endring som trenger å bryte dem, skal i stedet forbedre den delte komponenten eller tokenmodellen.

@@ -142,10 +142,10 @@ export function KlasseKampTab({ turneringId, klasse, forslagStartTid, renderActi
 
   return (
     <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
-      <div className="space-y-4">
+      <div className="app-stack app-stack--lg">
         <PageSection title="Kampprogram" actions={renderActions?.(ctx)}>
           {klasse.foreslåttStartTid && (
-            <p className="text-sm text-muted-foreground">
+            <p className="app-text-muted">
               Starter{" "}
               {format(parseISO(klasse.foreslåttStartTid), "EEEE d. MMM 'kl.' HH:mm", {
                 locale: nb,
@@ -153,12 +153,10 @@ export function KlasseKampTab({ turneringId, klasse, forslagStartTid, renderActi
             </p>
           )}
 
-          {!harDraw && (
-            <p className="text-sm text-muted-foreground italic">Draw er ikke generert ennå.</p>
-          )}
+          {!harDraw && <p className="app-text-empty">Draw er ikke generert ennå.</p>}
 
           {harDraw && gruppePlanTabs.length === 0 && (
-            <p className="text-sm text-muted-foreground italic">Ingen grupper ennå.</p>
+            <p className="app-text-empty">Ingen grupper ennå.</p>
           )}
           {harDraw && gruppePlanTabs.length > 0 && <Tabs items={gruppePlanTabs} />}
         </PageSection>

@@ -3,3 +3,4 @@ export { default as Tabs, TabsLazyMount } from "./Tabs";
 export { default as AppSidebar } from "./AppSidebar";
 export { default as MobileAppHeader } from "./MobileAppHeader";
 export { default as MobileBottomNav } from "./MobileBottomNav";
+export { default as LoginPageLayout } from "./LoginPageLayout";

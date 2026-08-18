@@ -1,4 +1,3 @@
-import { cn } from "@/lib/utils";
 import { KampStatusBadge } from "./KampStatusBadge";
 import type { SluttspillKampVisning } from "@/types";
 
@@ -32,58 +31,50 @@ function KampBoks({
   const harSett = !!kamp.resultat?.sett?.length && kamp.status !== "WalkOver";
 
   return (
-    <div className="rounded-lg border bg-background p-2 w-44 space-y-1.5">
+    <div className="tournament-bracket-match">
       {/* Scoreboard */}
-      <div className="space-y-0.5">
-        <div className="flex items-center gap-1.5">
+      <div className="app-stack app-stack--xs">
+        <div className="app-inline">
           <span
-            className={cn(
-              "flex-1 min-w-0 truncate text-sm",
-              sp1Vant && "font-semibold",
-              sp2Vant && "text-muted-foreground"
-            )}
+            className="tournament-player"
+            data-winner={sp1Vant || undefined}
+            data-loser={sp2Vant || undefined}
           >
             {sp1Navn}
           </span>
-          <div className="flex gap-0.5 shrink-0 tabular-nums text-sm">
+          <div className="tournament-score" data-density="compact">
             {harSett &&
               kamp.resultat!.sett.map((s, i) => (
-                <span key={i} className={cn("w-4 text-center", sp1Vant && "font-semibold")}>
+                <span key={i} data-winner={sp1Vant || undefined}>
                   {s.spiller1Games}
                 </span>
               ))}
-            {kamp.status === "WalkOver" && sp1Vant && (
-              <span className="text-xs text-muted-foreground">W/O</span>
-            )}
+            {kamp.status === "WalkOver" && sp1Vant && <span className="app-text-caption">W/O</span>}
           </div>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="app-inline">
           <span
-            className={cn(
-              "flex-1 min-w-0 truncate text-sm",
-              sp2Vant && "font-semibold",
-              sp1Vant && "text-muted-foreground"
-            )}
+            className="tournament-player"
+            data-winner={sp2Vant || undefined}
+            data-loser={sp1Vant || undefined}
           >
             {sp2Navn}
           </span>
-          <div className="flex gap-0.5 shrink-0 tabular-nums text-sm">
+          <div className="tournament-score" data-density="compact">
             {harSett &&
               kamp.resultat!.sett.map((s, i) => (
-                <span key={i} className={cn("w-4 text-center", sp2Vant && "font-semibold")}>
+                <span key={i} data-winner={sp2Vant || undefined}>
                   {s.spiller2Games}
                 </span>
               ))}
-            {kamp.status === "WalkOver" && sp2Vant && (
-              <span className="text-xs text-muted-foreground">W/O</span>
-            )}
+            {kamp.status === "WalkOver" && sp2Vant && <span className="app-text-caption">W/O</span>}
           </div>
         </div>
       </div>
 
       {/* Meta + status */}
-      <div className="flex items-center justify-between gap-1">
-        <div className="text-xs text-muted-foreground flex gap-1.5">
+      <div className="app-inline app-inline--between">
+        <div className="tournament-match-card__meta">
           {kamp.kampNummer && <span>#{kamp.kampNummer}</span>}
           {kamp.bane && <span>{kamp.bane}</span>}
         </div>
@@ -97,10 +88,7 @@ function KampBoks({
         kamp.spiller1Navn &&
         kamp.spiller2Navn &&
         onRegistrer && (
-          <button
-            className="w-full rounded border border-primary/40 py-1 text-xs font-medium text-primary active:bg-primary/5"
-            onClick={() => onRegistrer(kamp.id)}
-          >
+          <button className="tournament-result-action" onClick={() => onRegistrer(kamp.id)}>
             Registrer
           </button>
         )}
@@ -112,19 +100,17 @@ export function SluttspillBracket({ kamper, onRegistrer, kanRegistrere }: Props)
   const runder = [...new Set(kamper.map((k) => k.runde))].sort((a, b) => b - a);
 
   return (
-    <div className="relative">
-      <div className="overflow-x-auto">
-        <div className="flex gap-4 items-start pb-2 min-w-max">
+    <div className="tournament-bracket">
+      <div className="app-scroll-x">
+        <div className="tournament-bracket__rounds">
           {runder.map((runde) => {
             const rundeKamper = kamper
               .filter((k) => k.runde === runde)
               .sort((a, b) => a.bracketPosisjon - b.bracketPosisjon);
 
             return (
-              <div key={runde} className="flex flex-col gap-4">
-                <div className="text-xs font-semibold uppercase tracking-wider text-muted-foreground px-1">
-                  {rundeLabel(runde)}
-                </div>
+              <div key={runde} className="tournament-bracket__round">
+                <div className="tournament-bracket__round-title">{rundeLabel(runde)}</div>
                 {rundeKamper.map((kamp) => (
                   <KampBoks
                     key={kamp.id}
@@ -138,7 +124,7 @@ export function SluttspillBracket({ kamper, onRegistrer, kanRegistrere }: Props)
           })}
         </div>
       </div>
-      <div className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-background to-transparent" />
+      <div className="tournament-bracket__fade" />
     </div>
   );
 }

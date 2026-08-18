@@ -1,14 +1,9 @@
 import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import ScoreInput from "@/components/controls/ScoreInput";
+import { AppDialog } from "@/components/dialogs";
+import { Inline, Stack, Text } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import type {
   GruppeKampVisning,
   KampAvslutning,
@@ -146,111 +141,109 @@ export function ResultatDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Registrer resultat</DialogTitle>
-          <DialogDescription>
-            {sp1Navn} vs. {sp2Navn}
-          </DialogDescription>
-        </DialogHeader>
-
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <Label>Vinner</Label>
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                variant={vinner === "Spiller1" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setVinner("Spiller1")}
-              >
-                {sp1Navn}
-              </Button>
-              <Button
-                type="button"
-                variant={vinner === "Spiller2" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setVinner("Spiller2")}
-              >
-                {sp2Navn}
-              </Button>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label>Avslutning</Label>
-            <div className="flex gap-2">
-              <Button
-                type="button"
-                variant={avslutning === "Normal" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setAvslutning("Normal")}
-              >
-                Normal
-              </Button>
-              <Button
-                type="button"
-                variant={avslutning === "Retired" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setAvslutning("Retired")}
-              >
-                Retired
-              </Button>
-              <Button
-                type="button"
-                variant={avslutning === "Default" ? "default" : "outline"}
-                size="sm"
-                onClick={() => setAvslutning("Default")}
-              >
-                Default
-              </Button>
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label>Sett</Label>
-            {sett.map((s, idx) => (
-              <div key={idx} className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="text-sm text-muted-foreground w-12">Sett {idx + 1}</span>
-                  <Input
-                    type="number"
-                    min={0}
-                    max={99}
-                    value={s.spiller1}
-                    onChange={(e) => oppdaterSett(idx, "spiller1", e.target.value)}
-                    className="w-16 text-center"
-                    placeholder="0"
-                  />
-                  <span className="text-muted-foreground">–</span>
-                  <Input
-                    type="number"
-                    min={0}
-                    max={99}
-                    value={s.spiller2}
-                    onChange={(e) => oppdaterSett(idx, "spiller2", e.target.value)}
-                    className="w-16 text-center"
-                    placeholder="0"
-                  />
-                </div>
-                {settFeil[idx] && <p className="text-xs text-destructive pl-14">{settFeil[idx]}</p>}
-              </div>
-            ))}
-          </div>
-
-          {clientFeil && <p className="text-sm text-destructive">{clientFeil}</p>}
-          <ServerFeil feil={serverFeil ?? null} />
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => handleClose(false)} disabled={isPending}>
-              Avbryt
+    <AppDialog
+      open={open}
+      onOpenChange={handleClose}
+      title="Registrer resultat"
+      description={`${sp1Navn} vs. ${sp2Navn}`}
+      actions={
+        <>
+          <Button variant="outline" onClick={() => handleClose(false)} disabled={isPending}>
+            Avbryt
+          </Button>
+          <Button onClick={handleSubmit} disabled={!vinner || isPending}>
+            {isPending ? "Lagrer..." : "Lagre resultat"}
+          </Button>
+        </>
+      }
+    >
+      <Stack gap="lg">
+        <Stack gap="sm">
+          <Label>Vinner</Label>
+          <Inline wrap>
+            <Button
+              type="button"
+              variant={vinner === "Spiller1" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setVinner("Spiller1")}
+            >
+              {sp1Navn}
             </Button>
-            <Button onClick={handleSubmit} disabled={!vinner || isPending}>
-              {isPending ? "Lagrer..." : "Lagre resultat"}
+            <Button
+              type="button"
+              variant={vinner === "Spiller2" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setVinner("Spiller2")}
+            >
+              {sp2Navn}
             </Button>
-          </div>
-        </div>
-      </DialogContent>
-    </Dialog>
+          </Inline>
+        </Stack>
+
+        <Stack gap="sm">
+          <Label>Avslutning</Label>
+          <Inline wrap>
+            <Button
+              type="button"
+              variant={avslutning === "Normal" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setAvslutning("Normal")}
+            >
+              Normal
+            </Button>
+            <Button
+              type="button"
+              variant={avslutning === "Retired" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setAvslutning("Retired")}
+            >
+              Retired
+            </Button>
+            <Button
+              type="button"
+              variant={avslutning === "Default" ? "default" : "outline"}
+              size="sm"
+              onClick={() => setAvslutning("Default")}
+            >
+              Default
+            </Button>
+          </Inline>
+        </Stack>
+
+        <Stack gap="sm">
+          <Label>Sett</Label>
+          {sett.map((s, idx) => (
+            <Stack key={idx} gap="xs">
+              <Inline>
+                <Text as="span" variant="muted">
+                  Sett {idx + 1}
+                </Text>
+                <ScoreInput
+                  min={0}
+                  max={99}
+                  value={s.spiller1}
+                  onChange={(e) => oppdaterSett(idx, "spiller1", e.target.value)}
+                  placeholder="0"
+                />
+                <Text as="span" variant="muted">
+                  –
+                </Text>
+                <ScoreInput
+                  min={0}
+                  max={99}
+                  value={s.spiller2}
+                  onChange={(e) => oppdaterSett(idx, "spiller2", e.target.value)}
+                  placeholder="0"
+                />
+              </Inline>
+              {settFeil[idx] && <Text variant="danger">{settFeil[idx]}</Text>}
+            </Stack>
+          ))}
+        </Stack>
+
+        {clientFeil && <Text variant="danger">{clientFeil}</Text>}
+        <ServerFeil feil={serverFeil ?? null} />
+      </Stack>
+    </AppDialog>
   );
 }
