@@ -8,6 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import type { BookingSlotRespons } from "@/types";
+import { bookingSlotStyles } from "@/styles/recipes";
 import BookingSlotDetails from "./BookingSlotDetails";
 import BookingSlotSummary from "./BookingSlotSummary";
 import { getBookingSlotPresentation } from "./bookingSlotPresentation";
@@ -46,8 +47,8 @@ function BookingSlotRow({ grenId, slot, isAuthenticated, onBook, onFjern }: Prop
   return (
     <Accordion type="single" collapsible className={slot.erPassert ? "opacity-60" : undefined}>
       <AccordionItem value={presentation.slotKey}>
-        <div className="flex items-center gap-2 pr-4">
-          <AccordionTrigger className="min-w-0 flex-1 hover:no-underline">
+        <div className={bookingSlotStyles.row}>
+          <AccordionTrigger className={bookingSlotStyles.trigger}>
             <BookingSlotSummary slot={slot} presentation={presentation} />
           </AccordionTrigger>
           {quickAction}

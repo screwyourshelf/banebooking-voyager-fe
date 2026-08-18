@@ -63,10 +63,10 @@
   --app-nav-active-surface: var(--brand-50);
   --app-nav-indicator: var(--brand-500);
   --app-nav-indicator-on-dark: var(--brand-300);
-  --app-control-surface: #173c25;
-  --app-control-surface-strong: #23452a;
+  --app-control-surface: #1d5133;
+  --app-control-surface-strong: #285f3e;
   --app-control-text: #ffffff;
-  --app-control-muted: #bdd0bf;
+  --app-control-muted: #ccdbd0;
   --activity-accent: #88c984;
   --activity-accent-strong: #376c3c;
   --activity-soft: #e4f3df;

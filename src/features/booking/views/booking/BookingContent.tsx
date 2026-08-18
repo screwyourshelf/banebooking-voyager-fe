@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { bookingPageStyles } from "@/styles/recipes";
 import BookingSchedule from "./BookingSchedule";
 import type { BookingContentProps } from "./bookingViewTypes";
@@ -9,9 +8,7 @@ export default function BookingContent(props: BookingContentProps) {
   return (
     <div className={bookingPageStyles.frame}>
       <header className={bookingPageStyles.hero}>
-        <Badge variant="outline" className={bookingPageStyles.heroBadge}>
-          Booking
-        </Badge>
+        <p className={bookingPageStyles.heroKicker}>Booking</p>
         <div className="space-y-1.5">
           <h1 className={bookingPageStyles.heroTitle}>Book bane</h1>
           <p className={bookingPageStyles.heroDescription}>Finn en ledig tid.</p>

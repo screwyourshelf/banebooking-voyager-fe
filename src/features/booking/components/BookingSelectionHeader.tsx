@@ -52,6 +52,10 @@ export default function BookingSelectionHeader({
   const today = startOfDay(new Date());
   const tomorrow = addDays(today, 1);
   const shownDate = valgtDato ?? today;
+  const isToday = isSameDay(shownDate, today);
+  const isTomorrow = isSameDay(shownDate, tomorrow);
+  const dateButtonLabel =
+    isToday || isTomorrow ? "Velg dato" : format(shownDate, "d. MMM", { locale: nb });
   const selectedActivity = grener.find((gren) => gren.id === valgtGrenId);
   const selectedCourt = baner.find((bane) => bane.id === valgtBaneId);
   const resultLabel =
@@ -124,23 +128,17 @@ export default function BookingSelectionHeader({
           data-disabled={isSetupFetching || undefined}
         >
           <FieldLabel className={bookingPageStyles.selectorLabel}>Dag</FieldLabel>
-          <div className="grid gap-2">
+          <div className={bookingPageStyles.selectorDayRow}>
             <ToggleGroup
               type="single"
               variant="outline"
-              value={
-                isSameDay(shownDate, today)
-                  ? "today"
-                  : isSameDay(shownDate, tomorrow)
-                    ? "tomorrow"
-                    : ""
-              }
+              value={isToday ? "today" : isTomorrow ? "tomorrow" : ""}
               onValueChange={(value) => {
                 if (value === "today") onDatoChange(today);
                 if (value === "tomorrow") onDatoChange(tomorrow);
               }}
               aria-label="Velg dag"
-              className={bookingPageStyles.selectorGroup}
+              className={bookingPageStyles.selectorDayGroup}
             >
               <ToggleGroupItem
                 value="today"
@@ -164,9 +162,10 @@ export default function BookingSelectionHeader({
                   variant="outline"
                   className={bookingPageStyles.selectorDate}
                   disabled={isSetupFetching}
+                  aria-label={`Velg dato, valgt ${format(shownDate, "EEEE d. MMMM", { locale: nb })}`}
                 >
                   <CalendarDays aria-hidden="true" />
-                  {format(shownDate, "EEEE d. MMMM", { locale: nb })}
+                  {dateButtonLabel}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">

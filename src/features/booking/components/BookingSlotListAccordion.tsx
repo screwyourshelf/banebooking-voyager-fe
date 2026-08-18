@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import type { BookingSlotRespons } from "@/types";
 import { grupperSlots } from "@/utils/bookingUtils";
+import { bookingSlotStyles } from "@/styles/recipes";
 import BookingSlotRow from "./BookingSlotRow";
 import { getBookingSlotKey } from "./bookingSlotPresentation";
 
@@ -59,14 +60,14 @@ export function BookingSlotListAccordion({
   const slotsÅVise = erIDag && !visPasserte ? kommendeSlots : synligeSlots;
 
   return (
-    <div className="space-y-4">
+    <div className={bookingSlotStyles.list}>
       {slotsÅVise.length === 0 ? (
         <BookingSlotEmptyState
           title="Dagens spilletider er over"
           description="Vis passerte tider eller velg neste dag."
         />
       ) : (
-        <div className="space-y-3" aria-label="Tilgjengelige tider">
+        <div className={bookingSlotStyles.slots} aria-label="Tilgjengelige tider">
           {slotsÅVise.map((slot) => (
             <BookingSlotRow
               key={getBookingSlotKey(slot)}

@@ -1,6 +1,7 @@
 import { Badge, type badgeVariants } from "@/components/ui/badge";
 import WeatherInfo from "@/components/WeatherInfo";
 import type { BookingSlotRespons, SlotStatus } from "@/types";
+import { bookingSlotStyles } from "@/styles/recipes";
 import type { VariantProps } from "class-variance-authority";
 import type { BookingSlotPresentation } from "./bookingSlotPresentation";
 
@@ -13,12 +14,12 @@ type BadgeVariant = VariantProps<typeof badgeVariants>["variant"];
 
 export default function BookingSlotSummary({ slot, presentation }: Props) {
   return (
-    <div className="grid min-w-0 gap-2 text-left sm:grid-cols-[7.5rem_minmax(0,1fr)] sm:items-center sm:gap-5">
-      <div className="flex flex-wrap items-baseline gap-x-1.5 gap-y-1 tabular-nums">
-        <strong className="text-base">{presentation.startTid}</strong>
-        <span className="text-sm text-muted-foreground">–{presentation.sluttTid}</span>
+    <div className={bookingSlotStyles.summary}>
+      <div className={bookingSlotStyles.time}>
+        <strong className={bookingSlotStyles.startTime}>{presentation.startTid}</strong>
+        <span className={bookingSlotStyles.endTime}>–{presentation.sluttTid}</span>
         {slot.værSymbol || typeof slot.temperatur === "number" ? (
-          <span className="basis-full">
+          <span className={bookingSlotStyles.weather}>
             <WeatherInfo
               værSymbol={slot.værSymbol}
               temperatur={slot.temperatur}
@@ -29,18 +30,18 @@ export default function BookingSlotSummary({ slot, presentation }: Props) {
         ) : null}
       </div>
 
-      <div className="flex min-w-0 flex-wrap items-center gap-2">
+      <div className={bookingSlotStyles.status}>
+        <span className={bookingSlotStyles.mobileStatus}>{presentation.hovedtekst}</span>
         <Badge
           variant={getBadgeVariant(presentation.status)}
-          className={presentation.status === "ledig" ? "bg-primary/10 text-primary" : undefined}
+          className={`${bookingSlotStyles.desktopStatus}${
+            presentation.status === "ledig" ? " bg-primary/10 text-primary" : ""
+          }`}
         >
           {presentation.hovedtekst}
         </Badge>
         {presentation.sekundærtekst ? (
-          <span
-            className="min-w-0 truncate text-sm text-muted-foreground"
-            title={presentation.sekundærtekst}
-          >
+          <span className={bookingSlotStyles.secondary} title={presentation.sekundærtekst}>
             {presentation.sekundærtekst}
           </span>
         ) : null}
