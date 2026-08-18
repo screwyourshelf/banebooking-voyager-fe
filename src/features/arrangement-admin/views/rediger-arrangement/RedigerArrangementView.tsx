@@ -25,6 +25,7 @@ import {
   ARRANGEMENT_KATEGORI_VALG,
   formaterAntallBanetider,
 } from "@/utils/arrangementPresentation";
+import { arrangementEditorStyles, binaryChoiceStyles } from "@/styles/recipes";
 
 import { useNavigate } from "react-router-dom";
 
@@ -373,24 +374,18 @@ export default function RedigerArrangementView({
       <Tabs
         value={aktivTab}
         onValueChange={(value) => setAktivTab(value as typeof aktivTab)}
-        className="gap-0 overflow-hidden rounded-2xl bg-card ring-1 ring-foreground/10"
+        className={arrangementEditorStyles.tabs}
       >
         <div className="border-b px-4 sm:px-6">
           <TabsList
             variant="line"
             aria-label="Rediger arrangement"
-            className="h-12 w-full justify-start gap-6"
+            className={arrangementEditorStyles.tabsList}
           >
-            <TabsTrigger
-              value="metadata"
-              className="flex-none rounded-none border-0 px-0 after:bg-ring focus-visible:border-transparent focus-visible:ring-0 focus-visible:outline-none"
-            >
+            <TabsTrigger value="metadata" className={arrangementEditorStyles.tabsTrigger}>
               Informasjon
             </TabsTrigger>
-            <TabsTrigger
-              value="bookinger"
-              className="flex-none rounded-none border-0 px-0 after:bg-ring focus-visible:border-transparent focus-visible:ring-0 focus-visible:outline-none"
-            >
+            <TabsTrigger value="bookinger" className={arrangementEditorStyles.tabsTrigger}>
               Tider
             </TabsTrigger>
           </TabsList>
@@ -403,8 +398,8 @@ export default function RedigerArrangementView({
               void håndterLagreMetadata();
             }}
           >
-            <section className="px-4 py-6 sm:px-6">
-              <div className="mb-5 space-y-1">
+            <section className={arrangementEditorStyles.section}>
+              <div className={arrangementEditorStyles.sectionIntro}>
                 <h2 className="font-heading text-lg font-medium">Arrangement</h2>
                 <p className="text-sm text-muted-foreground">
                   Informasjonen kan lagres uten å endre banetidene.
@@ -413,7 +408,7 @@ export default function RedigerArrangementView({
 
               <div className="divide-y border-y">
                 {grener.length > 1 ? (
-                  <div className="grid gap-3 py-4 md:grid-cols-[minmax(0,1fr)_minmax(18rem,32rem)] md:items-center">
+                  <div className={arrangementEditorStyles.fieldRow}>
                     <div className="space-y-1">
                       <Label htmlFor="gren">Gren for nye banetider</Label>
                       <p className="text-sm text-muted-foreground">
@@ -435,7 +430,7 @@ export default function RedigerArrangementView({
                   </div>
                 ) : null}
 
-                <div className="grid gap-3 py-4 md:grid-cols-[minmax(0,1fr)_minmax(18rem,32rem)] md:items-center">
+                <div className={arrangementEditorStyles.fieldRow}>
                   <Label htmlFor="kategori">Kategori</Label>
                   <Select
                     value={kategori}
@@ -457,7 +452,7 @@ export default function RedigerArrangementView({
                   </Select>
                 </div>
 
-                <div className="grid gap-3 py-4 md:grid-cols-[minmax(0,1fr)_minmax(18rem,32rem)] md:items-start">
+                <div className={arrangementEditorStyles.fieldRowTop}>
                   <Label htmlFor="beskrivelse">Intern beskrivelse</Label>
                   <Textarea
                     id="beskrivelse"
@@ -473,8 +468,8 @@ export default function RedigerArrangementView({
 
             <Separator />
 
-            <section className="px-4 py-6 sm:px-6">
-              <div className="mb-5 space-y-1">
+            <section className={arrangementEditorStyles.section}>
+              <div className={arrangementEditorStyles.sectionIntro}>
                 <h2 className="font-heading text-lg font-medium">Publisering</h2>
                 <p className="text-sm text-muted-foreground">
                   Styr presentasjonen på klubbens nettside.
@@ -501,7 +496,7 @@ export default function RedigerArrangementView({
 
                 {publisertPåNettsiden ? (
                   <>
-                    <div className="grid gap-3 py-4 md:grid-cols-[minmax(0,1fr)_minmax(18rem,32rem)] md:items-center">
+                    <div className={arrangementEditorStyles.fieldRow}>
                       <Label htmlFor="nettside-tittel">Tittel på nettsiden</Label>
                       <Input
                         id="nettside-tittel"
@@ -531,8 +526,8 @@ export default function RedigerArrangementView({
 
             <Separator />
 
-            <section className="px-4 py-6 sm:px-6">
-              <div className="mb-5 space-y-1">
+            <section className={arrangementEditorStyles.section}>
+              <div className={arrangementEditorStyles.sectionIntro}>
                 <h2 className="font-heading text-lg font-medium">Turnering</h2>
                 <p className="text-sm text-muted-foreground">
                   Koble arrangementet til turneringsadministrasjon ved behov.
@@ -570,8 +565,8 @@ export default function RedigerArrangementView({
 
             <Separator />
 
-            <section className="px-4 py-6 sm:px-6">
-              <div className="mb-5 space-y-1">
+            <section className={arrangementEditorStyles.section}>
+              <div className={arrangementEditorStyles.sectionIntro}>
                 <p className="text-xs font-medium tracking-wide text-destructive uppercase">
                   Fareområde
                 </p>
@@ -617,8 +612,8 @@ export default function RedigerArrangementView({
         </TabsContent>
 
         <TabsContent value="bookinger" className="mt-0">
-          <section className="px-4 py-6 sm:px-6">
-            <div className="mb-5 space-y-1">
+          <section className={arrangementEditorStyles.section}>
+            <div className={arrangementEditorStyles.sectionIntro}>
               <h2 className="font-heading text-lg font-medium">Legg til banetider</h2>
               <p className="text-sm text-muted-foreground">
                 Nye tider legges først som forslag og lagres separat.
@@ -633,19 +628,19 @@ export default function RedigerArrangementView({
                 if (value) setOppsettsModus(value as typeof oppsettsModus);
               }}
               aria-label="Velg oppsettstype"
-              className="w-full sm:w-auto"
+              className={binaryChoiceStyles.group}
             >
               <ToggleGroupItem
                 value="gjentakende"
                 aria-label="Bruk gjentakende oppsett"
-                className="flex-1 sm:flex-none"
+                className={binaryChoiceStyles.item}
               >
                 Gjentakende
               </ToggleGroupItem>
               <ToggleGroupItem
                 value="manuell"
                 aria-label="Bruk manuelt oppsett"
-                className="flex-1 sm:flex-none"
+                className={binaryChoiceStyles.item}
               >
                 Manuelt
               </ToggleGroupItem>
@@ -654,8 +649,8 @@ export default function RedigerArrangementView({
 
           <Separator />
 
-          <section className="px-4 py-6 sm:px-6">
-            <div className="mb-5 space-y-1">
+          <section className={arrangementEditorStyles.section}>
+            <div className={arrangementEditorStyles.sectionIntro}>
               <h2 className="font-heading text-lg font-medium">
                 {oppsettsModus === "gjentakende" ? "Gjentakende tider" : "Manuelle tider"}
               </h2>

@@ -9,6 +9,7 @@ import ArrangementAdminOverview from "@/features/arrangement-admin/views/Arrange
 import { useBruker } from "@/hooks/useBruker";
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
+import { brandedPageStyles } from "@/styles/recipes";
 
 export default function ArrangementPage() {
   const [createOpen, setCreateOpen] = useState(false);
@@ -16,22 +17,17 @@ export default function ArrangementPage() {
   const canManageArrangements = harHandling(bruker?.kapabiliteter, Kapabiliteter.arrangement.se);
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 pb-6 sm:px-6 md:py-8 lg:px-8 lg:py-10">
+    <div className={brandedPageStyles.frame}>
       <div className="flex min-h-[36rem] flex-col gap-0 overflow-hidden rounded-t-3xl bg-card">
         <header className="bg-sidebar px-4 py-6 text-sidebar-foreground sm:px-6 md:px-8 md:py-8">
           <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
             <div className="space-y-3">
-              <Badge
-                variant="outline"
-                className="border-transparent bg-sidebar-accent text-sidebar-accent-foreground"
-              >
+              <Badge variant="outline" className={brandedPageStyles.badge}>
                 Administrasjon
               </Badge>
               <div className="space-y-1.5">
-                <h1 className="font-heading text-page-title text-balance text-sidebar-foreground">
-                  Administrer arrangementer
-                </h1>
-                <p className="max-w-2xl text-body text-sidebar-foreground/75 md:text-lead">
+                <h1 className={brandedPageStyles.title}>Administrer arrangementer</h1>
+                <p className={brandedPageStyles.description}>
                   Planlegg program, legg til banetider og styr publisering.
                 </p>
               </div>

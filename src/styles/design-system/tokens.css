@@ -6,14 +6,28 @@
  */
 
 :root {
-  --radius: 0.75rem;
+  color-scheme: light;
+  --radius: 0.625rem;
+
+  /* Ås tennisklubb palette */
+  --aas-green-50: color-mix(in oklab, #4c911f 8%, white);
+  --aas-green-300: color-mix(in oklab, #4c911f 55%, white);
+  --aas-green-500: #4c911f;
+  --aas-green-700: color-mix(in oklab, #4c911f 76%, black);
+  --aas-green-900: color-mix(in oklab, #4c911f 48%, black);
+  --aas-orange-100: color-mix(in oklab, #f28d3b 18%, white);
+  --aas-orange-500: #f28d3b;
+  --aas-orange-700: color-mix(in oklab, #f28d3b 72%, black);
+  --aas-blue-100: color-mix(in oklab, #1c4f99 16%, white);
+  --aas-blue-300: color-mix(in oklab, #1c4f99 48%, white);
+  --aas-blue-500: #1c4f99;
+  --aas-blue-900: color-mix(in oklab, #1c4f99 52%, black);
 
   /* Brand */
   --brand-50: #f2f7f0;
   --brand-100: #e1edde;
   --brand-300: #98c094;
   --brand-500: #4d854d;
-  --brand-600: #376c3c;
   --brand-700: #2a5632;
   --brand-900: #1d3924;
 
@@ -45,7 +59,6 @@
   --app-sidebar-hover: #214d30;
   --app-sidebar-active: #2a5d39;
   --app-sidebar-text: #f7fbf6;
-  --app-sidebar-muted: #bdd0bf;
   --app-nav-active: var(--brand-700);
   --app-nav-active-surface: var(--brand-50);
   --app-nav-indicator: var(--brand-500);
@@ -63,7 +76,6 @@
   --app-content-max: 96rem;
   --app-sidebar-width: 15.5rem;
   --app-sidebar-rail-width: 4.5rem;
-  --app-topbar-action-icon-size: 1.25rem;
   --app-space-2xs: 0.125rem;
   --app-space-xs: 0.25rem;
   --app-space-sm: 0.5rem;
@@ -76,6 +88,7 @@
   --app-record-padding-block: 0.375rem;
   --app-record-radius: 0.875rem;
   --app-record-shadow: 0 4px 16px rgb(18 36 23 / 0.07);
+  --app-radius-sm: calc(var(--radius) * 0.6);
 
   /* Typography
    *
@@ -83,9 +96,8 @@
    * separates display text, reading text and compact UI labels without letting
    * individual pages invent their own sizes.
    */
-  --app-font-body:
-    "Geist Variable", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
+  --app-font-body: "Figtree Variable", sans-serif;
+  --app-font-sans: var(--app-font-body);
   --app-font-display: var(--app-font-body);
   --app-type-micro: 0.75rem;
   --app-type-caption-compact: 0.8125rem;
@@ -124,7 +136,6 @@
   --app-menu-item-weight: 600;
   --app-menu-meta-size: var(--app-type-caption);
   --app-menu-label-weight: 700;
-  --app-menu-compact-weight: 650;
   --app-menu-text: var(--app-ink);
   --app-menu-muted: var(--app-ink-soft);
   --app-menu-faint: var(--app-ink-faint);
@@ -149,40 +160,41 @@
   --status-danger-indicator: #c9534c;
 
   /* shadcn/Radix compatibility */
-  --background: var(--app-surface);
-  --foreground: var(--app-ink);
-  --card: var(--app-surface-raised);
-  --card-foreground: var(--app-ink);
-  --popover: var(--app-surface-raised);
-  --popover-foreground: var(--app-ink);
-  --primary: var(--app-brand);
+  --background: oklch(1 0 0);
+  --foreground: #172019;
+  --card: oklch(1 0 0);
+  --card-foreground: #172019;
+  --popover: oklch(1 0 0);
+  --popover-foreground: #172019;
+  --primary: var(--aas-green-700);
   --primary-foreground: #ffffff;
-  --secondary: var(--app-brand-soft);
-  --secondary-foreground: var(--brand-900);
-  --muted: #edf0e9;
-  --muted-foreground: var(--app-ink-soft);
-  --accent: var(--app-accent-soft);
-  --accent-foreground: #713315;
-  --destructive: #ba352f;
-  --border: var(--app-line);
-  --input: var(--app-line-strong);
-  --ring: var(--app-focus);
-  --chart-1: var(--brand-600);
-  --chart-2: var(--clay-500);
-  --chart-3: #4d789f;
-  --chart-4: #a78b36;
-  --chart-5: #765a8c;
-  --sidebar: var(--app-sidebar);
-  --sidebar-foreground: var(--app-sidebar-text);
-  --sidebar-primary: #ffffff;
-  --sidebar-primary-foreground: var(--app-sidebar);
-  --sidebar-accent: var(--app-sidebar-active);
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgb(255 255 255 / 0.12);
-  --sidebar-ring: #b8d8b7;
+  --secondary: var(--aas-blue-100);
+  --secondary-foreground: var(--aas-blue-900);
+  --muted: var(--aas-green-50);
+  --muted-foreground: #536057;
+  --accent: var(--aas-orange-100);
+  --accent-foreground: var(--aas-orange-700);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: #dfe3dc;
+  --input: #cbd2c9;
+  --ring: var(--aas-orange-500);
+  --chart-1: var(--aas-green-500);
+  --chart-2: var(--aas-orange-500);
+  --chart-3: var(--aas-blue-500);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: var(--aas-green-900);
+  --sidebar-foreground: #f7fbf6;
+  --sidebar-primary: var(--aas-orange-500);
+  --sidebar-primary-foreground: #172019;
+  --sidebar-accent: var(--aas-orange-500);
+  --sidebar-accent-foreground: #172019;
+  --sidebar-border: rgb(255 255 255 / 14%);
+  --sidebar-ring: var(--aas-orange-500);
 }
 
 .dark {
+  color-scheme: dark;
   --app-canvas: #0f1611;
   --app-surface: #151e17;
   --app-surface-subtle: #1a251d;
@@ -232,16 +244,35 @@
   --status-danger-text: #ffaaa3;
   --status-danger-indicator: #ef756d;
 
-  --primary: var(--app-brand);
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+  --primary: var(--aas-green-300);
   --primary-foreground: #102115;
-  --secondary: var(--app-brand-soft);
-  --secondary-foreground: #d9ead7;
+  --secondary: var(--aas-blue-900);
+  --secondary-foreground: color-mix(in oklab, var(--aas-blue-500) 26%, white);
   --muted: #253029;
-  --muted-foreground: var(--app-ink-soft);
-  --accent: var(--app-accent-soft);
-  --accent-foreground: #ffd2b6;
-  --destructive: #f07a70;
-  --border: var(--app-line);
-  --input: var(--app-line-strong);
-  --ring: var(--app-focus);
+  --muted-foreground: #b3bfb5;
+  --accent: color-mix(in oklab, var(--aas-orange-500) 35%, black);
+  --accent-foreground: color-mix(in oklab, var(--aas-orange-500) 38%, white);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: var(--aas-orange-500);
+  --chart-1: var(--aas-green-300);
+  --chart-2: var(--aas-orange-500);
+  --chart-3: var(--aas-blue-300);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: var(--aas-green-900);
+  --sidebar-foreground: #f7fbf6;
+  --sidebar-primary: var(--aas-orange-500);
+  --sidebar-primary-foreground: #172019;
+  --sidebar-accent: var(--aas-orange-500);
+  --sidebar-accent-foreground: #172019;
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
 }

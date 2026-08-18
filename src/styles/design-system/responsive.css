@@ -1,5 +1,21 @@
 @media (min-width: 48rem) {
   @layer components {
+    .brand-court-background {
+      background:
+        linear-gradient(
+          90deg,
+          color-mix(in srgb, var(--aas-green-900) 90%, transparent) 0,
+          color-mix(in srgb, var(--aas-green-900) 74%, transparent) 28%,
+          color-mix(in srgb, var(--aas-green-700) 58%, transparent) 62%,
+          color-mix(in srgb, var(--aas-green-900) 64%, transparent) 100%
+        ),
+        linear-gradient(
+          color-mix(in srgb, var(--aas-green-900) 12%, transparent),
+          color-mix(in srgb, var(--aas-green-900) 42%, transparent)
+        ),
+        url("/backgrounds/tennis-net.avif") center / cover fixed;
+    }
+
     :is(.admin-page, .admin-editor-dialog, .login-page, .record-collection-page) {
       --app-type-caption: var(--app-type-caption-comfortable);
       --app-type-label: var(--app-type-label-comfortable);
@@ -104,20 +120,6 @@
 
     .app-sidebar {
       padding: 1rem 0.625rem;
-    }
-
-    .app-sidebar__utilities {
-      margin-bottom: 1rem;
-      padding-bottom: 1rem;
-    }
-
-    .app-sidebar__utility {
-      justify-content: center;
-      padding: 0.625rem;
-    }
-
-    .app-sidebar__utility-copy {
-      display: none;
     }
 
     .mobile-bottom-nav {
@@ -521,20 +523,6 @@
       background: radial-gradient(circle, rgb(240 131 71 / 0.22), transparent 68%);
       content: "";
       pointer-events: none;
-    }
-
-    .app-sidebar__utilities {
-      margin-bottom: 1.25rem;
-      padding-bottom: 1.25rem;
-    }
-
-    .app-sidebar__utility {
-      justify-content: flex-start;
-      padding: 0.625rem 0.75rem;
-    }
-
-    .app-sidebar__utility-copy {
-      display: flex;
     }
 
     .app-shell__workspace {

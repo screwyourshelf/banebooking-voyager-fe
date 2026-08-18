@@ -5,6 +5,7 @@ import process from "node:process";
 const projectRoot = process.cwd();
 const sourceRoot = path.join(projectRoot, "src");
 const stylesheetEntryPath = path.join(sourceRoot, "index.css");
+const tokensPath = path.join(sourceRoot, "styles", "design-system", "tokens.css");
 const recordsRoot = path.join(sourceRoot, "components", "records");
 const tournamentRoot = path.join(sourceRoot, "features", "turnering");
 const recordCollectionHeaderPath = path.join(recordsRoot, "RecordCollectionHeader.tsx");
@@ -222,6 +223,21 @@ async function validateStylesheets(files) {
   const issues = [];
   const reachableStylesheets = new Set();
 
+  const entrySource = sourceByPath.get(stylesheetEntryPath) ?? "";
+  if (/(?:^|\n)\s*(?::root|\.dark)\s*\{/.test(entrySource)) {
+    issues.push(
+      "src/index.css definerer temavariabler; legg dem i src/styles/design-system/tokens.css"
+    );
+  }
+  if (/@layer\s+(?:base|components)\b/.test(entrySource)) {
+    issues.push("src/index.css inneholder komponent-/base-styling; bruk designsystemfilene");
+  }
+
+  const tokensSource = sourceByPath.get(tokensPath) ?? "";
+  if (!tokensSource) {
+    issues.push("src/styles/design-system/tokens.css mangler");
+  }
+
   function visitStylesheet(filePath) {
     if (reachableStylesheets.has(filePath)) return;
     reachableStylesheets.add(filePath);
@@ -263,6 +279,31 @@ async function validateStylesheets(files) {
         `${path.relative(projectRoot, filePath)} definerer .${className}, men klassen brukes ikke i kildekoden`
       );
     }
+  }
+
+  const definedCssVariables = new Set(
+    [...stylesheetSource.matchAll(/(--[A-Za-z0-9_-]+)\s*:/g)].map((match) => match[1])
+  );
+  const runtimeCssVariables = new Set(
+    [...componentSource.matchAll(/["'](--[A-Za-z0-9_-]+)["']\s*:/g)].map((match) => match[1])
+  );
+
+  for (const match of stylesheetSource.matchAll(/var\((--[A-Za-z0-9_-]+)/g)) {
+    const variable = match[1];
+    if (definedCssVariables.has(variable) || runtimeCssVariables.has(variable)) continue;
+    issues.push(`CSS bruker ${variable}, men variabelen er ikke definert`);
+  }
+
+  const productTokenPattern = /^--(?:aas|activity|app|brand|clay|status)-/;
+  const allSource = `${stylesheetSource}\n${componentSource}`;
+  for (const variable of definedCssVariables) {
+    if (!productTokenPattern.test(variable)) continue;
+    const escaped = variable.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const occurrences = allSource.match(new RegExp(escaped, "g"))?.length ?? 0;
+    if (occurrences > 1) continue;
+    issues.push(
+      `${path.relative(projectRoot, tokensPath)} definerer ${variable}, men tokenet brukes ikke`
+    );
   }
 
   const semanticPrefix =

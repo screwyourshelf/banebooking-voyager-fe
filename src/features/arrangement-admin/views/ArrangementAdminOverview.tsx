@@ -26,6 +26,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import type { ArrangementRespons } from "@/types";
 import { formaterArrangementKategori } from "@/utils/arrangementPresentation";
+import { arrangementEditorStyles } from "@/styles/recipes";
 import { useRedigerArrangement } from "../hooks/useRedigerArrangement";
 import OpprettArrangementView from "./arrangement/OpprettArrangementView";
 import RedigerArrangementView from "./rediger-arrangement/RedigerArrangementView";
@@ -275,33 +276,31 @@ export default function ArrangementAdminOverview({ createOpen, onCreateOpenChang
         <SheetContent
           side="right"
           showCloseButton={false}
-          className="w-full! overflow-y-auto p-0 sm:max-w-3xl! lg:max-w-5xl!"
+          className={arrangementEditorStyles.sheet}
         >
-          <SheetHeader className="sticky top-0 z-10 gap-3 border-b bg-sidebar px-4 py-5 text-sidebar-foreground sm:px-6">
+          <SheetHeader className={arrangementEditorStyles.sheetHeader}>
             <SheetClose asChild>
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="w-fit text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                className={arrangementEditorStyles.sheetBackButton}
               >
                 <ArrowLeft data-icon="inline-start" aria-hidden="true" />
                 Alle arrangementer
               </Button>
             </SheetClose>
             <div className="space-y-1 text-left">
-              <Badge className="bg-sidebar-accent text-sidebar-accent-foreground">
-                Nytt arrangement
-              </Badge>
-              <SheetTitle className="text-2xl text-sidebar-foreground sm:text-3xl">
+              <Badge className={arrangementEditorStyles.sheetBadge}>Nytt arrangement</Badge>
+              <SheetTitle className={arrangementEditorStyles.sheetTitle}>
                 Opprett arrangement
               </SheetTitle>
-              <SheetDescription className="text-sidebar-foreground/70">
+              <SheetDescription className={arrangementEditorStyles.sheetDescription}>
                 Legg inn informasjon og bygg listen over banetider.
               </SheetDescription>
             </div>
           </SheetHeader>
-          <div className="p-4 sm:p-6">
+          <div className={arrangementEditorStyles.sheetBody}>
             <OpprettArrangementView
               onCreated={(feedback) => {
                 setCreationFeedback(feedback);
@@ -316,35 +315,33 @@ export default function ArrangementAdminOverview({ createOpen, onCreateOpenChang
         <SheetContent
           side="right"
           showCloseButton={false}
-          className="w-full! overflow-y-auto p-0 sm:max-w-3xl! lg:max-w-5xl!"
+          className={arrangementEditorStyles.sheet}
         >
-          <SheetHeader className="sticky top-0 z-10 gap-3 border-b bg-sidebar px-4 py-5 text-sidebar-foreground sm:px-6">
+          <SheetHeader className={arrangementEditorStyles.sheetHeader}>
             <SheetClose asChild>
               <Button
                 type="button"
                 variant="ghost"
                 size="sm"
-                className="w-fit text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                className={arrangementEditorStyles.sheetBackButton}
               >
                 <ArrowLeft data-icon="inline-start" aria-hidden="true" />
                 Alle arrangementer
               </Button>
             </SheetClose>
             <div className="space-y-1 text-left">
-              <Badge className="bg-sidebar-accent text-sidebar-accent-foreground">
-                Rediger arrangement
-              </Badge>
-              <SheetTitle className="text-2xl text-sidebar-foreground sm:text-3xl">
+              <Badge className={arrangementEditorStyles.sheetBadge}>Rediger arrangement</Badge>
+              <SheetTitle className={arrangementEditorStyles.sheetTitle}>
                 {selectedArrangement?.tittel ?? "Arrangement"}
               </SheetTitle>
-              <SheetDescription className="text-sidebar-foreground/70">
+              <SheetDescription className={arrangementEditorStyles.sheetDescription}>
                 {selectedArrangement
                   ? `${formatDateRange(selectedArrangement)} · ${selectedArrangement.grenNavn}`
                   : "Laster arrangementet."}
               </SheetDescription>
             </div>
           </SheetHeader>
-          <div className="p-4 sm:p-6">
+          <div className={arrangementEditorStyles.sheetBody}>
             {selectedId ? (
               <RedigerArrangementView
                 arrangementId={selectedId}

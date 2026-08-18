@@ -19,6 +19,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { MinBookingRespons } from "@/types";
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
+import { binaryChoiceStyles } from "@/styles/recipes";
 
 import MineBookingRow from "./MineBookingRow";
 import { buildBookingKey } from "./bookingSort";
@@ -227,19 +228,19 @@ export default function MineBookingerContent({
               if (value) onToggleVisHistoriske(value === "alle");
             }}
             aria-label="Filtrer bookinger etter periode"
-            className="w-full sm:w-auto"
+            className={binaryChoiceStyles.group}
           >
             <ToggleGroupItem
               value="kommende"
               aria-label="Vis kommende bookinger"
-              className="flex-1 sm:flex-none"
+              className={binaryChoiceStyles.item}
             >
               Kommende
             </ToggleGroupItem>
             <ToggleGroupItem
               value="alle"
               aria-label="Vis alle bookinger"
-              className="flex-1 sm:flex-none"
+              className={binaryChoiceStyles.item}
             >
               Alle
             </ToggleGroupItem>
