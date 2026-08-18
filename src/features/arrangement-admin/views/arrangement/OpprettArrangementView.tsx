@@ -300,10 +300,16 @@ export default function OpprettArrangementView({ onCreated }: Props) {
             aria-label="Opprett arrangement"
             className="h-12 w-full justify-start gap-6"
           >
-            <TabsTrigger value="metadata" className="flex-none px-0">
+            <TabsTrigger
+              value="metadata"
+              className="flex-none rounded-none border-0 px-0 after:bg-ring focus-visible:border-transparent focus-visible:ring-0 focus-visible:outline-none"
+            >
               Informasjon
             </TabsTrigger>
-            <TabsTrigger value="bookinger" className="flex-none px-0">
+            <TabsTrigger
+              value="bookinger"
+              className="flex-none rounded-none border-0 px-0 after:bg-ring focus-visible:border-transparent focus-visible:ring-0 focus-visible:outline-none"
+            >
               Tider
             </TabsTrigger>
           </TabsList>
