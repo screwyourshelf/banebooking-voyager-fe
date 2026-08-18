@@ -9,7 +9,7 @@ export type RecordCollectionFilter = Omit<
 >;
 export type RecordCollectionSelection = Pick<
   RecordControlPanelProps,
-  "label" | "groups" | "disabled" | "indicator"
+  "label" | "groups" | "fields" | "disabled" | "indicator"
 >;
 
 type Props = {

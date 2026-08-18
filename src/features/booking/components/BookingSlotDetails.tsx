@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import { RecordCardActions, RecordFacts } from "@/components/records";
 import type { BookingSlotRespons } from "@/types";
 import type { BookingSlotPresentation } from "./bookingSlotPresentation";
 import KobleTilArrangementDialog from "./KobleTilArrangementDialog";
@@ -15,7 +16,7 @@ export default function BookingSlotDetails({ grenId, slot, presentation, onBook,
   const arrangementBooker = slot.arrangementTittel ? slot.booketAv?.trim() : null;
 
   return (
-    <div className="space-y-4 border-t pt-4">
+    <div className="space-y-4">
       {slot.arrangementBeskrivelse ? (
         <p className="max-w-3xl leading-relaxed text-muted-foreground">
           {slot.arrangementBeskrivelse}
@@ -23,10 +24,7 @@ export default function BookingSlotDetails({ grenId, slot, presentation, onBook,
       ) : null}
 
       {arrangementBooker ? (
-        <dl className="grid gap-1 text-sm sm:grid-cols-[7rem_1fr]">
-          <dt className="text-muted-foreground">Booket av</dt>
-          <dd className="font-medium">{arrangementBooker}</dd>
-        </dl>
+        <RecordFacts items={[{ label: "Booket av", value: arrangementBooker }]} />
       ) : null}
 
       {presentation.kanIkkeBooke ? (
@@ -36,7 +34,7 @@ export default function BookingSlotDetails({ grenId, slot, presentation, onBook,
       ) : null}
 
       {presentation.kanKobleTilArrangement || presentation.kanFjerne ? (
-        <div className="flex flex-wrap justify-end gap-2 pt-1">
+        <RecordCardActions>
           {presentation.kanKobleTilArrangement ? (
             <KobleTilArrangementDialog
               grenId={grenId}
@@ -56,7 +54,7 @@ export default function BookingSlotDetails({ grenId, slot, presentation, onBook,
               Avbestill
             </Button>
           ) : null}
-        </div>
+        </RecordCardActions>
       ) : null}
     </div>
   );

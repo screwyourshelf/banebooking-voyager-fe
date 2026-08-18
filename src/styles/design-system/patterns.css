@@ -1534,6 +1534,12 @@
     content: "";
   }
 
+  .control-choice > svg {
+    width: 1rem;
+    height: 1rem;
+    flex: 0 0 auto;
+  }
+
   .control-choice:hover {
     background: var(--control-choice-hover-bg, var(--muted));
     color: var(--control-choice-hover-text, var(--app-ink));
@@ -1929,6 +1935,11 @@
     padding-block: 0.75rem 1rem;
   }
 
+  .record-date-groups[data-loading="true"] {
+    opacity: 0.58;
+    transition: opacity 180ms ease;
+  }
+
   .record-date-group {
     display: grid;
     min-width: 0;
@@ -2146,6 +2157,32 @@
 
   .record-card__summary .record-status {
     justify-self: end;
+  }
+
+  .record-card__copy {
+    display: grid;
+    min-width: 0;
+    gap: var(--app-space-2xs);
+  }
+
+  .record-card__title {
+    overflow: hidden;
+    color: var(--app-ink);
+    font-size: var(--app-type-body-sm);
+    font-weight: 720;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .record-card__description {
+    overflow: hidden;
+    color: var(--app-ink-faint);
+    font-size: var(--app-type-caption);
+    font-weight: 560;
+    line-height: 1.3;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
   .record-card__details {

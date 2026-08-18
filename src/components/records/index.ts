@@ -40,4 +40,9 @@ export { default as RecordFacts } from "./RecordFacts";
 export type { RecordFact } from "./RecordFacts";
 export { default as RecordStatus } from "./RecordStatus";
 export type { RecordStatusTone } from "./RecordStatus";
-export { RecordEyebrow, RecordLeadingValue, RecordTimeRange } from "./RecordText";
+export {
+  RecordEyebrow,
+  RecordLeadingValue,
+  RecordSummaryCopy,
+  RecordTimeRange,
+} from "./RecordText";

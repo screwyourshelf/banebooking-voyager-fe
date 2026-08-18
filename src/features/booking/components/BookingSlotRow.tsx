@@ -1,14 +1,13 @@
 import { memo } from "react";
 import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+  RecordAccordionCard,
+  RecordCard,
+  RecordCardDetails,
+  RecordCardStatic,
+  RecordCardTrigger,
+} from "@/components/records";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
 import type { BookingSlotRespons } from "@/types";
-import { bookingSlotStyles } from "@/styles/recipes";
 import BookingSlotDetails from "./BookingSlotDetails";
 import BookingSlotSummary from "./BookingSlotSummary";
 import { getBookingSlotPresentation } from "./bookingSlotPresentation";
@@ -35,35 +34,29 @@ function BookingSlotRow({ grenId, slot, isAuthenticated, onBook, onFjern }: Prop
 
   if (!presentation.harDetaljer) {
     return (
-      <Card size="sm" className={slot.erPassert ? "opacity-60" : undefined}>
-        <CardContent className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+      <RecordCard muted={slot.erPassert}>
+        <RecordCardStatic layout="content-action" action={quickAction}>
           <BookingSlotSummary slot={slot} presentation={presentation} />
-          {quickAction}
-        </CardContent>
-      </Card>
+        </RecordCardStatic>
+      </RecordCard>
     );
   }
 
   return (
-    <Accordion type="single" collapsible className={slot.erPassert ? "opacity-60" : undefined}>
-      <AccordionItem value={presentation.slotKey}>
-        <div className={bookingSlotStyles.row}>
-          <AccordionTrigger className={bookingSlotStyles.trigger}>
-            <BookingSlotSummary slot={slot} presentation={presentation} />
-          </AccordionTrigger>
-          {quickAction}
-        </div>
-        <AccordionContent>
-          <BookingSlotDetails
-            grenId={grenId}
-            slot={slot}
-            presentation={presentation}
-            onBook={onBook}
-            onFjern={onFjern}
-          />
-        </AccordionContent>
-      </AccordionItem>
-    </Accordion>
+    <RecordAccordionCard value={presentation.slotKey} muted={slot.erPassert}>
+      <RecordCardTrigger action={quickAction}>
+        <BookingSlotSummary slot={slot} presentation={presentation} />
+      </RecordCardTrigger>
+      <RecordCardDetails>
+        <BookingSlotDetails
+          grenId={grenId}
+          slot={slot}
+          presentation={presentation}
+          onBook={onBook}
+          onFjern={onFjern}
+        />
+      </RecordCardDetails>
+    </RecordAccordionCard>
   );
 }
 

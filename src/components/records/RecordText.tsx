@@ -10,6 +10,11 @@ type TimeRangeProps = {
   accessory?: ReactNode;
 };
 
+type SummaryCopyProps = {
+  title: ReactNode;
+  description?: ReactNode;
+};
+
 export function RecordLeadingValue({ children }: Props) {
   return <strong className="record-card__leading-value">{children}</strong>;
 }
@@ -26,6 +31,15 @@ export function RecordTimeRange({ start, end, accessory }: TimeRangeProps) {
         <span>–{end}</span>
       </span>
       {accessory}
+    </span>
+  );
+}
+
+export function RecordSummaryCopy({ title, description }: SummaryCopyProps) {
+  return (
+    <span className="record-card__copy">
+      <span className="record-card__title">{title}</span>
+      {description ? <span className="record-card__description">{description}</span> : null}
     </span>
   );
 }

@@ -2,10 +2,14 @@ import { useMemo, useState } from "react";
 import { isBefore, isSameDay, startOfDay } from "date-fns";
 import { CalendarX } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
+import {
+  RecordAccordionList,
+  RecordCollectionPagination,
+  RecordCollectionSkeleton,
+  RecordListState,
+} from "@/components/records";
 import type { BookingSlotRespons } from "@/types";
 import { grupperSlots } from "@/utils/bookingUtils";
-import { bookingSlotStyles } from "@/styles/recipes";
 import BookingSlotRow from "./BookingSlotRow";
 import { getBookingSlotKey } from "./bookingSlotPresentation";
 
@@ -17,6 +21,7 @@ type Props = {
   onBook?: (slot: BookingSlotRespons, arrangementId?: string) => void;
   onFjern?: (slot: BookingSlotRespons) => void;
   isLoading?: boolean;
+  isFetching?: boolean;
 };
 
 export function BookingSlotListAccordion({
@@ -27,6 +32,7 @@ export function BookingSlotListAccordion({
   onBook,
   onFjern,
   isLoading = false,
+  isFetching = false,
 }: Props) {
   const iDag = startOfDay(new Date());
   const erHistorisk = valgtDato ? isBefore(valgtDato, iDag) : false;
@@ -39,13 +45,7 @@ export function BookingSlotListAccordion({
   );
 
   if (isLoading) {
-    return (
-      <div className="space-y-3" aria-label="Laster tider">
-        {Array.from({ length: 5 }, (_, index) => (
-          <Skeleton key={index} className="h-20 w-full rounded-2xl" />
-        ))}
-      </div>
-    );
+    return <RecordCollectionSkeleton ariaLabel="Laster tider" rows={5} layout="time" />;
   }
 
   if (slots.length === 0) {
@@ -60,14 +60,14 @@ export function BookingSlotListAccordion({
   const slotsÅVise = erIDag && !visPasserte ? kommendeSlots : synligeSlots;
 
   return (
-    <div className={bookingSlotStyles.list}>
+    <>
       {slotsÅVise.length === 0 ? (
         <BookingSlotEmptyState
           title="Dagens spilletider er over"
           description="Vis passerte tider eller velg neste dag."
         />
       ) : (
-        <div className={bookingSlotStyles.slots} aria-label="Tilgjengelige tider">
+        <RecordAccordionList loading={isFetching} ariaLabel="Tilgjengelige tider">
           {slotsÅVise.map((slot) => (
             <BookingSlotRow
               key={getBookingSlotKey(slot)}
@@ -78,32 +78,27 @@ export function BookingSlotListAccordion({
               onFjern={onFjern}
             />
           ))}
-        </div>
+        </RecordAccordionList>
       )}
 
       {erIDag && antallPasserte > 0 ? (
-        <div className="flex justify-center pt-1">
+        <RecordCollectionPagination>
           <Button variant="outline" size="sm" onClick={() => setVisPasserte((current) => !current)}>
             {visPasserte ? "Skjul passerte" : `Vis passerte (${antallPasserte})`}
           </Button>
-        </div>
+        </RecordCollectionPagination>
       ) : null}
-    </div>
+    </>
   );
 }
 
 function BookingSlotEmptyState({ title, description }: { title: string; description: string }) {
   return (
-    <div
-      className="flex flex-col items-center gap-2 rounded-2xl border border-dashed px-6 py-12 text-center"
-      role="status"
-    >
-      <span className="flex size-10 items-center justify-center rounded-full bg-muted">
-        <CalendarX className="size-5 text-muted-foreground" aria-hidden="true" />
-      </span>
-      <p className="font-medium">{title}</p>
-      <p className="text-sm text-muted-foreground">{description}</p>
-    </div>
+    <RecordListState
+      icon={<CalendarX aria-hidden="true" />}
+      title={title}
+      description={description}
+    />
   );
 }
 

@@ -4,19 +4,41 @@ import process from "node:process";
 
 const projectRoot = process.cwd();
 const sourceRoot = path.join(projectRoot, "src");
+const featuresRoot = path.join(sourceRoot, "features");
 const stylesheetEntryPath = path.join(sourceRoot, "index.css");
 const tokensPath = path.join(sourceRoot, "styles", "design-system", "tokens.css");
 const recordsRoot = path.join(sourceRoot, "components", "records");
 const tournamentRoot = path.join(sourceRoot, "features", "turnering");
 const recordCollectionHeaderPath = path.join(recordsRoot, "RecordCollectionHeader.tsx");
 const filterSwitchPath = path.join(sourceRoot, "components", "controls", "FilterSwitch.tsx");
-const allowedComponentFiles = new Set([filterSwitchPath]);
+const controlChoicePath = path.join(sourceRoot, "components", "controls", "ControlChoice.tsx");
+const pagePath = path.join(sourceRoot, "components", "Page.tsx");
+const pageHeaderPath = path.join(sourceRoot, "components", "layout", "PageHeader.tsx");
+const adminEditorDialogPath = path.join(sourceRoot, "components", "admin", "AdminEditorDialog.tsx");
+const loginPagePath = path.join(sourceRoot, "features", "auth", "pages", "LoginPage.tsx");
+const allowedComponentFiles = new Set([
+  filterSwitchPath,
+  controlChoicePath,
+  pagePath,
+  pageHeaderPath,
+  adminEditorDialogPath,
+  loginPagePath,
+]);
 const allowedCssFiles = new Set([
   path.join(sourceRoot, "styles", "design-system", "patterns.css"),
   path.join(sourceRoot, "styles", "design-system", "responsive.css"),
 ]);
 
 const protectedClasses = [
+  "page-frame",
+  "page-heading",
+  "page-heading__eyebrow",
+  "page-heading__title",
+  "page-heading__description",
+  "page-heading__support",
+  "page-heading__actions",
+  "control-surface",
+  "control-choice",
   "record-collection",
   "record-collection__body",
   "record-collection__pagination",
@@ -24,16 +46,34 @@ const protectedClasses = [
   "record-collection__context-action",
   "record-list",
   "record-list-state",
+  "record-date-groups",
+  "record-date-group",
+  "record-date-group__heading",
   "record-card",
+  "record-card-button",
   "record-card-row",
+  "record-card__row",
+  "record-card__row-action",
   "record-card__static",
   "record-card__trigger",
+  "record-card__trigger-header",
+  "record-card__disclosure-open-icon",
+  "record-card__disclosure-close-icon",
   "record-card__summary",
+  "record-card__copy",
+  "record-card__title",
+  "record-card__description",
+  "record-card__leading-value",
+  "record-card__time",
+  "record-card__time-range",
   "record-card__details",
   "record-card__actions",
   "record-card__accent",
   "record-card__eyebrow",
+  "record-facts",
   "record-status",
+  "record-collection-skeleton",
+  "record-collection-skeleton__row",
   "record-filter-panel",
   "record-filter-panel__top",
   "record-filter-panel__label",
@@ -53,6 +93,86 @@ const protectedClasses = [
   "filter-switch__control",
 ];
 
+const compositionPrimitiveAllowlist = new Map([
+  [
+    "@/components/ui/card",
+    new Set([
+      path.join(featuresRoot, "arrangement-admin", "views", "ArrangementAdminOverview.tsx"),
+      path.join(featuresRoot, "statistikk", "components", "Medlemsstatistikk.tsx"),
+      path.join(featuresRoot, "statistikk", "components", "NøkkeltallGrid.tsx"),
+    ]),
+  ],
+  [
+    "@/components/ui/tabs",
+    new Set([
+      path.join(
+        featuresRoot,
+        "arrangement-admin",
+        "views",
+        "arrangement",
+        "OpprettArrangementView.tsx"
+      ),
+      path.join(
+        featuresRoot,
+        "arrangement-admin",
+        "views",
+        "rediger-arrangement",
+        "RedigerArrangementView.tsx"
+      ),
+    ]),
+  ],
+  [
+    "@/components/ui/toggle-group",
+    new Set([
+      path.join(
+        featuresRoot,
+        "arrangement-admin",
+        "views",
+        "arrangement",
+        "OpprettArrangementView.tsx"
+      ),
+      path.join(
+        featuresRoot,
+        "arrangement-admin",
+        "views",
+        "rediger-arrangement",
+        "RedigerArrangementView.tsx"
+      ),
+    ]),
+  ],
+  ["@/components/ui/accordion", new Set()],
+]);
+
+const recipeAllowlist = new Set([
+  path.join(featuresRoot, "arrangement-admin", "pages", "ArrangementPage.tsx"),
+  path.join(featuresRoot, "arrangement-admin", "views", "ArrangementAdminOverview.tsx"),
+  path.join(
+    featuresRoot,
+    "arrangement-admin",
+    "views",
+    "arrangement",
+    "OpprettArrangementView.tsx"
+  ),
+  path.join(
+    featuresRoot,
+    "arrangement-admin",
+    "views",
+    "rediger-arrangement",
+    "RedigerArrangementView.tsx"
+  ),
+]);
+
+const strictPatternFiles = new Set([
+  path.join(featuresRoot, "booking", "components", "BookingSelectionHeader.tsx"),
+  path.join(featuresRoot, "booking", "components", "BookingSlotListAccordion.tsx"),
+  path.join(featuresRoot, "booking", "components", "BookingSlotRow.tsx"),
+  path.join(featuresRoot, "booking", "components", "BookingSlotSummary.tsx"),
+  path.join(featuresRoot, "booking", "views", "booking", "BookingContent.tsx"),
+  path.join(featuresRoot, "minside", "views", "mine-bookinger", "MineBookingerView.tsx"),
+  path.join(featuresRoot, "minside", "views", "mine-bookinger", "MineBookingerContent.tsx"),
+  path.join(featuresRoot, "minside", "views", "mine-bookinger", "MineBookingRow.tsx"),
+]);
+
 const sourceFiles = await collectFiles(sourceRoot);
 const violations = [];
 const apiViolations = [];
@@ -67,6 +187,43 @@ for (const filePath of sourceFiles) {
   const source = await readFile(filePath, "utf8");
 
   if (isComponentSource) {
+    if (filePath.startsWith(`${featuresRoot}${path.sep}`)) {
+      for (const [moduleName, allowlist] of compositionPrimitiveAllowlist) {
+        const modulePattern = new RegExp(
+          `from\\s+["']${moduleName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`
+        );
+        const index = source.search(modulePattern);
+
+        if (index >= 0 && !allowlist.has(filePath)) {
+          apiViolations.push({
+            filePath,
+            line: lineFor(source, index),
+            message: `importerer rå ${moduleName}; bruk den delte side-, kontroll- eller record-komposisjonen`,
+          });
+        }
+      }
+
+      const recipeIndex = source.search(/from\s+["']@\/styles\/recipes["']/);
+      if (recipeIndex >= 0 && !recipeAllowlist.has(filePath)) {
+        apiViolations.push({
+          filePath,
+          line: lineFor(source, recipeIndex),
+          message: "lager feature-komposisjon via recipes; bruk det beskyttede designsystem-API-et",
+        });
+      }
+    }
+
+    if (strictPatternFiles.has(filePath)) {
+      const localStyleIndex = source.search(/\b(?:className|style)\s*=/);
+      if (localStyleIndex >= 0) {
+        apiViolations.push({
+          filePath,
+          line: lineFor(source, localStyleIndex),
+          message: "har lokal styling i en beskyttet komposisjon",
+        });
+      }
+    }
+
     if (
       !filePath.startsWith(`${tournamentRoot}${path.sep}`) &&
       /type\s*=\s*["'](?:date|datetime-local)["']/.test(source)

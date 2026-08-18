@@ -1,11 +1,10 @@
 import { AlertCircle, CalendarX, RefreshCw } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { RecordCollection, RecordCollectionBody, RecordListState } from "@/components/records";
 import { BookingSelectionHeader, BookingSlotListAccordion } from "@/features/booking/components";
 import { utledSlotStatus } from "@/utils/bookingUtils";
 import type { BaneRespons, GrenRespons, KalenderSlotRespons } from "@/types";
-import { bookingPageStyles } from "@/styles/recipes";
 import type { BookingContentProps, BookingResultProps } from "./bookingViewTypes";
 
 type Props = BookingContentProps & {
@@ -21,13 +20,9 @@ type BodyProps = BookingResultProps & {
 
 export default function BookingSchedule(props: Props) {
   const ledigeAntall = getLedigeAntall(props.slots, props.isAuthenticated);
-  const valgtBane = props.baner.find((bane) => bane.id === props.valgtBaneId);
 
   return (
-    <div
-      className={bookingPageStyles.workspace}
-      aria-busy={props.isLoading || props.isFetching || undefined}
-    >
+    <RecordCollection ariaLabel="Tilgjengelige tider" busy={props.isLoading || props.isFetching}>
       <BookingSelectionHeader
         grener={props.grener}
         valgtGrenId={props.valgtGrenId}
@@ -44,22 +39,10 @@ export default function BookingSchedule(props: Props) {
         hasError={Boolean(props.setupFeil || props.queryFeil)}
       />
 
-      <Card className={bookingPageStyles.resultsCard}>
-        <CardHeader className={bookingPageStyles.resultsHeader}>
-          <CardTitle className={bookingPageStyles.resultsTitle}>
-            <h2>Tilgjengelige tider</h2>
-          </CardTitle>
-          <CardDescription>
-            {valgtBane
-              ? `${valgtBane.navn}${props.valgtGren ? ` · ${props.valgtGren.navn}` : ""}`
-              : "Velg en bane for å se tider."}
-          </CardDescription>
-        </CardHeader>
-        <CardContent className={bookingPageStyles.resultsContent}>
-          <BookingScheduleBody {...props} />
-        </CardContent>
-      </Card>
-    </div>
+      <RecordCollectionBody>
+        <BookingScheduleBody {...props} />
+      </RecordCollectionBody>
+    </RecordCollection>
   );
 }
 
@@ -83,7 +66,7 @@ function BookingScheduleBody({
   onSlotsRetry,
 }: BodyProps) {
   return (
-    <div className="space-y-4">
+    <>
       <BookingMutationErrors bookFeil={bookFeil} fjernFeil={fjernFeil} />
 
       {setupFeil ? (
@@ -103,19 +86,18 @@ function BookingScheduleBody({
       ) : baner.length === 0 ? (
         <BookingEmptyState grenNavn={valgtGren?.navn} />
       ) : (
-        <div className={isFetching && !isLoading ? "opacity-60 transition-opacity" : undefined}>
-          <BookingSlotListAccordion
-            grenId={valgtGrenId}
-            slots={slots}
-            valgtDato={valgtDato}
-            isAuthenticated={isAuthenticated}
-            onBook={onBook}
-            onFjern={onFjern}
-            isLoading={isLoading}
-          />
-        </div>
+        <BookingSlotListAccordion
+          grenId={valgtGrenId}
+          slots={slots}
+          valgtDato={valgtDato}
+          isAuthenticated={isAuthenticated}
+          onBook={onBook}
+          onFjern={onFjern}
+          isLoading={isLoading}
+          isFetching={isFetching}
+        />
       )}
-    </div>
+    </>
   );
 }
 
@@ -165,18 +147,11 @@ function BookingMutationErrors({
 
 function BookingEmptyState({ grenNavn }: { grenNavn?: string }) {
   return (
-    <div
-      className="flex flex-col items-center gap-2 rounded-2xl border border-dashed px-6 py-12 text-center"
-      role="status"
-    >
-      <span className="flex size-10 items-center justify-center rounded-full bg-muted">
-        <CalendarX className="size-5 text-muted-foreground" aria-hidden="true" />
-      </span>
-      <p className="font-medium">Ingen baner å vise</p>
-      <p className="max-w-sm text-sm text-muted-foreground">
-        Det er ikke lagt til baner for {grenNavn ?? "denne grenen"}.
-      </p>
-    </div>
+    <RecordListState
+      icon={<CalendarX aria-hidden="true" />}
+      title="Ingen baner å vise"
+      description={`Det er ikke lagt til baner for ${grenNavn ?? "denne grenen"}.`}
+    />
   );
 }
 

@@ -1,9 +1,10 @@
 import { useMemo, useState } from "react";
-import { Badge } from "@/components/ui/badge";
+
+import Page from "@/components/Page";
+import { RecordCollectionPage } from "@/components/records";
 import { useMineBookinger } from "@/features/minside/hooks/useMineBookinger";
 import { useBookingActions } from "@/features/minside/hooks/useBookingActions";
 import type { MinBookingRespons } from "@/types";
-import { brandedPageStyles } from "@/styles/recipes";
 
 import MineBookingerContent from "./MineBookingerContent";
 import { sortBookingerEtterRelevans } from "./bookingSort";
@@ -28,29 +29,19 @@ export default function MineBookingerView() {
     if (isPending || !slot.bookingId) return;
 
     try {
-      await fjernAsync({
-        bookingId: slot.bookingId,
-      });
+      await fjernAsync({ bookingId: slot.bookingId });
     } catch {
-      // feil eksponeres via fjernFeil
+      // Feilen eksponeres via fjernFeil.
     }
   }
 
   return (
-    <div className={brandedPageStyles.frame}>
-      <div className="flex flex-col gap-6 md:gap-0 md:overflow-hidden md:rounded-t-3xl md:bg-card">
-        <header className="-mx-4 space-y-3 bg-sidebar px-4 py-6 text-sidebar-foreground sm:-mx-6 sm:px-6 md:mx-0 md:px-8 md:py-8">
-          <Badge variant="outline" className={brandedPageStyles.badge}>
-            Min konto
-          </Badge>
-          <div className="space-y-1.5">
-            <h1 className={brandedPageStyles.title}>Mine bookinger</h1>
-            <p className={brandedPageStyles.description}>
-              Hold oversikt over kommende og gjennomførte tider.
-            </p>
-          </div>
-        </header>
-
+    <Page width="lg">
+      <RecordCollectionPage
+        eyebrow="Min konto"
+        title="Mine bookinger"
+        description="Hold oversikt over kommende og gjennomførte tider."
+      >
         <MineBookingerContent
           visHistoriske={visHistoriske}
           onToggleVisHistoriske={setVisHistoriske}
@@ -63,7 +54,7 @@ export default function MineBookingerView() {
           onFjern={handleFjern}
           serverFeil={fjernFeil?.message ?? null}
         />
-      </div>
-    </div>
+      </RecordCollectionPage>
+    </Page>
   );
 }
