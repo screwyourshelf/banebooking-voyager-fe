@@ -8,11 +8,11 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   Select,
   SelectContent,
@@ -618,21 +618,32 @@ export default function RedigerArrangementView({
                 Nye tider legges først som forslag og lagres separat.
               </p>
             </div>
-            <RadioGroup
-              aria-label="Oppsettstype"
+            <ToggleGroup
+              type="single"
+              variant="outline"
+              spacing={0}
               value={oppsettsModus}
-              onValueChange={(value) => setOppsettsModus(value as typeof oppsettsModus)}
-              className="grid max-w-lg grid-cols-2 gap-3"
+              onValueChange={(value) => {
+                if (value) setOppsettsModus(value as typeof oppsettsModus);
+              }}
+              aria-label="Velg oppsettstype"
+              className="w-full sm:w-auto"
             >
-              <Label className="flex cursor-pointer items-center gap-3 rounded-xl border p-4 has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5">
-                <RadioGroupItem value="gjentakende" />
+              <ToggleGroupItem
+                value="gjentakende"
+                aria-label="Bruk gjentakende oppsett"
+                className="flex-1 sm:flex-none"
+              >
                 Gjentakende
-              </Label>
-              <Label className="flex cursor-pointer items-center gap-3 rounded-xl border p-4 has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5">
-                <RadioGroupItem value="manuell" />
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                value="manuell"
+                aria-label="Bruk manuelt oppsett"
+                className="flex-1 sm:flex-none"
+              >
                 Manuelt
-              </Label>
-            </RadioGroup>
+              </ToggleGroupItem>
+            </ToggleGroup>
           </section>
 
           <Separator />
