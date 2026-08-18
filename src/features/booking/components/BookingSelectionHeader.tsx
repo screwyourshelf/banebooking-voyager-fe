@@ -7,26 +7,13 @@ import {
   norskeKalenderEtiketter,
   norskKalenderLocale,
 } from "@/components/controls/kalenderLokalisering";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardAction, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { bookingPageStyles } from "@/styles/recipes";
 import type { BaneRespons, GrenRespons } from "@/types";
 import ReglementDialog from "./ReglementDialog";
 
@@ -83,62 +70,99 @@ export default function BookingSelectionHeader({
   }
 
   return (
-    <Card className="md:bg-card/95 md:backdrop-blur-sm">
-      <CardHeader>
-        <CardTitle className="text-xl font-semibold tracking-tight">
-          <h2>Velg bane og dag</h2>
+    <Card className={bookingPageStyles.selectorCard}>
+      <CardHeader className={bookingPageStyles.selectorHeader}>
+        <CardTitle className={bookingPageStyles.selectorTitle}>
+          <h2>{resultLabel}</h2>
         </CardTitle>
-        <CardDescription>Endringer oppdaterer de tilgjengelige tidene automatisk.</CardDescription>
+        <CardAction>
+          <ReglementDialog gren={selectedActivity} bane={selectedCourt}>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              className={bookingPageStyles.selectorRules}
+              disabled={!selectedActivity || !selectedCourt}
+            >
+              Bookingregler
+            </Button>
+          </ReglementDialog>
+        </CardAction>
       </CardHeader>
 
-      <CardContent className="grid gap-6 lg:grid-cols-[1fr_1.25fr_1fr]">
-        <Field data-disabled={isSetupFetching || undefined}>
-          <FieldLabel htmlFor="booking-activity">Aktivitet</FieldLabel>
-          <Select
+      <CardContent className={bookingPageStyles.selectorGrid}>
+        <Field
+          className={bookingPageStyles.selectorField}
+          data-disabled={isSetupFetching || undefined}
+        >
+          <FieldLabel className={bookingPageStyles.selectorLabel}>Gren</FieldLabel>
+          <ToggleGroup
+            type="single"
+            variant="outline"
             value={valgtGrenId}
-            onValueChange={onGrenChange}
-            disabled={isSetupFetching || grener.length === 0}
+            onValueChange={(value) => {
+              if (value) onGrenChange(value);
+            }}
+            aria-label="Velg gren"
+            className={bookingPageStyles.selectorGroup}
           >
-            <SelectTrigger id="booking-activity" className="w-full">
-              <SelectValue placeholder="Velg aktivitet" />
-            </SelectTrigger>
-            <SelectContent>
-              {grener.map((gren) => (
-                <SelectItem key={gren.id} value={gren.id}>
-                  {gren.navn}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            {grener.map((gren) => (
+              <ToggleGroupItem
+                key={gren.id}
+                value={gren.id}
+                className={bookingPageStyles.selectorItem}
+                disabled={isSetupFetching}
+              >
+                {gren.navn}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
         </Field>
 
-        <Field data-disabled={isSetupFetching || undefined}>
-          <FieldLabel>Dag</FieldLabel>
-          <div className="grid grid-cols-2 gap-2">
-            <Button
-              type="button"
-              variant={isSameDay(shownDate, today) ? "secondary" : "outline"}
-              size="sm"
-              onClick={() => onDatoChange(today)}
-              disabled={isSetupFetching}
+        <Field
+          className={bookingPageStyles.selectorField}
+          data-disabled={isSetupFetching || undefined}
+        >
+          <FieldLabel className={bookingPageStyles.selectorLabel}>Dag</FieldLabel>
+          <div className="grid gap-2">
+            <ToggleGroup
+              type="single"
+              variant="outline"
+              value={
+                isSameDay(shownDate, today)
+                  ? "today"
+                  : isSameDay(shownDate, tomorrow)
+                    ? "tomorrow"
+                    : ""
+              }
+              onValueChange={(value) => {
+                if (value === "today") onDatoChange(today);
+                if (value === "tomorrow") onDatoChange(tomorrow);
+              }}
+              aria-label="Velg dag"
+              className={bookingPageStyles.selectorGroup}
             >
-              I dag
-            </Button>
-            <Button
-              type="button"
-              variant={isSameDay(shownDate, tomorrow) ? "secondary" : "outline"}
-              size="sm"
-              onClick={() => onDatoChange(tomorrow)}
-              disabled={isSetupFetching}
-            >
-              I morgen
-            </Button>
+              <ToggleGroupItem
+                value="today"
+                className={bookingPageStyles.selectorItem}
+                disabled={isSetupFetching}
+              >
+                I dag
+              </ToggleGroupItem>
+              <ToggleGroupItem
+                value="tomorrow"
+                className={bookingPageStyles.selectorItem}
+                disabled={isSetupFetching}
+              >
+                I morgen
+              </ToggleGroupItem>
+            </ToggleGroup>
             <Popover open={calendarOpen} onOpenChange={setCalendarOpen}>
               <PopoverTrigger asChild>
                 <Button
                   type="button"
                   variant="outline"
-                  className="col-span-2 justify-start font-normal"
+                  className={bookingPageStyles.selectorDate}
                   disabled={isSetupFetching}
                 >
                   <CalendarDays aria-hidden="true" />
@@ -159,46 +183,34 @@ export default function BookingSelectionHeader({
           </div>
         </Field>
 
-        <Field data-disabled={isSetupFetching || undefined}>
-          <FieldLabel htmlFor="booking-court">Bane</FieldLabel>
-          <Select
+        <Field
+          className={bookingPageStyles.selectorField}
+          data-disabled={isSetupFetching || undefined}
+        >
+          <FieldLabel className={bookingPageStyles.selectorLabel}>Bane</FieldLabel>
+          <ToggleGroup
+            type="single"
+            variant="outline"
             value={valgtBaneId}
-            onValueChange={onBaneChange}
-            disabled={isSetupFetching || baner.length === 0}
+            onValueChange={(value) => {
+              if (value) onBaneChange(value);
+            }}
+            aria-label="Velg bane"
+            className={bookingPageStyles.selectorGroup}
           >
-            <SelectTrigger id="booking-court" className="w-full">
-              <SelectValue placeholder="Velg bane" />
-            </SelectTrigger>
-            <SelectContent>
-              {baner.map((bane) => (
-                <SelectItem key={bane.id} value={bane.id}>
-                  {bane.navn}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+            {baner.map((bane) => (
+              <ToggleGroupItem
+                key={bane.id}
+                value={bane.id}
+                className={bookingPageStyles.selectorItem}
+                disabled={isSetupFetching}
+              >
+                {bane.navn}
+              </ToggleGroupItem>
+            ))}
+          </ToggleGroup>
         </Field>
       </CardContent>
-
-      <CardFooter className="flex-wrap justify-between gap-3 border-t">
-        <Badge
-          variant={hasError ? "destructive" : "secondary"}
-          className={hasError ? undefined : "bg-primary/10 text-primary"}
-        >
-          {resultLabel}
-        </Badge>
-        <ReglementDialog gren={selectedActivity} bane={selectedCourt}>
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="text-accent-foreground"
-            disabled={!selectedActivity || !selectedCourt}
-          >
-            Bookingregler
-          </Button>
-        </ReglementDialog>
-      </CardFooter>
     </Card>
   );
 }

@@ -5,6 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { BookingSelectionHeader, BookingSlotListAccordion } from "@/features/booking/components";
 import { utledSlotStatus } from "@/utils/bookingUtils";
 import type { BaneRespons, GrenRespons, KalenderSlotRespons } from "@/types";
+import { bookingPageStyles } from "@/styles/recipes";
 import type { BookingContentProps, BookingResultProps } from "./bookingViewTypes";
 
 type Props = BookingContentProps & {
@@ -23,7 +24,10 @@ export default function BookingSchedule(props: Props) {
   const valgtBane = props.baner.find((bane) => bane.id === props.valgtBaneId);
 
   return (
-    <div className="space-y-6" aria-busy={props.isLoading || props.isFetching || undefined}>
+    <div
+      className={bookingPageStyles.workspace}
+      aria-busy={props.isLoading || props.isFetching || undefined}
+    >
       <BookingSelectionHeader
         grener={props.grener}
         valgtGrenId={props.valgtGrenId}
@@ -40,9 +44,9 @@ export default function BookingSchedule(props: Props) {
         hasError={Boolean(props.setupFeil || props.queryFeil)}
       />
 
-      <Card className="md:bg-card/95 md:backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="text-xl font-semibold tracking-tight">
+      <Card className={bookingPageStyles.resultsCard}>
+        <CardHeader className={bookingPageStyles.resultsHeader}>
+          <CardTitle className={bookingPageStyles.resultsTitle}>
             <h2>Tilgjengelige tider</h2>
           </CardTitle>
           <CardDescription>
@@ -51,7 +55,7 @@ export default function BookingSchedule(props: Props) {
               : "Velg en bane for å se tider."}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className={bookingPageStyles.resultsContent}>
           <BookingScheduleBody {...props} />
         </CardContent>
       </Card>

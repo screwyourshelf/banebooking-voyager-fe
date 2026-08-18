@@ -22,6 +22,7 @@ export type AppNavigationItem = {
   id: string;
   to: string;
   label: string;
+  mobileLabel?: string;
   icon: ComponentType<{ className?: string; "aria-hidden"?: boolean | "true" | "false" }>;
   section: NavigationSectionId;
   end?: boolean;
@@ -43,6 +44,7 @@ const navigationItems: AppNavigationItem[] = [
     id: "booking",
     to: ".",
     label: "Book bane",
+    mobileLabel: "Book",
     icon: CalendarPlus,
     section: "overview",
     end: true,

@@ -7,9 +7,15 @@ type Props = {
   klubbnavn: React.ReactNode;
   tone?: "default" | "inverted";
   className?: string;
+  logoClassName?: string;
 };
 
-export default function NavbarBrandMedKlubb({ klubbnavn, tone = "default", className }: Props) {
+export default function NavbarBrandMedKlubb({
+  klubbnavn,
+  tone = "default",
+  className,
+  logoClassName,
+}: Props) {
   const slug = useSlug();
   const base = import.meta.env.BASE_URL ?? "/";
 
@@ -34,7 +40,7 @@ export default function NavbarBrandMedKlubb({ klubbnavn, tone = "default", class
         alt=""
         width={48}
         height={48}
-        className="size-8 shrink-0 rounded-lg object-contain"
+        className={cn("size-8 shrink-0 rounded-lg object-contain", logoClassName)}
         onError={() => {
           if (src.endsWith(".svg")) {
             setSrc(`${klubbPath}/logo.webp`);
