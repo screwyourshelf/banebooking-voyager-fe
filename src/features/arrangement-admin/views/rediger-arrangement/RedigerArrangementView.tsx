@@ -1,18 +1,23 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { AdminPageLoading } from "@/components/admin";
+import {
+  AdminEditorForm,
+  AdminFormActions,
+  AdminPageLoading,
+  SettingsPanel,
+  SettingsRadioGroup,
+  SettingsRow,
+  SettingsStack,
+  SettingsSwitchRow,
+} from "@/components/admin";
+import SettingsSection from "@/components/admin/SettingsSection";
 import { ServerFeil } from "@/components/errors";
 import { ActionFeedback, type ActionFeedbackMessage } from "@/components/feedback";
+import SectionTabs from "@/components/navigation/Tabs";
 import { RecordCollectionSkeleton, RecordListState } from "@/components/records";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { Switch } from "@/components/ui/switch";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
-import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import {
   Select,
   SelectContent,
@@ -25,7 +30,6 @@ import {
   ARRANGEMENT_KATEGORI_VALG,
   formaterAntallBanetider,
 } from "@/utils/arrangementPresentation";
-import { arrangementEditorStyles, binaryChoiceStyles } from "@/styles/recipes";
 
 import { useNavigate } from "react-router-dom";
 
@@ -371,357 +375,300 @@ export default function RedigerArrangementView({
 
   return (
     <>
-      <Tabs
+      <SectionTabs
         value={aktivTab}
         onValueChange={(value) => setAktivTab(value as typeof aktivTab)}
-        className={arrangementEditorStyles.tabs}
-      >
-        <div className="border-b px-4 sm:px-6">
-          <TabsList
-            variant="line"
-            aria-label="Rediger arrangement"
-            className={arrangementEditorStyles.tabsList}
-          >
-            <TabsTrigger value="metadata" className={arrangementEditorStyles.tabsTrigger}>
-              Informasjon
-            </TabsTrigger>
-            <TabsTrigger value="bookinger" className={arrangementEditorStyles.tabsTrigger}>
-              Tider
-            </TabsTrigger>
-          </TabsList>
-        </div>
-
-        <TabsContent value="metadata" className="mt-0">
-          <form
-            onSubmit={(event) => {
-              event.preventDefault();
-              void håndterLagreMetadata();
-            }}
-          >
-            <section className={arrangementEditorStyles.section}>
-              <div className={arrangementEditorStyles.sectionIntro}>
-                <h2 className="font-heading text-lg font-medium">Arrangement</h2>
-                <p className="text-sm text-muted-foreground">
-                  Informasjonen kan lagres uten å endre banetidene.
-                </p>
-              </div>
-
-              <div className="divide-y border-y">
-                {grener.length > 1 ? (
-                  <div className={arrangementEditorStyles.fieldRow}>
-                    <div className="space-y-1">
-                      <Label htmlFor="gren">Gren for nye banetider</Label>
-                      <p className="text-sm text-muted-foreground">
-                        Endrer bare hvilke baner du kan legge til videre.
-                      </p>
-                    </div>
-                    <Select value={valgtGrenId} onValueChange={setValgtGrenId}>
-                      <SelectTrigger id="gren" className="w-full">
-                        <SelectValue placeholder="Velg gren…" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {grener.map((gren) => (
-                          <SelectItem key={gren.id} value={gren.id}>
-                            {gren.navn}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                ) : null}
-
-                <div className={arrangementEditorStyles.fieldRow}>
-                  <Label htmlFor="kategori">Kategori</Label>
-                  <Select
-                    value={kategori}
-                    onValueChange={(value) => {
-                      resetMetadataFeedback();
-                      setKategori(value as ArrangementKategori);
-                    }}
+        variant="section"
+        ariaLabel="Rediger arrangement"
+        items={[
+          {
+            value: "metadata",
+            label: "Informasjon",
+            content: (
+              <AdminEditorForm
+                onSubmit={(event) => {
+                  event.preventDefault();
+                  void håndterLagreMetadata();
+                }}
+              >
+                <SettingsStack embedded>
+                  <SettingsSection
+                    embedded
+                    title="Arrangement"
+                    description="Informasjonen kan lagres uten å endre banetidene."
                   >
-                    <SelectTrigger id="kategori" className="w-full">
-                      <SelectValue placeholder="Velg kategori…" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {ARRANGEMENT_KATEGORI_VALG.map((category) => (
-                        <SelectItem key={category.value} value={category.value}>
-                          {category.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                    <SettingsPanel>
+                      {grener.length > 1 ? (
+                        <SettingsRow
+                          title="Gren for nye banetider"
+                          description="Endrer bare hvilke baner du kan legge til videre."
+                        >
+                          <Select value={valgtGrenId} onValueChange={setValgtGrenId}>
+                            <SelectTrigger id="gren" aria-label="Gren for nye banetider">
+                              <SelectValue placeholder="Velg gren…" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {grener.map((gren) => (
+                                <SelectItem key={gren.id} value={gren.id}>
+                                  {gren.navn}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </SettingsRow>
+                      ) : null}
 
-                <div className={arrangementEditorStyles.fieldRowTop}>
-                  <Label htmlFor="beskrivelse">Intern beskrivelse</Label>
-                  <Textarea
-                    id="beskrivelse"
-                    value={beskrivelse}
-                    onChange={(event) => {
-                      resetMetadataFeedback();
-                      setBeskrivelse(event.target.value);
-                    }}
-                  />
-                </div>
-              </div>
-            </section>
+                      <SettingsRow title="Kategori">
+                        <Select
+                          value={kategori}
+                          onValueChange={(value) => {
+                            resetMetadataFeedback();
+                            setKategori(value as ArrangementKategori);
+                          }}
+                        >
+                          <SelectTrigger id="kategori" aria-label="Kategori">
+                            <SelectValue placeholder="Velg kategori…" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {ARRANGEMENT_KATEGORI_VALG.map((category) => (
+                              <SelectItem key={category.value} value={category.value}>
+                                {category.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </SettingsRow>
 
-            <Separator />
+                      <SettingsRow title="Intern beskrivelse">
+                        <Textarea
+                          id="beskrivelse"
+                          aria-label="Intern beskrivelse"
+                          value={beskrivelse}
+                          onChange={(event) => {
+                            resetMetadataFeedback();
+                            setBeskrivelse(event.target.value);
+                          }}
+                        />
+                      </SettingsRow>
+                    </SettingsPanel>
+                  </SettingsSection>
 
-            <section className={arrangementEditorStyles.section}>
-              <div className={arrangementEditorStyles.sectionIntro}>
-                <h2 className="font-heading text-lg font-medium">Publisering</h2>
-                <p className="text-sm text-muted-foreground">
-                  Styr presentasjonen på klubbens nettside.
-                </p>
-              </div>
-
-              <div className="divide-y border-y">
-                <div className="flex items-center justify-between gap-4 py-4">
-                  <div className="space-y-1">
-                    <Label htmlFor="publisert">Vis på nettsiden</Label>
-                    <p className="text-sm text-muted-foreground">
-                      Publiser med egen tittel og presentasjonstekst.
-                    </p>
-                  </div>
-                  <Switch
-                    id="publisert"
-                    checked={publisertPåNettsiden}
-                    onCheckedChange={(checked) => {
-                      resetMetadataFeedback();
-                      setPublisertPåNettsiden(checked);
-                    }}
-                  />
-                </div>
-
-                {publisertPåNettsiden ? (
-                  <>
-                    <div className={arrangementEditorStyles.fieldRow}>
-                      <Label htmlFor="nettside-tittel">Tittel på nettsiden</Label>
-                      <Input
-                        id="nettside-tittel"
-                        value={nettsideTittel}
-                        onChange={(event) => {
+                  <SettingsSection
+                    embedded
+                    title="Publisering"
+                    description="Styr presentasjonen på klubbens nettside."
+                  >
+                    <SettingsPanel>
+                      <SettingsSwitchRow
+                        title="Vis på nettsiden"
+                        description="Publiser med egen tittel og presentasjonstekst."
+                        checked={publisertPåNettsiden}
+                        onCheckedChange={(checked) => {
                           resetMetadataFeedback();
-                          setNettsideTittel(event.target.value);
-                        }}
-                        placeholder="F.eks. Vårturnering 2026"
-                        maxLength={100}
-                      />
-                    </div>
-                    <div className="space-y-3 py-4">
-                      <Label>Presentasjon på nettsiden</Label>
-                      <LazyTiptapEditor
-                        content={nettsideBeskrivelse}
-                        onChange={(content) => {
-                          resetMetadataFeedback();
-                          setNettsideBeskrivelse(content);
+                          setPublisertPåNettsiden(checked);
                         }}
                       />
-                    </div>
-                  </>
-                ) : null}
-              </div>
-            </section>
 
-            <Separator />
+                      {publisertPåNettsiden ? (
+                        <>
+                          <SettingsRow title="Tittel på nettsiden">
+                            <Input
+                              id="nettside-tittel"
+                              aria-label="Tittel på nettsiden"
+                              value={nettsideTittel}
+                              onChange={(event) => {
+                                resetMetadataFeedback();
+                                setNettsideTittel(event.target.value);
+                              }}
+                              placeholder="F.eks. Vårturnering 2026"
+                              maxLength={100}
+                            />
+                          </SettingsRow>
+                          <SettingsRow title="Presentasjon på nettsiden">
+                            <LazyTiptapEditor
+                              content={nettsideBeskrivelse}
+                              onChange={(content) => {
+                                resetMetadataFeedback();
+                                setNettsideBeskrivelse(content);
+                              }}
+                            />
+                          </SettingsRow>
+                        </>
+                      ) : null}
+                    </SettingsPanel>
+                  </SettingsSection>
 
-            <section className={arrangementEditorStyles.section}>
-              <div className={arrangementEditorStyles.sectionIntro}>
-                <h2 className="font-heading text-lg font-medium">Turnering</h2>
-                <p className="text-sm text-muted-foreground">
-                  Koble arrangementet til turneringsadministrasjon ved behov.
-                </p>
-              </div>
-              <div className="flex flex-col gap-4 border-y py-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="space-y-1">
-                  <p className="text-sm font-medium">Turneringsmodus</p>
-                  <p className="text-sm text-muted-foreground">
-                    {arrangement.turneringId
-                      ? "Arrangementet er koblet til en turnering."
-                      : "Opprett en turnering med arrangementet som grunnlag."}
-                  </p>
-                </div>
-                {arrangement.turneringId ? (
-                  <Button
-                    type="button"
-                    onClick={() => navigate(`../turnering/${arrangement.turneringId}`)}
+                  <SettingsSection
+                    embedded
+                    title="Turnering"
+                    description="Koble arrangementet til turneringsadministrasjon ved behov."
                   >
-                    Administrer turnering
-                  </Button>
-                ) : (
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => opprettTurnering.mutate({ arrangementId: arrangement.id })}
-                    disabled={opprettTurnering.isPending}
+                    <SettingsPanel>
+                      <SettingsRow
+                        title="Turneringsmodus"
+                        description={
+                          arrangement.turneringId
+                            ? "Arrangementet er koblet til en turnering."
+                            : "Opprett en turnering med arrangementet som grunnlag."
+                        }
+                      >
+                        {arrangement.turneringId ? (
+                          <Button
+                            type="button"
+                            onClick={() => navigate(`../turnering/${arrangement.turneringId}`)}
+                          >
+                            Administrer turnering
+                          </Button>
+                        ) : (
+                          <Button
+                            type="button"
+                            variant="outline"
+                            onClick={() =>
+                              opprettTurnering.mutate({ arrangementId: arrangement.id })
+                            }
+                            disabled={opprettTurnering.isPending}
+                          >
+                            {opprettTurnering.isPending ? "Oppretter…" : "Opprett turnering"}
+                          </Button>
+                        )}
+                      </SettingsRow>
+                    </SettingsPanel>
+                  </SettingsSection>
+
+                  <SettingsSection
+                    embedded
+                    eyebrow="Fareområde"
+                    title="Avlys arrangement"
+                    description="Alle tilknyttede banetider slettes. Handlingen må bekreftes."
+                    tone="danger"
                   >
-                    {opprettTurnering.isPending ? "Oppretter…" : "Opprett turnering"}
-                  </Button>
-                )}
-              </div>
-              <ServerFeil feil={opprettTurnering.error?.message ?? null} />
-            </section>
+                    <SettingsPanel>
+                      <SettingsRow
+                        title="Fjern arrangementet"
+                        description="Bruk avlysning bare når arrangementet og alle tidene skal fjernes."
+                      >
+                        <SlettArrangementDialog
+                          tittel={arrangement.tittel}
+                          harTurnering={!!arrangement.turneringId}
+                          onSlett={async () => {
+                            await avlysArrangement();
+                            onDeleted?.();
+                          }}
+                          trigger={<Button variant="destructive">Avlys arrangement</Button>}
+                        />
+                      </SettingsRow>
+                    </SettingsPanel>
+                  </SettingsSection>
 
-            <Separator />
-
-            <section className={arrangementEditorStyles.section}>
-              <div className={arrangementEditorStyles.sectionIntro}>
-                <p className="text-xs font-medium tracking-wide text-destructive uppercase">
-                  Fareområde
-                </p>
-                <h2 className="font-heading text-lg font-medium text-destructive">
-                  Avlys arrangement
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  Alle tilknyttede banetider slettes. Handlingen må bekreftes.
-                </p>
-              </div>
-              <div className="flex flex-col gap-4 border-y py-4 sm:flex-row sm:items-center sm:justify-between">
-                <p className="max-w-xl text-sm text-muted-foreground">
-                  Bruk avlysning bare når arrangementet og alle tidene skal fjernes.
-                </p>
-                <SlettArrangementDialog
-                  tittel={arrangement.tittel}
-                  harTurnering={!!arrangement.turneringId}
-                  onSlett={async () => {
-                    await avlysArrangement();
-                    onDeleted?.();
-                  }}
-                  trigger={<Button variant="destructive">Avlys arrangement</Button>}
-                />
-              </div>
-            </section>
-
-            <div className="space-y-3 border-t bg-muted/20 px-4 py-4 sm:px-6">
-              {metadataLagret ? (
-                <ActionFeedback
-                  tone="success"
-                  title="Informasjonen er lagret"
-                  description="Arrangementoversikten er oppdatert."
-                />
-              ) : null}
-              <ServerFeil feil={lagreFeil?.message ?? null} />
-              <div className="flex justify-end">
-                <Button type="submit" disabled={lagreMetadataLoading}>
-                  {lagreMetadataLoading ? "Lagrer…" : "Lagre informasjon"}
-                </Button>
-              </div>
-            </div>
-          </form>
-        </TabsContent>
-
-        <TabsContent value="bookinger" className="mt-0">
-          <section className={arrangementEditorStyles.section}>
-            <div className={arrangementEditorStyles.sectionIntro}>
-              <h2 className="font-heading text-lg font-medium">Legg til banetider</h2>
-              <p className="text-sm text-muted-foreground">
-                Nye tider legges først som forslag og lagres separat.
-              </p>
-            </div>
-            <ToggleGroup
-              type="single"
-              variant="outline"
-              spacing={0}
-              value={oppsettsModus}
-              onValueChange={(value) => {
-                if (value) setOppsettsModus(value as typeof oppsettsModus);
-              }}
-              aria-label="Velg oppsettstype"
-              className={binaryChoiceStyles.group}
-            >
-              <ToggleGroupItem
-                value="gjentakende"
-                aria-label="Bruk gjentakende oppsett"
-                className={binaryChoiceStyles.item}
-              >
-                Gjentakende
-              </ToggleGroupItem>
-              <ToggleGroupItem
-                value="manuell"
-                aria-label="Bruk manuelt oppsett"
-                className={binaryChoiceStyles.item}
-              >
-                Manuelt
-              </ToggleGroupItem>
-            </ToggleGroup>
-          </section>
-
-          <Separator />
-
-          <section className={arrangementEditorStyles.section}>
-            <div className={arrangementEditorStyles.sectionIntro}>
-              <h2 className="font-heading text-lg font-medium">
-                {oppsettsModus === "gjentakende" ? "Gjentakende tider" : "Manuelle tider"}
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                {oppsettsModus === "gjentakende"
-                  ? "Velg periode, ukedager, baner og tidspunkter."
-                  : "Velg konkrete datoer, baner og tidspunkter."}
-              </p>
-            </div>
-            {oppsettsModus === "gjentakende" ? (
-              <GjentakendeOppsett baner={baner} onGenerer={håndterGenererForslag} />
-            ) : (
-              <ManueltOppsett baner={baner} onLeggTil={håndterManueltLeggTil} />
-            )}
-          </section>
-
-          <Separator />
-
-          <section className="space-y-4 px-4 py-6 sm:px-6">
-            {isLoadingBookinger ? (
-              <RecordCollectionSkeleton
-                ariaLabel="Laster arrangementets banetider"
-                rows={5}
-                layout="date"
-              />
-            ) : bookingerFeil ? (
-              <RecordListState
-                title="Kunne ikke laste banetidene"
-                description={bookingerFeil.message}
-                tone="danger"
-                role="alert"
-              />
-            ) : (
-              <BookingListe
-                bookinger={bookinger}
-                onRediger={håndterRediger}
-                onFjernEllerAvlys={håndterFjernEllerAvlys}
-              />
-            )}
-
-            {bookingFeedback ? <ActionFeedback {...bookingFeedback} /> : null}
-            <ServerFeil
-              feil={slettBookingFeil?.message ?? leggTilBookingFeil?.message ?? null}
-              title="Listen over banetider kunne ikke oppdateres"
-            />
-
-            {stagede.length > 0 ? (
-              <div className="flex flex-col gap-4 border-t pt-5 sm:flex-row sm:items-center sm:justify-between">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <p className="font-heading font-medium">Forslag klare</p>
-                    <Badge variant="secondary">{stagede.length}</Badge>
-                  </div>
-                  <p className="text-sm text-muted-foreground">
-                    Forslagene lagres først når du bekrefter.
-                  </p>
-                </div>
-                <Button
-                  type="button"
-                  onClick={() => void håndterOpprettForslag()}
-                  disabled={oppretterForslag}
+                  <AdminFormActions>
+                    {metadataLagret ? (
+                      <ActionFeedback
+                        tone="success"
+                        title="Informasjonen er lagret"
+                        description="Arrangementoversikten er oppdatert."
+                      />
+                    ) : null}
+                    <ServerFeil feil={opprettTurnering.error?.message ?? null} />
+                    <ServerFeil feil={lagreFeil?.message ?? null} />
+                    <Button type="submit" disabled={lagreMetadataLoading}>
+                      {lagreMetadataLoading ? "Lagrer…" : "Lagre informasjon"}
+                    </Button>
+                  </AdminFormActions>
+                </SettingsStack>
+              </AdminEditorForm>
+            ),
+          },
+          {
+            value: "bookinger",
+            label: "Tider",
+            content: (
+              <SettingsStack embedded>
+                <SettingsSection
+                  embedded
+                  title="Legg til banetider"
+                  description="Nye tider legges først som forslag og lagres separat."
                 >
-                  {oppretterForslag
-                    ? `Oppretter ${stagede.length}…`
-                    : `Opprett ${stagede.length} forslag`}
-                </Button>
-              </div>
-            ) : null}
-          </section>
-        </TabsContent>
-      </Tabs>
+                  <SettingsPanel>
+                    <SettingsRow title="Metode">
+                      <SettingsRadioGroup
+                        label="Velg oppsettstype"
+                        value={oppsettsModus}
+                        onValueChange={(value) => setOppsettsModus(value as typeof oppsettsModus)}
+                        options={[
+                          { value: "gjentakende", label: "Gjentakende" },
+                          { value: "manuell", label: "Manuelt" },
+                        ]}
+                      />
+                    </SettingsRow>
+                  </SettingsPanel>
+                </SettingsSection>
+
+                <SettingsSection
+                  embedded
+                  title={oppsettsModus === "gjentakende" ? "Gjentakende tider" : "Manuelle tider"}
+                  description={
+                    oppsettsModus === "gjentakende"
+                      ? "Velg periode, ukedager, baner og tidspunkter."
+                      : "Velg konkrete datoer, baner og tidspunkter."
+                  }
+                >
+                  {oppsettsModus === "gjentakende" ? (
+                    <GjentakendeOppsett baner={baner} onGenerer={håndterGenererForslag} />
+                  ) : (
+                    <ManueltOppsett baner={baner} onLeggTil={håndterManueltLeggTil} />
+                  )}
+                </SettingsSection>
+
+                <SettingsSection
+                  embedded
+                  title="Banetider"
+                  description="Eksisterende tider og nye forslag vises i samme liste."
+                >
+                  {isLoadingBookinger ? (
+                    <RecordCollectionSkeleton
+                      ariaLabel="Laster arrangementets banetider"
+                      rows={5}
+                      layout="date"
+                    />
+                  ) : bookingerFeil ? (
+                    <RecordListState
+                      title="Kunne ikke laste banetidene"
+                      description={bookingerFeil.message}
+                      tone="danger"
+                      role="alert"
+                    />
+                  ) : (
+                    <BookingListe
+                      bookinger={bookinger}
+                      onRediger={håndterRediger}
+                      onFjernEllerAvlys={håndterFjernEllerAvlys}
+                    />
+                  )}
+                </SettingsSection>
+
+                <AdminFormActions>
+                  {bookingFeedback ? <ActionFeedback {...bookingFeedback} /> : null}
+                  <ServerFeil
+                    feil={slettBookingFeil?.message ?? leggTilBookingFeil?.message ?? null}
+                    title="Listen over banetider kunne ikke oppdateres"
+                  />
+                  {stagede.length > 0 ? (
+                    <Button
+                      type="button"
+                      onClick={() => void håndterOpprettForslag()}
+                      disabled={oppretterForslag}
+                    >
+                      {oppretterForslag
+                        ? `Oppretter ${stagede.length}…`
+                        : `Opprett ${stagede.length} forslag`}
+                    </Button>
+                  ) : null}
+                </AdminFormActions>
+              </SettingsStack>
+            ),
+          },
+        ]}
+      />
 
       <RedigerBookingModal
         key={redigeringsMålId ?? "closed"}

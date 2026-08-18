@@ -836,7 +836,7 @@
   .settings-row [data-slot="input"],
   .settings-row [data-slot="select-trigger"],
   .settings-row [data-slot="textarea"] {
-    width: 100%;
+    width: 100% !important;
     min-height: 2.625rem;
     background: var(--app-surface);
   }

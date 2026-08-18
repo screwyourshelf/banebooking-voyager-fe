@@ -1,32 +1,17 @@
 import { useMemo, useState } from "react";
-import { ArrowLeft, CalendarCog, CalendarX2, ChevronRight, SlidersHorizontal } from "lucide-react";
+import { CalendarCog, CalendarX2 } from "lucide-react";
 
+import {
+  AdminEditorDialog,
+  AdminEntityCollection,
+  AdminEntityList,
+  AdminEntityRow,
+} from "@/components/admin";
 import { ActionFeedback, type ActionFeedbackMessage } from "@/components/feedback";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { Badge } from "@/components/ui/badge";
+import { RecordCollectionSkeleton, RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  Sheet,
-  SheetClose,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
-import { Skeleton } from "@/components/ui/skeleton";
 import type { ArrangementRespons } from "@/types";
 import { formaterArrangementKategori } from "@/utils/arrangementPresentation";
-import { arrangementEditorStyles } from "@/styles/recipes";
 import { useRedigerArrangement } from "../hooks/useRedigerArrangement";
 import OpprettArrangementView from "./arrangement/OpprettArrangementView";
 import RedigerArrangementView from "./rediger-arrangement/RedigerArrangementView";
@@ -62,7 +47,7 @@ function formatDateRange(arrangement: ArrangementRespons) {
 }
 
 function getStatus(arrangement: ArrangementRespons) {
-  if (arrangement.erPassert) return { label: "Gjennomført", variant: "secondary" as const };
+  if (arrangement.erPassert) return { label: "Gjennomført", tone: "past" as const };
 
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -70,8 +55,8 @@ function getStatus(arrangement: ArrangementRespons) {
   const end = parseLocalDate(arrangement.sluttDato);
 
   return start <= today && today <= end
-    ? { label: "Pågår", variant: "default" as const }
-    : { label: "Kommende", variant: "outline" as const };
+    ? { label: "Pågår", tone: "event" as const }
+    : { label: "Kommende", tone: "available" as const };
 }
 
 export default function ArrangementAdminOverview({ createOpen, onCreateOpenChange }: Props) {
@@ -102,255 +87,134 @@ export default function ArrangementAdminOverview({ createOpen, onCreateOpenChang
 
   return (
     <>
-      <div className="space-y-5">
-        {creationFeedback ? <ActionFeedback {...creationFeedback} /> : null}
+      {creationFeedback ? <ActionFeedback {...creationFeedback} /> : null}
 
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div className="flex items-start gap-3">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/10 text-primary">
-              <CalendarCog className="size-5" aria-hidden="true" />
-            </div>
-            <div>
-              <h2 className="font-heading text-xl font-medium tracking-tight">
-                {visibleArrangements.length} arrangement
-                {visibleArrangements.length === 1 ? "" : "er"}
-              </h2>
-              <p className="text-sm text-muted-foreground">
-                {showPast ? "Alle arrangementer" : "Aktive og kommende arrangementer"}
-              </p>
-            </div>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-2">
-            <label className="flex h-9 items-center gap-2 rounded-xl border bg-background px-3 text-sm font-medium shadow-xs">
-              <Checkbox
-                checked={showPast}
-                onCheckedChange={(checked) => setShowPast(checked === true)}
-                disabled={isLoadingOverview}
-              />
-              Vis tidligere
-            </label>
-
-            {grener.length > 1 ? (
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <Button type="button" variant="outline" size="sm">
-                    <SlidersHorizontal data-icon="inline-start" aria-hidden="true" />
-                    Gren
-                    {selectedBranches.length > 0 ? (
-                      <Badge variant="secondary">{selectedBranches.length}</Badge>
-                    ) : null}
-                  </Button>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-56">
-                  <DropdownMenuLabel>Filtrer på gren</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  {grener.map((gren) => (
-                    <DropdownMenuCheckboxItem
-                      key={gren.slug}
-                      checked={selectedBranches.includes(gren.slug)}
-                      onCheckedChange={() =>
-                        setSelectedBranches((current) =>
-                          current.includes(gren.slug)
-                            ? current.filter((branch) => branch !== gren.slug)
-                            : [...current, gren.slug]
-                        )
-                      }
-                    >
-                      {gren.navn}
-                    </DropdownMenuCheckboxItem>
-                  ))}
-                  {selectedBranches.length > 0 ? (
-                    <>
-                      <DropdownMenuSeparator />
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="sm"
-                        className="w-full justify-start"
-                        onClick={() => setSelectedBranches([])}
-                      >
-                        Nullstill filter
-                      </Button>
-                    </>
-                  ) : null}
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : null}
-          </div>
-        </div>
-
+      <AdminEntityCollection
+        icon={<CalendarCog aria-hidden="true" />}
+        title={`${visibleArrangements.length} arrangement${
+          visibleArrangements.length === 1 ? "" : "er"
+        }`}
+        description={showPast ? "Alle arrangementer" : "Aktive og kommende arrangementer"}
+        toggle={{
+          title: "Vis tidligere",
+          description: "Inkluder gjennomførte",
+          checked: showPast,
+          onCheckedChange: setShowPast,
+          disabled: isLoadingOverview,
+        }}
+        filter={
+          grener.length > 1
+            ? {
+                label: "Filtrer arrangementer",
+                groups: [
+                  {
+                    label: "Gren",
+                    options: grener.map((gren) => ({ value: gren.slug, label: gren.navn })),
+                    selectedValues: selectedBranches,
+                    onToggle: (value) =>
+                      setSelectedBranches((current) =>
+                        current.includes(value)
+                          ? current.filter((branch) => branch !== value)
+                          : [...current, value]
+                      ),
+                  },
+                ],
+                onReset: () => setSelectedBranches([]),
+                disabled: isLoadingOverview,
+              }
+            : undefined
+        }
+      >
         {isLoadingOverview ? (
-          <div className="space-y-2" aria-label="Laster arrangementer">
-            {[0, 1, 2, 3].map((row) => (
-              <Skeleton key={row} className="h-20 w-full rounded-2xl" />
-            ))}
-          </div>
+          <RecordCollectionSkeleton ariaLabel="Laster arrangementer" rows={4} />
         ) : arrangementerFeil ? (
-          <Alert variant="destructive">
-            <CalendarX2 aria-hidden="true" />
-            <AlertTitle>Kunne ikke laste arrangementene</AlertTitle>
-            <AlertDescription className="flex flex-col items-start gap-3">
-              <span>{arrangementerFeil.message}</span>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={() => void refetchArrangementer()}
-              >
+          <RecordListState
+            icon={<CalendarX2 aria-hidden="true" />}
+            title="Kunne ikke laste arrangementene"
+            description={arrangementerFeil.message}
+            tone="danger"
+            role="alert"
+            action={
+              <Button type="button" variant="outline" onClick={() => void refetchArrangementer()}>
                 Prøv igjen
               </Button>
-            </AlertDescription>
-          </Alert>
+            }
+          />
         ) : visibleArrangements.length === 0 ? (
-          <Card className="border-dashed bg-muted/20 shadow-none">
-            <CardHeader className="items-center py-10 text-center">
-              <div className="flex size-11 items-center justify-center rounded-full bg-muted">
-                <CalendarX2 className="size-5 text-muted-foreground" aria-hidden="true" />
-              </div>
-              <CardTitle>
-                {showPast ? "Ingen arrangementer ennå" : "Ingen aktive arrangementer"}
-              </CardTitle>
-              <CardDescription>
-                {showPast
-                  ? "Opprett et arrangement for å legge til tider."
-                  : "Vis tidligere eller opprett et nytt arrangement."}
-              </CardDescription>
-            </CardHeader>
-          </Card>
+          <RecordListState
+            icon={<CalendarX2 aria-hidden="true" />}
+            title={showPast ? "Ingen arrangementer ennå" : "Ingen aktive arrangementer"}
+            description={
+              showPast
+                ? "Opprett et arrangement for å legge til tider."
+                : "Vis tidligere eller opprett et nytt arrangement."
+            }
+          />
         ) : (
-          <Card className="gap-0 py-0">
-            <CardContent className="px-0">
-              <div className="hidden grid-cols-[minmax(0,1fr)_9rem_8rem_2rem] gap-4 border-b px-5 py-3 text-xs font-medium text-muted-foreground md:grid">
-                <span>Arrangement</span>
-                <span>Dato</span>
-                <span>Status</span>
-                <span className="sr-only">Åpne</span>
-              </div>
-              <div className="divide-y">
-                {visibleArrangements.map((arrangement) => {
-                  const status = getStatus(arrangement);
-                  const metadata = [
-                    arrangement.grenNavn,
-                    formaterArrangementKategori(arrangement.kategori),
-                  ]
-                    .filter(Boolean)
-                    .join(" · ");
+          <AdminEntityList>
+            {visibleArrangements.map((arrangement) => {
+              const status = getStatus(arrangement);
+              const metadata = [
+                arrangement.grenNavn,
+                formaterArrangementKategori(arrangement.kategori),
+              ]
+                .filter(Boolean)
+                .join(" · ");
 
-                  return (
-                    <button
-                      key={arrangement.id}
-                      type="button"
-                      className="grid w-full grid-cols-[minmax(0,1fr)_auto] items-center gap-x-4 gap-y-2 px-4 py-4 text-left transition-colors hover:bg-muted/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-inset md:grid-cols-[minmax(0,1fr)_9rem_8rem_2rem] md:px-5"
-                      aria-label={`Rediger ${arrangement.tittel}, ${formatDateRange(arrangement)}`}
-                      onClick={() => setSelectedId(arrangement.id)}
-                    >
-                      <span className="min-w-0">
-                        <span className="block truncate font-heading text-base font-medium">
-                          {arrangement.tittel}
-                        </span>
-                        <span className="mt-0.5 block truncate text-sm text-muted-foreground">
-                          {metadata}
-                        </span>
-                      </span>
-                      <ChevronRight
-                        className="size-4 text-muted-foreground md:order-last"
-                        aria-hidden="true"
-                      />
-                      <span className="text-sm font-medium md:col-auto md:row-auto">
-                        {formatDateRange(arrangement)}
-                      </span>
-                      <Badge variant={status.variant} className="w-fit md:col-auto md:row-auto">
-                        {status.label}
-                      </Badge>
-                    </button>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
+              return (
+                <AdminEntityRow
+                  key={arrangement.id}
+                  title={arrangement.tittel}
+                  meta={metadata}
+                  description={formatDateRange(arrangement)}
+                  status={status.label}
+                  statusTone={status.tone}
+                  ariaLabel={`Rediger ${arrangement.tittel}, ${formatDateRange(arrangement)}`}
+                  onSelect={() => setSelectedId(arrangement.id)}
+                />
+              );
+            })}
+          </AdminEntityList>
         )}
-      </div>
+      </AdminEntityCollection>
 
-      <Sheet open={createOpen} onOpenChange={onCreateOpenChange}>
-        <SheetContent
-          side="right"
-          showCloseButton={false}
-          className={arrangementEditorStyles.sheet}
-        >
-          <SheetHeader className={arrangementEditorStyles.sheetHeader}>
-            <SheetClose asChild>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className={arrangementEditorStyles.sheetBackButton}
-              >
-                <ArrowLeft data-icon="inline-start" aria-hidden="true" />
-                Alle arrangementer
-              </Button>
-            </SheetClose>
-            <div className="space-y-1 text-left">
-              <Badge className={arrangementEditorStyles.sheetBadge}>Nytt arrangement</Badge>
-              <SheetTitle className={arrangementEditorStyles.sheetTitle}>
-                Opprett arrangement
-              </SheetTitle>
-              <SheetDescription className={arrangementEditorStyles.sheetDescription}>
-                Legg inn informasjon og bygg listen over banetider.
-              </SheetDescription>
-            </div>
-          </SheetHeader>
-          <div className={arrangementEditorStyles.sheetBody}>
-            <OpprettArrangementView
-              onCreated={(feedback) => {
-                setCreationFeedback(feedback);
-                onCreateOpenChange(false);
-              }}
-            />
-          </div>
-        </SheetContent>
-      </Sheet>
+      <AdminEditorDialog
+        open={createOpen}
+        onOpenChange={onCreateOpenChange}
+        backLabel="Alle arrangementer"
+        eyebrow="Nytt arrangement"
+        title="Opprett arrangement"
+        description="Legg inn informasjon og bygg listen over banetider."
+        size="wide"
+      >
+        <OpprettArrangementView
+          onCreated={(feedback) => {
+            setCreationFeedback(feedback);
+            onCreateOpenChange(false);
+          }}
+        />
+      </AdminEditorDialog>
 
-      <Sheet open={!!selectedId} onOpenChange={(open) => !open && setSelectedId(null)}>
-        <SheetContent
-          side="right"
-          showCloseButton={false}
-          className={arrangementEditorStyles.sheet}
-        >
-          <SheetHeader className={arrangementEditorStyles.sheetHeader}>
-            <SheetClose asChild>
-              <Button
-                type="button"
-                variant="ghost"
-                size="sm"
-                className={arrangementEditorStyles.sheetBackButton}
-              >
-                <ArrowLeft data-icon="inline-start" aria-hidden="true" />
-                Alle arrangementer
-              </Button>
-            </SheetClose>
-            <div className="space-y-1 text-left">
-              <Badge className={arrangementEditorStyles.sheetBadge}>Rediger arrangement</Badge>
-              <SheetTitle className={arrangementEditorStyles.sheetTitle}>
-                {selectedArrangement?.tittel ?? "Arrangement"}
-              </SheetTitle>
-              <SheetDescription className={arrangementEditorStyles.sheetDescription}>
-                {selectedArrangement
-                  ? `${formatDateRange(selectedArrangement)} · ${selectedArrangement.grenNavn}`
-                  : "Laster arrangementet."}
-              </SheetDescription>
-            </div>
-          </SheetHeader>
-          <div className={arrangementEditorStyles.sheetBody}>
-            {selectedId ? (
-              <RedigerArrangementView
-                arrangementId={selectedId}
-                onDeleted={() => setSelectedId(null)}
-              />
-            ) : null}
-          </div>
-        </SheetContent>
-      </Sheet>
+      <AdminEditorDialog
+        open={!!selectedId}
+        onOpenChange={(open) => !open && setSelectedId(null)}
+        backLabel="Alle arrangementer"
+        eyebrow="Rediger arrangement"
+        title={selectedArrangement?.tittel ?? "Arrangement"}
+        description={
+          selectedArrangement
+            ? `${formatDateRange(selectedArrangement)} · ${selectedArrangement.grenNavn}`
+            : "Laster arrangementet."
+        }
+        size="wide"
+      >
+        {selectedId ? (
+          <RedigerArrangementView
+            arrangementId={selectedId}
+            onDeleted={() => setSelectedId(null)}
+          />
+        ) : null}
+      </AdminEditorDialog>
     </>
   );
 }

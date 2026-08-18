@@ -11,5 +11,6 @@ Disse reglene er arkitektur, ikke anbefalinger.
 7. Feature-kode leverer innhold, tilstand og handlinger. Den eier ikke den overordnede visuelle grammatikken.
 8. Nye varianter opprettes først i det delte mønsteret og må fungere for minst to reelle konsumenter.
 9. Unntakslisten i designsystemkontrollen er lukket teknisk gjeld. Den skal bare reduseres, aldri utvides for å få en lokal løsning gjennom.
+10. Arrangementadministrasjonen er en beskyttet feature: lokale `className`/`style`, rå komposisjonsprimitiver og feature-recipes er ikke tillatt.
 
 `npm run design-system:check` håndhever grensene. En endring som trenger å bryte dem, skal i stedet forbedre den delte komponenten eller tokenmodellen.

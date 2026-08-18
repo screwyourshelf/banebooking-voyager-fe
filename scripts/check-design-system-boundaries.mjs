@@ -97,70 +97,18 @@ const compositionPrimitiveAllowlist = new Map([
   [
     "@/components/ui/card",
     new Set([
-      path.join(featuresRoot, "arrangement-admin", "views", "ArrangementAdminOverview.tsx"),
       path.join(featuresRoot, "statistikk", "components", "Medlemsstatistikk.tsx"),
       path.join(featuresRoot, "statistikk", "components", "NøkkeltallGrid.tsx"),
     ]),
   ],
-  [
-    "@/components/ui/tabs",
-    new Set([
-      path.join(
-        featuresRoot,
-        "arrangement-admin",
-        "views",
-        "arrangement",
-        "OpprettArrangementView.tsx"
-      ),
-      path.join(
-        featuresRoot,
-        "arrangement-admin",
-        "views",
-        "rediger-arrangement",
-        "RedigerArrangementView.tsx"
-      ),
-    ]),
-  ],
-  [
-    "@/components/ui/toggle-group",
-    new Set([
-      path.join(
-        featuresRoot,
-        "arrangement-admin",
-        "views",
-        "arrangement",
-        "OpprettArrangementView.tsx"
-      ),
-      path.join(
-        featuresRoot,
-        "arrangement-admin",
-        "views",
-        "rediger-arrangement",
-        "RedigerArrangementView.tsx"
-      ),
-    ]),
-  ],
+  ["@/components/ui/tabs", new Set()],
+  ["@/components/ui/toggle-group", new Set()],
   ["@/components/ui/accordion", new Set()],
+  ["@/components/ui/sheet", new Set()],
 ]);
 
-const recipeAllowlist = new Set([
-  path.join(featuresRoot, "arrangement-admin", "pages", "ArrangementPage.tsx"),
-  path.join(featuresRoot, "arrangement-admin", "views", "ArrangementAdminOverview.tsx"),
-  path.join(
-    featuresRoot,
-    "arrangement-admin",
-    "views",
-    "arrangement",
-    "OpprettArrangementView.tsx"
-  ),
-  path.join(
-    featuresRoot,
-    "arrangement-admin",
-    "views",
-    "rediger-arrangement",
-    "RedigerArrangementView.tsx"
-  ),
-]);
+const recipeAllowlist = new Set();
+const strictPatternRoots = [path.join(featuresRoot, "arrangement-admin")];
 
 const strictPatternFiles = new Set([
   path.join(featuresRoot, "booking", "components", "BookingSelectionHeader.tsx"),
@@ -213,7 +161,10 @@ for (const filePath of sourceFiles) {
       }
     }
 
-    if (strictPatternFiles.has(filePath)) {
+    if (
+      strictPatternFiles.has(filePath) ||
+      strictPatternRoots.some((root) => filePath.startsWith(`${root}${path.sep}`))
+    ) {
       const localStyleIndex = source.search(/\b(?:className|style)\s*=/);
       if (localStyleIndex >= 0) {
         apiViolations.push({
