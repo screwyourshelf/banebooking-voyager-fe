@@ -1,23 +1,15 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import {
-  AdminFormActions,
-  AdminFormSubmitButton,
-  AdminPageLoading,
-  AdminSettingsForm,
-  SettingsPanel,
-  SettingsRadioGroup,
-  SettingsRow,
-  SettingsSection,
-  SettingsStack,
-  SettingsSwitchRow,
-} from "@/components/admin";
+import { AdminPageLoading } from "@/components/admin";
 import { ServerFeil } from "@/components/errors";
 import { ActionFeedback, type ActionFeedbackMessage } from "@/components/feedback";
-import { TabsLazyMount } from "@/components/navigation/Tabs";
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
@@ -297,200 +289,242 @@ export default function OpprettArrangementView({ onCreated }: Props) {
 
   return (
     <>
-      <TabsLazyMount
+      <Tabs
         value={aktivTab}
         onValueChange={(value) => setAktivTab(value as typeof aktivTab)}
-        variant="section"
-        ariaLabel="Opprett arrangement"
-        items={[
-          {
-            value: "metadata",
-            label: "Informasjon",
-            content: (
-              <AdminSettingsForm
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  setAktivTab("bookinger");
-                }}
-              >
-                <SettingsStack>
-                  <SettingsSection
-                    eyebrow="Steg 1"
-                    title="Grunnlag"
-                    description="Velg gren og kategori, og legg inn en intern beskrivelse."
+        className="gap-0 overflow-hidden rounded-2xl bg-card ring-1 ring-foreground/10"
+      >
+        <div className="border-b px-4 sm:px-6">
+          <TabsList
+            variant="line"
+            aria-label="Opprett arrangement"
+            className="h-12 w-full justify-start gap-6"
+          >
+            <TabsTrigger value="metadata" className="flex-none px-0">
+              Informasjon
+            </TabsTrigger>
+            <TabsTrigger value="bookinger" className="flex-none px-0">
+              Tider
+            </TabsTrigger>
+          </TabsList>
+        </div>
+
+        <TabsContent value="metadata" className="mt-0">
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              setAktivTab("bookinger");
+            }}
+          >
+            <section className="px-4 py-6 sm:px-6">
+              <div className="mb-5 space-y-1">
+                <p className="text-xs font-medium tracking-wide text-primary uppercase">Steg 1</p>
+                <h2 className="font-heading text-lg font-medium">Grunnlag</h2>
+                <p className="text-sm text-muted-foreground">
+                  Velg gren og kategori, og legg inn en intern beskrivelse.
+                </p>
+              </div>
+
+              <div className="divide-y border-y">
+                {grener.length > 1 ? (
+                  <div className="grid gap-3 py-4 md:grid-cols-[minmax(0,1fr)_minmax(18rem,32rem)] md:items-center">
+                    <div className="space-y-1">
+                      <Label htmlFor="gren">Gren</Label>
+                      <p className="text-sm text-muted-foreground">
+                        Styrer hvilke baner du kan velge.
+                      </p>
+                    </div>
+                    <Select value={valgtGrenId} onValueChange={håndterGrenEndring}>
+                      <SelectTrigger id="gren" className="w-full">
+                        <SelectValue placeholder="Velg gren…" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {grener.map((gren) => (
+                          <SelectItem key={gren.id} value={gren.id}>
+                            {gren.navn}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                ) : null}
+
+                <div className="grid gap-3 py-4 md:grid-cols-[minmax(0,1fr)_minmax(18rem,32rem)] md:items-center">
+                  <Label htmlFor="kategori">Kategori</Label>
+                  <Select
+                    value={kategori}
+                    onValueChange={(value) => setKategori(value as ArrangementKategori)}
                   >
-                    <SettingsPanel>
-                      {grener.length > 1 ? (
-                        <SettingsRow title="Gren" description="Styrer hvilke baner du kan velge.">
-                          <Field>
-                            <Select value={valgtGrenId} onValueChange={håndterGrenEndring}>
-                              <SelectTrigger id="gren">
-                                <SelectValue placeholder="Velg gren…" />
-                              </SelectTrigger>
-                              <SelectContent>
-                                {grener.map((gren) => (
-                                  <SelectItem key={gren.id} value={gren.id}>
-                                    {gren.navn}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                          </Field>
-                        </SettingsRow>
-                      ) : null}
+                    <SelectTrigger id="kategori" className="w-full">
+                      <SelectValue placeholder="Velg kategori…" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {ARRANGEMENT_KATEGORI_VALG.map((category) => (
+                        <SelectItem key={category.value} value={category.value}>
+                          {category.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
-                      <SettingsRow title="Kategori">
-                        <Field>
-                          <Select
-                            value={kategori}
-                            onValueChange={(value) => setKategori(value as ArrangementKategori)}
-                          >
-                            <SelectTrigger id="kategori">
-                              <SelectValue placeholder="Velg kategori…" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {ARRANGEMENT_KATEGORI_VALG.map((category) => (
-                                <SelectItem key={category.value} value={category.value}>
-                                  {category.label}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </Field>
-                      </SettingsRow>
-
-                      <SettingsRow
-                        title="Intern beskrivelse"
-                        description="Vises i Banebooking og kan endres senere."
-                      >
-                        <Field>
-                          <Textarea
-                            id="beskrivelse"
-                            value={beskrivelse}
-                            onChange={(event) => setBeskrivelse(event.target.value)}
-                            placeholder="Kort beskrivelse av arrangementet"
-                          />
-                        </Field>
-                      </SettingsRow>
-                    </SettingsPanel>
-                  </SettingsSection>
-
-                  <SettingsSection
-                    title="Publisering"
-                    description="Bestem om arrangementet også skal presenteres på klubbens nettside."
-                  >
-                    <SettingsPanel>
-                      <SettingsSwitchRow
-                        title="Vis på nettsiden"
-                        description="Publiser med en egen tittel og presentasjonstekst."
-                        checked={publisertPåNettsiden}
-                        onCheckedChange={setPublisertPåNettsiden}
-                      />
-
-                      {publisertPåNettsiden ? (
-                        <>
-                          <SettingsRow title="Tittel på nettsiden">
-                            <Field>
-                              <Input
-                                id="nettside-tittel"
-                                value={nettsideTittel}
-                                onChange={(event) => setNettsideTittel(event.target.value)}
-                                placeholder="F.eks. Vårturnering 2026"
-                                maxLength={100}
-                              />
-                            </Field>
-                          </SettingsRow>
-                          <SettingsRow title="Presentasjon på nettsiden">
-                            <LazyTiptapEditor
-                              content={nettsideBeskrivelse}
-                              onChange={setNettsideBeskrivelse}
-                            />
-                          </SettingsRow>
-                        </>
-                      ) : null}
-                    </SettingsPanel>
-                  </SettingsSection>
-                </SettingsStack>
-
-                <AdminFormActions>
-                  <Button type="submit">Neste: Tider</Button>
-                </AdminFormActions>
-              </AdminSettingsForm>
-            ),
-          },
-          {
-            value: "bookinger",
-            label: "Tider",
-            content: (
-              <AdminSettingsForm
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  void håndterOpprett();
-                }}
-              >
-                <SettingsStack>
-                  <SettingsSection
-                    eyebrow="Steg 2"
-                    title="Velg oppsett"
-                    description="Begge metodene legger konkrete forslag i den samme listen."
-                  >
-                    <SettingsPanel>
-                      <SettingsRow title="Oppsettstype">
-                        <SettingsRadioGroup
-                          label="Oppsettstype"
-                          options={[
-                            { value: "gjentakende", label: "Gjentakende" },
-                            { value: "manuell", label: "Manuelt" },
-                          ]}
-                          value={oppsettsModus}
-                          onValueChange={(value) => setOppsettsModus(value as typeof oppsettsModus)}
-                        />
-                      </SettingsRow>
-                    </SettingsPanel>
-                  </SettingsSection>
-
-                  <SettingsSection
-                    title={oppsettsModus === "gjentakende" ? "Gjentakende tider" : "Manuelle tider"}
-                    description={
-                      oppsettsModus === "gjentakende"
-                        ? "Velg periode, ukedager, baner og tidspunkter."
-                        : "Velg konkrete datoer, baner og tidspunkter."
-                    }
-                  >
-                    {oppsettsModus === "gjentakende" ? (
-                      <GjentakendeOppsett baner={baner} onGenerer={håndterGenerer} />
-                    ) : (
-                      <ManueltOppsett baner={baner} onLeggTil={håndterGenerer} />
-                    )}
-                  </SettingsSection>
-
-                  <BookingListe
-                    bookinger={bookinger}
-                    onRediger={håndterRediger}
-                    onFjernEllerAvlys={håndterFjernEllerAvlys}
+                <div className="grid gap-3 py-4 md:grid-cols-[minmax(0,1fr)_minmax(18rem,32rem)] md:items-start">
+                  <div className="space-y-1">
+                    <Label htmlFor="beskrivelse">Intern beskrivelse</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Vises i Banebooking og kan endres senere.
+                    </p>
+                  </div>
+                  <Textarea
+                    id="beskrivelse"
+                    value={beskrivelse}
+                    onChange={(event) => setBeskrivelse(event.target.value)}
+                    placeholder="Kort beskrivelse av arrangementet"
                   />
-                </SettingsStack>
+                </div>
+              </div>
+            </section>
 
-                <AdminFormActions>
-                  {opprettFeedback ? <ActionFeedback {...opprettFeedback} /> : null}
-                  <ServerFeil feil={opprettFeil?.message ?? null} />
-                  <AdminFormSubmitButton
-                    isLoading={isCreating || sjekkKonflikterLoading}
-                    loadingText={isCreating ? "Oppretter…" : "Sjekker konflikter…"}
-                    disabled={
-                      bookinger.filter((booking) => !booking.erSlettet).length === 0 ||
-                      isCreating ||
-                      sjekkKonflikterLoading
-                    }
-                  >
-                    Opprett arrangement ({bookinger.filter((booking) => !booking.erSlettet).length})
-                  </AdminFormSubmitButton>
-                </AdminFormActions>
-              </AdminSettingsForm>
-            ),
-          },
-        ]}
-      />
+            <Separator />
+
+            <section className="px-4 py-6 sm:px-6">
+              <div className="mb-5 space-y-1">
+                <h2 className="font-heading text-lg font-medium">Publisering</h2>
+                <p className="text-sm text-muted-foreground">
+                  Bestem om arrangementet også skal presenteres på klubbens nettside.
+                </p>
+              </div>
+
+              <div className="divide-y border-y">
+                <div className="flex items-center justify-between gap-4 py-4">
+                  <div className="space-y-1">
+                    <Label htmlFor="publisert">Vis på nettsiden</Label>
+                    <p className="text-sm text-muted-foreground">
+                      Publiser med en egen tittel og presentasjonstekst.
+                    </p>
+                  </div>
+                  <Switch
+                    id="publisert"
+                    checked={publisertPåNettsiden}
+                    onCheckedChange={setPublisertPåNettsiden}
+                  />
+                </div>
+
+                {publisertPåNettsiden ? (
+                  <>
+                    <div className="grid gap-3 py-4 md:grid-cols-[minmax(0,1fr)_minmax(18rem,32rem)] md:items-center">
+                      <Label htmlFor="nettside-tittel">Tittel på nettsiden</Label>
+                      <Input
+                        id="nettside-tittel"
+                        value={nettsideTittel}
+                        onChange={(event) => setNettsideTittel(event.target.value)}
+                        placeholder="F.eks. Vårturnering 2026"
+                        maxLength={100}
+                      />
+                    </div>
+                    <div className="space-y-3 py-4">
+                      <Label>Presentasjon på nettsiden</Label>
+                      <LazyTiptapEditor
+                        content={nettsideBeskrivelse}
+                        onChange={setNettsideBeskrivelse}
+                      />
+                    </div>
+                  </>
+                ) : null}
+              </div>
+            </section>
+
+            <div className="flex justify-end border-t bg-muted/20 px-4 py-4 sm:px-6">
+              <Button type="submit">Neste: Tider</Button>
+            </div>
+          </form>
+        </TabsContent>
+
+        <TabsContent value="bookinger" className="mt-0">
+          <form
+            onSubmit={(event) => {
+              event.preventDefault();
+              void håndterOpprett();
+            }}
+          >
+            <section className="px-4 py-6 sm:px-6">
+              <div className="mb-5 space-y-1">
+                <p className="text-xs font-medium tracking-wide text-primary uppercase">Steg 2</p>
+                <h2 className="font-heading text-lg font-medium">Velg oppsett</h2>
+                <p className="text-sm text-muted-foreground">
+                  Begge metodene legger konkrete forslag i den samme listen.
+                </p>
+              </div>
+              <RadioGroup
+                aria-label="Oppsettstype"
+                value={oppsettsModus}
+                onValueChange={(value) => setOppsettsModus(value as typeof oppsettsModus)}
+                className="grid max-w-lg grid-cols-2 gap-3"
+              >
+                <Label className="flex cursor-pointer items-center gap-3 rounded-xl border p-4 has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5">
+                  <RadioGroupItem value="gjentakende" />
+                  Gjentakende
+                </Label>
+                <Label className="flex cursor-pointer items-center gap-3 rounded-xl border p-4 has-data-[state=checked]:border-primary has-data-[state=checked]:bg-primary/5">
+                  <RadioGroupItem value="manuell" />
+                  Manuelt
+                </Label>
+              </RadioGroup>
+            </section>
+
+            <Separator />
+
+            <section className="px-4 py-6 sm:px-6">
+              <div className="mb-5 space-y-1">
+                <h2 className="font-heading text-lg font-medium">
+                  {oppsettsModus === "gjentakende" ? "Gjentakende tider" : "Manuelle tider"}
+                </h2>
+                <p className="text-sm text-muted-foreground">
+                  {oppsettsModus === "gjentakende"
+                    ? "Velg periode, ukedager, baner og tidspunkter."
+                    : "Velg konkrete datoer, baner og tidspunkter."}
+                </p>
+              </div>
+              {oppsettsModus === "gjentakende" ? (
+                <GjentakendeOppsett baner={baner} onGenerer={håndterGenerer} />
+              ) : (
+                <ManueltOppsett baner={baner} onLeggTil={håndterGenerer} />
+              )}
+            </section>
+
+            <Separator />
+
+            <section className="px-4 py-6 sm:px-6">
+              <BookingListe
+                bookinger={bookinger}
+                onRediger={håndterRediger}
+                onFjernEllerAvlys={håndterFjernEllerAvlys}
+              />
+            </section>
+
+            <div className="space-y-3 border-t bg-muted/20 px-4 py-4 sm:px-6">
+              {opprettFeedback ? <ActionFeedback {...opprettFeedback} /> : null}
+              <ServerFeil feil={opprettFeil?.message ?? null} />
+              <div className="flex justify-end">
+                <Button
+                  type="submit"
+                  disabled={
+                    bookinger.filter((booking) => !booking.erSlettet).length === 0 ||
+                    isCreating ||
+                    sjekkKonflikterLoading
+                  }
+                >
+                  {isCreating
+                    ? "Oppretter…"
+                    : sjekkKonflikterLoading
+                      ? "Sjekker konflikter…"
+                      : `Opprett arrangement (${bookinger.filter((booking) => !booking.erSlettet).length})`}
+                </Button>
+              </div>
+            </div>
+          </form>
+        </TabsContent>
+      </Tabs>
 
       <RedigerBookingModal
         key={redigeringsMålId ?? "closed"}

@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import type { MinBookingRespons } from "@/types";
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
@@ -218,15 +218,32 @@ export default function MineBookingerContent({
         </div>
 
         <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-          <Tabs
+          <ToggleGroup
+            type="single"
+            variant="outline"
+            spacing={0}
             value={visHistoriske ? "alle" : "kommende"}
-            onValueChange={(value) => onToggleVisHistoriske(value === "alle")}
+            onValueChange={(value) => {
+              if (value) onToggleVisHistoriske(value === "alle");
+            }}
+            aria-label="Filtrer bookinger etter periode"
+            className="w-full sm:w-auto"
           >
-            <TabsList className="w-full sm:w-auto">
-              <TabsTrigger value="kommende">Kommende</TabsTrigger>
-              <TabsTrigger value="alle">Alle</TabsTrigger>
-            </TabsList>
-          </Tabs>
+            <ToggleGroupItem
+              value="kommende"
+              aria-label="Vis kommende bookinger"
+              className="flex-1 sm:flex-none"
+            >
+              Kommende
+            </ToggleGroupItem>
+            <ToggleGroupItem
+              value="alle"
+              aria-label="Vis alle bookinger"
+              className="flex-1 sm:flex-none"
+            >
+              Alle
+            </ToggleGroupItem>
+          </ToggleGroup>
 
           {grener.length > 1 || grenFilter.length > 0 ? (
             <DropdownMenu>
