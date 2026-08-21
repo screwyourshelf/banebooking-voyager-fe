@@ -1,13 +1,7 @@
+import { Dialog, Form } from "@/components";
 import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
+import { Stack, Text } from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -83,84 +77,81 @@ export function GenererDrawDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{erRegenerer ? "Regenerer draw" : "Generer draw"}</DialogTitle>
-          <DialogDescription>
-            {antallPaameldte} påmeldte deltakere
-            {erRegenerer && (
-              <span className="block mt-1 text-destructive font-medium">
-                ⚠ Alle eksisterende grupper og kampoppsett for denne klassen vil slettes og bygges
-                på nytt.
-              </span>
-            )}
-          </DialogDescription>
-        </DialogHeader>
-
-        <div className="space-y-4">
-          {forFaaSpillere && (
-            <p className="text-sm text-destructive">
-              Minst 2 påmeldte deltakere kreves for å generere draw.
-            </p>
+    <Dialog
+      open={open}
+      onOpenChange={handleClose}
+      title={erRegenerer ? "Regenerer draw" : "Generer draw"}
+      description={
+        <>
+          {antallPaameldte} påmeldte deltakere
+          {erRegenerer && (
+            <Text as="span" variant="danger">
+              ⚠ Alle eksisterende grupper og kampoppsett for denne klassen vil slettes og bygges på
+              nytt.
+            </Text>
           )}
-          {klasseStruktur === "GruppeMedSluttspill" && (
-            <div className="grid grid-cols-2 gap-3">
-              <div className="space-y-1.5">
-                <Label>Antall grupper</Label>
-                <Select
-                  value={String(antallGrupper)}
-                  onValueChange={(v) => handleAntallGrupperChange(Number(v))}
-                  disabled={forFaaSpillere}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {tilgjengeligeGrupper.map((n) => (
-                      <SelectItem key={n} value={String(n)}>
-                        {n} {n === 1 ? "gruppe" : "grupper"}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-1.5">
-                <Label>Videre per gruppe</Label>
-                <Select
-                  value={String(antallSomGaarViderePerGruppe)}
-                  onValueChange={(v) => setAntallSomGaarViderePerGruppe(Number(v))}
-                  disabled={forFaaSpillere}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {tilgjengeligeVidere.map((n) => (
-                      <SelectItem key={n} value={String(n)}>
-                        {n}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-          )}
-
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => handleClose(false)} disabled={isPending}>
-              Avbryt
-            </Button>
-            <Button
-              onClick={handleGenerer}
-              disabled={isPending || forFaaSpillere}
-              variant={erRegenerer ? "destructive" : "default"}
-            >
-              {isPending ? "Genererer..." : erRegenerer ? "Ja, regenerer draw" : "Generer draw"}
-            </Button>
-          </div>
-        </div>
-      </DialogContent>
+        </>
+      }
+      actions={
+        <>
+          <Button variant="outline" onClick={() => handleClose(false)} disabled={isPending}>
+            Avbryt
+          </Button>
+          <Button
+            onClick={handleGenerer}
+            disabled={isPending || forFaaSpillere}
+            variant={erRegenerer ? "destructive" : "default"}
+          >
+            {isPending ? "Genererer..." : erRegenerer ? "Ja, regenerer draw" : "Generer draw"}
+          </Button>
+        </>
+      }
+    >
+      <Stack gap="lg">
+        {forFaaSpillere && (
+          <Text variant="danger">Minst 2 påmeldte deltakere kreves for å generere draw.</Text>
+        )}
+        {klasseStruktur === "GruppeMedSluttspill" && (
+          <Form.Fields>
+            <Form.Field label="Antall grupper">
+              <Select
+                value={String(antallGrupper)}
+                onValueChange={(v) => handleAntallGrupperChange(Number(v))}
+                disabled={forFaaSpillere}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {tilgjengeligeGrupper.map((n) => (
+                    <SelectItem key={n} value={String(n)}>
+                      {n} {n === 1 ? "gruppe" : "grupper"}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Form.Field>
+            <Form.Field label="Videre per gruppe">
+              <Select
+                value={String(antallSomGaarViderePerGruppe)}
+                onValueChange={(v) => setAntallSomGaarViderePerGruppe(Number(v))}
+                disabled={forFaaSpillere}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {tilgjengeligeVidere.map((n) => (
+                    <SelectItem key={n} value={String(n)}>
+                      {n}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Form.Field>
+          </Form.Fields>
+        )}
+      </Stack>
     </Dialog>
   );
 }

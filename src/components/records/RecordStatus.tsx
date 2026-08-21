@@ -9,15 +9,28 @@ export type RecordStatusTone =
   | "warning"
   | "danger";
 
+export type RecordStatusAppearance = "badge" | "plain";
+
 type Props = {
   tone: RecordStatusTone;
   children: ReactNode;
   align?: "default" | "text-start";
+  appearance?: RecordStatusAppearance;
 };
 
-export default function RecordStatus({ tone, children, align = "default" }: Props) {
+export default function RecordStatus({
+  tone,
+  children,
+  align = "default",
+  appearance = "badge",
+}: Props) {
   return (
-    <span className="record-status" data-tone={tone} data-align={align}>
+    <span
+      className="record-status"
+      data-tone={tone}
+      data-align={align}
+      data-appearance={appearance}
+    >
       {children}
     </span>
   );

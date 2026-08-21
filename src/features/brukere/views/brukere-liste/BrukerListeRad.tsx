@@ -1,13 +1,13 @@
 import type { ReactNode } from "react";
-import { Ban, CalendarDays, Tag, UserRound } from "lucide-react";
+import { Ban, Tag, UserRound } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
-  RecordAccordionCard,
-  RecordCardActions,
-  RecordCardDetails,
-  RecordCardTrigger,
-  RecordEyebrow,
+  RecordDetailGrid,
+  RecordDetailItem,
+  RecordLinkButton,
+  RecordStatus,
 } from "@/components/records";
+import { Collection } from "@/components";
 import type { BrukerRespons, RolleType } from "@/features/brukere/types";
 import { formaterMedlemskapType, formaterRolle } from "@/utils/brukerPresentation";
 import { formatDatoKort } from "@/utils/datoUtils";
@@ -24,20 +24,6 @@ type Props = {
 
 function erSlettetEpost(epost?: string | null) {
   return !!epost?.toLowerCase().startsWith("slettet_");
-}
-
-function hentInitialer(bruker: BrukerRespons) {
-  const navn = bruker.visningsnavn?.trim() || bruker.fulltNavn?.trim();
-  if (navn) {
-    return navn
-      .split(/\s+/)
-      .slice(0, 2)
-      .map((del) => del[0])
-      .join("")
-      .toLocaleUpperCase("nb-NO");
-  }
-
-  return bruker.epost?.slice(0, 2).toLocaleUpperCase("nb-NO") || "?";
 }
 
 export default function BrukerListeRad({
@@ -64,133 +50,76 @@ export default function BrukerListeRad({
 
   const kontoStatus = slettet ? "slettet" : bruker.erSperret ? "sperret" : "aktiv";
   const kontoStatusTekst = slettet ? "Slettet" : bruker.erSperret ? "Sperret" : "Aktiv";
+  const visMedlemsnavn =
+    !!bruker.visningsnavn?.trim() &&
+    !!bruker.fulltNavn?.trim() &&
+    bruker.visningsnavn.trim() !== bruker.fulltNavn.trim();
+  const details = (
+    <RecordDetailGrid>
+      <RecordDetailItem icon={<Tag aria-hidden="true" />} label="Medlemskap">
+        {bruker.medlemskapType ? formaterMedlemskapType(bruker.medlemskapType) : medlemskapTekst}
+        {bruker.medlemskapBekreftetDato
+          ? ` · ${formatDatoKort(bruker.medlemskapBekreftetDato)}`
+          : null}
+      </RecordDetailItem>
+
+      {visMedlemsnavn ? (
+        <RecordDetailItem icon={<UserRound aria-hidden="true" />} label="Navn i medlemskapet">
+          {bruker.fulltNavn}
+        </RecordDetailItem>
+      ) : null}
+
+      {bruker.antallAktiveSperrer !== undefined ? (
+        <RecordDetailItem icon={<Ban aria-hidden="true" />} label="Sperrehistorikk">
+          {onÅpneSperreHistorikk ? (
+            <RecordLinkButton onClick={() => onÅpneSperreHistorikk(bruker)}>
+              {bruker.antallAktiveSperrer === 0
+                ? "Ingen aktive sperrer"
+                : `${bruker.antallAktiveSperrer} aktive sperrer`}
+            </RecordLinkButton>
+          ) : bruker.antallAktiveSperrer === 0 ? (
+            "Ingen aktive sperrer"
+          ) : (
+            `${bruker.antallAktiveSperrer} aktive sperrer`
+          )}
+        </RecordDetailItem>
+      ) : null}
+    </RecordDetailGrid>
+  );
+  const actions =
+    kanRedigere && erKlubbAdmin ? (
+      <>
+        <Button
+          type="button"
+          size="sm"
+          onClick={(event) => {
+            event.stopPropagation();
+            onRedigerBruker(bruker);
+          }}
+        >
+          Rediger
+        </Button>
+        {renderSperrAction?.(bruker)}
+        {renderSlettAction?.(bruker)}
+      </>
+    ) : undefined;
 
   return (
-    <RecordAccordionCard value={bruker.id} muted={slettet}>
-      <RecordCardTrigger>
-        <div className="user-directory-row__summary">
-          <div className="user-directory-row__identity">
-            <span className="user-directory-row__avatar" aria-hidden="true">
-              {hentInitialer(bruker)}
-            </span>
-            <span className="user-directory-row__identity-copy">
-              <span className="user-directory-row__name-line">
-                <span className="user-directory-row__name" title={hovednavn || bruker.epost}>
-                  {hovednavn || "Ukjent bruker"}
-                </span>
-                {erDeg ? <span className="user-directory-row__self">Deg</span> : null}
-              </span>
-              {visEpost ? (
-                <span className="user-directory-row__email" title={bruker.epost}>
-                  {bruker.epost}
-                </span>
-              ) : null}
-              <span className="user-directory-row__metadata">
-                <RecordEyebrow>{formaterRolle(rolle)}</RecordEyebrow>
-                <span>{opprettetTekst}</span>
-                {kontoStatus !== "aktiv" ? (
-                  <span data-account-status={kontoStatus}>{kontoStatusTekst}</span>
-                ) : null}
-              </span>
-            </span>
-          </div>
-        </div>
-      </RecordCardTrigger>
-
-      <RecordCardDetails>
-        <div className="user-directory-row__detail-content">
-          <dl className="user-directory-row__detail-grid">
-            <div>
-              <dt>
-                <CalendarDays aria-hidden="true" />
-                Opprettet
-              </dt>
-              <dd>
-                {bruker.opprettetTid ? formatDatoKort(bruker.opprettetTid) : "Ikke tilgjengelig"}
-              </dd>
-            </div>
-
-            <div>
-              <dt>
-                <UserRound aria-hidden="true" />
-                Visningsnavn
-              </dt>
-              <dd>{bruker.visningsnavn || "Ikke satt"}</dd>
-            </div>
-
-            <div>
-              <dt>
-                <Tag aria-hidden="true" />
-                Medlemskap
-              </dt>
-              <dd>
-                {bruker.medlemskapType
-                  ? formaterMedlemskapType(bruker.medlemskapType)
-                  : medlemskapTekst}
-                {bruker.medlemskapBekreftetDato
-                  ? ` · ${formatDatoKort(bruker.medlemskapBekreftetDato)}`
-                  : null}
-              </dd>
-            </div>
-
-            {bruker.fulltNavn ? (
-              <div>
-                <dt>
-                  <UserRound aria-hidden="true" />
-                  Navn i medlemskapet
-                </dt>
-                <dd>{bruker.fulltNavn}</dd>
-              </div>
-            ) : null}
-
-            {bruker.antallAktiveSperrer !== undefined ? (
-              <div>
-                <dt>
-                  <Ban aria-hidden="true" />
-                  Sperrehistorikk
-                </dt>
-                <dd>
-                  {onÅpneSperreHistorikk ? (
-                    <button
-                      type="button"
-                      className="user-directory-row__history-link"
-                      onClick={(event) => {
-                        event.stopPropagation();
-                        onÅpneSperreHistorikk(bruker);
-                      }}
-                    >
-                      {bruker.antallAktiveSperrer === 0
-                        ? "Ingen aktive sperrer"
-                        : `${bruker.antallAktiveSperrer} aktive sperrer`}
-                    </button>
-                  ) : bruker.antallAktiveSperrer === 0 ? (
-                    "Ingen aktive sperrer"
-                  ) : (
-                    `${bruker.antallAktiveSperrer} aktive sperrer`
-                  )}
-                </dd>
-              </div>
-            ) : null}
-          </dl>
-
-          {kanRedigere && erKlubbAdmin ? (
-            <RecordCardActions>
-              <Button
-                type="button"
-                size="sm"
-                onClick={(event) => {
-                  event.stopPropagation();
-                  onRedigerBruker(bruker);
-                }}
-              >
-                Rediger
-              </Button>
-              {renderSperrAction?.(bruker)}
-              {renderSlettAction?.(bruker)}
-            </RecordCardActions>
-          ) : null}
-        </div>
-      </RecordCardDetails>
-    </RecordAccordionCard>
+    <Collection.Row
+      muted={slettet}
+      title={<span title={hovednavn || bruker.epost}>{hovednavn || "Ukjent bruker"}</span>}
+      context={erDeg ? <RecordStatus tone="own">Deg</RecordStatus> : undefined}
+      description={visEpost ? <span title={bruker.epost}>{bruker.epost}</span> : undefined}
+      meta={`${formaterRolle(rolle)} · ${opprettetTekst}`}
+      status={
+        kontoStatus !== "aktiv"
+          ? {
+              label: kontoStatusTekst,
+              tone: kontoStatus === "sperret" ? "warning" : "past",
+            }
+          : undefined
+      }
+      interaction={{ type: "expand", value: bruker.id, details, actions }}
+    />
   );
 }

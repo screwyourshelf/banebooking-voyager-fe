@@ -1,11 +1,13 @@
 import { useMemo, useState } from "react";
 import { isBefore, isSameDay, startOfDay } from "date-fns";
+import { CalendarX } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Collection } from "@/components";
 import {
-  RecordAccordionList,
   RecordCollectionPagination,
   RecordCollectionSkeleton,
+  RecordListState,
 } from "@/components/records";
-import { Button } from "@/components/ui/button";
 import type { BookingSlotRespons } from "@/types";
 import { grupperSlots } from "@/utils/bookingUtils";
 import BookingSlotRow from "./BookingSlotRow";
@@ -19,6 +21,7 @@ type Props = {
   onBook?: (slot: BookingSlotRespons, arrangementId?: string) => void;
   onFjern?: (slot: BookingSlotRespons) => void;
   isLoading?: boolean;
+  isFetching?: boolean;
 };
 
 export function BookingSlotListAccordion({
@@ -29,6 +32,7 @@ export function BookingSlotListAccordion({
   onBook,
   onFjern,
   isLoading = false,
+  isFetching = false,
 }: Props) {
   const iDag = startOfDay(new Date());
   const erHistorisk = valgtDato ? isBefore(valgtDato, iDag) : false;
@@ -40,7 +44,9 @@ export function BookingSlotListAccordion({
     [slots]
   );
 
-  if (isLoading) return <RecordCollectionSkeleton ariaLabel="Laster tider" rows={5} />;
+  if (isLoading) {
+    return <RecordCollectionSkeleton ariaLabel="Laster tider" rows={5} layout="time" />;
+  }
 
   if (slots.length === 0) {
     return (
@@ -53,10 +59,6 @@ export function BookingSlotListAccordion({
 
   const slotsÅVise = erIDag && !visPasserte ? kommendeSlots : synligeSlots;
 
-  function handleTogglePasserte() {
-    setVisPasserte((current) => !current);
-  }
-
   return (
     <>
       {slotsÅVise.length === 0 ? (
@@ -65,7 +67,7 @@ export function BookingSlotListAccordion({
           description="Vis passerte tider eller velg neste dag."
         />
       ) : (
-        <RecordAccordionList ariaLabel="Tilgjengelige tider">
+        <Collection.List loading={isFetching} ariaLabel="Tilgjengelige tider">
           {slotsÅVise.map((slot) => (
             <BookingSlotRow
               key={getBookingSlotKey(slot)}
@@ -76,12 +78,12 @@ export function BookingSlotListAccordion({
               onFjern={onFjern}
             />
           ))}
-        </RecordAccordionList>
+        </Collection.List>
       )}
 
       {erIDag && antallPasserte > 0 ? (
         <RecordCollectionPagination>
-          <Button variant="outline" size="sm" onClick={handleTogglePasserte}>
+          <Button variant="outline" size="sm" onClick={() => setVisPasserte((current) => !current)}>
             {visPasserte ? "Skjul passerte" : `Vis passerte (${antallPasserte})`}
           </Button>
         </RecordCollectionPagination>
@@ -92,10 +94,11 @@ export function BookingSlotListAccordion({
 
 function BookingSlotEmptyState({ title, description }: { title: string; description: string }) {
   return (
-    <div className="booking-slot__empty" role="status">
-      <div className="booking-slot__empty-title">{title}</div>
-      <p className="booking-slot__empty-copy">{description}</p>
-    </div>
+    <RecordListState
+      icon={<CalendarX aria-hidden="true" />}
+      title={title}
+      description={description}
+    />
   );
 }
 

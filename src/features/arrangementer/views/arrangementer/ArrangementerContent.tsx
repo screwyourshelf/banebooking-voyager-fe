@@ -2,14 +2,11 @@ import { useMemo, useState } from "react";
 import { CalendarDays, CalendarX, RefreshCw } from "lucide-react";
 import { usePagination } from "@/hooks/usePagination";
 import {
-  RecordAccordionList,
-  RecordCollection,
-  RecordCollectionBody,
-  RecordCollectionHeader,
   RecordCollectionPagination,
   RecordCollectionSkeleton,
   RecordListState,
 } from "@/components/records";
+import { Collection } from "@/components";
 import { Button } from "@/components/ui/button";
 import type { ArrangementRespons } from "@/types";
 
@@ -70,106 +67,102 @@ export default function ArrangementerContent({
   const hasFilteredEmptyState = arrangementer.length > 0 && filteredArrangements.length === 0;
 
   return (
-    <RecordCollection ariaLabel="Arrangementsoversikt" busy={isLoading}>
-      <RecordCollectionHeader
-        icon={<CalendarDays />}
-        title={countLabel}
-        description={visHistoriske ? "Kommende og tidligere" : "Kommende"}
-        toggle={{
-          title: "Vis tidligere",
-          checked: visHistoriske,
-          onCheckedChange: onToggleVisHistoriske,
-          disabled: isFetching,
-        }}
-        filter={
-          grener.length > 1
-            ? {
-                label: "Filtrer på gren",
-                groups: [
-                  {
-                    label: "Gren",
-                    options: grener.map((gren) => ({ value: gren, label: gren })),
-                    selectedValues: grenFilter,
-                    onToggle: toggleGren,
-                  },
-                ],
-                onReset: () => setGrenFilter([]),
-                disabled: isFetching,
-              }
-            : undefined
-        }
-      />
-
-      <RecordCollectionBody>
-        {isLoading ? (
-          <RecordCollectionSkeleton ariaLabel="Laster arrangementer" layout="date" />
-        ) : queryError ? (
-          <RecordListState
-            icon={<RefreshCw aria-hidden="true" />}
-            title="Kunne ikke laste arrangementene"
-            description={queryError}
-            tone="danger"
-            role="alert"
-            action={
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={onRetry}
-                disabled={isFetching}
-              >
-                {isFetching ? "Prøver igjen…" : "Prøv igjen"}
-              </Button>
+    <Collection
+      icon={<CalendarDays />}
+      title={countLabel}
+      scope={visHistoriske ? "Kommende og tidligere" : "Kommende"}
+      toggle={{
+        title: "Vis tidligere",
+        checked: visHistoriske,
+        onCheckedChange: onToggleVisHistoriske,
+        disabled: isFetching,
+      }}
+      filter={
+        grener.length > 1
+          ? {
+              label: "Filtrer på gren",
+              groups: [
+                {
+                  label: "Gren",
+                  options: grener.map((gren) => ({ value: gren, label: gren })),
+                  selectedValues: grenFilter,
+                  onToggle: toggleGren,
+                },
+              ],
+              onReset: () => setGrenFilter([]),
+              disabled: isFetching,
             }
-          />
-        ) : filteredArrangements.length === 0 ? (
-          <RecordListState
-            icon={<CalendarX aria-hidden="true" />}
-            title={
-              hasFilteredEmptyState
-                ? "Ingen arrangementer for valgt gren"
-                : visHistoriske
-                  ? "Ingen arrangementer ennå"
-                  : "Ingen kommende arrangementer"
-            }
-            description={
-              hasFilteredEmptyState
-                ? "Velg en annen gren eller nullstill filteret."
-                : visHistoriske
-                  ? "Når klubben publiserer noe, vises kommende og tidligere arrangementer her."
-                  : "Nye arrangementer dukker opp her når de blir publisert av klubben."
-            }
-            action={
-              hasFilteredEmptyState ? (
-                <Button type="button" variant="outline" size="sm" onClick={() => setGrenFilter([])}>
-                  Nullstill filter
-                </Button>
-              ) : undefined
-            }
-          />
-        ) : (
-          <>
-            <RecordAccordionList
-              value={openId}
-              onValueChange={setOpenId}
-              loading={isFetching}
-              ariaLabel="Arrangementer"
+          : undefined
+      }
+    >
+      {isLoading ? (
+        <RecordCollectionSkeleton ariaLabel="Laster arrangementer" layout="date" />
+      ) : queryError ? (
+        <RecordListState
+          icon={<RefreshCw aria-hidden="true" />}
+          title="Kunne ikke laste arrangementene"
+          description={queryError}
+          tone="danger"
+          role="alert"
+          action={
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={onRetry}
+              disabled={isFetching}
             >
-              {visibleArrangements.map((arrangement) => (
-                <ArrangementRow key={arrangement.id} arrangement={arrangement} onAvlys={onAvlys} />
-              ))}
-            </RecordAccordionList>
+              {isFetching ? "Prøver igjen…" : "Prøv igjen"}
+            </Button>
+          }
+        />
+      ) : filteredArrangements.length === 0 ? (
+        <RecordListState
+          icon={<CalendarX aria-hidden="true" />}
+          title={
+            hasFilteredEmptyState
+              ? "Ingen arrangementer for valgt gren"
+              : visHistoriske
+                ? "Ingen arrangementer ennå"
+                : "Ingen kommende arrangementer"
+          }
+          description={
+            hasFilteredEmptyState
+              ? "Velg en annen gren eller nullstill filteret."
+              : visHistoriske
+                ? "Når klubben publiserer noe, vises kommende og tidligere arrangementer her."
+                : "Nye arrangementer dukker opp her når de blir publisert av klubben."
+          }
+          action={
+            hasFilteredEmptyState ? (
+              <Button type="button" variant="outline" size="sm" onClick={() => setGrenFilter([])}>
+                Nullstill filter
+              </Button>
+            ) : undefined
+          }
+        />
+      ) : (
+        <>
+          <Collection.List
+            value={openId}
+            onValueChange={setOpenId}
+            loading={isFetching}
+            ariaLabel="Arrangementer"
+          >
+            {visibleArrangements.map((arrangement) => (
+              <ArrangementRow key={arrangement.id} arrangement={arrangement} onAvlys={onAvlys} />
+            ))}
+          </Collection.List>
 
-            {harFlere ? (
-              <RecordCollectionPagination>
-                <Button type="button" variant="outline" size="sm" onClick={visFlere}>
-                  Vis flere ({gjenstaar} gjenstår)
-                </Button>
-              </RecordCollectionPagination>
-            ) : null}
-          </>
-        )}
-      </RecordCollectionBody>
-    </RecordCollection>
+          {harFlere ? (
+            <RecordCollectionPagination>
+              <Button type="button" variant="outline" size="sm" onClick={visFlere}>
+                Vis flere ({gjenstaar} gjenstår)
+              </Button>
+            </RecordCollectionPagination>
+          ) : null}
+        </>
+      )}
+    </Collection>
   );
 }

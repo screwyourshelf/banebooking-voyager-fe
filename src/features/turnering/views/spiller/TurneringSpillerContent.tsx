@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
-import PageSection from "@/components/sections/PageSection";
 import Tabs from "@/components/navigation/Tabs";
 import { TurneringHeaderSection } from "../../components";
 import type { TurneringRespons } from "@/types";
+import { Section } from "@/components";
 
 type TabItem = { value: string; label: string; content: ReactNode };
 
@@ -20,7 +20,7 @@ export default function TurneringSpillerContent({
   visDrawFaser,
 }: Props) {
   return (
-    <div className="space-y-4">
+    <div>
       {/* ─── Header ─── */}
       <TurneringHeaderSection
         tittel={turnering.arrangementTittel}
@@ -30,21 +30,21 @@ export default function TurneringSpillerContent({
       />
 
       {turnering.status === "Oppsett" && (
-        <PageSection>
-          <p className="text-sm text-muted-foreground italic">Påmelding åpner snart.</p>
-        </PageSection>
+        <Section>
+          <p>Påmelding åpner snart.</p>
+        </Section>
       )}
 
       {(visPaamelding || visDrawFaser) && klasseTabs.length > 0 && (
-        <PageSection title="Klasser">
+        <Section title="Klasser">
           <Tabs items={klasseTabs} />
-        </PageSection>
+        </Section>
       )}
 
       {(visPaamelding || visDrawFaser) && klasseTabs.length === 0 && (
-        <PageSection>
-          <p className="text-sm text-muted-foreground italic">Ingen klasser er satt opp.</p>
-        </PageSection>
+        <Section>
+          <p>Ingen klasser er satt opp.</p>
+        </Section>
       )}
     </div>
   );

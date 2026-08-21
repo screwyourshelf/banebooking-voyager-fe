@@ -2,32 +2,24 @@ import { Suspense } from "react";
 import { Outlet } from "react-router-dom";
 import DeferredFeedbackToaster from "@/components/feedback/DeferredFeedbackToaster";
 import { RouteContentSkeleton } from "@/components/loading";
-import { AppSidebar, MobileBottomNav, Navbar } from "@/components/navigation";
+import { AppSidebar, MobileAppHeader, MobileBottomNav } from "@/components/navigation";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
 
 export default function AppShell() {
   return (
-    <div className="app-shell">
-      <div className="app-shell__frame">
-        <aside className="app-shell__sidebar">
-          <AppSidebar />
-        </aside>
+    <SidebarProvider data-ui="app-shell" data-background="court">
+      <AppSidebar />
+      <SidebarInset data-part="workspace">
+        <MobileAppHeader />
 
-        <div className="app-shell__workspace">
-          <header className="app-shell__topbar">
-            <Navbar />
-          </header>
-
-          <main className="app-shell__main">
-            <Suspense fallback={<RouteContentSkeleton label="Laster siden" />}>
-              <Outlet />
-            </Suspense>
-          </main>
-        </div>
-      </div>
-
+        <main data-part="main">
+          <Suspense fallback={<RouteContentSkeleton label="Laster siden" />}>
+            <Outlet />
+          </Suspense>
+        </main>
+      </SidebarInset>
       <MobileBottomNav />
-
       <DeferredFeedbackToaster />
-    </div>
+    </SidebarProvider>
   );
 }

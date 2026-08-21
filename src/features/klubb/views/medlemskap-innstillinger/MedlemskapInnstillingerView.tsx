@@ -1,10 +1,10 @@
-import { useState } from "react";
 import { RefreshCw } from "lucide-react";
-import { AdminPageLoading, AdminPageState } from "@/components/admin";
+import { useState } from "react";
 import { RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import { useMedlemskapAdmin } from "@/features/klubb/hooks/useMedlemskapAdmin";
 import { tilDatoTekst } from "@/utils/datoUtils";
+import { Page } from "@/components";
 
 import MedlemskapInnstillingerContent from "./MedlemskapInnstillingerContent";
 
@@ -49,11 +49,11 @@ export default function MedlemskapInnstillingerView() {
     }
   };
 
-  if (laster) return <AdminPageLoading label="Laster medlemsinnstillinger" />;
+  if (laster) return <Page.Loading label="Laster medlemsinnstillinger" />;
 
   if (error) {
     return (
-      <AdminPageState>
+      <Page.State>
         <RecordListState
           icon={<RefreshCw aria-hidden="true" />}
           title="Kunne ikke laste status for medlemsbekreftelse"
@@ -72,7 +72,7 @@ export default function MedlemskapInnstillingerView() {
             </Button>
           }
         />
-      </AdminPageState>
+      </Page.State>
     );
   }
 

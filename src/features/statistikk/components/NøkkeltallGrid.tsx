@@ -1,5 +1,5 @@
 import { CalendarCheck, CalendarRange, Clock3, UsersRound } from "lucide-react";
-import { Card, CardContent } from "@/components/ui/card";
+import { MetricCard, MetricGrid } from "@/components/statistics";
 import type { BookingstatistikkRespons } from "@/features/statistikk/types";
 import {
   formatAntall,
@@ -53,34 +53,19 @@ export default function NøkkeltallGrid({ statistikk }: Props) {
   ];
 
   return (
-    <section className="statistics-metrics" aria-label="Nøkkeltall">
+    <MetricGrid label="Nøkkeltall">
       {kort.map(({ label, value, unit, comparison, change, icon: Icon }) => (
-        <Card key={label} size="sm" className="statistics-metric">
-          <CardContent className="statistics-metric__content">
-            <span className="statistics-metric__icon" aria-hidden="true">
-              <Icon />
-            </span>
-            <span className="statistics-metric__copy">
-              <small>{label}</small>
-              <strong>
-                {value}
-                {unit ? <span className="statistics-metric__unit"> {unit}</span> : null}
-              </strong>
-              {comparison ? <span>{comparison}</span> : <span>Valgt periode</span>}
-            </span>
-            {change ? (
-              <span
-                className="statistics-metric__change"
-                data-direction={
-                  endringBookedeTimerProsent && endringBookedeTimerProsent < 0 ? "down" : "up"
-                }
-              >
-                {change}
-              </span>
-            ) : null}
-          </CardContent>
-        </Card>
+        <MetricCard
+          key={label}
+          label={label}
+          value={value}
+          unit={unit}
+          description={comparison ?? "Valgt periode"}
+          icon={<Icon />}
+          change={change}
+          direction={endringBookedeTimerProsent && endringBookedeTimerProsent < 0 ? "down" : "up"}
+        />
       ))}
-    </section>
+    </MetricGrid>
   );
 }

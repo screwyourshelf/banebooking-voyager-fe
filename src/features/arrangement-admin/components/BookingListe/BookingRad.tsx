@@ -1,15 +1,13 @@
-import { AdminActionRow } from "@/components/admin";
-import { Button } from "@/components/ui/button";
+import { RecordTimeRange } from "@/components/records";
 import type { LokalBooking } from "../../types";
-import { formatDatoMedUkedag } from "./bookingListeUtils";
+import { Collection } from "@/components";
 
 type Props = {
   booking: LokalBooking;
   onRediger: (id: string) => void;
-  onFjernEllerAvlys: (id: string) => void;
 };
 
-export default function BookingRad({ booking, onRediger, onFjernEllerAvlys }: Props) {
+export default function BookingRad({ booking, onRediger }: Props) {
   const erEksisterende = booking.kilde === "eksisterende";
   const erSlettet = !!booking.erSlettet;
   const erKonflikt = booking.status === "konflikt";
@@ -20,34 +18,18 @@ export default function BookingRad({ booking, onRediger, onFjernEllerAvlys }: Pr
       : erEksisterende
         ? { label: "Aktiv", tone: "available" as const }
         : { label: "Forslag", tone: "event" as const };
-  const description = [booking.baneNavn, erKonflikt ? booking.konfliktInfo : null]
-    .filter(Boolean)
-    .join(" · ");
 
   return (
-    <AdminActionRow
-      meta={formatDatoMedUkedag(booking.dato)}
-      title={`${booking.startTid}–${booking.sluttTid}`}
-      description={description}
-      status={status.label}
-      statusTone={status.tone}
+    <Collection.Row
+      layout="schedule"
+      leading={<RecordTimeRange start={booking.startTid} end={booking.sluttTid} />}
+      title={booking.baneNavn}
+      description={erKonflikt ? booking.konfliktInfo : undefined}
+      status={status}
       muted={erSlettet}
-      actions={
-        !erSlettet ? (
-          <>
-            <Button type="button" variant="outline" size="sm" onClick={() => onRediger(booking.id)}>
-              Rediger
-            </Button>
-            <Button
-              type="button"
-              variant="destructive"
-              size="sm"
-              onClick={() => onFjernEllerAvlys(booking.id)}
-            >
-              {erEksisterende ? "Avlys" : "Fjern"}
-            </Button>
-          </>
-        ) : undefined
+      ariaLabel={`Rediger ${booking.baneNavn}, ${booking.startTid}–${booking.sluttTid}`}
+      interaction={
+        erSlettet ? { type: "static" } : { type: "open", onOpen: () => onRediger(booking.id) }
       }
     />
   );

@@ -1,6 +1,5 @@
 import { format, parseISO } from "date-fns";
 import { nb } from "date-fns/locale";
-import PageSection from "@/components/sections/PageSection";
 import Tabs from "@/components/navigation/Tabs";
 import { ListSkeleton } from "@/components/loading";
 import { QueryFeil } from "@/components/errors";
@@ -8,6 +7,7 @@ import { klasseTypeNavn, GruppeTab, SluttspillBracket } from "../../components";
 import { useDraw } from "../../hooks/draw/useDraw";
 import AdminAvsluttetContent from "./AdminAvsluttetContent";
 import type { TurneringRespons, TurneringKlasseRespons } from "@/types";
+import { Section } from "@/components";
 
 type KlasseTabProps = {
   turneringId: string;
@@ -49,9 +49,9 @@ function AdminAvsluttetKlasseTab({ turneringId, klasse }: KlasseTabProps) {
 
   return (
     <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
-      <PageSection title="Kampprogram">
+      <Section title="Kampprogram">
         {klasse.foreslåttStartTid && (
-          <p className="text-sm text-muted-foreground">
+          <p>
             Startet{" "}
             {format(parseISO(klasse.foreslåttStartTid), "EEEE d. MMM 'kl.' HH:mm", {
               locale: nb,
@@ -59,16 +59,12 @@ function AdminAvsluttetKlasseTab({ turneringId, klasse }: KlasseTabProps) {
           </p>
         )}
 
-        {!harDraw && (
-          <p className="text-sm text-muted-foreground italic">Ingen kampprogram tilgjengelig.</p>
-        )}
+        {!harDraw && <p>Ingen kampprogram tilgjengelig.</p>}
 
-        {harDraw && gruppePlanTabs.length === 0 && (
-          <p className="text-sm text-muted-foreground italic">Ingen grupper tilgjengelig.</p>
-        )}
+        {harDraw && gruppePlanTabs.length === 0 && <p>Ingen grupper tilgjengelig.</p>}
 
         {harDraw && gruppePlanTabs.length > 0 && <Tabs items={gruppePlanTabs} />}
-      </PageSection>
+      </Section>
     </QueryFeil>
   );
 }

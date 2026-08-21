@@ -1,9 +1,9 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { ChevronDown, KeyRound, Mail, ShieldCheck, UserRound, UserRoundCog } from "lucide-react";
+import { Form } from "@/components";
 
 import ActionFeedback, { type ActionFeedbackMessage } from "@/components/feedback/ActionFeedback";
-import { FormActions, FormLayout, FormSubmitButton } from "@/components/forms";
 import { GoogleIcon, IdrettensIdIcon } from "@/components/icons";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError } from "@/components/ui/field";
@@ -144,7 +144,7 @@ export default function LoginPanel({ onLoginSuccess, showIntro = true }: LoginPa
           disabled={busy}
           aria-label="Logg inn med Google"
         >
-          <GoogleIcon className="size-5" />
+          <GoogleIcon />
           Google
         </Button>
 
@@ -158,7 +158,7 @@ export default function LoginPanel({ onLoginSuccess, showIntro = true }: LoginPa
             disabled={busy}
             aria-label="Logg inn med Idrettens ID"
           >
-            <IdrettensIdIcon className="size-5" />
+            <IdrettensIdIcon />
             Idrettens ID
           </Button>
         ) : null}
@@ -171,7 +171,7 @@ export default function LoginPanel({ onLoginSuccess, showIntro = true }: LoginPa
       {visibleFeedback ? <ActionFeedback {...visibleFeedback} /> : null}
 
       {step === "input" ? (
-        <FormLayout density="compact" className="login-panel__form" onSubmit={submitSendOtp}>
+        <Form density="compact" className="login-panel__form" onSubmit={submitSendOtp}>
           <div className="login-panel__form-heading">
             <Mail aria-hidden="true" />
             <label htmlFor="email">E-post</label>
@@ -194,14 +194,14 @@ export default function LoginPanel({ onLoginSuccess, showIntro = true }: LoginPa
             {feilEmail ? <FieldError>{feilEmail}</FieldError> : null}
           </Field>
 
-          <FormActions align="left" spaced={false} className="w-full">
-            <FormSubmitButton fullWidth isLoading={status === "sending"} loadingText="Sender...">
+          <Form.Actions align="left" spaced={false} fullWidth>
+            <Form.Submit fullWidth isLoading={status === "sending"} loadingText="Sender...">
               Send kode
-            </FormSubmitButton>
-          </FormActions>
-        </FormLayout>
+            </Form.Submit>
+          </Form.Actions>
+        </Form>
       ) : (
-        <FormLayout density="compact" className="login-panel__form" onSubmit={submitVerifyOtp}>
+        <Form density="compact" className="login-panel__form" onSubmit={submitVerifyOtp}>
           <div className="login-panel__form-heading">
             <Mail aria-hidden="true" />
             <span>Skriv inn koden fra e-posten</span>
@@ -223,16 +223,12 @@ export default function LoginPanel({ onLoginSuccess, showIntro = true }: LoginPa
             {feilOtp ? <FieldError>{feilOtp}</FieldError> : null}
           </Field>
 
-          <FormActions align="left" spaced={false} className="w-full">
-            <FormSubmitButton
-              fullWidth
-              isLoading={status === "verifying"}
-              loadingText="Verifiserer..."
-            >
+          <Form.Actions align="left" spaced={false} fullWidth>
+            <Form.Submit fullWidth isLoading={status === "verifying"} loadingText="Verifiserer...">
               Verifiser kode
-            </FormSubmitButton>
-          </FormActions>
-        </FormLayout>
+            </Form.Submit>
+          </Form.Actions>
+        </Form>
       )}
 
       {import.meta.env.DEV ? (

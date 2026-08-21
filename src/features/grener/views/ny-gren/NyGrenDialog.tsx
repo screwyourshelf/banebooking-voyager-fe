@@ -1,4 +1,5 @@
-import { AdminEditorDialog } from "@/components/admin";
+import { Dialog } from "@/components";
+
 import NyGrenView from "./NyGrenView";
 
 type Props = {
@@ -8,7 +9,7 @@ type Props = {
 
 export default function NyGrenDialog({ open, onOpenChange }: Props) {
   return (
-    <AdminEditorDialog
+    <Dialog.Editor
       open={open}
       onOpenChange={onOpenChange}
       backLabel="Alle grener"
@@ -17,6 +18,6 @@ export default function NyGrenDialog({ open, onOpenChange }: Props) {
       description="Angi navn og standardregler for banene i grenen."
     >
       <NyGrenView onCreated={() => onOpenChange(false)} />
-    </AdminEditorDialog>
+    </Dialog.Editor>
   );
 }

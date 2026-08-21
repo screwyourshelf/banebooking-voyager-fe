@@ -19,24 +19,24 @@ export function ErrorDisplay({
   const isDev = import.meta.env.DEV;
 
   return (
-    <article className="error-display">
-      <header className="error-display__header">
-        <span className="error-display__eyebrow">Banebooking</span>
-        <span className="error-display__icon">
+    <article data-ui="error-display">
+      <header data-part="header">
+        <span data-part="eyebrow">Banebooking</span>
+        <span data-part="icon">
           <Icon aria-hidden="true" />
         </span>
       </header>
 
-      <div className="error-display__body">
-        <div className="error-display__copy">
+      <div data-part="content">
+        <div data-part="intro">
           <h1>{title}</h1>
           <p>{description}</p>
         </div>
 
-        {children ? <div className="error-display__actions">{children}</div> : null}
+        {children ? <div data-part="actions">{children}</div> : null}
 
         {isDev && error ? (
-          <pre className="error-display__details">
+          <pre data-part="details">
             {error instanceof Error
               ? `${error.name}: ${error.message}${error.stack ? `\n\n${error.stack}` : ""}`
               : String(error)}

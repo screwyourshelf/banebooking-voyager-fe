@@ -1,6 +1,5 @@
 import { useState } from "react";
 import type { TurneringRespons, TurneringKlasseRespons } from "@/types";
-import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList, Row } from "@/components/rows";
 import { Button } from "@/components/ui/button";
 import Tabs from "@/components/navigation/Tabs";
@@ -12,6 +11,7 @@ import { useMeldPaaKlasse } from "../../hooks/paamelding/useMeldPaaKlasse";
 import { useTrekkPaamelding } from "../../hooks/paamelding/useTrekkPaamelding";
 import { useDraw } from "../../hooks/draw/useDraw";
 import TurneringSpillerContent from "./TurneringSpillerContent";
+import { Section } from "@/components";
 
 type PaameldingKlasseTabProps = {
   turneringId: string;
@@ -35,25 +35,25 @@ function SpillerPaameldingKlasseTab({
 
   return (
     <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
-      <div className="space-y-4">
-        <PageSection
+      <div>
+        <Section
           title="Påmeldinger"
           actions={
             kanMeldePaa ? (
-              <Button size="sm" variant="outline" onClick={() => setMeldPaaOpen(true)}>
+              <Button variant="outline" onClick={() => setMeldPaaOpen(true)}>
                 Meld på
               </Button>
             ) : undefined
           }
         >
           {data && (
-            <div className="flex gap-3 text-sm text-muted-foreground mb-2">
+            <div>
               <span>{data.antallPaameldte} påmeldt</span>
             </div>
           )}
           <ServerFeil feil={trekkMutation.error?.message ?? null} />
           {aktivePaameldinger.length === 0 ? (
-            <p className="text-sm text-muted-foreground italic">Ingen påmeldinger ennå.</p>
+            <p>Ingen påmeldinger ennå.</p>
           ) : (
             <RowPanel>
               <RowList>
@@ -63,14 +63,12 @@ function SpillerPaameldingKlasseTab({
                     title={p.spiller1Navn}
                     description={p.spiller2Navn ?? undefined}
                     right={
-                      <div className="flex items-center gap-2">
+                      <div>
                         {p.kanTrekkeSeg && (
                           <Button
                             variant="ghost"
-                            size="sm"
                             onClick={() => trekkMutation.mutate({ paameldingId: p.id })}
                             disabled={trekkMutation.isPending}
-                            className="text-xs"
                           >
                             Trekk meg
                           </Button>
@@ -82,7 +80,7 @@ function SpillerPaameldingKlasseTab({
               </RowList>
             </RowPanel>
           )}
-        </PageSection>
+        </Section>
 
         <MeldPaaDialog
           open={meldPaaOpen}
@@ -142,15 +140,11 @@ function SpillerDrawKlasseTab({ turneringId, klasse }: DrawKlasseTabProps) {
 
   return (
     <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
-      <PageSection title="Kampprogram">
-        {!drawData && (
-          <p className="text-sm text-muted-foreground italic">Ingen kampprogram tilgjengelig.</p>
-        )}
-        {drawData && allTabs.length === 0 && (
-          <p className="text-sm text-muted-foreground italic">Ingen grupper ennå.</p>
-        )}
+      <Section title="Kampprogram">
+        {!drawData && <p>Ingen kampprogram tilgjengelig.</p>}
+        {drawData && allTabs.length === 0 && <p>Ingen grupper ennå.</p>}
         {drawData && allTabs.length > 0 && <Tabs items={allTabs} />}
-      </PageSection>
+      </Section>
     </QueryFeil>
   );
 }

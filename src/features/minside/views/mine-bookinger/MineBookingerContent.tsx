@@ -1,22 +1,18 @@
 import { useMemo, useState } from "react";
-import { CalendarCheck, CalendarX, RefreshCw } from "lucide-react";
+import { AlertCircle, CalendarCheck, CalendarX, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
-import { usePagination } from "@/hooks/usePagination";
+
 import {
-  RecordCollection,
-  RecordCollectionBody,
-  RecordCollectionHeader,
   RecordCollectionPagination,
   RecordCollectionSkeleton,
-  RecordDateGroup,
-  RecordDateGroupHeading,
-  RecordDateGroupList,
-  RecordList,
   RecordListState,
 } from "@/components/records";
-import { ServerFeil } from "@/components/errors";
+import { Collection } from "@/components";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { usePagination } from "@/hooks/usePagination";
 import type { MinBookingRespons } from "@/types";
+import { formaterDatoGruppe } from "@/utils/datoUtils";
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
 
@@ -40,31 +36,6 @@ type BookingGroup = {
   date: string;
   bookings: MinBookingRespons[];
 };
-
-function parseLocalDate(date: string) {
-  return new Date(`${date.slice(0, 10)}T00:00:00`);
-}
-
-function capitalize(value: string) {
-  return value.charAt(0).toLocaleUpperCase("nb-NO") + value.slice(1);
-}
-
-function getDateHeading(date: string) {
-  const parsed = parseLocalDate(date);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const dayDifference = Math.round((parsed.getTime() - today.getTime()) / 86_400_000);
-  const full = parsed.toLocaleDateString("nb-NO", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  });
-
-  return {
-    relative: dayDifference === 0 ? "I dag" : dayDifference === 1 ? "I morgen" : null,
-    full: capitalize(full),
-  };
-}
 
 function groupBookingsByDate(bookings: MinBookingRespons[]): BookingGroup[] {
   return bookings.reduce<BookingGroup[]>((groups, booking) => {
@@ -129,139 +100,127 @@ export default function MineBookingerContent({
   } = usePagination(filtrerteBookinger, 10, `${String(visHistoriske)}|${grenFilter.join(",")}`);
 
   const antallTekst = isLoading
-    ? "Laster tider…"
-    : `${filtrerteBookinger.length} ${filtrerteBookinger.length === 1 ? "tid" : "tider"}`;
+    ? "Laster bookinger…"
+    : `${filtrerteBookinger.length} ${filtrerteBookinger.length === 1 ? "booking" : "bookinger"}`;
   const bookingGroups = groupBookingsByDate(synligeBookinger);
   const harFiltrertTomtilstand = bookinger.length > 0 && filtrerteBookinger.length === 0;
-
   return (
-    <RecordCollection ariaLabel="Oversikt over mine tider" busy={isLoading}>
-      <RecordCollectionHeader
-        icon={<CalendarCheck />}
-        title={antallTekst}
-        description={visHistoriske ? "Kommende og tidligere tider" : "Kommende tider"}
-        toggle={{
-          title: "Vis tidligere",
-          checked: visHistoriske,
-          onCheckedChange: onToggleVisHistoriske,
-          disabled: isFetching,
-        }}
-        filter={
-          grener.length > 1 || grenFilter.length > 0
-            ? {
-                label: "Filtrer på gren",
-                groups: [
-                  {
-                    label: "Gren",
-                    options: grener,
-                    selectedValues: grenFilter,
-                    onToggle: toggleGren,
-                  },
-                ],
-                onReset: () => setGrenFilter([]),
-                disabled: isFetching,
-              }
-            : undefined
-        }
-      />
+    <Collection
+      icon={<CalendarCheck />}
+      title={antallTekst}
+      scope="Dine reservasjoner"
+      busy={isLoading || isFetching}
+      toggle={{
+        title: "Vis tidligere",
+        checked: visHistoriske,
+        onCheckedChange: onToggleVisHistoriske,
+        disabled: isFetching,
+      }}
+      filter={
+        grener.length > 1
+          ? {
+              label: "Filtrer bookinger",
+              groups: [
+                {
+                  label: "Gren",
+                  options: grener,
+                  selectedValues: grenFilter,
+                  onToggle: toggleGren,
+                },
+              ],
+              onReset: () => setGrenFilter([]),
+              disabled: isFetching,
+            }
+          : undefined
+      }
+    >
+      {serverFeil ? (
+        <Alert variant="destructive">
+          <AlertCircle aria-hidden="true" />
+          <AlertTitle>Kunne ikke avbestille</AlertTitle>
+          <AlertDescription>{serverFeil}</AlertDescription>
+        </Alert>
+      ) : null}
 
-      <RecordCollectionBody>
-        <ServerFeil feil={serverFeil} />
-
-        {isLoading ? (
-          <RecordCollectionSkeleton ariaLabel="Laster tider" rows={4} />
-        ) : queryError ? (
-          <RecordListState
-            icon={<RefreshCw aria-hidden="true" />}
-            title="Kunne ikke laste tidene dine"
-            description={queryError}
-            tone="danger"
-            role="alert"
-            action={
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                onClick={onRetry}
-                disabled={isFetching}
-              >
-                {isFetching ? "Prøver igjen…" : "Prøv igjen"}
+      {isLoading ? (
+        <RecordCollectionSkeleton ariaLabel="Laster bookinger" rows={3} layout="date" />
+      ) : queryError ? (
+        <RecordListState
+          icon={<RefreshCw aria-hidden="true" />}
+          title="Kunne ikke laste bookingene dine"
+          description={queryError}
+          tone="danger"
+          role="alert"
+          action={
+            <Button type="button" variant="outline" onClick={onRetry} disabled={isFetching}>
+              {isFetching ? "Prøver igjen…" : "Prøv igjen"}
+            </Button>
+          }
+        />
+      ) : filtrerteBookinger.length === 0 ? (
+        <RecordListState
+          icon={<CalendarX aria-hidden="true" />}
+          title={
+            harFiltrertTomtilstand
+              ? "Ingen bookinger for valgt gren"
+              : visHistoriske
+                ? "Ingen bookinger ennå"
+                : "Ingen kommende bookinger"
+          }
+          description={
+            harFiltrertTomtilstand
+              ? "Velg en annen gren eller nullstill filteret."
+              : visHistoriske
+                ? "Når du booker en bane, vises kommende og gjennomførte tider her."
+                : "Finn en ledig tid som passer, så dukker den opp her med en gang."
+          }
+          action={
+            harFiltrertTomtilstand ? (
+              <Button type="button" variant="outline" onClick={() => setGrenFilter([])}>
+                Nullstill filter
               </Button>
-            }
-          />
-        ) : filtrerteBookinger.length === 0 ? (
-          <RecordListState
-            icon={<CalendarX aria-hidden="true" />}
-            title={
-              harFiltrertTomtilstand
-                ? "Ingen tider for valgt gren"
-                : visHistoriske
-                  ? "Ingen tider ennå"
-                  : "Ingen kommende tider"
-            }
-            description={
-              harFiltrertTomtilstand
-                ? "Velg en annen gren eller nullstill filteret."
-                : visHistoriske
-                  ? "Når du booker en bane, vises kommende og tidligere tider her."
-                  : "Finn en ledig tid som passer, så dukker den opp her med en gang."
-            }
-            action={
-              harFiltrertTomtilstand ? (
-                <Button type="button" variant="outline" size="sm" onClick={() => setGrenFilter([])}>
-                  Nullstill filter
-                </Button>
-              ) : (
-                <Button asChild size="sm">
-                  <Link to="..">Book en bane</Link>
-                </Button>
-              )
-            }
-          />
-        ) : (
-          <>
-            <RecordDateGroupList>
-              {bookingGroups.map((group) => {
-                const heading = getDateHeading(group.date);
+            ) : (
+              <Button asChild>
+                <Link to="..">Book en bane</Link>
+              </Button>
+            )
+          }
+        />
+      ) : (
+        <Collection.List loading={isFetching || isPending}>
+          {bookingGroups.map((group) => {
+            const heading = formaterDatoGruppe(group.date);
 
-                return (
-                  <RecordDateGroup key={group.date}>
-                    <RecordDateGroupHeading
-                      date={group.date}
-                      label={heading.full}
-                      relativeLabel={heading.relative}
-                    />
+            return (
+              <Collection.Group key={group.date}>
+                <Collection.GroupHeading
+                  date={group.date}
+                  label={heading.label}
+                  relativeLabel={heading.relativeLabel}
+                />
+                {group.bookings.map((booking) => (
+                  <MineBookingRow
+                    key={buildBookingKey(booking)}
+                    bookingKey={buildBookingKey(booking)}
+                    booking={booking}
+                    canCancel={harHandling(booking.kapabiliteter, Kapabiliteter.booking.fjern)}
+                    isPending={isPending}
+                    onCancel={onFjern}
+                  />
+                ))}
+              </Collection.Group>
+            );
+          })}
+        </Collection.List>
+      )}
 
-                    <RecordList loading={isFetching || isPending}>
-                      {group.bookings.map((booking) => (
-                        <MineBookingRow
-                          key={buildBookingKey(booking)}
-                          bookingKey={buildBookingKey(booking)}
-                          booking={booking}
-                          canCancel={harHandling(
-                            booking.kapabiliteter,
-                            Kapabiliteter.booking.fjern
-                          )}
-                          isPending={isPending}
-                          onCancel={onFjern}
-                        />
-                      ))}
-                    </RecordList>
-                  </RecordDateGroup>
-                );
-              })}
-            </RecordDateGroupList>
-
-            {harFlere ? (
-              <RecordCollectionPagination>
-                <Button type="button" variant="outline" size="sm" onClick={visFlere}>
-                  Vis flere ({gjenstaar} gjenstår)
-                </Button>
-              </RecordCollectionPagination>
-            ) : null}
-          </>
-        )}
-      </RecordCollectionBody>
-    </RecordCollection>
+      {harFlere ? (
+        <RecordCollectionPagination>
+          <Button type="button" variant="outline" onClick={visFlere}>
+            Vis flere ({gjenstaar} gjenstår)
+          </Button>
+        </RecordCollectionPagination>
+      ) : null}
+    </Collection>
   );
 }

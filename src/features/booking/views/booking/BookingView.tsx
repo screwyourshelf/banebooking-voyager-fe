@@ -5,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useBaner } from "@/hooks/useBaner";
 import { useGrener } from "@/hooks/useGrener";
 import BookingContent from "./BookingContent";
+import { Page } from "@/components";
 
 export default function BookingView() {
   const {
@@ -27,7 +28,7 @@ export default function BookingView() {
   const booking = useBooking(selection.valgtDatoStr, selection.valgtBaneId);
 
   if (loadingBaner || loadingGrener) {
-    return <PageContentSkeleton label="Laster booking" rows={5} controls />;
+    return <BookingPageSkeleton />;
   }
 
   function handleSlotsRetry() {
@@ -62,5 +63,13 @@ export default function BookingView() {
       onSetupRetry={handleSetupRetry}
       onSlotsRetry={handleSlotsRetry}
     />
+  );
+}
+
+function BookingPageSkeleton() {
+  return (
+    <Page>
+      <PageContentSkeleton label="Laster booking" rows={4} layout="time" controls />
+    </Page>
   );
 }

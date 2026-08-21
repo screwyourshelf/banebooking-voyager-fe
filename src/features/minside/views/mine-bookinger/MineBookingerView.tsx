@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
-import { RecordCollectionPage } from "@/components/records";
+import { Page } from "@/components";
+
 import { useMineBookinger } from "@/features/minside/hooks/useMineBookinger";
 import { useBookingActions } from "@/features/minside/hooks/useBookingActions";
 import type { MinBookingRespons } from "@/types";
@@ -7,7 +8,7 @@ import type { MinBookingRespons } from "@/types";
 import MineBookingerContent from "./MineBookingerContent";
 import { sortBookingerEtterRelevans } from "./bookingSort";
 
-export default function MineBookingerTab() {
+export default function MineBookingerView() {
   const [visHistoriske, setVisHistoriske] = useState(false);
 
   const {
@@ -27,19 +28,17 @@ export default function MineBookingerTab() {
     if (isPending || !slot.bookingId) return;
 
     try {
-      await fjernAsync({
-        bookingId: slot.bookingId,
-      });
+      await fjernAsync({ bookingId: slot.bookingId });
     } catch {
-      // feil eksponeres via fjernFeil
+      // Feilen eksponeres via fjernFeil.
     }
   }
 
   return (
-    <RecordCollectionPage
+    <Page
       eyebrow="Min konto"
-      title="Mine tider"
-      description="Hold oversikt over det du har booket og spilt."
+      title="Mine bookinger"
+      description="Hold oversikt over kommende og gjennomførte tider."
     >
       <MineBookingerContent
         visHistoriske={visHistoriske}
@@ -53,6 +52,6 @@ export default function MineBookingerTab() {
         onFjern={handleFjern}
         serverFeil={fjernFeil?.message ?? null}
       />
-    </RecordCollectionPage>
+    </Page>
   );
 }

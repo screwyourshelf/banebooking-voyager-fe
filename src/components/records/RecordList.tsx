@@ -21,6 +21,10 @@ type DateGroupProps = {
   children: ReactNode;
 };
 
+type DateGroupListProps = DateGroupProps & {
+  loading?: boolean;
+};
+
 type DateGroupHeadingProps = {
   date: string;
   label: string;
@@ -81,9 +85,14 @@ export function RecordDateGroupHeading({ date, label, relativeLabel }: DateGroup
   );
 }
 
-export function RecordDateGroupList({ children }: DateGroupProps) {
+export function RecordDateGroupList({ children, loading = false }: DateGroupListProps) {
   return (
-    <Accordion type="single" collapsible className="record-date-groups">
+    <Accordion
+      type="single"
+      collapsible
+      className="record-date-groups"
+      data-loading={loading || undefined}
+    >
       {children}
     </Accordion>
   );

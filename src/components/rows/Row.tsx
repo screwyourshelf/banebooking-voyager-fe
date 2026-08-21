@@ -1,7 +1,6 @@
-import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
+import type { ComponentProps, ReactNode } from "react";
 
-type Props = {
+type Props = Omit<ComponentProps<"div">, "title"> & {
   title?: ReactNode;
   description?: ReactNode;
   right?: ReactNode;
@@ -17,26 +16,28 @@ export default function Row({
   children,
   className,
   density = "default",
+  ...props
 }: Props) {
-  const py = density === "compact" ? "py-1" : "py-2";
   const hasHeader = !!title || !!description || !!right;
 
   return (
-    <div className={cn("px-2", py, className)}>
+    <div className={className} data-layout="row" data-density={density} {...props}>
       {hasHeader ? (
-        <div className="flex items-start justify-between gap-2">
-          <div className="min-w-0">
-            {title ? <div className="text-sm font-medium leading-5">{title}</div> : null}
-            {description ? (
-              <div className="mt-1 text-xs text-muted-foreground leading-4">{description}</div>
-            ) : null}
+        <div data-part="header">
+          <div data-part="intro">
+            {title ? <div data-part="title">{title}</div> : null}
+            {description ? <div data-part="description">{description}</div> : null}
           </div>
 
-          {right ? <div className="shrink-0">{right}</div> : null}
+          {right ? <div data-part="actions">{right}</div> : null}
         </div>
       ) : null}
 
-      {children ? <div className={cn(hasHeader && "mt-2")}>{children}</div> : null}
+      {children ? (
+        <div data-part="content" data-has-header={hasHeader || undefined}>
+          {children}
+        </div>
+      ) : null}
     </div>
   );
 }

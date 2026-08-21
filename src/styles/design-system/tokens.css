@@ -6,24 +6,29 @@
  */
 
 :root {
-  --radius: 0.75rem;
+  color-scheme: light;
+  --radius: 0.625rem;
 
-  /* Brand */
-  --brand-50: #f2f7f0;
-  --brand-100: #e1edde;
-  --brand-300: #98c094;
-  --brand-500: #4d854d;
-  --brand-600: #376c3c;
-  --brand-700: #2a5632;
-  --brand-900: #1d3924;
-
-  --clay-50: #fff6ef;
-  --clay-100: #fee8d7;
-  --clay-500: #df672e;
-  --clay-700: #983a20;
+  /* Ås tennisklubb palette. The three 500 values are sampled from the crest. */
+  --aas-green-500: #4c911f;
+  --aas-orange-500: #f28d3b;
+  --aas-blue-500: #1c4f99;
+  --aas-cream-500: #f4f0e1;
+  --aas-green-50: color-mix(in oklab, var(--aas-green-500) 7%, white);
+  --aas-green-100: color-mix(in oklab, var(--aas-green-500) 18%, white);
+  --aas-green-300: color-mix(in oklab, var(--aas-green-500) 55%, white);
+  --aas-green-700: color-mix(in oklab, var(--aas-green-500) 76%, black);
+  --aas-green-900: color-mix(in oklab, var(--aas-green-500) 48%, black);
+  --aas-orange-100: color-mix(in oklab, var(--aas-orange-500) 18%, white);
+  --aas-orange-700: color-mix(in oklab, var(--aas-orange-500) 74%, black);
+  --aas-orange-900: color-mix(in oklab, var(--aas-orange-500) 48%, black);
+  --aas-blue-50: color-mix(in oklab, var(--aas-blue-500) 7%, white);
+  --aas-blue-100: color-mix(in oklab, var(--aas-blue-500) 16%, white);
+  --aas-blue-300: color-mix(in oklab, var(--aas-blue-500) 48%, white);
+  --aas-blue-900: color-mix(in oklab, var(--aas-blue-500) 52%, black);
 
   /* Product roles */
-  --app-canvas: #f2f3ed;
+  --app-canvas: color-mix(in oklab, var(--aas-cream-500) 72%, var(--aas-green-50));
   --app-surface: #ffffff;
   --app-surface-subtle: #f7f8f3;
   --app-surface-raised: #ffffff;
@@ -32,38 +37,49 @@
   --app-ink-faint: #768078;
   --app-line: #dfe3dc;
   --app-line-strong: #cbd2c9;
-  --app-brand: var(--brand-700);
-  --app-brand-strong: var(--brand-900);
-  --app-brand-soft: var(--brand-100);
-  --app-accent: var(--clay-500);
-  --app-accent-strong: var(--clay-700);
-  --app-accent-soft: var(--clay-100);
+  --app-brand: var(--aas-green-700);
+  --app-brand-strong: var(--aas-green-900);
+  --app-brand-soft: var(--aas-green-100);
+  --app-accent: var(--aas-orange-700);
+  --app-accent-strong: var(--aas-orange-900);
+  --app-accent-soft: var(--aas-orange-100);
   --app-accent-contrast: #ffffff;
   --app-choice-indicator: var(--app-accent);
-  --app-focus: #4d854d;
-  --app-sidebar: #173c25;
-  --app-sidebar-hover: #214d30;
-  --app-sidebar-active: #2a5d39;
+  --app-focus: var(--aas-blue-500);
+  --app-backdrop-scrim: rgb(3 17 10 / 0.5);
+  --app-desktop-backdrop-horizontal: linear-gradient(
+    90deg,
+    rgb(3 20 13 / 0.94) 0,
+    rgb(4 23 15 / 0.84) 28%,
+    rgb(6 26 18 / 0.72) 62%,
+    rgb(4 21 15 / 0.78) 100%
+  );
+  --app-desktop-backdrop-vertical: linear-gradient(rgb(3 16 10 / 0.18), rgb(3 16 10 / 0.5));
+  --app-sidebar: #0b3021;
+  --app-sidebar-divider-width: 2px;
+  --app-sidebar-divider: color-mix(in srgb, var(--app-control-muted) 38%, transparent);
+  --app-sidebar-hover: color-mix(in oklab, var(--aas-green-500) 42%, var(--app-sidebar));
+  --app-sidebar-active: color-mix(in oklab, var(--aas-green-500) 58%, var(--app-sidebar));
   --app-sidebar-text: #f7fbf6;
-  --app-sidebar-muted: #bdd0bf;
-  --app-nav-active: var(--brand-700);
-  --app-nav-active-surface: var(--brand-50);
-  --app-nav-indicator: var(--brand-500);
-  --app-nav-indicator-on-dark: var(--brand-300);
-  --app-control-surface: #173c25;
-  --app-control-surface-strong: #23452a;
+  --app-nav-active: var(--aas-green-700);
+  --app-nav-active-surface: var(--aas-green-50);
+  --app-nav-indicator: var(--aas-green-500);
+  --app-nav-indicator-on-dark: var(--aas-green-300);
+  --app-control-surface: #194d32;
+  --app-control-surface-strong: #225c3b;
   --app-control-text: #ffffff;
-  --app-control-muted: #bdd0bf;
-  --activity-accent: #88c984;
-  --activity-accent-strong: #376c3c;
-  --activity-soft: #e4f3df;
+  --app-control-muted: #c7dacd;
+  --activity-accent: var(--aas-green-300);
+  --activity-accent-strong: var(--aas-green-700);
+  --activity-soft: var(--aas-green-100);
   --app-shadow-sm: 0 1px 2px rgb(18 36 23 / 0.05);
   --app-shadow-md: 0 12px 32px rgb(18 36 23 / 0.08);
   --app-shadow-lg: 0 24px 70px rgb(18 36 23 / 0.12);
-  --app-content-max: 96rem;
+  --app-content-max: 112rem;
+  --app-page-width: 96rem;
   --app-sidebar-width: 15.5rem;
   --app-sidebar-rail-width: 4.5rem;
-  --app-topbar-action-icon-size: 1.25rem;
+  --app-sidebar-logo-size: 2.75rem;
   --app-space-2xs: 0.125rem;
   --app-space-xs: 0.25rem;
   --app-space-sm: 0.5rem;
@@ -76,6 +92,7 @@
   --app-record-padding-block: 0.375rem;
   --app-record-radius: 0.875rem;
   --app-record-shadow: 0 4px 16px rgb(18 36 23 / 0.07);
+  --app-radius-sm: calc(var(--radius) * 0.6);
 
   /* Typography
    *
@@ -83,11 +100,11 @@
    * separates display text, reading text and compact UI labels without letting
    * individual pages invent their own sizes.
    */
-  --app-font-body:
-    "Geist Variable", Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
+  --app-font-body: "Figtree Variable", sans-serif;
+  --app-font-sans: var(--app-font-body);
   --app-font-display: var(--app-font-body);
-  --app-type-micro: 0.75rem;
+  --app-type-micro-compact: 0.75rem;
+  --app-type-micro-comfortable: 0.8125rem;
   --app-type-caption-compact: 0.8125rem;
   --app-type-label-compact: 0.875rem;
   --app-type-body-sm-compact: 0.9375rem;
@@ -102,6 +119,7 @@
   --app-type-body-lg-comfortable: 1.125rem;
   --app-type-heading-sm-comfortable: 1.375rem;
   --app-type-heading-md-comfortable: 1.5rem;
+  --app-type-micro: var(--app-type-micro-compact);
   --app-type-caption: var(--app-type-caption-compact);
   --app-type-label: var(--app-type-label-compact);
   --app-type-body-sm: var(--app-type-body-sm-compact);
@@ -109,8 +127,26 @@
   --app-type-body-lg: var(--app-type-body-lg-compact);
   --app-type-heading-sm: var(--app-type-heading-sm-compact);
   --app-type-heading-md: var(--app-type-heading-md-compact);
-  --app-type-page-title: clamp(2rem, calc(1.7rem + 1vw), 2.625rem);
-  --app-type-display: clamp(2.125rem, 4.8vw, 3.5rem);
+  --app-type-page-title-compact: clamp(2rem, calc(1.7rem + 1vw), 2.625rem);
+  --app-type-page-title-comfortable: clamp(2.125rem, calc(1.8rem + 1vw), 2.875rem);
+  --app-type-display-compact: clamp(2.125rem, 4.8vw, 3.5rem);
+  --app-type-display-comfortable: clamp(2.25rem, 4.8vw, 3.75rem);
+  --app-type-page-title: var(--app-type-page-title-compact);
+  --app-type-display: var(--app-type-display-compact);
+
+  /* Statistics typography
+   *
+   * Charts and metric cards use meaning-based roles instead of selecting
+   * arbitrary steps from the general type scale in each component.
+   */
+  --app-stat-key-value-size: var(--app-type-heading-md);
+  --app-stat-chart-value-size: var(--app-type-body-sm);
+  --app-stat-chart-label-size: var(--app-type-label);
+  --app-stat-chart-meta-size: var(--app-type-caption);
+  --app-stat-key-value-weight: 720;
+  --app-stat-chart-value-weight: 690;
+  --app-stat-chart-label-weight: 680;
+  --app-stat-chart-meta-weight: 620;
 
   /* Menu roles
    *
@@ -124,19 +160,18 @@
   --app-menu-item-weight: 600;
   --app-menu-meta-size: var(--app-type-caption);
   --app-menu-label-weight: 700;
-  --app-menu-compact-weight: 650;
   --app-menu-text: var(--app-ink);
   --app-menu-muted: var(--app-ink-soft);
   --app-menu-faint: var(--app-ink-faint);
 
   /* Status */
-  --status-available-bg: #e4f3df;
-  --status-available-text: #24562a;
-  --status-available-indicator: #4f9f54;
-  --status-own-bg: #e4edf8;
-  --status-own-text: #234d78;
-  --status-event-bg: #fff0df;
-  --status-event-text: #874319;
+  --status-available-bg: var(--aas-green-100);
+  --status-available-text: var(--aas-green-900);
+  --status-available-indicator: var(--aas-green-500);
+  --status-own-bg: var(--aas-blue-100);
+  --status-own-text: var(--aas-blue-900);
+  --status-event-bg: var(--aas-orange-100);
+  --status-event-text: var(--aas-orange-900);
   --status-busy-bg: #eceeeb;
   --status-busy-text: #596159;
   --status-past-bg: #f1f1ee;
@@ -155,34 +190,35 @@
   --card-foreground: var(--app-ink);
   --popover: var(--app-surface-raised);
   --popover-foreground: var(--app-ink);
-  --primary: var(--app-brand);
+  --primary: var(--aas-green-700);
   --primary-foreground: #ffffff;
-  --secondary: var(--app-brand-soft);
-  --secondary-foreground: var(--brand-900);
-  --muted: #edf0e9;
+  --secondary: var(--aas-blue-100);
+  --secondary-foreground: var(--aas-blue-900);
+  --muted: var(--app-surface-subtle);
   --muted-foreground: var(--app-ink-soft);
-  --accent: var(--app-accent-soft);
-  --accent-foreground: #713315;
-  --destructive: #ba352f;
+  --accent: var(--aas-orange-100);
+  --accent-foreground: var(--aas-orange-700);
+  --destructive: oklch(0.577 0.245 27.325);
   --border: var(--app-line);
   --input: var(--app-line-strong);
   --ring: var(--app-focus);
-  --chart-1: var(--brand-600);
-  --chart-2: var(--clay-500);
-  --chart-3: #4d789f;
-  --chart-4: #a78b36;
-  --chart-5: #765a8c;
+  --chart-1: var(--aas-green-500);
+  --chart-2: var(--aas-orange-500);
+  --chart-3: var(--aas-blue-500);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
   --sidebar: var(--app-sidebar);
-  --sidebar-foreground: var(--app-sidebar-text);
-  --sidebar-primary: #ffffff;
-  --sidebar-primary-foreground: var(--app-sidebar);
-  --sidebar-accent: var(--app-sidebar-active);
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgb(255 255 255 / 0.12);
-  --sidebar-ring: #b8d8b7;
+  --sidebar-foreground: #f7fbf6;
+  --sidebar-primary: var(--app-accent);
+  --sidebar-primary-foreground: var(--app-accent-contrast);
+  --sidebar-accent: var(--app-accent);
+  --sidebar-accent-foreground: var(--app-accent-contrast);
+  --sidebar-border: rgb(255 255 255 / 14%);
+  --sidebar-ring: var(--aas-blue-300);
 }
 
 .dark {
+  color-scheme: dark;
   --app-canvas: #0f1611;
   --app-surface: #151e17;
   --app-surface-subtle: #1a251d;
@@ -192,23 +228,26 @@
   --app-ink-faint: #89958b;
   --app-line: #304035;
   --app-line-strong: #425447;
-  --app-brand: #84b880;
-  --app-brand-strong: #b9d5b5;
-  --app-brand-soft: #253b29;
-  --app-accent: #f08a50;
-  --app-accent-strong: #f8aa78;
-  --app-accent-soft: #45291e;
+  --app-brand: var(--aas-green-300);
+  --app-brand-strong: var(--aas-green-100);
+  --app-brand-soft: color-mix(in oklab, var(--aas-green-500) 28%, var(--app-surface));
+  --app-accent: var(--aas-orange-500);
+  --app-accent-strong: color-mix(in oklab, var(--aas-orange-500) 35%, white);
+  --app-accent-soft: color-mix(in oklab, var(--aas-orange-500) 28%, var(--app-surface));
   --app-accent-contrast: #2b160c;
-  --app-focus: #8dc288;
-  --app-sidebar: #102b1b;
-  --app-sidebar-hover: #173923;
-  --app-sidebar-active: #21492d;
-  --app-nav-active: #b9d5b5;
-  --app-nav-active-surface: #203d25;
-  --app-nav-indicator: #84b880;
-  --app-nav-indicator-on-dark: #98c094;
-  --activity-accent-strong: #afe0ae;
-  --activity-soft: #203d25;
+  --app-choice-indicator: var(--app-accent);
+  --app-focus: var(--aas-blue-300);
+  --app-sidebar: #0b3021;
+  --app-sidebar-hover: color-mix(in oklab, var(--aas-green-500) 38%, var(--app-sidebar));
+  --app-sidebar-active: color-mix(in oklab, var(--aas-green-500) 52%, var(--app-sidebar));
+  --app-nav-active: var(--aas-green-100);
+  --app-nav-active-surface: color-mix(in oklab, var(--aas-green-500) 24%, var(--app-surface));
+  --app-nav-indicator: var(--aas-green-300);
+  --app-nav-indicator-on-dark: var(--aas-green-300);
+  --app-control-surface: #194d32;
+  --app-control-surface-strong: #225c3b;
+  --activity-accent-strong: var(--aas-green-300);
+  --activity-soft: color-mix(in oklab, var(--aas-green-500) 24%, var(--app-surface));
   --app-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.25);
   --app-shadow-md: 0 12px 32px rgb(0 0 0 / 0.24);
   --app-shadow-lg: 0 24px 70px rgb(0 0 0 / 0.34);
@@ -232,40 +271,50 @@
   --status-danger-text: #ffaaa3;
   --status-danger-indicator: #ef756d;
 
-  --primary: var(--app-brand);
+  --background: var(--app-canvas);
+  --foreground: var(--app-ink);
+  --card: var(--app-surface-raised);
+  --card-foreground: var(--app-ink);
+  --popover: var(--app-surface-raised);
+  --popover-foreground: var(--app-ink);
+  --primary: var(--aas-green-300);
   --primary-foreground: #102115;
-  --secondary: var(--app-brand-soft);
-  --secondary-foreground: #d9ead7;
-  --muted: #253029;
+  --secondary: var(--aas-blue-900);
+  --secondary-foreground: color-mix(in oklab, var(--aas-blue-500) 26%, white);
+  --muted: var(--app-surface-subtle);
   --muted-foreground: var(--app-ink-soft);
-  --accent: var(--app-accent-soft);
-  --accent-foreground: #ffd2b6;
-  --destructive: #f07a70;
+  --accent: color-mix(in oklab, var(--aas-orange-500) 35%, black);
+  --accent-foreground: color-mix(in oklab, var(--aas-orange-500) 38%, white);
+  --destructive: oklch(0.704 0.191 22.216);
   --border: var(--app-line);
   --input: var(--app-line-strong);
   --ring: var(--app-focus);
+  --chart-1: var(--aas-green-300);
+  --chart-2: var(--aas-orange-500);
+  --chart-3: var(--aas-blue-300);
+  --chart-4: oklch(0.371 0 0);
+  --chart-5: oklch(0.269 0 0);
+  --sidebar: var(--app-sidebar);
+  --sidebar-foreground: #f7fbf6;
+  --sidebar-primary: var(--app-accent);
+  --sidebar-primary-foreground: var(--app-accent-contrast);
+  --sidebar-accent: var(--app-accent);
+  --sidebar-accent-foreground: var(--app-accent-contrast);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: var(--aas-blue-300);
 }
 
-.booking-page[data-activity-theme="tennis"] {
-  --activity-accent: var(--app-accent);
-}
-
-.booking-page[data-activity-theme="padel"] {
-  --activity-accent: #88c984;
-}
-
-.booking-page[data-activity-theme="bordtennis"] {
-  --activity-accent: #8baec3;
-}
-
-.dark .booking-page[data-activity-theme="tennis"] {
-  --activity-accent: var(--app-accent);
-}
-
-.dark .booking-page[data-activity-theme="padel"] {
-  --activity-accent: #9ed79a;
-}
-
-.dark .booking-page[data-activity-theme="bordtennis"] {
-  --activity-accent: #a3c0d1;
+@media (min-width: 48rem) {
+  :root {
+    --app-type-micro: var(--app-type-micro-comfortable);
+    --app-type-caption: var(--app-type-caption-comfortable);
+    --app-type-label: var(--app-type-label-comfortable);
+    --app-type-body-sm: var(--app-type-body-sm-comfortable);
+    --app-type-body: var(--app-type-body-comfortable);
+    --app-type-body-lg: var(--app-type-body-lg-comfortable);
+    --app-type-heading-sm: var(--app-type-heading-sm-comfortable);
+    --app-type-heading-md: var(--app-type-heading-md-comfortable);
+    --app-type-page-title: var(--app-type-page-title-comfortable);
+    --app-type-display: var(--app-type-display-comfortable);
+  }
 }

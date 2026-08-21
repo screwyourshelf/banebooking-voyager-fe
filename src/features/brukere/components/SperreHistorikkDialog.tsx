@@ -1,16 +1,9 @@
-import {
-  AdminEditorDialog,
-  SettingsPanel,
-  SettingsRow,
-  SettingsSection,
-  SettingsStack,
-  SettingsText,
-} from "@/components/admin";
 import { ServerFeil } from "@/components/errors";
 import { RecordListState, RecordStatus } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import { useBrukerSperrer } from "@/features/brukere/hooks/useAdminBrukersperre";
 import { formatDatoKort, formatTidspunktKort } from "@/utils/datoUtils";
+import { Settings, Dialog } from "@/components";
 
 type Props = {
   brukerId: string;
@@ -34,7 +27,7 @@ export default function SperreHistorikkDialog({
   const { data, isLoading, error, refetch } = useBrukerSperrer(brukerId, true);
 
   return (
-    <AdminEditorDialog
+    <Dialog.Editor
       open
       onOpenChange={(open) => !open && onClose()}
       backLabel="Til brukeren"
@@ -42,10 +35,9 @@ export default function SperreHistorikkDialog({
       title="Sperrehistorikk"
       description={brukerEpost}
       closeDisabled={opphevLaster}
-      size="compact"
     >
-      <SettingsStack embedded>
-        <SettingsSection
+      <Settings.Stack embedded>
+        <Settings.Section
           embedded
           eyebrow="Historikk"
           title="Registrerte sperrer"
@@ -67,7 +59,7 @@ export default function SperreHistorikkDialog({
               }
             />
           ) : data?.sperrer.length ? (
-            <SettingsPanel>
+            <Settings.Panel>
               {data.sperrer.map((sperre) => {
                 const status = sperre.erAktiv
                   ? { label: "Aktiv", tone: "danger" as const }
@@ -76,20 +68,20 @@ export default function SperreHistorikkDialog({
                     : { label: "Utløpt", tone: "past" as const };
 
                 return (
-                  <SettingsRow
+                  <Settings.Row
                     key={sperre.id}
                     title={sperre.årsak}
                     description={`Sperret ${formatTidspunktKort(sperre.opprettetTidspunkt)} av ${sperre.opprettetAv}`}
                     right={<RecordStatus tone={status.tone}>{status.label}</RecordStatus>}
                   >
-                    <SettingsText>
+                    <Settings.Text>
                       {sperre.aktivTil
                         ? `Utløper ${formatDatoKort(sperre.aktivTil)}`
                         : "Ingen utløpsdato"}
                       {sperre.opphevtAv && sperre.opphevtTidspunkt
                         ? `\nOpphevet ${formatTidspunktKort(sperre.opphevtTidspunkt)} av ${sperre.opphevtAv}`
                         : ""}
-                    </SettingsText>
+                    </Settings.Text>
 
                     {sperre.erAktiv && kanOppheve ? (
                       <Button
@@ -102,20 +94,20 @@ export default function SperreHistorikkDialog({
                         {opphevLaster ? "Opphever…" : "Opphev sperre"}
                       </Button>
                     ) : null}
-                  </SettingsRow>
+                  </Settings.Row>
                 );
               })}
-            </SettingsPanel>
+            </Settings.Panel>
           ) : (
             <RecordListState
               title="Ingen sperrer"
               description="Det er ikke registrert sperrer for denne brukeren."
             />
           )}
-        </SettingsSection>
+        </Settings.Section>
 
         <ServerFeil feil={opphevFeil} title="Kunne ikke oppheve sperren" />
-      </SettingsStack>
-    </AdminEditorDialog>
+      </Settings.Stack>
+    </Dialog.Editor>
   );
 }

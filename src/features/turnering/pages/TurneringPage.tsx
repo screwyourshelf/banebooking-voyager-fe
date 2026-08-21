@@ -1,6 +1,6 @@
 import { useParams } from "react-router-dom";
-import Page from "@/components/Page";
 import TurneringView from "../views/turnering/TurneringView";
+import { Page } from "@/components";
 
 export default function TurneringPage() {
   const { turneringId } = useParams<{ turneringId: string }>();

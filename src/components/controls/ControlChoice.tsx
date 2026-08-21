@@ -1,5 +1,4 @@
 import type { ButtonHTMLAttributes } from "react";
-import { cn } from "@/lib/utils";
 
 type Props = Omit<ButtonHTMLAttributes<HTMLButtonElement>, "aria-pressed"> & {
   selected: boolean;
@@ -9,7 +8,8 @@ export default function ControlChoice({ selected, className, children, ...props 
   return (
     <button
       type="button"
-      className={cn("control-choice", className)}
+      className={className}
+      data-ui="control-choice"
       data-selected={selected}
       aria-pressed={selected}
       {...props}

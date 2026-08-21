@@ -9,14 +9,14 @@ export type RecordCollectionFilter = Omit<
 >;
 export type RecordCollectionSelection = Pick<
   RecordControlPanelProps,
-  "label" | "groups" | "disabled" | "indicator"
+  "label" | "groups" | "fields" | "disabled" | "indicator"
 >;
 
 type Props = {
   icon: ReactNode;
   title: string;
-  description?: string;
-  summaryStatus?: ReactNode;
+  scope?: ReactNode;
+  notice?: ReactNode;
   contextAction?: ReactNode;
   toggle?: RecordCollectionToggle;
   filter?: RecordCollectionFilter;
@@ -26,8 +26,8 @@ type Props = {
 export default function RecordCollectionHeader({
   icon,
   title,
-  description,
-  summaryStatus,
+  scope,
+  notice,
   contextAction,
   toggle,
   filter,
@@ -36,24 +36,23 @@ export default function RecordCollectionHeader({
   return (
     <>
       <header
-        className="control-surface record-collection__toolbar"
+        data-ui="record-collection-header"
+        data-surface="control"
         data-has-context-action={contextAction ? "true" : undefined}
       >
-        <div className="record-collection__summary">
-          <span className="record-collection__summary-icon" aria-hidden="true">
+        <div data-part="summary">
+          <span data-part="icon" aria-hidden="true">
             {icon}
           </span>
-          <span className="record-collection__summary-copy">
+          <span data-part="content">
             <strong>{title}</strong>
-            {description ? <small>{description}</small> : null}
-            {summaryStatus ? (
-              <span className="record-collection__summary-status">{summaryStatus}</span>
-            ) : null}
+            {scope ? <small>{scope}</small> : null}
+            {notice ? <span data-part="notice">{notice}</span> : null}
           </span>
         </div>
 
         {contextAction || toggle ? (
-          <div className="record-collection__toolbar-actions">
+          <div data-part="actions">
             {contextAction}
             {toggle ? <FilterSwitch {...toggle} /> : null}
           </div>

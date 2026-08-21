@@ -1,19 +1,11 @@
 import { useState } from "react";
 import DatoVelger from "@/components/DatoVelger";
-import {
-  AdminEditorDialog,
-  AdminEditorForm,
-  AdminFormActions,
-  SettingsPanel,
-  SettingsRow,
-  SettingsSection,
-  SettingsStack,
-} from "@/components/admin";
+
 import { ServerFeil } from "@/components/errors";
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import type { SperrBrukerForespørsel } from "@/types";
+import { Form, Settings, Dialog } from "@/components";
 
 type Props = {
   brukerEpost: string;
@@ -61,7 +53,7 @@ export default function SperrBrukerDialog({
   }
 
   return (
-    <AdminEditorDialog
+    <Dialog.Editor
       open={open}
       onOpenChange={handleOpenChange}
       trigger={
@@ -74,37 +66,35 @@ export default function SperrBrukerDialog({
       title="Sperr bruker"
       description={`Sperr ${brukerEpost} fra booking og arrangementer.`}
       closeDisabled={loading}
-      size="compact"
     >
-      <AdminEditorForm
+      <Form
+        variant="editor"
         onSubmit={(event) => {
           event.preventDefault();
           void handleSperr();
         }}
       >
-        <SettingsStack embedded>
-          <SettingsSection
+        <Settings.Stack embedded>
+          <Settings.Section
             embedded
             tone="danger"
             eyebrow="Sperring"
             title="Begrunn og avgrens sperringen"
             description="Uten utløpsdato gjelder sperringen til en administrator opphever den."
           >
-            <SettingsPanel>
-              <SettingsRow title="Årsak" description="Mellom 3 og 500 tegn.">
-                <Field>
-                  <Input
-                    id="sperre-aarsak"
-                    aria-label="Årsak"
-                    value={årsak}
-                    onChange={(event) => setÅrsak(event.target.value)}
-                    placeholder="Beskriv hvorfor brukeren sperres"
-                    disabled={loading}
-                  />
-                </Field>
-              </SettingsRow>
+            <Form.Fields>
+              <Form.Field label="Årsak" description="Mellom 3 og 500 tegn." htmlFor="sperre-aarsak">
+                <Input
+                  id="sperre-aarsak"
+                  aria-label="Årsak"
+                  value={årsak}
+                  onChange={(event) => setÅrsak(event.target.value)}
+                  placeholder="Beskriv hvorfor brukeren sperres"
+                  disabled={loading}
+                />
+              </Form.Field>
 
-              <SettingsRow title="Aktiv til" description="Valgfri utløpsdato.">
+              <Form.Field label="Aktiv til" description="Valgfri utløpsdato.">
                 <DatoVelger
                   value={aktivTil}
                   onChange={setAktivTil}
@@ -122,11 +112,11 @@ export default function SperrBrukerDialog({
                     Fjern utløpsdato
                   </Button>
                 ) : null}
-              </SettingsRow>
-            </SettingsPanel>
-          </SettingsSection>
+              </Form.Field>
+            </Form.Fields>
+          </Settings.Section>
 
-          <AdminFormActions>
+          <Form.Actions>
             <ServerFeil feil={serverFeil} />
             <Button
               type="button"
@@ -143,9 +133,9 @@ export default function SperrBrukerDialog({
             >
               {loading ? "Sperrer…" : "Sperr bruker"}
             </Button>
-          </AdminFormActions>
-        </SettingsStack>
-      </AdminEditorForm>
-    </AdminEditorDialog>
+          </Form.Actions>
+        </Settings.Stack>
+      </Form>
+    </Dialog.Editor>
   );
 }

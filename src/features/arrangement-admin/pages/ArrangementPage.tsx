@@ -1,8 +1,8 @@
+import { ShieldX } from "lucide-react";
 import { useState } from "react";
-import { Plus, ShieldX } from "lucide-react";
-import { AdminAccessError, AdminPage, AdminPageLoading, AdminPageState } from "@/components/admin";
+import { Page } from "@/components";
+
 import { RecordListState } from "@/components/records";
-import { Button } from "@/components/ui/button";
 import ArrangementAdminOverview from "@/features/arrangement-admin/views/ArrangementAdminOverview";
 import { useBruker } from "@/hooks/useBruker";
 import { harHandling } from "@/utils/handlingUtils";
@@ -14,35 +14,32 @@ export default function ArrangementPage() {
   const canManageArrangements = harHandling(bruker?.kapabiliteter, Kapabiliteter.arrangement.se);
 
   return (
-    <AdminPage
+    <Page
       eyebrow="Administrasjon"
       title="Administrer arrangementer"
       description="Planlegg program, legg til banetider og styr publisering."
-      action={
-        canManageArrangements ? (
-          <Button type="button" onClick={() => setCreateOpen(true)}>
-            <Plus data-icon="inline-start" aria-hidden="true" />
-            Nytt arrangement
-          </Button>
-        ) : null
+      createAction={
+        canManageArrangements
+          ? { label: "Nytt arrangement", onClick: () => setCreateOpen(true) }
+          : undefined
       }
     >
       {laster ? (
-        <AdminPageLoading label="Kontrollerer tilgang" />
+        <Page.Loading label="Kontrollerer tilgang" />
       ) : feil ? (
-        <AdminAccessError feil={feil} isFetching={isFetching} onRetry={() => void refetch()} />
+        <Page.AccessError error={feil} isFetching={isFetching} onRetry={() => void refetch()} />
       ) : !canManageArrangements ? (
-        <AdminPageState>
+        <Page.State>
           <RecordListState
             icon={<ShieldX aria-hidden="true" />}
             title="Du har ikke tilgang til arrangementadministrasjon"
             description="En klubbadministrator må gi deg tilgang før du kan administrere arrangementer."
             tone="danger"
           />
-        </AdminPageState>
+        </Page.State>
       ) : (
         <ArrangementAdminOverview createOpen={createOpen} onCreateOpenChange={setCreateOpen} />
       )}
-    </AdminPage>
+    </Page>
   );
 }

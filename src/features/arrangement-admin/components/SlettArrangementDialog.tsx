@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { SettingsPanel, SettingsSection, SettingsSwitchRow } from "@/components/admin";
+import { Settings } from "@/components";
+
 import { ServerFeil } from "@/components/errors";
 import {
   AlertDialog,
@@ -65,21 +66,22 @@ export default function SlettArrangementDialog({
           </AlertDialogDescription>
         </AlertDialogHeader>
         {harTurnering && (
-          <SettingsSection
+          <Settings.Section
+            eyebrow="Fareområde"
             title="Turnering kobles fra"
             description="Bekreft at du forstår at tilknytningen til turneringen fjernes."
             tone="danger"
             embedded
           >
-            <SettingsPanel>
-              <SettingsSwitchRow
+            <Settings.Panel>
+              <Settings.SwitchRow
                 title="Jeg forstår konsekvensene"
                 checked={bekreftTurnering}
                 onCheckedChange={setBekreftTurnering}
                 disabled={isDeleting}
               />
-            </SettingsPanel>
-          </SettingsSection>
+            </Settings.Panel>
+          </Settings.Section>
         )}
         <AlertDialogFooter>
           <ServerFeil feil={feil} />

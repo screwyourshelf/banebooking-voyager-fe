@@ -8,8 +8,8 @@ export type BookingSlotPresentation = {
   startTid: string;
   sluttTid: string;
   status: SlotStatus;
-  hovedtekst: string;
-  sekundærtekst?: string;
+  tittel: string | null;
+  statusTekst: string;
   harDetaljer: boolean;
   kanHurtigbooke: boolean;
   kanIkkeBooke: boolean;
@@ -47,8 +47,8 @@ export function getBookingSlotPresentation(
     startTid: effektivStart.slice(0, 5),
     sluttTid: effektivSlutt.slice(0, 5),
     status,
-    hovedtekst: getPrimaryText(slot, status),
-    sekundærtekst: getSecondaryText(slot, erInnlogget),
+    tittel: getTitle(slot, status),
+    statusTekst: getStatusText(status),
     harDetaljer,
     kanHurtigbooke: erInnlogget && !slot.erPassert && kan(Kapabiliteter.booking.book),
     kanIkkeBooke,
@@ -61,14 +61,14 @@ export function getBookingSlotKey(slot: BookingSlotRespons) {
   return slot.bookingId ?? `${slot.dato}-${slot.slotStartTid}-${slot.baneId}`;
 }
 
-function getPrimaryText(slot: BookingSlotRespons, status: SlotStatus) {
-  if (slot.erPassert || status === "passert") return "Passert";
-  if (status === "arrangement") return "Arrangement";
+function getStatusText(status: SlotStatus) {
+  if (status === "passert") return "Passert";
   return status === "ledig" ? "Ledig" : "Opptatt";
 }
 
-function getSecondaryText(slot: BookingSlotRespons, erInnlogget: boolean) {
+function getTitle(slot: BookingSlotRespons, status: SlotStatus) {
   if (slot.arrangementTittel) return slot.arrangementTittel;
-  if (erInnlogget && slot.erEier === true) return "Din tid";
-  return slot.booketAv ?? undefined;
+  if (slot.erEier === true) return "Din tid";
+  if (status === "ledig") return null;
+  return slot.booketAv?.trim() || "Booket";
 }

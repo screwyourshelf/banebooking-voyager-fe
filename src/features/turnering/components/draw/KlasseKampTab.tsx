@@ -2,7 +2,6 @@ import { useState } from "react";
 import type { ReactNode } from "react";
 import { format, parseISO } from "date-fns";
 import { nb } from "date-fns/locale";
-import PageSection from "@/components/sections/PageSection";
 import Tabs from "@/components/navigation/Tabs";
 import { ListSkeleton } from "@/components/loading";
 import { QueryFeil } from "@/components/errors";
@@ -17,6 +16,7 @@ import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
 import { velgKampformat } from "../../utils/kampformatUtils";
 import type { TurneringKlasseRespons, RegistrerResultatForespørsel } from "@/types";
+import { Section } from "@/components";
 
 export type KlasseKampTabContext = {
   openKampplan: () => void;
@@ -142,10 +142,10 @@ export function KlasseKampTab({ turneringId, klasse, forslagStartTid, renderActi
 
   return (
     <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
-      <div className="space-y-4">
-        <PageSection title="Kampprogram" actions={renderActions?.(ctx)}>
+      <div>
+        <Section title="Kampprogram" actions={renderActions?.(ctx)}>
           {klasse.foreslåttStartTid && (
-            <p className="text-sm text-muted-foreground">
+            <p>
               Starter{" "}
               {format(parseISO(klasse.foreslåttStartTid), "EEEE d. MMM 'kl.' HH:mm", {
                 locale: nb,
@@ -153,15 +153,11 @@ export function KlasseKampTab({ turneringId, klasse, forslagStartTid, renderActi
             </p>
           )}
 
-          {!harDraw && (
-            <p className="text-sm text-muted-foreground italic">Draw er ikke generert ennå.</p>
-          )}
+          {!harDraw && <p>Draw er ikke generert ennå.</p>}
 
-          {harDraw && gruppePlanTabs.length === 0 && (
-            <p className="text-sm text-muted-foreground italic">Ingen grupper ennå.</p>
-          )}
+          {harDraw && gruppePlanTabs.length === 0 && <p>Ingen grupper ennå.</p>}
           {harDraw && gruppePlanTabs.length > 0 && <Tabs items={gruppePlanTabs} />}
-        </PageSection>
+        </Section>
 
         <GenererKampplanDialog
           open={kampplanDialogOpen}

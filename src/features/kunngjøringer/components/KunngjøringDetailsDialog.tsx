@@ -1,18 +1,9 @@
-import {
-  AdminEditorDialog,
-  AdminFormActions,
-  SettingsPanel,
-  SettingsRow,
-  SettingsSection,
-  SettingsStack,
-  SettingsText,
-  SettingsValue,
-} from "@/components/admin";
 import { ServerFeil } from "@/components/errors";
 import { RecordStatus, type RecordStatusTone } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import type { KunngjøringAdminRespons } from "@/features/kunngjøringer/types/kunngjøring";
 import { formatDatoKort, formatTidspunktKort } from "@/utils/datoUtils";
+import { Form, Settings, Dialog } from "@/components";
 
 type Props = {
   open: boolean;
@@ -47,7 +38,7 @@ export default function KunngjøringDetailsDialog({
   }
 
   return (
-    <AdminEditorDialog
+    <Dialog.Editor
       open={open}
       onOpenChange={onOpenChange}
       backLabel="Alle kunngjøringer"
@@ -55,60 +46,59 @@ export default function KunngjøringDetailsDialog({
       title={announcement.tittel}
       description={`Publisert ${formatDatoKort(announcement.opprettetTidspunkt)}`}
       closeDisabled={isLoading}
-      size="compact"
     >
-      <SettingsStack embedded>
-        <SettingsSection
+      <Settings.Stack embedded>
+        <Settings.Section
           embedded
           eyebrow="Kunngjøring"
           title="Publisert innhold"
           description={`Aktiv til ${formatDatoKort(announcement.utløperTidspunkt)}.`}
         >
-          <SettingsPanel>
-            <SettingsRow title="Budskap">
-              <SettingsText>{announcement.tekst}</SettingsText>
-            </SettingsRow>
-            <SettingsRow title="Status">
+          <Settings.Panel>
+            <Settings.Row title="Budskap">
+              <Settings.Text>{announcement.tekst}</Settings.Text>
+            </Settings.Row>
+            <Settings.Row title="Status">
               <RecordStatus tone="available">Aktiv</RecordStatus>
-            </SettingsRow>
-          </SettingsPanel>
-        </SettingsSection>
+            </Settings.Row>
+          </Settings.Panel>
+        </Settings.Section>
 
-        <SettingsSection
+        <Settings.Section
           embedded
           eyebrow="Målgruppe"
           title="Bekreftelser"
           description="Brukere som har lest og bekreftet kunngjøringen."
         >
-          <SettingsPanel>
-            <SettingsRow title="Fremdrift">
+          <Settings.Panel>
+            <Settings.Row title="Fremdrift">
               <RecordStatus tone={confirmationTone}>
                 {announcement.antallBekreftelser} av {announcement.antallMålgruppe} bekreftet
               </RecordStatus>
-            </SettingsRow>
+            </Settings.Row>
 
             {announcement.bekreftelser.map((confirmation) => (
-              <SettingsRow
+              <Settings.Row
                 key={confirmation.epost}
                 title={confirmation.visningsnavn}
                 description={confirmation.epost}
               >
-                <SettingsValue>
+                <Settings.Value>
                   {formatTidspunktKort(confirmation.bekreftetTidspunkt)}
-                </SettingsValue>
-              </SettingsRow>
+                </Settings.Value>
+              </Settings.Row>
             ))}
-          </SettingsPanel>
-        </SettingsSection>
+          </Settings.Panel>
+        </Settings.Section>
 
-        <SettingsSection
+        <Settings.Section
           embedded
           eyebrow="Fareområde"
           title="Deaktiver kunngjøring"
           description="Brukere som ikke har bekreftet, blir ikke lenger blokkert."
           tone="danger"
         >
-          <AdminFormActions>
+          <Form.Actions>
             <ServerFeil feil={error} />
             <Button
               type="button"
@@ -118,9 +108,9 @@ export default function KunngjøringDetailsDialog({
             >
               {isLoading ? "Deaktiverer…" : "Deaktiver kunngjøring"}
             </Button>
-          </AdminFormActions>
-        </SettingsSection>
-      </SettingsStack>
-    </AdminEditorDialog>
+          </Form.Actions>
+        </Settings.Section>
+      </Settings.Stack>
+    </Dialog.Editor>
   );
 }

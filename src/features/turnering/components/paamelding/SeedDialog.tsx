@@ -1,8 +1,7 @@
+import { Dialog, Form } from "@/components";
 import { useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ServerFeil } from "@/components/errors";
 
 type Props = {
@@ -40,35 +39,34 @@ export function SeedDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Sett seed – {spillerNavn}</DialogTitle>
-        </DialogHeader>
+    <Dialog
+      open={open}
+      onOpenChange={handleClose}
+      title={`Sett seed – ${spillerNavn}`}
+      actions={
+        <>
+          <Button variant="outline" onClick={() => handleClose(false)} disabled={isPending}>
+            Avbryt
+          </Button>
+          <Button onClick={handleOppdater} disabled={isPending}>
+            {isPending ? "Lagrer..." : "Lagre"}
+          </Button>
+        </>
+      }
+    >
+      <Form.Fields>
+        <Form.Field label="Seed" description="La feltet stå tomt for å fjerne seedingen.">
+          <Input
+            type="number"
+            min={1}
+            value={verdi}
+            onChange={(e) => setVerdi(e.target.value)}
+            placeholder="t.eks. 1"
+          />
+        </Form.Field>
 
-        <div className="space-y-4">
-          <div className="space-y-1.5">
-            <Label>Seed (la stå tomt for å fjerne)</Label>
-            <Input
-              type="number"
-              min={1}
-              value={verdi}
-              onChange={(e) => setVerdi(e.target.value)}
-              placeholder="t.eks. 1"
-            />
-          </div>
-
-          <ServerFeil feil={serverFeil ?? null} />
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => handleClose(false)} disabled={isPending}>
-              Avbryt
-            </Button>
-            <Button onClick={handleOppdater} disabled={isPending}>
-              {isPending ? "Lagrer..." : "Lagre"}
-            </Button>
-          </div>
-        </div>
-      </DialogContent>
+        <ServerFeil feil={serverFeil ?? null} />
+      </Form.Fields>
     </Dialog>
   );
 }

@@ -1,5 +1,5 @@
-import CardSection from "@/components/layout/CardSection";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Section } from "@/components";
 
 export default function StatistikkLoading() {
   return (
@@ -9,10 +9,10 @@ export default function StatistikkLoading() {
           <Skeleton key={item} className="statistics-loading__metric" />
         ))}
       </div>
-      <CardSection className="statistics-loading__chart">
+      <Section variant="surface" className="statistics-loading__chart">
         <Skeleton className="statistics-loading__title" />
         <Skeleton className="statistics-loading__plot" />
-      </CardSection>
+      </Section>
     </div>
   );
 }

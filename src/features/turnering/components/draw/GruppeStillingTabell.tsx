@@ -1,5 +1,13 @@
-import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
+import { Badge } from "@/components/ui/badge";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import type { GruppeDeltakerVisning } from "@/types";
 
 type Props = {
@@ -19,63 +27,61 @@ export function GruppeStillingTabell({ deltakere }: Props) {
   });
 
   return (
-    <div className="overflow-x-auto">
-      <table className="w-full text-sm">
-        <thead>
-          <tr className="border-b text-muted-foreground text-xs">
-            <th className="text-left py-1 pr-2 font-medium w-6">#</th>
-            <th className="text-left py-1 pr-4 font-medium">Spiller</th>
-            <th className="text-right py-1 px-2 font-medium">
-              <Tooltip>
-                <TooltipTrigger className="cursor-default">K</TooltipTrigger>
-                <TooltipContent>Kamper spilt</TooltipContent>
-              </Tooltip>
-            </th>
-            <th className="text-right py-1 px-2 font-medium">
-              <Tooltip>
-                <TooltipTrigger className="cursor-default">S+</TooltipTrigger>
-                <TooltipContent>Sett vunnet</TooltipContent>
-              </Tooltip>
-            </th>
-            <th className="text-right py-1 px-2 font-medium">
-              <Tooltip>
-                <TooltipTrigger className="cursor-default">S-</TooltipTrigger>
-                <TooltipContent>Sett tapt</TooltipContent>
-              </Tooltip>
-            </th>
-            <th className="text-right py-1 px-2 font-medium">
-              <Tooltip>
-                <TooltipTrigger className="cursor-default">G+</TooltipTrigger>
-                <TooltipContent>Games vunnet</TooltipContent>
-              </Tooltip>
-            </th>
-            <th className="text-right py-1 px-2 font-medium">
-              <Tooltip>
-                <TooltipTrigger className="cursor-default">G-</TooltipTrigger>
-                <TooltipContent>Games tapt</TooltipContent>
-              </Tooltip>
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortert.map((d, idx) => (
-            <tr
-              key={d.gruppeDeltakerId}
-              className={cn("border-b last:border-0", d.trukketSeg && "opacity-40 line-through")}
-            >
-              <td className="py-1.5 pr-2 text-muted-foreground">{idx + 1}</td>
-              <td className="py-1.5 pr-4 font-medium">{d.spillerNavn}</td>
-              <td className="text-right py-1.5 px-2">
-                {d.stilling.kampVunnet + d.stilling.kampTapt}
-              </td>
-              <td className="text-right py-1.5 px-2">{d.stilling.settVunnet}</td>
-              <td className="text-right py-1.5 px-2">{d.stilling.settTapt}</td>
-              <td className="text-right py-1.5 px-2">{d.stilling.gameVunnet}</td>
-              <td className="text-right py-1.5 px-2">{d.stilling.gameTapt}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>#</TableHead>
+          <TableHead>Spiller</TableHead>
+          <TableHead>
+            <Tooltip>
+              <TooltipTrigger>K</TooltipTrigger>
+              <TooltipContent>Kamper spilt</TooltipContent>
+            </Tooltip>
+          </TableHead>
+          <TableHead>
+            <Tooltip>
+              <TooltipTrigger>S+</TooltipTrigger>
+              <TooltipContent>Sett vunnet</TooltipContent>
+            </Tooltip>
+          </TableHead>
+          <TableHead>
+            <Tooltip>
+              <TooltipTrigger>S-</TooltipTrigger>
+              <TooltipContent>Sett tapt</TooltipContent>
+            </Tooltip>
+          </TableHead>
+          <TableHead>
+            <Tooltip>
+              <TooltipTrigger>G+</TooltipTrigger>
+              <TooltipContent>Games vunnet</TooltipContent>
+            </Tooltip>
+          </TableHead>
+          <TableHead>
+            <Tooltip>
+              <TooltipTrigger>G-</TooltipTrigger>
+              <TooltipContent>Games tapt</TooltipContent>
+            </Tooltip>
+          </TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {sortert.map((d, idx) => (
+          <TableRow key={d.gruppeDeltakerId}>
+            <TableCell>{idx + 1}</TableCell>
+            <TableCell>
+              <span>
+                {d.spillerNavn}
+                {d.trukketSeg ? <Badge variant="outline">Trukket</Badge> : null}
+              </span>
+            </TableCell>
+            <TableCell>{d.stilling.kampVunnet + d.stilling.kampTapt}</TableCell>
+            <TableCell>{d.stilling.settVunnet}</TableCell>
+            <TableCell>{d.stilling.settTapt}</TableCell>
+            <TableCell>{d.stilling.gameVunnet}</TableCell>
+            <TableCell>{d.stilling.gameTapt}</TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
   );
 }

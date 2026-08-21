@@ -1,5 +1,6 @@
 import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { SidebarMenuButton } from "@/components/ui/sidebar";
 import { useTheme } from "@/hooks/useTheme";
 
 type ModeToggleProps = {
@@ -11,39 +12,30 @@ export default function ModeToggle({ presentation = "icon" }: ModeToggleProps) {
 
   const isDark = theme === "dark";
   const actionLabel = isDark ? "Bruk lyst tema" : "Bruk mørkt tema";
+  const handleToggle = () => setTheme(isDark ? "light" : "dark");
 
   if (presentation === "sidebar") {
+    const Icon = isDark ? Sun : Moon;
+
     return (
-      <button
-        type="button"
-        className="app-sidebar__utility"
-        onClick={() => setTheme(isDark ? "light" : "dark")}
-        aria-label={actionLabel}
-        title={actionLabel}
-      >
-        <span className="app-sidebar__utility-icon" aria-hidden="true">
-          <Sun className="rotate-0 scale-100 transition-all dark:rotate-90 dark:scale-0" />
-          <Moon className="absolute rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-        </span>
-        <span className="app-sidebar__utility-copy">
-          <strong>{isDark ? "Lyst tema" : "Mørkt tema"}</strong>
-          <small>Bytt utseende</small>
-        </span>
-      </button>
+      <SidebarMenuButton type="button" tooltip={actionLabel} onClick={handleToggle}>
+        <Icon aria-hidden="true" />
+        <span>{isDark ? "Lyst tema" : "Mørkt tema"}</span>
+      </SidebarMenuButton>
     );
   }
 
   return (
     <Button
       variant="ghost"
-      size="icon"
-      className="h-9 w-9"
-      onClick={() => setTheme(isDark ? "light" : "dark")}
+      size="icon-sm"
+      onClick={handleToggle}
       aria-label={actionLabel}
       title={actionLabel}
+      data-ui="mode-toggle"
     >
-      <Sun className="size-[var(--app-topbar-action-icon-size)] rotate-0 scale-100 transition-all dark:rotate-90 dark:scale-0" />
-      <Moon className="absolute size-[var(--app-topbar-action-icon-size)] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      <Sun data-part="sun" />
+      <Moon data-part="moon" />
     </Button>
   );
 }

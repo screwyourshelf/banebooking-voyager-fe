@@ -17,17 +17,17 @@ export default function ActionFeedback({ tone, title, description, action }: Pro
 
   return (
     <div
-      className="action-feedback"
+      data-ui="action-feedback"
       data-tone={tone}
       role={isUrgent ? "alert" : "status"}
       aria-live={isUrgent ? "assertive" : "polite"}
       aria-atomic="true"
     >
-      <div className="action-feedback__copy">
-        <strong className="action-feedback__title">{title}</strong>
-        {description ? <p className="action-feedback__description">{description}</p> : null}
+      <div data-part="content">
+        <strong data-part="title">{title}</strong>
+        {description ? <p data-part="description">{description}</p> : null}
       </div>
-      {action ? <div className="action-feedback__action">{action}</div> : null}
+      {action ? <div data-part="action">{action}</div> : null}
     </div>
   );
 }

@@ -1,11 +1,6 @@
-import { useState, type ReactNode } from "react";
-import { AdminEditorDialog } from "@/components/admin";
-import {
-  ContentDocument,
-  ContentDocumentFacts,
-  ContentDocumentSection,
-  type ContentDocumentFact,
-} from "@/components/layout/ContentDocument";
+import { type ReactNode } from "react";
+import { Dialog, Document, Section, Settings } from "@/components";
+
 import type { BaneRespons, GrenRespons } from "@/types";
 import type { BookingRegelRespons } from "@/types/Klubbdetaljer";
 
@@ -15,8 +10,9 @@ type Props = {
   bane?: BaneRespons;
 };
 
+type Fact = { label: string; value: string };
+
 export default function ReglementDialog({ children, gren, bane }: Props) {
-  const [open, setOpen] = useState(false);
   const bookingRegler = resolveBookingRegler(gren, bane);
   const title = bane
     ? `Bookingregler for ${bane.navn}`
@@ -25,65 +21,46 @@ export default function ReglementDialog({ children, gren, bane }: Props) {
       : "Bookingregler";
 
   return (
-    <AdminEditorDialog
-      open={open}
-      onOpenChange={setOpen}
+    <Dialog
       trigger={children}
-      backLabel="Til booking"
-      eyebrow="Booking"
       title={title}
-      description="Se grensene, tidene og varigheten som gjelder når du booker."
-      size="compact"
+      description="Grenser, tider og varighet som gjelder når du booker."
     >
       {gren && bookingRegler ? (
-        <ReglementContent gren={gren} bookingRegler={bookingRegler} />
+        <Settings.Stack>
+          <Section
+            title="Hvor mye du kan booke"
+            description={`Gjelder ${gren.navn.toLocaleLowerCase("nb-NO")}.`}
+            variant="plain"
+            padding="sm"
+          >
+            <Document.Facts items={getBookingLimitFacts(bookingRegler)} />
+          </Section>
+          <Section title="Når du kan booke" variant="plain" padding="sm">
+            <Document.Facts items={getTimeFacts(bookingRegler)} />
+          </Section>
+        </Settings.Stack>
       ) : null}
-    </AdminEditorDialog>
+    </Dialog>
   );
 }
 
-function ReglementContent({
-  gren,
-  bookingRegler,
-}: {
-  gren: GrenRespons;
-  bookingRegler: BookingRegelRespons;
-}) {
-  return (
-    <ContentDocument>
-      <ContentDocumentSection
-        title="Hvor mye du kan booke"
-        description={`Dette gjelder når du booker ${gren.navn.toLocaleLowerCase("nb-NO")}.`}
-      >
-        <ContentDocumentFacts items={getBookingLimitFacts(bookingRegler)} />
-      </ContentDocumentSection>
-
-      <ContentDocumentSection title="Når du kan booke">
-        <ContentDocumentFacts items={getTimeFacts(bookingRegler)} />
-      </ContentDocumentSection>
-    </ContentDocument>
-  );
-}
-
-function getBookingLimitFacts(regler: BookingRegelRespons): ContentDocumentFact[] {
+function getBookingLimitFacts(regler: BookingRegelRespons): Fact[] {
   const { maksPerDag, maksTotalt, dagerFremITid } = regler;
 
   return [
     { label: "Per dag", value: `Maks ${formatCount(maksPerDag, "booking", "bookinger")}` },
-    {
-      label: "Aktive totalt",
-      value: `Maks ${formatCount(maksTotalt, "booking", "bookinger")}`,
-    },
+    { label: "Aktive totalt", value: `Maks ${formatCount(maksTotalt, "booking", "bookinger")}` },
     { label: "Frem i tid", value: `Opptil ${formatCount(dagerFremITid, "dag", "dager")}` },
   ];
 }
 
-function getTimeFacts(regler: BookingRegelRespons): ContentDocumentFact[] {
+function getTimeFacts(regler: BookingRegelRespons): Fact[] {
   const { aapningstid, stengetid, slotLengdeMinutter } = regler;
 
   return [
     { label: "Åpningstid", value: `${aapningstid}–${stengetid}` },
-    { label: "Varighet", value: `${slotLengdeMinutter} minutter per booking` },
+    { label: "Varighet", value: `${slotLengdeMinutter} minutter` },
   ];
 }
 

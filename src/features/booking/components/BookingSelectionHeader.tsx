@@ -1,6 +1,6 @@
 import { addDays, format, isSameDay, startOfDay } from "date-fns";
 import { nb } from "date-fns/locale";
-import { CalendarCheck } from "lucide-react";
+import { CalendarDays } from "lucide-react";
 
 import ControlChoice from "@/components/controls/ControlChoice";
 import DatePickerPopover from "@/components/controls/DatePickerPopover";
@@ -10,6 +10,7 @@ import {
   type RecordControlGroup,
 } from "@/components/records";
 import type { BaneRespons, GrenRespons } from "@/types";
+
 import ReglementDialog from "./ReglementDialog";
 
 type Props = {
@@ -48,16 +49,21 @@ export default function BookingSelectionHeader({
   const shownDate = valgtDato ?? today;
   const isToday = isSameDay(shownDate, today);
   const isTomorrow = isSameDay(shownDate, tomorrow);
-  const isCustomDate = !isToday && !isTomorrow;
-  const selectedDateValue = isToday ? "today" : isTomorrow ? "tomorrow" : "custom";
   const selectedActivity = grener.find((gren) => gren.id === valgtGrenId);
   const selectedCourt = baner.find((bane) => bane.id === valgtBaneId);
-  const customDateLabel = isCustomDate ? format(shownDate, "d. MMM", { locale: nb }) : "Velg dato";
-  const customDateAriaLabel = isCustomDate
-    ? `Velg dato. Viser ${format(shownDate, "d. MMMM", { locale: nb })}`
-    : "Velg en annen dato";
+  const resultLabel =
+    isLoading || isFetching
+      ? "Laster tider…"
+      : hasError
+        ? "Tider utilgjengelige"
+        : ledigeAntall === 0
+          ? "Ingen ledige tider"
+          : `${ledigeAntall} ${ledigeAntall === 1 ? "ledig tid" : "ledige tider"}`;
+  const selectedDateValue = isToday ? "today" : isTomorrow ? "tomorrow" : "date";
+  const dateButtonLabel =
+    isToday || isTomorrow ? "Velg dato" : format(shownDate, "d. MMM", { locale: nb });
 
-  const groups: RecordControlGroup[] = [
+  const selectionGroups: RecordControlGroup[] = [
     {
       label: "Gren",
       options: grener.map((gren) => ({ value: gren.id, label: gren.navn })),
@@ -70,16 +76,22 @@ export default function BookingSelectionHeader({
         { value: "today", label: "I dag" },
         { value: "tomorrow", label: "I morgen" },
         {
-          value: "custom",
-          label: customDateLabel,
+          value: "date",
+          label: dateButtonLabel,
           renderControl: ({ selected, disabled }) => (
-            <DatePickerPopover value={valgtDato} onChange={onDatoChange} align="end">
+            <DatePickerPopover
+              value={shownDate}
+              onChange={onDatoChange}
+              minDate={today}
+              align="start"
+            >
               <ControlChoice
                 selected={selected}
                 disabled={disabled}
-                aria-label={customDateAriaLabel}
+                aria-label={`Velg dato, valgt ${format(shownDate, "EEEE d. MMMM", { locale: nb })}`}
               >
-                {customDateLabel}
+                <CalendarDays aria-hidden="true" />
+                {dateButtonLabel}
               </ControlChoice>
             </DatePickerPopover>
           ),
@@ -91,46 +103,34 @@ export default function BookingSelectionHeader({
         if (value === "tomorrow") onDatoChange(tomorrow);
       },
     },
-    ...(baner.length > 0
-      ? [
-          {
-            label: "Bane",
-            options: baner.map((bane) => ({ value: bane.id, label: bane.navn })),
-            selectedValues: valgtBaneId ? [valgtBaneId] : [],
-            onToggle: onBaneChange,
-          } satisfies RecordControlGroup,
-        ]
-      : []),
+    {
+      label: "Bane",
+      options: baner.map((bane) => ({ value: bane.id, label: bane.navn })),
+      selectedValues: valgtBaneId ? [valgtBaneId] : [],
+      onToggle: onBaneChange,
+    },
   ];
 
-  const title =
-    isLoading || isFetching
-      ? "Laster tider…"
-      : hasError
-        ? "Tider utilgjengelige"
-        : ledigeAntall === 0
-          ? "Ingen ledige tider"
-          : `${ledigeAntall} ${ledigeAntall === 1 ? "ledig tid" : "ledige tider"}`;
   return (
     <RecordCollectionHeader
-      icon={<CalendarCheck />}
-      title={title}
+      icon={<CalendarDays />}
+      title={resultLabel}
+      scope={
+        selectedCourt
+          ? `${selectedCourt.navn}${selectedActivity ? ` · ${selectedActivity.navn}` : ""}`
+          : "Velg en bane for å se tider"
+      }
       contextAction={
         <ReglementDialog gren={selectedActivity} bane={selectedCourt}>
-          <RecordContextAction
-            type="button"
-            aria-label="Regler for valgt bane"
-            disabled={!selectedActivity || !selectedCourt}
-          >
+          <RecordContextAction disabled={!selectedActivity || !selectedCourt}>
             Bookingregler
           </RecordContextAction>
         </ReglementDialog>
       }
       selection={{
-        label: "Bookingvalg",
-        groups,
+        label: "Velg gren, dag og bane",
+        groups: selectionGroups,
         disabled: isSetupFetching,
-        indicator: "activity",
       }}
     />
   );

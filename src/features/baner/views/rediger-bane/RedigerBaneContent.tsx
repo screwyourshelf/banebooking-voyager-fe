@@ -1,18 +1,6 @@
-import { CalendarClock, MapPin, SlidersHorizontal } from "lucide-react";
-import {
-  AdminEditorForm,
-  AdminFormActions,
-  AdminFormSubmitButton,
-  SettingsPanel,
-  SettingsRange,
-  SettingsRow,
-  SettingsSection,
-  SettingsStack,
-  SettingsSwitchRow,
-  SettingsValue,
-} from "@/components/admin";
+import { Form, Settings } from "@/components";
+
 import { MutationFeedback } from "@/components/feedback";
-import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -96,111 +84,102 @@ export default function RedigerBaneContent({
   const grenNavn = grener.find((gren) => gren.id === grenId)?.navn;
 
   return (
-    <AdminEditorForm
+    <Form
+      variant="editor"
       onSubmit={(event) => {
         event.preventDefault();
         onSubmit();
       }}
     >
       {valgtBane ? (
-        <SettingsStack embedded>
-          <SettingsSection
+        <Settings.Stack embedded>
+          <Settings.Section
             embedded
             eyebrow="Bane"
-            icon={<MapPin />}
             title="Baneinformasjon"
             description="Det medlemmene kjenner igjen i bookingoversikten."
           >
-            <SettingsPanel>
-              <SettingsRow title="Navn">
-                <Field data-invalid={!!navnError}>
-                  <Input
-                    id="navn"
-                    aria-label="Navn"
-                    placeholder="For eksempel Bane A"
-                    disabled={isSaving}
-                    value={navn}
-                    onChange={(event) => onChangeFelt("navn", event.target.value)}
-                    onBlur={onBlurNavn}
-                    aria-invalid={!!navnError}
-                    autoComplete="off"
-                  />
-                  {navnError ? <FieldError>{navnError}</FieldError> : null}
-                </Field>
-              </SettingsRow>
+            <Form.Fields>
+              <Form.Field label="Navn" htmlFor="navn" error={navnError}>
+                <Input
+                  id="navn"
+                  aria-label="Navn"
+                  placeholder="For eksempel Bane A"
+                  disabled={isSaving}
+                  value={navn}
+                  onChange={(event) => onChangeFelt("navn", event.target.value)}
+                  onBlur={onBlurNavn}
+                  aria-invalid={!!navnError}
+                  autoComplete="off"
+                />
+              </Form.Field>
 
-              <SettingsRow title="Gren">
-                <Field>
-                  <Select
-                    disabled={isSaving}
-                    value={grenId}
-                    onValueChange={(value) => onChangeFelt("grenId", value)}
-                  >
-                    <SelectTrigger id="rediger-grenId" aria-label="Gren">
-                      <SelectValue placeholder="Velg gren…" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {grener.map((gren) => (
-                        <SelectItem key={gren.id} value={gren.id}>
-                          {gren.navn}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </Field>
-              </SettingsRow>
+              <Form.Field label="Gren" htmlFor="rediger-grenId">
+                <Select
+                  disabled={isSaving}
+                  value={grenId}
+                  onValueChange={(value) => onChangeFelt("grenId", value)}
+                >
+                  <SelectTrigger id="rediger-grenId" aria-label="Gren">
+                    <SelectValue placeholder="Velg gren…" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {grener.map((gren) => (
+                      <SelectItem key={gren.id} value={gren.id}>
+                        {gren.navn}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Form.Field>
 
-              <SettingsRow title="Beskrivelse">
-                <Field>
-                  <Input
-                    id="beskrivelse"
-                    aria-label="Beskrivelse"
-                    placeholder="For eksempel nær klubbhuset"
-                    disabled={isSaving}
-                    value={beskrivelse}
-                    onChange={(event) => onChangeFelt("beskrivelse", event.target.value)}
-                    autoComplete="off"
-                  />
-                </Field>
-              </SettingsRow>
-            </SettingsPanel>
-          </SettingsSection>
+              <Form.Field label="Beskrivelse" htmlFor="beskrivelse">
+                <Input
+                  id="beskrivelse"
+                  aria-label="Beskrivelse"
+                  placeholder="For eksempel nær klubbhuset"
+                  disabled={isSaving}
+                  value={beskrivelse}
+                  onChange={(event) => onChangeFelt("beskrivelse", event.target.value)}
+                  autoComplete="off"
+                />
+              </Form.Field>
+            </Form.Fields>
+          </Settings.Section>
 
-          <SettingsSection
+          <Settings.Section
             embedded
             eyebrow="Booking"
-            icon={<CalendarClock />}
             title="Tilgjengelighet"
             description="Styr om banen kan bookes og om den avviker fra grenens standard."
           >
-            <SettingsPanel>
-              <SettingsSwitchRow
+            <Settings.Panel>
+              <Settings.SwitchRow
                 title="Aktiv"
                 checked={aktiv}
                 onCheckedChange={(checked) => onChangeFelt("aktiv", checked)}
                 disabled={isSaving}
               />
 
-              <SettingsSwitchRow
+              <Settings.SwitchRow
                 title="Egne bookingregler"
                 description={grenNavn ? `Avvik fra standard for ${grenNavn}.` : undefined}
                 checked={overstyringAktivert}
                 onCheckedChange={onToggleOverstyringAktivert}
                 disabled={isSaving}
               />
-            </SettingsPanel>
-          </SettingsSection>
+            </Settings.Panel>
+          </Settings.Section>
 
           {overstyringAktivert && klubbDefault && overstyring ? (
-            <SettingsSection
+            <Settings.Section
               embedded
               eyebrow="Avvik"
-              icon={<SlidersHorizontal />}
               title="Bookingregler"
               description="Bare aktiver verdiene som skal avvike fra grenens standard."
             >
-              <SettingsPanel>
-                <SettingsSwitchRow
+              <Settings.Panel>
+                <Settings.SwitchRow
                   title="Egen åpningstid"
                   description={`Standard: ${klubbDefault.aapningstid}`}
                   checked={overstyring.aapningstid !== null}
@@ -208,11 +187,11 @@ export default function RedigerBaneContent({
                   disabled={isSaving}
                 />
                 {overstyring.aapningstid !== null ? (
-                  <SettingsRow
+                  <Settings.Row
                     title="Åpningstid"
-                    right={<SettingsValue>{hourLabel(overstyring.aapningstid)}</SettingsValue>}
+                    right={<Settings.Value>{hourLabel(overstyring.aapningstid)}</Settings.Value>}
                   >
-                    <SettingsRange
+                    <Settings.Range
                       aria-label="Åpningstid"
                       value={overstyring.aapningstid}
                       min={6}
@@ -223,10 +202,10 @@ export default function RedigerBaneContent({
                       }
                       disabled={isSaving}
                     />
-                  </SettingsRow>
+                  </Settings.Row>
                 ) : null}
 
-                <SettingsSwitchRow
+                <Settings.SwitchRow
                   title="Egen stengetid"
                   description={`Standard: ${klubbDefault.stengetid}`}
                   checked={overstyring.stengetid !== null}
@@ -234,11 +213,11 @@ export default function RedigerBaneContent({
                   disabled={isSaving}
                 />
                 {overstyring.stengetid !== null ? (
-                  <SettingsRow
+                  <Settings.Row
                     title="Stengetid"
-                    right={<SettingsValue>{hourLabel(overstyring.stengetid)}</SettingsValue>}
+                    right={<Settings.Value>{hourLabel(overstyring.stengetid)}</Settings.Value>}
                   >
-                    <SettingsRange
+                    <Settings.Range
                       aria-label="Stengetid"
                       value={overstyring.stengetid}
                       min={6}
@@ -249,10 +228,10 @@ export default function RedigerBaneContent({
                       }
                       disabled={isSaving}
                     />
-                  </SettingsRow>
+                  </Settings.Row>
                 ) : null}
 
-                <SettingsSwitchRow
+                <Settings.SwitchRow
                   title="Egen grense per dag"
                   description={`Standard: ${klubbDefault.maksPerDag}`}
                   checked={overstyring.maksPerDag !== null}
@@ -260,11 +239,11 @@ export default function RedigerBaneContent({
                   disabled={isSaving}
                 />
                 {overstyring.maksPerDag !== null ? (
-                  <SettingsRow
+                  <Settings.Row
                     title="Maks bookinger per dag"
-                    right={<SettingsValue>{overstyring.maksPerDag}</SettingsValue>}
+                    right={<Settings.Value>{overstyring.maksPerDag}</Settings.Value>}
                   >
-                    <SettingsRange
+                    <Settings.Range
                       aria-label="Maks bookinger per dag"
                       value={overstyring.maksPerDag}
                       min={0}
@@ -275,10 +254,10 @@ export default function RedigerBaneContent({
                       }
                       disabled={isSaving}
                     />
-                  </SettingsRow>
+                  </Settings.Row>
                 ) : null}
 
-                <SettingsSwitchRow
+                <Settings.SwitchRow
                   title="Egen grense for aktive bookinger"
                   description={`Standard: ${klubbDefault.maksTotalt}`}
                   checked={overstyring.maksTotalt !== null}
@@ -286,11 +265,11 @@ export default function RedigerBaneContent({
                   disabled={isSaving}
                 />
                 {overstyring.maksTotalt !== null ? (
-                  <SettingsRow
+                  <Settings.Row
                     title="Maks aktive bookinger"
-                    right={<SettingsValue>{overstyring.maksTotalt}</SettingsValue>}
+                    right={<Settings.Value>{overstyring.maksTotalt}</Settings.Value>}
                   >
-                    <SettingsRange
+                    <Settings.Range
                       aria-label="Maks aktive bookinger"
                       value={overstyring.maksTotalt}
                       min={0}
@@ -301,10 +280,10 @@ export default function RedigerBaneContent({
                       }
                       disabled={isSaving}
                     />
-                  </SettingsRow>
+                  </Settings.Row>
                 ) : null}
 
-                <SettingsSwitchRow
+                <Settings.SwitchRow
                   title="Egen bookinghorisont"
                   description={`Standard: ${klubbDefault.dagerFremITid} dager`}
                   checked={overstyring.dagerFremITid !== null}
@@ -312,11 +291,11 @@ export default function RedigerBaneContent({
                   disabled={isSaving}
                 />
                 {overstyring.dagerFremITid !== null ? (
-                  <SettingsRow
+                  <Settings.Row
                     title="Dager frem i tid"
-                    right={<SettingsValue>{overstyring.dagerFremITid}</SettingsValue>}
+                    right={<Settings.Value>{overstyring.dagerFremITid}</Settings.Value>}
                   >
-                    <SettingsRange
+                    <Settings.Range
                       aria-label="Dager frem i tid"
                       value={overstyring.dagerFremITid}
                       min={1}
@@ -327,10 +306,10 @@ export default function RedigerBaneContent({
                       }
                       disabled={isSaving}
                     />
-                  </SettingsRow>
+                  </Settings.Row>
                 ) : null}
 
-                <SettingsSwitchRow
+                <Settings.SwitchRow
                   title="Egen lengde på tider"
                   description={`Standard: ${klubbDefault.slotLengdeMinutter} min`}
                   checked={overstyring.slotLengdeMinutter !== null}
@@ -338,13 +317,13 @@ export default function RedigerBaneContent({
                   disabled={isSaving}
                 />
                 {overstyring.slotLengdeMinutter !== null ? (
-                  <SettingsRow
+                  <Settings.Row
                     title="Lengde på tider"
                     right={
-                      <SettingsValue>{slotLabel(overstyring.slotLengdeMinutter)}</SettingsValue>
+                      <Settings.Value>{slotLabel(overstyring.slotLengdeMinutter)}</Settings.Value>
                     }
                   >
-                    <SettingsRange
+                    <Settings.Range
                       aria-label="Lengde på tider"
                       min={0}
                       max={slotValues.length - 1}
@@ -363,24 +342,24 @@ export default function RedigerBaneContent({
                         </>
                       }
                     />
-                  </SettingsRow>
+                  </Settings.Row>
                 ) : null}
-              </SettingsPanel>
-            </SettingsSection>
+              </Settings.Panel>
+            </Settings.Section>
           ) : null}
 
-          <AdminFormActions>
+          <Form.Actions>
             <MutationFeedback
               error={mutasjonFeil}
               success={lagret}
               successTitle="Baneinnstillingene er lagret"
             />
-            <AdminFormSubmitButton isLoading={isSaving} disabled={!canSubmit} loadingText="Lagrer…">
+            <Form.Submit isLoading={isSaving} disabled={!canSubmit} loadingText="Lagrer…">
               Lagre endringer
-            </AdminFormSubmitButton>
-          </AdminFormActions>
-        </SettingsStack>
+            </Form.Submit>
+          </Form.Actions>
+        </Settings.Stack>
       ) : null}
-    </AdminEditorForm>
+    </Form>
   );
 }

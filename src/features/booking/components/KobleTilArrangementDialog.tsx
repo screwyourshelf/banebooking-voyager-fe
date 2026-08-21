@@ -1,15 +1,10 @@
 import type { ReactNode } from "react";
-import {
-  AdminEditorDialog,
-  AdminFormActions,
-  AdminSettingsForm,
-  SettingsPanel,
-  SettingsRadioGroup,
-  SettingsRow,
-  SettingsSection,
-  SettingsStack,
-} from "@/components/admin";
-import { RecordListState } from "@/components/records";
+import { AlertCircle } from "lucide-react";
+import { Settings, Dialog } from "@/components";
+
+import { Stack } from "@/components/layout";
+import { RecordCollectionSkeleton } from "@/components/records";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { useArrangementBookingDialog } from "../hooks/useArrangementBookingDialog";
 import type { AktivtArrangementRespons } from "@/types";
@@ -35,48 +30,35 @@ export default function KobleTilArrangementDialog({ grenId, valgtId, onVelg, chi
   const dialog = useArrangementBookingDialog({ grenId, valgtId, onVelg });
 
   return (
-    <AdminEditorDialog
+    <Dialog
       open={dialog.open}
       onOpenChange={dialog.handleOpenChange}
       trigger={children}
-      backLabel="Til booking"
-      eyebrow="Booking"
       title="Koble til arrangement"
       description="Velg hvilket aktivt arrangement tiden skal høre til."
+      onSubmit={(event) => {
+        event.preventDefault();
+        dialog.handleSubmit();
+      }}
+      actions={
+        <Button
+          type="submit"
+          disabled={!dialog.valgtArrangementId || dialog.isLoading || Boolean(dialog.error)}
+        >
+          Koble til valgt arrangement
+        </Button>
+      }
     >
-      <AdminSettingsForm
-        onSubmit={(event) => {
-          event.preventDefault();
-          dialog.handleSubmit();
-        }}
-      >
-        <SettingsStack>
-          <SettingsSection
-            title="Aktive arrangementer"
-            description="Valget gjelder bare denne tiden."
-          >
-            <ArrangementSelection
-              arrangementer={dialog.arrangementer}
-              valgtArrangementId={dialog.valgtArrangementId}
-              isLoading={dialog.isLoading}
-              isFetching={dialog.isFetching}
-              error={dialog.error}
-              onArrangementChange={dialog.handleArrangementChange}
-              onRetry={() => void dialog.refetch()}
-            />
-          </SettingsSection>
-        </SettingsStack>
-
-        <AdminFormActions>
-          <Button
-            type="submit"
-            disabled={!dialog.valgtArrangementId || dialog.isLoading || Boolean(dialog.error)}
-          >
-            Koble til valgt arrangement
-          </Button>
-        </AdminFormActions>
-      </AdminSettingsForm>
-    </AdminEditorDialog>
+      <ArrangementSelection
+        arrangementer={dialog.arrangementer}
+        valgtArrangementId={dialog.valgtArrangementId}
+        isLoading={dialog.isLoading}
+        isFetching={dialog.isFetching}
+        error={dialog.error}
+        onArrangementChange={dialog.handleArrangementChange}
+        onRetry={() => void dialog.refetch()}
+      />
+    </Dialog>
   );
 }
 
@@ -90,53 +72,54 @@ function ArrangementSelection({
   onRetry,
 }: SelectionProps) {
   if (isLoading) {
-    return <RecordListState title="Laster arrangementer…" />;
+    return <RecordCollectionSkeleton ariaLabel="Laster arrangementer" rows={2} />;
   }
 
   if (error) {
     return (
-      <RecordListState
-        title="Kunne ikke laste arrangementene"
-        description={error.message}
-        tone="danger"
-        role="alert"
-        action={
-          <Button type="button" variant="outline" size="sm" onClick={onRetry} disabled={isFetching}>
-            {isFetching ? "Prøver igjen…" : "Prøv igjen"}
-          </Button>
-        }
-      />
+      <Alert variant="destructive">
+        <AlertCircle aria-hidden="true" />
+        <AlertTitle>Kunne ikke laste arrangementene</AlertTitle>
+        <AlertDescription>
+          <Stack gap="sm">
+            <p>{error.message}</p>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={onRetry}
+              disabled={isFetching}
+            >
+              {isFetching ? "Prøver igjen…" : "Prøv igjen"}
+            </Button>
+          </Stack>
+        </AlertDescription>
+      </Alert>
     );
   }
 
   if (arrangementer.length === 0) {
     return (
-      <RecordListState
-        title="Ingen aktive arrangementer"
-        description="Opprett eller aktiver et arrangement før du kobler tiden til det."
-      />
+      <Alert>
+        <AlertTitle>Ingen aktive arrangementer</AlertTitle>
+        <AlertDescription>
+          Opprett eller aktiver et arrangement før du kobler tiden til det.
+        </AlertDescription>
+      </Alert>
     );
   }
 
   return (
-    <SettingsPanel>
-      <SettingsRow title="Arrangement" description="Velg ett arrangement fra listen.">
-        <SettingsRadioGroup
-          label="Aktive arrangementer"
-          layout="stacked"
-          options={arrangementer.map(toRadioOption)}
-          value={valgtArrangementId ?? ""}
-          onValueChange={onArrangementChange}
-        />
-      </SettingsRow>
-    </SettingsPanel>
+    <Settings.RadioGroup
+      label="Aktive arrangementer"
+      value={valgtArrangementId ?? ""}
+      onValueChange={onArrangementChange}
+      layout="stacked"
+      options={arrangementer.map((arrangement) => ({
+        value: arrangement.id,
+        label: arrangement.tittel,
+        description: arrangement.beskrivelse || "Aktivt arrangement",
+      }))}
+    />
   );
-}
-
-function toRadioOption(arrangement: AktivtArrangementRespons) {
-  return {
-    value: arrangement.id,
-    label: arrangement.tittel,
-    description: arrangement.beskrivelse || "Aktivt arrangement",
-  };
 }

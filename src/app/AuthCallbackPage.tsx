@@ -88,5 +88,5 @@ export default function AuthCallbackPage() {
     };
   }, [navigate]);
 
-  return <div className="p-4 text-center">Logger inn ...</div>;
+  return <div data-ui="auth-status">Logger inn ...</div>;
 }

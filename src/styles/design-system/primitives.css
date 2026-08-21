@@ -1,14 +1,17 @@
 @layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
   html {
     min-width: 20rem;
     background: var(--app-canvas);
-    font-family: var(--app-font-body);
+    @apply font-sans;
   }
 
   body {
     min-height: 100svh;
-    background: var(--app-canvas);
-    color: var(--app-ink);
+    @apply bg-background text-foreground;
     font-size: var(--app-type-body);
     line-height: 1.55;
     font-optical-sizing: auto;

@@ -1,7 +1,8 @@
-import { RefreshCw } from "lucide-react";
-import { ServerFeil } from "@/components/errors";
-import { RecordCollection, RecordCollectionBody, RecordListState } from "@/components/records";
+import { AlertCircle, CalendarX, RefreshCw } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
+import { Inline, Stack } from "@/components/layout";
+import { RecordCollection, RecordCollectionBody, RecordListState } from "@/components/records";
 import { BookingSelectionHeader, BookingSlotListAccordion } from "@/features/booking/components";
 import { utledSlotStatus } from "@/utils/bookingUtils";
 import type { BaneRespons, GrenRespons, KalenderSlotRespons } from "@/types";
@@ -9,25 +10,6 @@ import type { BookingContentProps, BookingResultProps } from "./bookingViewTypes
 
 type Props = BookingContentProps & {
   valgtGren?: GrenRespons;
-};
-
-type HeaderProps = Pick<
-  Props,
-  | "grener"
-  | "valgtGrenId"
-  | "onGrenChange"
-  | "baner"
-  | "valgtBaneId"
-  | "onBaneChange"
-  | "valgtDato"
-  | "onDatoChange"
-  | "isLoading"
-  | "isFetching"
-  | "isSetupFetching"
-  | "setupFeil"
-  | "queryFeil"
-> & {
-  ledigeAntall: number;
 };
 
 type BodyProps = BookingResultProps & {
@@ -42,44 +24,26 @@ export default function BookingSchedule(props: Props) {
 
   return (
     <RecordCollection ariaLabel="Tilgjengelige tider" busy={props.isLoading || props.isFetching}>
-      <BookingScheduleHeader {...props} ledigeAntall={ledigeAntall} />
-      <BookingScheduleBody {...props} />
-    </RecordCollection>
-  );
-}
+      <BookingSelectionHeader
+        grener={props.grener}
+        valgtGrenId={props.valgtGrenId}
+        onGrenChange={props.onGrenChange}
+        baner={props.baner}
+        valgtBaneId={props.valgtBaneId}
+        onBaneChange={props.onBaneChange}
+        valgtDato={props.valgtDato}
+        onDatoChange={props.onDatoChange}
+        ledigeAntall={ledigeAntall}
+        isLoading={props.isLoading}
+        isFetching={props.isFetching}
+        isSetupFetching={props.isSetupFetching}
+        hasError={Boolean(props.setupFeil || props.queryFeil)}
+      />
 
-function BookingScheduleHeader({
-  grener,
-  valgtGrenId,
-  onGrenChange,
-  baner,
-  valgtBaneId,
-  onBaneChange,
-  valgtDato,
-  onDatoChange,
-  isLoading,
-  isFetching,
-  isSetupFetching,
-  setupFeil,
-  queryFeil,
-  ledigeAntall,
-}: HeaderProps) {
-  return (
-    <BookingSelectionHeader
-      grener={grener}
-      valgtGrenId={valgtGrenId}
-      onGrenChange={onGrenChange}
-      baner={baner}
-      valgtBaneId={valgtBaneId}
-      onBaneChange={onBaneChange}
-      valgtDato={valgtDato}
-      onDatoChange={onDatoChange}
-      ledigeAntall={ledigeAntall}
-      isLoading={isLoading}
-      isFetching={isFetching}
-      isSetupFetching={isSetupFetching}
-      hasError={Boolean(setupFeil || queryFeil)}
-    />
+      <RecordCollectionBody>
+        <BookingScheduleBody {...props} />
+      </RecordCollectionBody>
+    </RecordCollection>
   );
 }
 
@@ -103,7 +67,7 @@ function BookingScheduleBody({
   onSlotsRetry,
 }: BodyProps) {
   return (
-    <RecordCollectionBody>
+    <>
       <BookingMutationErrors bookFeil={bookFeil} fjernFeil={fjernFeil} />
 
       {setupFeil ? (
@@ -123,19 +87,18 @@ function BookingScheduleBody({
       ) : baner.length === 0 ? (
         <BookingEmptyState grenNavn={valgtGren?.navn} />
       ) : (
-        <div className={isFetching && !isLoading ? "booking-schedule__loading" : undefined}>
-          <BookingSlotListAccordion
-            grenId={valgtGrenId}
-            slots={slots}
-            valgtDato={valgtDato}
-            isAuthenticated={isAuthenticated}
-            onBook={onBook}
-            onFjern={onFjern}
-            isLoading={isLoading}
-          />
-        </div>
+        <BookingSlotListAccordion
+          grenId={valgtGrenId}
+          slots={slots}
+          valgtDato={valgtDato}
+          isAuthenticated={isAuthenticated}
+          onBook={onBook}
+          onFjern={onFjern}
+          isLoading={isLoading}
+          isFetching={isFetching}
+        />
       )}
-    </RecordCollectionBody>
+    </>
   );
 }
 
@@ -151,18 +114,27 @@ function BookingLoadError({
   onRetry: () => void;
 }) {
   return (
-    <RecordListState
-      icon={<RefreshCw aria-hidden="true" />}
-      title={title}
-      description={description}
-      tone="danger"
-      role="alert"
-      action={
-        <Button type="button" variant="outline" size="sm" onClick={onRetry} disabled={isFetching}>
-          {isFetching ? "Prøver igjen…" : "Prøv igjen"}
-        </Button>
-      }
-    />
+    <Alert variant="destructive">
+      <AlertCircle aria-hidden="true" />
+      <AlertTitle>{title}</AlertTitle>
+      <AlertDescription>
+        <Stack gap="sm">
+          <span>{description}</span>
+          <Inline>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={onRetry}
+              disabled={isFetching}
+            >
+              <RefreshCw aria-hidden="true" />
+              {isFetching ? "Prøver igjen…" : "Prøv igjen"}
+            </Button>
+          </Inline>
+        </Stack>
+      </AlertDescription>
+    </Alert>
   );
 }
 
@@ -170,24 +142,27 @@ function BookingMutationErrors({
   bookFeil,
   fjernFeil,
 }: Pick<BookingResultProps, "bookFeil" | "fjernFeil">) {
-  if (!bookFeil && !fjernFeil) return null;
+  const message = bookFeil ?? fjernFeil;
+  if (!message) return null;
 
   return (
-    <div className="booking-schedule__feedback">
-      <ServerFeil feil={bookFeil} title="Tiden kunne ikke bookes" />
-      <ServerFeil feil={fjernFeil} title="Tiden kunne ikke avbestilles" />
-    </div>
+    <Alert variant="destructive">
+      <AlertCircle aria-hidden="true" />
+      <AlertTitle>
+        {bookFeil ? "Tiden kunne ikke bookes" : "Tiden kunne ikke avbestilles"}
+      </AlertTitle>
+      <AlertDescription>{message}</AlertDescription>
+    </Alert>
   );
 }
 
 function BookingEmptyState({ grenNavn }: { grenNavn?: string }) {
   return (
-    <div className="booking-slot__empty" role="status">
-      <div className="booking-slot__empty-title">Ingen baner å vise</div>
-      <p className="booking-slot__empty-copy">
-        Det er ikke lagt til baner for {grenNavn ?? "denne grenen"}.
-      </p>
-    </div>
+    <RecordListState
+      icon={<CalendarX aria-hidden="true" />}
+      title="Ingen baner å vise"
+      description={`Det er ikke lagt til baner for ${grenNavn ?? "denne grenen"}.`}
+    />
   );
 }
 

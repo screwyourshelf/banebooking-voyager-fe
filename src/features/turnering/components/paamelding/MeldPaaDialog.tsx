@@ -1,17 +1,9 @@
+import { Dialog, Form } from "@/components";
 import { useState } from "react";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-} from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Check, ChevronsUpDown, Search } from "lucide-react";
-import { cn } from "@/lib/utils";
 import type { KlasseType, MeldPaaKlasseForespørsel, BrukerRespons } from "@/types";
 import { ServerFeil } from "@/components/errors";
 
@@ -126,105 +118,176 @@ export function MeldPaaDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={handleClose}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Meld på</DialogTitle>
-          <DialogDescription>
-            {erAdmin ? "Registrer deltaker" : erDobbel ? "Legg til makker" : "Bekreft påmelding"}
-          </DialogDescription>
-        </DialogHeader>
+    <Dialog
+      open={open}
+      onOpenChange={handleClose}
+      title="Meld på"
+      description={
+        erAdmin ? "Registrer deltaker" : erDobbel ? "Legg til makker" : "Bekreft påmelding"
+      }
+      actions={
+        <>
+          <Button variant="outline" onClick={() => handleClose(false)} disabled={isPending}>
+            Avbryt
+          </Button>
+          <Button onClick={handleMeldPaa} disabled={isSubmitDisabled}>
+            {isPending ? "Melder på..." : "Meld på"}
+          </Button>
+        </>
+      }
+    >
+      <Form.Fields>
+        {erAdmin ? (
+          <>
+            <Form.Field label="Spiller 1">
+              <div>
+                <div>
+                  <Button
+                    type="button"
+                    variant={spiller1Modus === "manuell" ? "secondary" : "ghost"}
+                    size="sm"
+                    onClick={() => setSpiller1Modus("manuell")}
+                  >
+                    Manuell
+                  </Button>
+                  <Button
+                    type="button"
+                    variant={spiller1Modus === "bruker" ? "secondary" : "ghost"}
+                    size="sm"
+                    onClick={() => setSpiller1Modus("bruker")}
+                  >
+                    Eksisterende
+                  </Button>
+                </div>
+              </div>
+              {spiller1Modus === "bruker" ? (
+                <Popover
+                  open={popover1Open}
+                  onOpenChange={(o) => {
+                    setPopover1Open(o);
+                    if (!o) setSøkTekst1("");
+                  }}
+                >
+                  <PopoverTrigger asChild>
+                    <Button variant="outline" role="combobox" aria-expanded={popover1Open}>
+                      {spiller1Bruker ? (
+                        spiller1Bruker.visningsnavn || spiller1Bruker.epost
+                      ) : (
+                        <span>Velg bruker...</span>
+                      )}
+                      <ChevronsUpDown />
+                    </Button>
+                  </PopoverTrigger>
+                  <PopoverContent align="start">
+                    <div>
+                      <Search />
+                      <Input
+                        placeholder="Søk etter bruker..."
+                        value={søkTekst1}
+                        onChange={(e) => setSøkTekst1(e.target.value)}
+                      />
+                    </div>
+                    <div>
+                      {filtrerteBrukere1.length === 0 ? (
+                        <p>Ingen brukere funnet.</p>
+                      ) : (
+                        filtrerteBrukere1.map((b) => (
+                          <button
+                            key={b.id}
+                            type="button"
+                            onClick={() => {
+                              setAdminSpiller1BrukerId(b.id);
+                              setPopover1Open(false);
+                              setSøkTekst1("");
+                            }}
+                          >
+                            <Check data-selected={b.id === adminSpiller1BrukerId} />
+                            <div>
+                              <span>{b.visningsnavn || b.epost}</span>
+                              {b.visningsnavn && <span>{b.epost}</span>}
+                            </div>
+                          </button>
+                        ))
+                      )}
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              ) : (
+                <Input
+                  value={adminSpiller1Navn}
+                  onChange={(e) => setAdminSpiller1Navn(e.target.value)}
+                  placeholder="Fullt navn"
+                />
+              )}
+            </Form.Field>
 
-        <div className="space-y-4">
-          {erAdmin ? (
-            <>
-              <div className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <Label>Spiller 1</Label>
-                  <div className="flex gap-0.5">
+            {erDobbel && (
+              <Form.Field label="Spiller 2" description="Valgfritt">
+                <div>
+                  <div>
                     <Button
                       type="button"
-                      variant={spiller1Modus === "manuell" ? "secondary" : "ghost"}
+                      variant={spiller2Modus === "manuell" ? "secondary" : "ghost"}
                       size="sm"
-                      className="h-6 px-2 text-xs"
-                      onClick={() => setSpiller1Modus("manuell")}
+                      onClick={() => setSpiller2Modus("manuell")}
                     >
                       Manuell
                     </Button>
                     <Button
                       type="button"
-                      variant={spiller1Modus === "bruker" ? "secondary" : "ghost"}
+                      variant={spiller2Modus === "bruker" ? "secondary" : "ghost"}
                       size="sm"
-                      className="h-6 px-2 text-xs"
-                      onClick={() => setSpiller1Modus("bruker")}
+                      onClick={() => setSpiller2Modus("bruker")}
                     >
                       Eksisterende
                     </Button>
                   </div>
                 </div>
-                {spiller1Modus === "bruker" ? (
+                {spiller2Modus === "bruker" ? (
                   <Popover
-                    open={popover1Open}
+                    open={popover2Open}
                     onOpenChange={(o) => {
-                      setPopover1Open(o);
-                      if (!o) setSøkTekst1("");
+                      setPopover2Open(o);
+                      if (!o) setSøkTekst2("");
                     }}
                   >
                     <PopoverTrigger asChild>
-                      <Button
-                        variant="outline"
-                        role="combobox"
-                        aria-expanded={popover1Open}
-                        className="w-full justify-between font-normal"
-                      >
-                        {spiller1Bruker ? (
-                          spiller1Bruker.visningsnavn || spiller1Bruker.epost
+                      <Button variant="outline" role="combobox" aria-expanded={popover2Open}>
+                        {spiller2Bruker ? (
+                          spiller2Bruker.visningsnavn || spiller2Bruker.epost
                         ) : (
-                          <span className="text-muted-foreground">Velg bruker...</span>
+                          <span>Velg bruker...</span>
                         )}
-                        <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                        <ChevronsUpDown />
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="p-0 w-[300px]" align="start">
-                      <div className="flex items-center gap-2 border-b px-3">
-                        <Search className="h-4 w-4 shrink-0 opacity-50" />
+                    <PopoverContent align="start">
+                      <div>
+                        <Search />
                         <Input
                           placeholder="Søk etter bruker..."
-                          value={søkTekst1}
-                          onChange={(e) => setSøkTekst1(e.target.value)}
-                          className="border-0 p-0 shadow-none focus-visible:ring-0 h-10 text-sm"
+                          value={søkTekst2}
+                          onChange={(e) => setSøkTekst2(e.target.value)}
                         />
                       </div>
-                      <div className="max-h-[260px] overflow-y-auto p-1">
-                        {filtrerteBrukere1.length === 0 ? (
-                          <p className="py-6 text-center text-sm text-muted-foreground">
-                            Ingen brukere funnet.
-                          </p>
+                      <div>
+                        {filtrerteBrukere2.length === 0 ? (
+                          <p>Ingen brukere funnet.</p>
                         ) : (
-                          filtrerteBrukere1.map((b) => (
+                          filtrerteBrukere2.map((b) => (
                             <button
                               key={b.id}
                               type="button"
                               onClick={() => {
-                                setAdminSpiller1BrukerId(b.id);
-                                setPopover1Open(false);
-                                setSøkTekst1("");
+                                setAdminSpiller2BrukerId(b.id);
+                                setPopover2Open(false);
+                                setSøkTekst2("");
                               }}
-                              className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm text-left hover:bg-accent hover:text-accent-foreground"
                             >
-                              <Check
-                                className={cn(
-                                  "h-4 w-4 shrink-0",
-                                  b.id === adminSpiller1BrukerId ? "opacity-100" : "opacity-0"
-                                )}
-                              />
-                              <div className="flex flex-col min-w-0">
-                                <span className="truncate">{b.visningsnavn || b.epost}</span>
-                                {b.visningsnavn && (
-                                  <span className="text-xs text-muted-foreground truncate">
-                                    {b.epost}
-                                  </span>
-                                )}
+                              <Check data-selected={b.id === adminSpiller2BrukerId} />
+                              <div>
+                                <span>{b.visningsnavn || b.epost}</span>
+                                {b.visningsnavn && <span>{b.epost}</span>}
                               </div>
                             </button>
                           ))
@@ -234,164 +297,48 @@ export function MeldPaaDialog({
                   </Popover>
                 ) : (
                   <Input
-                    value={adminSpiller1Navn}
-                    onChange={(e) => setAdminSpiller1Navn(e.target.value)}
+                    value={adminSpiller2Navn}
+                    onChange={(e) => setAdminSpiller2Navn(e.target.value)}
                     placeholder="Fullt navn"
                   />
                 )}
-              </div>
+              </Form.Field>
+            )}
 
-              {erDobbel && (
-                <div className="space-y-1.5">
-                  <div className="flex items-center justify-between">
-                    <Label>Spiller 2 (valgfritt)</Label>
-                    <div className="flex gap-0.5">
-                      <Button
-                        type="button"
-                        variant={spiller2Modus === "manuell" ? "secondary" : "ghost"}
-                        size="sm"
-                        className="h-6 px-2 text-xs"
-                        onClick={() => setSpiller2Modus("manuell")}
-                      >
-                        Manuell
-                      </Button>
-                      <Button
-                        type="button"
-                        variant={spiller2Modus === "bruker" ? "secondary" : "ghost"}
-                        size="sm"
-                        className="h-6 px-2 text-xs"
-                        onClick={() => setSpiller2Modus("bruker")}
-                      >
-                        Eksisterende
-                      </Button>
-                    </div>
-                  </div>
-                  {spiller2Modus === "bruker" ? (
-                    <Popover
-                      open={popover2Open}
-                      onOpenChange={(o) => {
-                        setPopover2Open(o);
-                        if (!o) setSøkTekst2("");
-                      }}
-                    >
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="outline"
-                          role="combobox"
-                          aria-expanded={popover2Open}
-                          className="w-full justify-between font-normal"
-                        >
-                          {spiller2Bruker ? (
-                            spiller2Bruker.visningsnavn || spiller2Bruker.epost
-                          ) : (
-                            <span className="text-muted-foreground">Velg bruker...</span>
-                          )}
-                          <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent className="p-0 w-[300px]" align="start">
-                        <div className="flex items-center gap-2 border-b px-3">
-                          <Search className="h-4 w-4 shrink-0 opacity-50" />
-                          <Input
-                            placeholder="Søk etter bruker..."
-                            value={søkTekst2}
-                            onChange={(e) => setSøkTekst2(e.target.value)}
-                            className="border-0 p-0 shadow-none focus-visible:ring-0 h-10 text-sm"
-                          />
-                        </div>
-                        <div className="max-h-[260px] overflow-y-auto p-1">
-                          {filtrerteBrukere2.length === 0 ? (
-                            <p className="py-6 text-center text-sm text-muted-foreground">
-                              Ingen brukere funnet.
-                            </p>
-                          ) : (
-                            filtrerteBrukere2.map((b) => (
-                              <button
-                                key={b.id}
-                                type="button"
-                                onClick={() => {
-                                  setAdminSpiller2BrukerId(b.id);
-                                  setPopover2Open(false);
-                                  setSøkTekst2("");
-                                }}
-                                className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-sm text-left hover:bg-accent hover:text-accent-foreground"
-                              >
-                                <Check
-                                  className={cn(
-                                    "h-4 w-4 shrink-0",
-                                    b.id === adminSpiller2BrukerId ? "opacity-100" : "opacity-0"
-                                  )}
-                                />
-                                <div className="flex flex-col min-w-0">
-                                  <span className="truncate">{b.visningsnavn || b.epost}</span>
-                                  {b.visningsnavn && (
-                                    <span className="text-xs text-muted-foreground truncate">
-                                      {b.epost}
-                                    </span>
-                                  )}
-                                </div>
-                              </button>
-                            ))
-                          )}
-                        </div>
-                      </PopoverContent>
-                    </Popover>
-                  ) : (
-                    <Input
-                      value={adminSpiller2Navn}
-                      onChange={(e) => setAdminSpiller2Navn(e.target.value)}
-                      placeholder="Fullt navn"
-                    />
-                  )}
-                </div>
-              )}
+            <Form.Field label="Seed" description="Valgfritt">
+              <Input
+                type="number"
+                min={1}
+                value={adminSeed}
+                onChange={(e) => setAdminSeed(e.target.value)}
+                placeholder="t.eks. 1"
+              />
+            </Form.Field>
+          </>
+        ) : erDobbel ? (
+          <>
+            <Form.Field label="Makkerens navn">
+              <Input
+                value={manuellMakkerNavn}
+                onChange={(e) => setManuellMakkerNavn(e.target.value)}
+                placeholder="Fullt navn"
+              />
+            </Form.Field>
+            <Form.Field label="Makkerens e-post" description="Valgfritt">
+              <Input
+                type="email"
+                value={manuellMakkerEpost}
+                onChange={(e) => setManuellMakkerEpost(e.target.value)}
+                placeholder="epost@eksempel.no"
+              />
+            </Form.Field>
+          </>
+        ) : (
+          <p>Bekreft at du vil melde deg på klassen.</p>
+        )}
 
-              <div className="space-y-1.5">
-                <Label>Seed (valgfritt)</Label>
-                <Input
-                  type="number"
-                  min={1}
-                  value={adminSeed}
-                  onChange={(e) => setAdminSeed(e.target.value)}
-                  placeholder="t.eks. 1"
-                />
-              </div>
-            </>
-          ) : erDobbel ? (
-            <>
-              <div className="space-y-1.5">
-                <Label>Makkerens navn</Label>
-                <Input
-                  value={manuellMakkerNavn}
-                  onChange={(e) => setManuellMakkerNavn(e.target.value)}
-                  placeholder="Fullt navn"
-                />
-              </div>
-              <div className="space-y-1.5">
-                <Label>Makkerens e-post (valgfritt)</Label>
-                <Input
-                  type="email"
-                  value={manuellMakkerEpost}
-                  onChange={(e) => setManuellMakkerEpost(e.target.value)}
-                  placeholder="epost@eksempel.no"
-                />
-              </div>
-            </>
-          ) : (
-            <p className="text-sm text-muted-foreground">Bekreft at du vil melde deg på klassen.</p>
-          )}
-
-          <ServerFeil feil={serverFeil ?? null} />
-          <div className="flex justify-end gap-2">
-            <Button variant="outline" onClick={() => handleClose(false)} disabled={isPending}>
-              Avbryt
-            </Button>
-            <Button onClick={handleMeldPaa} disabled={isSubmitDisabled}>
-              {isPending ? "Melder på..." : "Meld på"}
-            </Button>
-          </div>
-        </div>
-      </DialogContent>
+        <ServerFeil feil={serverFeil ?? null} />
+      </Form.Fields>
     </Dialog>
   );
 }

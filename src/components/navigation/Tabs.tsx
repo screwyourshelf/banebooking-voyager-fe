@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { useNavigate } from "react-router-dom";
 import { Tabs as RadixTabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { cn } from "@/lib/utils";
 
 export type TabItem = {
   value: string;
@@ -27,7 +26,7 @@ type TabsProps = {
 
 export default function Tabs({
   items,
-  className = "",
+  className,
   value,
   onValueChange,
   defaultValue,
@@ -42,31 +41,23 @@ export default function Tabs({
 
   // Hvis value finnes men er ugyldig: la Radix håndtere default (ikke lås til ugyldig)
   const resolvedValue = value && items.some((i) => i.value === value) ? value : undefined;
-  const isSection = variant === "section";
-
   return (
     <RadixTabs
-      className={isSection ? "section-tabs" : undefined}
+      data-ui="tabs"
+      data-variant={variant}
       value={resolvedValue}
       defaultValue={resolvedDefault}
       onValueChange={onValueChange}
     >
       <TabsList
-        variant={isSection ? "line" : "default"}
+        variant={variant === "section" ? "line" : "default"}
         aria-label={ariaLabel}
-        className={cn(
-          isSection ? "section-tabs__list" : "flex h-auto flex-wrap gap-2 mb-2",
-          className
-        )}
+        className={className}
       >
         {items.map((item) => (
-          <TabsTrigger
-            key={item.value}
-            value={item.value}
-            className={isSection ? "section-tabs__trigger" : undefined}
-          >
-            {isSection && item.icon ? (
-              <span className="section-tabs__icon" aria-hidden="true">
+          <TabsTrigger key={item.value} value={item.value}>
+            {variant === "section" && item.icon ? (
+              <span data-part="icon" aria-hidden="true">
                 {item.icon}
               </span>
             ) : null}
@@ -78,11 +69,7 @@ export default function Tabs({
       {controls}
 
       {items.map((item) => (
-        <TabsContent
-          key={item.value}
-          value={item.value}
-          className={isSection ? "section-tabs__content" : "mt-0"}
-        >
+        <TabsContent key={item.value} value={item.value}>
           {item.content}
         </TabsContent>
       ))}
@@ -104,7 +91,7 @@ export function TabsLazyMount({
   items,
   value,
   onValueChange,
-  className = "",
+  className,
   variant = "default",
   ariaLabel,
   controls,
@@ -113,30 +100,22 @@ export function TabsLazyMount({
 
   // Finn valgt tab, eller fallback til første hvis value er ugyldig
   const activeItem = items.find((item) => item.value === value) ?? items[0];
-  const isSection = variant === "section";
-
   return (
     <RadixTabs
-      className={isSection ? "section-tabs" : undefined}
+      data-ui="tabs"
+      data-variant={variant}
       value={activeItem.value}
       onValueChange={onValueChange}
     >
       <TabsList
-        variant={isSection ? "line" : "default"}
+        variant={variant === "section" ? "line" : "default"}
         aria-label={ariaLabel}
-        className={cn(
-          isSection ? "section-tabs__list" : "flex h-auto flex-wrap gap-2 mb-2",
-          className
-        )}
+        className={className}
       >
         {items.map((item) => (
-          <TabsTrigger
-            key={item.value}
-            value={item.value}
-            className={isSection ? "section-tabs__trigger" : undefined}
-          >
-            {isSection && item.icon ? (
-              <span className="section-tabs__icon" aria-hidden="true">
+          <TabsTrigger key={item.value} value={item.value}>
+            {variant === "section" && item.icon ? (
+              <span data-part="icon" aria-hidden="true">
                 {item.icon}
               </span>
             ) : null}
@@ -148,7 +127,7 @@ export function TabsLazyMount({
       {controls}
 
       {/* Render kun aktivt innhold */}
-      <div className={isSection ? "section-tabs__content" : "mt-0"}>{activeItem.content}</div>
+      <div data-part="content">{activeItem.content}</div>
     </RadixTabs>
   );
 }
@@ -164,10 +143,9 @@ type RouteTabsProps = {
   value: string;
   ariaLabel: string;
   children: ReactNode;
-  controls?: ReactNode;
 };
 
-export function RouteTabs({ items, value, ariaLabel, children, controls }: RouteTabsProps) {
+export function RouteTabs({ items, value, ariaLabel, children }: RouteTabsProps) {
   const navigate = useNavigate();
   const hasActiveItem = items.some((item) => item.value === value);
 
@@ -181,27 +159,23 @@ export function RouteTabs({ items, value, ariaLabel, children, controls }: Route
   };
 
   return (
-    <RadixTabs className="section-tabs" value={value} onValueChange={handleValueChange}>
-      <div className="section-tabs__rail">
-        <TabsList
-          variant="line"
-          aria-label={ariaLabel}
-          className="section-tabs__list"
-          data-count={items.length}
-        >
+    <RadixTabs
+      data-ui="tabs"
+      data-variant="section"
+      value={value}
+      onValueChange={handleValueChange}
+    >
+      <div data-part="rail">
+        <TabsList variant="line" aria-label={ariaLabel} data-count={items.length}>
           {items.map((item) => (
-            <TabsTrigger key={item.value} value={item.value} className="section-tabs__trigger">
+            <TabsTrigger key={item.value} value={item.value}>
               {item.label}
             </TabsTrigger>
           ))}
         </TabsList>
-
-        {controls}
       </div>
 
-      <TabsContent value={value} className="section-tabs__content">
-        {children}
-      </TabsContent>
+      <TabsContent value={value}>{children}</TabsContent>
     </RadixTabs>
   );
 }

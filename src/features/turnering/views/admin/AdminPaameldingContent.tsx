@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
-import PageSection from "@/components/sections/PageSection";
 import Tabs from "@/components/navigation/Tabs";
 import { TurneringHeaderSection } from "../../components";
 import { NesteStatusKnapp } from "./NesteStatusKnapp";
 import type { TurneringRespons, TurneringStatus } from "@/types";
+import { Section } from "@/components";
 
 type TabItem = { value: string; label: string; content: ReactNode };
 
@@ -27,7 +27,7 @@ export default function AdminPaameldingContent({
   klasseTabs,
 }: Props) {
   return (
-    <div className="space-y-4">
+    <div>
       {/* ─── Header ─── */}
       <TurneringHeaderSection
         tittel={turnering.arrangementTittel}
@@ -49,13 +49,13 @@ export default function AdminPaameldingContent({
 
       {/* ─── Klasse-tabs ─── */}
       {klasseTabs.length > 0 ? (
-        <PageSection title="Klasser">
+        <Section title="Klasser">
           <Tabs items={klasseTabs} />
-        </PageSection>
+        </Section>
       ) : (
-        <PageSection>
-          <p className="text-sm text-muted-foreground italic">Ingen klasser er satt opp ennå.</p>
-        </PageSection>
+        <Section>
+          <p>Ingen klasser er satt opp ennå.</p>
+        </Section>
       )}
     </div>
   );

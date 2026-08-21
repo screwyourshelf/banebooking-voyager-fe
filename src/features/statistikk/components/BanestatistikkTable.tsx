@@ -1,5 +1,4 @@
-import CardSection from "@/components/layout/CardSection";
-import SectionHeading from "@/components/layout/SectionHeading";
+import { Section } from "@/components";
 import {
   Table,
   TableBody,
@@ -21,11 +20,11 @@ type Props = {
 
 export default function BanestatistikkTable({ baner }: Props) {
   return (
-    <CardSection className="statistics-section statistics-court-table" padding="sm">
+    <Section variant="surface" data-context="statistics" data-view="court-table" padding="sm">
       <div className="statistics-court-table__heading">
-        <SectionHeading description="Bookede timer og type booking for hver bane." size="lg">
+        <Section.Heading description="Bookede timer og type booking for hver bane.">
           Baner
-        </SectionHeading>
+        </Section.Heading>
       </div>
 
       <Table>
@@ -66,7 +65,8 @@ export default function BanestatistikkTable({ baner }: Props) {
                     : formatTimer(bane.sammenligningBookedeTimer)}
                 </TableCell>
                 <TableCell
-                  className="statistics-table__numeric statistics-court-table__change"
+                  className="statistics-table__numeric"
+                  data-value="change"
                   data-direction={
                     bane.endringBookedeTimerProsent === null
                       ? undefined
@@ -134,6 +134,6 @@ export default function BanestatistikkTable({ baner }: Props) {
           </tbody>
         </table>
       </div>
-    </CardSection>
+    </Section>
   );
 }

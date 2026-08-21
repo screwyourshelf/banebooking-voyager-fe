@@ -104,6 +104,26 @@ export function formatDatoLang(datoStr: string): string {
   return dato.toLocaleDateString("nb-NO", { day: "numeric", month: "long", year: "numeric" });
 }
 
+export function formaterDatoGruppe(datoIso: string, referanseDato = new Date()) {
+  const dato = new Date(`${datoIso.slice(0, 10)}T00:00:00`);
+  const iDag = new Date(
+    referanseDato.getFullYear(),
+    referanseDato.getMonth(),
+    referanseDato.getDate()
+  );
+  const dagDifferanse = Math.round((dato.getTime() - iDag.getTime()) / 86_400_000);
+  const fullDato = dato.toLocaleDateString("nb-NO", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+
+  return {
+    relativeLabel: dagDifferanse === 0 ? "I dag" : dagDifferanse === 1 ? "I morgen" : null,
+    label: fullDato.charAt(0).toLocaleUpperCase("nb-NO") + fullDato.slice(1),
+  };
+}
+
 const dayOfWeekToIso: Record<DayOfWeek, UkedagIso> = {
   Sunday: 7,
   Monday: 1,

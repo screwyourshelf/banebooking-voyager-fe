@@ -1,15 +1,6 @@
-import { MapPin, Rss } from "lucide-react";
-import {
-  AdminFormActions,
-  AdminFormSubmitButton,
-  AdminSettingsForm,
-  SettingsPanel,
-  SettingsRow,
-  SettingsSection,
-  SettingsStack,
-} from "@/components/admin";
+import { Form, Settings } from "@/components";
+
 import { MutationFeedback } from "@/components/feedback";
-import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 
 export type KlubbFormData = {
@@ -58,167 +49,173 @@ export default function KlubbInnstillingerContent({
     : null;
 
   return (
-    <AdminSettingsForm
+    <Form
+      variant="settings"
       onSubmit={(event) => {
         event.preventDefault();
         onSubmit();
       }}
     >
-      <SettingsStack>
-        <SettingsSection
+      <Settings.Stack>
+        <Settings.Section
           eyebrow="Profil"
           title="Klubbinformasjon"
           description="Navn og kontaktpunkter medlemmene møter."
         >
-          <SettingsPanel>
-            <SettingsRow title="Klubbnavn">
-              <Field data-invalid={!!navnError}>
-                <Input
-                  id="klubbnavn"
-                  aria-label="Klubbnavn"
-                  value={form.navn}
-                  onChange={(event) => onChange("navn", event.target.value)}
-                  placeholder="Ås tennisklubb"
-                  autoComplete="organization"
-                  maxLength={60}
-                  onBlur={() => onBlurField("navn")}
-                  aria-invalid={!!navnError}
-                  disabled={isSaving}
-                />
-                {navnError ? <FieldError>{navnError}</FieldError> : null}
-              </Field>
-            </SettingsRow>
+          <Form.Fields>
+            <Form.Field label="Klubbnavn" htmlFor="klubbnavn" error={navnError}>
+              <Input
+                id="klubbnavn"
+                aria-label="Klubbnavn"
+                value={form.navn}
+                onChange={(event) => onChange("navn", event.target.value)}
+                placeholder="Ås tennisklubb"
+                autoComplete="organization"
+                maxLength={60}
+                onBlur={() => onBlurField("navn")}
+                aria-invalid={!!navnError}
+                disabled={isSaving}
+              />
+            </Form.Field>
 
-            <SettingsRow title="Kontakt-e-post" description="Vises i klubbens kontaktinformasjon.">
-              <Field data-invalid={!!kontaktEpostError}>
-                <Input
-                  id="kontaktEpost"
-                  aria-label="Kontakt-e-post"
-                  value={form.kontaktEpost}
-                  onChange={(event) => onChange("kontaktEpost", event.target.value)}
-                  placeholder="post@klubb.no"
-                  type="email"
-                  inputMode="email"
-                  autoComplete="email"
-                  onBlur={() => onBlurField("kontaktEpost")}
-                  aria-invalid={!!kontaktEpostError}
-                  disabled={isSaving}
-                />
-                {kontaktEpostError ? <FieldError>{kontaktEpostError}</FieldError> : null}
-              </Field>
-            </SettingsRow>
+            <Form.Field
+              label="Kontakt-e-post"
+              description="Vises i klubbens kontaktinformasjon."
+              htmlFor="kontaktEpost"
+              error={kontaktEpostError}
+            >
+              <Input
+                id="kontaktEpost"
+                aria-label="Kontakt-e-post"
+                value={form.kontaktEpost}
+                onChange={(event) => onChange("kontaktEpost", event.target.value)}
+                placeholder="post@klubb.no"
+                type="email"
+                inputMode="email"
+                autoComplete="email"
+                onBlur={() => onBlurField("kontaktEpost")}
+                aria-invalid={!!kontaktEpostError}
+                disabled={isSaving}
+              />
+            </Form.Field>
 
-            <SettingsRow title="Nettside" description="Valgfri lenke til klubbens nettside.">
-              <Field>
-                <Input
-                  id="nettside"
-                  aria-label="Nettside"
-                  value={form.nettside}
-                  onChange={(event) => onChange("nettside", event.target.value)}
-                  placeholder="https://www.aastk.no"
-                  inputMode="url"
-                  type="url"
-                  disabled={isSaving}
-                />
-              </Field>
-            </SettingsRow>
-          </SettingsPanel>
-        </SettingsSection>
+            <Form.Field
+              label="Nettside"
+              description="Valgfri lenke til klubbens nettside."
+              htmlFor="nettside"
+            >
+              <Input
+                id="nettside"
+                aria-label="Nettside"
+                value={form.nettside}
+                onChange={(event) => onChange("nettside", event.target.value)}
+                placeholder="https://www.aastk.no"
+                inputMode="url"
+                type="url"
+                disabled={isSaving}
+              />
+            </Form.Field>
+          </Form.Fields>
+        </Settings.Section>
 
-        <SettingsSection
+        <Settings.Section
           eyebrow="Sted"
-          icon={<MapPin />}
           title="Vær og posisjon"
           description="Koordinatene brukes til lokal værinformasjon i Book bane."
         >
-          <SettingsPanel>
-            <SettingsRow title="Breddegrad" description="Desimalgrader mellom −90 og 90.">
-              <Field>
-                <Input
-                  id="latitude"
-                  aria-label="Breddegrad"
-                  value={form.latitude}
-                  onChange={(event) => onChange("latitude", event.target.value)}
-                  placeholder="59.6552"
-                  inputMode="decimal"
-                  disabled={isSaving}
-                />
-              </Field>
-            </SettingsRow>
+          <Form.Fields>
+            <Form.Field
+              label="Breddegrad"
+              description="Desimalgrader mellom −90 og 90."
+              htmlFor="latitude"
+            >
+              <Input
+                id="latitude"
+                aria-label="Breddegrad"
+                value={form.latitude}
+                onChange={(event) => onChange("latitude", event.target.value)}
+                placeholder="59.6552"
+                inputMode="decimal"
+                disabled={isSaving}
+              />
+            </Form.Field>
 
-            <SettingsRow title="Lengdegrad" description="Desimalgrader mellom −180 og 180.">
-              <Field>
-                <Input
-                  id="longitude"
-                  aria-label="Lengdegrad"
-                  value={form.longitude}
-                  onChange={(event) => onChange("longitude", event.target.value)}
-                  placeholder="10.7769"
-                  inputMode="decimal"
-                  disabled={isSaving}
-                />
-              </Field>
-            </SettingsRow>
-          </SettingsPanel>
-        </SettingsSection>
+            <Form.Field
+              label="Lengdegrad"
+              description="Desimalgrader mellom −180 og 180."
+              htmlFor="longitude"
+            >
+              <Input
+                id="longitude"
+                aria-label="Lengdegrad"
+                value={form.longitude}
+                onChange={(event) => onChange("longitude", event.target.value)}
+                placeholder="10.7769"
+                inputMode="decimal"
+                disabled={isSaving}
+              />
+            </Form.Field>
+          </Form.Fields>
+        </Settings.Section>
 
-        <SettingsSection
+        <Settings.Section
           eyebrow="Innhold"
-          icon={<Rss />}
           title="Nyhetsfeed"
           description="Vis nyheter fra klubbens RSS-feed i Banebooking."
         >
-          <SettingsPanel>
-            <SettingsRow title="RSS-feed" description="Valgfri adresse til feeden.">
-              <Field>
-                <Input
-                  id="feedUrl"
-                  aria-label="RSS-feed"
-                  value={form.feedUrl}
-                  onChange={(event) => onChange("feedUrl", event.target.value)}
-                  placeholder="https://www.aastk.no/?feed=rss2"
-                  inputMode="url"
-                  type="url"
-                  disabled={isSaving}
-                />
-              </Field>
-            </SettingsRow>
+          <Form.Fields>
+            <Form.Field
+              label="RSS-feed"
+              description="Valgfri adresse til feeden."
+              htmlFor="feedUrl"
+            >
+              <Input
+                id="feedUrl"
+                aria-label="RSS-feed"
+                value={form.feedUrl}
+                onChange={(event) => onChange("feedUrl", event.target.value)}
+                placeholder="https://www.aastk.no/?feed=rss2"
+                inputMode="url"
+                type="url"
+                disabled={isSaving}
+              />
+            </Form.Field>
 
-            <SettingsRow title="Vis innlegg i" description="Antall dager, fra 1 til 150.">
-              <Field data-invalid={!!feedSynligAntallDagerError}>
-                <Input
-                  id="feedSynligAntallDager"
-                  aria-label="Antall dager feedinnlegg vises"
-                  value={form.feedSynligAntallDager}
-                  onChange={(event) => onChange("feedSynligAntallDager", event.target.value)}
-                  type="number"
-                  inputMode="numeric"
-                  min={1}
-                  max={150}
-                  step={1}
-                  onBlur={() => onBlurField("feedSynligAntallDager")}
-                  aria-invalid={!!feedSynligAntallDagerError}
-                  disabled={isSaving}
-                />
-                {feedSynligAntallDagerError ? (
-                  <FieldError>{feedSynligAntallDagerError}</FieldError>
-                ) : null}
-              </Field>
-            </SettingsRow>
-          </SettingsPanel>
-        </SettingsSection>
+            <Form.Field
+              label="Vis innlegg i"
+              description="Antall dager, fra 1 til 150."
+              htmlFor="feedSynligAntallDager"
+              error={feedSynligAntallDagerError}
+            >
+              <Input
+                id="feedSynligAntallDager"
+                aria-label="Antall dager feedinnlegg vises"
+                value={form.feedSynligAntallDager}
+                onChange={(event) => onChange("feedSynligAntallDager", event.target.value)}
+                type="number"
+                inputMode="numeric"
+                min={1}
+                max={150}
+                step={1}
+                onBlur={() => onBlurField("feedSynligAntallDager")}
+                aria-invalid={!!feedSynligAntallDagerError}
+                disabled={isSaving}
+              />
+            </Form.Field>
+          </Form.Fields>
+        </Settings.Section>
 
-        <AdminFormActions embedded={false}>
+        <Form.Actions embedded={false}>
           <MutationFeedback
             error={mutasjonFeil}
             success={lagret}
             successTitle="Klubbinnstillingene er lagret"
           />
-          <AdminFormSubmitButton isLoading={isSaving} disabled={!canSubmit} loadingText="Lagrer…">
+          <Form.Submit isLoading={isSaving} disabled={!canSubmit} loadingText="Lagrer…">
             Lagre endringer
-          </AdminFormSubmitButton>
-        </AdminFormActions>
-      </SettingsStack>
-    </AdminSettingsForm>
+          </Form.Submit>
+        </Form.Actions>
+      </Settings.Stack>
+    </Form>
   );
 }

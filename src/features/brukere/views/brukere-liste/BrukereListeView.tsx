@@ -1,7 +1,7 @@
-import { useMemo, useState } from "react";
 import { ShieldX } from "lucide-react";
-import { AdminPageLoading, AdminPageState } from "@/components/admin";
+import { useMemo, useState } from "react";
 import { RecordListState } from "@/components/records";
+import { Page } from "@/components";
 
 import { useBruker } from "@/hooks/useBruker";
 import { useAdminBrukere } from "@/features/brukere/hooks/useAdminBrukere";
@@ -152,7 +152,7 @@ export default function BrukereListeView() {
   };
 
   if (lasterBruker) {
-    return <AdminPageLoading label="Kontrollerer brukertilgang" />;
+    return <Page.Loading label="Kontrollerer brukertilgang" />;
   }
 
   if (brukerFeil) {
@@ -168,14 +168,14 @@ export default function BrukereListeView() {
 
   if (!erKlubbAdmin && !harLeseTilgang) {
     return (
-      <AdminPageState>
+      <Page.State>
         <RecordListState
           icon={<ShieldX aria-hidden="true" />}
           title="Du har ikke tilgang til brukere"
           description="En klubbadministrator må gi deg tilgang før du kan administrere brukere."
           tone="danger"
         />
-      </AdminPageState>
+      </Page.State>
     );
   }
 

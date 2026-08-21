@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
 
 type Props = {
   children: ReactNode;
@@ -13,43 +12,28 @@ type Props = {
 
   /** Ny: sticky actions nederst på skjermen */
   variant?: "inline" | "sticky";
+  embedded?: boolean;
+  fullWidth?: boolean;
 };
 
 export default function FormActions({
   children,
   className,
   align = "right",
-  spaced = true,
+  spaced = false,
   variant = "inline",
+  embedded = true,
+  fullWidth = false,
 }: Props) {
   return (
     <div
-      className={cn(
-        // base
-        "flex items-center gap-2",
-
-        // spacing
-        spaced && variant === "inline" && "pt-2",
-
-        // alignment
-        align === "right" && "justify-end",
-        align === "left" && "justify-start",
-        align === "between" && "justify-between",
-
-        // sticky variant (mobil-first)
-        variant === "sticky" &&
-          cn(
-            "sticky bottom-0 z-10",
-            // “bar” look
-            "border-t bg-background/95 backdrop-blur",
-            // padding som matcher resten
-            "px-4 py-3",
-            // safe area for iOS
-            "pb-[calc(env(safe-area-inset-bottom)+0.75rem)]"
-          ),
-
-        className
-      )}
+      className={className}
+      data-ui="form-actions"
+      data-align={align}
+      data-spaced={spaced || undefined}
+      data-variant={variant}
+      data-embedded={embedded || undefined}
+      data-full-width={fullWidth || undefined}
     >
       {children}
     </div>

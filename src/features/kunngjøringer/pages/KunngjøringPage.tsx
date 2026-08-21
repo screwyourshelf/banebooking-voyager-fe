@@ -1,8 +1,9 @@
-import { CircleAlert } from "lucide-react";
 import { Navigate } from "react-router-dom";
-import { AdminFormActions, AdminPage, AdminPageLoading, AdminPageState } from "@/components/admin";
+import { CircleAlert } from "lucide-react";
+import { Form, Page, Document } from "@/components";
+
 import { ServerFeil } from "@/components/errors";
-import { ContentDocument, ContentDocumentIntro } from "@/components/layout";
+
 import { RecordListState, RecordStatus } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import { useBekreftKunngjøring } from "@/features/kunngjøringer/hooks/useBekreftKunngjøring";
@@ -15,24 +16,24 @@ export default function KunngjøringPage() {
 
   if (laster) {
     return (
-      <AdminPage
+      <Page
         eyebrow="Fra klubben"
         title="Kunngjøring"
         description="Les og bekreft før du går videre."
       >
-        <AdminPageLoading label="Laster kunngjøring" />
-      </AdminPage>
+        <Page.Loading label="Laster kunngjøring" />
+      </Page>
     );
   }
 
   if (brukerFeil) {
     return (
-      <AdminPage
+      <Page
         eyebrow="Fra klubben"
         title="Kunngjøring"
         description="Les og bekreft før du går videre."
       >
-        <AdminPageState>
+        <Page.State>
           <RecordListState
             icon={<CircleAlert aria-hidden="true" />}
             title="Kunne ikke laste kunngjøringen"
@@ -45,8 +46,8 @@ export default function KunngjøringPage() {
             tone="danger"
             role="alert"
           />
-        </AdminPageState>
-      </AdminPage>
+        </Page.State>
+      </Page>
     );
   }
 
@@ -63,21 +64,21 @@ export default function KunngjøringPage() {
   };
 
   return (
-    <AdminPage
+    <Page
       eyebrow="Fra klubben"
       title={kunngjøring.tittel}
       description="Les og bekreft før du går videre."
-      action={<RecordStatus tone="warning">Må bekreftes</RecordStatus>}
+      actions={<RecordStatus tone="warning">Må bekreftes</RecordStatus>}
     >
-      <ContentDocument>
-        <ContentDocumentIntro>{kunngjøring.tekst}</ContentDocumentIntro>
-        <AdminFormActions>
+      <Document>
+        <Document.Intro>{kunngjøring.tekst}</Document.Intro>
+        <Form.Actions>
           <ServerFeil feil={feil?.message ?? null} />
           <Button type="button" onClick={() => void handleBekreft()} disabled={bekrefter}>
             {bekrefter ? "Bekrefter…" : "Jeg har lest kunngjøringen"}
           </Button>
-        </AdminFormActions>
-      </ContentDocument>
-    </AdminPage>
+        </Form.Actions>
+      </Document>
+    </Page>
   );
 }

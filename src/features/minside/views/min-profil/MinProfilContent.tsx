@@ -1,16 +1,6 @@
 import type { ReactNode } from "react";
+import { Form, Settings } from "@/components";
 
-import {
-  AdminFormActions,
-  AdminFormSubmitButton,
-  AdminSettingsForm,
-  SettingsPanel,
-  SettingsRow,
-  SettingsSection,
-  SettingsStack,
-  SettingsValue,
-} from "@/components/admin";
-import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -75,22 +65,24 @@ export default function MinProfilContent({
   deleteAction,
 }: Props) {
   return (
-    <SettingsStack>
-      <AdminSettingsForm
+    <Settings.Stack>
+      <Form
+        variant="settings"
         onSubmit={(event) => {
           event.preventDefault();
           onSubmit();
         }}
       >
-        <SettingsSection
+        <Settings.Section
           eyebrow="Profil"
           title="Slik vises du"
           description="Velg navnet andre ser i Banebooking."
         >
-          <SettingsPanel>
-            <SettingsRow
-              title="Visningsnavn"
+          <Form.Fields>
+            <Form.Field
+              label="Visningsnavn"
               description="Bruk e-postadressen din eller skriv inn et eget navn."
+              htmlFor="visningsnavn-mode"
             >
               <Select
                 value={mode}
@@ -105,86 +97,88 @@ export default function MinProfilContent({
                   <SelectItem value="navn">Bruk eget navn</SelectItem>
                 </SelectContent>
               </Select>
-            </SettingsRow>
+            </Form.Field>
 
             {mode === "navn" ? (
-              <SettingsRow title="Eget navn" description={`Mellom 3 og ${maxLength} tegn.`}>
-                <Field data-invalid={!!error}>
-                  <Input
-                    id="visningsnavn"
-                    aria-label="Eget visningsnavn"
-                    value={visningsnavn}
-                    onChange={(event) => onChangeVisningsnavn(event.target.value)}
-                    placeholder="For eksempel Ola Nordmann"
-                    maxLength={maxLength}
-                    autoComplete="name"
-                    aria-invalid={!!error}
-                    disabled={isSaving}
-                  />
-                  {error ? <FieldError>{error}</FieldError> : null}
-                </Field>
-              </SettingsRow>
+              <Form.Field
+                label="Eget navn"
+                description={`Mellom 3 og ${maxLength} tegn.`}
+                htmlFor="visningsnavn"
+                error={error}
+              >
+                <Input
+                  id="visningsnavn"
+                  aria-label="Eget visningsnavn"
+                  value={visningsnavn}
+                  onChange={(event) => onChangeVisningsnavn(event.target.value)}
+                  placeholder="For eksempel Ola Nordmann"
+                  maxLength={maxLength}
+                  autoComplete="name"
+                  aria-invalid={!!error}
+                  disabled={isSaving}
+                />
+              </Form.Field>
             ) : null}
-          </SettingsPanel>
+          </Form.Fields>
 
-          <AdminFormActions>
+          <Form.Actions>
             <MutationFeedback
               error={serverFeil}
               success={lagret}
               successTitle="Visningsnavnet er lagret"
             />
-            <AdminFormSubmitButton isLoading={isSaving} disabled={!canSubmit} loadingText="Lagrer…">
+            <Form.Submit isLoading={isSaving} disabled={!canSubmit} loadingText="Lagrer…">
               Lagre endringer
-            </AdminFormSubmitButton>
-          </AdminFormActions>
-        </SettingsSection>
-      </AdminSettingsForm>
+            </Form.Submit>
+          </Form.Actions>
+        </Settings.Section>
+      </Form>
 
-      <SettingsSection
+      <Settings.Section
         eyebrow="Konto"
         title="Kontoinformasjon"
         description="Tilgang og opplysninger som administreres av klubben."
       >
-        <SettingsPanel>
-          <SettingsRow title="E-post">
-            <SettingsValue>{epost}</SettingsValue>
-          </SettingsRow>
-          <SettingsRow title="Rolle">
-            <SettingsValue>{rollerText}</SettingsValue>
-          </SettingsRow>
+        <Settings.Panel>
+          <Settings.Row title="E-post">
+            <Settings.Value>{epost}</Settings.Value>
+          </Settings.Row>
+          <Settings.Row title="Rolle">
+            <Settings.Value>{rollerText}</Settings.Value>
+          </Settings.Row>
           {medlemskapBekreftelseLabel ? (
-            <SettingsRow title="Medlemskap">
+            <Settings.Row title="Medlemskap">
               <RecordStatus tone="available">{medlemskapBekreftelseLabel}</RecordStatus>
-            </SettingsRow>
+            </Settings.Row>
           ) : null}
           {medlemskapBekreftelseLabel && fulltNavn ? (
-            <SettingsRow title="Navn i medlemskapet">
-              <SettingsValue>{fulltNavn}</SettingsValue>
-            </SettingsRow>
+            <Settings.Row title="Navn i medlemskapet">
+              <Settings.Value>{fulltNavn}</Settings.Value>
+            </Settings.Row>
           ) : null}
           {medlemskapBekreftelseLabel && medlemskapType ? (
-            <SettingsRow title="Medlemskapstype">
-              <SettingsValue>{formaterMedlemskapType(medlemskapType)}</SettingsValue>
-            </SettingsRow>
+            <Settings.Row title="Medlemskapstype">
+              <Settings.Value>{formaterMedlemskapType(medlemskapType)}</Settings.Value>
+            </Settings.Row>
           ) : null}
           {medlemskapBekreftelseLabel && medlemskapBekreftetDato ? (
-            <SettingsRow title="Bekreftet">
-              <SettingsValue>
+            <Settings.Row title="Bekreftet">
+              <Settings.Value>
                 {new Date(medlemskapBekreftetDato).toLocaleDateString("nb-NO")}
-              </SettingsValue>
-            </SettingsRow>
+              </Settings.Value>
+            </Settings.Row>
           ) : null}
-        </SettingsPanel>
-      </SettingsSection>
+        </Settings.Panel>
+      </Settings.Section>
 
-      <SettingsSection
+      <Settings.Section
         eyebrow="Fareområde"
         title="Slett konto"
         description="Sletter kontoen og alle tilknyttede data permanent. Handlingen kan ikke angres."
         tone="danger"
       >
-        <AdminFormActions>{deleteAction}</AdminFormActions>
-      </SettingsSection>
-    </SettingsStack>
+        <Form.Actions>{deleteAction}</Form.Actions>
+      </Settings.Section>
+    </Settings.Stack>
   );
 }

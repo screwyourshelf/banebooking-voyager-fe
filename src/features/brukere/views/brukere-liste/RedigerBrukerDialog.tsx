@@ -1,17 +1,7 @@
-import {
-  AdminEditorDialog,
-  AdminEditorForm,
-  AdminFormActions,
-  AdminFormSubmitButton,
-  SettingsPanel,
-  SettingsRow,
-  SettingsSection,
-  SettingsStack,
-} from "@/components/admin";
 import { ServerFeil } from "@/components/errors";
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { Form, Settings, Dialog } from "@/components";
 import {
   Select,
   SelectContent,
@@ -42,7 +32,7 @@ export default function RedigerBrukerDialog({
   serverFeil,
 }: Props) {
   return (
-    <AdminEditorDialog
+    <Dialog.Editor
       open
       onOpenChange={(open) => !open && onClose()}
       backLabel="Alle brukere"
@@ -50,72 +40,69 @@ export default function RedigerBrukerDialog({
       title="Rediger bruker"
       description={aktivBruker.epost}
       closeDisabled={isSaving}
-      size="compact"
     >
-      <AdminEditorForm
+      <Form
+        variant="editor"
         onSubmit={(event) => {
           event.preventDefault();
           onSave();
         }}
       >
-        <SettingsStack embedded>
-          <SettingsSection
+        <Settings.Stack embedded>
+          <Settings.Section
             embedded
             eyebrow="Profil og tilgang"
             title={aktivBruker.visningsnavn || "Bruker uten visningsnavn"}
             description="Oppdater navnet som vises i klubben og hvilken tilgang brukeren har."
           >
-            <SettingsPanel>
-              <SettingsRow title="Visningsnavn">
-                <Field>
-                  <Input
-                    id="visningsnavn"
-                    aria-label="Visningsnavn"
-                    value={edit.visningsnavn}
-                    onChange={(event) => onEditChange({ visningsnavn: event.target.value })}
-                    placeholder="Valgfritt"
-                    disabled={isSaving}
-                  />
-                </Field>
-              </SettingsRow>
+            <Form.Fields>
+              <Form.Field label="Visningsnavn" htmlFor="visningsnavn">
+                <Input
+                  id="visningsnavn"
+                  aria-label="Visningsnavn"
+                  value={edit.visningsnavn}
+                  onChange={(event) => onEditChange({ visningsnavn: event.target.value })}
+                  placeholder="Valgfritt"
+                  disabled={isSaving}
+                />
+              </Form.Field>
 
-              <SettingsRow
-                title="Rolle"
+              <Form.Field
+                label="Rolle"
+                htmlFor="brukerrolle"
                 description="Rollen styrer hvilke deler av administrasjonen brukeren kan åpne."
               >
-                <Field>
-                  <Select
-                    value={edit.rolle}
-                    onValueChange={(value) => onEditChange({ rolle: value as RolleType })}
-                    disabled={isSaving}
-                  >
-                    <SelectTrigger id="brukerrolle" aria-label="Rolle">
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {ROLLE_VALG.map((rolle) => (
-                        <SelectItem key={rolle.value} value={rolle.value}>
-                          {rolle.label}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </Field>
-              </SettingsRow>
-            </SettingsPanel>
-          </SettingsSection>
+                <Select
+                  value={edit.rolle}
+                  onValueChange={(value) => onEditChange({ rolle: value as RolleType })}
+                  disabled={isSaving}
+                >
+                  <SelectTrigger id="brukerrolle" aria-label="Rolle">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {ROLLE_VALG.map((rolle) => (
+                      <SelectItem key={rolle.value} value={rolle.value}>
+                        {rolle.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Form.Field>
+            </Form.Fields>
+          </Settings.Section>
 
-          <AdminFormActions>
+          <Form.Actions>
             <ServerFeil feil={serverFeil} />
             <Button type="button" variant="outline" onClick={onClose} disabled={isSaving}>
               Avbryt
             </Button>
-            <AdminFormSubmitButton isLoading={isSaving} loadingText="Lagrer…">
+            <Form.Submit isLoading={isSaving} loadingText="Lagrer…">
               Lagre
-            </AdminFormSubmitButton>
-          </AdminFormActions>
-        </SettingsStack>
-      </AdminEditorForm>
-    </AdminEditorDialog>
+            </Form.Submit>
+          </Form.Actions>
+        </Settings.Stack>
+      </Form>
+    </Dialog.Editor>
   );
 }

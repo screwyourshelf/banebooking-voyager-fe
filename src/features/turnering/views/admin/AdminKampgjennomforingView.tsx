@@ -41,9 +41,8 @@ function AdminKampActions({ turneringId, klasse, ctx }: AdminKampActionsProps) {
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="sm" variant="outline">
-            <MoreHorizontal className="size-4" />
-            <span className="sr-only">Handlinger</span>
+          <Button size="sm" variant="outline" aria-label="Handlinger">
+            <MoreHorizontal />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">

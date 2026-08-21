@@ -34,10 +34,10 @@ export function RouteContentSkeleton(props: PageContentSkeletonProps) {
   const isContentFirstRoute =
     /\/(?:bookinger|arrangementer|nyheter|minside|login|vilkaar|sperret|kunngjøring|bekreft-medlemskap)$/.test(
       pathname
-    ) || pathname.includes("/turnering/");
+    );
 
   return (
-    <Page width="xl">
+    <Page>
       <PageContentSkeleton controls={!isContentFirstRoute} {...props} />
     </Page>
   );
