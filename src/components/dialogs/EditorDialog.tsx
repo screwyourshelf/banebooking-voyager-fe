@@ -21,10 +21,9 @@ type Props = {
   children: ReactNode;
   trigger?: ReactNode;
   closeDisabled?: boolean;
-  size?: "compact" | "default" | "wide";
 };
 
-export default function AdminEditorDialog({
+export default function EditorDialog({
   open,
   onOpenChange,
   backLabel,
@@ -34,19 +33,18 @@ export default function AdminEditorDialog({
   children,
   trigger,
   closeDisabled = false,
-  size = "default",
 }: Props) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       {trigger ? <DialogTrigger asChild>{trigger}</DialogTrigger> : null}
-      <DialogContent className="admin-editor-dialog" data-size={size} showCloseButton={false}>
-        <DialogHeader className="control-surface admin-editor-dialog__header">
+      <DialogContent data-ui="editor-dialog" showCloseButton={false}>
+        <DialogHeader data-part="header" data-surface="control">
           <DialogClose asChild>
             <Button
               type="button"
               variant="ghost"
               size="sm"
-              className="admin-editor-dialog__back"
+              data-part="back"
               disabled={closeDisabled}
             >
               <ArrowLeft data-icon="inline-start" aria-hidden="true" />
@@ -54,14 +52,14 @@ export default function AdminEditorDialog({
             </Button>
           </DialogClose>
 
-          <div className="admin-editor-dialog__heading">
-            <span className="admin-editor-dialog__eyebrow">{eyebrow}</span>
+          <div data-part="intro">
+            <span data-part="eyebrow">{eyebrow}</span>
             <DialogTitle>{title}</DialogTitle>
             <DialogDescription>{description}</DialogDescription>
           </div>
         </DialogHeader>
 
-        <div className="admin-editor-dialog__body">{children}</div>
+        <div data-part="content">{children}</div>
       </DialogContent>
     </Dialog>
   );

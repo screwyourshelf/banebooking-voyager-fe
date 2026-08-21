@@ -2,8 +2,8 @@ import { useMemo, useState } from "react";
 import { isBefore, isSameDay, startOfDay } from "date-fns";
 import { CalendarX } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Collection } from "@/components";
 import {
-  RecordAccordionList,
   RecordCollectionPagination,
   RecordCollectionSkeleton,
   RecordListState,
@@ -67,7 +67,7 @@ export function BookingSlotListAccordion({
           description="Vis passerte tider eller velg neste dag."
         />
       ) : (
-        <RecordAccordionList loading={isFetching} ariaLabel="Tilgjengelige tider">
+        <Collection.List loading={isFetching} ariaLabel="Tilgjengelige tider">
           {slotsÅVise.map((slot) => (
             <BookingSlotRow
               key={getBookingSlotKey(slot)}
@@ -78,7 +78,7 @@ export function BookingSlotListAccordion({
               onFjern={onFjern}
             />
           ))}
-        </RecordAccordionList>
+        </Collection.List>
       )}
 
       {erIDag && antallPasserte > 0 ? (

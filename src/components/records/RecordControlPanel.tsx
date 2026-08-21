@@ -99,7 +99,8 @@ export default function RecordControlPanel({
 
   return (
     <section
-      className="control-surface record-filter-panel"
+      className="record-filter-panel"
+      data-surface="control"
       aria-label={label}
       data-mode={mode}
       data-trigger={trigger}
@@ -112,7 +113,7 @@ export default function RecordControlPanel({
         <div className="record-filter-panel__top">
           {search ? (
             <div className="record-filter-panel__search">
-              <label className="sr-only" htmlFor={searchId}>
+              <label data-ui="visually-hidden" htmlFor={searchId}>
                 {search.label}
               </label>
               <Search aria-hidden="true" />

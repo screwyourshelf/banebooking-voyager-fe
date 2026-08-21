@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { LoaderCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 type Props = {
   children: ReactNode;
@@ -35,17 +34,14 @@ export default function FormSubmitButton({
       type="submit"
       size={size}
       disabled={disabled || isLoading}
-      className={cn(
-        // “mobile-first” baseline
-        "h-8 text-sm",
-        fullWidth && "w-full",
-        className
-      )}
+      className={className}
+      data-ui="form-submit"
+      data-full-width={fullWidth || undefined}
     >
       {isLoading ? (
         <>
-          <LoaderCircle className="animate-spin" aria-hidden="true" />
-          <span className="ml-2">{loadingText ?? children}</span>
+          <LoaderCircle data-ui="loading-spinner" aria-hidden="true" />
+          <span>{loadingText ?? children}</span>
         </>
       ) : (
         children

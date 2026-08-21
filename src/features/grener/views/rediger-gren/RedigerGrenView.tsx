@@ -1,17 +1,13 @@
 import { useEffect, useMemo, useState } from "react";
 import { RefreshCw, Shapes } from "lucide-react";
-import {
-  AdminEditorDialog,
-  AdminEntityCollection,
-  AdminEntityList,
-  AdminEntityRow,
-} from "@/components/admin";
+
 import { RecordCollectionSkeleton, RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import GrenEditorContent, { type GrenFormData } from "@/features/grener/GrenEditorContent";
 import { useGrener } from "@/hooks/useGrener";
 import type { GrenRespons } from "@/types";
 import { loadValgtGrenId, saveValgtGrenId } from "./storage";
+import { Collection, Dialog } from "@/components";
 
 type TouchedState = { navn: boolean };
 
@@ -161,22 +157,22 @@ export default function RedigerGrenView() {
 
   if (isLoading) {
     return (
-      <AdminEntityCollection
+      <Collection
         icon={<Shapes aria-hidden="true" />}
         title="Grener"
-        description="Velg en gren for å redigere"
+        scope="Velg en gren for å redigere"
       >
         <RecordCollectionSkeleton ariaLabel="Laster grener" rows={3} />
-      </AdminEntityCollection>
+      </Collection>
     );
   }
 
   if (error) {
     return (
-      <AdminEntityCollection
+      <Collection
         icon={<Shapes aria-hidden="true" />}
         title="Grener"
-        description="Velg en gren for å redigere"
+        scope="Velg en gren for å redigere"
       >
         <RecordListState
           icon={<RefreshCw aria-hidden="true" />}
@@ -196,7 +192,7 @@ export default function RedigerGrenView() {
             </Button>
           }
         />
-      </AdminEntityCollection>
+      </Collection>
     );
   }
 
@@ -205,10 +201,10 @@ export default function RedigerGrenView() {
 
   return (
     <>
-      <AdminEntityCollection
+      <Collection
         icon={<Shapes aria-hidden="true" />}
         title={antallTekst}
-        description="Velg en gren for å redigere"
+        scope="Velg en gren for å redigere"
       >
         {grener.length === 0 ? (
           <RecordListState
@@ -217,36 +213,41 @@ export default function RedigerGrenView() {
             description="Bruk knappen Ny gren for å opprette den første."
           />
         ) : (
-          <AdminEntityList>
+          <Collection.List>
             {grener.map((gren) => {
               const rowDraft = redigerte[gren.id];
               const values = rowDraft ?? toFormData(gren);
               const erEndret = !!rowDraft;
 
               return (
-                <AdminEntityRow
+                <Collection.Row
                   key={gren.id}
                   title={values.navn.trim() || gren.navn}
-                  meta={timeRange(values)}
                   description={`${values.slotLengdeMinutter} min · maks ${values.maksPerDag} per dag`}
-                  status={erEndret ? "Ulagret" : values.aktiv ? "Aktiv" : "Inaktiv"}
-                  statusTone={erEndret ? "warning" : values.aktiv ? "available" : "past"}
-                  onSelect={() => {
-                    setLagretGrenId(null);
-                    oppdaterGren.reset();
-                    setValgtGrenId(gren.id);
-                    setEditorOpen(true);
+                  meta={timeRange(values)}
+                  status={{
+                    label: erEndret ? "Ulagret" : values.aktiv ? "Aktiv" : "Inaktiv",
+                    tone: erEndret ? "warning" : values.aktiv ? "available" : "past",
+                  }}
+                  interaction={{
+                    type: "open",
+                    onOpen: () => {
+                      setLagretGrenId(null);
+                      oppdaterGren.reset();
+                      setValgtGrenId(gren.id);
+                      setEditorOpen(true);
+                    },
                   }}
                   disabled={isSaving}
                 />
               );
             })}
-          </AdminEntityList>
+          </Collection.List>
         )}
-      </AdminEntityCollection>
+      </Collection>
 
       {valgtGren && draft ? (
-        <AdminEditorDialog
+        <Dialog.Editor
           open={editorOpen}
           onOpenChange={(open) => {
             if (!isSaving) setEditorOpen(open);
@@ -273,7 +274,7 @@ export default function RedigerGrenView() {
             mutasjonFeil={oppdaterGren.error?.message ?? null}
             lagret={lagretGrenId === valgtGrenId && !isDirty}
           />
-        </AdminEditorDialog>
+        </Dialog.Editor>
       ) : null}
     </>
   );

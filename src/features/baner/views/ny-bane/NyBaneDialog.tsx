@@ -1,4 +1,5 @@
-import { AdminEditorDialog } from "@/components/admin";
+import { Dialog } from "@/components";
+
 import NyBaneView from "./NyBaneView";
 
 type Props = {
@@ -8,7 +9,7 @@ type Props = {
 
 export default function NyBaneDialog({ open, onOpenChange }: Props) {
   return (
-    <AdminEditorDialog
+    <Dialog.Editor
       open={open}
       onOpenChange={onOpenChange}
       backLabel="Alle baner"
@@ -17,6 +18,6 @@ export default function NyBaneDialog({ open, onOpenChange }: Props) {
       description="Legg til en ny bane i klubbens bookingtilbud."
     >
       <NyBaneView onCreated={() => onOpenChange(false)} />
-    </AdminEditorDialog>
+    </Dialog.Editor>
   );
 }

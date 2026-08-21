@@ -10,16 +10,18 @@ type ChildrenProps = {
 type CardProps = ChildrenProps & {
   as?: "div" | "article";
   muted?: boolean;
+  "data-ui"?: string;
+  "data-variant"?: string;
 };
 
 type CardButtonProps = ChildrenProps & {
   onClick: MouseEventHandler<HTMLButtonElement>;
   disabled?: boolean;
   ariaLabel: string;
+  "data-ui"?: string;
 };
 
 type StaticProps = ChildrenProps & {
-  layout?: "default" | "content-action";
   action?: ReactNode;
 };
 
@@ -28,17 +30,24 @@ type AccordionCardProps = ChildrenProps & {
   muted?: boolean;
 };
 
-type SummaryProps = ChildrenProps & {
-  layout?: "default" | "slot" | "time" | "date";
-};
-
 type TriggerProps = ChildrenProps & {
   action?: ReactNode;
 };
 
-export function RecordCard({ children, as: Tag = "div", muted = false }: CardProps) {
+export function RecordCard({
+  children,
+  as: Tag = "div",
+  muted = false,
+  "data-ui": dataUi,
+  "data-variant": dataVariant,
+}: CardProps) {
   return (
-    <Tag className="record-card" data-muted={muted || undefined} data-record-card="">
+    <Tag
+      data-surface="record-card"
+      data-ui={dataUi}
+      data-variant={dataVariant}
+      data-muted={muted || undefined}
+    >
       {children}
     </Tag>
   );
@@ -49,15 +58,18 @@ export function RecordCardButton({
   onClick,
   disabled = false,
   ariaLabel,
+  "data-ui": dataUi,
 }: CardButtonProps) {
   return (
     <button
       type="button"
-      className="record-card record-card__static record-card-button"
+      data-surface="record-card"
+      data-ui={dataUi}
+      data-part="static"
+      data-interactive="true"
       aria-label={ariaLabel}
       onClick={onClick}
       disabled={disabled}
-      data-record-card=""
     >
       {children}
     </button>
@@ -66,20 +78,15 @@ export function RecordCardButton({
 
 export function RecordAccordionCard({ children, value, muted = false }: AccordionCardProps) {
   return (
-    <AccordionItem
-      value={value}
-      className="record-card"
-      data-muted={muted || undefined}
-      data-record-card=""
-    >
+    <AccordionItem value={value} data-surface="record-card" data-muted={muted || undefined}>
       {children}
     </AccordionItem>
   );
 }
 
-export function RecordCardStatic({ children, layout = "default", action }: StaticProps) {
+export function RecordCardStatic({ children, action }: StaticProps) {
   const content = (
-    <div className="record-card__static" data-layout={layout}>
+    <div data-ui="record-card-static" data-part="static">
       {children}
     </div>
   );
@@ -87,48 +94,44 @@ export function RecordCardStatic({ children, layout = "default", action }: Stati
   if (!action) return content;
 
   return (
-    <div className="record-card__row">
+    <div data-part="row">
       {content}
-      <div className="record-card__row-action">{action}</div>
+      <div data-part="row-action">{action}</div>
     </div>
   );
 }
 
 export function RecordCardTrigger({ children, action }: TriggerProps) {
   return (
-    <div className="record-card__row">
-      <AccordionPrimitive.Header className="record-card__trigger-header">
-        <AccordionPrimitive.Trigger className="record-card__trigger">
+    <div data-part="row">
+      <AccordionPrimitive.Header data-part="trigger-header">
+        <AccordionPrimitive.Trigger data-ui="record-card-trigger" data-part="trigger">
           {children}
           <ChevronDown
             aria-hidden="true"
             data-slot="accordion-trigger-icon"
-            className="record-card__disclosure-open-icon"
+            data-part="open-icon"
           />
-          <ChevronUp
-            aria-hidden="true"
-            data-slot="accordion-trigger-icon"
-            className="record-card__disclosure-close-icon"
-          />
+          <ChevronUp aria-hidden="true" data-slot="accordion-trigger-icon" data-part="close-icon" />
         </AccordionPrimitive.Trigger>
       </AccordionPrimitive.Header>
-      {action ? <div className="record-card__row-action">{action}</div> : null}
-    </div>
-  );
-}
-
-export function RecordCardSummary({ children, layout = "default" }: SummaryProps) {
-  return (
-    <div className="record-card__summary" data-layout={layout}>
-      {children}
+      {action ? <div data-part="row-action">{action}</div> : null}
     </div>
   );
 }
 
 export function RecordCardDetails({ children }: ChildrenProps) {
-  return <AccordionContent className="record-card__details">{children}</AccordionContent>;
+  return (
+    <AccordionContent data-ui="record-card-details" data-part="details">
+      {children}
+    </AccordionContent>
+  );
 }
 
 export function RecordCardActions({ children }: ChildrenProps) {
-  return <div className="record-card__actions">{children}</div>;
+  return (
+    <div data-ui="record-card-actions" data-part="actions">
+      {children}
+    </div>
+  );
 }

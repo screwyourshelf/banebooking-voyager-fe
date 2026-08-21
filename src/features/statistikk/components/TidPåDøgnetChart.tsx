@@ -1,8 +1,7 @@
 import type { CSSProperties } from "react";
-import CardSection from "@/components/layout/CardSection";
-import SectionHeading from "@/components/layout/SectionHeading";
 import type { BookingPerTime } from "@/features/statistikk/types";
 import { formatTimer } from "@/features/statistikk/statistikkPresentation";
+import { Section } from "@/components";
 
 type Props = {
   punkter: BookingPerTime[];
@@ -26,8 +25,8 @@ export default function TidPåDøgnetChart({ punkter, visSammenligning }: Props)
   );
 
   return (
-    <CardSection className="statistics-section statistics-hour-chart">
-      <SectionHeading
+    <Section variant="surface" data-context="statistics" data-view="hour-chart">
+      <Section.Heading
         description="Når på døgnet banene brukes mest."
         actions={
           visSammenligning ? (
@@ -37,10 +36,9 @@ export default function TidPåDøgnetChart({ punkter, visSammenligning }: Props)
             </span>
           ) : null
         }
-        size="lg"
       >
         Tid på døgnet
-      </SectionHeading>
+      </Section.Heading>
 
       <div className="statistics-hour-chart__scroll">
         <div
@@ -81,13 +79,13 @@ export default function TidPåDøgnetChart({ punkter, visSammenligning }: Props)
                     />
                   ) : null}
                 </div>
-                <strong>{formatTimer(punkt.bookedeTimer)}</strong>
-                <span>{String(punkt.time).padStart(2, "0")}</span>
+                <strong data-stat-role="chart-value">{formatTimer(punkt.bookedeTimer)}</strong>
+                <span data-stat-role="chart-meta">{String(punkt.time).padStart(2, "0")}</span>
               </div>
             );
           })}
         </div>
       </div>
-    </CardSection>
+    </Section>
   );
 }

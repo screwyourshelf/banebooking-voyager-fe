@@ -19,17 +19,17 @@ export default function FilterSwitch({
   const descriptionId = useId();
 
   return (
-    <label className="filter-switch">
-      <span className="filter-switch__copy">
-        <strong className="filter-switch__title">{title}</strong>
+    <label data-ui="filter-switch">
+      <span data-part="content">
+        <strong data-part="title">{title}</strong>
         {description ? (
-          <small id={descriptionId} className="filter-switch__description">
+          <small id={descriptionId} data-part="description">
             {description}
           </small>
         ) : null}
       </span>
       <Switch
-        className="filter-switch__control"
+        data-part="control"
         checked={checked}
         onCheckedChange={onCheckedChange}
         disabled={disabled}

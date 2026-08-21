@@ -13,11 +13,7 @@ export default function MobileAppHeader() {
 
   return (
     <header className="app-topbar">
-      <NavbarBrandMedKlubb
-        klubbnavn={klubb?.navn ?? "Banebooking"}
-        className="app-topbar__brand"
-        logoClassName="app-topbar__logo"
-      />
+      <NavbarBrandMedKlubb klubbnavn={klubb?.navn ?? "Banebooking"} placement="topbar" />
       <div className="app-topbar__actions">
         <ModeToggle />
         <Button asChild variant="ghost" size="icon-sm">

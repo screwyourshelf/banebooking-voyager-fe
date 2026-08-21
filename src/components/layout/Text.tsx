@@ -26,7 +26,7 @@ export default function Text({
 }: Props) {
   return (
     <Tag
-      className="app-text"
+      data-ui="text"
       data-variant={variant}
       data-align={align}
       data-truncate={truncate || undefined}

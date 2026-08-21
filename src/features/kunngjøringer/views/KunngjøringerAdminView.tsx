@@ -1,12 +1,7 @@
+import { CircleAlert, Megaphone } from "lucide-react";
 import { useState } from "react";
-import { CircleAlert, Megaphone, Plus } from "lucide-react";
-import {
-  AdminEntityCollection,
-  AdminEntityList,
-  AdminEntityRow,
-  AdminPageLoading,
-  AdminPageState,
-} from "@/components/admin";
+import { Collection, Page } from "@/components";
+
 import { RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import KunngjøringDetailsDialog from "@/features/kunngjøringer/components/KunngjøringDetailsDialog";
@@ -31,91 +26,89 @@ export default function KunngjøringerAdminView() {
   const [createOpen, setCreateOpen] = useState(false);
   const [detailsOpen, setDetailsOpen] = useState(false);
 
-  if (laster) return <AdminPageLoading label="Laster kunngjøringer" />;
-
-  if (error) {
-    return (
-      <AdminPageState>
-        <RecordListState
-          icon={<CircleAlert aria-hidden="true" />}
-          title="Kunne ikke laste kunngjøringer"
-          description={error.message}
-          action={
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => void refetch()}
-              disabled={isFetching}
-            >
-              {isFetching ? "Prøver igjen…" : "Prøv igjen"}
-            </Button>
-          }
-          tone="danger"
-          role="alert"
-        />
-      </AdminPageState>
-    );
-  }
-
-  const newButton = (
-    <Button
-      type="button"
-      size="sm"
-      onClick={() => setCreateOpen(true)}
-      disabled={Boolean(aktiv)}
-      title={aktiv ? "Deaktiver den aktive kunngjøringen før du oppretter en ny" : undefined}
-    >
-      <Plus aria-hidden="true" />
-      Ny
-    </Button>
-  );
-
   return (
-    <>
-      <AdminEntityCollection
-        icon={<Megaphone aria-hidden="true" />}
-        title={aktiv ? "1 aktiv kunngjøring" : "Ingen aktiv kunngjøring"}
-        description="Informasjon som krever bekreftelse"
-        contextAction={newButton}
-      >
-        {aktiv ? (
-          <AdminEntityList>
-            <AdminEntityRow
-              title={aktiv.tittel}
-              meta={`Utløper ${formatDatoKort(aktiv.utløperTidspunkt)}`}
-              description={`${aktiv.antallBekreftelser} av ${aktiv.antallMålgruppe} har bekreftet`}
-              status="Aktiv"
-              statusTone="available"
-              onSelect={() => setDetailsOpen(true)}
-            />
-          </AdminEntityList>
-        ) : (
+    <Page
+      eyebrow="Administrasjon"
+      title="Kunngjøringer"
+      description="Styr informasjon som må leses og bekreftes før brukerne går videre."
+      createAction={
+        aktiv
+          ? undefined
+          : {
+              label: "Ny kunngjøring",
+              onClick: () => setCreateOpen(true),
+              disabled: laster || Boolean(error),
+            }
+      }
+    >
+      {laster ? (
+        <Page.Loading label="Laster kunngjøringer" />
+      ) : error ? (
+        <Page.State>
           <RecordListState
-            icon={<Megaphone aria-hidden="true" />}
-            title="Klar for neste beskjed"
-            description="Opprett en kunngjøring når alle brukere må lese viktig informasjon."
+            icon={<CircleAlert aria-hidden="true" />}
+            title="Kunne ikke laste kunngjøringer"
+            description={error.message}
+            action={
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => void refetch()}
+                disabled={isFetching}
+              >
+                {isFetching ? "Prøver igjen…" : "Prøv igjen"}
+              </Button>
+            }
+            tone="danger"
+            role="alert"
           />
-        )}
-      </AdminEntityCollection>
+        </Page.State>
+      ) : (
+        <>
+          <Collection
+            icon={<Megaphone aria-hidden="true" />}
+            title={aktiv ? "1 kunngjøring" : "Ingen kunngjøring"}
+            scope="Krever bekreftelse"
+          >
+            {aktiv ? (
+              <Collection.List>
+                <Collection.Row
+                  title={aktiv.tittel}
+                  description={`${aktiv.antallBekreftelser} av ${aktiv.antallMålgruppe} bekreftet`}
+                  meta={`Utløper ${formatDatoKort(aktiv.utløperTidspunkt)}`}
+                  status={{ label: "Aktiv", tone: "available" }}
+                  interaction={{ type: "open", onOpen: () => setDetailsOpen(true) }}
+                />
+              </Collection.List>
+            ) : (
+              <RecordListState
+                icon={<Megaphone aria-hidden="true" />}
+                title="Klar for neste beskjed"
+                description="Opprett en kunngjøring når alle brukere må lese viktig informasjon."
+              />
+            )}
+          </Collection>
 
-      <KunngjøringEditorDialog
-        open={createOpen}
-        onOpenChange={setCreateOpen}
-        onCreate={opprett}
-        isLoading={opprettLaster}
-        error={opprettFeil?.message ?? null}
-      />
+          <KunngjøringEditorDialog
+            open={createOpen}
+            onOpenChange={setCreateOpen}
+            onCreate={opprett}
+            isLoading={opprettLaster}
+            error={opprettFeil?.message ?? null}
+          />
 
-      {aktiv ? (
-        <KunngjøringDetailsDialog
-          open={detailsOpen}
-          onOpenChange={setDetailsOpen}
-          announcement={aktiv}
-          onDeactivate={() => deaktiver(aktiv.id)}
-          isLoading={deaktiverLaster}
-          error={deaktiverFeil?.message ?? null}
-        />
-      ) : null}
-    </>
+          {aktiv ? (
+            <KunngjøringDetailsDialog
+              open={detailsOpen}
+              onOpenChange={setDetailsOpen}
+              announcement={aktiv}
+              onDeactivate={() => deaktiver(aktiv.id)}
+              isLoading={deaktiverLaster}
+              error={deaktiverFeil?.message ?? null}
+            />
+          ) : null}
+        </>
+      )}
+    </Page>
   );
 }

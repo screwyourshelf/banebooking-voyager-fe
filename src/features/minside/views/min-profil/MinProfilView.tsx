@@ -1,7 +1,7 @@
-import { useState } from "react";
 import { CircleAlert } from "lucide-react";
+import { useState } from "react";
+import { Page } from "@/components";
 
-import { AdminPageLoading, AdminPageState } from "@/components/admin";
 import { RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import { SlettMegDialog } from "@/features/minside/components";
@@ -42,11 +42,11 @@ export default function MinProfilView() {
     setError(null);
   }
 
-  if (lasterMeg) return <AdminPageLoading label="Laster profil" />;
+  if (lasterMeg) return <Page.Loading label="Laster profil" />;
 
   if (megFeil || !bruker) {
     return (
-      <AdminPageState>
+      <Page.State>
         <RecordListState
           icon={<CircleAlert aria-hidden="true" />}
           title="Kunne ikke laste profilen"
@@ -59,7 +59,7 @@ export default function MinProfilView() {
           tone="danger"
           role="alert"
         />
-      </AdminPageState>
+      </Page.State>
     );
   }
 

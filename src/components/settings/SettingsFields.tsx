@@ -1,4 +1,4 @@
-import { useId, type ComponentProps, type InputHTMLAttributes, type ReactNode } from "react";
+import { type ComponentProps, type InputHTMLAttributes, type ReactNode, useId } from "react";
 import { Row, RowList, RowPanel, SwitchRow } from "@/components/rows";
 import { Field } from "@/components/ui/field";
 import { Label } from "@/components/ui/label";
@@ -13,7 +13,7 @@ export function SettingsStack({
   embedded?: boolean;
 }) {
   return (
-    <div className={embedded ? "settings-stack settings-stack--embedded" : "settings-stack"}>
+    <div data-ui="settings-stack" data-embedded={embedded || undefined}>
       {children}
     </div>
   );
@@ -21,7 +21,7 @@ export function SettingsStack({
 
 export function SettingsPanel({ children }: { children: ReactNode }) {
   return (
-    <RowPanel className="settings-panel">
+    <RowPanel data-ui="settings-panel">
       <RowList>{children}</RowList>
     </RowPanel>
   );
@@ -30,21 +30,21 @@ export function SettingsPanel({ children }: { children: ReactNode }) {
 type RowProps = Omit<ComponentProps<typeof Row>, "className">;
 
 export function SettingsRow(props: RowProps) {
-  return <Row className="settings-row" {...props} />;
+  return <Row data-ui="settings-row" data-kind="default" {...props} />;
 }
 
 type SwitchRowProps = Omit<ComponentProps<typeof SwitchRow>, "className" | "density">;
 
 export function SettingsSwitchRow(props: SwitchRowProps) {
-  return <SwitchRow className="settings-row settings-row--switch" density="default" {...props} />;
+  return <SwitchRow data-ui="settings-row" data-kind="switch" density="default" {...props} />;
 }
 
 export function SettingsValue({ children }: { children: ReactNode }) {
-  return <strong className="settings-row__value">{children}</strong>;
+  return <strong data-ui="settings-value">{children}</strong>;
 }
 
 export function SettingsText({ children }: { children: ReactNode }) {
-  return <div className="settings-row__text">{children}</div>;
+  return <div data-ui="settings-text">{children}</div>;
 }
 
 type RadioOption = {
@@ -76,7 +76,7 @@ export function SettingsRadioGroup({
       value={value}
       onValueChange={onValueChange}
       disabled={disabled}
-      className="settings-radio-group"
+      data-ui="settings-radio-group"
       data-layout={layout}
     >
       {options.map((option) => {
@@ -86,15 +86,15 @@ export function SettingsRadioGroup({
           <Label
             key={option.value}
             htmlFor={optionId}
-            className="settings-radio-option"
+            data-ui="settings-radio-option"
             data-selected={value === option.value}
             data-disabled={disabled || undefined}
           >
             <RadioGroupItem id={optionId} value={option.value} />
-            <span className="settings-radio-option__copy">
-              <span className="settings-radio-option__label">{option.label}</span>
+            <span data-part="content">
+              <span data-part="label">{option.label}</span>
               {option.description ? (
-                <span className="settings-radio-option__description">{option.description}</span>
+                <span data-part="description">{option.description}</span>
               ) : null}
             </span>
           </Label>
@@ -124,7 +124,7 @@ export function SettingsChoiceGroup({
   disabled?: boolean;
 }) {
   return (
-    <div className="settings-choice-group" role="group" aria-label={label}>
+    <div data-ui="settings-choice-group" role="group" aria-label={label}>
       {options.map((option) => (
         <ControlChoice
           key={option.value}
@@ -145,10 +145,10 @@ type RangeProps = Omit<InputHTMLAttributes<HTMLInputElement>, "type" | "classNam
 
 export function SettingsRange({ labels, ...props }: RangeProps) {
   return (
-    <Field>
-      <input type="range" className="settings-range" {...props} />
+    <Field data-ui="settings-range">
+      <input type="range" data-part="control" {...props} />
       {labels ? (
-        <div className="settings-range__labels" aria-hidden="true">
+        <div data-part="labels" aria-hidden="true">
           {labels}
         </div>
       ) : null}

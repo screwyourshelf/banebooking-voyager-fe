@@ -1,8 +1,8 @@
-import PageSection from "@/components/sections/PageSection";
 import { Button } from "@/components/ui/button";
 import Tabs from "@/components/navigation/Tabs";
 import { TurneringStatusBadge, klasseTypeNavn, KlasseKampTab } from "../../components";
 import type { TurneringRespons } from "@/types";
+import { Section } from "@/components";
 
 type Props = {
   turnering: TurneringRespons;
@@ -19,7 +19,7 @@ export default function ResultatansvarligKampView({ turnering }: Props) {
         klasse={klasse}
         renderActions={({ openKampplan, harDraw, kanGenererKampplan, kampplanPending }) =>
           kanGenererKampplan && harDraw ? (
-            <Button size="sm" variant="outline" onClick={openKampplan} disabled={kampplanPending}>
+            <Button variant="outline" onClick={openKampplan} disabled={kampplanPending}>
               {kampplanPending ? "Genererer..." : "Generer kampplan"}
             </Button>
           ) : undefined
@@ -29,24 +29,24 @@ export default function ResultatansvarligKampView({ turnering }: Props) {
   }));
 
   return (
-    <div className="app-stack app-stack--lg">
+    <div>
       {/* ─── Header ─── */}
-      <PageSection>
+      <Section>
         <div>
-          <h2 className="app-text-heading">{turnering.arrangementTittel}</h2>
-          <div className="app-margin-top">
+          <h2>{turnering.arrangementTittel}</h2>
+          <div>
             <TurneringStatusBadge status={turnering.status} />
           </div>
         </div>
-      </PageSection>
+      </Section>
 
       {/* ─── Klasse-tabs ─── */}
       {turnering.klasser.length > 0 ? (
-        <PageSection title="Klasser">
+        <Section title="Klasser">
           <Tabs items={klasseTabs} />
-        </PageSection>
+        </Section>
       ) : (
-        <p className="app-text-empty">Ingen klasser er satt opp ennå.</p>
+        <p>Ingen klasser er satt opp ennå.</p>
       )}
     </div>
   );

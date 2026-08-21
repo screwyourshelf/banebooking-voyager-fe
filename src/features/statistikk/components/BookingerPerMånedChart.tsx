@@ -1,8 +1,7 @@
-import type { CSSProperties } from "react";
-import CardSection from "@/components/layout/CardSection";
-import SectionHeading from "@/components/layout/SectionHeading";
+import { useLayoutEffect, useRef, useState, type CSSProperties } from "react";
 import type { BookingPerMåned } from "@/features/statistikk/types";
 import { formatMånedsnavn, formatTimer } from "@/features/statistikk/statistikkPresentation";
+import { Section } from "@/components";
 
 type Props = {
   punkter: BookingPerMåned[];
@@ -48,15 +47,33 @@ export default function BookingerPerMånedChart({ punkter, visSammenligning }: P
     1,
     ...punkter.flatMap((punkt) => [punkt.bookedeTimer, punkt.sammenligningBookedeTimer ?? 0])
   );
-  const bredde = Math.max(620, (punkter.length - 1) * 76 + venstre + høyre);
+  const minimumsbredde = Math.max(620, (punkter.length - 1) * 76 + venstre + høyre);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [bredde, setBredde] = useState(minimumsbredde);
+
+  useLayoutEffect(() => {
+    const scrollflate = scrollRef.current;
+    if (!scrollflate) return;
+
+    const oppdaterBredde = () => {
+      setBredde(Math.max(minimumsbredde, Math.round(scrollflate.clientWidth)));
+    };
+
+    oppdaterBredde();
+
+    if (typeof ResizeObserver === "undefined") return;
+    const observer = new ResizeObserver(oppdaterBredde);
+    observer.observe(scrollflate);
+    return () => observer.disconnect();
+  }, [minimumsbredde]);
   const flereÅr = new Set(punkter.map((punkt) => punkt.år)).size > 1;
   const nåværende = lagLinje(punkter, (punkt) => punkt.bookedeTimer, maks, bredde);
   const sammenligning = lagLinje(punkter, (punkt) => punkt.sammenligningBookedeTimer, maks, bredde);
   const rutenett = [0, 0.25, 0.5, 0.75, 1];
 
   return (
-    <CardSection className="statistics-section statistics-month-chart">
-      <SectionHeading
+    <Section variant="surface" data-context="statistics" data-view="month-chart">
+      <Section.Heading
         className="statistics-month-chart__heading"
         description="Bookede timer per måned i den valgte perioden."
         actions={
@@ -65,17 +82,18 @@ export default function BookingerPerMånedChart({ punkter, visSammenligning }: P
             {visSammenligning ? <span data-series="previous">Året før</span> : null}
           </span>
         }
-        size="lg"
       >
         Utvikling gjennom perioden
-      </SectionHeading>
+      </Section.Heading>
 
-      <div className="statistics-month-chart__scroll">
+      <div ref={scrollRef} className="statistics-month-chart__scroll">
         <div
           className="statistics-month-chart__plot"
           style={{ "--statistics-line-chart-width": `${bredde}px` } as CSSProperties}
         >
           <svg
+            width={bredde}
+            height={høyde}
             viewBox={`0 0 ${bredde} ${høyde}`}
             role="img"
             aria-label="Linjediagram over bookede timer per måned"
@@ -87,7 +105,7 @@ export default function BookingerPerMånedChart({ punkter, visSammenligning }: P
               return (
                 <g key={andel} className="statistics-line-chart__grid">
                   <line x1={venstre} x2={bredde - høyre} y1={y} y2={y} />
-                  <text x={venstre - 8} y={y + 4} textAnchor="end">
+                  <text x={venstre - 8} y={y + 4} textAnchor="end" data-stat-role="chart-meta">
                     {formatTimer(Math.round(maks * andel))}
                   </text>
                 </g>
@@ -140,6 +158,7 @@ export default function BookingerPerMånedChart({ punkter, visSammenligning }: P
                   </circle>
                   <text
                     className="statistics-line-chart__label"
+                    data-stat-role="chart-meta"
                     x={x}
                     y={høyde - 13}
                     textAnchor="middle"
@@ -152,6 +171,6 @@ export default function BookingerPerMånedChart({ punkter, visSammenligning }: P
           </svg>
         </div>
       </div>
-    </CardSection>
+    </Section>
   );
 }

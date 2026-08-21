@@ -10,29 +10,6 @@ export function RecordDateRange({ start, end }: { start: ReactNode; end?: ReactN
   );
 }
 
-export function RecordIdentity({
-  title,
-  description,
-  leading,
-  meta,
-}: {
-  title: ReactNode;
-  description?: ReactNode;
-  leading?: ReactNode;
-  meta?: ReactNode;
-}) {
-  return (
-    <span className="record-identity">
-      {leading ? <span className="record-identity__leading">{leading}</span> : null}
-      <span className="record-identity__copy">
-        <span className="record-identity__title">{title}</span>
-        {description ? <span className="record-identity__description">{description}</span> : null}
-        {meta ? <span className="record-identity__meta">{meta}</span> : null}
-      </span>
-    </span>
-  );
-}
-
 export function RecordDetailsLayout({ children }: { children: ReactNode }) {
   return <div className="record-details-layout">{children}</div>;
 }
@@ -51,45 +28,19 @@ export function RecordProgram({
   );
 }
 
-export function RecordProgramHeader({
-  title,
-  summary,
-  expanded,
-  controls,
-  onToggle,
-}: {
-  title: ReactNode;
-  summary: ReactNode;
-  expanded: boolean;
-  controls: string;
-  onToggle: () => void;
-}) {
+export function RecordProgramHeader({ title, summary }: { title: ReactNode; summary: ReactNode }) {
   return (
     <div className="record-program__header">
       <span>
         <strong>{title}</strong>
         <small>{summary}</small>
       </span>
-      <Button
-        type="button"
-        variant="outline"
-        size="sm"
-        aria-expanded={expanded}
-        aria-controls={controls}
-        onClick={onToggle}
-      >
-        {expanded ? "Skjul program" : "Vis program"}
-      </Button>
     </div>
   );
 }
 
-export function RecordProgramDays({ id, children }: { id: string; children: ReactNode }) {
-  return (
-    <div id={id} className="record-program__days">
-      {children}
-    </div>
-  );
+export function RecordProgramDays({ children }: { children: ReactNode }) {
+  return <div className="record-program__days">{children}</div>;
 }
 
 export function RecordProgramDay({ title, children }: { title: ReactNode; children: ReactNode }) {

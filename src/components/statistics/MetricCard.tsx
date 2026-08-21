@@ -11,7 +11,7 @@ export function MetricGrid({
   label: string;
 }) {
   return (
-    <section className="statistics-metrics" data-variant={variant} aria-label={label}>
+    <section data-ui="metric-grid" data-variant={variant} aria-label={label}>
       {children}
     </section>
   );
@@ -35,21 +35,21 @@ export default function MetricCard({
   direction?: "up" | "down";
 }) {
   return (
-    <Card size="sm" className="statistics-metric">
-      <CardContent className="statistics-metric__content">
-        <span className="statistics-metric__icon" aria-hidden="true">
+    <Card size="sm" data-ui="metric">
+      <CardContent data-part="content">
+        <span data-part="icon" aria-hidden="true">
           {icon}
         </span>
-        <span className="statistics-metric__copy">
-          <small>{label}</small>
-          <strong>
+        <span data-part="value">
+          <small data-stat-role="chart-label">{label}</small>
+          <strong data-stat-role="key-value">
             {value}
-            {unit ? <span className="statistics-metric__unit"> {unit}</span> : null}
+            {unit ? <span data-part="unit"> {unit}</span> : null}
           </strong>
-          <span>{description}</span>
+          <span data-stat-role="chart-meta">{description}</span>
         </span>
         {change ? (
-          <span className="statistics-metric__change" data-direction={direction}>
+          <span data-part="change" data-direction={direction} data-stat-role="chart-meta">
             {change}
           </span>
         ) : null}

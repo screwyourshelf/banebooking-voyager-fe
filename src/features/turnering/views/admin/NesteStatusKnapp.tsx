@@ -23,7 +23,7 @@ export function NesteStatusKnapp({
   const [forrigeOpen, setForrigeOpen] = useState(false);
 
   return (
-    <div className="app-inline">
+    <div>
       {forrige && onForrigeStatus && (
         <Popover open={forrigeOpen} onOpenChange={setForrigeOpen}>
           <PopoverTrigger asChild>
@@ -31,11 +31,11 @@ export function NesteStatusKnapp({
               ← {STATUS_LABELS[forrige]}
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="app-popover-confirm" align="end">
-            <p className="app-confirm-copy">
-              Tilbake til <span className="app-font-medium">«{STATUS_LABELS[forrige]}»</span>?
+          <PopoverContent align="end">
+            <p>
+              Tilbake til <span>«{STATUS_LABELS[forrige]}»</span>?
             </p>
-            <div className="app-inline app-inline--end">
+            <div>
               <Button size="sm" variant="ghost" onClick={() => setForrigeOpen(false)}>
                 Avbryt
               </Button>
@@ -60,11 +60,11 @@ export function NesteStatusKnapp({
             {pending ? "Oppdaterer..." : `Sett til «${STATUS_LABELS[neste]}»`}
           </Button>
         </PopoverTrigger>
-        <PopoverContent className="app-popover-confirm" align="end">
-          <p className="app-confirm-copy">
-            Sett til <span className="app-font-medium">«{STATUS_LABELS[neste]}»</span>?
+        <PopoverContent align="end">
+          <p>
+            Sett til <span>«{STATUS_LABELS[neste]}»</span>?
           </p>
-          <div className="app-inline app-inline--end">
+          <div>
             <Button size="sm" variant="ghost" onClick={() => setNesteOpen(false)}>
               Avbryt
             </Button>

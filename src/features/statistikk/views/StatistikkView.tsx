@@ -1,8 +1,6 @@
 import { useMemo, useState } from "react";
 import { addDays, endOfYear, startOfDay, startOfYear, subYears } from "date-fns";
 import { ChartNoAxesCombined, CircleAlert, RefreshCw } from "lucide-react";
-import { AdminPageState } from "@/components/admin";
-import CardSection from "@/components/layout/CardSection";
 import Tabs from "@/components/navigation/Tabs";
 import { RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
@@ -16,6 +14,7 @@ import StatistikkFilter from "@/features/statistikk/components/StatistikkFilter"
 import StatistikkLoading from "@/features/statistikk/components/StatistikkLoading";
 import TidPåDøgnetChart from "@/features/statistikk/components/TidPåDøgnetChart";
 import { useBookingstatistikk } from "@/features/statistikk/hooks/useBookingstatistikk";
+import { Section, Page } from "@/components";
 import {
   formatDatoIso,
   formatTidspunkt,
@@ -135,7 +134,7 @@ export default function StatistikkView() {
 
     if (statistikkQuery.error && !statistikk) {
       return (
-        <AdminPageState>
+        <Page.State>
           <RecordListState
             icon={<CircleAlert aria-hidden="true" />}
             title="Kunne ikke laste statistikken"
@@ -154,7 +153,7 @@ export default function StatistikkView() {
             tone="danger"
             role="alert"
           />
-        </AdminPageState>
+        </Page.State>
       );
     }
 
@@ -238,13 +237,13 @@ export default function StatistikkView() {
         </div>
 
         {statistikk.nøkkeltall.antallBookinger === 0 ? (
-          <CardSection>
+          <Section variant="surface">
             <RecordListState
               icon={<ChartNoAxesCombined aria-hidden="true" />}
               title="Ingen bookinger i perioden"
               description="Prøv en annen periode, gren eller bane for å se bookingaktivitet."
             />
-          </CardSection>
+          </Section>
         ) : (
           faneinnhold
         )}

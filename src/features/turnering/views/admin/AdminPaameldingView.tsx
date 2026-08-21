@@ -1,11 +1,11 @@
 import { useState } from "react";
-import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList, Row } from "@/components/rows";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import Tabs from "@/components/navigation/Tabs";
 import { ListSkeleton } from "@/components/loading";
 import { QueryFeil, ServerFeil } from "@/components/errors";
+import { Section } from "@/components";
 import {
   klasseTypeNavn,
   MeldPaaDialog,
@@ -66,18 +66,18 @@ function AdminPaameldingKlasseTab({ turneringId, klasse, brukere }: KlasseTabPro
 
   return (
     <QueryFeil error={error} isFetching={isFetching} onRetry={() => void refetch()}>
-      <div className="app-stack app-stack--lg">
-        <PageSection
+      <div>
+        <Section
           title="Påmeldinger"
           actions={
-            <Button size="sm" variant="outline" onClick={() => setMeldPaaDialogOpen(true)}>
+            <Button variant="outline" onClick={() => setMeldPaaDialogOpen(true)}>
               Legg til deltaker
             </Button>
           }
         >
           <ServerFeil feil={trekkMutation.error?.message ?? null} />
           {aktivePaameldinger.length === 0 ? (
-            <p className="app-text-empty">Ingen påmeldinger ennå.</p>
+            <p>Ingen påmeldinger ennå.</p>
           ) : (
             <RowPanel>
               <RowList>
@@ -87,26 +87,16 @@ function AdminPaameldingKlasseTab({ turneringId, klasse, brukere }: KlasseTabPro
                     title={p.spiller1Navn}
                     description={p.spiller2Navn ?? undefined}
                     right={
-                      <div className="app-inline">
-                        {p.seed != null && (
-                          <Badge variant="outline" className="app-text-caption">
-                            #{p.seed}
-                          </Badge>
-                        )}
+                      <div>
+                        {p.seed != null && <Badge variant="outline">#{p.seed}</Badge>}
                         <Button
                           variant="ghost"
-                          size="sm"
                           onClick={() => trekkMutation.mutate({ paameldingId: p.id })}
                           disabled={trekkMutation.isPending}
                         >
-                          <Trash2 className="app-icon-sm" />
+                          <Trash2 />
                         </Button>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => setStatusDialogForId(p.id)}
-                          className="app-text-caption"
-                        >
+                        <Button variant="ghost" onClick={() => setStatusDialogForId(p.id)}>
                           Endre
                         </Button>
                       </div>
@@ -116,7 +106,7 @@ function AdminPaameldingKlasseTab({ turneringId, klasse, brukere }: KlasseTabPro
               </RowList>
             </RowPanel>
           )}
-        </PageSection>
+        </Section>
 
         <MeldPaaDialog
           open={meldPaaDialogOpen}
@@ -195,9 +185,8 @@ function AdminPaameldingDrawHandlinger({
     <>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
-          <Button size="sm" variant="outline">
-            <MoreHorizontal className="app-icon-sm" />
-            <span className="app-visually-hidden">Handlinger</span>
+          <Button variant="outline" aria-label="Handlinger">
+            <MoreHorizontal />
           </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">

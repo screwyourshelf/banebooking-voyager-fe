@@ -6,11 +6,11 @@ export type ContentDocumentFact = {
 };
 
 export function ContentDocument({ children }: { children: ReactNode }) {
-  return <article className="content-document">{children}</article>;
+  return <article data-ui="document">{children}</article>;
 }
 
 export function ContentDocumentIntro({ children }: { children: ReactNode }) {
-  return <div className="content-document__intro">{children}</div>;
+  return <div data-ui="document-intro">{children}</div>;
 }
 
 export function ContentDocumentSection({
@@ -23,17 +23,17 @@ export function ContentDocumentSection({
   children: ReactNode;
 }) {
   return (
-    <section className="content-document__section">
-      <h2>{title}</h2>
-      {description ? <p className="content-document__section-description">{description}</p> : null}
-      <div className="content-document__body">{children}</div>
+    <section data-ui="document-section">
+      <h2 data-part="title">{title}</h2>
+      {description ? <p data-part="description">{description}</p> : null}
+      <div data-part="content">{children}</div>
     </section>
   );
 }
 
 export function ContentDocumentFacts({ items }: { items: readonly ContentDocumentFact[] }) {
   return (
-    <dl className="content-document__facts">
+    <dl data-ui="document-facts">
       {items.map((item) => (
         <div key={item.label}>
           <dt>{item.label}</dt>

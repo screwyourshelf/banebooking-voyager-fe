@@ -1,5 +1,4 @@
 import type { ReactNode } from "react";
-import { cn } from "@/lib/utils";
 
 type Props = {
   children: ReactNode;
@@ -16,12 +15,10 @@ export default function RowList({
 }: Props) {
   return (
     <div
-      className={cn(
-        "overflow-hidden",
-        divided && "divide-y divide-border/60",
-        density === "compact" && "text-sm",
-        className
-      )}
+      className={className}
+      data-ui="row-list"
+      data-divided={divided || undefined}
+      data-density={density}
     >
       {children}
     </div>

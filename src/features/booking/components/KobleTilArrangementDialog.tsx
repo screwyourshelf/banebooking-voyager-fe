@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { AlertCircle } from "lucide-react";
-import { SettingsRadioGroup } from "@/components/admin";
-import { AppDialog } from "@/components/dialogs";
+import { Settings, Dialog } from "@/components";
+
 import { Stack } from "@/components/layout";
 import { RecordCollectionSkeleton } from "@/components/records";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -30,7 +30,7 @@ export default function KobleTilArrangementDialog({ grenId, valgtId, onVelg, chi
   const dialog = useArrangementBookingDialog({ grenId, valgtId, onVelg });
 
   return (
-    <AppDialog
+    <Dialog
       open={dialog.open}
       onOpenChange={dialog.handleOpenChange}
       trigger={children}
@@ -58,7 +58,7 @@ export default function KobleTilArrangementDialog({ grenId, valgtId, onVelg, chi
         onArrangementChange={dialog.handleArrangementChange}
         onRetry={() => void dialog.refetch()}
       />
-    </AppDialog>
+    </Dialog>
   );
 }
 
@@ -110,7 +110,7 @@ function ArrangementSelection({
   }
 
   return (
-    <SettingsRadioGroup
+    <Settings.RadioGroup
       label="Aktive arrangementer"
       value={valgtArrangementId ?? ""}
       onValueChange={onArrangementChange}

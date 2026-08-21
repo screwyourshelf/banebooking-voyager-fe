@@ -1,7 +1,6 @@
+import { Dialog, Form } from "@/components";
 import { useState } from "react";
-import { AppDialog } from "@/components/dialogs";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Check, ChevronsUpDown, Search } from "lucide-react";
@@ -122,7 +121,7 @@ export function PaameldingStatusDialog({
   }
 
   return (
-    <AppDialog
+    <Dialog
       open={open}
       onOpenChange={handleClose}
       title={`Endre – ${spillerNavn}`}
@@ -141,16 +140,14 @@ export function PaameldingStatusDialog({
         </>
       }
     >
-      <div className="app-stack app-stack--lg">
-        <div className="app-stack app-stack--xs">
-          <div className="app-inline app-inline--between">
-            <Label>Spiller 1</Label>
-            <div className="app-inline app-inline--tight">
+      <Form.Fields>
+        <Form.Field label="Spiller 1">
+          <div>
+            <div>
               <Button
                 type="button"
                 variant={spiller1Modus === "manuell" ? "secondary" : "ghost"}
                 size="sm"
-                className="app-button--compact"
                 onClick={() => setSpiller1Modus("manuell")}
               >
                 Manuell
@@ -159,7 +156,6 @@ export function PaameldingStatusDialog({
                 type="button"
                 variant={spiller1Modus === "bruker" ? "secondary" : "ghost"}
                 size="sm"
-                className="app-button--compact"
                 onClick={() => setSpiller1Modus("bruker")}
               >
                 Eksisterende
@@ -175,33 +171,27 @@ export function PaameldingStatusDialog({
               }}
             >
               <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  aria-expanded={popover1Open}
-                  className="app-combobox-trigger"
-                >
+                <Button variant="outline" role="combobox" aria-expanded={popover1Open}>
                   {spiller1Bruker ? (
                     spiller1Bruker.visningsnavn || spiller1Bruker.epost
                   ) : (
-                    <span className="app-text-muted">Velg bruker...</span>
+                    <span>Velg bruker...</span>
                   )}
-                  <ChevronsUpDown className="app-icon-sm app-icon-muted" />
+                  <ChevronsUpDown />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="app-combobox-popover" align="start">
-                <div className="app-combobox-search">
-                  <Search className="app-icon-sm app-icon-muted" />
+              <PopoverContent align="start">
+                <div>
+                  <Search />
                   <Input
                     placeholder="Søk etter bruker..."
                     value={søkTekst1}
                     onChange={(e) => setSøkTekst1(e.target.value)}
-                    className="app-combobox-input"
                   />
                 </div>
-                <div className="app-combobox-list">
+                <div>
                   {filtrerteBrukere1.length === 0 ? (
-                    <p className="app-combobox-empty">Ingen brukere funnet.</p>
+                    <p>Ingen brukere funnet.</p>
                   ) : (
                     filtrerteBrukere1.map((b) => (
                       <button
@@ -212,17 +202,11 @@ export function PaameldingStatusDialog({
                           setPopover1Open(false);
                           setSøkTekst1("");
                         }}
-                        className="app-combobox-option"
                       >
-                        <Check
-                          className="app-combobox-check"
-                          data-selected={b.id === spiller1BrukerId}
-                        />
-                        <div className="app-combobox-copy">
-                          <span className="app-text-truncate">{b.visningsnavn || b.epost}</span>
-                          {b.visningsnavn && (
-                            <span className="app-text-caption app-text-truncate">{b.epost}</span>
-                          )}
+                        <Check data-selected={b.id === spiller1BrukerId} />
+                        <div>
+                          <span>{b.visningsnavn || b.epost}</span>
+                          {b.visningsnavn && <span>{b.epost}</span>}
                         </div>
                       </button>
                     ))
@@ -236,18 +220,16 @@ export function PaameldingStatusDialog({
               onChange={(e) => setSpiller1NavnInput(e.target.value)}
             />
           )}
-        </div>
+        </Form.Field>
 
         {erDobbel && (
-          <div className="app-stack app-stack--xs">
-            <div className="app-inline app-inline--between">
-              <Label>Spiller 2 (valgfritt)</Label>
-              <div className="app-inline app-inline--tight">
+          <Form.Field label="Spiller 2" description="Valgfritt">
+            <div>
+              <div>
                 <Button
                   type="button"
                   variant={spiller2Modus === "manuell" ? "secondary" : "ghost"}
                   size="sm"
-                  className="app-button--compact"
                   onClick={() => setSpiller2Modus("manuell")}
                 >
                   Manuell
@@ -256,7 +238,6 @@ export function PaameldingStatusDialog({
                   type="button"
                   variant={spiller2Modus === "bruker" ? "secondary" : "ghost"}
                   size="sm"
-                  className="app-button--compact"
                   onClick={() => setSpiller2Modus("bruker")}
                 >
                   Eksisterende
@@ -272,33 +253,27 @@ export function PaameldingStatusDialog({
                 }}
               >
                 <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={popover2Open}
-                    className="app-combobox-trigger"
-                  >
+                  <Button variant="outline" role="combobox" aria-expanded={popover2Open}>
                     {spiller2Bruker ? (
                       spiller2Bruker.visningsnavn || spiller2Bruker.epost
                     ) : (
-                      <span className="app-text-muted">Velg bruker...</span>
+                      <span>Velg bruker...</span>
                     )}
-                    <ChevronsUpDown className="app-icon-sm app-icon-muted" />
+                    <ChevronsUpDown />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="app-combobox-popover" align="start">
-                  <div className="app-combobox-search">
-                    <Search className="app-icon-sm app-icon-muted" />
+                <PopoverContent align="start">
+                  <div>
+                    <Search />
                     <Input
                       placeholder="Søk etter bruker..."
                       value={søkTekst2}
                       onChange={(e) => setSøkTekst2(e.target.value)}
-                      className="app-combobox-input"
                     />
                   </div>
-                  <div className="app-combobox-list">
+                  <div>
                     {filtrerteBrukere2.length === 0 ? (
-                      <p className="app-combobox-empty">Ingen brukere funnet.</p>
+                      <p>Ingen brukere funnet.</p>
                     ) : (
                       filtrerteBrukere2.map((b) => (
                         <button
@@ -309,17 +284,11 @@ export function PaameldingStatusDialog({
                             setPopover2Open(false);
                             setSøkTekst2("");
                           }}
-                          className="app-combobox-option"
                         >
-                          <Check
-                            className="app-combobox-check"
-                            data-selected={b.id === spiller2BrukerId}
-                          />
-                          <div className="app-combobox-copy">
-                            <span className="app-text-truncate">{b.visningsnavn || b.epost}</span>
-                            {b.visningsnavn && (
-                              <span className="app-text-caption app-text-truncate">{b.epost}</span>
-                            )}
+                          <Check data-selected={b.id === spiller2BrukerId} />
+                          <div>
+                            <span>{b.visningsnavn || b.epost}</span>
+                            {b.visningsnavn && <span>{b.epost}</span>}
                           </div>
                         </button>
                       ))
@@ -334,11 +303,10 @@ export function PaameldingStatusDialog({
                 placeholder="Tomt for å fjerne"
               />
             )}
-          </div>
+          </Form.Field>
         )}
 
-        <div className="app-stack app-stack--xs">
-          <Label>Seed (la stå tomt for å fjerne)</Label>
+        <Form.Field label="Seed" description="La feltet stå tomt for å fjerne seedingen.">
           <Input
             type="number"
             min={1}
@@ -346,10 +314,10 @@ export function PaameldingStatusDialog({
             onChange={(e) => setSeedVerdi(e.target.value)}
             placeholder="t.eks. 1"
           />
-        </div>
+        </Form.Field>
 
         <ServerFeil feil={detaljerFeil ?? serverFeil ?? null} />
-      </div>
-    </AppDialog>
+      </Form.Fields>
+    </Dialog>
   );
 }

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import { RecordCollectionPage } from "@/components/records";
 
 import ArrangementerContent from "./ArrangementerContent";
 import { useArrangementer } from "./useArrangementer";
@@ -21,22 +20,16 @@ export default function ArrangementerView() {
   const defaultArrangementId = searchParams.get("arrangement") ?? undefined;
 
   return (
-    <RecordCollectionPage
-      eyebrow="Klubben"
-      title="Arrangementer"
-      description="Se hva som skjer, når det starter og hvilke baner som brukes."
-    >
-      <ArrangementerContent
-        visHistoriske={visHistoriske}
-        onToggleVisHistoriske={setVisHistoriske}
-        arrangementer={arrangementer}
-        isLoading={isLoading}
-        queryError={error?.message ?? null}
-        isFetching={isFetching}
-        onRetry={() => void refetch()}
-        onAvlys={onAvlys}
-        defaultArrangementId={defaultArrangementId}
-      />
-    </RecordCollectionPage>
+    <ArrangementerContent
+      visHistoriske={visHistoriske}
+      onToggleVisHistoriske={setVisHistoriske}
+      arrangementer={arrangementer}
+      isLoading={isLoading}
+      queryError={error?.message ?? null}
+      isFetching={isFetching}
+      onRetry={() => void refetch()}
+      onAvlys={onAvlys}
+      defaultArrangementId={defaultArrangementId}
+    />
   );
 }

@@ -1,33 +1,27 @@
-import { useId, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
-  RecordAccordionCard,
-  RecordCard,
-  RecordCardActions,
-  RecordCardDetails,
-  RecordCardStatic,
-  RecordCardSummary,
-  RecordCardTrigger,
   RecordDateRange,
-  RecordDetailsLayout,
   RecordEmptyNote,
   RecordFacts,
-  RecordIdentity,
   RecordProgram,
   RecordProgramDay,
   RecordProgramDays,
   RecordProgramHeader,
   RecordProgramMore,
   RecordProgramSlot,
-  RecordStatus,
 } from "@/components/records";
+import { Collection } from "@/components";
 import { SlettArrangementDialog } from "@/features/arrangement-admin/components";
 import type { ArrangementRespons, DagMedSlotsRespons } from "@/types";
 import { dagerIgjenTekst } from "@/utils/datoUtils";
 import { harHandling } from "@/utils/handlingUtils";
 import { Kapabiliteter } from "@/utils/kapabiliteter";
-import { formaterArrangementKategori } from "@/utils/arrangementPresentation";
+import {
+  formaterArrangementMetadata,
+  getArrangementLifecycleStatus,
+} from "@/utils/arrangementPresentation";
 
 type Props = {
   arrangement: ArrangementRespons;
@@ -54,6 +48,10 @@ function todayIso() {
   const month = String(today.getMonth() + 1).padStart(2, "0");
   const day = String(today.getDate()).padStart(2, "0");
   return `${year}-${month}-${day}`;
+}
+
+function formatRelativeStart(date: string) {
+  return `Starter ${dagerIgjenTekst(date).toLocaleLowerCase("nb-NO")}`;
 }
 
 function formatShortDate(date: string, includeYear = false) {
@@ -122,8 +120,6 @@ function formatCourts(courts: string[]) {
 
 export default function ArrangementRow({ arrangement, onAvlys }: Props) {
   const navigate = useNavigate();
-  const programId = useId();
-  const [showProgram, setShowProgram] = useState(false);
   const [visibleDayCount, setVisibleDayCount] = useState(INITIAL_DATOER);
 
   const description = arrangement.beskrivelse?.trim() ?? "";
@@ -133,13 +129,10 @@ export default function ArrangementRow({ arrangement, onAvlys }: Props) {
   const visibleDays = upcomingDays.slice(0, visibleDayCount);
   const hasMoreDays = upcomingDays.length > visibleDayCount;
   const dates = formatDateRange(arrangement);
-  const categoryLabel = formaterArrangementKategori(arrangement.kategori);
-  const categoryDiffersFromTitle =
-    categoryLabel.toLocaleLowerCase("nb-NO") !==
-    arrangement.tittel.trim().toLocaleLowerCase("nb-NO");
-  const metadata = [arrangement.grenNavn, categoryDiffersFromTitle ? categoryLabel : null]
-    .filter(Boolean)
-    .join(" · ");
+  const lifecycleStatus = getArrangementLifecycleStatus(arrangement);
+  const relativeStart =
+    lifecycleStatus.label === "Kommende" && nextDate ? formatRelativeStart(nextDate) : undefined;
+  const metadata = formaterArrangementMetadata(arrangement);
 
   const canManageTournament =
     !!arrangement.turneringId &&
@@ -159,137 +152,125 @@ export default function ArrangementRow({ arrangement, onAvlys }: Props) {
     hasActions ||
     (!arrangement.erPassert && !programSummary);
 
-  const summary = (
-    <RecordCardSummary layout="date">
-      <RecordDateRange start={dates.start} end={dates.end} />
-      <RecordIdentity title={arrangement.tittel} description={metadata} />
-
-      <RecordStatus tone={arrangement.erPassert ? "past" : "event"}>
-        {arrangement.erPassert ? "Gjennomført" : nextDate ? dagerIgjenTekst(nextDate) : "Kommende"}
-      </RecordStatus>
-    </RecordCardSummary>
-  );
-
-  if (!hasDetails) {
-    return (
-      <RecordCard>
-        <RecordCardStatic>{summary}</RecordCardStatic>
-      </RecordCard>
-    );
-  }
-
   return (
-    <RecordAccordionCard value={arrangement.id}>
-      <RecordCardTrigger>{summary}</RecordCardTrigger>
+    <Collection.Row
+      leading={<RecordDateRange start={dates.start} end={dates.end} />}
+      title={arrangement.tittel}
+      description={metadata}
+      meta={relativeStart}
+      status={lifecycleStatus}
+      muted={arrangement.erPassert}
+      interaction={
+        hasDetails
+          ? {
+              type: "expand",
+              value: arrangement.id,
+              details: (
+                <>
+                  {description ? <p>{description}</p> : null}
 
-      <RecordCardDetails>
-        <RecordDetailsLayout>
-          {description ? <p>{description}</p> : null}
+                  <RecordFacts
+                    items={[
+                      ...(arrangement.booketAv
+                        ? [{ label: "Booket av", value: arrangement.booketAv }]
+                        : []),
+                      ...(arrangement.turneringStatus
+                        ? [
+                            {
+                              label: "Turnering",
+                              value:
+                                TURNERING_STATUS_TEKST[arrangement.turneringStatus] ??
+                                arrangement.turneringStatus,
+                            },
+                          ]
+                        : []),
+                    ]}
+                  />
 
-          <RecordFacts
-            items={[
-              ...(arrangement.booketAv
-                ? [{ label: "Booket av", value: arrangement.booketAv }]
-                : []),
-              ...(arrangement.turneringStatus
-                ? [
-                    {
-                      label: "Turnering",
-                      value:
-                        TURNERING_STATUS_TEKST[arrangement.turneringStatus] ??
-                        arrangement.turneringStatus,
-                    },
-                  ]
-                : []),
-            ]}
-          />
+                  {programSummary ? (
+                    <RecordProgram>
+                      <RecordProgramHeader
+                        title="Program"
+                        summary={
+                          <>
+                            {programSummary.count} {programSummary.count === 1 ? "tid" : "tider"} ·{" "}
+                            {programSummary.dayCount}{" "}
+                            {programSummary.dayCount === 1 ? "dag" : "dager"} ·{" "}
+                            {programSummary.timeRange}
+                          </>
+                        }
+                      />
 
-          {programSummary ? (
-            <RecordProgram>
-              <RecordProgramHeader
-                title="Program"
-                summary={
-                  <>
-                    {programSummary.count} {programSummary.count === 1 ? "tid" : "tider"} ·{" "}
-                    {programSummary.dayCount} {programSummary.dayCount === 1 ? "dag" : "dager"} ·{" "}
-                    {programSummary.timeRange}
-                  </>
-                }
-                expanded={showProgram}
-                controls={programId}
-                onToggle={() => setShowProgram((visible) => !visible)}
-              />
+                      <RecordProgramDays>
+                        {visibleDays.map(({ dato, slots }) => (
+                          <RecordProgramDay
+                            key={dato}
+                            title={<time dateTime={dato}>{formatProgramDate(dato)}</time>}
+                          >
+                            {slots.map((slot) => (
+                              <RecordProgramSlot
+                                key={`${dato}-${slot.startTid}-${slot.sluttTid}-${slot.baneNavn.join("-")}`}
+                                time={`${slot.startTid.slice(0, 5)}–${slot.sluttTid.slice(0, 5)}`}
+                              >
+                                {formatCourts(slot.baneNavn)}
+                              </RecordProgramSlot>
+                            ))}
+                          </RecordProgramDay>
+                        ))}
 
-              {showProgram ? (
-                <RecordProgramDays id={programId}>
-                  {visibleDays.map(({ dato, slots }) => (
-                    <RecordProgramDay
-                      key={dato}
-                      title={<time dateTime={dato}>{formatProgramDate(dato)}</time>}
-                    >
-                      {slots.map((slot) => (
-                        <RecordProgramSlot
-                          key={`${dato}-${slot.startTid}-${slot.sluttTid}-${slot.baneNavn.join("-")}`}
-                          time={`${slot.startTid.slice(0, 5)}–${slot.sluttTid.slice(0, 5)}`}
-                        >
-                          {formatCourts(slot.baneNavn)}
-                        </RecordProgramSlot>
-                      ))}
-                    </RecordProgramDay>
-                  ))}
-
-                  {hasMoreDays ? (
-                    <RecordProgramMore
-                      onClick={() => setVisibleDayCount((count) => count + DATOER_PER_KLIKK)}
-                    >
-                      Vis flere datoer
-                    </RecordProgramMore>
+                        {hasMoreDays ? (
+                          <RecordProgramMore
+                            onClick={() => setVisibleDayCount((count) => count + DATOER_PER_KLIKK)}
+                          >
+                            Vis flere datoer
+                          </RecordProgramMore>
+                        ) : null}
+                      </RecordProgramDays>
+                    </RecordProgram>
+                  ) : !arrangement.erPassert ? (
+                    <RecordEmptyNote>Ingen kommende tider i programmet.</RecordEmptyNote>
                   ) : null}
-                </RecordProgramDays>
-              ) : null}
-            </RecordProgram>
-          ) : !arrangement.erPassert ? (
-            <RecordEmptyNote>Ingen kommende tider i programmet.</RecordEmptyNote>
-          ) : null}
-
-          {hasActions ? (
-            <RecordCardActions>
-              {canManageTournament ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigate(`../turnering/${arrangement.turneringId}`)}
-                >
-                  Administrer turnering
-                </Button>
-              ) : canViewTournament ? (
-                <Button
-                  type="button"
-                  variant="outline"
-                  size="sm"
-                  onClick={() => navigate(`../turnering/${arrangement.turneringId}`)}
-                >
-                  Se turnering
-                </Button>
-              ) : null}
-
-              {canCancel ? (
-                <SlettArrangementDialog
-                  tittel={arrangement.tittel}
-                  harTurnering={arrangement.turneringId !== null}
-                  onSlett={() => onAvlys(arrangement).then(() => undefined)}
-                  trigger={
-                    <Button type="button" variant="destructive" size="sm">
-                      Avlys
+                </>
+              ),
+              actions: hasActions ? (
+                <>
+                  {canManageTournament ? (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => navigate(`../turnering/${arrangement.turneringId}`)}
+                    >
+                      Administrer turnering
                     </Button>
-                  }
-                />
-              ) : null}
-            </RecordCardActions>
-          ) : null}
-        </RecordDetailsLayout>
-      </RecordCardDetails>
-    </RecordAccordionCard>
+                  ) : canViewTournament ? (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      onClick={() => navigate(`../turnering/${arrangement.turneringId}`)}
+                    >
+                      Se turnering
+                    </Button>
+                  ) : null}
+
+                  {canCancel ? (
+                    <SlettArrangementDialog
+                      tittel={arrangement.tittel}
+                      harTurnering={arrangement.turneringId !== null}
+                      onSlett={() => onAvlys(arrangement).then(() => undefined)}
+                      trigger={
+                        <Button type="button" variant="destructive" size="sm">
+                          Avlys
+                        </Button>
+                      }
+                    />
+                  ) : null}
+                </>
+              ) : undefined,
+            }
+          : { type: "static" }
+      }
+    />
   );
 }

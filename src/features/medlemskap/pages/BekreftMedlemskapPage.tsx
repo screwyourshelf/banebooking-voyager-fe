@@ -1,23 +1,12 @@
-import { useState } from "react";
 import { CircleAlert } from "lucide-react";
+import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
-import {
-  AdminFormActions,
-  AdminFormSubmitButton,
-  AdminPage,
-  AdminPageLoading,
-  AdminPageState,
-  AdminSettingsForm,
-  SettingsPanel,
-  SettingsRadioGroup,
-  SettingsRow,
-  SettingsSection,
-} from "@/components/admin";
+import { Form, Settings, Page, Document } from "@/components";
+
 import { ServerFeil } from "@/components/errors";
-import { ContentDocument, ContentDocumentIntro } from "@/components/layout";
+
 import { RecordListState, RecordStatus } from "@/components/records";
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useBekreftMedlemskap } from "@/hooks/useBekreftMedlemskap";
 import { useBruker } from "@/hooks/useBruker";
@@ -39,24 +28,24 @@ export default function BekreftMedlemskapPage() {
 
   if (lasterKlubb || lasterBruker) {
     return (
-      <AdminPage
+      <Page
         eyebrow="Medlemskap"
         title="Bekreft medlemskap"
         description="Oppgi medlemskapstype og navnet medlemskapet står på."
       >
-        <AdminPageLoading label="Laster medlemsbekreftelse" />
-      </AdminPage>
+        <Page.Loading label="Laster medlemsbekreftelse" />
+      </Page>
     );
   }
 
   if (klubbFeil || brukerFeil || !klubb) {
     return (
-      <AdminPage
+      <Page
         eyebrow="Medlemskap"
         title="Bekreft medlemskap"
         description="Oppgi medlemskapstype og navnet medlemskapet står på."
       >
-        <AdminPageState>
+        <Page.State>
           <RecordListState
             icon={<CircleAlert aria-hidden="true" />}
             title="Kunne ikke laste medlemsinformasjonen"
@@ -73,8 +62,8 @@ export default function BekreftMedlemskapPage() {
             tone="danger"
             role="alert"
           />
-        </AdminPageState>
-      </AdminPage>
+        </Page.State>
+      </Page>
     );
   }
 
@@ -95,18 +84,18 @@ export default function BekreftMedlemskapPage() {
   };
 
   return (
-    <AdminPage
+    <Page
       eyebrow="Medlemskap"
       title="Bekreft medlemskap"
       description="Oppgi medlemskapstype og navnet medlemskapet står på."
-      action={
+      actions={
         <RecordStatus tone="warning">
           {bruker?.medlemskapBekreftelseLabel ?? "Må bekreftes"}
         </RecordStatus>
       }
     >
-      <ContentDocument>
-        <ContentDocumentIntro>
+      <Document>
+        <Document.Intro>
           <p>
             For å booke baner må du være medlem av <strong>{klubb.navn}</strong>. Alle spillere du
             booker for, må også ha gyldig medlemskap.
@@ -123,59 +112,62 @@ export default function BekreftMedlemskapPage() {
           <p>
             Ved å bekrefte godtar du <Link to="../vilkaar">vilkårene for bruk</Link>.
           </p>
-        </ContentDocumentIntro>
+        </Document.Intro>
 
-        <AdminSettingsForm
+        <Form
+          variant="settings"
           onSubmit={(event) => {
             event.preventDefault();
             void handleSubmit();
           }}
         >
-          <SettingsSection
+          <Settings.Section
             eyebrow="Påkrevd"
             title="Dine opplysninger"
             description="Opplysningene brukes til klubbens medlemsoversikt."
             embedded
           >
-            <SettingsPanel>
-              <SettingsRow title="Fullt navn" description="Skriv navnet medlemskapet står på.">
-                <Field>
-                  <Input
-                    id="fulltNavn"
-                    aria-label="Fullt navn"
-                    placeholder="Ola Nordmann"
-                    value={fulltNavn}
-                    onChange={(event) => setFulltNavn(event.target.value)}
-                    disabled={laster || vellykket}
-                    autoComplete="name"
-                  />
-                </Field>
-              </SettingsRow>
+            <Form.Fields>
+              <Form.Field
+                label="Fullt navn"
+                description="Skriv navnet medlemskapet står på."
+                htmlFor="fulltNavn"
+              >
+                <Input
+                  id="fulltNavn"
+                  aria-label="Fullt navn"
+                  placeholder="Ola Nordmann"
+                  value={fulltNavn}
+                  onChange={(event) => setFulltNavn(event.target.value)}
+                  disabled={laster || vellykket}
+                  autoComplete="name"
+                />
+              </Form.Field>
 
-              <SettingsRow title="Medlemskapstype" description="Velg medlemskapet du har betalt.">
-                <SettingsRadioGroup
+              <Form.Field label="Medlemskapstype" description="Velg medlemskapet du har betalt.">
+                <Settings.RadioGroup
                   label="Medlemskapstype"
                   options={MEDLEMSKAP_TYPE_VALG}
                   value={medlemskapType}
                   onValueChange={setMedlemskapType}
                   disabled={laster || vellykket}
                 />
-              </SettingsRow>
-            </SettingsPanel>
+              </Form.Field>
+            </Form.Fields>
 
-            <AdminFormActions>
+            <Form.Actions>
               <ServerFeil feil={feil?.message ?? null} />
-              <AdminFormSubmitButton
+              <Form.Submit
                 isLoading={laster}
                 disabled={!kanBekrefte || vellykket}
                 loadingText="Bekrefter…"
               >
                 {vellykket ? "Bekreftet!" : "Jeg bekrefter medlemskapet"}
-              </AdminFormSubmitButton>
-            </AdminFormActions>
-          </SettingsSection>
-        </AdminSettingsForm>
-      </ContentDocument>
-    </AdminPage>
+              </Form.Submit>
+            </Form.Actions>
+          </Settings.Section>
+        </Form>
+      </Document>
+    </Page>
   );
 }

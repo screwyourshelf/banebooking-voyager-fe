@@ -1,8 +1,6 @@
+import { Dialog, Form, Settings } from "@/components";
 import { useState } from "react";
-import { AppDialog } from "@/components/dialogs";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import {
   Select,
   SelectContent,
@@ -104,7 +102,7 @@ export function LeggTilKlasseDialog({
   }
 
   return (
-    <AppDialog
+    <Dialog
       open={open}
       onOpenChange={handleClose}
       title="Legg til klasse"
@@ -122,9 +120,8 @@ export function LeggTilKlasseDialog({
         </>
       }
     >
-      <div className="app-stack app-stack--lg">
-        <div className="app-stack app-stack--xs">
-          <Label>Klasse</Label>
+      <Form.Fields>
+        <Form.Field label="Klasse">
           <Select
             value={klasseType}
             onValueChange={(v) => setKlasseType(v as KlasseType)}
@@ -141,13 +138,10 @@ export function LeggTilKlasseDialog({
               ))}
             </SelectContent>
           </Select>
-          {tilgjengelige.length === 0 && (
-            <p className="app-text-muted">Alle klasser er allerede lagt til.</p>
-          )}
-        </div>
+          {tilgjengelige.length === 0 && <p>Alle klasser er allerede lagt til.</p>}
+        </Form.Field>
 
-        <div className="app-stack app-stack--xs">
-          <Label>Struktur</Label>
+        <Form.Field label="Struktur">
           <Select value={struktur} onValueChange={(v) => setStruktur(v as TurneringStruktur)}>
             <SelectTrigger>
               <SelectValue />
@@ -160,77 +154,15 @@ export function LeggTilKlasseDialog({
               ))}
             </SelectContent>
           </Select>
-        </div>
+        </Form.Field>
 
         {struktur === "GruppeMedSluttspill" && (
-          <div className="app-stack app-stack--md">
-            <p className="app-text-strong">Gruppespill-format</p>
-            <div className="app-grid--2">
-              <div className="app-stack app-stack--xs">
-                <Label className="app-text-caption">Antall sett</Label>
-                <Select
-                  value={String(gruppespillFormat.antallSett)}
-                  onValueChange={(v) =>
-                    setGruppespillFormat({ ...gruppespillFormat, antallSett: Number(v) })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="1">1 sett</SelectItem>
-                    <SelectItem value="3">Best av 3</SelectItem>
-                    <SelectItem value="5">Best av 5</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="app-stack app-stack--xs">
-                <Label className="app-text-caption">Spill til</Label>
-                <Select
-                  value={String(gruppespillFormat.spillTil)}
-                  onValueChange={(v) =>
-                    setGruppespillFormat({ ...gruppespillFormat, spillTil: Number(v) })
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="4">4 games</SelectItem>
-                    <SelectItem value="6">6 games</SelectItem>
-                    <SelectItem value="8">8 games</SelectItem>
-                    <SelectItem value="10">10 games</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-            </div>
-            <div className="app-inline app-inline--wide">
-              <Switch
-                id="gruppespill-tiebreak"
-                checked={gruppespillFormat.superTiebreak}
-                onCheckedChange={(v) =>
-                  setGruppespillFormat({ ...gruppespillFormat, superTiebreak: v })
-                }
-                disabled={gruppespillFormat.antallSett === 1}
-              />
-              <Label htmlFor="gruppespill-tiebreak" className="app-label-normal">
-                Super-tiebreak (siste sett)
-              </Label>
-            </div>
-          </div>
-        )}
-
-        <div className="app-stack app-stack--md">
-          <p className="app-text-strong">
-            {struktur === "GruppeMedSluttspill" ? "Sluttspill-format" : "Format"}
-          </p>
-          <div className="app-grid--2">
-            <div className="app-stack app-stack--xs">
-              <Label className="app-text-caption">Antall sett</Label>
+          <>
+            <Form.Field label="Antall sett · gruppespill">
               <Select
-                value={String(sluttspillFormat.antallSett)}
+                value={String(gruppespillFormat.antallSett)}
                 onValueChange={(v) =>
-                  setSluttspillFormat({ ...sluttspillFormat, antallSett: Number(v) })
+                  setGruppespillFormat({ ...gruppespillFormat, antallSett: Number(v) })
                 }
               >
                 <SelectTrigger>
@@ -242,13 +174,12 @@ export function LeggTilKlasseDialog({
                   <SelectItem value="5">Best av 5</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-            <div className="app-stack app-stack--xs">
-              <Label className="app-text-caption">Spill til</Label>
+            </Form.Field>
+            <Form.Field label="Spill til · gruppespill">
               <Select
-                value={String(sluttspillFormat.spillTil)}
+                value={String(gruppespillFormat.spillTil)}
                 onValueChange={(v) =>
-                  setSluttspillFormat({ ...sluttspillFormat, spillTil: Number(v) })
+                  setGruppespillFormat({ ...gruppespillFormat, spillTil: Number(v) })
                 }
               >
                 <SelectTrigger>
@@ -261,25 +192,68 @@ export function LeggTilKlasseDialog({
                   <SelectItem value="10">10 games</SelectItem>
                 </SelectContent>
               </Select>
-            </div>
-          </div>
-          <div className="app-inline app-inline--wide">
-            <Switch
-              id="sluttspill-tiebreak"
-              checked={sluttspillFormat.superTiebreak}
+            </Form.Field>
+            <Settings.SwitchRow
+              title="Super-tiebreak · gruppespill"
+              description="Bruk super-tiebreak i siste sett."
+              checked={gruppespillFormat.superTiebreak}
               onCheckedChange={(v) =>
-                setSluttspillFormat({ ...sluttspillFormat, superTiebreak: v })
+                setGruppespillFormat({ ...gruppespillFormat, superTiebreak: v })
               }
-              disabled={sluttspillFormat.antallSett === 1}
+              disabled={gruppespillFormat.antallSett === 1}
             />
-            <Label htmlFor="sluttspill-tiebreak" className="app-label-normal">
-              Super-tiebreak (siste sett)
-            </Label>
-          </div>
-        </div>
+          </>
+        )}
+
+        <Form.Field
+          label={struktur === "GruppeMedSluttspill" ? "Antall sett · sluttspill" : "Antall sett"}
+        >
+          <Select
+            value={String(sluttspillFormat.antallSett)}
+            onValueChange={(v) =>
+              setSluttspillFormat({ ...sluttspillFormat, antallSett: Number(v) })
+            }
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="1">1 sett</SelectItem>
+              <SelectItem value="3">Best av 3</SelectItem>
+              <SelectItem value="5">Best av 5</SelectItem>
+            </SelectContent>
+          </Select>
+        </Form.Field>
+        <Form.Field
+          label={struktur === "GruppeMedSluttspill" ? "Spill til · sluttspill" : "Spill til"}
+        >
+          <Select
+            value={String(sluttspillFormat.spillTil)}
+            onValueChange={(v) => setSluttspillFormat({ ...sluttspillFormat, spillTil: Number(v) })}
+          >
+            <SelectTrigger>
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="4">4 games</SelectItem>
+              <SelectItem value="6">6 games</SelectItem>
+              <SelectItem value="8">8 games</SelectItem>
+              <SelectItem value="10">10 games</SelectItem>
+            </SelectContent>
+          </Select>
+        </Form.Field>
+        <Settings.SwitchRow
+          title={
+            struktur === "GruppeMedSluttspill" ? "Super-tiebreak · sluttspill" : "Super-tiebreak"
+          }
+          description="Bruk super-tiebreak i siste sett."
+          checked={sluttspillFormat.superTiebreak}
+          onCheckedChange={(v) => setSluttspillFormat({ ...sluttspillFormat, superTiebreak: v })}
+          disabled={sluttspillFormat.antallSett === 1}
+        />
 
         <ServerFeil feil={serverFeil ?? null} />
-      </div>
-    </AppDialog>
+      </Form.Fields>
+    </Dialog>
   );
 }

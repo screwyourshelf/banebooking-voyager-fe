@@ -198,7 +198,7 @@ export default function StatistikkFilter({
       <RecordCollectionHeader
         icon={<SlidersHorizontal aria-hidden="true" />}
         title="Visning"
-        description={
+        scope={
           medlemsbookingtype
             ? "Velg bookingtype, periode, gren eller bane."
             : "Velg periode og avgrens statistikken til en gren eller bane."

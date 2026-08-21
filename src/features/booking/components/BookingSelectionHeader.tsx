@@ -115,7 +115,7 @@ export default function BookingSelectionHeader({
     <RecordCollectionHeader
       icon={<CalendarDays />}
       title={resultLabel}
-      summaryStatus={
+      scope={
         selectedCourt
           ? `${selectedCourt.navn}${selectedActivity ? ` · ${selectedActivity.navn}` : ""}`
           : "Velg en bane for å se tider"

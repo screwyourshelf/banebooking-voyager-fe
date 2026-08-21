@@ -1,18 +1,6 @@
-import { CalendarClock, Shapes } from "lucide-react";
-import {
-  AdminEditorForm,
-  AdminFormActions,
-  AdminFormSubmitButton,
-  SettingsPanel,
-  SettingsRange,
-  SettingsRow,
-  SettingsSection,
-  SettingsStack,
-  SettingsSwitchRow,
-  SettingsValue,
-} from "@/components/admin";
+import { Form, Settings } from "@/components";
+
 import { MutationFeedback } from "@/components/feedback";
-import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -71,68 +59,69 @@ export default function GrenEditorContent({
   const slotIndex = Math.max(0, slotValues.indexOf(form.slotLengdeMinutter));
 
   return (
-    <AdminEditorForm
+    <Form
+      variant="editor"
       onSubmit={(event) => {
         event.preventDefault();
         onSubmit();
       }}
     >
-      <SettingsStack embedded>
-        <SettingsSection
+      <Settings.Stack embedded>
+        <Settings.Section
           embedded
           eyebrow="Gren"
-          icon={<Shapes />}
           title="Greninformasjon"
           description="Navn og regler medlemmene møter i bookingflyten."
         >
-          <SettingsPanel>
-            <SettingsRow title="Navn">
-              <Field data-invalid={!!navnError}>
-                <Input
-                  id="gren-navn"
-                  aria-label="Navn"
-                  placeholder="For eksempel Tennis"
-                  disabled={isSaving}
-                  value={form.navn}
-                  onChange={(event) => onChange("navn", event.target.value)}
-                  onBlur={onBlurNavn}
-                  aria-invalid={!!navnError}
-                  autoComplete="off"
-                />
-                {navnError ? <FieldError>{navnError}</FieldError> : null}
-              </Field>
-            </SettingsRow>
+          <Form.Fields>
+            <Form.Field label="Navn" htmlFor="gren-navn" error={navnError}>
+              <Input
+                id="gren-navn"
+                aria-label="Navn"
+                placeholder="For eksempel Tennis"
+                disabled={isSaving}
+                value={form.navn}
+                onChange={(event) => onChange("navn", event.target.value)}
+                onBlur={onBlurNavn}
+                aria-invalid={!!navnError}
+                autoComplete="off"
+              />
+            </Form.Field>
 
-            <SettingsRow title="Banereglement" description="Valgfritt. Vises før booking.">
-              <Field>
-                <Textarea
-                  id="gren-banereglement"
-                  aria-label="Banereglement"
-                  placeholder="Skriv reglene medlemmene skal se"
-                  disabled={isSaving}
-                  value={form.banereglement}
-                  onChange={(event) => onChange("banereglement", event.target.value)}
-                  rows={4}
-                />
-              </Field>
-            </SettingsRow>
+            <Form.Field
+              label="Banereglement"
+              description="Valgfritt. Vises før booking."
+              htmlFor="gren-banereglement"
+            >
+              <Textarea
+                id="gren-banereglement"
+                aria-label="Banereglement"
+                placeholder="Skriv reglene medlemmene skal se"
+                disabled={isSaving}
+                value={form.banereglement}
+                onChange={(event) => onChange("banereglement", event.target.value)}
+                rows={4}
+              />
+            </Form.Field>
 
-            <SettingsRow title="Sortering" description="Lavest vises først.">
-              <Field>
-                <Input
-                  id="gren-sortering"
-                  aria-label="Sortering"
-                  type="number"
-                  disabled={isSaving}
-                  value={form.sortering}
-                  onChange={(event) => onChange("sortering", event.target.value)}
-                  autoComplete="off"
-                />
-              </Field>
-            </SettingsRow>
+            <Form.Field
+              label="Sortering"
+              description="Lavest vises først."
+              htmlFor="gren-sortering"
+            >
+              <Input
+                id="gren-sortering"
+                aria-label="Sortering"
+                type="number"
+                disabled={isSaving}
+                value={form.sortering}
+                onChange={(event) => onChange("sortering", event.target.value)}
+                autoComplete="off"
+              />
+            </Form.Field>
 
             {showActive ? (
-              <SettingsSwitchRow
+              <Settings.SwitchRow
                 title="Aktiv"
                 description="Vis grenen i bookingflyten."
                 checked={form.aktiv}
@@ -140,23 +129,22 @@ export default function GrenEditorContent({
                 disabled={isSaving}
               />
             ) : null}
-          </SettingsPanel>
-        </SettingsSection>
+          </Form.Fields>
+        </Settings.Section>
 
-        <SettingsSection
+        <Settings.Section
           embedded
           eyebrow="Booking"
-          icon={<CalendarClock />}
           title="Bookingregler"
           description="Standardverdier for alle baner i denne grenen."
         >
-          <SettingsPanel>
-            <SettingsRow
+          <Settings.Panel>
+            <Settings.Row
               title="Åpningstid"
               description="Tidligste starttid."
-              right={<SettingsValue>{hourLabel(form.aapningstid)}</SettingsValue>}
+              right={<Settings.Value>{hourLabel(form.aapningstid)}</Settings.Value>}
             >
-              <SettingsRange
+              <Settings.Range
                 aria-label="Åpningstid"
                 value={form.aapningstid}
                 min={6}
@@ -165,14 +153,14 @@ export default function GrenEditorContent({
                 onChange={(event) => onChange("aapningstid", Number(event.target.value))}
                 disabled={isSaving}
               />
-            </SettingsRow>
+            </Settings.Row>
 
-            <SettingsRow
+            <Settings.Row
               title="Stengetid"
               description="Seneste starttid."
-              right={<SettingsValue>{hourLabel(form.stengetid)}</SettingsValue>}
+              right={<Settings.Value>{hourLabel(form.stengetid)}</Settings.Value>}
             >
-              <SettingsRange
+              <Settings.Range
                 aria-label="Stengetid"
                 value={form.stengetid}
                 min={6}
@@ -181,14 +169,14 @@ export default function GrenEditorContent({
                 onChange={(event) => onChange("stengetid", Number(event.target.value))}
                 disabled={isSaving}
               />
-            </SettingsRow>
+            </Settings.Row>
 
-            <SettingsRow
+            <Settings.Row
               title="Maks per dag"
               description="Bookinger per medlem."
-              right={<SettingsValue>{form.maksPerDag}</SettingsValue>}
+              right={<Settings.Value>{form.maksPerDag}</Settings.Value>}
             >
-              <SettingsRange
+              <Settings.Range
                 aria-label="Maks bookinger per dag"
                 value={form.maksPerDag}
                 min={0}
@@ -197,14 +185,14 @@ export default function GrenEditorContent({
                 onChange={(event) => onChange("maksPerDag", Number(event.target.value))}
                 disabled={isSaving}
               />
-            </SettingsRow>
+            </Settings.Row>
 
-            <SettingsRow
+            <Settings.Row
               title="Maks aktive"
               description="Samtidige bookinger per medlem."
-              right={<SettingsValue>{form.maksTotalt}</SettingsValue>}
+              right={<Settings.Value>{form.maksTotalt}</Settings.Value>}
             >
-              <SettingsRange
+              <Settings.Range
                 aria-label="Maks aktive bookinger"
                 value={form.maksTotalt}
                 min={0}
@@ -213,14 +201,14 @@ export default function GrenEditorContent({
                 onChange={(event) => onChange("maksTotalt", Number(event.target.value))}
                 disabled={isSaving}
               />
-            </SettingsRow>
+            </Settings.Row>
 
-            <SettingsRow
+            <Settings.Row
               title="Bookinghorisont"
               description="Dager frem i tid."
-              right={<SettingsValue>{form.dagerFremITid} dager</SettingsValue>}
+              right={<Settings.Value>{form.dagerFremITid} dager</Settings.Value>}
             >
-              <SettingsRange
+              <Settings.Range
                 aria-label="Dager frem i tid"
                 value={form.dagerFremITid}
                 min={1}
@@ -229,13 +217,13 @@ export default function GrenEditorContent({
                 onChange={(event) => onChange("dagerFremITid", Number(event.target.value))}
                 disabled={isSaving}
               />
-            </SettingsRow>
+            </Settings.Row>
 
-            <SettingsRow
+            <Settings.Row
               title="Lengde på tider"
-              right={<SettingsValue>{slotLabel(form.slotLengdeMinutter)}</SettingsValue>}
+              right={<Settings.Value>{slotLabel(form.slotLengdeMinutter)}</Settings.Value>}
             >
-              <SettingsRange
+              <Settings.Range
                 aria-label="Lengde på tider"
                 min={0}
                 max={slotValues.length - 1}
@@ -254,25 +242,21 @@ export default function GrenEditorContent({
                   </>
                 }
               />
-            </SettingsRow>
-          </SettingsPanel>
-        </SettingsSection>
+            </Settings.Row>
+          </Settings.Panel>
+        </Settings.Section>
 
-        <AdminFormActions>
+        <Form.Actions>
           <MutationFeedback
             error={mutasjonFeil}
             success={lagret}
             successTitle="Greninnstillingene er lagret"
           />
-          <AdminFormSubmitButton
-            isLoading={isSaving}
-            disabled={!canSubmit}
-            loadingText={loadingText}
-          >
+          <Form.Submit isLoading={isSaving} disabled={!canSubmit} loadingText={loadingText}>
             {submitLabel}
-          </AdminFormSubmitButton>
-        </AdminFormActions>
-      </SettingsStack>
-    </AdminEditorForm>
+          </Form.Submit>
+        </Form.Actions>
+      </Settings.Stack>
+    </Form>
   );
 }

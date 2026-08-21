@@ -1,17 +1,8 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { CircleAlert } from "lucide-react";
+import { Form, Settings, Page } from "@/components";
 
-import {
-  AdminFormActions,
-  AdminPageLoading,
-  AdminPageState,
-  SettingsPanel,
-  SettingsRow,
-  SettingsSection,
-  SettingsStack,
-  SettingsValue,
-} from "@/components/admin";
 import { ServerFeil } from "@/components/errors";
 import { RecordListState, RecordStatus } from "@/components/records";
 import { Button } from "@/components/ui/button";
@@ -25,11 +16,11 @@ export default function PersondataView() {
   const [lasterNed, setLasterNed] = useState(false);
   const [nedlastingsFeil, setNedlastingsFeil] = useState<string | null>(null);
 
-  if (laster) return <AdminPageLoading label="Laster dataene dine" />;
+  if (laster) return <Page.Loading label="Laster dataene dine" />;
 
   if (error || !bruker) {
     return (
-      <AdminPageState>
+      <Page.State>
         <RecordListState
           icon={<CircleAlert aria-hidden="true" />}
           title="Kunne ikke laste dataene dine"
@@ -42,7 +33,7 @@ export default function PersondataView() {
           tone="danger"
           role="alert"
         />
-      </AdminPageState>
+      </Page.State>
     );
   }
 
@@ -63,49 +54,49 @@ export default function PersondataView() {
   };
 
   return (
-    <SettingsStack>
-      <SettingsSection
+    <Settings.Stack>
+      <Settings.Section
         eyebrow="Personvern"
         title="Vilkår og samtykke"
         description="Se når og hvilken versjon du godtok."
       >
-        <SettingsPanel>
-          <SettingsRow title="Status" description="Vilkårene aksepteres ved første innlogging.">
+        <Settings.Panel>
+          <Settings.Row title="Status" description="Vilkårene aksepteres ved første innlogging.">
             <RecordStatus tone={bruker.vilkårAkseptertDato ? "available" : "warning"}>
               {bruker.vilkårAkseptertDato ? "Akseptert" : "Ikke registrert"}
             </RecordStatus>
-          </SettingsRow>
+          </Settings.Row>
           {bruker.vilkårAkseptertDato ? (
-            <SettingsRow title="Akseptert dato">
-              <SettingsValue>{formatDatoKort(bruker.vilkårAkseptertDato)}</SettingsValue>
-            </SettingsRow>
+            <Settings.Row title="Akseptert dato">
+              <Settings.Value>{formatDatoKort(bruker.vilkårAkseptertDato)}</Settings.Value>
+            </Settings.Row>
           ) : null}
           {bruker.vilkårVersjon ? (
-            <SettingsRow title="Versjon">
-              <SettingsValue>{bruker.vilkårVersjon}</SettingsValue>
-            </SettingsRow>
+            <Settings.Row title="Versjon">
+              <Settings.Value>{bruker.vilkårVersjon}</Settings.Value>
+            </Settings.Row>
           ) : null}
-        </SettingsPanel>
-        <AdminFormActions>
+        </Settings.Panel>
+        <Form.Actions>
           <Button asChild type="button" variant="outline">
             <Link to="../vilkaar" target="_blank" rel="noopener noreferrer">
               Les vilkårene
             </Link>
           </Button>
-        </AdminFormActions>
-      </SettingsSection>
+        </Form.Actions>
+      </Settings.Section>
 
-      <SettingsSection
+      <Settings.Section
         eyebrow="Eksport"
         title="Dine data"
         description="Last ned opplysningene Banebooking har lagret om deg."
       >
-        <SettingsPanel>
-          <SettingsRow title="Datafil" description="JSON med kontoopplysninger og bookede tider.">
+        <Settings.Panel>
+          <Settings.Row title="Datafil" description="JSON med kontoopplysninger og bookede tider.">
             <RecordStatus tone="past">JSON</RecordStatus>
-          </SettingsRow>
-        </SettingsPanel>
-        <AdminFormActions>
+          </Settings.Row>
+        </Settings.Panel>
+        <Form.Actions>
           <ServerFeil feil={nedlastingsFeil} title="Datafilen kunne ikke lastes ned" />
           <Button
             type="button"
@@ -115,8 +106,8 @@ export default function PersondataView() {
           >
             {lasterNed ? "Laster ned…" : "Last ned data"}
           </Button>
-        </AdminFormActions>
-      </SettingsSection>
-    </SettingsStack>
+        </Form.Actions>
+      </Settings.Section>
+    </Settings.Stack>
   );
 }

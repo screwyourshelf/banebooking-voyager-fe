@@ -1,9 +1,9 @@
 import type { ReactNode } from "react";
 import { SearchX, UsersRound } from "lucide-react";
 import { usePagination } from "@/hooks/usePagination";
-import { AdminEntityCollection } from "@/components/admin";
+import { Collection } from "@/components";
+
 import {
-  RecordAccordionList,
   RecordCollectionPagination,
   RecordCollectionSkeleton,
   RecordListState,
@@ -81,11 +81,11 @@ export default function BrukereListeContent({
     : `${filtrerteBrukere.length} ${filtrerteBrukere.length === 1 ? "bruker" : "brukere"}`;
 
   return (
-    <AdminEntityCollection
+    <Collection
       icon={<UsersRound aria-hidden="true" />}
       title={antallTekst}
-      description="Medlemskap, roller og tilgang"
-      summaryStatus={
+      scope="Medlemskap, roller og tilgang"
+      notice={
         !lasterListe && antallTilOppfølging > 0 ? (
           <RecordStatus tone="warning">{antallTilOppfølging} trenger oppfølging</RecordStatus>
         ) : undefined
@@ -144,7 +144,7 @@ export default function BrukereListeContent({
         />
       ) : (
         <>
-          <RecordAccordionList ariaLabel="Brukere">
+          <Collection.List ariaLabel="Brukere">
             {synligeBrukere.map((bruker) => (
               <BrukerListeRad
                 key={bruker.id}
@@ -157,7 +157,7 @@ export default function BrukereListeContent({
                 onÅpneSperreHistorikk={onÅpneSperreHistorikk}
               />
             ))}
-          </RecordAccordionList>
+          </Collection.List>
 
           {harFlere ? (
             <RecordCollectionPagination>
@@ -168,6 +168,6 @@ export default function BrukereListeContent({
           ) : null}
         </>
       )}
-    </AdminEntityCollection>
+    </Collection>
   );
 }

@@ -1,9 +1,8 @@
 import { CalendarCheck, Clock3, UsersRound } from "lucide-react";
-import CardSection from "@/components/layout/CardSection";
-import SectionHeading from "@/components/layout/SectionHeading";
 import { RecordListState } from "@/components/records";
 import { MetricCard, MetricGrid } from "@/components/statistics";
 import type { BookingMedlemsstatistikk, Medlemsbookingtype } from "@/features/statistikk/types";
+import { Section } from "@/components";
 import {
   formatAntall,
   formatAntallMedEnhet,
@@ -76,11 +75,9 @@ export default function Medlemsstatistikk({ medlemmer, bookingtype }: Props) {
         ))}
       </MetricGrid>
 
-      <CardSection className="statistics-section statistics-top-users" padding="sm">
+      <Section variant="surface" data-context="statistics" data-view="top-users" padding="sm">
         <div className="statistics-top-users__heading">
-          <SectionHeading description={beskrivelser.rangering} size="lg">
-            Topp 10 brukere
-          </SectionHeading>
+          <Section.Heading description={beskrivelser.rangering}>Topp 10 brukere</Section.Heading>
         </div>
 
         {medlemmer.toppBrukere.length === 0 ? (
@@ -137,7 +134,7 @@ export default function Medlemsstatistikk({ medlemmer, bookingtype }: Props) {
             </table>
           </div>
         )}
-      </CardSection>
+      </Section>
     </div>
   );
 }

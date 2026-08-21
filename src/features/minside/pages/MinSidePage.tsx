@@ -1,6 +1,6 @@
-import { AdminPage } from "@/components/admin";
 import Tabs from "@/components/navigation/Tabs";
 import { useSearchParams } from "react-router-dom";
+import { Page } from "@/components";
 
 import MinProfilView from "@/features/minside/views/min-profil/MinProfilView";
 import PersondataView from "@/features/minside/views/persondata/PersondataView";
@@ -13,7 +13,7 @@ export default function MinSidePage() {
   const defaultTab = tabParam && validTabs.includes(tabParam) ? tabParam : "profil";
 
   return (
-    <AdminPage
+    <Page
       eyebrow="Min konto"
       title="Min side"
       description="Oppdater profilen og få innsyn i dataene som er lagret om deg."
@@ -35,6 +35,6 @@ export default function MinSidePage() {
           },
         ]}
       />
-    </AdminPage>
+    </Page>
   );
 }

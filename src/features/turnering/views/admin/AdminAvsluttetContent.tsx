@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
-import PageSection from "@/components/sections/PageSection";
 import Tabs from "@/components/navigation/Tabs";
 import { TurneringHeaderSection } from "../../components";
 import type { TurneringRespons } from "@/types";
+import { Section } from "@/components";
 
 type TabItem = { value: string; label: string; content: ReactNode };
 
@@ -13,7 +13,7 @@ type Props = {
 
 export default function AdminAvsluttetContent({ turnering, klasseTabs }: Props) {
   return (
-    <div className="app-stack app-stack--lg">
+    <div>
       {/* ─── Header ─── */}
       <TurneringHeaderSection
         tittel={turnering.arrangementTittel}
@@ -24,13 +24,13 @@ export default function AdminAvsluttetContent({ turnering, klasseTabs }: Props) 
 
       {/* ─── Klasse-tabs ─── */}
       {klasseTabs.length > 0 ? (
-        <PageSection title="Klasser">
+        <Section title="Klasser">
           <Tabs items={klasseTabs} />
-        </PageSection>
+        </Section>
       ) : (
-        <PageSection>
-          <p className="app-text-empty">Ingen klasser er satt opp ennå.</p>
-        </PageSection>
+        <Section>
+          <p>Ingen klasser er satt opp ennå.</p>
+        </Section>
       )}
     </div>
   );

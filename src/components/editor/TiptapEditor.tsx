@@ -17,7 +17,6 @@ import {
 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 export type TiptapEditorProps = {
   content: string;
@@ -55,13 +54,13 @@ export default function TiptapEditor({ content, onChange, className }: TiptapEdi
   if (!editor) return null;
 
   return (
-    <div className={cn("tiptap-editor border rounded-lg overflow-hidden", className)}>
-      <div className="flex flex-wrap items-center gap-0.5 p-1 border-b bg-muted/40">
+    <div className={className} data-ui="editor">
+      <div data-part="toolbar">
         <Button
           type="button"
           variant={editor.isActive("bold") ? "secondary" : "ghost"}
           size="icon"
-          className="h-7 w-7"
+          data-part="control"
           onClick={() => editor.chain().focus().toggleBold().run()}
           aria-label="Fet"
         >
@@ -72,20 +71,20 @@ export default function TiptapEditor({ content, onChange, className }: TiptapEdi
           type="button"
           variant={editor.isActive("italic") ? "secondary" : "ghost"}
           size="icon"
-          className="h-7 w-7"
+          data-part="control"
           onClick={() => editor.chain().focus().toggleItalic().run()}
           aria-label="Kursiv"
         >
           <Italic />
         </Button>
 
-        <div className="w-px bg-border mx-0.5 self-stretch" />
+        <div data-part="separator" />
 
         <Button
           type="button"
           variant={editor.isActive("heading", { level: 2 }) ? "secondary" : "ghost"}
           size="icon"
-          className="h-7 w-7"
+          data-part="control"
           onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
           aria-label="Overskrift 2"
           title="Overskrift (H2)"
@@ -97,7 +96,7 @@ export default function TiptapEditor({ content, onChange, className }: TiptapEdi
           type="button"
           variant={editor.isActive("heading", { level: 3 }) ? "secondary" : "ghost"}
           size="icon"
-          className="h-7 w-7"
+          data-part="control"
           onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
           aria-label="Overskrift 3"
           title="Underoverskrift (H3)"
@@ -105,13 +104,13 @@ export default function TiptapEditor({ content, onChange, className }: TiptapEdi
           <Heading3 />
         </Button>
 
-        <div className="w-px bg-border mx-0.5 self-stretch" />
+        <div data-part="separator" />
 
         <Button
           type="button"
           variant={editor.isActive("bulletList") ? "secondary" : "ghost"}
           size="icon"
-          className="h-7 w-7"
+          data-part="control"
           onClick={() => editor.chain().focus().toggleBulletList().run()}
           aria-label="Punktliste"
         >
@@ -122,7 +121,7 @@ export default function TiptapEditor({ content, onChange, className }: TiptapEdi
           type="button"
           variant={editor.isActive("orderedList") ? "secondary" : "ghost"}
           size="icon"
-          className="h-7 w-7"
+          data-part="control"
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
           aria-label="Nummerert liste"
         >
@@ -133,20 +132,20 @@ export default function TiptapEditor({ content, onChange, className }: TiptapEdi
           type="button"
           variant={editor.isActive("blockquote") ? "secondary" : "ghost"}
           size="icon"
-          className="h-7 w-7"
+          data-part="control"
           onClick={() => editor.chain().focus().toggleBlockquote().run()}
           aria-label="Sitat"
         >
           <Quote />
         </Button>
 
-        <div className="w-px bg-border mx-0.5 self-stretch" />
+        <div data-part="separator" />
 
         <Button
           type="button"
           variant={editor.isActive("table") ? "secondary" : "ghost"}
           size="icon"
-          className="h-7 w-7"
+          data-part="control"
           onClick={() =>
             editor.isActive("table")
               ? editor.chain().focus().deleteTable().run()
@@ -164,56 +163,56 @@ export default function TiptapEditor({ content, onChange, className }: TiptapEdi
               type="button"
               variant="ghost"
               size="icon"
-              className="h-7 w-7"
+              data-part="control"
               onClick={() => editor.chain().focus().addColumnAfter().run()}
               aria-label="Legg til kolonne"
               title="Legg til kolonne"
             >
-              <Plus className="text-blue-600" />
+              <Plus data-part="table-icon" data-tone="column" />
             </Button>
             <Button
               type="button"
               variant="ghost"
               size="icon"
-              className="h-7 w-7"
+              data-part="control"
               onClick={() => editor.chain().focus().deleteColumn().run()}
               aria-label="Slett kolonne"
               title="Slett kolonne"
             >
-              <Minus className="text-blue-600" />
+              <Minus data-part="table-icon" data-tone="column" />
             </Button>
             <Button
               type="button"
               variant="ghost"
               size="icon"
-              className="h-7 w-7"
+              data-part="control"
               onClick={() => editor.chain().focus().addRowAfter().run()}
               aria-label="Legg til rad"
               title="Legg til rad"
             >
-              <Plus className="text-green-600" />
+              <Plus data-part="table-icon" data-tone="row" />
             </Button>
             <Button
               type="button"
               variant="ghost"
               size="icon"
-              className="h-7 w-7"
+              data-part="control"
               onClick={() => editor.chain().focus().deleteRow().run()}
               aria-label="Slett rad"
               title="Slett rad"
             >
-              <Minus className="text-green-600" />
+              <Minus data-part="table-icon" data-tone="row" />
             </Button>
             <Button
               type="button"
               variant="ghost"
               size="icon"
-              className="h-7 w-7"
+              data-part="control"
               onClick={() => editor.chain().focus().deleteTable().run()}
               aria-label="Slett tabell"
               title="Slett tabell"
             >
-              <Trash2 className="text-destructive" />
+              <Trash2 data-part="table-icon" data-tone="danger" />
             </Button>
           </>
         )}

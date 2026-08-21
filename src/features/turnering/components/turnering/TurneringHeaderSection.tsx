@@ -1,9 +1,8 @@
-import { Fragment } from "react";
 import type { ReactNode } from "react";
-import { Calendar } from "lucide-react";
-import PageSection from "@/components/sections/PageSection";
+import { Badge } from "@/components/ui/badge";
 import { formatDatoKort } from "@/utils/datoUtils";
 import type { TurneringStatus } from "@/types";
+import { Section } from "@/components";
 
 const statusLabels: Record<TurneringStatus, string> = {
   Oppsett: "Oppsett",
@@ -39,47 +38,21 @@ export function TurneringHeaderSection({ tittel, status, startDato, sluttDato, a
   const datoTekst = formatDatoTekst(startDato, sluttDato);
 
   return (
-    <PageSection>
-      <div className="tournament-header">
-        <div className="app-min-width-0">
-          <div className="app-inline app-inline--baseline">
-            <h2 className="app-text-heading">{tittel}</h2>
-            {datoTekst && (
-              <span className="tournament-header__date">
-                <Calendar className="app-icon-xs" />
-                {datoTekst}
-              </span>
-            )}
-          </div>
-          <div className="tournament-status-track">
-            {STATUS_REKKEFØLGE.map((s, i) => {
-              const gjeldende = s === status;
-              const passert = STATUS_REKKEFØLGE.indexOf(status) > i;
-              return (
-                <Fragment key={s}>
-                  {i > 0 && (
-                    <span
-                      className="tournament-status-track__separator"
-                      data-past={passert || undefined}
-                    >
-                      ›
-                    </span>
-                  )}
-                  <span
-                    className="tournament-status-track__item"
-                    data-current={gjeldende || undefined}
-                    data-past={passert || undefined}
-                  >
-                    {gjeldende && <span className="tournament-status-track__dot" data-status={s} />}
-                    {statusLabels[s]}
-                  </span>
-                </Fragment>
-              );
-            })}
-          </div>
-        </div>
-        {actions ? <div className="app-shrink-0">{actions}</div> : null}
+    <Section title={tittel} description={datoTekst ?? undefined} actions={actions}>
+      <div>
+        {STATUS_REKKEFØLGE.map((steg) => {
+          const stegIndex = STATUS_REKKEFØLGE.indexOf(steg);
+          const statusIndex = STATUS_REKKEFØLGE.indexOf(status);
+          const variant =
+            steg === status ? "default" : stegIndex < statusIndex ? "secondary" : "outline";
+
+          return (
+            <Badge key={steg} variant={variant}>
+              {statusLabels[steg]}
+            </Badge>
+          );
+        })}
       </div>
-    </PageSection>
+    </Section>
   );
 }

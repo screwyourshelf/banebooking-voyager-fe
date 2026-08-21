@@ -40,16 +40,31 @@ export function sorterBookinger(bookinger: LokalBooking[]): LokalBooking[] {
 }
 
 /**
- * Formatterer dato til "Man 17.06"-format for bruk i BookingListe-tabellen.
- * Forventer "YYYY-MM-DD"-streng.
+ * Én felles regel for om en lokal banetid kan sendes til opprettelse.
+ * Slettede tider og kjente konflikter skal aldri regnes med i handlingen.
  */
-export function formatDatoMedUkedag(dato: string): string {
-  const [år, måned, dag] = dato.split("-").map(Number);
-  // Bruk eksplisitt lokal dato for å unngå UTC-offset-problemer
-  const d = new Date(år, måned - 1, dag);
-  const ukedag = d.toLocaleDateString("nb-NO", { weekday: "short" });
-  const datoDel = d.toLocaleDateString("nb-NO", { day: "2-digit", month: "2-digit" });
-  return `${ukedag.charAt(0).toUpperCase()}${ukedag.slice(1, 3)} ${datoDel}`;
+export function kanBookingOpprettes(booking: LokalBooking): boolean {
+  return !booking.erSlettet && booking.status !== "konflikt";
+}
+
+export type BookingDatoGruppe = {
+  dato: string;
+  bookinger: LokalBooking[];
+};
+
+export function grupperBookingerEtterDato(bookinger: LokalBooking[]): BookingDatoGruppe[] {
+  return bookinger.reduce<BookingDatoGruppe[]>((grupper, booking) => {
+    const dato = booking.dato.slice(0, 10);
+    const sisteGruppe = grupper.at(-1);
+
+    if (sisteGruppe?.dato === dato) {
+      sisteGruppe.bookinger.push(booking);
+    } else {
+      grupper.push({ dato, bookinger: [booking] });
+    }
+
+    return grupper;
+  }, []);
 }
 
 /**

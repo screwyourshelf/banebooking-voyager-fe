@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
+import { Page, type PageProps } from "@/components";
 
-import { AdminPage, AdminResponsiveAction, AdminWorkspace } from "@/components/admin";
 import { RouteTabs, type RouteTabItem } from "@/components/navigation/Tabs";
 
 export type BanerOgGrenerSection = "baner" | "grener";
@@ -8,7 +8,7 @@ export type BanerOgGrenerSection = "baner" | "grener";
 type Props = {
   activeSection: BanerOgGrenerSection;
   availableSections: Record<BanerOgGrenerSection, boolean>;
-  action?: ReactNode;
+  createAction?: PageProps["createAction"];
   children: ReactNode;
 };
 
@@ -28,36 +28,21 @@ const sections: Array<RouteTabItem & { value: BanerOgGrenerSection }> = [
 export default function BanerOgGrenerWorkspace({
   activeSection,
   availableSections,
-  action,
+  createAction,
   children,
 }: Props) {
   const items = sections.filter((section) => availableSections[section.value]);
 
   return (
-    <AdminPage
+    <Page
       eyebrow="Administrasjon"
       title="Baner og grener"
       description="Definer klubbens bookingtilbud og reglene som gjelder."
-      action={
-        action ? (
-          <AdminResponsiveAction placement="page">{action}</AdminResponsiveAction>
-        ) : undefined
-      }
+      createAction={createAction}
     >
-      <AdminWorkspace section={activeSection}>
-        <RouteTabs
-          ariaLabel="Baner og grener"
-          items={items}
-          value={activeSection}
-          controls={
-            action ? (
-              <AdminResponsiveAction placement="tabs">{action}</AdminResponsiveAction>
-            ) : undefined
-          }
-        >
-          {children}
-        </RouteTabs>
-      </AdminWorkspace>
-    </AdminPage>
+      <RouteTabs ariaLabel="Baner og grener" items={items} value={activeSection}>
+        {children}
+      </RouteTabs>
+    </Page>
   );
 }

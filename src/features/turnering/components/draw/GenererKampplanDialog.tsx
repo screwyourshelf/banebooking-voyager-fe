@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { SettingsChoiceGroup, SettingsRange } from "@/components/admin";
-import DateTimeInput from "@/components/controls/DateTimeInput";
-import { AppDialog } from "@/components/dialogs";
-import { Inline, Stack, Text } from "@/components/layout";
+import { Dialog, Form, Settings } from "@/components";
+
+import DateTimeInput from "@/features/turnering/components/internal/DateTimeInput";
+import { Text } from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { useBaner } from "@/hooks/useBaner";
 import type { GenererKampplanForespørsel } from "@/types";
 
@@ -75,7 +74,7 @@ export function GenererKampplanDialog({
   const kanGenerer = !!startTid && valgteBaner.length > 0;
 
   return (
-    <AppDialog
+    <Dialog
       open={open}
       onOpenChange={handleClose}
       title="Generer kampplan"
@@ -91,24 +90,20 @@ export function GenererKampplanDialog({
         </>
       }
     >
-      <Stack gap="lg">
-        <Stack gap="xs">
-          <Label htmlFor="kampplan-starttid">Starttid</Label>
+      <Form.Fields>
+        <Form.Field label="Starttid" htmlFor="kampplan-starttid">
           <DateTimeInput
             id="kampplan-starttid"
             value={startTid}
             onChange={(e) => setStartTid(e.target.value)}
           />
-        </Stack>
+        </Form.Field>
 
-        <Stack gap="xs">
-          <Inline justify="between">
-            <Label>Kampvarighet</Label>
-            <Text as="span" variant="strong">
-              {VARIGHET_VERDIER[varighetIndex]} min
-            </Text>
-          </Inline>
-          <SettingsRange
+        <Form.Field
+          label="Kampvarighet"
+          description={`${VARIGHET_VERDIER[varighetIndex]} minutter`}
+        >
+          <Settings.Range
             min={0}
             max={VARIGHET_VERDIER.length - 1}
             step={1}
@@ -118,22 +113,21 @@ export function GenererKampplanDialog({
               <span key={v}>{v}</span>
             ))}
           />
-        </Stack>
+        </Form.Field>
 
-        <Stack gap="xs">
-          <Label>Baner</Label>
+        <Form.Field label="Baner">
           {tilgjengeligeBaner.length === 0 ? (
             <Text variant="empty">Ingen aktive baner funnet.</Text>
           ) : (
-            <SettingsChoiceGroup
+            <Settings.ChoiceGroup
               label="Baner"
               options={tilgjengeligeBaner.map((bane) => ({ value: bane.navn, label: bane.navn }))}
               selectedValues={valgteBaner}
               onToggle={toggleBane}
             />
           )}
-        </Stack>
-      </Stack>
-    </AppDialog>
+        </Form.Field>
+      </Form.Fields>
+    </Dialog>
   );
 }

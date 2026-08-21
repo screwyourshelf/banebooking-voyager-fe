@@ -1,11 +1,6 @@
 import { useMemo, useState } from "react";
-import {
-  AdminFormActions,
-  SettingsChoiceGroup,
-  SettingsPanel,
-  SettingsRow,
-  SettingsSwitchRow,
-} from "@/components/admin";
+import { Form, Settings } from "@/components";
+
 import DatoVelger from "@/components/DatoVelger";
 import { RecordStatus } from "@/components/records";
 import { Button } from "@/components/ui/button";
@@ -164,22 +159,22 @@ export default function GjentakendeOppsett({ baner, onGenerer }: Props) {
 
   return (
     <>
-      <SettingsPanel>
-        <SettingsRow title="Fra dato">
+      <Form.Fields>
+        <Form.Field label="Fra dato">
           <DatoVelger value={datoFra} onChange={setDatoFra} visNavigering />
-        </SettingsRow>
-        <SettingsRow title="Til dato">
+        </Form.Field>
+        <Form.Field label="Til dato">
           <DatoVelger value={datoTil} onChange={setDatoTil} visNavigering />
-        </SettingsRow>
+        </Form.Field>
 
-        <SettingsSwitchRow
+        <Settings.SwitchRow
           title="Alle ukedager i perioden"
           description="Bruk alle dager som finnes mellom fra- og til-dato."
           checked={alleUkedager}
           onCheckedChange={setAlleUkedager}
         />
-        <SettingsRow title="Ukedager" description="Velg dagene som skal gjentas.">
-          <SettingsChoiceGroup
+        <Form.Field label="Ukedager" description="Velg dagene som skal gjentas.">
+          <Settings.ChoiceGroup
             label="Ukedager"
             options={UKEDAGER_REKKEFOLGE.map((day) => ({
               value: day,
@@ -190,28 +185,28 @@ export default function GjentakendeOppsett({ baner, onGenerer }: Props) {
             onToggle={(value) => toggleItem(value as DayOfWeek, setValgteUkedager)}
             disabled={alleUkedager}
           />
-        </SettingsRow>
+        </Form.Field>
 
-        <SettingsSwitchRow
+        <Settings.SwitchRow
           title="Alle baner"
           description="Bruk alle banene i valgt gren."
           checked={alleBaner}
           onCheckedChange={setAlleBaner}
         />
-        <SettingsRow title="Baner" description="Velg banene arrangementet skal bruke.">
-          <SettingsChoiceGroup
+        <Form.Field label="Baner" description="Velg banene arrangementet skal bruke.">
+          <Settings.ChoiceGroup
             label="Baner"
             options={baner.map((bane) => ({ value: bane.id, label: bane.navn }))}
             selectedValues={aktiveBaner}
             onToggle={(value) => toggleItem(value, setValgteBaner)}
             disabled={alleBaner}
           />
-        </SettingsRow>
+        </Form.Field>
 
         {tidspunktResultat.advarselTekst ? (
-          <SettingsRow title="Ulik varighet" description={tidspunktResultat.advarselTekst}>
+          <Settings.Row title="Ulik varighet" description={tidspunktResultat.advarselTekst}>
             <RecordStatus tone="warning">Kontroller tidene</RecordStatus>
-          </SettingsRow>
+          </Settings.Row>
         ) : null}
 
         {erGruppert ? (
@@ -220,7 +215,7 @@ export default function GjentakendeOppsett({ baner, onGenerer }: Props) {
             const allTimes = allePerGruppe[slotLength] ?? false;
             const selectedTimes = tidspunkterPerGruppe[slotLength] ?? [];
             return [
-              <SettingsSwitchRow
+              <Settings.SwitchRow
                 key={`all-${slotLength}`}
                 title={`Alle tidspunkter · ${slotLength} min`}
                 description={group.baneNavn.join(", ")}
@@ -229,12 +224,12 @@ export default function GjentakendeOppsett({ baner, onGenerer }: Props) {
                   setAllePerGruppe((current) => ({ ...current, [slotLength]: checked }))
                 }
               />,
-              <SettingsRow
+              <Form.Field
                 key={`times-${slotLength}`}
-                title={`Tidspunkter · ${slotLength} min`}
+                label={`Tidspunkter · ${slotLength} min`}
                 description={group.baneNavn.join(", ")}
               >
-                <SettingsChoiceGroup
+                <Settings.ChoiceGroup
                   label={`Tidspunkter for ${slotLength} minutter`}
                   options={group.tidspunkter.map((time) => ({ value: time, label: time }))}
                   selectedValues={allTimes ? group.tidspunkter : selectedTimes}
@@ -248,35 +243,35 @@ export default function GjentakendeOppsett({ baner, onGenerer }: Props) {
                   }
                   disabled={allTimes}
                 />
-              </SettingsRow>,
+              </Form.Field>,
             ];
           })
         ) : (
           <>
-            <SettingsSwitchRow
+            <Settings.SwitchRow
               title="Alle tidspunkter"
               description="Bruk alle tilgjengelige starttider for valgte baner."
               checked={alleTidspunkter}
               onCheckedChange={setAlleTidspunkter}
             />
-            <SettingsRow title="Tidspunkter" description="Velg starttidene som skal gjentas.">
-              <SettingsChoiceGroup
+            <Form.Field label="Tidspunkter" description="Velg starttidene som skal gjentas.">
+              <Settings.ChoiceGroup
                 label="Tidspunkter"
                 options={tilgjengeligeTidspunkter.map((time) => ({ value: time, label: time }))}
                 selectedValues={alleTidspunkter ? tilgjengeligeTidspunkter : valgteTidspunkter}
                 onToggle={(value) => toggleItem(value, setValgteTidspunkter)}
                 disabled={alleTidspunkter}
               />
-            </SettingsRow>
+            </Form.Field>
           </>
         )}
-      </SettingsPanel>
+      </Form.Fields>
 
-      <AdminFormActions>
+      <Form.Actions>
         <Button type="button" disabled={!kanGenerere} onClick={handleGenerate}>
           Legg forslag i listen
         </Button>
-      </AdminFormActions>
+      </Form.Actions>
     </>
   );
 }

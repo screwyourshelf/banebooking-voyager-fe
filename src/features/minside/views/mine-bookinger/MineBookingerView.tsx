@@ -1,7 +1,6 @@
 import { useMemo, useState } from "react";
+import { Page } from "@/components";
 
-import Page from "@/components/Page";
-import { RecordCollectionPage } from "@/components/records";
 import { useMineBookinger } from "@/features/minside/hooks/useMineBookinger";
 import { useBookingActions } from "@/features/minside/hooks/useBookingActions";
 import type { MinBookingRespons } from "@/types";
@@ -36,25 +35,23 @@ export default function MineBookingerView() {
   }
 
   return (
-    <Page width="lg">
-      <RecordCollectionPage
-        eyebrow="Min konto"
-        title="Mine bookinger"
-        description="Hold oversikt over kommende og gjennomførte tider."
-      >
-        <MineBookingerContent
-          visHistoriske={visHistoriske}
-          onToggleVisHistoriske={setVisHistoriske}
-          bookinger={visteBookinger}
-          isLoading={isLoading}
-          queryError={error?.message ?? null}
-          isFetching={isFetching}
-          onRetry={() => void refetch()}
-          isPending={isPending}
-          onFjern={handleFjern}
-          serverFeil={fjernFeil?.message ?? null}
-        />
-      </RecordCollectionPage>
+    <Page
+      eyebrow="Min konto"
+      title="Mine bookinger"
+      description="Hold oversikt over kommende og gjennomførte tider."
+    >
+      <MineBookingerContent
+        visHistoriske={visHistoriske}
+        onToggleVisHistoriske={setVisHistoriske}
+        bookinger={visteBookinger}
+        isLoading={isLoading}
+        queryError={error?.message ?? null}
+        isFetching={isFetching}
+        onRetry={() => void refetch()}
+        isPending={isPending}
+        onFjern={handleFjern}
+        serverFeil={fjernFeil?.message ?? null}
+      />
     </Page>
   );
 }

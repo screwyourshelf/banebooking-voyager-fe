@@ -1,8 +1,6 @@
 import { type ReactNode } from "react";
-import { SettingsStack } from "@/components/admin";
-import { AppDialog } from "@/components/dialogs";
-import { RecordFacts } from "@/components/records";
-import { Separator } from "@/components/ui/separator";
+import { Dialog, Document, Section, Settings } from "@/components";
+
 import type { BaneRespons, GrenRespons } from "@/types";
 import type { BookingRegelRespons } from "@/types/Klubbdetaljer";
 
@@ -23,42 +21,27 @@ export default function ReglementDialog({ children, gren, bane }: Props) {
       : "Bookingregler";
 
   return (
-    <AppDialog
+    <Dialog
       trigger={children}
       title={title}
       description="Grenser, tider og varighet som gjelder når du booker."
-      size="wide"
     >
       {gren && bookingRegler ? (
-        <SettingsStack>
-          <RuleSection
+        <Settings.Stack>
+          <Section
             title="Hvor mye du kan booke"
             description={`Gjelder ${gren.navn.toLocaleLowerCase("nb-NO")}.`}
-            facts={getBookingLimitFacts(bookingRegler)}
-          />
-          <Separator />
-          <RuleSection title="Når du kan booke" facts={getTimeFacts(bookingRegler)} />
-        </SettingsStack>
+            variant="plain"
+            padding="sm"
+          >
+            <Document.Facts items={getBookingLimitFacts(bookingRegler)} />
+          </Section>
+          <Section title="Når du kan booke" variant="plain" padding="sm">
+            <Document.Facts items={getTimeFacts(bookingRegler)} />
+          </Section>
+        </Settings.Stack>
       ) : null}
-    </AppDialog>
-  );
-}
-
-function RuleSection({
-  title,
-  description,
-  facts,
-}: {
-  title: string;
-  description?: string;
-  facts: Fact[];
-}) {
-  return (
-    <section>
-      <h3>{title}</h3>
-      {description ? <p>{description}</p> : null}
-      <RecordFacts items={facts} />
-    </section>
+    </Dialog>
   );
 }
 

@@ -1,7 +1,6 @@
-import CardSection from "@/components/layout/CardSection";
-import SectionHeading from "@/components/layout/SectionHeading";
 import type { BookingNøkkeltall } from "@/features/statistikk/types";
 import { formatAntallMedEnhet } from "@/features/statistikk/statistikkPresentation";
+import { Section } from "@/components";
 
 type Props = {
   nøkkeltall: BookingNøkkeltall;
@@ -23,10 +22,10 @@ export default function BookingtypeDonut({ nøkkeltall }: Props) {
   const arrangementLengde = totalt > 0 ? (arrangement / totalt) * omkrets : 0;
 
   return (
-    <CardSection className="statistics-section statistics-booking-types">
-      <SectionHeading description="Andel personlige bookinger og arrangementsbookinger." size="lg">
+    <Section variant="surface" data-context="statistics" data-view="booking-types">
+      <Section.Heading description="Andel personlige bookinger og arrangementsbookinger.">
         Bookingtype
-      </SectionHeading>
+      </Section.Heading>
 
       <div className="statistics-booking-types__content">
         <div className="statistics-booking-types__chart">
@@ -52,28 +51,28 @@ export default function BookingtypeDonut({ nøkkeltall }: Props) {
             />
           </svg>
           <span aria-hidden="true">
-            <strong>{formatAntallMedEnhet(totalt)}</strong>
-            <small>bookinger</small>
+            <strong data-stat-role="chart-value">{formatAntallMedEnhet(totalt)}</strong>
+            <small data-stat-role="chart-meta">bookinger</small>
           </span>
         </div>
 
         <dl className="statistics-booking-types__legend">
           <div data-series="current">
-            <dt>Personlige</dt>
+            <dt data-stat-role="chart-label">Personlige</dt>
             <dd>
-              <strong>{formatAntallMedEnhet(personlig)}</strong>
-              <span>{formatAndel(personlig, totalt)}</span>
+              <strong data-stat-role="chart-value">{formatAntallMedEnhet(personlig)}</strong>
+              <span data-stat-role="chart-meta">{formatAndel(personlig, totalt)}</span>
             </dd>
           </div>
           <div data-series="previous">
-            <dt>Arrangement</dt>
+            <dt data-stat-role="chart-label">Arrangement</dt>
             <dd>
-              <strong>{formatAntallMedEnhet(arrangement)}</strong>
-              <span>{formatAndel(arrangement, totalt)}</span>
+              <strong data-stat-role="chart-value">{formatAntallMedEnhet(arrangement)}</strong>
+              <span data-stat-role="chart-meta">{formatAndel(arrangement, totalt)}</span>
             </dd>
           </div>
         </dl>
       </div>
-    </CardSection>
+    </Section>
   );
 }

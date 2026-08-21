@@ -1,19 +1,9 @@
-import { CalendarPlus } from "lucide-react";
 import DatoVelger from "@/components/DatoVelger";
-import {
-  AdminFormActions,
-  AdminFormSubmitButton,
-  AdminSettingsForm,
-  SettingsPanel,
-  SettingsRow,
-  SettingsSection,
-  SettingsStack,
-  SettingsValue,
-} from "@/components/admin";
+import { Form, Settings } from "@/components";
+
 import { ServerFeil } from "@/components/errors";
 import { RecordStatus } from "@/components/records";
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import type { MedlemskapStatusRespons } from "@/types";
 import { formatDatoKort } from "@/utils/datoUtils";
@@ -48,14 +38,14 @@ export default function MedlemskapInnstillingerContent({
   const aktivBekreftelse = status?.aktivBekreftelse ?? null;
 
   return (
-    <SettingsStack>
-      <SettingsSection
+    <Settings.Stack>
+      <Settings.Section
         eyebrow="Medlemskap"
         title="Bekreftelsesperiode"
         description="Følg status og hvor mange som har fullført."
       >
-        <SettingsPanel>
-          <SettingsRow
+        <Settings.Panel>
+          <Settings.Row
             title="Status"
             description={
               aktivBekreftelse
@@ -66,55 +56,59 @@ export default function MedlemskapInnstillingerContent({
             <RecordStatus tone={aktivBekreftelse ? "available" : "past"}>
               {aktivBekreftelse?.label ?? "Ingen aktiv periode"}
             </RecordStatus>
-          </SettingsRow>
+          </Settings.Row>
 
           {aktivBekreftelse ? (
             <>
-              <SettingsRow title="Startet">
-                <SettingsValue>{formatDatoKort(aktivBekreftelse.opprettetTidspunkt)}</SettingsValue>
-              </SettingsRow>
-              <SettingsRow title="Gyldig til">
-                <SettingsValue>{formatDatoKort(aktivBekreftelse.gyldigTil)}</SettingsValue>
-              </SettingsRow>
-              <SettingsRow title="Bekreftet">
-                <SettingsValue>
+              <Settings.Row title="Startet">
+                <Settings.Value>
+                  {formatDatoKort(aktivBekreftelse.opprettetTidspunkt)}
+                </Settings.Value>
+              </Settings.Row>
+              <Settings.Row title="Gyldig til">
+                <Settings.Value>{formatDatoKort(aktivBekreftelse.gyldigTil)}</Settings.Value>
+              </Settings.Row>
+              <Settings.Row title="Bekreftet">
+                <Settings.Value>
                   {status?.antallBekreftet ?? 0} av {status?.antallTotalt ?? 0} medlemmer
-                </SettingsValue>
-              </SettingsRow>
+                </Settings.Value>
+              </Settings.Row>
             </>
           ) : null}
-        </SettingsPanel>
-      </SettingsSection>
+        </Settings.Panel>
+      </Settings.Section>
 
       {!aktivBekreftelse ? (
-        <AdminSettingsForm
+        <Form
+          variant="settings"
           onSubmit={(event) => {
             event.preventDefault();
             onAktiver();
           }}
         >
-          <SettingsSection
+          <Settings.Section
             eyebrow="Ny periode"
-            icon={<CalendarPlus />}
             title="Start medlemsbekreftelse"
             description="Alle medlemmer må bekrefte innen sluttdatoen."
           >
-            <SettingsPanel>
-              <SettingsRow title="Periodenavn" description='For eksempel "Sesong 2026".'>
-                <Field>
-                  <Input
-                    id="medlemskap-label"
-                    aria-label="Periodenavn"
-                    value={label}
-                    onChange={(event) => onLabelChange(event.target.value)}
-                    placeholder="Sesong 2026"
-                    maxLength={100}
-                    disabled={aktiverLaster}
-                  />
-                </Field>
-              </SettingsRow>
+            <Form.Fields>
+              <Form.Field
+                label="Periodenavn"
+                description='For eksempel "Sesong 2026".'
+                htmlFor="medlemskap-label"
+              >
+                <Input
+                  id="medlemskap-label"
+                  aria-label="Periodenavn"
+                  value={label}
+                  onChange={(event) => onLabelChange(event.target.value)}
+                  placeholder="Sesong 2026"
+                  maxLength={100}
+                  disabled={aktiverLaster}
+                />
+              </Form.Field>
 
-              <SettingsRow title="Gyldig til" description="Dato perioden utløper.">
+              <Form.Field label="Gyldig til" description="Dato perioden utløper.">
                 <DatoVelger
                   value={gyldigTil}
                   onChange={onGyldigTilChange}
@@ -122,29 +116,29 @@ export default function MedlemskapInnstillingerContent({
                   ariaLabel="Velg gyldighetsdato"
                   disabled={aktiverLaster}
                 />
-              </SettingsRow>
-            </SettingsPanel>
+              </Form.Field>
+            </Form.Fields>
 
-            <AdminFormActions>
+            <Form.Actions>
               <ServerFeil feil={aktiverFeil} />
-              <AdminFormSubmitButton
+              <Form.Submit
                 isLoading={aktiverLaster}
                 disabled={!label.trim() || !gyldigTil}
                 loadingText="Aktiverer…"
               >
                 Aktiver bekreftelse
-              </AdminFormSubmitButton>
-            </AdminFormActions>
-          </SettingsSection>
-        </AdminSettingsForm>
+              </Form.Submit>
+            </Form.Actions>
+          </Settings.Section>
+        </Form>
       ) : (
-        <SettingsSection
+        <Settings.Section
           eyebrow="Kontroll"
           title="Avslutt medlemsbekreftelsen"
           description="Tidligere bekreftelser beholdes når perioden avsluttes."
           tone="danger"
         >
-          <AdminFormActions>
+          <Form.Actions>
             <ServerFeil feil={deaktiverFeil} />
             <Button
               type="button"
@@ -154,9 +148,9 @@ export default function MedlemskapInnstillingerContent({
             >
               {deaktiverLaster ? "Deaktiverer…" : "Deaktiver bekreftelse"}
             </Button>
-          </AdminFormActions>
-        </SettingsSection>
+          </Form.Actions>
+        </Settings.Section>
       )}
-    </SettingsStack>
+    </Settings.Stack>
   );
 }

@@ -1,4 +1,3 @@
-import Page from "@/components/Page";
 import { PageContentSkeleton } from "@/components/loading";
 import { useBooking } from "@/features/booking/hooks/useBooking";
 import { useBookingSelection } from "@/features/booking/hooks/useBookingSelection";
@@ -6,6 +5,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useBaner } from "@/hooks/useBaner";
 import { useGrener } from "@/hooks/useGrener";
 import BookingContent from "./BookingContent";
+import { Page } from "@/components";
 
 export default function BookingView() {
   const {
@@ -68,7 +68,7 @@ export default function BookingView() {
 
 function BookingPageSkeleton() {
   return (
-    <Page width="lg">
+    <Page>
       <PageContentSkeleton label="Laster booking" rows={4} layout="time" controls />
     </Page>
   );

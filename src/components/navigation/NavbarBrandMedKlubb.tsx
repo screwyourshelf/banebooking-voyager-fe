@@ -1,20 +1,19 @@
 import { Link } from "react-router-dom";
 import { useSlug } from "@/hooks/useSlug";
 import { useState } from "react";
-import { cn } from "@/lib/utils";
 
 type Props = {
   klubbnavn: React.ReactNode;
   tone?: "default" | "inverted";
+  placement?: "default" | "topbar" | "sidebar";
   className?: string;
-  logoClassName?: string;
 };
 
 export default function NavbarBrandMedKlubb({
   klubbnavn,
   tone = "default",
+  placement = "default",
   className,
-  logoClassName,
 }: Props) {
   const slug = useSlug();
   const base = import.meta.env.BASE_URL ?? "/";
@@ -25,22 +24,13 @@ export default function NavbarBrandMedKlubb({
   const [src, setSrc] = useState(`${klubbPath}/logo.svg`);
 
   return (
-    <Link
-      to="."
-      className={cn(
-        "flex min-w-0 items-center gap-2 font-medium",
-        tone === "inverted"
-          ? "text-white hover:text-white/85"
-          : "text-foreground hover:text-foreground/80",
-        className
-      )}
-    >
+    <Link to="." className={className} data-ui="brand" data-tone={tone} data-placement={placement}>
       <img
         src={src}
         alt=""
         width={48}
         height={48}
-        className={cn("size-8 shrink-0 rounded-lg object-contain", logoClassName)}
+        data-part="logo"
         onError={() => {
           if (src.endsWith(".svg")) {
             setSrc(`${klubbPath}/logo.webp`);
@@ -50,7 +40,7 @@ export default function NavbarBrandMedKlubb({
         }}
       />
 
-      <span className="truncate">{klubbnavn}</span>
+      <span data-part="name">{klubbnavn}</span>
     </Link>
   );
 }

@@ -1,15 +1,6 @@
-import { MapPin } from "lucide-react";
-import {
-  AdminEditorForm,
-  AdminFormActions,
-  AdminFormSubmitButton,
-  SettingsPanel,
-  SettingsRow,
-  SettingsSection,
-  SettingsStack,
-} from "@/components/admin";
+import { Form, Settings } from "@/components";
+
 import { ServerFeil } from "@/components/errors";
-import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -50,86 +41,73 @@ export default function NyBaneContent({
   mutasjonFeil,
 }: Props) {
   return (
-    <AdminEditorForm
+    <Form
+      variant="editor"
       onSubmit={(event) => {
         event.preventDefault();
         onSubmit();
       }}
     >
-      <SettingsStack embedded>
-        <SettingsSection
+      <Settings.Stack embedded>
+        <Settings.Section
           embedded
           eyebrow="Bane"
-          icon={<MapPin />}
           title="Baneinformasjon"
           description="Det medlemmene skal kjenne igjen i bookingoversikten."
         >
-          <SettingsPanel>
-            <SettingsRow title="Navn">
-              <Field data-invalid={!!navnError}>
-                <Input
-                  id="ny-navn"
-                  aria-label="Navn"
-                  placeholder="For eksempel Bane A"
-                  disabled={isSaving}
-                  value={form.navn}
-                  onChange={(event) => onChange("navn", event.target.value)}
-                  onBlur={onBlurNavn}
-                  aria-invalid={!!navnError}
-                  autoComplete="off"
-                />
-                {navnError ? <FieldError>{navnError}</FieldError> : null}
-              </Field>
-            </SettingsRow>
+          <Form.Fields>
+            <Form.Field label="Navn" htmlFor="ny-navn" error={navnError}>
+              <Input
+                id="ny-navn"
+                placeholder="For eksempel Bane A"
+                disabled={isSaving}
+                value={form.navn}
+                onChange={(event) => onChange("navn", event.target.value)}
+                onBlur={onBlurNavn}
+                aria-invalid={!!navnError}
+                autoComplete="off"
+              />
+            </Form.Field>
 
-            <SettingsRow title="Gren">
-              <Field>
-                <Select
-                  disabled={isSaving}
-                  value={form.grenId}
-                  onValueChange={(value) => onChange("grenId", value)}
-                >
-                  <SelectTrigger id="ny-grenId" aria-label="Gren">
-                    <SelectValue placeholder="Velg gren…" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {grener.map((gren) => (
-                      <SelectItem key={gren.id} value={gren.id}>
-                        {gren.navn}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </Field>
-            </SettingsRow>
+            <Form.Field label="Gren" htmlFor="ny-grenId">
+              <Select
+                disabled={isSaving}
+                value={form.grenId}
+                onValueChange={(value) => onChange("grenId", value)}
+              >
+                <SelectTrigger id="ny-grenId" aria-label="Gren">
+                  <SelectValue placeholder="Velg gren…" />
+                </SelectTrigger>
+                <SelectContent>
+                  {grener.map((gren) => (
+                    <SelectItem key={gren.id} value={gren.id}>
+                      {gren.navn}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </Form.Field>
 
-            <SettingsRow title="Beskrivelse">
-              <Field>
-                <Input
-                  id="ny-beskrivelse"
-                  aria-label="Beskrivelse"
-                  placeholder="For eksempel nær klubbhuset"
-                  disabled={isSaving}
-                  value={form.beskrivelse}
-                  onChange={(event) => onChange("beskrivelse", event.target.value)}
-                  autoComplete="off"
-                />
-              </Field>
-            </SettingsRow>
-          </SettingsPanel>
-        </SettingsSection>
+            <Form.Field label="Beskrivelse" htmlFor="ny-beskrivelse">
+              <Input
+                id="ny-beskrivelse"
+                placeholder="For eksempel nær klubbhuset"
+                disabled={isSaving}
+                value={form.beskrivelse}
+                onChange={(event) => onChange("beskrivelse", event.target.value)}
+                autoComplete="off"
+              />
+            </Form.Field>
+          </Form.Fields>
+        </Settings.Section>
 
-        <AdminFormActions>
+        <Form.Actions>
           <ServerFeil feil={mutasjonFeil} />
-          <AdminFormSubmitButton
-            isLoading={isSaving}
-            disabled={!canSubmit}
-            loadingText="Oppretter…"
-          >
+          <Form.Submit isLoading={isSaving} disabled={!canSubmit} loadingText="Oppretter…">
             Opprett bane
-          </AdminFormSubmitButton>
-        </AdminFormActions>
-      </SettingsStack>
-    </AdminEditorForm>
+          </Form.Submit>
+        </Form.Actions>
+      </Settings.Stack>
+    </Form>
   );
 }

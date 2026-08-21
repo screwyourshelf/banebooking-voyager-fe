@@ -10,36 +10,22 @@ type TimeRangeProps = {
   accessory?: ReactNode;
 };
 
-type SummaryCopyProps = {
-  title: ReactNode;
-  description?: ReactNode;
-};
-
 export function RecordLeadingValue({ children }: Props) {
-  return <strong className="record-card__leading-value">{children}</strong>;
-}
-
-export function RecordEyebrow({ children }: Props) {
-  return <span className="record-card__eyebrow">{children}</span>;
+  return (
+    <strong data-ui="record-leading-value" data-part="leading-value">
+      {children}
+    </strong>
+  );
 }
 
 export function RecordTimeRange({ start, end, accessory }: TimeRangeProps) {
   return (
-    <span className="record-card__time">
-      <span className="record-card__time-range">
+    <span data-ui="record-time" data-part="time">
+      <span data-part="time-range">
         <RecordLeadingValue>{start}</RecordLeadingValue>
-        <span>–{end}</span>
+        <span data-part="end-time">–{end}</span>
       </span>
       {accessory}
-    </span>
-  );
-}
-
-export function RecordSummaryCopy({ title, description }: SummaryCopyProps) {
-  return (
-    <span className="record-card__copy">
-      <span className="record-card__title">{title}</span>
-      {description ? <span className="record-card__description">{description}</span> : null}
     </span>
   );
 }

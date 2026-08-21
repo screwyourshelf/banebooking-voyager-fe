@@ -1,17 +1,16 @@
 import { MoreHorizontal } from "lucide-react";
 import { NavLink } from "react-router-dom";
 
-import { useSidebar } from "@/components/ui/sidebar";
 import { useAuth } from "@/hooks/useAuth";
 import { useBruker } from "@/hooks/useBruker";
 import { routePrefetchProps } from "@/utils/prefetchRoute";
 
+import MobileMoreMenu from "./MobileMoreMenu";
 import { buildMobilePrimaryNavigation } from "./navigationModel";
 
 export default function MobileBottomNav() {
   const { currentUser } = useAuth();
   const { bruker } = useBruker();
-  const { openMobile, toggleSidebar } = useSidebar();
   const items = buildMobilePrimaryNavigation(Boolean(currentUser), bruker?.kapabiliteter ?? []);
 
   return (
@@ -42,22 +41,13 @@ export default function MobileBottomNav() {
         );
       })}
 
-      <button
-        type="button"
-        className="mobile-bottom-nav__item"
-        data-active={openMobile || undefined}
-        aria-expanded={openMobile}
-        aria-label="Åpne meny"
-        onClick={toggleSidebar}
-      >
-        <span
-          className="mobile-bottom-nav__indicator"
-          data-active={openMobile || undefined}
-          aria-hidden="true"
-        />
-        <MoreHorizontal className="mobile-bottom-nav__icon" aria-hidden="true" />
-        <span>Mer</span>
-      </button>
+      <MobileMoreMenu>
+        <button type="button" className="mobile-bottom-nav__item" aria-label="Åpne meny">
+          <span className="mobile-bottom-nav__indicator" aria-hidden="true" />
+          <MoreHorizontal className="mobile-bottom-nav__icon" aria-hidden="true" />
+          <span>Mer</span>
+        </button>
+      </MobileMoreMenu>
     </nav>
   );
 }

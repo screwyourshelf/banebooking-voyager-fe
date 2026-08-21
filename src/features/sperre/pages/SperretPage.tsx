@@ -1,42 +1,33 @@
 import { CircleAlert } from "lucide-react";
-import {
-  AdminFormActions,
-  AdminPage,
-  AdminPageLoading,
-  AdminPageState,
-  SettingsPanel,
-  SettingsRow,
-  SettingsSection,
-  SettingsText,
-} from "@/components/admin";
-import { ContentDocument, ContentDocumentIntro } from "@/components/layout";
+
 import { RecordListState, RecordStatus } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import { useKlubb } from "@/hooks/useKlubb";
+import { Form, Settings, Page, Document } from "@/components";
 
 export default function SperretPage() {
   const { data: klubb, isLoading, error, refetch } = useKlubb();
 
   if (isLoading) {
     return (
-      <AdminPage
+      <Page
         eyebrow="Tilgang"
         title="Kontoen er sperret"
         description="Du kan ikke bruke Banebooking før klubben opphever sperren."
       >
-        <AdminPageLoading label="Laster sperreinformasjon" />
-      </AdminPage>
+        <Page.Loading label="Laster sperreinformasjon" />
+      </Page>
     );
   }
 
   if (error || !klubb) {
     return (
-      <AdminPage
+      <Page
         eyebrow="Tilgang"
         title="Kontoen er sperret"
         description="Du kan ikke bruke Banebooking før klubben opphever sperren."
       >
-        <AdminPageState>
+        <Page.State>
           <RecordListState
             icon={<CircleAlert aria-hidden="true" />}
             title="Kunne ikke laste sperreinformasjonen"
@@ -49,45 +40,45 @@ export default function SperretPage() {
             tone="danger"
             role="alert"
           />
-        </AdminPageState>
-      </AdminPage>
+        </Page.State>
+      </Page>
     );
   }
 
   return (
-    <AdminPage
+    <Page
       eyebrow="Tilgang"
       title="Kontoen er sperret"
       description="Du kan ikke bruke Banebooking før klubben opphever sperren."
-      action={<RecordStatus tone="danger">Sperret</RecordStatus>}
+      actions={<RecordStatus tone="danger">Sperret</RecordStatus>}
     >
-      <ContentDocument>
-        <ContentDocumentIntro>
+      <Document>
+        <Document.Intro>
           Du kan ikke booke baner eller melde deg på arrangementer mens sperren er aktiv.
-        </ContentDocumentIntro>
+        </Document.Intro>
 
-        <SettingsSection
+        <Settings.Section
           eyebrow="Konto"
           title="Kontakt klubben"
           description="Klubben må avklare eller oppheve sperren."
           embedded
           tone="danger"
         >
-          <SettingsPanel>
-            <SettingsRow title="Neste steg">
-              <SettingsText>Ta kontakt med {klubb.navn} for mer informasjon.</SettingsText>
-            </SettingsRow>
-          </SettingsPanel>
+          <Settings.Panel>
+            <Settings.Row title="Neste steg">
+              <Settings.Text>Ta kontakt med {klubb.navn} for mer informasjon.</Settings.Text>
+            </Settings.Row>
+          </Settings.Panel>
 
           {klubb.kontaktEpost ? (
-            <AdminFormActions>
+            <Form.Actions>
               <Button asChild variant="outline">
                 <a href={`mailto:${klubb.kontaktEpost}`}>Kontakt klubben</a>
               </Button>
-            </AdminFormActions>
+            </Form.Actions>
           ) : null}
-        </SettingsSection>
-      </ContentDocument>
-    </AdminPage>
+        </Settings.Section>
+      </Document>
+    </Page>
   );
 }

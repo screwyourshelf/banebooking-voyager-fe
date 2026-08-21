@@ -77,7 +77,6 @@ const navigationItems: AppNavigationItem[] = [
     end: true,
     requiresAuth: true,
     mobilePrimaryOrder: 2,
-    mobileSecondary: "include",
   },
   {
     id: "profile",

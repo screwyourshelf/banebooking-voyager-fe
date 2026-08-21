@@ -11,12 +11,12 @@ type Props = {
 export default function RecordCollectionLoading({ label, rows, layout, controls }: Props) {
   return (
     <section className="record-collection" aria-label={label} aria-busy="true">
-      <header className="control-surface record-collection__toolbar">
-        <div className="record-collection__summary">
-          <span className="record-collection__summary-icon" aria-hidden="true">
-            <LoaderCircle className="page-content-skeleton__spinner" />
+      <header data-ui="record-collection-header" data-surface="control">
+        <div data-part="summary">
+          <span data-part="icon" aria-hidden="true">
+            <LoaderCircle data-ui="loading-spinner" />
           </span>
-          <span className="record-collection__summary-copy">
+          <span data-part="content">
             <strong>Laster innhold</strong>
             <small>Gjør siden klar</small>
           </span>
@@ -38,7 +38,7 @@ export default function RecordCollectionLoading({ label, rows, layout, controls 
         >
           <div className="record-list">
             {Array.from({ length: rows }, (_, index) => (
-              <div key={index} className="record-card">
+              <div key={index} data-surface="record-card">
                 <div className="record-collection-skeleton__row" aria-hidden="true">
                   <span />
                   <span />

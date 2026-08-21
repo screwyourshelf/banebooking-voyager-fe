@@ -33,7 +33,11 @@ export function mergeKonfliktStatus(
     const nøkkel = lagBookingNøkkel(b);
 
     if (konfliktNøkler.has(nøkkel)) {
-      return { ...b, status: "konflikt" };
+      return {
+        ...b,
+        status: "konflikt",
+        konfliktInfo: b.konfliktInfo ?? "Tidspunktet er allerede opptatt.",
+      };
     }
 
     if (ledigeNøkler.has(nøkkel)) {

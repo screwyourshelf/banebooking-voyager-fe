@@ -1,5 +1,15 @@
 import { Fragment, useState } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Tooltip, TooltipContent, TooltipTrigger } from "@/components/ui/tooltip";
 import type { GruppeDeltakerVisning, RangeringsKriterium } from "@/types";
 import { useStillingsForklaring } from "../../hooks/draw/useStillingsForklaring";
@@ -44,91 +54,92 @@ export function GruppeStillingTabellMedForklaring({
   const harForklaring = !!forklaring;
 
   return (
-    <div className="app-scroll-x">
-      <table className="app-table">
-        <thead>
-          <tr className="app-table__head">
-            <th className="app-table__heading">#</th>
-            <th className="app-table__heading">Spiller</th>
-            <th className="app-table__heading">
-              <Tooltip>
-                <TooltipTrigger className="app-tooltip-trigger">K</TooltipTrigger>
-                <TooltipContent>Kamper spilt</TooltipContent>
-              </Tooltip>
-            </th>
-            <th className="app-table__heading">
-              <Tooltip>
-                <TooltipTrigger className="app-tooltip-trigger">S+</TooltipTrigger>
-                <TooltipContent>Sett vunnet</TooltipContent>
-              </Tooltip>
-            </th>
-            <th className="app-table__heading">
-              <Tooltip>
-                <TooltipTrigger className="app-tooltip-trigger">S-</TooltipTrigger>
-                <TooltipContent>Sett tapt</TooltipContent>
-              </Tooltip>
-            </th>
-            <th className="app-table__heading">
-              <Tooltip>
-                <TooltipTrigger className="app-tooltip-trigger">G+</TooltipTrigger>
-                <TooltipContent>Games vunnet</TooltipContent>
-              </Tooltip>
-            </th>
-            <th className="app-table__heading">
-              <Tooltip>
-                <TooltipTrigger className="app-tooltip-trigger">G-</TooltipTrigger>
-                <TooltipContent>Games tapt</TooltipContent>
-              </Tooltip>
-            </th>
-            <th className="tournament-table__disclosure" />
-          </tr>
-        </thead>
-        <tbody>
-          {sortert.map((d, idx) => {
-            const erÅpen = åpenId === d.gruppeDeltakerId;
-            const plassForklaring = forklaringMap.get(d.gruppeDeltakerId);
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>#</TableHead>
+          <TableHead>Spiller</TableHead>
+          <TableHead>
+            <Tooltip>
+              <TooltipTrigger>K</TooltipTrigger>
+              <TooltipContent>Kamper spilt</TooltipContent>
+            </Tooltip>
+          </TableHead>
+          <TableHead>
+            <Tooltip>
+              <TooltipTrigger>S+</TooltipTrigger>
+              <TooltipContent>Sett vunnet</TooltipContent>
+            </Tooltip>
+          </TableHead>
+          <TableHead>
+            <Tooltip>
+              <TooltipTrigger>S-</TooltipTrigger>
+              <TooltipContent>Sett tapt</TooltipContent>
+            </Tooltip>
+          </TableHead>
+          <TableHead>
+            <Tooltip>
+              <TooltipTrigger>G+</TooltipTrigger>
+              <TooltipContent>Games vunnet</TooltipContent>
+            </Tooltip>
+          </TableHead>
+          <TableHead>
+            <Tooltip>
+              <TooltipTrigger>G-</TooltipTrigger>
+              <TooltipContent>Games tapt</TooltipContent>
+            </Tooltip>
+          </TableHead>
+          <TableHead>Detaljer</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {sortert.map((d, idx) => {
+          const erÅpen = åpenId === d.gruppeDeltakerId;
+          const plassForklaring = forklaringMap.get(d.gruppeDeltakerId);
 
-            return (
-              <Fragment key={d.gruppeDeltakerId}>
-                <tr
-                  className="tournament-table__row"
-                  data-withdrawn={d.trukketSeg || undefined}
-                  data-interactive={harForklaring || undefined}
-                  data-open={erÅpen || undefined}
-                  onClick={() => harForklaring && setÅpenId(erÅpen ? null : d.gruppeDeltakerId)}
-                >
-                  <td className="app-table__cell">{idx + 1}</td>
-                  <td className="app-table__cell">{d.spillerNavn}</td>
-                  <td className="app-table__cell">{d.stilling.kampVunnet + d.stilling.kampTapt}</td>
-                  <td className="app-table__cell">{d.stilling.settVunnet}</td>
-                  <td className="app-table__cell">{d.stilling.settTapt}</td>
-                  <td className="app-table__cell">{d.stilling.gameVunnet}</td>
-                  <td className="app-table__cell">{d.stilling.gameTapt}</td>
-                  <td className="tournament-table__disclosure-cell">
-                    {harForklaring && (
-                      <ChevronDown
-                        className="tournament-table__disclosure-icon"
-                        data-open={erÅpen || undefined}
-                      />
-                    )}
-                  </td>
-                </tr>
-                {erÅpen && plassForklaring && (
-                  <tr className="tournament-table__explanation-row">
-                    <td colSpan={8} className="tournament-table__explanation">
-                      <span className="tournament-table__criterion">
-                        {KRITERIUM_LABEL[plassForklaring.kriterium]}
-                      </span>
-                      {" – "}
-                      {plassForklaring.beskrivelse}
-                    </td>
-                  </tr>
-                )}
-              </Fragment>
-            );
-          })}
-        </tbody>
-      </table>
-    </div>
+          return (
+            <Fragment key={d.gruppeDeltakerId}>
+              <TableRow data-state={erÅpen ? "selected" : undefined}>
+                <TableCell>{idx + 1}</TableCell>
+                <TableCell>
+                  <span>
+                    {d.spillerNavn}
+                    {d.trukketSeg ? <Badge variant="outline">Trukket</Badge> : null}
+                  </span>
+                </TableCell>
+                <TableCell>{d.stilling.kampVunnet + d.stilling.kampTapt}</TableCell>
+                <TableCell>{d.stilling.settVunnet}</TableCell>
+                <TableCell>{d.stilling.settTapt}</TableCell>
+                <TableCell>{d.stilling.gameVunnet}</TableCell>
+                <TableCell>{d.stilling.gameTapt}</TableCell>
+                <TableCell>
+                  {harForklaring && (
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon-sm"
+                      aria-label={`${erÅpen ? "Skjul" : "Vis"} rangeringsforklaring for ${d.spillerNavn}`}
+                      aria-expanded={erÅpen}
+                      onClick={() => setÅpenId(erÅpen ? null : d.gruppeDeltakerId)}
+                    >
+                      {erÅpen ? <ChevronUp /> : <ChevronDown />}
+                    </Button>
+                  )}
+                </TableCell>
+              </TableRow>
+              {erÅpen && plassForklaring && (
+                <TableRow>
+                  <TableCell colSpan={8}>
+                    <strong>{KRITERIUM_LABEL[plassForklaring.kriterium]}</strong>
+                    {" – "}
+                    {plassForklaring.beskrivelse}
+                  </TableCell>
+                </TableRow>
+              )}
+            </Fragment>
+          );
+        })}
+      </TableBody>
+    </Table>
   );
 }

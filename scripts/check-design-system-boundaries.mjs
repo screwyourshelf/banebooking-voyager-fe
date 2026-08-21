@@ -1,6 +1,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import ts from "typescript";
 
 const projectRoot = process.cwd();
 const sourceRoot = path.join(projectRoot, "src");
@@ -11,10 +12,44 @@ const recordsRoot = path.join(sourceRoot, "components", "records");
 const recordCollectionHeaderPath = path.join(recordsRoot, "RecordCollectionHeader.tsx");
 const filterSwitchPath = path.join(sourceRoot, "components", "controls", "FilterSwitch.tsx");
 const controlChoicePath = path.join(sourceRoot, "components", "controls", "ControlChoice.tsx");
-const dateTimeInputPath = path.join(sourceRoot, "components", "controls", "DateTimeInput.tsx");
+const dateTimeInputPath = path.join(
+  featuresRoot,
+  "turnering",
+  "components",
+  "internal",
+  "DateTimeInput.tsx"
+);
 const pagePath = path.join(sourceRoot, "components", "Page.tsx");
-const pageHeaderPath = path.join(sourceRoot, "components", "layout", "PageHeader.tsx");
-const adminEditorDialogPath = path.join(sourceRoot, "components", "admin", "AdminEditorDialog.tsx");
+const createActionPath = path.join(sourceRoot, "components", "actions", "CreateAction.tsx");
+const sectionPath = path.join(sourceRoot, "components", "section", "index.tsx");
+const collectionPartsPath = path.join(
+  sourceRoot,
+  "components",
+  "collection",
+  "CollectionParts.tsx"
+);
+const formRoot = path.join(sourceRoot, "components", "forms");
+const statisticsFilterPath = path.join(
+  featuresRoot,
+  "statistikk",
+  "components",
+  "StatistikkFilter.tsx"
+);
+const tournamentScoreInputPath = path.join(
+  featuresRoot,
+  "turnering",
+  "components",
+  "internal",
+  "ScoreInput.tsx"
+);
+const tournamentAdminSetupPath = path.join(
+  featuresRoot,
+  "turnering",
+  "views",
+  "admin",
+  "AdminOppsettContent.tsx"
+);
+const editorDialogPath = path.join(sourceRoot, "components", "dialogs", "EditorDialog.tsx");
 const loginPagePath = path.join(sourceRoot, "features", "auth", "pages", "LoginPage.tsx");
 const loginPageLayoutPath = path.join(
   sourceRoot,
@@ -26,8 +61,10 @@ const allowedComponentFiles = new Set([
   filterSwitchPath,
   controlChoicePath,
   pagePath,
-  pageHeaderPath,
-  adminEditorDialogPath,
+  createActionPath,
+  sectionPath,
+  collectionPartsPath,
+  editorDialogPath,
   loginPagePath,
   loginPageLayoutPath,
 ]);
@@ -37,46 +74,15 @@ const allowedCssFiles = new Set([
 ]);
 
 const protectedClasses = [
-  "page-frame",
-  "page-heading",
-  "page-heading__eyebrow",
-  "page-heading__title",
-  "page-heading__description",
-  "page-heading__support",
-  "page-heading__actions",
-  "control-surface",
-  "control-choice",
   "record-collection",
   "record-collection__body",
   "record-collection__pagination",
-  "record-collection__toolbar",
   "record-collection__context-action",
   "record-list",
   "record-list-state",
   "record-date-groups",
   "record-date-group",
   "record-date-group__heading",
-  "record-card",
-  "record-card-button",
-  "record-card-row",
-  "record-card__row",
-  "record-card__row-action",
-  "record-card__static",
-  "record-card__trigger",
-  "record-card__trigger-header",
-  "record-card__disclosure-open-icon",
-  "record-card__disclosure-close-icon",
-  "record-card__summary",
-  "record-card__copy",
-  "record-card__title",
-  "record-card__description",
-  "record-card__leading-value",
-  "record-card__time",
-  "record-card__time-range",
-  "record-card__details",
-  "record-card__actions",
-  "record-card__accent",
-  "record-card__eyebrow",
   "record-facts",
   "record-status",
   "record-collection-skeleton",
@@ -93,12 +99,12 @@ const protectedClasses = [
   "record-filter-panel__choices",
   "record-filter-panel__custom-control",
   "record-filter-panel__reset",
-  "filter-switch",
-  "filter-switch__copy",
-  "filter-switch__title",
-  "filter-switch__description",
-  "filter-switch__control",
 ];
+
+const ambiguousPartNames = /__(?:copy|wrapper|container)(?=$|\s)/;
+const modifierClass = /--[a-z0-9_-]+/i;
+const utilityClass =
+  /^(?:animate-|bg-|border-|col-|flex$|gap-|grid$|h-|hidden$|items-|justify-|m[trblxy]?-|max-w-|min-h-|min-w-|overflow-|p[trblxy]?-|rounded-|sr-only$|text-|w-)/;
 
 const compositionPrimitiveAllowlist = new Map([
   ["@/components/ui/card", new Set()],
@@ -110,18 +116,46 @@ const compositionPrimitiveAllowlist = new Map([
 ]);
 
 const recipeAllowlist = new Set();
+const statisticsTypographyRoles = new Set([
+  "key-value",
+  "chart-value",
+  "chart-label",
+  "chart-meta",
+]);
 const featureStyleAllowlist = new Set([
   path.join(featuresRoot, "statistikk", "components", "BookingerPerMånedChart.tsx"),
   path.join(featuresRoot, "statistikk", "components", "FordelingBarListe.tsx"),
   path.join(featuresRoot, "statistikk", "components", "TidPåDøgnetChart.tsx"),
 ]);
+const formControlOutsideFieldAllowlist = new Map([
+  [statisticsFilterPath, new Map([["Select", 1]])],
+  [dateTimeInputPath, new Map([["Input", 1]])],
+  [tournamentScoreInputPath, new Map([["Input", 1]])],
+  [tournamentAdminSetupPath, new Map([["Input", 1]])],
+]);
 const strictPatternRoots = [path.join(featuresRoot, "arrangement-admin")];
+const tournamentRoot = path.join(featuresRoot, "turnering");
+const privateRecordRowPrimitives = new Set([
+  "RecordAccordionCard",
+  "RecordAccordionList",
+  "RecordCard",
+  "RecordCardActions",
+  "RecordCardButton",
+  "RecordCardDetails",
+  "RecordCardStatic",
+  "RecordCardSummary",
+  "RecordCardTrigger",
+  "RecordDateGroup",
+  "RecordDateGroupHeading",
+  "RecordDateGroupList",
+  "RecordIdentity",
+  "RecordSummaryCopy",
+]);
 
 const strictPatternFiles = new Set([
   path.join(featuresRoot, "booking", "components", "BookingSelectionHeader.tsx"),
   path.join(featuresRoot, "booking", "components", "BookingSlotListAccordion.tsx"),
   path.join(featuresRoot, "booking", "components", "BookingSlotRow.tsx"),
-  path.join(featuresRoot, "booking", "components", "BookingSlotSummary.tsx"),
   path.join(featuresRoot, "booking", "views", "booking", "BookingContent.tsx"),
   path.join(featuresRoot, "minside", "views", "mine-bookinger", "MineBookingerView.tsx"),
   path.join(featuresRoot, "minside", "views", "mine-bookinger", "MineBookingerContent.tsx"),
@@ -142,7 +176,227 @@ for (const filePath of sourceFiles) {
   const source = await readFile(filePath, "utf8");
 
   if (isComponentSource) {
+    for (const match of source.matchAll(/data-stat-role\s*=\s*["']([^"']+)["']/g)) {
+      if (!statisticsTypographyRoles.has(match[1])) {
+        apiViolations.push({
+          filePath,
+          line: lineFor(source, match.index),
+          message: `bruker ukjent statistikkrolle «${match[1]}»`,
+        });
+      }
+    }
+  }
+
+  if (isComponentSource && !filePath.includes(`${path.sep}components${path.sep}ui${path.sep}`)) {
     if (filePath.startsWith(`${featuresRoot}${path.sep}`)) {
+      const localUiAnatomyIndex = source.search(/\bdata-(?:ui|part)\s*=/);
+      if (localUiAnatomyIndex >= 0) {
+        apiViolations.push({
+          filePath,
+          line: lineFor(source, localUiAnatomyIndex),
+          message: "definerer lokal UI-anatomi; data-ui og data-part eies av en delt komponent",
+        });
+      }
+    }
+
+    for (const match of source.matchAll(/className\s*=\s*["']([^"']+)["']/g)) {
+      const classNames = match[1].split(/\s+/).filter(Boolean);
+
+      if (classNames.length > 1) {
+        apiViolations.push({
+          filePath,
+          line: lineFor(source, match.index),
+          message:
+            "har flere lokale klasser på samme element; bruk én komponentidentitet og data-attributter",
+        });
+      }
+
+      for (const className of classNames) {
+        if (ambiguousPartNames.test(className)) {
+          apiViolations.push({
+            filePath,
+            line: lineFor(source, match.index),
+            message: `bruker det uklare delnavnet ${className}; velg et domeneord som intro, content eller actions`,
+          });
+        }
+
+        if (modifierClass.test(className)) {
+          apiViolations.push({
+            filePath,
+            line: lineFor(source, match.index),
+            message: `koder variant i klassen ${className}; bruk et data-attributt`,
+          });
+        }
+
+        if (utilityClass.test(className)) {
+          apiViolations.push({
+            filePath,
+            line: lineFor(source, match.index),
+            message: `bruker utility-klassen ${className}; legg regelen i designsystemets sentrale CSS`,
+          });
+        }
+      }
+    }
+  }
+
+  const tournamentStyleIndex = source.search(/\btournament-[a-z0-9_-]+/i);
+  if (tournamentStyleIndex >= 0) {
+    apiViolations.push({
+      filePath,
+      line: lineFor(source, tournamentStyleIndex),
+      message: "bruker et eget tournament-stilprefiks; bruk appens generelle designsystem",
+    });
+  }
+
+  if (isComponentSource) {
+    if (filePath.startsWith(`${featuresRoot}${path.sep}`)) {
+      if (!filePath.startsWith(`${tournamentRoot}${path.sep}`)) {
+        const privateRecordModuleIndex = source.search(
+          /from\s+["']@\/components\/records\/(?:RecordCard|RecordList)["']/
+        );
+
+        if (privateRecordModuleIndex >= 0) {
+          apiViolations.push({
+            filePath,
+            line: lineFor(source, privateRecordModuleIndex),
+            message: "importerer en intern radmodul; bruk Collection.Row og Collection.List",
+          });
+        }
+
+        for (const match of source.matchAll(
+          /import\s*\{([\s\S]*?)\}\s*from\s*["']@\/components\/records["']/g
+        )) {
+          const importedNames = match[1]
+            .split(",")
+            .map(
+              (name) =>
+                name
+                  .trim()
+                  .replace(/^type\s+/, "")
+                  .split(/\s+as\s+/)[0]
+            )
+            .filter(Boolean);
+          const privateImport = importedNames.find((name) => privateRecordRowPrimitives.has(name));
+
+          if (privateImport) {
+            apiViolations.push({
+              filePath,
+              line: lineFor(source, match.index),
+              message: `importerer den interne radbyggeklossen ${privateImport}; bruk Collection.Row`,
+            });
+          }
+        }
+      }
+
+      const isFeaturePage = filePath.includes(`${path.sep}pages${path.sep}`);
+
+      const rawFormAnatomyIndex = source.search(
+        /from\s+["']@\/components\/ui\/(?:field|label)["']|<label\b|<Label\b/
+      );
+
+      if (rawFormAnatomyIndex >= 0) {
+        apiViolations.push({
+          filePath,
+          line: lineFor(source, rawFormAnatomyIndex),
+          message: "lager lokal skjemaanatomi; bruk Form.Fields og Form.Field",
+        });
+      }
+
+      for (const match of source.matchAll(/<Settings\.Row\b[\s\S]*?<\/Settings\.Row>/g)) {
+        if (
+          !/<(?:Input|Textarea|Select|DatoVelger|DatoFlervelger|DateTimeInput|ScoreInput|LazyTiptapEditor|Settings\.(?:ChoiceGroup|RadioGroup))\b/.test(
+            match[0]
+          )
+        ) {
+          continue;
+        }
+
+        apiViolations.push({
+          filePath,
+          line: lineFor(source, match.index),
+          message: "legger et redigerbart felt i Settings.Row; bruk Form.Field",
+        });
+      }
+
+      const allowedOutsideFormField = new Map(formControlOutsideFieldAllowlist.get(filePath) ?? []);
+      for (const control of findControlsOutsideFormField(filePath, source)) {
+        const remainingAllowance = allowedOutsideFormField.get(control.name) ?? 0;
+        if (remainingAllowance > 0) {
+          allowedOutsideFormField.set(control.name, remainingAllowance - 1);
+          continue;
+        }
+
+        apiViolations.push({
+          filePath,
+          line: control.line,
+          message: `bruker ${control.name} utenfor Form.Field; redigerbare kontroller må bruke den faste feltstrukturen`,
+        });
+      }
+
+      if (isFeaturePage) {
+        const hasApprovedPageShell =
+          /<(?:Page|LoginPageLayout|ErrorShell|BanerOgGrenerWorkspace|BookingView|MineBookingerView)\b/.test(
+            source
+          );
+
+        if (!hasApprovedPageShell) {
+          apiViolations.push({
+            filePath,
+            line: 1,
+            message: "mangler en godkjent side- eller viewstruktur",
+          });
+        }
+
+        const directPageCreateIndex = source.search(
+          /<Button\b[^>]*>[\s\S]{0,240}?\b(?:Nytt|Ny)\s+[A-ZÆØÅa-zæøå]/
+        );
+
+        if (directPageCreateIndex >= 0) {
+          apiViolations.push({
+            filePath,
+            line: lineFor(source, directPageCreateIndex),
+            message: "lager en lokal opprett-knapp; bruk createAction på Page",
+          });
+        }
+      }
+
+      const privateFamilyImportIndex = source.search(
+        /from\s+["']@\/components\/(?:Page|admin|collection|dialogs|forms|section|settings)(?:[\/"'])/
+      );
+
+      if (privateFamilyImportIndex >= 0) {
+        apiViolations.push({
+          filePath,
+          line: lineFor(source, privateFamilyImportIndex),
+          message:
+            "importerer en intern komponentfamilie; bruk det offentlige API-et fra @/components",
+        });
+      }
+
+      const directPlusIconIndex = source.search(
+        /import\s*\{[^}]*\bPlus\b[^}]*\}\s*from\s*["']lucide-react["']/
+      );
+
+      if (directPlusIconIndex >= 0) {
+        apiViolations.push({
+          filePath,
+          line: lineFor(source, directPlusIconIndex),
+          message: "bruker Plus-ikon direkte; bruk createAction på Page",
+        });
+      }
+
+      const collectionCreateActionIndex = source.search(
+        /<Collection\b[\s\S]{0,1200}?\bcreateAction\s*=/
+      );
+
+      if (collectionCreateActionIndex >= 0) {
+        apiViolations.push({
+          filePath,
+          line: lineFor(source, collectionCreateActionIndex),
+          message: "legger sidens opprettelseshandling i Collection; bruk createAction på Page",
+        });
+      }
+
       for (const [moduleName, allowlist] of compositionPrimitiveAllowlist) {
         const modulePattern = new RegExp(
           `from\\s+["']${moduleName.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}["']`
@@ -169,7 +423,7 @@ for (const filePath of sourceFiles) {
 
       for (const match of source.matchAll(/className\s*=\s*["']([^"']+)["']/g)) {
         for (const className of match[1].split(/\s+/)) {
-          if (/^(?:app|statistics|tournament)-/.test(className)) continue;
+          if (/^(?:app|statistics)-/.test(className)) continue;
           apiViolations.push({
             filePath,
             line: lineFor(source, match.index),
@@ -247,7 +501,23 @@ for (const filePath of sourceFiles) {
       });
     }
 
-    for (const legacyComponent of ["RecordChoiceFilter", "RecordCollectionToolbar"]) {
+    for (const legacyComponent of [
+      "RecordChoiceFilter",
+      "RecordCollectionToolbar",
+      "AdminPage",
+      "RecordCollectionPage",
+      "PageHeader",
+      "PageCreateAction",
+      "RecordCreateAction",
+      "AdminWorkspace",
+      "AdminEditorForm",
+      "AdminSettingsForm",
+      "AdminFormActions",
+      "AdminFormSubmitButton",
+      "PageSection",
+      "CardSection",
+      "SectionHeading",
+    ]) {
       const index = source.search(new RegExp(`\\b${legacyComponent}\\b`));
       if (index >= 0) {
         apiViolations.push({
@@ -261,7 +531,9 @@ for (const filePath of sourceFiles) {
 
   if (
     (isComponentSource &&
-      (filePath.startsWith(`${recordsRoot}${path.sep}`) || allowedComponentFiles.has(filePath))) ||
+      (filePath.startsWith(`${recordsRoot}${path.sep}`) ||
+        filePath.startsWith(`${formRoot}${path.sep}`) ||
+        allowedComponentFiles.has(filePath))) ||
     (isStylesheet && allowedCssFiles.has(filePath))
   ) {
     continue;
@@ -354,6 +626,48 @@ function lineFor(source, index) {
   return source.slice(0, Math.max(index, 0)).split("\n").length;
 }
 
+function findControlsOutsideFormField(filePath, source) {
+  const editableControls = new Set([
+    "Input",
+    "Textarea",
+    "Select",
+    "DatoVelger",
+    "DatoFlervelger",
+    "DateTimeInput",
+    "ScoreInput",
+    "LazyTiptapEditor",
+  ]);
+  const sourceFile = ts.createSourceFile(
+    filePath,
+    source,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX
+  );
+  const controls = [];
+
+  function visit(node, insideFormField = false) {
+    let tagName = null;
+
+    if (ts.isJsxElement(node)) {
+      tagName = node.openingElement.tagName.getText(sourceFile);
+    } else if (ts.isJsxSelfClosingElement(node)) {
+      tagName = node.tagName.getText(sourceFile);
+    }
+
+    if (tagName && editableControls.has(tagName) && !insideFormField) {
+      const position = sourceFile.getLineAndCharacterOfPosition(node.getStart(sourceFile));
+      controls.push({ name: tagName, line: position.line + 1 });
+    }
+
+    const nextInsideFormField = insideFormField || tagName === "Form.Field";
+    ts.forEachChild(node, (child) => visit(child, nextInsideFormField));
+  }
+
+  visit(sourceFile);
+  return controls;
+}
+
 async function validateStylesheets(files) {
   const stylesheetFiles = files.filter((filePath) => path.extname(filePath) === ".css");
   const componentFiles = files.filter((filePath) =>
@@ -423,6 +737,49 @@ async function validateStylesheets(files) {
         `${path.relative(projectRoot, filePath)} definerer .${className}, men klassen brukes ikke i kildekoden`
       );
     }
+
+    for (const ruleMatch of source.matchAll(/([^{}]+)\{/g)) {
+      const selectorBlock = ruleMatch[1].trim();
+      if (!selectorBlock.includes("[data-part") || selectorBlock.startsWith("@")) continue;
+
+      for (const selector of selectorBlock.split(",")) {
+        const anchors = [
+          ...selector.matchAll(
+            /\[(?:data-ui|data-part|data-slot|data-layout|data-surface)(?:[^\]]*)\]/g
+          ),
+        ];
+
+        for (let index = 1; index < anchors.length; index += 1) {
+          const current = anchors[index];
+          if (!current[0].startsWith("[data-part")) continue;
+
+          const previous = anchors[index - 1];
+          const between = selector.slice(previous.index + previous[0].length, current.index);
+          if (!/\s/.test(between) || between.includes(">")) continue;
+
+          issues.push(
+            `${path.relative(projectRoot, filePath)}:${lineFor(source, ruleMatch.index)} har en ubundet ${current[0]}-selektor; bind komponentanatomien med direkte barn (>) så regelen ikke lekker til nestede komponenter`
+          );
+        }
+      }
+    }
+  }
+
+  const componentUiNames = new Set(
+    [...componentSource.matchAll(/\bdata-ui\s*=\s*["']([^"']+)["']/g)].map((match) => match[1])
+  );
+  const stylesheetUiNames = new Set(
+    [...stylesheetSource.matchAll(/\[data-ui\s*=\s*["']([^"']+)["']\]/g)].map((match) => match[1])
+  );
+
+  for (const uiName of componentUiNames) {
+    if (stylesheetUiNames.has(uiName)) continue;
+    issues.push(`data-ui="${uiName}" brukes i en komponent, men mangler en sentral CSS-regel`);
+  }
+
+  for (const uiName of stylesheetUiNames) {
+    if (componentUiNames.has(uiName)) continue;
+    issues.push(`CSS definerer data-ui="${uiName}", men ingen komponent bruker den`);
   }
 
   const definedCssVariables = new Set(
@@ -451,7 +808,7 @@ async function validateStylesheets(files) {
   }
 
   const semanticPrefix =
-    /^(?:action|admin|app|arrangement|booking|content|control|date|error|filter|guard|login|mine|mobile|navbar|news|page|query|record|section|settings|statistics|tournament|user|weather)-/;
+    /^(?:action|app|arrangement|booking|collection|content|control|date|editor|error|filter|guard|login|mine|mobile|navbar|news|page|query|record|section|settings|statistics|tournament|user|weather)-/;
 
   for (const filePath of componentFiles.filter((candidate) => candidate.endsWith(".tsx"))) {
     const source = sourceByPath.get(filePath);

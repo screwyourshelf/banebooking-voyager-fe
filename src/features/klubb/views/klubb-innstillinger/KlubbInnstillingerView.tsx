@@ -1,9 +1,9 @@
-import { useMemo, useState } from "react";
 import { RefreshCw } from "lucide-react";
-import { AdminPageLoading, AdminPageState } from "@/components/admin";
+import { useMemo, useState } from "react";
 import { RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import { useKlubb } from "@/hooks/useKlubb";
+import { Page } from "@/components";
 
 import KlubbInnstillingerContent, { type KlubbFormData } from "./KlubbInnstillingerContent";
 
@@ -121,10 +121,10 @@ export default function KlubbInnstillingerView() {
 
   const canSubmit = isDirty && isValid;
 
-  if (isLoading) return <AdminPageLoading label="Laster klubbinnstillinger" />;
+  if (isLoading) return <Page.Loading label="Laster klubbinnstillinger" />;
   if (!klubb) {
     return (
-      <AdminPageState>
+      <Page.State>
         <RecordListState
           icon={<RefreshCw aria-hidden="true" />}
           title="Kunne ikke laste klubbinnstillingene"
@@ -143,7 +143,7 @@ export default function KlubbInnstillingerView() {
             </Button>
           }
         />
-      </AdminPageState>
+      </Page.State>
     );
   }
 

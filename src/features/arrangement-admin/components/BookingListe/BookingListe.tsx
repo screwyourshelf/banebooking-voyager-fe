@@ -1,19 +1,26 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { CalendarClock } from "lucide-react";
-import { AdminEntityCollection, AdminEntityList } from "@/components/admin";
+import { Collection } from "@/components";
+
 import { RecordListState } from "@/components/records";
 import type { LokalBooking } from "../../types";
-import { sorterBookinger, tellKonflikter } from "./bookingListeUtils";
+import {
+  grupperBookingerEtterDato,
+  kanBookingOpprettes,
+  sorterBookinger,
+  tellKonflikter,
+} from "./bookingListeUtils";
 import BookingRad from "./BookingRad";
 import { formaterAntallBanetider } from "@/utils/arrangementPresentation";
+import { formaterDatoGruppe } from "@/utils/datoUtils";
 
 type Props = {
   bookinger: LokalBooking[];
   onRediger: (id: string) => void;
-  onFjernEllerAvlys: (id: string) => void;
 };
 
-export default function BookingListe({ bookinger, onRediger, onFjernEllerAvlys }: Props) {
+export default function BookingListe({ bookinger, onRediger }: Props) {
+  const [valgteStatuser, setValgteStatuser] = useState<string[]>([]);
   const sorterte = useMemo(() => sorterBookinger(bookinger), [bookinger]);
   const antallKonflikter = useMemo(() => tellKonflikter(bookinger), [bookinger]);
   const antallAktive = bookinger.filter((booking) => !booking.erSlettet).length;
@@ -21,8 +28,13 @@ export default function BookingListe({ bookinger, onRediger, onFjernEllerAvlys }
     (booking) => !booking.erSlettet && booking.kilde === "eksisterende"
   ).length;
   const antallForslag = bookinger.filter(
-    (booking) => !booking.erSlettet && booking.kilde !== "eksisterende"
+    (booking) => booking.kilde !== "eksisterende" && kanBookingOpprettes(booking)
   ).length;
+  const visKunKonflikter = valgteStatuser.includes("konflikt");
+  const synligeBookinger = visKunKonflikter
+    ? sorterte.filter((booking) => !booking.erSlettet && booking.status === "konflikt")
+    : sorterte;
+  const grupper = grupperBookingerEtterDato(synligeBookinger);
 
   const summary = [
     antallEksisterende > 0
@@ -37,28 +49,61 @@ export default function BookingListe({ bookinger, onRediger, onFjernEllerAvlys }
     .join(" · ");
 
   return (
-    <AdminEntityCollection
+    <Collection
       icon={<CalendarClock aria-hidden="true" />}
-      title={formaterAntallBanetider(antallAktive)}
-      description={summary || "Ingen tider er lagt til ennå."}
+      title={formaterAntallBanetider(visKunKonflikter ? synligeBookinger.length : antallAktive)}
+      scope={summary || "Ingen tider er lagt til ennå."}
+      filter={
+        antallKonflikter > 0
+          ? {
+              label: "Filtrer banetider",
+              groups: [
+                {
+                  label: "Status",
+                  options: [{ value: "konflikt", label: "Konflikter" }],
+                  selectedValues: valgteStatuser,
+                  onToggle: (value) =>
+                    setValgteStatuser((current) =>
+                      current.includes(value)
+                        ? current.filter((status) => status !== value)
+                        : [...current, value]
+                    ),
+                },
+              ],
+              onReset: () => setValgteStatuser([]),
+            }
+          : undefined
+      }
     >
-      {sorterte.length === 0 ? (
+      {synligeBookinger.length === 0 ? (
         <RecordListState
-          title="Ingen banetider ennå"
-          description="Bruk oppsettet over for å legge til konkrete tider."
+          title={visKunKonflikter ? "Ingen konflikter" : "Ingen banetider ennå"}
+          description={
+            visKunKonflikter
+              ? "Alle forslagene kan opprettes."
+              : "Bruk oppsettet over for å legge til konkrete tider."
+          }
         />
       ) : (
-        <AdminEntityList>
-          {sorterte.map((booking) => (
-            <BookingRad
-              key={booking.id}
-              booking={booking}
-              onRediger={onRediger}
-              onFjernEllerAvlys={onFjernEllerAvlys}
-            />
-          ))}
-        </AdminEntityList>
+        <Collection.List>
+          {grupper.map((gruppe) => {
+            const heading = formaterDatoGruppe(gruppe.dato);
+
+            return (
+              <Collection.Group key={gruppe.dato}>
+                <Collection.GroupHeading
+                  date={gruppe.dato}
+                  label={heading.label}
+                  relativeLabel={heading.relativeLabel}
+                />
+                {gruppe.bookinger.map((booking) => (
+                  <BookingRad key={booking.id} booking={booking} onRediger={onRediger} />
+                ))}
+              </Collection.Group>
+            );
+          })}
+        </Collection.List>
       )}
-    </AdminEntityCollection>
+    </Collection>
   );
 }

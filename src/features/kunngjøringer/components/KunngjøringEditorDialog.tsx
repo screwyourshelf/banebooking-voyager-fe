@@ -1,21 +1,12 @@
 import { useState } from "react";
 import DatoVelger from "@/components/DatoVelger";
-import {
-  AdminEditorDialog,
-  AdminEditorForm,
-  AdminFormActions,
-  AdminFormSubmitButton,
-  SettingsPanel,
-  SettingsRow,
-  SettingsSection,
-  SettingsStack,
-} from "@/components/admin";
+
 import { ServerFeil } from "@/components/errors";
-import { Field } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import type { OpprettKunngjøringForespørsel } from "@/features/kunngjøringer/hooks/useKunngjøringAdmin";
 import { tilDatoTekst } from "@/utils/datoUtils";
+import { Form, Settings, Dialog } from "@/components";
 
 type Props = {
   open: boolean;
@@ -65,7 +56,7 @@ export default function KunngjøringEditorDialog({
   }
 
   return (
-    <AdminEditorDialog
+    <Dialog.Editor
       open={open}
       onOpenChange={handleOpenChange}
       backLabel="Alle kunngjøringer"
@@ -73,53 +64,57 @@ export default function KunngjøringEditorDialog({
       title="Opprett kunngjøring"
       description="Publiser informasjon som brukerne må lese og bekrefte."
       closeDisabled={isLoading}
-      size="compact"
     >
-      <AdminEditorForm
+      <Form
+        variant="editor"
         onSubmit={(event) => {
           event.preventDefault();
           void handleSubmit();
         }}
       >
-        <SettingsStack embedded>
-          <SettingsSection
+        <Settings.Stack embedded>
+          <Settings.Section
             embedded
             eyebrow="Innhold"
             title="Budskap til medlemmene"
             description="Kunngjøringen sperrer videre bruk av appen til den er bekreftet."
           >
-            <SettingsPanel>
-              <SettingsRow title="Tittel" description="Kort overskrift for kunngjøringen.">
-                <Field>
-                  <Input
-                    id="kunngjøring-tittel"
-                    aria-label="Tittel"
-                    value={tittel}
-                    onChange={(event) => setTittel(event.target.value)}
-                    placeholder="Viktig informasjon"
-                    maxLength={200}
-                    disabled={isLoading}
-                  />
-                </Field>
-              </SettingsRow>
+            <Form.Fields>
+              <Form.Field
+                label="Tittel"
+                description="Kort overskrift for kunngjøringen."
+                htmlFor="kunngjøring-tittel"
+              >
+                <Input
+                  id="kunngjøring-tittel"
+                  aria-label="Tittel"
+                  value={tittel}
+                  onChange={(event) => setTittel(event.target.value)}
+                  placeholder="Viktig informasjon"
+                  maxLength={200}
+                  disabled={isLoading}
+                />
+              </Form.Field>
 
-              <SettingsRow title="Budskap" description="Innholdet brukerne må bekrefte.">
-                <Field>
-                  <Textarea
-                    id="kunngjøring-tekst"
-                    aria-label="Budskap"
-                    value={tekst}
-                    onChange={(event) => setTekst(event.target.value)}
-                    placeholder="Skriv kunngjøringsteksten her…"
-                    maxLength={5000}
-                    rows={7}
-                    disabled={isLoading}
-                  />
-                </Field>
-              </SettingsRow>
+              <Form.Field
+                label="Budskap"
+                description="Innholdet brukerne må bekrefte."
+                htmlFor="kunngjøring-tekst"
+              >
+                <Textarea
+                  id="kunngjøring-tekst"
+                  aria-label="Budskap"
+                  value={tekst}
+                  onChange={(event) => setTekst(event.target.value)}
+                  placeholder="Skriv kunngjøringsteksten her…"
+                  maxLength={5000}
+                  rows={7}
+                  disabled={isLoading}
+                />
+              </Form.Field>
 
-              <SettingsRow
-                title="Utløpsdato"
+              <Form.Field
+                label="Utløpsdato"
                 description="Kunngjøringen deaktiveres etter denne datoen."
               >
                 <DatoVelger
@@ -129,22 +124,18 @@ export default function KunngjøringEditorDialog({
                   ariaLabel="Velg utløpsdato"
                   disabled={isLoading}
                 />
-              </SettingsRow>
-            </SettingsPanel>
-          </SettingsSection>
+              </Form.Field>
+            </Form.Fields>
+          </Settings.Section>
 
-          <AdminFormActions>
+          <Form.Actions>
             <ServerFeil feil={error} />
-            <AdminFormSubmitButton
-              isLoading={isLoading}
-              disabled={!canCreate}
-              loadingText="Publiserer…"
-            >
+            <Form.Submit isLoading={isLoading} disabled={!canCreate} loadingText="Publiserer…">
               Publiser kunngjøring
-            </AdminFormSubmitButton>
-          </AdminFormActions>
-        </SettingsStack>
-      </AdminEditorForm>
-    </AdminEditorDialog>
+            </Form.Submit>
+          </Form.Actions>
+        </Settings.Stack>
+      </Form>
+    </Dialog.Editor>
   );
 }

@@ -1,17 +1,8 @@
 import { useState } from "react";
-import {
-  AdminEditorDialog,
-  AdminFormActions,
-  AdminSettingsForm,
-  SettingsPanel,
-  SettingsRow,
-  SettingsSection,
-  SettingsStack,
-  SettingsValue,
-} from "@/components/admin";
+
 import DatoVelger from "@/components/DatoVelger";
 import { Button } from "@/components/ui/button";
-import { Field } from "@/components/ui/field";
+import { Form, Settings, Dialog } from "@/components";
 import {
   Select,
   SelectContent,
@@ -35,6 +26,7 @@ type Props = {
   booking: LokalBooking | null;
   baner: BaneRespons[];
   onBekreft: (id: string, verdier: RedigerBookingVerdier) => void;
+  onFjernEllerAvlys: (id: string) => void;
   onAvbryt: () => void;
 };
 
@@ -59,7 +51,13 @@ function toDateText(date: Date): string {
   return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
 }
 
-export default function RedigerBookingModal({ booking, baner, onBekreft, onAvbryt }: Props) {
+export default function RedigerBookingModal({
+  booking,
+  baner,
+  onBekreft,
+  onFjernEllerAvlys,
+  onAvbryt,
+}: Props) {
   const [dato, setDato] = useState<Date>(() => (booking ? toDate(booking.dato) : new Date()));
   const [valgtBaneId, setValgtBaneId] = useState(() => booking?.baneId ?? "");
   const [valgtStartTid, setValgtStartTid] = useState(() => booking?.startTid ?? "");
@@ -92,7 +90,7 @@ export default function RedigerBookingModal({ booking, baner, onBekreft, onAvbry
   };
 
   return (
-    <AdminEditorDialog
+    <Dialog.Editor
       open={!!booking}
       onOpenChange={(open) => !open && onAvbryt()}
       backLabel="Til listen"
@@ -100,78 +98,88 @@ export default function RedigerBookingModal({ booking, baner, onBekreft, onAvbry
       title="Rediger banetid"
       description="Endre dato, bane eller starttid."
     >
-      <AdminSettingsForm
+      <Form
+        variant="settings"
         onSubmit={(event) => {
           event.preventDefault();
           handleSubmit();
         }}
       >
-        <SettingsStack>
-          <SettingsSection
+        <Settings.Stack>
+          <Settings.Section
+            eyebrow="Booking"
             title="Tid og bane"
             description="Sluttiden beregnes ut fra banens varighet."
           >
-            <SettingsPanel>
-              <SettingsRow title="Dato">
+            <Form.Fields>
+              <Form.Field label="Dato">
                 <DatoVelger value={dato} onChange={setDato} visNavigering />
-              </SettingsRow>
+              </Form.Field>
 
-              <SettingsRow title="Bane">
-                <Field>
-                  <Select value={valgtBaneId} onValueChange={handleCourtChange}>
-                    <SelectTrigger id="rediger-bane">
-                      <SelectValue placeholder="Velg bane…" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {baner.map((bane) => (
-                        <SelectItem key={bane.id} value={bane.id}>
-                          {bane.navn}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </Field>
-              </SettingsRow>
+              <Form.Field label="Bane" htmlFor="rediger-bane">
+                <Select value={valgtBaneId} onValueChange={handleCourtChange}>
+                  <SelectTrigger id="rediger-bane">
+                    <SelectValue placeholder="Velg bane…" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {baner.map((bane) => (
+                      <SelectItem key={bane.id} value={bane.id}>
+                        {bane.navn}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Form.Field>
 
-              <SettingsRow title="Starttid">
-                <Field>
-                  <Select
-                    value={valgtStartTid}
-                    onValueChange={setValgtStartTid}
-                    disabled={!valgtBaneId}
-                  >
-                    <SelectTrigger id="rediger-starttid">
-                      <SelectValue placeholder="Velg tidspunkt…" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {tidspunkter.map((time) => (
-                        <SelectItem key={time} value={time}>
-                          {time}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </Field>
-              </SettingsRow>
+              <Form.Field label="Starttid" htmlFor="rediger-starttid">
+                <Select
+                  value={valgtStartTid}
+                  onValueChange={setValgtStartTid}
+                  disabled={!valgtBaneId}
+                >
+                  <SelectTrigger id="rediger-starttid">
+                    <SelectValue placeholder="Velg tidspunkt…" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {tidspunkter.map((time) => (
+                      <SelectItem key={time} value={time}>
+                        {time}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Form.Field>
 
               {sluttTid ? (
-                <SettingsRow title="Sluttid" description={`${slotLengde} minutter`}>
-                  <SettingsValue>{sluttTid}</SettingsValue>
-                </SettingsRow>
+                <Settings.Row title="Sluttid" description={`${slotLengde} minutter`}>
+                  <Settings.Value>{sluttTid}</Settings.Value>
+                </Settings.Row>
               ) : null}
-            </SettingsPanel>
-          </SettingsSection>
-        </SettingsStack>
+            </Form.Fields>
+          </Settings.Section>
+        </Settings.Stack>
 
-        <AdminFormActions>
+        <Form.Actions>
+          {booking ? (
+            <Button
+              type="button"
+              variant="destructive"
+              onClick={() => {
+                onFjernEllerAvlys(booking.id);
+                onAvbryt();
+              }}
+            >
+              {booking.kilde === "eksisterende" ? "Avlys banetid" : "Fjern forslag"}
+            </Button>
+          ) : null}
           <Button type="button" variant="outline" onClick={onAvbryt}>
             Avbryt
           </Button>
           <Button type="submit" disabled={!kanBekrefte}>
             Lagre endring
           </Button>
-        </AdminFormActions>
-      </AdminSettingsForm>
-    </AdminEditorDialog>
+        </Form.Actions>
+      </Form>
+    </Dialog.Editor>
   );
 }

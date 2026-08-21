@@ -1,9 +1,8 @@
+import { Dialog, Form } from "@/components";
 import { useState } from "react";
-import ScoreInput from "@/components/controls/ScoreInput";
-import { AppDialog } from "@/components/dialogs";
+import ScoreInput from "@/features/turnering/components/internal/ScoreInput";
 import { Inline, Stack, Text } from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import type {
   GruppeKampVisning,
   KampAvslutning,
@@ -141,7 +140,7 @@ export function ResultatDialog({
   }
 
   return (
-    <AppDialog
+    <Dialog
       open={open}
       onOpenChange={handleClose}
       title="Registrer resultat"
@@ -157,9 +156,8 @@ export function ResultatDialog({
         </>
       }
     >
-      <Stack gap="lg">
-        <Stack gap="sm">
-          <Label>Vinner</Label>
+      <Form.Fields>
+        <Form.Field label="Vinner">
           <Inline wrap>
             <Button
               type="button"
@@ -178,10 +176,9 @@ export function ResultatDialog({
               {sp2Navn}
             </Button>
           </Inline>
-        </Stack>
+        </Form.Field>
 
-        <Stack gap="sm">
-          <Label>Avslutning</Label>
+        <Form.Field label="Avslutning">
           <Inline wrap>
             <Button
               type="button"
@@ -208,10 +205,9 @@ export function ResultatDialog({
               Default
             </Button>
           </Inline>
-        </Stack>
+        </Form.Field>
 
-        <Stack gap="sm">
-          <Label>Sett</Label>
+        <Form.Field label="Sett">
           {sett.map((s, idx) => (
             <Stack key={idx} gap="xs">
               <Inline>
@@ -239,11 +235,11 @@ export function ResultatDialog({
               {settFeil[idx] && <Text variant="danger">{settFeil[idx]}</Text>}
             </Stack>
           ))}
-        </Stack>
+        </Form.Field>
 
         {clientFeil && <Text variant="danger">{clientFeil}</Text>}
         <ServerFeil feil={serverFeil ?? null} />
-      </Stack>
-    </AppDialog>
+      </Form.Fields>
+    </Dialog>
   );
 }

@@ -2,13 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import { MapPin, RefreshCw } from "lucide-react";
 import { useBaner } from "@/hooks/useBaner";
 import { useGrener } from "@/hooks/useGrener";
+import { Collection, Dialog } from "@/components";
 
-import {
-  AdminEditorDialog,
-  AdminEntityCollection,
-  AdminEntityList,
-  AdminOrderedEntityRow,
-} from "@/components/admin";
 import { MutationFeedback } from "@/components/feedback";
 import { RecordCollectionSkeleton, RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
@@ -463,22 +458,22 @@ export default function RedigerBaneView() {
 
   if (isLoading || loadingGrener) {
     return (
-      <AdminEntityCollection
+      <Collection
         icon={<MapPin aria-hidden="true" />}
         title="Baner"
-        description="Velg en bane for å redigere"
+        scope="Velg en bane for å redigere"
       >
         <RecordCollectionSkeleton ariaLabel="Laster baner" rows={4} />
-      </AdminEntityCollection>
+      </Collection>
     );
   }
 
   if (error) {
     return (
-      <AdminEntityCollection
+      <Collection
         icon={<MapPin aria-hidden="true" />}
         title="Baner"
-        description="Velg en bane for å redigere"
+        scope="Velg en bane for å redigere"
       >
         <RecordListState
           icon={<RefreshCw aria-hidden="true" />}
@@ -498,7 +493,7 @@ export default function RedigerBaneView() {
             </Button>
           }
         />
-      </AdminEntityCollection>
+      </Collection>
     );
   }
 
@@ -519,10 +514,10 @@ export default function RedigerBaneView() {
 
   return (
     <>
-      <AdminEntityCollection
+      <Collection
         icon={<MapPin aria-hidden="true" />}
         title={antallTekst}
-        description={listeBeskrivelse}
+        scope={listeBeskrivelse}
         filter={
           grenValg.length > 1
             ? {
@@ -572,7 +567,7 @@ export default function RedigerBaneView() {
               successTitle="Rekkefølgen er lagret"
               successDescription="Bookingoversikten bruker den nye rekkefølgen."
             />
-            <AdminEntityList>
+            <Collection.List>
               {filtrerteBaner.map((bane) => {
                 const baneDraft = redigerte[bane.id];
                 const erEndret = Boolean(
@@ -581,37 +576,47 @@ export default function RedigerBaneView() {
                   Object.hasOwn(overstyringAktivDraft, bane.id)
                 );
                 const beskrivelse = baneDraft ? baneDraft.beskrivelse : bane.beskrivelse;
+                const tittel = baneDraft?.navn.trim() || bane.navn;
+                const beskrivelseTekst = beskrivelse.trim();
+                const visBeskrivelse =
+                  beskrivelseTekst.length > 0 &&
+                  beskrivelseTekst.localeCompare(tittel, "nb-NO", { sensitivity: "base" }) !== 0;
 
                 const plassering = plasseringPerBane.get(bane.id);
 
                 return (
-                  <AdminOrderedEntityRow
+                  <Collection.Row
                     key={bane.id}
-                    title={baneDraft?.navn.trim() || bane.navn}
+                    title={tittel}
+                    description={visBeskrivelse ? beskrivelseTekst : undefined}
                     meta={bane.grenNavn}
-                    description={beskrivelse || undefined}
-                    status={erEndret ? "Ulagret" : bane.aktiv ? "Aktiv" : "Inaktiv"}
-                    statusTone={erEndret ? "warning" : bane.aktiv ? "available" : "past"}
-                    onSelect={() => {
-                      resetBaneFeedback();
-                      setValgtBaneId(bane.id);
-                      setEditorOpen(true);
+                    status={{
+                      label: erEndret ? "Ulagret" : bane.aktiv ? "Aktiv" : "Inaktiv",
+                      tone: erEndret ? "warning" : bane.aktiv ? "available" : "past",
                     }}
                     disabled={isSaving}
-                    onMoveUp={() => void handleFlyttBane(bane, -1)}
-                    onMoveDown={() => void handleFlyttBane(bane, 1)}
-                    disableMoveUp={!plassering || plassering.indeks === 0}
-                    disableMoveDown={!plassering || plassering.indeks === plassering.antall - 1}
+                    interaction={{
+                      type: "reorder",
+                      onOpen: () => {
+                        resetBaneFeedback();
+                        setValgtBaneId(bane.id);
+                        setEditorOpen(true);
+                      },
+                      onMoveUp: () => void handleFlyttBane(bane, -1),
+                      onMoveDown: () => void handleFlyttBane(bane, 1),
+                      disableMoveUp: !plassering || plassering.indeks === 0,
+                      disableMoveDown: !plassering || plassering.indeks === plassering.antall - 1,
+                    }}
                   />
                 );
               })}
-            </AdminEntityList>
+            </Collection.List>
           </>
         )}
-      </AdminEntityCollection>
+      </Collection>
 
       {valgtBane ? (
-        <AdminEditorDialog
+        <Dialog.Editor
           open={editorOpen}
           onOpenChange={(open) => {
             if (!isSaving) setEditorOpen(open);
@@ -649,7 +654,7 @@ export default function RedigerBaneView() {
             }
             lagret={lagretBaneId === valgtBaneId && !isDirty}
           />
-        </AdminEditorDialog>
+        </Dialog.Editor>
       ) : null}
     </>
   );

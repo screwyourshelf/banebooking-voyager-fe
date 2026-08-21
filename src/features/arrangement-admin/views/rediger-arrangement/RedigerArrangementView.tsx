@@ -1,19 +1,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { Form, Settings, Page } from "@/components";
 
-import {
-  AdminEditorForm,
-  AdminFormActions,
-  AdminPageLoading,
-  SettingsPanel,
-  SettingsRadioGroup,
-  SettingsRow,
-  SettingsStack,
-  SettingsSwitchRow,
-} from "@/components/admin";
-import SettingsSection from "@/components/admin/SettingsSection";
 import { ServerFeil } from "@/components/errors";
 import { ActionFeedback, type ActionFeedbackMessage } from "@/components/feedback";
-import SectionTabs from "@/components/navigation/Tabs";
 import { RecordCollectionSkeleton, RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -370,305 +359,300 @@ export default function RedigerArrangementView({
   };
 
   if (isLoading || isLoadingArrangementer || !arrangement) {
-    return <AdminPageLoading label="Laster arrangementskjemaet" />;
+    return <Page.Loading label="Laster arrangementskjemaet" />;
   }
 
   return (
     <>
-      <SectionTabs
+      <Form.Steps
         value={aktivTab}
         onValueChange={(value) => setAktivTab(value as typeof aktivTab)}
-        variant="section"
-        ariaLabel="Rediger arrangement"
+        label="Rediger arrangement"
         items={[
-          {
-            value: "metadata",
-            label: "Informasjon",
-            content: (
-              <AdminEditorForm
-                onSubmit={(event) => {
-                  event.preventDefault();
-                  void håndterLagreMetadata();
-                }}
+          { value: "metadata", label: "Informasjon" },
+          { value: "bookinger", label: "Tider" },
+        ]}
+      >
+        {aktivTab === "metadata" ? (
+          <Form
+            variant="editor"
+            onSubmit={(event) => {
+              event.preventDefault();
+              void håndterLagreMetadata();
+            }}
+          >
+            <Settings.Stack embedded>
+              <Settings.Section
+                embedded
+                eyebrow="Arrangement"
+                title="Arrangement"
+                description="Informasjonen kan lagres uten å endre banetidene."
               >
-                <SettingsStack embedded>
-                  <SettingsSection
-                    embedded
-                    title="Arrangement"
-                    description="Informasjonen kan lagres uten å endre banetidene."
-                  >
-                    <SettingsPanel>
-                      {grener.length > 1 ? (
-                        <SettingsRow
-                          title="Gren for nye banetider"
-                          description="Endrer bare hvilke baner du kan legge til videre."
-                        >
-                          <Select value={valgtGrenId} onValueChange={setValgtGrenId}>
-                            <SelectTrigger id="gren" aria-label="Gren for nye banetider">
-                              <SelectValue placeholder="Velg gren…" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {grener.map((gren) => (
-                                <SelectItem key={gren.id} value={gren.id}>
-                                  {gren.navn}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                        </SettingsRow>
-                      ) : null}
+                <Form.Fields>
+                  {grener.length > 1 ? (
+                    <Form.Field
+                      label="Gren for nye banetider"
+                      description="Endrer bare hvilke baner du kan legge til videre."
+                      htmlFor="gren"
+                    >
+                      <Select value={valgtGrenId} onValueChange={setValgtGrenId}>
+                        <SelectTrigger id="gren" aria-label="Gren for nye banetider">
+                          <SelectValue placeholder="Velg gren…" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {grener.map((gren) => (
+                            <SelectItem key={gren.id} value={gren.id}>
+                              {gren.navn}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </Form.Field>
+                  ) : null}
 
-                      <SettingsRow title="Kategori">
-                        <Select
-                          value={kategori}
-                          onValueChange={(value) => {
-                            resetMetadataFeedback();
-                            setKategori(value as ArrangementKategori);
-                          }}
-                        >
-                          <SelectTrigger id="kategori" aria-label="Kategori">
-                            <SelectValue placeholder="Velg kategori…" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {ARRANGEMENT_KATEGORI_VALG.map((category) => (
-                              <SelectItem key={category.value} value={category.value}>
-                                {category.label}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </SettingsRow>
+                  <Form.Field label="Kategori" htmlFor="kategori">
+                    <Select
+                      value={kategori}
+                      onValueChange={(value) => {
+                        resetMetadataFeedback();
+                        setKategori(value as ArrangementKategori);
+                      }}
+                    >
+                      <SelectTrigger id="kategori" aria-label="Kategori">
+                        <SelectValue placeholder="Velg kategori…" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {ARRANGEMENT_KATEGORI_VALG.map((category) => (
+                          <SelectItem key={category.value} value={category.value}>
+                            {category.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </Form.Field>
 
-                      <SettingsRow title="Intern beskrivelse">
-                        <Textarea
-                          id="beskrivelse"
-                          aria-label="Intern beskrivelse"
-                          value={beskrivelse}
+                  <Form.Field label="Intern beskrivelse" htmlFor="beskrivelse">
+                    <Textarea
+                      id="beskrivelse"
+                      aria-label="Intern beskrivelse"
+                      value={beskrivelse}
+                      onChange={(event) => {
+                        resetMetadataFeedback();
+                        setBeskrivelse(event.target.value);
+                      }}
+                    />
+                  </Form.Field>
+                </Form.Fields>
+              </Settings.Section>
+
+              <Settings.Section
+                embedded
+                eyebrow="Nettside"
+                title="Publisering"
+                description="Styr presentasjonen på klubbens nettside."
+              >
+                <Form.Fields>
+                  <Settings.SwitchRow
+                    title="Vis på nettsiden"
+                    description="Publiser med egen tittel og presentasjonstekst."
+                    checked={publisertPåNettsiden}
+                    onCheckedChange={(checked) => {
+                      resetMetadataFeedback();
+                      setPublisertPåNettsiden(checked);
+                    }}
+                  />
+
+                  {publisertPåNettsiden ? (
+                    <>
+                      <Form.Field label="Tittel på nettsiden" htmlFor="nettside-tittel">
+                        <Input
+                          id="nettside-tittel"
+                          aria-label="Tittel på nettsiden"
+                          value={nettsideTittel}
                           onChange={(event) => {
                             resetMetadataFeedback();
-                            setBeskrivelse(event.target.value);
+                            setNettsideTittel(event.target.value);
+                          }}
+                          placeholder="F.eks. Vårturnering 2026"
+                          maxLength={100}
+                        />
+                      </Form.Field>
+                      <Form.Field label="Presentasjon på nettsiden">
+                        <LazyTiptapEditor
+                          content={nettsideBeskrivelse}
+                          onChange={(content) => {
+                            resetMetadataFeedback();
+                            setNettsideBeskrivelse(content);
                           }}
                         />
-                      </SettingsRow>
-                    </SettingsPanel>
-                  </SettingsSection>
-
-                  <SettingsSection
-                    embedded
-                    title="Publisering"
-                    description="Styr presentasjonen på klubbens nettside."
-                  >
-                    <SettingsPanel>
-                      <SettingsSwitchRow
-                        title="Vis på nettsiden"
-                        description="Publiser med egen tittel og presentasjonstekst."
-                        checked={publisertPåNettsiden}
-                        onCheckedChange={(checked) => {
-                          resetMetadataFeedback();
-                          setPublisertPåNettsiden(checked);
-                        }}
-                      />
-
-                      {publisertPåNettsiden ? (
-                        <>
-                          <SettingsRow title="Tittel på nettsiden">
-                            <Input
-                              id="nettside-tittel"
-                              aria-label="Tittel på nettsiden"
-                              value={nettsideTittel}
-                              onChange={(event) => {
-                                resetMetadataFeedback();
-                                setNettsideTittel(event.target.value);
-                              }}
-                              placeholder="F.eks. Vårturnering 2026"
-                              maxLength={100}
-                            />
-                          </SettingsRow>
-                          <SettingsRow title="Presentasjon på nettsiden">
-                            <LazyTiptapEditor
-                              content={nettsideBeskrivelse}
-                              onChange={(content) => {
-                                resetMetadataFeedback();
-                                setNettsideBeskrivelse(content);
-                              }}
-                            />
-                          </SettingsRow>
-                        </>
-                      ) : null}
-                    </SettingsPanel>
-                  </SettingsSection>
-
-                  <SettingsSection
-                    embedded
-                    title="Turnering"
-                    description="Koble arrangementet til turneringsadministrasjon ved behov."
-                  >
-                    <SettingsPanel>
-                      <SettingsRow
-                        title="Turneringsmodus"
-                        description={
-                          arrangement.turneringId
-                            ? "Arrangementet er koblet til en turnering."
-                            : "Opprett en turnering med arrangementet som grunnlag."
-                        }
-                      >
-                        {arrangement.turneringId ? (
-                          <Button
-                            type="button"
-                            onClick={() => navigate(`../turnering/${arrangement.turneringId}`)}
-                          >
-                            Administrer turnering
-                          </Button>
-                        ) : (
-                          <Button
-                            type="button"
-                            variant="outline"
-                            onClick={() =>
-                              opprettTurnering.mutate({ arrangementId: arrangement.id })
-                            }
-                            disabled={opprettTurnering.isPending}
-                          >
-                            {opprettTurnering.isPending ? "Oppretter…" : "Opprett turnering"}
-                          </Button>
-                        )}
-                      </SettingsRow>
-                    </SettingsPanel>
-                  </SettingsSection>
-
-                  <SettingsSection
-                    embedded
-                    eyebrow="Fareområde"
-                    title="Avlys arrangement"
-                    description="Alle tilknyttede banetider slettes. Handlingen må bekreftes."
-                    tone="danger"
-                  >
-                    <SettingsPanel>
-                      <SettingsRow
-                        title="Fjern arrangementet"
-                        description="Bruk avlysning bare når arrangementet og alle tidene skal fjernes."
-                      >
-                        <SlettArrangementDialog
-                          tittel={arrangement.tittel}
-                          harTurnering={!!arrangement.turneringId}
-                          onSlett={async () => {
-                            await avlysArrangement();
-                            onDeleted?.();
-                          }}
-                          trigger={<Button variant="destructive">Avlys arrangement</Button>}
-                        />
-                      </SettingsRow>
-                    </SettingsPanel>
-                  </SettingsSection>
-
-                  <AdminFormActions>
-                    {metadataLagret ? (
-                      <ActionFeedback
-                        tone="success"
-                        title="Informasjonen er lagret"
-                        description="Arrangementoversikten er oppdatert."
-                      />
-                    ) : null}
-                    <ServerFeil feil={opprettTurnering.error?.message ?? null} />
-                    <ServerFeil feil={lagreFeil?.message ?? null} />
-                    <Button type="submit" disabled={lagreMetadataLoading}>
-                      {lagreMetadataLoading ? "Lagrer…" : "Lagre informasjon"}
-                    </Button>
-                  </AdminFormActions>
-                </SettingsStack>
-              </AdminEditorForm>
-            ),
-          },
-          {
-            value: "bookinger",
-            label: "Tider",
-            content: (
-              <SettingsStack embedded>
-                <SettingsSection
-                  embedded
-                  title="Legg til banetider"
-                  description="Nye tider legges først som forslag og lagres separat."
-                >
-                  <SettingsPanel>
-                    <SettingsRow title="Metode">
-                      <SettingsRadioGroup
-                        label="Velg oppsettstype"
-                        value={oppsettsModus}
-                        onValueChange={(value) => setOppsettsModus(value as typeof oppsettsModus)}
-                        options={[
-                          { value: "gjentakende", label: "Gjentakende" },
-                          { value: "manuell", label: "Manuelt" },
-                        ]}
-                      />
-                    </SettingsRow>
-                  </SettingsPanel>
-                </SettingsSection>
-
-                <SettingsSection
-                  embedded
-                  title={oppsettsModus === "gjentakende" ? "Gjentakende tider" : "Manuelle tider"}
-                  description={
-                    oppsettsModus === "gjentakende"
-                      ? "Velg periode, ukedager, baner og tidspunkter."
-                      : "Velg konkrete datoer, baner og tidspunkter."
-                  }
-                >
-                  {oppsettsModus === "gjentakende" ? (
-                    <GjentakendeOppsett baner={baner} onGenerer={håndterGenererForslag} />
-                  ) : (
-                    <ManueltOppsett baner={baner} onLeggTil={håndterManueltLeggTil} />
-                  )}
-                </SettingsSection>
-
-                <SettingsSection
-                  embedded
-                  title="Banetider"
-                  description="Eksisterende tider og nye forslag vises i samme liste."
-                >
-                  {isLoadingBookinger ? (
-                    <RecordCollectionSkeleton
-                      ariaLabel="Laster arrangementets banetider"
-                      rows={5}
-                      layout="date"
-                    />
-                  ) : bookingerFeil ? (
-                    <RecordListState
-                      title="Kunne ikke laste banetidene"
-                      description={bookingerFeil.message}
-                      tone="danger"
-                      role="alert"
-                    />
-                  ) : (
-                    <BookingListe
-                      bookinger={bookinger}
-                      onRediger={håndterRediger}
-                      onFjernEllerAvlys={håndterFjernEllerAvlys}
-                    />
-                  )}
-                </SettingsSection>
-
-                <AdminFormActions>
-                  {bookingFeedback ? <ActionFeedback {...bookingFeedback} /> : null}
-                  <ServerFeil
-                    feil={slettBookingFeil?.message ?? leggTilBookingFeil?.message ?? null}
-                    title="Listen over banetider kunne ikke oppdateres"
-                  />
-                  {stagede.length > 0 ? (
-                    <Button
-                      type="button"
-                      onClick={() => void håndterOpprettForslag()}
-                      disabled={oppretterForslag}
-                    >
-                      {oppretterForslag
-                        ? `Oppretter ${stagede.length}…`
-                        : `Opprett ${stagede.length} forslag`}
-                    </Button>
+                      </Form.Field>
+                    </>
                   ) : null}
-                </AdminFormActions>
-              </SettingsStack>
-            ),
-          },
-        ]}
-      />
+                </Form.Fields>
+              </Settings.Section>
+
+              <Settings.Section
+                embedded
+                eyebrow="Integrasjon"
+                title="Turnering"
+                description="Koble arrangementet til turneringsadministrasjon ved behov."
+              >
+                <Settings.Panel>
+                  <Settings.Row
+                    title="Turneringsmodus"
+                    description={
+                      arrangement.turneringId
+                        ? "Arrangementet er koblet til en turnering."
+                        : "Opprett en turnering med arrangementet som grunnlag."
+                    }
+                  >
+                    {arrangement.turneringId ? (
+                      <Button
+                        type="button"
+                        onClick={() => navigate(`../turnering/${arrangement.turneringId}`)}
+                      >
+                        Administrer turnering
+                      </Button>
+                    ) : (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        onClick={() => opprettTurnering.mutate({ arrangementId: arrangement.id })}
+                        disabled={opprettTurnering.isPending}
+                      >
+                        {opprettTurnering.isPending ? "Oppretter…" : "Opprett turnering"}
+                      </Button>
+                    )}
+                  </Settings.Row>
+                </Settings.Panel>
+              </Settings.Section>
+
+              <Settings.Section
+                embedded
+                eyebrow="Fareområde"
+                title="Avlys arrangement"
+                description="Alle tilknyttede banetider slettes. Handlingen må bekreftes."
+                tone="danger"
+              >
+                <Settings.Panel>
+                  <Settings.Row
+                    title="Fjern arrangementet"
+                    description="Bruk avlysning bare når arrangementet og alle tidene skal fjernes."
+                  >
+                    <SlettArrangementDialog
+                      tittel={arrangement.tittel}
+                      harTurnering={!!arrangement.turneringId}
+                      onSlett={async () => {
+                        await avlysArrangement();
+                        onDeleted?.();
+                      }}
+                      trigger={<Button variant="destructive">Avlys arrangement</Button>}
+                    />
+                  </Settings.Row>
+                </Settings.Panel>
+              </Settings.Section>
+
+              <Form.Actions>
+                {metadataLagret ? (
+                  <ActionFeedback
+                    tone="success"
+                    title="Informasjonen er lagret"
+                    description="Arrangementoversikten er oppdatert."
+                  />
+                ) : null}
+                <ServerFeil feil={opprettTurnering.error?.message ?? null} />
+                <ServerFeil feil={lagreFeil?.message ?? null} />
+                <Button type="submit" disabled={lagreMetadataLoading}>
+                  {lagreMetadataLoading ? "Lagrer…" : "Lagre informasjon"}
+                </Button>
+              </Form.Actions>
+            </Settings.Stack>
+          </Form>
+        ) : (
+          <Settings.Stack embedded>
+            <Settings.Section
+              embedded
+              eyebrow="Tider"
+              title="Legg til banetider"
+              description="Nye tider legges først som forslag og lagres separat."
+            >
+              <Form.Fields>
+                <Form.Field label="Metode">
+                  <Settings.RadioGroup
+                    label="Velg oppsettstype"
+                    value={oppsettsModus}
+                    onValueChange={(value) => setOppsettsModus(value as typeof oppsettsModus)}
+                    options={[
+                      { value: "gjentakende", label: "Gjentakende" },
+                      { value: "manuell", label: "Manuelt" },
+                    ]}
+                  />
+                </Form.Field>
+              </Form.Fields>
+            </Settings.Section>
+
+            <Settings.Section
+              embedded
+              eyebrow="Oppsett"
+              title={oppsettsModus === "gjentakende" ? "Gjentakende tider" : "Manuelle tider"}
+              description={
+                oppsettsModus === "gjentakende"
+                  ? "Velg periode, ukedager, baner og tidspunkter."
+                  : "Velg konkrete datoer, baner og tidspunkter."
+              }
+            >
+              {oppsettsModus === "gjentakende" ? (
+                <GjentakendeOppsett baner={baner} onGenerer={håndterGenererForslag} />
+              ) : (
+                <ManueltOppsett baner={baner} onLeggTil={håndterManueltLeggTil} />
+              )}
+            </Settings.Section>
+
+            <Settings.Section
+              embedded
+              eyebrow="Kontroll"
+              title="Banetider"
+              description="Eksisterende tider og nye forslag vises i samme liste."
+            >
+              {isLoadingBookinger ? (
+                <RecordCollectionSkeleton
+                  ariaLabel="Laster arrangementets banetider"
+                  rows={5}
+                  layout="date"
+                />
+              ) : bookingerFeil ? (
+                <RecordListState
+                  title="Kunne ikke laste banetidene"
+                  description={bookingerFeil.message}
+                  tone="danger"
+                  role="alert"
+                />
+              ) : (
+                <BookingListe bookinger={bookinger} onRediger={håndterRediger} />
+              )}
+            </Settings.Section>
+
+            <Form.Actions>
+              {bookingFeedback ? <ActionFeedback {...bookingFeedback} /> : null}
+              <ServerFeil
+                feil={slettBookingFeil?.message ?? leggTilBookingFeil?.message ?? null}
+                title="Listen over banetider kunne ikke oppdateres"
+              />
+              {stagede.length > 0 ? (
+                <Button
+                  type="button"
+                  onClick={() => void håndterOpprettForslag()}
+                  disabled={oppretterForslag}
+                >
+                  {oppretterForslag
+                    ? `Oppretter ${stagede.length}…`
+                    : `Opprett ${stagede.length} forslag`}
+                </Button>
+              ) : null}
+            </Form.Actions>
+          </Settings.Stack>
+        )}
+      </Form.Steps>
 
       <RedigerBookingModal
         key={redigeringsMålId ?? "closed"}
@@ -679,6 +663,7 @@ export default function RedigerArrangementView({
         }
         baner={baner}
         onBekreft={håndterRedigerBekreft}
+        onFjernEllerAvlys={håndterFjernEllerAvlys}
         onAvbryt={() => setRedigeringsMålId(null)}
       />
     </>

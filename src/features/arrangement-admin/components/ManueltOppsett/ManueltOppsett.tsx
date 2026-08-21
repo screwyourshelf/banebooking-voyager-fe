@@ -1,12 +1,6 @@
 import { useMemo, useState } from "react";
-import {
-  AdminFormActions,
-  SettingsChoiceGroup,
-  SettingsPanel,
-  SettingsRow,
-  SettingsSwitchRow,
-  SettingsText,
-} from "@/components/admin";
+import { Form, Settings } from "@/components";
+
 import DatoFlervelger from "@/components/DatoFlervelger";
 import { RecordStatus } from "@/components/records";
 import { Button } from "@/components/ui/button";
@@ -190,33 +184,33 @@ export default function ManueltOppsett({ baner, onLeggTil }: Props) {
 
   return (
     <>
-      <SettingsPanel>
-        <SettingsRow title="Datoer" description="Velg én eller flere datoer i kalenderen.">
+      <Form.Fields>
+        <Form.Field label="Datoer" description="Velg én eller flere datoer i kalenderen.">
           <DatoFlervelger
             value={valgteDataer}
             onChange={setValgteDataer}
             ariaLabel="Velg datoer for bookingene"
           />
-          <SettingsText>
+          <Settings.Text>
             {valgteDataer.length === 0
               ? "Ingen datoer valgt."
               : `${valgteDataer.length} dato${valgteDataer.length === 1 ? "" : "er"} valgt.`}
-          </SettingsText>
-        </SettingsRow>
+          </Settings.Text>
+        </Form.Field>
 
-        <SettingsRow title="Baner" description="Velg én eller flere baner.">
-          <SettingsChoiceGroup
+        <Form.Field label="Baner" description="Velg én eller flere baner.">
+          <Settings.ChoiceGroup
             label="Baner"
             options={baner.map((bane) => ({ value: bane.id, label: bane.navn }))}
             selectedValues={valgteBaneIder}
             onToggle={(value) => toggleItem(value, setValgteBaneIder)}
           />
-        </SettingsRow>
+        </Form.Field>
 
         {tidspunktResultat.advarselTekst ? (
-          <SettingsRow title="Ulik varighet" description={tidspunktResultat.advarselTekst}>
+          <Settings.Row title="Ulik varighet" description={tidspunktResultat.advarselTekst}>
             <RecordStatus tone="warning">Kontroller tidene</RecordStatus>
-          </SettingsRow>
+          </Settings.Row>
         ) : null}
 
         {erGruppert ? (
@@ -225,7 +219,7 @@ export default function ManueltOppsett({ baner, onLeggTil }: Props) {
             const allTimes = allePerGruppe[slotLength] ?? false;
             const selectedTimes = tidspunkterPerGruppe[slotLength] ?? [];
             return [
-              <SettingsSwitchRow
+              <Settings.SwitchRow
                 key={`all-${slotLength}`}
                 title={`Alle tidspunkter · ${slotLength} min`}
                 description={group.baneNavn.join(", ")}
@@ -234,12 +228,12 @@ export default function ManueltOppsett({ baner, onLeggTil }: Props) {
                   setAllePerGruppe((current) => ({ ...current, [slotLength]: checked }))
                 }
               />,
-              <SettingsRow
+              <Form.Field
                 key={`times-${slotLength}`}
-                title={`Tidspunkter · ${slotLength} min`}
+                label={`Tidspunkter · ${slotLength} min`}
                 description={group.baneNavn.join(", ")}
               >
-                <SettingsChoiceGroup
+                <Settings.ChoiceGroup
                   label={`Tidspunkter for ${slotLength} minutter`}
                   options={group.tidspunkter.map((time) => ({ value: time, label: time }))}
                   selectedValues={allTimes ? group.tidspunkter : selectedTimes}
@@ -253,45 +247,45 @@ export default function ManueltOppsett({ baner, onLeggTil }: Props) {
                   }
                   disabled={allTimes}
                 />
-              </SettingsRow>,
+              </Form.Field>,
             ];
           })
         ) : valgteBaneIder.length > 0 ? (
           <>
-            <SettingsSwitchRow
+            <Settings.SwitchRow
               title="Alle tidspunkter"
               description="Bruk alle tilgjengelige starttider for valgte baner."
               checked={alleTidspunkter}
               onCheckedChange={setAlleTidspunkter}
             />
-            <SettingsRow title="Tidspunkter" description="Velg starttidene som skal legges til.">
-              <SettingsChoiceGroup
+            <Form.Field label="Tidspunkter" description="Velg starttidene som skal legges til.">
+              <Settings.ChoiceGroup
                 label="Tidspunkter"
                 options={tilgjengeligeTidspunkter.map((time) => ({ value: time, label: time }))}
                 selectedValues={alleTidspunkter ? tilgjengeligeTidspunkter : valgteTidspunkter}
                 onToggle={(value) => toggleItem(value, setValgteTidspunkter)}
                 disabled={alleTidspunkter}
               />
-            </SettingsRow>
+            </Form.Field>
           </>
         ) : null}
 
-        <SettingsRow title={kanLeggeTil ? "Klart til å legge til" : "Før du kan legge til"}>
-          <SettingsText>
+        <Settings.Row title={kanLeggeTil ? "Klart til å legge til" : "Før du kan legge til"}>
+          <Settings.Text>
             {kanLeggeTil
               ? `${formaterAntallBanetider(antallBookinger)} legges i listen.`
               : `Velg ${requirements.join(", ")}.`}
-          </SettingsText>
-        </SettingsRow>
-      </SettingsPanel>
+          </Settings.Text>
+        </Settings.Row>
+      </Form.Fields>
 
-      <AdminFormActions>
+      <Form.Actions>
         <Button type="button" disabled={!kanLeggeTil} onClick={handleAdd}>
           {kanLeggeTil
             ? `Legg til ${formaterAntallBanetider(antallBookinger)}`
             : "Legg til i listen"}
         </Button>
-      </AdminFormActions>
+      </Form.Actions>
     </>
   );
 }

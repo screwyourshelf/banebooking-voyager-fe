@@ -1,7 +1,6 @@
 import type { CSSProperties } from "react";
-import CardSection from "@/components/layout/CardSection";
-import SectionHeading from "@/components/layout/SectionHeading";
 import { formatTimer } from "@/features/statistikk/statistikkPresentation";
+import { Section } from "@/components";
 
 export type FordelingPunkt = {
   id: string;
@@ -26,20 +25,22 @@ export default function FordelingBarListe({ title, description, punkter, oppsumm
   );
 
   return (
-    <CardSection className="statistics-section statistics-distribution">
-      <SectionHeading description={description} size="lg">
-        {title}
-      </SectionHeading>
+    <Section variant="surface" data-context="statistics" data-view="distribution">
+      <Section.Heading description={description}>{title}</Section.Heading>
 
-      {oppsummering ? <p className="statistics-distribution__summary">{oppsummering}</p> : null}
+      {oppsummering ? (
+        <p className="statistics-distribution__summary" data-stat-role="chart-label">
+          {oppsummering}
+        </p>
+      ) : null}
 
       <div className="statistics-distribution__list">
         {punkter.map((punkt) => (
           <div key={punkt.id} className="statistics-distribution__row">
             <div className="statistics-distribution__label">
-              <strong>{punkt.label}</strong>
-              <span>
-                {formatTimer(punkt.bookedeTimer)}
+              <strong data-stat-role="chart-label">{punkt.label}</strong>
+              <span data-stat-role="chart-meta">
+                <strong data-stat-role="chart-value">{formatTimer(punkt.bookedeTimer)}</strong>
                 {punkt.sammenligningBookedeTimer !== null
                   ? ` · året før ${formatTimer(punkt.sammenligningBookedeTimer)}`
                   : ""}
@@ -68,6 +69,6 @@ export default function FordelingBarListe({ title, description, punkter, oppsumm
           </div>
         ))}
       </div>
-    </CardSection>
+    </Section>
   );
 }

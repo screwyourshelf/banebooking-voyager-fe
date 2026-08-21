@@ -1,8 +1,8 @@
+import { ShieldX } from "lucide-react";
 import { useState } from "react";
-import { Plus, ShieldX } from "lucide-react";
-import { AdminAccessError, AdminPageLoading, AdminPageState } from "@/components/admin";
+import { Page } from "@/components";
+
 import { RecordListState } from "@/components/records";
-import { Button } from "@/components/ui/button";
 import BanerOgGrenerWorkspace from "@/features/baner-og-grener/components/BanerOgGrenerWorkspace";
 import NyGrenDialog from "@/features/grener/views/ny-gren/NyGrenDialog";
 import RedigerGrenView from "@/features/grener/views/rediger-gren/RedigerGrenView";
@@ -23,28 +23,25 @@ export default function GrenerPage() {
         baner: canAdministerCourts,
         grener: canAdministerActivities,
       }}
-      action={
-        canAdministerActivities ? (
-          <Button type="button" onClick={() => setCreateOpen(true)}>
-            <Plus data-icon="inline-start" aria-hidden="true" />
-            Ny gren
-          </Button>
-        ) : null
+      createAction={
+        canAdministerActivities
+          ? { label: "Ny gren", onClick: () => setCreateOpen(true) }
+          : undefined
       }
     >
       {laster ? (
-        <AdminPageLoading label="Kontrollerer tilgang" />
+        <Page.Loading label="Kontrollerer tilgang" />
       ) : feil ? (
-        <AdminAccessError feil={feil} isFetching={isFetching} onRetry={() => void refetch()} />
+        <Page.AccessError error={feil} isFetching={isFetching} onRetry={() => void refetch()} />
       ) : !canAdministerActivities ? (
-        <AdminPageState>
+        <Page.State>
           <RecordListState
             icon={<ShieldX aria-hidden="true" />}
             title="Du har ikke tilgang til grener"
             description="En klubbadministrator må gi deg tilgang før du kan administrere grener."
             tone="danger"
           />
-        </AdminPageState>
+        </Page.State>
       ) : (
         <RedigerGrenView />
       )}

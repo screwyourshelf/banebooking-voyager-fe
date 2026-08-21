@@ -1,9 +1,9 @@
 import type { FormHTMLAttributes, ReactNode } from "react";
-import { cn } from "@/lib/utils";
 
 type Props = Omit<FormHTMLAttributes<HTMLFormElement>, "children"> & {
   children: ReactNode;
   density?: "default" | "compact";
+  variant?: "default" | "editor" | "settings";
 
   /** Standard: Enter submitter (for konsistent UX + viser validering) */
   submitOnEnter?: boolean;
@@ -24,18 +24,20 @@ export default function FormLayout({
   children,
   className,
   density = "default",
+  variant = "default",
   submitOnEnter = true,
   inset = "none",
   onKeyDown,
   ...props
 }: Props) {
-  const gap = density === "compact" ? "space-y-1" : "space-y-2";
-  const px = inset === "sm" ? "px-1" : inset === "md" ? "px-2" : "";
-
   return (
     <form
       noValidate
-      className={cn("w-full", gap, px, className)}
+      className={className}
+      data-ui="form"
+      data-variant={variant}
+      data-density={density}
+      data-inset={inset}
       onKeyDown={(e) => {
         onKeyDown?.(e);
 

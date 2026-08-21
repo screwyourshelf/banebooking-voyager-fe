@@ -26,7 +26,7 @@ export default function WeatherInfo({
         alt={værSymbol}
         width={16}
         height={16}
-        className="select-none"
+        data-ui="weather-icon"
         draggable={false}
       />
     ) : null;
@@ -34,14 +34,14 @@ export default function WeatherInfo({
 
   if (compact) {
     return (
-      <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
+      <span data-ui="weather" data-variant="compact">
         {værSymbol ? (
           <img
             src={`${import.meta.env.BASE_URL}weather-symbols/svg/${værSymbol}.svg`}
             alt=""
             width={16}
             height={16}
-            className="size-4 select-none"
+            data-part="icon"
             draggable={false}
           />
         ) : null}
@@ -51,14 +51,14 @@ export default function WeatherInfo({
   }
 
   return (
-    <span className="inline-flex items-center gap-1 text-sm text-muted-foreground">
+    <span data-ui="weather" data-variant="default">
       {værSymbol && (
         <img
           src={`${import.meta.env.BASE_URL}weather-symbols/svg/${værSymbol}.svg`}
           alt={værSymbol}
           width={16}
           height={16}
-          className="size-4 select-none"
+          data-part="icon"
           draggable={false}
         />
       )}

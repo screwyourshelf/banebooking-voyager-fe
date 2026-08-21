@@ -1,8 +1,7 @@
+import { Dialog, Form } from "@/components";
 import { useState } from "react";
-import { AppDialog } from "@/components/dialogs";
-import { Grid, Stack, Text } from "@/components/layout";
+import { Stack, Text } from "@/components/layout";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -78,7 +77,7 @@ export function GenererDrawDialog({
   }
 
   return (
-    <AppDialog
+    <Dialog
       open={open}
       onOpenChange={handleClose}
       title={erRegenerer ? "Regenerer draw" : "Generer draw"}
@@ -113,9 +112,8 @@ export function GenererDrawDialog({
           <Text variant="danger">Minst 2 påmeldte deltakere kreves for å generere draw.</Text>
         )}
         {klasseStruktur === "GruppeMedSluttspill" && (
-          <Grid columns={2}>
-            <Stack gap="xs">
-              <Label>Antall grupper</Label>
+          <Form.Fields>
+            <Form.Field label="Antall grupper">
               <Select
                 value={String(antallGrupper)}
                 onValueChange={(v) => handleAntallGrupperChange(Number(v))}
@@ -132,9 +130,8 @@ export function GenererDrawDialog({
                   ))}
                 </SelectContent>
               </Select>
-            </Stack>
-            <Stack gap="xs">
-              <Label>Videre per gruppe</Label>
+            </Form.Field>
+            <Form.Field label="Videre per gruppe">
               <Select
                 value={String(antallSomGaarViderePerGruppe)}
                 onValueChange={(v) => setAntallSomGaarViderePerGruppe(Number(v))}
@@ -151,10 +148,10 @@ export function GenererDrawDialog({
                   ))}
                 </SelectContent>
               </Select>
-            </Stack>
-          </Grid>
+            </Form.Field>
+          </Form.Fields>
         )}
       </Stack>
-    </AppDialog>
+    </Dialog>
   );
 }

@@ -1,15 +1,13 @@
+import type { ComponentProps } from "react";
 import Row from "./Row";
 import { Switch } from "@/components/ui/switch";
-import { cn } from "@/lib/utils";
 
-type Props = {
+type Props = Omit<ComponentProps<typeof Row>, "right" | "children"> & {
   title: string;
   description?: string;
   checked: boolean;
   onCheckedChange: (checked: boolean) => void;
   disabled?: boolean;
-  className?: string;
-  density?: "default" | "compact";
 };
 
 export default function SwitchRow({
@@ -20,13 +18,16 @@ export default function SwitchRow({
   disabled = false,
   className,
   density = "compact",
+  ...props
 }: Props) {
   return (
     <Row
       title={title}
       description={description}
       density={density}
-      className={cn("switch-row", className)}
+      className={className}
+      data-control="switch"
+      {...props}
       right={
         <Switch
           aria-label={title}

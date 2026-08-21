@@ -1,9 +1,7 @@
+import { Dialog, Form } from "@/components";
 import { useState } from "react";
-import { AppDialog } from "@/components/dialogs";
-import { Stack } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { ServerFeil } from "@/components/errors";
 
 type Props = {
@@ -41,7 +39,7 @@ export function SeedDialog({
   }
 
   return (
-    <AppDialog
+    <Dialog
       open={open}
       onOpenChange={handleClose}
       title={`Sett seed – ${spillerNavn}`}
@@ -56,9 +54,8 @@ export function SeedDialog({
         </>
       }
     >
-      <Stack gap="lg">
-        <Stack gap="xs">
-          <Label>Seed (la stå tomt for å fjerne)</Label>
+      <Form.Fields>
+        <Form.Field label="Seed" description="La feltet stå tomt for å fjerne seedingen.">
           <Input
             type="number"
             min={1}
@@ -66,10 +63,10 @@ export function SeedDialog({
             onChange={(e) => setVerdi(e.target.value)}
             placeholder="t.eks. 1"
           />
-        </Stack>
+        </Form.Field>
 
         <ServerFeil feil={serverFeil ?? null} />
-      </Stack>
-    </AppDialog>
+      </Form.Fields>
+    </Dialog>
   );
 }

@@ -1,5 +1,7 @@
 import { format, parseISO } from "date-fns";
 import { nb } from "date-fns/locale";
+import { RecordCard, RecordCardStatic } from "@/components/records/RecordCard";
+import { Button } from "@/components/ui/button";
 import { KampStatusBadge } from "./KampStatusBadge";
 import type { GruppeKampVisning, SluttspillKampVisning } from "@/types";
 
@@ -15,6 +17,40 @@ function avslutningLabel(avslutning: string | undefined): string | null {
   return null;
 }
 
+function SpillerRad({
+  navn,
+  vant,
+  tapte,
+  sett,
+  walkOver,
+}: {
+  navn: string;
+  vant: boolean;
+  tapte: boolean;
+  sett: number[];
+  walkOver: boolean;
+}) {
+  const spiller = tapte ? (
+    <span>{navn}</span>
+  ) : vant ? (
+    <strong>{navn}</strong>
+  ) : (
+    <span>{navn}</span>
+  );
+
+  return (
+    <div>
+      {spiller}
+      <span>
+        {sett.map((games, index) => (
+          <span key={index}>{games}</span>
+        ))}
+        {walkOver && vant ? <span>W/O</span> : null}
+      </span>
+    </div>
+  );
+}
+
 export function KampKort({ kamp, onRegistrer, kanRegistrere }: Props) {
   const vinner = kamp.resultat?.vinner;
   const sp1Navn = kamp.spiller1Navn ?? "TBD";
@@ -23,73 +59,55 @@ export function KampKort({ kamp, onRegistrer, kanRegistrere }: Props) {
   const sp2Vant = vinner === "Spiller2";
   const harSett = !!kamp.resultat?.sett?.length && kamp.status !== "WalkOver";
   const avslutning = avslutningLabel(kamp.resultat?.avslutning);
+  const kanViseRegistrering =
+    kanRegistrere &&
+    kamp.status !== "Ferdig" &&
+    kamp.status !== "WalkOver" &&
+    kamp.status !== "Bye" &&
+    Boolean(onRegistrer);
 
   return (
-    <div className="tournament-match-card">
-      {/* Meta + status */}
-      <div className="app-inline app-inline--between">
-        <div className="tournament-match-card__meta">
-          {"kampNummer" in kamp && kamp.kampNummer && <span>Kamp {kamp.kampNummer}</span>}
-          {kamp.bane && <span>{kamp.bane}</span>}
-          {kamp.tidspunkt && (
-            <span>{format(parseISO(kamp.tidspunkt), "d. MMM HH:mm", { locale: nb })}</span>
-          )}
-        </div>
-        <div className="tournament-match-card__status">
-          {avslutning && <span className="app-text-caption">{avslutning}</span>}
-          <KampStatusBadge status={kamp.status} />
-        </div>
-      </div>
+    <RecordCard as="article">
+      <RecordCardStatic>
+        <div>
+          <div>
+            <div>
+              {"kampNummer" in kamp && kamp.kampNummer ? <span>Kamp {kamp.kampNummer}</span> : null}
+              {kamp.bane ? <span>{kamp.bane}</span> : null}
+              {kamp.tidspunkt ? (
+                <span>{format(parseISO(kamp.tidspunkt), "d. MMM HH:mm", { locale: nb })}</span>
+              ) : null}
+            </div>
+            <div>
+              {avslutning ? <span>{avslutning}</span> : null}
+              <KampStatusBadge status={kamp.status} />
+            </div>
+          </div>
 
-      {/* Scoreboard */}
-      <div className="app-stack app-stack--xs">
-        <div className="app-inline">
-          <span
-            className="tournament-player"
-            data-winner={sp1Vant || undefined}
-            data-loser={sp2Vant || undefined}
-          >
-            {sp1Navn}
-          </span>
-          <div className="tournament-score">
-            {harSett &&
-              kamp.resultat!.sett.map((s, i) => (
-                <span key={i} data-winner={sp1Vant || undefined}>
-                  {s.spiller1Games}
-                </span>
-              ))}
-            {kamp.status === "WalkOver" && sp1Vant && <span className="app-text-caption">W/O</span>}
+          <div>
+            <SpillerRad
+              navn={sp1Navn}
+              vant={sp1Vant}
+              tapte={sp2Vant}
+              sett={harSett ? kamp.resultat!.sett.map((sett) => sett.spiller1Games) : []}
+              walkOver={kamp.status === "WalkOver"}
+            />
+            <SpillerRad
+              navn={sp2Navn}
+              vant={sp2Vant}
+              tapte={sp1Vant}
+              sett={harSett ? kamp.resultat!.sett.map((sett) => sett.spiller2Games) : []}
+              walkOver={kamp.status === "WalkOver"}
+            />
           </div>
         </div>
-        <div className="app-inline">
-          <span
-            className="tournament-player"
-            data-winner={sp2Vant || undefined}
-            data-loser={sp1Vant || undefined}
-          >
-            {sp2Navn}
-          </span>
-          <div className="tournament-score">
-            {harSett &&
-              kamp.resultat!.sett.map((s, i) => (
-                <span key={i} data-winner={sp2Vant || undefined}>
-                  {s.spiller2Games}
-                </span>
-              ))}
-            {kamp.status === "WalkOver" && sp2Vant && <span className="app-text-caption">W/O</span>}
-          </div>
-        </div>
-      </div>
 
-      {kanRegistrere &&
-        kamp.status !== "Ferdig" &&
-        kamp.status !== "WalkOver" &&
-        kamp.status !== "Bye" &&
-        onRegistrer && (
-          <button className="tournament-result-action" onClick={() => onRegistrer(kamp.id)}>
+        {kanViseRegistrering && onRegistrer ? (
+          <Button type="button" variant="outline" size="sm" onClick={() => onRegistrer(kamp.id)}>
             Registrer resultat
-          </button>
-        )}
-    </div>
+          </Button>
+        ) : null}
+      </RecordCardStatic>
+    </RecordCard>
   );
 }

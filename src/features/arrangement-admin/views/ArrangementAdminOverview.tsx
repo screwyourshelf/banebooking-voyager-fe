@@ -1,17 +1,15 @@
 import { useMemo, useState } from "react";
 import { CalendarCog, CalendarX2 } from "lucide-react";
+import { Collection, Dialog } from "@/components";
 
-import {
-  AdminEditorDialog,
-  AdminEntityCollection,
-  AdminEntityList,
-  AdminEntityRow,
-} from "@/components/admin";
 import { ActionFeedback, type ActionFeedbackMessage } from "@/components/feedback";
 import { RecordCollectionSkeleton, RecordListState } from "@/components/records";
 import { Button } from "@/components/ui/button";
 import type { ArrangementRespons } from "@/types";
-import { formaterArrangementKategori } from "@/utils/arrangementPresentation";
+import {
+  formaterArrangementMetadata,
+  getArrangementLifecycleStatus,
+} from "@/utils/arrangementPresentation";
 import { useRedigerArrangement } from "../hooks/useRedigerArrangement";
 import OpprettArrangementView from "./arrangement/OpprettArrangementView";
 import RedigerArrangementView from "./rediger-arrangement/RedigerArrangementView";
@@ -46,19 +44,6 @@ function formatDateRange(arrangement: ArrangementRespons) {
   return `${start}–${formatDate(arrangement.sluttDato, endYear !== currentYear)}`;
 }
 
-function getStatus(arrangement: ArrangementRespons) {
-  if (arrangement.erPassert) return { label: "Gjennomført", tone: "past" as const };
-
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const start = parseLocalDate(arrangement.startDato);
-  const end = parseLocalDate(arrangement.sluttDato);
-
-  return start <= today && today <= end
-    ? { label: "Pågår", tone: "event" as const }
-    : { label: "Kommende", tone: "available" as const };
-}
-
 export default function ArrangementAdminOverview({ createOpen, onCreateOpenChange }: Props) {
   const [showPast, setShowPast] = useState(false);
   const [selectedBranches, setSelectedBranches] = useState<string[]>([]);
@@ -89,15 +74,14 @@ export default function ArrangementAdminOverview({ createOpen, onCreateOpenChang
     <>
       {creationFeedback ? <ActionFeedback {...creationFeedback} /> : null}
 
-      <AdminEntityCollection
+      <Collection
         icon={<CalendarCog aria-hidden="true" />}
         title={`${visibleArrangements.length} arrangement${
           visibleArrangements.length === 1 ? "" : "er"
         }`}
-        description={showPast ? "Alle arrangementer" : "Aktive og kommende arrangementer"}
+        scope={showPast ? "Alle" : "Nå og fremover"}
         toggle={{
           title: "Vis tidligere",
-          description: "Inkluder gjennomførte",
           checked: showPast,
           onCheckedChange: setShowPast,
           disabled: isLoadingOverview,
@@ -105,7 +89,7 @@ export default function ArrangementAdminOverview({ createOpen, onCreateOpenChang
         filter={
           grener.length > 1
             ? {
-                label: "Filtrer arrangementer",
+                label: "Filtrer på gren",
                 groups: [
                   {
                     label: "Gren",
@@ -151,41 +135,35 @@ export default function ArrangementAdminOverview({ createOpen, onCreateOpenChang
             }
           />
         ) : (
-          <AdminEntityList>
+          <Collection.List>
             {visibleArrangements.map((arrangement) => {
-              const status = getStatus(arrangement);
-              const metadata = [
-                arrangement.grenNavn,
-                formaterArrangementKategori(arrangement.kategori),
-              ]
-                .filter(Boolean)
-                .join(" · ");
+              const status = getArrangementLifecycleStatus(arrangement);
+              const metadata = formaterArrangementMetadata(arrangement);
 
               return (
-                <AdminEntityRow
+                <Collection.Row
                   key={arrangement.id}
                   title={arrangement.tittel}
-                  meta={metadata}
                   description={formatDateRange(arrangement)}
-                  status={status.label}
-                  statusTone={status.tone}
+                  meta={metadata}
+                  status={status}
+                  muted={arrangement.erPassert}
                   ariaLabel={`Rediger ${arrangement.tittel}, ${formatDateRange(arrangement)}`}
-                  onSelect={() => setSelectedId(arrangement.id)}
+                  interaction={{ type: "open", onOpen: () => setSelectedId(arrangement.id) }}
                 />
               );
             })}
-          </AdminEntityList>
+          </Collection.List>
         )}
-      </AdminEntityCollection>
+      </Collection>
 
-      <AdminEditorDialog
+      <Dialog.Editor
         open={createOpen}
         onOpenChange={onCreateOpenChange}
         backLabel="Alle arrangementer"
         eyebrow="Nytt arrangement"
         title="Opprett arrangement"
         description="Legg inn informasjon og bygg listen over banetider."
-        size="wide"
       >
         <OpprettArrangementView
           onCreated={(feedback) => {
@@ -193,9 +171,9 @@ export default function ArrangementAdminOverview({ createOpen, onCreateOpenChang
             onCreateOpenChange(false);
           }}
         />
-      </AdminEditorDialog>
+      </Dialog.Editor>
 
-      <AdminEditorDialog
+      <Dialog.Editor
         open={!!selectedId}
         onOpenChange={(open) => !open && setSelectedId(null)}
         backLabel="Alle arrangementer"
@@ -206,7 +184,6 @@ export default function ArrangementAdminOverview({ createOpen, onCreateOpenChang
             ? `${formatDateRange(selectedArrangement)} · ${selectedArrangement.grenNavn}`
             : "Laster arrangementet."
         }
-        size="wide"
       >
         {selectedId ? (
           <RedigerArrangementView
@@ -214,7 +191,7 @@ export default function ArrangementAdminOverview({ createOpen, onCreateOpenChang
             onDeleted={() => setSelectedId(null)}
           />
         ) : null}
-      </AdminEditorDialog>
+      </Dialog.Editor>
     </>
   );
 }

@@ -1,12 +1,12 @@
 import { useState } from "react";
 import { format, parseISO } from "date-fns";
 import { nb } from "date-fns/locale";
-import PageSection from "@/components/sections/PageSection";
 import { RowPanel, RowList, Row } from "@/components/rows";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ServerFeil } from "@/components/errors";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Section } from "@/components";
 import {
   TurneringHeaderSection,
   LeggTilKlasseDialog,
@@ -100,7 +100,7 @@ export default function AdminOppsettContent({
 
   const valgtBruker = brukere.find((b) => b.id === valgtBrukerId);
   return (
-    <div className="app-stack app-stack--lg">
+    <div>
       {/* ─── Header ─── */}
       <TurneringHeaderSection
         tittel={turnering.arrangementTittel}
@@ -119,16 +119,12 @@ export default function AdminOppsettContent({
       />
 
       {/* ─── Klasser ─── */}
-      <PageSection
+      <Section
         title="Klasser"
-        actions={
-          <Button size="sm" onClick={() => onLeggTilKlasseOpen(true)}>
-            Legg til klasse
-          </Button>
-        }
+        actions={<Button onClick={() => onLeggTilKlasseOpen(true)}>Legg til klasse</Button>}
       >
         {turnering.klasser.length === 0 ? (
-          <p className="app-text-empty">Ingen klasser lagt til.</p>
+          <p>Ingen klasser lagt til.</p>
         ) : (
           <>
             <ServerFeil feil={fjernKlasseError} />
@@ -140,17 +136,16 @@ export default function AdminOppsettContent({
                     title={klasseTypeNavn(k.klasseType)}
                     description={`${k.antallPaameldte} påmeldt${k.foreslåttStartTid ? ` · Starter ${format(parseISO(k.foreslåttStartTid), "d. MMM 'kl.' HH:mm", { locale: nb })}` : ""}`}
                     right={
-                      <div className="app-inline app-inline--tight">
-                        <Button variant="ghost" size="sm" onClick={() => onRedigerKlasse(k)}>
-                          <Pencil className="app-icon-sm" />
+                      <div>
+                        <Button variant="ghost" onClick={() => onRedigerKlasse(k)}>
+                          <Pencil />
                         </Button>
                         <Button
                           variant="ghost"
-                          size="sm"
                           onClick={() => onFjernKlasse(k.id)}
                           disabled={fjernKlassePending}
                         >
-                          <Trash2 className="app-icon-sm" />
+                          <Trash2 />
                         </Button>
                       </div>
                     }
@@ -160,10 +155,10 @@ export default function AdminOppsettContent({
             </RowPanel>
           </>
         )}
-      </PageSection>
+      </Section>
 
       {/* ─── Resultatansvarlige ─── */}
-      <PageSection title="Resultatansvarlige">
+      <Section title="Resultatansvarlige">
         <ServerFeil feil={fjernAnsvarligError ?? leggTilAnsvarligError} />
         <RowPanel>
           <RowList>
@@ -175,17 +170,16 @@ export default function AdminOppsettContent({
                 right={
                   <Button
                     variant="ghost"
-                    size="sm"
                     onClick={() => onFjernAnsvarlig(a.brukerId)}
                     disabled={fjernAnsvarligPending}
                   >
-                    <UserMinus className="app-icon-sm" />
+                    <UserMinus />
                   </Button>
                 }
               />
             ))}
             <Row title="Legg til ansvarlig">
-              <div className="app-inline">
+              <div>
                 <Popover
                   open={open}
                   onOpenChange={(o) => {
@@ -194,33 +188,27 @@ export default function AdminOppsettContent({
                   }}
                 >
                   <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      role="combobox"
-                      aria-expanded={open}
-                      className="app-combobox-trigger app-flex-1"
-                    >
+                    <Button variant="outline" role="combobox" aria-expanded={open}>
                       {valgtBruker ? (
                         valgtBruker.visningsnavn || valgtBruker.epost
                       ) : (
-                        <span className="app-text-muted">Velg bruker...</span>
+                        <span>Velg bruker...</span>
                       )}
-                      <ChevronsUpDown className="app-icon-sm app-icon-muted" />
+                      <ChevronsUpDown />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="app-combobox-popover" align="start">
-                    <div className="app-combobox-search">
-                      <Search className="app-icon-sm app-icon-muted" />
+                  <PopoverContent align="start">
+                    <div>
+                      <Search />
                       <Input
                         placeholder="Søk etter bruker..."
                         value={søkTekst}
                         onChange={(e) => setSøkTekst(e.target.value)}
-                        className="app-combobox-input"
                       />
                     </div>
-                    <div className="app-combobox-list">
+                    <div>
                       {filtrerteBrukere.length === 0 ? (
-                        <p className="app-combobox-empty">Ingen brukere funnet.</p>
+                        <p>Ingen brukere funnet.</p>
                       ) : (
                         filtrerteBrukere.map((b) => (
                           <button
@@ -231,19 +219,11 @@ export default function AdminOppsettContent({
                               setOpen(false);
                               setSøkTekst("");
                             }}
-                            className="app-combobox-option"
                           >
-                            <Check
-                              className="app-combobox-check"
-                              data-selected={b.id === valgtBrukerId}
-                            />
-                            <div className="app-combobox-copy">
-                              <span className="app-text-truncate">{b.visningsnavn || b.epost}</span>
-                              {b.visningsnavn && (
-                                <span className="app-text-caption app-text-truncate">
-                                  {b.epost}
-                                </span>
-                              )}
+                            <Check data-selected={b.id === valgtBrukerId} />
+                            <div>
+                              <span>{b.visningsnavn || b.epost}</span>
+                              {b.visningsnavn && <span>{b.epost}</span>}
                             </div>
                           </button>
                         ))
@@ -252,18 +232,17 @@ export default function AdminOppsettContent({
                   </PopoverContent>
                 </Popover>
                 <Button
-                  size="sm"
                   variant="outline"
                   onClick={onLeggTilAnsvarlig}
                   disabled={leggTilAnsvarligPending || !valgtBrukerId}
                 >
-                  <UserPlus className="app-icon-sm" />
+                  <UserPlus />
                 </Button>
               </div>
             </Row>
           </RowList>
         </RowPanel>
-      </PageSection>
+      </Section>
 
       {/* ─── Dialog ─── */}
       <LeggTilKlasseDialog
