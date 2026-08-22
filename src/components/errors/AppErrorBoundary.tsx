@@ -1,5 +1,6 @@
 import { Component, type ReactNode, type ErrorInfo } from "react";
 import { TriangleAlert } from "lucide-react";
+import * as Sentry from "@sentry/react";
 import { ErrorDisplay } from "./ErrorDisplay";
 import ErrorShell from "@/app/ErrorShell";
 
@@ -14,7 +15,14 @@ export class AppErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error("AppErrorBoundary:", error, info);
+    Sentry.withScope((scope) => {
+      scope.setContext("react", { componentStack: info.componentStack });
+      Sentry.captureException(error);
+    });
+
+    if (import.meta.env.DEV) {
+      console.error("AppErrorBoundary:", error, info);
+    }
   }
 
   render() {
