@@ -45,6 +45,8 @@ export { default as NavigationLink } from "./NavigationLink.svelte";
 export type { NavigationBadge } from "./NavigationLink.svelte";
 export { default as NavigationList } from "./NavigationList.svelte";
 export { default as NavigationLoading } from "./NavigationLoading.svelte";
+export { default as NavigationOverlay } from "./NavigationOverlay.svelte";
+export type { NavigationOverlayContext } from "./NavigationOverlay.svelte";
 export { default as NavigationSection } from "./NavigationSection.svelte";
 export { default as Page } from "./Page.svelte";
 export { default as PageLoading } from "./PageLoading.svelte";

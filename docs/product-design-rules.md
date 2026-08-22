@@ -355,6 +355,15 @@ Den observerte produktkontrakten er:
 - Mobil bunnnavigasjon tar hensyn til safe area og har tommelvennlige mål. Desktop-sidefelt,
   mobilbunn og horisontale seksjonslenker bruker samme `NavigationLink`, badge- og fokuskontrakt;
   responsive skifter lager ikke parallelle itemvarianter.
+- Desktopkontoen åpner en fokusstyrt kontomeny med Mine tider, Min side og utlogging. Mobilens
+  «Mer» åpner samme sentrale overlayatferd som en bunnflate med sekundære person- og adminlenker;
+  de tre prioriterte mobildestinasjonene og Nyheter gjentas ikke der.
+- Konto- og Mer-overlays holder fokus inne, lukkes med Escape, utenfor-klikk eller eksplisitt
+  lukkeknapp og returnerer fokus til åpneren. En pågående utlogging låser alle dismissveier og
+  beholder kontoteksten og handlingsmålet til økten er avsluttet eller har feilet.
+- Anonyme brukere får en direkte innloggingslenke i desktop-sidefeltet og i Mer-flaten. Tema er en
+  direkte semantisk handling begge steder; konto- eller Mer-overlay brukes ikke som skjult eier av
+  temastate.
 
 ## Feedback, feil og lasting
 

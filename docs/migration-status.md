@@ -4,9 +4,9 @@
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** WP-5 — App-shell og navigasjon (pågår; første checkpoint fullført)
+> **Aktiv arbeidspakke:** WP-5 — App-shell og navigasjon (fullført)
 >
-> **Sist oppdatert:** 2026-08-22
+> **Sist oppdatert:** 2026-08-23
 
 ## Mål for aktiv arbeidspakke
 
@@ -250,6 +250,26 @@ Navigation- og feedbackpatternene uten featureadferd eller parallelle routekonfi
   390×844 og 1440×900 uten overflow eller nettleserfeil.
 - Første avgrensede WP-5-checkpoint for responsiv app-shellramme og loadinggeometri er fullført uten
   faktisk navigasjonsutvalg, konto-/Mer-overlay, featuremigrering eller backendendringer.
+- Klubb- og brukerqueryene eies nå én gang av en typed `SessionDataProvider`; SessionGate,
+  AccessGuard og app-shellnavigasjonen leser samme reaktive session-context og samme Query-cache
+  uten parallelle bootstrapkall eller kopiert brukerstate.
+- Én ren, diskriminert navigasjonsmodell kombinerer auth, tenant, klubb, bruker, backendstyrte
+  kapabiliteter, base path og normalisert SvelteKit-path. Navigasjonsdestinasjonene er innhold, ikke
+  en parallell router; adminsynlighet gjenbruker guardmodellens kapabilitetskrav.
+- Desktop-sidefelt, mobil toppfelt og mobil bunnnavigasjon komponerer de offentlige Navigation-
+  patternene med tenantidentitet, anonym/innlogget konto, tema, Nyheter og aktiv route. Baner og
+  grener deler aktiv hoveddestinasjon, og mobilens tre prioriterte destinasjoner dupliseres ikke i
+  Mer-flaten.
+- Offentlig `NavigationOverlay` eier konto- og Mer-flatenes dialogsemantikk, fokusfelle, Escape,
+  utenfor-klikk, fokusretur og pending/dismiss-kontrakt. Utlogging går gjennom typed auth-context;
+  desktopkontoen og mobilens Mer-flate deler samme semantiske handling uten lokal overlaykode.
+- Navigasjonsmodellen og komposisjonen har 12 nye modell-, komponent-, fokus- og axe-tester for
+  loading/fallback, anonym/innlogget state, kapabilitetsskjuling, sammensatt routeaktivitet, base
+  path, mobile prioriteringer, tema, konto/Mer, utlogging og fokusretur.
+- Andre avgrensede WP-5-checkpoint er kontrollert på 390×844 og 1440×900 i lyst og mørkt tema,
+  inkludert direkte route, tilbake/frem, fokusretur, én main-landmark, overflow og konsoll. Route
+  metadata og lokal tilbakehandling ble ikke innført fordi de gjeldende shellflatene ikke trenger
+  dem. WP-5-kvalitetsporten er nådd uten feature- eller backendendringer.
 
 ## Nåtilstand
 
@@ -265,22 +285,22 @@ Navigation- og feedbackpatternene uten featureadferd eller parallelle routekonfi
   Date-/Calendar- og Rich-text-kontroller samt Page-, Section-, feedback-, Form-, Settings-,
   Dialog-, Document-, Navigation- og Collection-patternene inkludert sammensatte rader og
   filterkomposisjon er autoritative.
-- WP-5 pågår. Den responsive app-shellrammen, loadinggeometrien og ett stabilt arbeidsområde er
-  integrert. Navigasjonsutvalg, tenantidentitet, routeaktivitet, tema-, konto- og Mer-handlinger er
-  fortsatt neste checkpoint; tenant-layouten viser derfor Navigation-loading i mellomtiden.
+- WP-5 er fullført. Responsiv shellramme, loadinggeometri, delt session-queryeierskap,
+  tenantidentitet, auth-/kapabilitetsstyrt navigasjon, routeaktivitet, tema, konto og Mer er
+  autoritative SvelteKit-flater.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                                        |
-| ------------------------------------- | --------------------------------------------------------- |
-| Base branch                           | `main`                                                    |
-| Fastslått basecommit                  | `5287c5e`                                                 |
-| Siste semantiske checkpoint           | `feat(sveltekit): establish WP-5 app shell frame`         |
-| Lokale commits foran base             | 20                                                        |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                             |
-| Neste planlagte checkpoint            | WP-5 navigasjonskomposisjon, routeaktivitet og handlinger |
+| Felt                                  | Forventet tilstand                                    |
+| ------------------------------------- | ----------------------------------------------------- |
+| Base branch                           | `main`                                                |
+| Fastslått basecommit                  | `5287c5e`                                             |
+| Siste semantiske checkpoint           | `feat(sveltekit): complete WP-5 app shell navigation` |
+| Lokale commits foran base             | 21                                                    |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                         |
+| Neste planlagte checkpoint            | WP-6 auth-, policy-, feil- og guardflater             |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -289,19 +309,18 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Neste `/start` skal bare starte andre avgrensede WP-5-checkpoint:
+Neste `/start` skal bare starte første avgrensede WP-6-checkpoint for auth-, policy-, feil- og
+guardflatene:
 
-1. Kaldkartlegg hvordan eksisterende klubb-/brukerquery, typed auth-context, tenant-pathbygging og
-   SvelteKit-URL skal levere én eksplisitt navigasjonsstate. Routefilene skal ikke gjentas i en
-   parallell routekonfigurasjon, og backendkapabilitetene skal forbli autoritative.
-2. Komponer `AppShell` sine klare snippets med offentlige Navigation-patterns for desktop-sidefelt,
-   mobil topp-/bunnnavigasjon, tenantidentitet, tema, konto og Mer. Beregn aktiv state fra
-   normalisert URL, behold de tre prioriterte mobildestinasjonene uten duplisering i Mer, og etabler
-   sentral overlayatferd bare dersom den observerte fokus-/dismisskontrakten krever det.
-3. Legg tester for anonym/innlogget state, kapabilitetsskjuling, sammensatt routeaktivitet,
-   utlogging, tema, konto/Mer, fokusretur og direkte navigasjon. Kontroller mobil/desktop og
-   lyst/mørkt tema, kjør full check/test og begge hostingbuildene. Route metadata og lokal
-   tilbakehandling tas ikke inn dersom checkpointets faktiske flater ikke trenger dem.
+1. Kaldkartlegg observerbar login-, vilkårs-, root error-, sperre-, medlemskaps-, kunngjørings- og
+   guardadferd mot React-referansen og `docs/behavior-inventory.md`. Avgrens hvilke flater som kan
+   erstattes atomisk uten å trekke inn booking eller andre senere featuregrupper.
+2. Flytt den valgte auth-/policygruppen til idiomatiske Svelte-features over eksisterende auth-,
+   tenant-, session-, API- og Document/Form/feedbackkontrakter. Routes skal forbli tynne, og
+   midlertidige routeplaceholdere fjernes bare for faktisk ferdig migrerte URL-er.
+3. Verifiser anonym/innlogget, callback/returnTo, loading, feil, retry, blocked og relevante
+   policyforløp på mobil/desktop og lyst/mørkt tema. Kjør full check/test og begge hostingbuildene;
+   ikke start bookinggruppen i samme sesjon.
 
 ## Arbeidspakkeregister
 
@@ -312,7 +331,7 @@ Neste `/start` skal bare starte andre avgrensede WP-5-checkpoint:
 | WP-2 Contracts/domain/platform   | Fullført     | Contracts, ren domain, fetch/API, 401 og adapters grønne     |
 | WP-3 Auth/tenant/serverdata      | Fullført     | Auth, tenant, Query, guards, 401 og base path grønne         |
 | WP-4 UI-fundament                | Fullført     | Alle kartlagte UI-familier og filterkomposisjon er grønne    |
-| WP-5 App-shell                   | Pågår        | Responsiv frame og loadinggeometri grønne                    |
+| WP-5 App-shell                   | Fullført     | Shell, navigation, routeaktivitet, konto og Mer grønne       |
 | WP-6 Featuremigrering            | Ikke startet | —                                                            |
 | WP-7 Paritet og produksjonsbytte | Ikke startet | —                                                            |
 
@@ -333,9 +352,9 @@ Neste `/start` skal bare starte andre avgrensede WP-5-checkpoint:
 
 ## Åpne blokkeringer
 
-Ingen kjente blokkeringer. Neste navigasjonscheckpoint kan gjennomføres mot eksisterende
-React-referanse, autoritativ auth-/tenant-/route-state og de offentlige Navigation-patternene uten
-backendendringer eller ny brukerbeslutning.
+Ingen kjente blokkeringer. Første WP-6-featuregruppe kan gjennomføres mot eksisterende
+React-referanse, komplett adferdsinventar og autoritative auth-, tenant-, session- og UI-kontrakter
+uten backendendringer eller ny brukerbeslutning.
 
 ## Midlertidig kode og kjente avvik
 
@@ -345,9 +364,6 @@ backendendringer eller ny brukerbeslutning.
   kode i `src/lib/contracts`, `src/lib/domain` og `src/lib/platform`.
 - Alle Svelte-featureflater er bevisst midlertidige route-placeholdere frem til WP-5–WP-6 gir
   app-shell og featureadferd.
-- Tenant-layouten bruker bevisst `AppShell` sin Navigation-loadingvariant til neste WP-5-checkpoint
-  kobler faktisk tenant-, auth-, kapabilitets- og routebasert navigasjonsinnhold. Rammen og
-  arbeidsområdet er autoritative; den vedvarende loadingnavigasjonen er midlertidig og forventet.
 - Eksisterende globale token-, font-, theme- og primitivefiler er autoritative. Eldre React-patterns
   og featurekomposisjoner i samme CSS-kjede er fortsatt visuell referanse og konsolideres når de
   respektive WP-4-patterns og WP-6-features erstatter dem.
@@ -373,10 +389,9 @@ backendendringer eller ny brukerbeslutning.
   handlinger komponeres gjennom Page-, feedback- og Form-familiene; redigering bruker den
   autoritative Rich-text-editorgrensen.
 - Navigation-familien er autoritativ for identity, grupper, lister, lenker, handlinger, badges,
-  loading og indre mobil/desktop-geometri. Eksisterende React-app-shell er fortsatt
-  produksjonsreferanse frem til WP-5; SvelteKit-routeaktivitet, auth-/kapabilitetsutvalg,
-  konto-dropdown og mobil «Mer»-overlay er bevisst ikke integrert eller bygget i dette
-  patterncheckpointet.
+  loading, konto-/Mer-overlay og indre mobil/desktop-geometri. WP-5-komposisjonen er autoritativ for
+  SvelteKit-routeaktivitet og auth-/tenant-/kapabilitetsutvalg; React-appskallet er nå bare visuell
+  referanse frem til React-kilden fjernes etter full paritet.
 - Bits UI brukes bare i primitive wrappers med reelle sammensatte behov: Dialog for fokusfelle og
   dismissable layer, Select for listbox, portal, typeahead og fokusretur, Calendar/Popover for
   datoaritmetikk, kalendergrid, portal og fokus, og Collection-accordion for kontrollert
@@ -391,15 +406,15 @@ backendendringer eller ny brukerbeslutning.
 
 | Kontroll                             | Resultat                                                                           |
 | ------------------------------------ | ---------------------------------------------------------------------------------- |
-| Prettier på aktiv kode og dokumenter | Bestått 2026-08-22                                                                 |
-| Relative dokumentlenker              | Bestått 2026-08-22                                                                 |
-| `git diff --check`                   | Bestått 2026-08-22                                                                 |
-| `npm test`                           | Bestått 2026-08-22: 36 filer, 154 tester                                           |
-| `npm run check`                      | Bestått 2026-08-22: Svelte/React-typecheck, arkitektur, design, lint og format     |
-| Cloudflare Pages-build               | Bestått 2026-08-22: root path og `index.html`-fallback                             |
-| GitHub Pages-build                   | Bestått 2026-08-22: eksplisitt `/banebooking` og `404.html`-fallback               |
+| Prettier på aktiv kode og dokumenter | Bestått 2026-08-23                                                                 |
+| Relative dokumentlenker              | Bestått 2026-08-23                                                                 |
+| `git diff --check`                   | Bestått 2026-08-23                                                                 |
+| `npm test`                           | Bestått 2026-08-23: 38 filer, 166 tester                                           |
+| `npm run check`                      | Bestått 2026-08-23: Svelte/React-typecheck, arkitektur, design, lint og format     |
+| Cloudflare Pages-build               | Bestått 2026-08-23: root path og `index.html`-fallback                             |
+| GitHub Pages-build                   | Bestått 2026-08-23: eksplisitt `/banebooking` og `404.html`-fallback               |
 | Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                  |
-| Nettleserrender                      | Bestått 2026-08-22: 390×844 og 1440×900, app-shell, lyst/mørkt, ingen feil         |
+| Nettleserrender                      | Bestått 2026-08-23: 390×844 og 1440×900, navigation, lyst/mørkt, ingen feil        |
 | SvelteKit-bundle                     | Verifisert 2026-08-22: ingen React-runtime                                         |
 | WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                |
 | WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon         |
@@ -414,17 +429,19 @@ backendendringer eller ny brukerbeslutning.
 | WP-4 date-/a11y-tester               | Bestått 2026-08-22: 1 fil, 8 tester for form, tastatur, grenser, fokus og axe      |
 | WP-4 editor-/a11y-tester             | Bestått 2026-08-22: 1 fil, 7 tester for JSON, format, tabell, fokus, states og axe |
 | WP-5 app-shell-/a11y-tester          | Bestått 2026-08-22: 1 fil, 4 tester for landmarks, fokus, loading og axe           |
+| WP-5 navigation-/a11y-tester         | Bestått 2026-08-23: 2 filer, 12 tester for state, routes, fokus, overlay og axe    |
 
 ## Filer i siste checkpoint
 
-- offentlig `AppShell`, klare/loading navigasjonskontrakter, komponent-/fokus-/axe-tester og
-  offentlig UI-eksport i `src/lib/ui/patterns/` og `src/lib/ui/index.ts`
-- tenant-layoutens shellkomposisjon og guard-/routeinnhold uten nestede hovedlandmarks i
-  `src/routes/[[slug=tenant]]/+layout.svelte`, `src/lib/features/session/` og
-  `src/lib/ui/patterns/RoutePlaceholder.svelte`
-- sentral responsiv frame-, sidebar-, topbar-, workspace-, bunnnav- og safe-area-geometri i
-  `src/styles/design-system/patterns.css` og `src/styles/design-system/responsive.css`
-- kaldkartlagt app-shell-, state-, fokus- og eierskapskontrakt i `docs/product-design-rules.md`
+- typed session-queryeier, ren navigasjonsmodell, desktop-/mobilkomposisjon, konto-/Mer-flyt og
+  modell-/komponent-/fokus-/axe-tester i `src/lib/features/session/`
+- offentlig fokusstyrt `NavigationOverlay`, ikonlenkepresentasjon og eksport i
+  `src/lib/ui/patterns/` og `src/lib/ui/index.ts`
+- tenant-layoutens session-, shell-, guard- og routekomposisjon i
+  `src/routes/[[slug=tenant]]/+layout.svelte`
+- sentral sidebar-, topbar-, bunnnav- og overlaygeometri i
+  `src/styles/design-system/patterns.css`
+- ferdig konto-/Mer-, mobilprioritets- og fokuskontrakt i `docs/product-design-rules.md`
 - `docs/migration-status.md`
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for

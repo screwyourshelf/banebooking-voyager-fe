@@ -2,29 +2,19 @@
   import { goto } from "$app/navigation";
   import { base, resolve } from "$app/paths";
   import { page } from "$app/state";
-  import { getApiClient } from "$lib/platform/api";
   import { getAuthContext } from "$lib/platform/auth";
   import { buildLoginPath, getTenantContext, stripBasePath } from "$lib/platform/tenant";
   import { ErrorState, Feedback, Page, PageLoading } from "$lib/ui";
-  import { createQuery } from "@tanstack/svelte-query";
   import type { Snippet } from "svelte";
-  import { getBrukerWithCurrentTermsAcceptance } from "./api";
+  import { getSessionDataContext } from "./context";
   import { hasAnyRequiredCapability, requiredCapabilitiesForPath } from "./guard-model";
-  import { sessionQueryKeys } from "./query-keys";
 
   let { children, mode }: { children: Snippet; mode: "admin" | "protected" } = $props();
 
-  const api = getApiClient();
   const auth = getAuthContext();
+  const session = getSessionDataContext();
   const tenant = getTenantContext();
   let lastRedirect: string | null = null;
-
-  const brukerQuery = createQuery(() => ({
-    queryKey: sessionQueryKeys.bruker(tenant.slug),
-    queryFn: () => getBrukerWithCurrentTermsAcceptance(api, tenant.slug),
-    enabled: auth.state.status === "authenticated",
-    staleTime: 60_000,
-  }));
 
   const loginTarget = $derived(
     auth.state.status === "anonymous" ? buildLoginPath(tenant, page.url, base) : null
@@ -35,7 +25,7 @@
   const allowed = $derived(
     mode === "protected" ||
       (requiredCapabilities !== null &&
-        hasAnyRequiredCapability(brukerQuery.data, requiredCapabilities))
+        hasAnyRequiredCapability(session.bruker, requiredCapabilities))
   );
 
   $effect(() => {
@@ -49,14 +39,14 @@
   <PageLoading label="Kontrollerer innlogging …" />
 {:else if loginTarget}
   <PageLoading label="Sender deg til innlogging …" />
-{:else if brukerQuery.isPending}
+{:else if session.brukerStatus === "pending"}
   <PageLoading label="Kontrollerer tilgangen …" />
-{:else if brukerQuery.isError}
+{:else if session.brukerStatus === "error"}
   <Page eyebrow="Tilgang" title="Kunne ikke kontrollere tilgangen">
     <ErrorState
       title="Brukerdata kunne ikke lastes"
-      isRetrying={brukerQuery.isFetching}
-      onRetry={() => void brukerQuery.refetch()}
+      isRetrying={session.brukerFetching}
+      onRetry={() => void session.refetchBruker()}
     />
   </Page>
 {:else if !allowed}
