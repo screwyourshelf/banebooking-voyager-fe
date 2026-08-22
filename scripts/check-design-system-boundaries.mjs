@@ -732,6 +732,16 @@ async function validateStylesheets(files) {
   const stylesheetUiNames = new Set(
     [...stylesheetSource.matchAll(/\[data-ui\s*=\s*["']([^"']+)["']\]/g)].map((match) => match[1])
   );
+  const componentPrimitiveNames = new Set(
+    [...componentSource.matchAll(/\bdata-ui-primitive\s*=\s*["']([^"']+)["']/g)].map(
+      (match) => match[1]
+    )
+  );
+  const stylesheetPrimitiveNames = new Set(
+    [...stylesheetSource.matchAll(/\[data-ui-primitive\s*=\s*["']([^"']+)["']\]/g)].map(
+      (match) => match[1]
+    )
+  );
 
   for (const uiName of componentUiNames) {
     if (stylesheetUiNames.has(uiName)) continue;
@@ -741,6 +751,20 @@ async function validateStylesheets(files) {
   for (const uiName of stylesheetUiNames) {
     if (componentUiNames.has(uiName)) continue;
     issues.push(`CSS definerer data-ui="${uiName}", men ingen komponent bruker den`);
+  }
+
+  for (const primitiveName of componentPrimitiveNames) {
+    if (stylesheetPrimitiveNames.has(primitiveName)) continue;
+    issues.push(
+      `data-ui-primitive="${primitiveName}" brukes i en primitive, men mangler en sentral CSS-regel`
+    );
+  }
+
+  for (const primitiveName of stylesheetPrimitiveNames) {
+    if (componentPrimitiveNames.has(primitiveName)) continue;
+    issues.push(
+      `CSS definerer data-ui-primitive="${primitiveName}", men ingen primitive bruker den`
+    );
   }
 
   const definedCssVariables = new Set(

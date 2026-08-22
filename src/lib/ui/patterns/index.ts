@@ -10,6 +10,13 @@ export type { CollectionRowStatus, CollectionStatusTone } from "./CollectionStat
 export { default as ErrorState } from "./ErrorState.svelte";
 export { default as Feedback } from "./Feedback.svelte";
 export type { FeedbackTone } from "./Feedback.svelte";
+export { default as Form } from "./Form.svelte";
+export type { FormDensity, FormVariant } from "./Form.svelte";
+export { default as FormActions } from "./FormActions.svelte";
+export type { FormActionsAlign } from "./FormActions.svelte";
+export { default as FormField } from "./FormField.svelte";
+export { default as FormFields } from "./FormFields.svelte";
+export { default as FormSubmit } from "./FormSubmit.svelte";
 export { default as Page } from "./Page.svelte";
 export { default as PageLoading } from "./PageLoading.svelte";
 export { default as RoutePlaceholder } from "./RoutePlaceholder.svelte";

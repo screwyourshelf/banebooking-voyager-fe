@@ -1,5 +1,5 @@
-export { Button, ButtonLink } from "./primitives";
-export type { ButtonSize, ButtonVariant } from "./primitives";
+export { Button, ButtonLink, Input, Textarea } from "./primitives";
+export type { ButtonSize, ButtonVariant, InputType } from "./primitives";
 export {
   Collection,
   CollectionEmpty,
@@ -10,6 +10,11 @@ export {
   CollectionRow,
   ErrorState,
   Feedback,
+  Form,
+  FormActions,
+  FormField,
+  FormFields,
+  FormSubmit,
   Page,
   PageLoading,
   RoutePlaceholder,
@@ -21,6 +26,9 @@ export type {
   CollectionRowStatus,
   CollectionStatusTone,
   FeedbackTone,
+  FormActionsAlign,
+  FormDensity,
+  FormVariant,
   SectionPadding,
   SectionVariant,
 } from "./patterns";

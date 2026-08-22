@@ -1070,11 +1070,18 @@
   }
 
   [data-ui="form-field"] > [data-part="intro"] > [data-part="label"] {
+    display: inline-flex;
     width: fit-content;
+    align-items: baseline;
+    gap: 0.25rem;
     color: var(--app-ink);
     font-size: var(--app-type-body-sm);
     font-weight: 690;
     line-height: 1.3;
+  }
+
+  [data-ui="form-field"] > [data-part="intro"] > [data-part="label"] > [data-part="required"] {
+    color: var(--status-danger-text);
   }
 
   [data-ui="form-field"] > [data-part="intro"] > [data-part="description"] {
@@ -1092,9 +1099,22 @@
 
   [data-ui="form-field"]
     > [data-part="control"]
-    > :is([data-slot="input"], [data-slot="select-trigger"], [data-slot="textarea"]) {
+    > :is(
+      [data-ui-primitive="input"],
+      [data-ui-primitive="textarea"],
+      [data-slot="input"],
+      [data-slot="select-trigger"],
+      [data-slot="textarea"]
+    ) {
     width: 100% !important;
     min-height: 2.625rem;
+  }
+
+  [data-ui="form-field"] > [data-part="control"] > [data-part="error"] {
+    margin: 0;
+    color: var(--status-danger-text);
+    font-size: var(--app-type-caption);
+    line-height: 1.4;
   }
 
   [data-ui="form-steps"] {
@@ -1710,7 +1730,7 @@
     box-shadow: none;
   }
 
-  [data-ui="form-actions"][data-align="left"] {
+  [data-ui="form-actions"]:is([data-align="left"], [data-align="start"]) {
     justify-content: flex-start;
   }
 
@@ -1746,6 +1766,28 @@
 
   [data-ui="form-submit"][data-full-width="true"] {
     width: 100%;
+  }
+
+  [data-ui="form-submit"] > [data-part="spinner"] {
+    width: 1rem;
+    height: 1rem;
+    flex: 0 0 auto;
+    border: 2px solid currentcolor;
+    border-right-color: transparent;
+    border-radius: 999px;
+    animation: form-submit-spin 700ms linear infinite;
+  }
+
+  @keyframes form-submit-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-ui="form-submit"] > [data-part="spinner"] {
+      animation: none;
+    }
   }
 
   /* Shared long-form reading surface for terms, regulations and required notices */
