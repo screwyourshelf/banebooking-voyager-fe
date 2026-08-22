@@ -1,6 +1,7 @@
 import { useLayoutEffect, useState } from "react";
 import type { Theme } from "./ThemeProviderContext";
 import { ThemeProviderContext } from "./ThemeProviderContext";
+import { lesLokalLagring, skrivLokalLagring } from "@/utils/browserStorage";
 
 type ThemeProviderProps = {
   children: React.ReactNode;
@@ -15,7 +16,7 @@ export function ThemeProvider({
   ...props
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme
+    () => (lesLokalLagring(storageKey) as Theme) || defaultTheme
   );
 
   useLayoutEffect(() => {
@@ -28,7 +29,7 @@ export function ThemeProvider({
   const value = {
     theme,
     setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme);
+      skrivLokalLagring(storageKey, theme);
       setTheme(theme);
     },
   };

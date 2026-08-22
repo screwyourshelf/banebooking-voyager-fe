@@ -1,4 +1,5 @@
 import type { DevelopmentLoginResponse } from "@/auth/authTypes";
+import { fjernFraLokalLagring, lesLokalLagring, skrivLokalLagring } from "@/utils/browserStorage";
 
 const STORAGE_KEY = "banebooking_development_session";
 
@@ -23,7 +24,7 @@ function erGyldigSession(value: unknown): value is DevelopmentLoginResponse {
 export function hentUtviklingssession(): DevelopmentLoginResponse | null {
   if (!import.meta.env.DEV) return null;
 
-  const raw = localStorage.getItem(STORAGE_KEY);
+  const raw = lesLokalLagring(STORAGE_KEY);
   if (!raw) return null;
 
   try {
@@ -33,15 +34,15 @@ export function hentUtviklingssession(): DevelopmentLoginResponse | null {
     // Fjern ugyldige eller utdaterte data under.
   }
 
-  localStorage.removeItem(STORAGE_KEY);
+  fjernFraLokalLagring(STORAGE_KEY);
   return null;
 }
 
 export function lagreUtviklingssession(session: DevelopmentLoginResponse) {
   if (!import.meta.env.DEV) return;
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(session));
+  skrivLokalLagring(STORAGE_KEY, JSON.stringify(session));
 }
 
 export function fjernUtviklingssession() {
-  localStorage.removeItem(STORAGE_KEY);
+  fjernFraLokalLagring(STORAGE_KEY);
 }

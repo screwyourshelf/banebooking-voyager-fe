@@ -1,8 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { ShieldAlert } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { synkroniserSupabaseToken } from "@/auth/supabaseToken";
+import ErrorShell from "@/app/ErrorShell";
+import {
+  LOKAL_LAGRING_KREVES_FOR_INNLOGGING,
+  synkroniserSupabaseToken,
+} from "@/auth/supabaseToken";
+import { ErrorDisplay } from "@/components/errors/ErrorDisplay";
 import { config } from "@/config";
 import { getSupabaseClient } from "@/supabase";
+import { lesLokalLagring, lokalLagringErTilgjengelig } from "@/utils/browserStorage";
 import type { Session } from "@supabase/supabase-js";
 
 function cleanSlug(raw: string | null): string {
@@ -32,9 +39,12 @@ function logSessionDiagnostics(session: Session | null) {
 
 export default function AuthCallbackPage() {
   const navigate = useNavigate();
+  const [kanLagreSession] = useState(lokalLagringErTilgjengelig);
 
   useEffect(() => {
-    const destination = config.tenantSlug ? "/" : `/${cleanSlug(localStorage.getItem("slug"))}`;
+    if (!kanLagreSession) return;
+
+    const destination = config.tenantSlug ? "/" : `/${cleanSlug(lesLokalLagring("slug"))}`;
 
     let redirected = false;
     // Holdes utenfor .then() slik at cleanup-funksjonen kan nå dem
@@ -86,7 +96,23 @@ export default function AuthCallbackPage() {
       if (timeout) clearTimeout(timeout);
       sub?.unsubscribe();
     };
-  }, [navigate]);
+  }, [kanLagreSession, navigate]);
 
-  return <div data-ui="auth-status">Logger inn ...</div>;
+  if (!kanLagreSession) {
+    return (
+      <ErrorShell>
+        <ErrorDisplay
+          icon={ShieldAlert}
+          title="Kan ikke fullføre innloggingen"
+          description={LOKAL_LAGRING_KREVES_FOR_INNLOGGING}
+        />
+      </ErrorShell>
+    );
+  }
+
+  return (
+    <div data-ui="auth-status" role="status">
+      Logger inn ...
+    </div>
+  );
 }

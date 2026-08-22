@@ -4,6 +4,7 @@ import { useSlug } from "@/hooks/useSlug";
 import { useKlubb } from "@/hooks/useKlubb";
 import { ErrorDisplay } from "@/components/errors/ErrorDisplay";
 import ErrorShell from "@/app/ErrorShell";
+import { skrivLokalLagring } from "@/utils/browserStorage";
 
 type Props = {
   children: React.ReactNode;
@@ -15,7 +16,7 @@ export default function AppBoot({ children }: Props) {
 
   useEffect(() => {
     if (slug) {
-      localStorage.setItem("slug", slug);
+      skrivLokalLagring("slug", slug);
     }
   }, [slug]);
 

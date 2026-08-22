@@ -1,4 +1,5 @@
 import { useLayoutEffect, type ReactNode } from "react";
+import { fjernFraSessionLagring } from "@/utils/browserStorage";
 
 const RECOVERY_STORAGE_KEY = "banebooking:asset-recovery-at";
 const RECOVERY_QUERY_PARAMETER = "_app_reload";
@@ -17,11 +18,7 @@ export default function BootHandoff({ children }: { children: ReactNode }) {
       );
     }
 
-    try {
-      sessionStorage.removeItem(RECOVERY_STORAGE_KEY);
-    } catch {
-      // Safari kan blokkere nettleserlagring i enkelte moduser.
-    }
+    fjernFraSessionLagring(RECOVERY_STORAGE_KEY);
   }, []);
 
   return children;
