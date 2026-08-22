@@ -151,8 +151,6 @@ export type ArrangementRespons = {
   ukedager: DayOfWeek[];
   erPassert: boolean;
   kapabiliteter: string[];
-  turneringId: string | null;
-  turneringStatus: string | null;
   presentasjon: ArrangementPresentasjon;
   slotsPrDag: DagMedSlotsRespons[];
 };

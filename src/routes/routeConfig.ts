@@ -33,9 +33,6 @@ const loadNyheterPage = createCachedRouteLoader(() => import("@/features/feed/pa
 const loadArrangementAdminPage = createCachedRouteLoader(
   () => import("@/features/arrangement-admin/pages/ArrangementPage")
 );
-const loadTurneringPage = createCachedRouteLoader(
-  () => import("@/features/turnering/pages/TurneringPage")
-);
 
 const loadKlubbPage = createCachedRouteLoader(() => import("@/features/klubb/pages/KlubbPage"));
 const loadBanerPage = createCachedRouteLoader(() => import("@/features/baner/pages/BanerPage"));
@@ -65,7 +62,6 @@ const MineBookingerPage = lazy(loadMineBookingerPage);
 const ArrangementerPage = lazy(loadArrangementerPage);
 const NyheterPage = lazy(loadNyheterPage);
 const ArrangementAdminPage = lazy(loadArrangementAdminPage);
-const TurneringPage = lazy(loadTurneringPage);
 
 const KlubbPage = lazy(loadKlubbPage);
 const BanerPage = lazy(loadBanerPage);
@@ -139,14 +135,6 @@ export const routeConfig: RouteConfig[] = [
     protected: true,
     component: ArrangementAdminPage,
     loader: loadArrangementAdminPage,
-  },
-
-  {
-    path: "turnering/:turneringId",
-    breadcrumb: "Turnering",
-    protected: true,
-    component: TurneringPage,
-    loader: loadTurneringPage,
   },
 
   {

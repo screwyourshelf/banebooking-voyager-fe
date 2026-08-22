@@ -102,7 +102,7 @@ som rikteksteditoren, lastes først når arbeidsflaten faktisk viser dem.
 - Mobil og desktop ferdigstilles og kontrolleres i samme utviklingsslice.
 - Typografien bruker en kompakt skala på mobil og en kontrollert, ett trinn større
   `comfortable`-skala i de redesignede arbeidsflatene fra desktop-breakpointet. Navigasjon
-  og Turnering beholder sin eksisterende skala.
+  beholder sin eksisterende skala.
 - Appskallet bruker ikke en global breadcrumb-rad. Aktiv side i hovednavigasjonen og en
   tydelig sidetittel gir orientering; dype detalj- og redigeringsflater skal bruke en lokal
   tilbakehandling når den trengs.
@@ -213,7 +213,7 @@ tilbakemeldings-, editor- og langtekstmønstrene som de øvrige løftede flatene
 Tilbakemeldingssystemet følger én regel på tvers av de redesignede flatene: oppdatert
 innhold er primær bekreftelse, uklare mutasjonsresultater får vedvarende inline-feedback,
 og query-/autorisasjonsfeil beholder kontekst og retry. Toast er reservert for globale
-hendelser uten lokal eier, foreløpig sesjonsutløp. Turnering er ikke migrert i POC-en.
+hendelser uten lokal eier, foreløpig sesjonsutløp.
 
 ### Fase 3 — Arrangementer
 
@@ -257,12 +257,6 @@ kunngjøringer og `Vilkår` deler `ContentDocument`, en avgrenset langtekstflate
 leseinnhold. Den skal også vurderes for reglement og annet strukturert informasjonsinnhold;
 det er ikke en ny generell kortvariant eller et lokalt sidemønster.
 
-### Fase 5 — Turnering
-
-Turnering tas sist fordi området har flest spesialtilfeller og pågående arkitekturplaner.
-Funksjonell refaktorering og visuell migrering må koordineres, men bør fortsatt leveres i
-små, verifiserbare deler.
-
 ## Arbeidsform per slice
 
 1. Kartlegg eksisterende funksjon, tilstander, handlinger og skjermstørrelser.
@@ -295,5 +289,5 @@ En side er ferdig migrert når:
   klubber/tenants.
 - Aktivitetsfarger løses foreløpig fra aktivitetens slug i frontend. Backend-kontrakt for
   aktivitetsmetadata kan vurderes senere, men er ikke nødvendig for migreringen.
-- POC-leveransen dekker de primære arbeidsflatene. Turnering og eksplisitt listet teknisk
-  gjeld er ikke del av PR-en.
+- POC-leveransen dekker de primære arbeidsflatene. Eksplisitt listet teknisk gjeld er ikke
+  del av PR-en.
