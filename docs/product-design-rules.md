@@ -216,6 +216,41 @@ som skal leses fremfor redigeres. Det er en avgrenset leseflate, ikke en generel
 - Lesebredden, typografien, avstanden og mobiltilpasningen er sentral. Mobil og desktop beholder
   samme innholdsrekkefølge og headinghierarki.
 
+## Navigasjon
+
+Navigation-familien eier semantikk, aktiv state, fokusuttrykk og den indre geometrien for
+sidefelt, mobil bunnnavigasjon, seksjonslenker og navigasjonsnære handlinger. App-shellen i WP-5
+eier hvilke av disse flatene som rendres, plasseringen rundt arbeidsområdet og koblingen til
+SvelteKit-routes, auth, tenant og serverdata.
+
+Den observerte produktkontrakten er:
+
+- Desktop-sidefeltet viser tenantidentitet, tema og konto sammen med grupperte hoved-, person- og
+  adminlenker. Mobil viser samme produktvokabular som tenantidentitet, tema og nyheter i toppfeltet,
+  tre prioriterte lenker i bunnfeltet og resten i «Mer»; primærlenker dupliseres ikke i menyen.
+- Routeaktivitet uttrykkes med `aria-current="page"` og ett sentralt visuelt uttrykk. Sammensatte
+  arbeidsområder som Baner og grener kan markere samme hovedlenke for flere routes. App-shellen
+  beregner aktiv state fra normalisert SvelteKit-URL; patternet gjetter ikke route.
+- Innlogging og backendstyrte kapabiliteter avgjør hvilke lenker og seksjoner som finnes. En tom
+  seksjon rendres ikke, og utilgjengelige routes vises ikke som disabled lokkemat.
+- Tenantidentiteten er en hjemlenke med klubbnavn og valgfri logo eller sekundærtekst. Manglende
+  tenantdata bruker en stabil tekstlig fallback uten at navigasjonsgeometrien kollapser.
+- Tema, konto, «Mer» og lokal tilbakehandling er native knapper. Pending kan deaktivere en handling
+  og eksponerer busy state uten å fjerne etiketten eller flytte fokusmålet.
+- Badges er korte tilstander eller tellinger med eksplisitt tilgjengelig navn når tallet alene ikke
+  forklarer betydningen. De endrer ikke lenkens størrelse eller plass i tastaturrekkefølgen.
+- Seksjonsnavigasjon mellom routes bruker native lenker, ikke tabs. Tabs er for lokal visningsstate
+  på samme route. Begge bruker samme teksthierarki, men har forskjellige websemantiske kontrakter.
+- Lenker aktiveres med native lenketastatur, handlinger med native knappetastatur, og alle synlige
+  kontroller har sentralt fokusuttrykk. Patternet innfører ikke piltastnavigasjon der vanlig
+  dokumentrekkefølge er riktig.
+- Før route-, auth- og tenantgrunnlaget er avklart, reserverer `NavigationLoading` sidefeltets eller
+  bunnfeltets sluttgeometri. Loading er navngitt status; blankt shell eller hoppende navigasjon er
+  ikke gyldig oppstartstilstand.
+- Mobil bunnnavigasjon tar hensyn til safe area og har tommelvennlige mål. Desktop-sidefelt,
+  mobilbunn og horisontale seksjonslenker bruker samme `NavigationLink`, badge- og fokuskontrakt;
+  responsive skifter lager ikke parallelle itemvarianter.
+
 ## Feedback, feil og lasting
 
 - Oppdatert innhold er primær bekreftelse etter en vellykket endring.
