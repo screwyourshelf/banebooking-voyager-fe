@@ -7,6 +7,7 @@ import App from "./App";
 import BootHandoff from "./app/BootHandoff";
 import { ReactQueryDevtoolsPanel } from "./components/ReactQueryDevtoolsPanel";
 import AuthProvider from "./providers/AuthProvider";
+import { settLagringsfeilReporter } from "./utils/browserStorage";
 import { prefetchCurrentRoute } from "./utils/prefetchRoute";
 import "./index.css";
 
@@ -20,6 +21,19 @@ Sentry.init({
     userInfo: false,
     httpBodies: [],
   },
+});
+
+settLagringsfeilReporter(({ lagringstype, operasjon, feil }) => {
+  Sentry.withScope((scope) => {
+    scope.setLevel("warning");
+    scope.setTag("browser_storage.type", lagringstype);
+    scope.setTag("browser_storage.operation", operasjon);
+    scope.setContext("browser_storage_error", {
+      name: feil instanceof Error ? feil.name : "UnknownError",
+      message: feil instanceof Error ? feil.message : "Ukjent lagringsfeil",
+    });
+    Sentry.captureMessage("Browser storage is unavailable");
+  });
 });
 
 prefetchCurrentRoute();

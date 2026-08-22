@@ -1,6 +1,8 @@
 import { useState } from "react";
 import type { ActionFeedbackMessage } from "@/components/feedback/ActionFeedback";
+import { LOKAL_LAGRING_KREVES_FOR_INNLOGGING } from "@/auth/supabaseToken";
 import { getSupabaseClient } from "@/supabase";
+import { lokalLagringErTilgjengelig } from "@/utils/browserStorage";
 
 type Step = "input" | "verify";
 type Status = "idle" | "sending" | "verifying" | "done" | "error";
@@ -17,9 +19,22 @@ export function useLogin() {
   const base = (import.meta.env.BASE_URL ?? "/").replace(/\/$/, "");
   const redirectTo = `${window.location.origin}${base}/auth/callback`;
 
+  const kontrollerLokalLagring = () => {
+    if (lokalLagringErTilgjengelig()) return true;
+
+    setStatus("error");
+    setFeedback({
+      tone: "danger",
+      title: "Innlogging krever lokal lagring",
+      description: LOKAL_LAGRING_KREVES_FOR_INNLOGGING,
+    });
+    return false;
+  };
+
   const handleGoogleLogin = async () => {
     if (erBusy) return;
     setFeedback(null);
+    if (!kontrollerLokalLagring()) return;
 
     try {
       const supabase = await getSupabaseClient();
@@ -54,6 +69,7 @@ export function useLogin() {
   const handleIdrettensIdLogin = async () => {
     if (erBusy) return;
     setFeedback(null);
+    if (!kontrollerLokalLagring()) return;
 
     try {
       const supabase = await getSupabaseClient();
@@ -93,6 +109,8 @@ export function useLogin() {
       });
       return;
     }
+
+    if (!kontrollerLokalLagring()) return;
 
     setStatus("sending");
     setFeedback(null);
@@ -149,6 +167,8 @@ export function useLogin() {
       });
       return;
     }
+
+    if (!kontrollerLokalLagring()) return;
 
     setStatus("verifying");
     setFeedback(null);

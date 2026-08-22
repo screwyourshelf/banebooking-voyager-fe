@@ -73,8 +73,18 @@ export default function VilkaarPage() {
         <Document.Section title="2. Konto og innlogging">
           <p>
             Innlogging i tjenesten skjer via e-post eller tredjepartsleverandører for autentisering,
-            for eksempel Google. For å holde brukeren innlogget mellom økter benyttes lokal lagring
-            i nettleseren. Tjenesten benytter ikke informasjonskapsler til sporing eller analyse.
+            for eksempel Google og Idrettens ID. Banebooking bruker lokal lagring i nettleseren for
+            å bevare innlogging mellom økter, valgt klubb og enkelte visningsinnstillinger.
+          </p>
+          <p>
+            Banebooking setter ikke egne informasjonskapsler. Eksterne innloggingsleverandører kan
+            bruke nødvendige informasjonskapsler på sine egne nettsteder. Lokal lagring og slike
+            informasjonskapsler brukes ikke av Banebooking til reklame, sporing av personer eller
+            analyse av brukeratferd.
+          </p>
+          <p>
+            Dersom nettleseren blokkerer lokal lagring, kan offentlige sider fortsatt brukes.
+            Innlogging og funksjoner som krever en konto, krever at lokal lagring er tilgjengelig.
           </p>
         </Document.Section>
 
@@ -83,6 +93,12 @@ export default function VilkaarPage() {
             Vi lagrer nødvendige personopplysninger som navn, e-postadresse og bookinghistorikk for
             å kunne levere tjenesten. Du kan når som helst se, laste ned eller slette dataene dine
             via <em>Min side</em>.
+          </p>
+          <p>
+            For å oppdage og rette tekniske feil bruker Banebooking Sentry. Ved en feil kan tekniske
+            opplysninger om feilen, nettleseren, operativsystemet og den aktuelle siden sendes til
+            Sentry. Feilrapporteringen er konfigurert uten brukeropplysninger og uten innhold fra
+            HTTP-forespørslers meldingskropp.
           </p>
         </Document.Section>
 

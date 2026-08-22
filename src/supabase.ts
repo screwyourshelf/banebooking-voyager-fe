@@ -1,5 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { config } from "@/config";
+import { supabaseAuthStorage } from "@/utils/browserStorage";
 
 type ClientListener = (client: SupabaseClient) => void;
 
@@ -16,6 +17,7 @@ export function getSupabaseClient(): Promise<SupabaseClient> {
     clientPromise = import("@supabase/supabase-js").then(({ createClient }) => {
       client = createClient(config.supabaseUrl, config.supabasePublishableKey, {
         auth: {
+          storage: supabaseAuthStorage,
           persistSession: true,
           autoRefreshToken: true,
           flowType: "pkce",

@@ -1,7 +1,12 @@
+import { fjernFraLokalLagring, lesLokalLagring, skrivLokalLagring } from "@/utils/browserStorage";
+
 const SUPABASE_TOKEN_KEY = "supabase_token";
 
+export const LOKAL_LAGRING_KREVES_FOR_INNLOGGING =
+  "Nettleseren blokkerer lokal lagring. Tillat lagring eller nettstedsdata for denne siden for å logge inn.";
+
 export function hentSupabaseToken() {
-  return localStorage.getItem(SUPABASE_TOKEN_KEY);
+  return lesLokalLagring(SUPABASE_TOKEN_KEY);
 }
 
 export function harSupabaseToken() {
@@ -10,9 +15,8 @@ export function harSupabaseToken() {
 
 export function synkroniserSupabaseToken(accessToken?: string) {
   if (accessToken) {
-    localStorage.setItem(SUPABASE_TOKEN_KEY, accessToken);
-    return;
+    return skrivLokalLagring(SUPABASE_TOKEN_KEY, accessToken);
   }
 
-  localStorage.removeItem(SUPABASE_TOKEN_KEY);
+  return fjernFraLokalLagring(SUPABASE_TOKEN_KEY);
 }
