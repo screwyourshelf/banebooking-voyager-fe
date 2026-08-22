@@ -100,7 +100,7 @@
    * separates display text, reading text and compact UI labels without letting
    * individual pages invent their own sizes.
    */
-  --app-font-body: "Figtree Variable", sans-serif;
+  --app-font-body: "Figtree Variable", Figtree, ui-sans-serif, system-ui, sans-serif;
   --app-font-sans: var(--app-font-body);
   --app-font-display: var(--app-font-body);
   --app-type-micro-compact: 0.75rem;
@@ -183,7 +183,7 @@
   --status-danger-text: #9b312d;
   --status-danger-indicator: #c9534c;
 
-  /* shadcn/Radix compatibility */
+  /* Primitive roles. The legacy React/shadcn reference consumes the same roles during migration. */
   --background: var(--app-surface);
   --foreground: var(--app-ink);
   --card: var(--app-surface-raised);

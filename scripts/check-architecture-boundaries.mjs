@@ -52,6 +52,15 @@ for (const targetRoot of targetRoots) {
         }
       }
 
+      if (normalizedPath.startsWith("src/lib/features/") && specifier.startsWith("$lib/ui/")) {
+        report(
+          relativePath,
+          source,
+          specifier,
+          "features må bruke det offentlige UI-API-et fra $lib/ui"
+        );
+      }
+
       if (
         normalizedPath.startsWith("src/routes/") &&
         /^\$lib\/features\/[^/]+\/.+/.test(specifier) &&
@@ -132,6 +141,31 @@ for (const targetRoot of targetRoots) {
       const legacyMatch = source.match(/createEventDispatcher|\bon:[a-z]+\s*=|<slot\b/);
       if (legacyMatch) {
         report(relativePath, source, legacyMatch[0], "ny Svelte-kode må bruke runes og snippets");
+      }
+
+      if (normalizedPath.startsWith("src/lib/features/") && /<style(?:\s|>)/.test(source)) {
+        report(relativePath, source, "<style", "features kan ikke definere lokal produktstyling");
+      }
+
+      if (normalizedPath.startsWith("src/lib/ui/primitives/") && /<style(?:\s|>)/.test(source)) {
+        report(
+          relativePath,
+          source,
+          "<style",
+          "primitives skal styles gjennom designsystemets sentrale CSS"
+        );
+      }
+
+      if (
+        !normalizedPath.startsWith("src/lib/ui/primitives/") &&
+        source.includes("data-ui-primitive")
+      ) {
+        report(
+          relativePath,
+          source,
+          "data-ui-primitive",
+          "primitiveanatomi kan bare defineres i ui/primitives"
+        );
       }
     }
   }

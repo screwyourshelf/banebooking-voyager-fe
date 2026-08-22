@@ -5,6 +5,7 @@
   import { getApiClient } from "$lib/platform/api";
   import { getAuthContext } from "$lib/platform/auth";
   import { buildLoginPath, getTenantContext, stripBasePath } from "$lib/platform/tenant";
+  import { Button } from "$lib/ui";
   import { createQuery } from "@tanstack/svelte-query";
   import type { Snippet } from "svelte";
   import { getBrukerWithCurrentTermsAcceptance } from "./api";
@@ -53,7 +54,7 @@
 {:else if brukerQuery.isError}
   <section data-ui="route-error" aria-labelledby="guard-error-title">
     <h1 id="guard-error-title">Kunne ikke kontrollere tilgangen</h1>
-    <button type="button" onclick={() => brukerQuery.refetch()}>Prøv igjen</button>
+    <Button variant="secondary" onclick={() => brukerQuery.refetch()}>Prøv igjen</Button>
   </section>
 {:else if !allowed}
   <section data-ui="access-blocked" aria-labelledby="access-blocked-title">

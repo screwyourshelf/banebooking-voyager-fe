@@ -5,6 +5,7 @@
   import { getApiClient } from "$lib/platform/api";
   import { getAuthContext } from "$lib/platform/auth";
   import { getTenantContext, stripBasePath } from "$lib/platform/tenant";
+  import { Button } from "$lib/ui";
   import { createQuery } from "@tanstack/svelte-query";
   import type { Snippet } from "svelte";
   import { getBrukerWithCurrentTermsAcceptance, getKlubb } from "./api";
@@ -63,7 +64,7 @@
   <section data-ui="route-error" aria-labelledby="tenant-error-title">
     <h1 id="tenant-error-title">Fant ikke klubben</h1>
     <p>Sjekk at adressen er riktig og prøv igjen.</p>
-    <button type="button" onclick={() => klubbQuery.refetch()}>Prøv igjen</button>
+    <Button variant="secondary" onclick={() => klubbQuery.refetch()}>Prøv igjen</Button>
   </section>
 {:else if auth.state.status === "authenticated" && brukerQuery.isPending}
   <div data-ui="auth-status" role="status">Kontrollerer tilgangen …</div>
@@ -71,7 +72,7 @@
   <section data-ui="route-error" aria-labelledby="user-error-title">
     <h1 id="user-error-title">Kunne ikke laste brukerdata</h1>
     <p>Prøv på nytt før du fortsetter.</p>
-    <button type="button" onclick={() => brukerQuery.refetch()}>Prøv igjen</button>
+    <Button variant="secondary" onclick={() => brukerQuery.refetch()}>Prøv igjen</Button>
   </section>
 {:else if redirectTarget}
   <div data-ui="auth-status" role="status">Sender deg til riktig side …</div>

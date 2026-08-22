@@ -8,7 +8,7 @@
 
 @theme inline {
   --font-heading: var(--font-sans);
-  --font-sans: "Figtree Variable", sans-serif;
+  --font-sans: "Figtree Variable", Figtree, ui-sans-serif, system-ui, sans-serif;
   --text-body: 1rem;
   --text-body--line-height: 1.5rem;
   --text-lead: 1.125rem;
