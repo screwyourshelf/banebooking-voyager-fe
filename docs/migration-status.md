@@ -4,14 +4,15 @@
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** WP-1 — SvelteKit build- og routefundament
+> **Aktiv arbeidspakke:** WP-2 — Contracts, domain og platform
 >
 > **Sist oppdatert:** 2026-08-22
 
 ## Mål for aktiv arbeidspakke
 
-Etabler Svelte 5 og SvelteKit med statisk SPA-hosting, base path, fallback, rootgrenser, tenanttre,
-tomme routeinnganger og maskinelt kontrollerte arkitekturgrenser uten React-runtime i bundlen.
+Flytt transportkontrakter og ren domenelogikk til målarkitekturen. Etabler deretter validert
+offentlig konfigurasjon, typed `fetch`-klient, normalisert `ApiError`, sentral 401-kontrakt og
+isolerte adapters for storage og observability.
 
 ## Fullført
 
@@ -25,11 +26,23 @@ tomme routeinnganger og maskinelt kontrollerte arkitekturgrenser uten React-runt
 - Alle eksisterende routes, tenantformer, tilgangsnivåer, sentrale API-er, kapabiliteter og kritiske
   states er dokumentert i `docs/behavior-inventory.md`.
 - WP-0-kvalitetsporten er nådd.
+- Svelte 5 og SvelteKit er aktivt buildfundament med TypeScript strict, Svelte-aware lint, Prettier,
+  `svelte-check` og `adapter-static`.
+- Cloudflare Pages bygges med `index.html`-fallback; GitHub Pages bygges med `404.html`-fallback og
+  verifisert base path.
+- Root layout, root error boundary, statisk `auth/callback`, valgfri tenant-route med matcher og
+  tomme routekomposisjoner for hele URL-kontrakten er etablert.
+- Offentlig buildkonfigurasjon normaliseres og valideres i platformlaget.
+- Første maskinelle SvelteKit-grenser håndhever offentlige featureinnganger, featureisolasjon,
+  Bits-/Supabase-/Sentry-eierskap, komponenters HTTP-grense og forbud mot legacy Svelte-syntaks.
+- WP-1-kvalitetsporten er nådd uten backendendringer.
 
 ## Nåtilstand
 
-- Produksjonskoden er fortsatt React/Vite; ingen SvelteKit-kode er opprettet.
-- Frontendfunksjonalitet er ikke endret.
+- SvelteKit er den aktive dev-, test-, preview- og produksjonsbuilden.
+- Alle produkt-URL-er rendrer foreløpige Svelte-routeflater; featureadferd er ikke migrert ennå.
+- React-kilden er fortsatt produksjonsreferanse i arbeidskopien, men er ikke koblet til eller bundlet
+  av SvelteKit.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
@@ -39,10 +52,10 @@ tomme routeinnganger og maskinelt kontrollerte arkitekturgrenser uten React-runt
 | ------------------------------------- | -------------------------------------------------- |
 | Base branch                           | `main`                                             |
 | Fastslått basecommit                  | `5287c5e`                                          |
-| Siste semantiske checkpoint           | `docs: document WP-0 behavior inventory`           |
-| Lokale commits foran base             | 2                                                  |
+| Siste semantiske checkpoint           | `feat(sveltekit): establish WP-1 route foundation` |
+| Lokale commits foran base             | 3                                                  |
 | Forventede ucommitterte frontendfiler | Ingen                                              |
-| Neste planlagte checkpoint            | `feat(sveltekit): establish WP-1 route foundation` |
+| Neste planlagte checkpoint            | `feat(sveltekit): establish WP-2 platform core`    |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -51,22 +64,24 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Etabler WP-1-fundamentet:
+Etabler WP-2-kjernen i denne rekkefølgen:
 
-1. Erstatt React/Vite-entrypointet som aktiv build med SvelteKit, Svelte 5, TypeScript strict og
-   `adapter-static`.
-2. Implementer root layout/error, statisk `auth/callback`, valgfri tenant-route med matcher og
-   tomme routekomposisjoner for hele URL-kontrakten.
-3. Bevar root- og base-path-hosting med måltilpasset fallback og validerte offentlige miljøverdier.
-4. Tilpass lint, format, `svelte-check`, tester og første arkitekturkontroller og kjør WP-1-porten.
+1. Flytt eksisterende backend-DTO-er til `lib/contracts` uten å endre transportkontraktene, og
+   behold midlertidige type-reexports bare når React-referansen trenger dem under overgangen.
+2. Flytt ren dato-, sorterings-, presentasjons- og kapabilitetslogikk til `lib/domain` med
+   DOM-frie Vitest-tester.
+3. Implementer en injiserbar typed klient rundt native `fetch` med base URL, auth-header, timeout,
+   abortsignal, JSON/body-håndtering og normalisert `ApiError`.
+4. Etabler sentral, idempotent 401-kontrakt og sikre storage-/observability-adapters, og kjør
+   WP-2-porten.
 
 ## Arbeidspakkeregister
 
 | Arbeidspakke                     | Status       | Port/resultat                                                |
 | -------------------------------- | ------------ | ------------------------------------------------------------ |
 | WP-0 Styring og baseline         | Fullført     | Dokumentgrunnlag, React-baseline og komplett adferdsinventar |
-| WP-1 Build og routes             | Pågår        | Eksakt scaffold- og routefundament er neste steg             |
-| WP-2 Contracts/domain/platform   | Ikke startet | —                                                            |
+| WP-1 Build og routes             | Fullført     | Build, routes, hostingvarianter og arkitekturkontroll grønn  |
+| WP-2 Contracts/domain/platform   | Pågår        | Transporttyper er første eksakte steg                        |
 | WP-3 Auth/tenant/serverdata      | Ikke startet | —                                                            |
 | WP-4 UI-fundament                | Ikke startet | —                                                            |
 | WP-5 App-shell                   | Ikke startet | —                                                            |
@@ -90,39 +105,46 @@ Etabler WP-1-fundamentet:
 
 ## Åpne blokkeringer
 
-Ingen kjente blokkeringer. WP-1 kan utføres uten backendendringer eller ny brukerbeslutning.
+Ingen kjente blokkeringer. WP-2 kan utføres fra eksisterende frontendkontrakter uten
+backendendringer eller ny brukerbeslutning.
 
 ## Midlertidig kode og kjente avvik
 
-- Hele React-applikasjonen er midlertidig produksjonsreferanse på migreringsbranchen.
-- SvelteKit-målstrukturen finnes foreløpig bare i dokumentasjonen.
+- React-kilde og React-avhengigheter er midlertidig referanse og skal fjernes etter hvert som
+  ansvaret erstattes; de er ikke del av SvelteKit-bundlen.
+- Alle Svelte-featureflater er bevisst midlertidige route-placeholdere frem til WP-2–WP-5 gir
+  contracts, data, auth, UI og app-shell.
+- Eksisterende globale designstiler lastes av root layout som visuell baseline; de konsolideres i
+  WP-4.
 
 ## Siste verifikasjon
 
-| Kontroll                             | Resultat                                                     |
-| ------------------------------------ | ------------------------------------------------------------ |
-| Prettier på aktive dokumenter        | Bestått 2026-08-22                                           |
-| Relative dokumentlenker              | Bestått 2026-08-22                                           |
-| Utdaterte frontenddokumentreferanser | Ingen funnet 2026-08-22                                      |
-| `git diff --check`                   | Bestått 2026-08-22                                           |
-| `npm test`                           | Bestått 2026-08-22: 8 filer, 25 tester                       |
-| `npm run check`                      | Bestått 2026-08-22: typecheck, designgrenser, lint og format |
-| `npm run build`                      | Bestått 2026-08-22: Vite-produksjonsbuild                    |
-| WP-0 route-/featureinventar          | Komplett 2026-08-22                                          |
+| Kontroll                             | Resultat                                                                       |
+| ------------------------------------ | ------------------------------------------------------------------------------ |
+| Prettier på aktiv kode og dokumenter | Bestått 2026-08-22                                                             |
+| Relative dokumentlenker              | Bestått 2026-08-22                                                             |
+| `git diff --check`                   | Bestått 2026-08-22                                                             |
+| `npm test`                           | Bestått 2026-08-22: 10 filer, 36 tester                                        |
+| `npm run check`                      | Bestått 2026-08-22: Svelte/React-typecheck, arkitektur, design, lint og format |
+| Cloudflare Pages-build               | Bestått 2026-08-22: root path og `index.html`-fallback                         |
+| GitHub Pages-build                   | Bestått 2026-08-22: `/banebooking` og `404.html`-fallback                      |
+| Dev og preview                       | Bestått 2026-08-22: direkte routes i multi-tenant og dedikert tenant           |
+| Nettleserrender                      | Bestått 2026-08-22: hydrert adminroute, korrekt tittel og ingen konsollfeil    |
+| SvelteKit-bundle                     | Verifisert 2026-08-22: ingen React-runtime                                     |
+| WP-0 route-/featureinventar          | Komplett 2026-08-22                                                            |
 
 ## Filer i siste checkpoint
 
-- `AGENTS.md`
-- `.github/copilot-instructions.md`
-- `docs/README.md`
-- `docs/sveltekit-architecture.md`
-- `docs/product-design-rules.md`
-- `docs/migration-plan.md`
+- build- og verktøykonfigurasjon i `package.json`, `svelte.config.js`, `vite.config.ts`,
+  `tsconfig*.json`, ESLint og Prettier
+- `src/app.html`, `src/app.d.ts`, root layout og error boundary
+- `src/routes/auth/callback/` og hele `src/routes/[[slug=tenant]]/` med route groups
+- `src/params/tenant.ts`
+- `src/lib/platform/config/`
+- `src/lib/ui/feedback/RoutePlaceholder.svelte`
+- `scripts/check-architecture-boundaries.mjs`
+- statiske hostingfiler i `public/`
 - `docs/migration-status.md`
-- `docs/behavior-inventory.md`
-- `docs/adr/`
-- `src/styles/design-system/PRINCIPLES.md`
-- slettede historiske React-planer, arkiv og PR-handover
 
 Denne listen beskriver checkpointets leveranse. `/start` bruker commit-diffen som autoritativ kilde
 for nøyaktig innhold og `git status` for eventuelt pågående arbeid etter checkpointet.
