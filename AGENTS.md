@@ -6,6 +6,10 @@ Gjennomfør en samlet lift-and-shift fra React/Vite til idiomatisk Svelte 5 og S
 `feature/sveltekit-lift-and-shift`. Bevar produktadferd, URL-er og API-kontrakter, men ikke kopier
 React-komponenttre, hooks, providers, guards eller filstruktur.
 
+Koden skal i første hånd kunne overtas, forstås og videreutvikles av nye AI-agenter uten skjult
+sesjonskontekst. AI-first lesbarhet er en del av leveransen, ikke et dokumentasjonsarbeid som
+utsettes til slutt.
+
 ## Autoritative dokumenter
 
 Les i denne rekkefølgen:
@@ -44,12 +48,42 @@ Når brukeren skriver `/start`, `fortsett lift-and-shift` eller tilsvarende:
    statusfilen.
 6. Kontroller siste verifikasjonsresultat. Kjør nødvendige, billige kontroller på nytt dersom kode
    eller avhengigheter har endret seg siden resultatet ble registrert.
-7. Velg `Neste eksakte steg` fra statusfilen og opprett en konkret arbeidsplan for denne sesjonen.
-8. Fortsett autonomt gjennom den aktive arbeidspakken til dens kvalitetsport er nådd eller en reell
-   blokkering krever brukerbeslutning.
+7. Velg ett avgrenset, verifiserbart checkpoint fra `Neste eksakte steg` og opprett en konkret
+   arbeidsplan for denne sesjonen. Aktiv arbeidspakke kan gå over flere AI-sesjoner.
+8. Fortsett autonomt bare innenfor checkpointet og den aktive arbeidspakken. `/start` betyr aldri
+   at hele migreringen eller alle gjenværende arbeidspakker skal utføres i ett sveip.
+9. Når aktiv arbeidspakke eller avtalt checkpoint er fullført, gjennomfør handover og avslutt
+   sesjonen. Statusfilen kan peke på neste arbeidspakke, men samme AI-sesjon starter den ikke
+   automatisk.
 
 Ikke be brukeren gjenta arkitektur, ønsket arbeidsform eller tidligere fremdrift når repoet kan gi
 svaret.
+
+## AI-first kodekontrakt
+
+AI-agenter er de primære leserne og vedlikeholderne under lift-and-shift. Ny og flyttet kode skal
+derfor optimaliseres for korrekt gjenopptakelse fra repoet alene:
+
+- Bruk presise, stabile navn som uttrykker produktbegrep og ansvar. Unngå `helpers`, `common`,
+  `misc`, brede `utils` og forkortelser som krever lokal sesjonskunnskap.
+- Hold moduler små og sammenhengende med én tydelig eier. Offentlige innganger skal være smale og
+  eksplisitte; intern struktur skal ikke lekke gjennom tilfeldige importer.
+- Gjør grenser maskinlesbare med TypeScript-typer, diskriminerte states, validerte adapters og
+  arkitekturkontroller. Kritiske invarianter skal finnes i kode eller tester, ikke bare i prosa.
+- Samlokaliser implementasjon, kontrakt og relevante tester. Bruk forutsigbar filstruktur likt på
+  tvers av features slik at en ny agent kan finne route, API, query, modell og UI uten søkegjetting.
+- Foretrekk eksplisitt dataflyt og vanlige språk-/rammeverksmønstre fremfor metaprogrammering,
+  skjulte sideeffekter, dynamisk registrering og «smart» abstraksjon.
+- Kommenter hvorfor, eierskap, sikkerhetskrav og uventede begrensninger. Ikke kommenter det
+  syntaksen allerede sier, og ikke bruk kommentarer som erstatning for presise typer og navn.
+- Én sannhetskilde per kontrakt. Midlertidige broer skal være tynne, navngitte og registrert i
+  statusfilen med planlagt fjerning.
+- Når en løsning avviker fra etablert anbefaling, skal begrunnelsen dokumenteres nær beslutningen
+  eller i ADR. En senere agent skal ikke måtte rekonstruere hensikten fra commitdiffen alene.
+
+Før et checkpoint godkjennes, leses endringen som om neste agent ikke har samtalehistorikken: Kan
+ansvar, innganger, invarianter, tester og neste endringspunkt fastslås direkte fra repoet? Hvis ikke,
+er leveransen ikke ferdig.
 
 ## Fast implementeringsmetode
 
@@ -65,6 +99,8 @@ For hver arbeidsflate:
 5. Verifiser funksjonell, visuell, responsiv og tilgjengelighetsmessig paritet.
 6. Fjern erstattet React-kode; ikke behold permanente broer eller parallelle implementasjoner.
 7. Oppdater `migration-status.md` umiddelbart når arbeidspakkens sannhet endres.
+8. Gjennomfør en AI-first lesbarhetskontroll før checkpoint: fjern skjult kobling, utydelige navn og
+   unødvendig kompleksitet, og sørg for at tester og typer forklarer kontrakten.
 
 ## Arkitekturgrenser
 
@@ -102,6 +138,9 @@ Før siste svar i en arbeidsøkt:
 7. Ikke amend, rebase, squash eller fjern tidligere migreringscommits uten en konkret grunn og
    eksplisitt godkjenning; de er handover-kontekst for senere sesjoner.
 8. Rapporter kort hva som er levert, verifisert, committet og neste steg.
+
+En handover er en normal sesjonsgrense, ikke bare en feil- eller blokkeringssituasjon. En sesjon
+skal ikke fortsette inn i neste arbeidspakke bare fordi det finnes tid eller kontekst igjen.
 
 Hvis sesjonen bare gjør dokumentasjon eller analyse, oppdateres statusen når dette påvirker neste
 arbeid. Ikke legg til kronologiske dagboknotater.

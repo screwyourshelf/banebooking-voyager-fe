@@ -44,6 +44,30 @@ Følgende ADR-er er bindende deler av målarkitekturen:
    foretrekkes fremfor egne abstraksjoner når de dekker behovet.
 7. **Eksperimentelle rammeverks-API-er er ikke fundament.** SvelteKit remote functions tas ikke i
    bruk mens de er eksperimentelle og applikasjonen har separat .NET-API og statisk hosting.
+8. **AI-first lesbarhet er en arkitekturegenskap.** Eierskap, dataflyt, tilstander og offentlige
+   innganger skal kunne utledes fra struktur, typer og tester uten tidligere samtalekontekst.
+
+## AI-first arkitekturkontrakt
+
+Arkitekturen skal redusere mengden implisitt kontekst en ny AI-agent må rekonstruere før en sikker
+endring. Dette påvirker kodeformen direkte:
+
+- Mappestrukturen uttrykker produktansvar; filnavn uttrykker rollen i ansvaret.
+- En feature har én offentlig inngang. Routes og andre konsumenter importerer ikke tilfeldige
+  internfiler.
+- Transporttyper, domenemodeller, platformadapters og UI-kontrakter holdes eksplisitt adskilt.
+- Tilstandsrom som auth, guards og mutations modelleres som typed, endelige states fremfor løse
+  kombinasjoner av booleans.
+- Sideeffekter ligger ved en synlig platform- eller querygrense og injiseres når det gjør kontrakten
+  testbar. Importtid skal ikke skjule nettverk, storage eller brukeravhengig state.
+- Repetert struktur er akseptabel når den gjør eierskap synlig; abstraksjon innføres først når et
+  stabilt felles begrep finnes.
+- Tester navngir produktinvarianter og plasseres ved koden de beskytter.
+- Kommentarer forklarer beslutninger som ikke kan uttrykkes gjennom struktur og typer. Store
+  forklaringsblokker er et signal om at modulgrensen bør vurderes på nytt.
+
+Disse reglene supplerer avhengighetstabellen under og inngår i kvalitetsporten for hver
+arbeidspakke.
 
 ## Mappestruktur
 

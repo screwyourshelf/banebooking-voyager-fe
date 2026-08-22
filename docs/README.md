@@ -16,3 +16,5 @@ React-planer og PR-handover er fjernet fra arbeidskopien; nødvendig sporbarhet 
 git-historikken.
 
 Codex fortsetter arbeidet gjennom start- og handoverprotokollen i [`../AGENTS.md`](../AGENTS.md).
+Protokollen og migreringsplanen gjør AI-first lesbarhet og avgrensede sesjonshandoffs til bindende
+kvalitetskrav for hele lift-and-shift-en.

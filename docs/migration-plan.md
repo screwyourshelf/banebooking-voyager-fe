@@ -19,6 +19,12 @@ kartlegges som kontrakt før den designes på nytt etter SvelteKits naturlige ei
 
 - En arbeidspakke starter ikke før inngangsporten er oppfylt.
 - En arbeidspakke avsluttes først når kvalitetsporten er verifisert.
+- Én AI-sesjon arbeider innenfor én aktiv arbeidspakke og normalt ett avgrenset checkpoint. Når
+  checkpointet eller arbeidspakken er ferdig, gjøres handover før mer omfang tas inn.
+- `/start` gjenopptar neste dokumenterte checkpoint; kommandoen autoriserer ikke automatisk
+  gjennomføring av alle gjenværende arbeidspakker.
+- En sesjon som fullfører en arbeidspakke oppdaterer statusen til neste arbeidspakke, men starter
+  ikke den nye arbeidspakken i samme sesjon uten en ny, eksplisitt brukerbeskjed.
 - Featurearbeid starter ikke før platform-, auth-, data- og UI-fundamentet er stabilt.
 - Nye patterns etableres sentralt før features som trenger dem fortsetter.
 - Midlertidig ufullstendig Svelte-funksjonalitet er tillatt på feature-branchen.
@@ -52,6 +58,41 @@ historikk:
 Git forteller eksakt hva som ble endret. Statusfilen forteller hvorfor tilstanden er gyldig, hva
 som er verifisert og hvilket steg som følger. Begge må samsvare før neste checkpoint.
 
+## AI-first kode som styringskrav
+
+AI-agenter er primære kodekonsumenter under migreringen. Kodekvalitet omfatter derfor hvor sikkert
+en ny agent kan forstå og endre løsningen fra repository, typer, tester og styringsdokumenter uten
+tilgang til tidligere samtalehistorikk.
+
+Bindende regler:
+
+- Ansvar og eierskap skal være synlig i mapper, filnavn, typer og offentlige innganger.
+- Hver modul skal ha ett sammenhengende ansvar og færrest mulig implisitte avhengigheter.
+- Typed contracts, diskriminerte states og smale adapters foretrekkes fremfor konvensjoner som bare
+  finnes i hodet til forrige utvikler eller agent.
+- Implementasjon og kontrakttester samlokaliseres. Testnavn skal uttrykke invariant og observerbar
+  adferd, ikke intern implementasjonsrekkefølge.
+- Standard SvelteKit-, Svelte- og TypeScript-mønstre foretrekkes. Egen metaprogrammering, skjulte
+  registries, magiske sideeffekter og unødvendig generiske abstraksjoner krever dokumentert grunn.
+- Kommentarer beskriver hvorfor, sikkerhetsgrenser og uventede avveininger; presise navn og typer
+  beskriver hva.
+- Midlertidige kompatibilitetsbroer skal peke på én autoritativ implementasjon og registreres i
+  `migration-status.md`.
+- Maskinelle arkitekturkontroller utvides når en viktig grense kan håndheves automatisk.
+
+### AI-first checkpointport
+
+Før hver lokal checkpoint-commit skal agenten gjøre en kaldlesing av endringen og kunne fastslå:
+
+1. hvilken modul som eier ansvaret
+2. hvilken offentlig inngang konsumenter skal bruke
+3. hvilke typer og tester som uttrykker kontrakten
+4. hvilke sideeffekter og plattformgrenser som finnes
+5. hvor neste agent skal fortsette eller fjerne midlertidig kode
+
+Hvis dette bare kan forklares med samtalehistorikk eller en lang handovertekst, skal koden eller den
+varige dokumentasjonen forbedres før checkpointet godkjennes.
+
 ## WP-0 — Styring og baseline
 
 ### Leveranser
@@ -60,6 +101,7 @@ som er verifisert og hvilket steg som følger. Begge må samsvare før neste che
 - rammeverksnøytrale produktregler
 - denne migreringsplanen og løpende status/handover
 - `AGENTS.md` med start- og avslutningsprotokoll
+- bindende AI-first kodekontrakt og checkpointport
 - inventar over routes, features, roller, kritiske states og brukerflyter
 - dokumentert React-baseline for test, check og build
 
@@ -69,6 +111,7 @@ som er verifisert og hvilket steg som følger. Begge må samsvare før neste che
 - hver eksisterende route og feature finnes i statusregisteret
 - React-baseline er kjørt og resultatet er dokumentert
 - neste arbeidspakke har ett eksakt startpunkt
+- en ny AI-agent kan fastslå ansvar, kontrakter, tester og neste steg uten samtalehistorikk
 
 ## WP-1 — SvelteKit build- og routefundament
 
@@ -265,3 +308,7 @@ som følger arkitekturen, og dokumenter resultatet.
 
 [`migration-status.md`](./migration-status.md) oppdateres ved slutten av hver arbeidsøkt og ved alle
 arbeidspakkeskifter. Dokumentet overskriver gammel nåsituasjon; det vokser ikke som dagbok.
+
+Handover er forventet mellom AI-sesjoner også når arbeidet går normalt. En aktiv arbeidspakke kan
+deles i flere atomiske checkpoints. Sesjonen som fullfører en arbeidspakke registrerer neste
+arbeidspakke og stopper; neste `/start` leser repoet og starter den.

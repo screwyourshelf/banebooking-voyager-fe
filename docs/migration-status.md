@@ -47,6 +47,10 @@ backendens kapabiliteter.
 - Arkitekturkontrollen håndhever rene contracts/domain, storage-eierskap og at universal kode ikke
   importerer `*.client`-moduler.
 - WP-2-kvalitetsporten er nådd uten funksjonell kontraktendring eller backendendringer.
+- `/start` er avgrenset til én aktiv arbeidspakke og normalt ett verifiserbart checkpoint per
+  AI-sesjon; fullført arbeidspakke skal overleveres før neste startes.
+- AI-first lesbarhet er et bindende styrings- og arkitekturkrav med eksplisitt checkpointport i
+  `AGENTS.md`, migreringsplanen og målarkitekturen.
 
 ## Nåtilstand
 
@@ -56,6 +60,8 @@ backendens kapabiliteter.
   av SvelteKit.
 - Contracts, ren domenelogikk og platformkjerne er nå autoritative for både videre Svelte-arbeid og
   de midlertidige React-broene.
+- Et ucommittert WP-3-utkast er påbegynt, men ikke kvalitetsportverifisert. Det omfatter auth- og
+  tenantkontrakter, Svelte Query-avhengigheter, session/guard-utkast og routekobling.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
@@ -65,9 +71,9 @@ backendens kapabiliteter.
 | ------------------------------------- | ---------------------------------------------------- |
 | Base branch                           | `main`                                               |
 | Fastslått basecommit                  | `5287c5e`                                            |
-| Siste semantiske checkpoint           | `feat(sveltekit): establish WP-2 platform core`      |
-| Lokale commits foran base             | 4                                                    |
-| Forventede ucommitterte frontendfiler | Ingen                                                |
+| Siste semantiske checkpoint           | `docs: define AI-first session governance`           |
+| Lokale commits foran base             | 5                                                    |
+| Forventede ucommitterte frontendfiler | WP-3-utkastet beskrevet under                        |
 | Neste planlagte checkpoint            | `feat(sveltekit): establish WP-3 auth and data core` |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
@@ -75,17 +81,33 @@ lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort fe
 selvrefererende og umiddelbart utdatert. Hvis tabellen og git avviker, er differ og kode
 autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
+## Pågående ucommittert WP-3-utkast
+
+Følgende endringer er forventet ucommitterte etter styringscheckpointet:
+
+- `package.json` og `package-lock.json` med TanStack Svelte Query og devtools
+- `scripts/check-architecture-boundaries.mjs`
+- React-broer i `src/auth/`, `src/supabase.ts` og `src/features/policy/pages/vilkaar.ts`
+- nye eller endrede moduler i `src/lib/platform/{api,app,auth,query,tenant}/`,
+  `src/lib/features/session/` og `src/lib/domain/`
+- routekobling i tenant-layouts og `src/routes/auth/callback/`
+
+Utkastet ble startet før sesjonsavgrensningen ble korrigert. Det er formatert delvis og et tidlig
+`svelte-check` fant én warning som deretter ble rettet, men full typecheck, test, arkitekturkontroll
+og build er ikke kjørt på den samlede WP-3-diffen. Utkastet er ikke et godkjent checkpoint.
+
 ## Neste eksakte steg
 
-Etabler WP-3-kjernen i denne rekkefølgen:
+Neste `/start` skal bare gjenoppta WP-3:
 
-1. Definer authport, deterministiske authstates og typed Svelte-context uten Supabase-kobling i
-   routes eller features.
-2. Flytt Supabase- og utviklingssesjon bak browser-only platformadapters, og implementer callback,
-   sesjonsgjenoppretting og idempotent utlogging mot den sentrale 401-kontrakten.
-3. Normaliser slug og dedikert tenant-build til én typed tenant-context som fungerer med base path.
-4. Etabler TanStack Svelte Query-klient, query-key-konvensjon og første typed endpointkontrakter, og
-   koble protected/admin route groups til deterministiske guards før WP-3-porten kjøres.
+1. Kaldles det ucommitterte utkastet mot AI-first kodekontrakten og kontroller at ansvar, offentlige
+   innganger, typed states, adapters og sideeffekter er tydelige uten samtalekontekst.
+2. Sammenlign utkastet med WP-3-kontrakten og React-referansen; korriger ufullstendig eller for bred
+   implementasjon før nytt omfang legges til.
+3. Kjør fokuserte auth-, tenant-, endpoint- og guardtester, deretter `npm run check`, begge
+   hostingbuildene og relevant nettleserverifikasjon.
+4. Når WP-3-porten faktisk er grønn, oppdater statusen, opprett WP-3-checkpointet og avslutt
+   sesjonen. Ikke start WP-4 i samme `/start`-sesjon.
 
 ## Arbeidspakkeregister
 
@@ -130,6 +152,9 @@ backendkontrakter uten backendendringer eller ny brukerbeslutning.
   contracts, data, auth, UI og app-shell.
 - Eksisterende globale designstiler lastes av root layout som visuell baseline; de konsolideres i
   WP-4.
+- Det ucommitterte WP-3-utkastet er eksplisitt WIP og kan inneholde typer eller integrasjonsvalg som
+  må korrigeres før checkpoint. Ingen senere agent skal anta at utkastet er godkjent fordi filene
+  finnes.
 
 ## Siste verifikasjon
 
@@ -146,19 +171,16 @@ backendkontrakter uten backendendringer eller ny brukerbeslutning.
 | Nettleserrender                      | Bestått 2026-08-22: hydrert adminroute, korrekt tittel og ingen konsollfeil    |
 | SvelteKit-bundle                     | Verifisert 2026-08-22: ingen React-runtime                                     |
 | WP-0 route-/featureinventar          | Komplett 2026-08-22                                                            |
+| Ucommittert WP-3-utkast              | Ikke fullverifisert; må kjøres fra kald start i neste AI-sesjon                |
 
 ## Filer i siste checkpoint
 
-- transportkontrakter og barrel i `src/lib/contracts/`, med midlertidige React-re-exports i
-  `src/types/`
-- ren og DOM-fri logikk med tester i `src/lib/domain/`, med midlertidige React-re-exports i
-  `src/utils/`
-- typed HTTP-klient, `ApiError` og sentral 401-kontrakt i `src/lib/platform/api/`
-- browser-only storageadapter i `src/lib/platform/storage/`
-- sikker observabilityport i `src/lib/platform/observability/`
-- styrkede grenser i `scripts/check-architecture-boundaries.mjs`
-- kompatibilitetsbro fra eksisterende Axios-klient til autoritativ `ApiError`
+- avgrenset `/start`- og handoverprotokoll i `AGENTS.md`
+- bindende AI-first styringskrav og checkpointport i `docs/migration-plan.md`
+- AI-first arkitekturkontrakt i `docs/sveltekit-architecture.md`
+- oppdatert dokumentindeks i `docs/README.md`
 - `docs/migration-status.md`
 
-Denne listen beskriver checkpointets leveranse. `/start` bruker commit-diffen som autoritativ kilde
-for nøyaktig innhold og `git status` for eventuelt pågående arbeid etter checkpointet.
+Denne listen beskriver bare styringscheckpointets leveranse. Det ucommitterte WP-3-utkastet er ikke
+del av checkpointet. `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og
+`git status` for pågående arbeid etter checkpointet.
