@@ -1,5 +1,6 @@
 import { base } from "$app/paths";
 import { publicConfig } from "$lib/platform/config";
+import { resolveTenant } from "$lib/platform/tenant";
 import { redirect } from "@sveltejs/kit";
 
 import type { LayoutLoad } from "./$types";
@@ -9,16 +10,15 @@ export const prerender = false;
 export const trailingSlash = "never";
 
 export const load: LayoutLoad = ({ params }) => {
-  const slug = params.slug ?? publicConfig.tenantSlug;
+  if (publicConfig.tenantSlug && params.slug) {
+    redirect(307, base || "/");
+  }
 
-  if (!slug) {
+  const tenant = resolveTenant(params.slug, publicConfig);
+
+  if (!tenant) {
     redirect(307, `${base}/${publicConfig.defaultSlug}`);
   }
 
-  return {
-    tenant: {
-      slug,
-      source: params.slug ? ("route" as const) : ("build" as const),
-    },
-  };
+  return { tenant };
 };

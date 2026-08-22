@@ -1,16 +1,16 @@
-const DEFAULT_SLUG = "aas-tennisklubb";
-const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+import { isTenantSlug } from "./tenant-slug";
 
-export type PublicEnvironment = Pick<
-  ImportMetaEnv,
-  | "VITE_API_BASE_URL"
-  | "VITE_DEFAULT_SLUG"
-  | "VITE_ENABLE_IDRETTENS_ID"
-  | "VITE_SENTRY_DSN"
-  | "VITE_SUPABASE_PUBLISHABLE_KEY"
-  | "VITE_SUPABASE_URL"
-  | "VITE_TENANT_SLUG"
->;
+const DEFAULT_SLUG = "aas-tennisklubb";
+
+export type PublicEnvironment = {
+  VITE_API_BASE_URL?: string;
+  VITE_DEFAULT_SLUG?: string;
+  VITE_ENABLE_IDRETTENS_ID?: string;
+  VITE_SENTRY_DSN?: string;
+  VITE_SUPABASE_PUBLISHABLE_KEY?: string;
+  VITE_SUPABASE_URL?: string;
+  VITE_TENANT_SLUG?: string;
+};
 
 export type PublicConfig = {
   apiBaseUrl: string;
@@ -38,7 +38,7 @@ export function readPublicConfig(environment: PublicEnvironment): PublicConfig {
 
 function readSlug(value: string, variableName: string) {
   const slug = value.trim().toLowerCase();
-  if (!SLUG_PATTERN.test(slug)) {
+  if (!isTenantSlug(slug)) {
     throw new Error(`${variableName} må være en URL-vennlig slug.`);
   }
   return slug;

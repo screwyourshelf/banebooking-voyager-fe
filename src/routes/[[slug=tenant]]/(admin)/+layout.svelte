@@ -1,9 +1,12 @@
 <script lang="ts">
+  import { AccessGuard } from "$lib/features/session";
   import type { Snippet } from "svelte";
 
   let { children }: { children: Snippet } = $props();
 </script>
 
-<div data-route-access="admin">
-  {@render children()}
-</div>
+<AccessGuard mode="admin">
+  <div data-route-access="admin">
+    {@render children()}
+  </div>
+</AccessGuard>

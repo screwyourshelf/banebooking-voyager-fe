@@ -1,0 +1,60 @@
+export type DevelopmentProfile = "admin" | "utvidet" | "medlem";
+
+export type AuthenticatedUser = {
+  id: string;
+  email: string | null;
+  name: string | null;
+  source: "supabase" | "development";
+  developmentProfile?: DevelopmentProfile;
+};
+
+export type DevelopmentLoginResponse = {
+  accessToken: string;
+  expiresAt: string;
+  user: {
+    id: string;
+    email: string;
+    name: string;
+    developmentProfile: DevelopmentProfile;
+  };
+};
+
+export type AuthSession = {
+  accessToken: string;
+  expiresAt?: string;
+  user: AuthenticatedUser;
+};
+
+export type AuthState =
+  | { status: "initializing"; user: null }
+  | { status: "anonymous"; user: null }
+  | { status: "authenticated"; user: AuthenticatedUser };
+
+export type AuthSessionListener = (session: AuthSession | null) => void;
+export type AuthStateListener = (state: AuthState) => void;
+export type Unsubscribe = () => void;
+
+export type AuthAdapter = {
+  getSession(): Promise<AuthSession | null>;
+  getAccessToken(): Promise<string | null>;
+  subscribe(listener: AuthSessionListener): Unsubscribe;
+  signOut(): Promise<void>;
+  signInAsDevelopmentProfile?(profile: DevelopmentProfile): Promise<AuthSession>;
+  signInWithOAuth?(provider: "google" | "idrettens-id", redirectTo: string): Promise<void>;
+  sendEmailOtp?(email: string, redirectTo: string): Promise<void>;
+  verifyEmailOtp?(email: string, token: string): Promise<void>;
+  destroy?(): void;
+};
+
+export type AuthController = {
+  readonly state: AuthState;
+  initialize(): Promise<void>;
+  getAccessToken(): Promise<string | null>;
+  subscribe(listener: AuthStateListener): Unsubscribe;
+  signOut(): Promise<void>;
+  signInAsDevelopmentProfile(profile: DevelopmentProfile): Promise<void>;
+  signInWithOAuth(provider: "google" | "idrettens-id", redirectTo: string): Promise<void>;
+  sendEmailOtp(email: string, redirectTo: string): Promise<void>;
+  verifyEmailOtp(email: string, token: string): Promise<void>;
+  destroy(): void;
+};

@@ -63,8 +63,10 @@ for (const targetRoot of targetRoots) {
       if (
         !normalizedPath.endsWith(".client.ts") &&
         !normalizedPath.endsWith(".client.js") &&
+        !normalizedPath.endsWith(".client.svelte") &&
         !normalizedPath.includes(".test.") &&
-        /(?:^|\/)\w[\w-]*\.client(?:\.[jt]s)?$/.test(specifier)
+        /(?:^|\/)\w[\w-]*\.client(?:\.[jt]s)?$/.test(specifier) &&
+        !isExplicitClientImport(source, specifier)
       ) {
         report(
           relativePath,
@@ -165,4 +167,11 @@ function report(relativePath, source, needle, message) {
   const index = source.indexOf(needle);
   const line = index < 0 ? 1 : source.slice(0, index).split("\n").length;
   violations.push(`${relativePath}:${line} ${message}`);
+}
+
+function isExplicitClientImport(source, specifier) {
+  const escaped = specifier.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const dynamicImport = new RegExp(`import\\(\\s*["']${escaped}["']\\s*\\)`).test(source);
+  const browserLifecycle = /\b(?:onMount|browser)\b|\$effect\s*\(/.test(source);
+  return dynamicImport && browserLifecycle;
 }

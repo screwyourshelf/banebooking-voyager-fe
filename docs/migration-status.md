@@ -4,16 +4,15 @@
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** WP-3 — Auth, tenant og serverdata
+> **Aktiv arbeidspakke:** WP-4 — UI-fundament og designsystem (ikke startet)
 >
 > **Sist oppdatert:** 2026-08-22
 
-## Mål for aktiv arbeidspakke
+## Mål for neste arbeidspakke
 
-Etabler et typed, rammeverksnøytralt authgrensesnitt med Supabase- og utviklingsadapter,
-deterministisk sesjonsgjenoppretting og auth callback. Normaliser tenant-context, koble TanStack
-Svelte Query til den nye API-klienten og håndhev protected/admin guards uten å flytte autoritet fra
-backendens kapabiliteter.
+Etabler sentrale tokens, tema, font og produktets offentlige UI-familier over et minimalt sett native
+eller Bits-baserte primitives. Features skal deretter kunne uttrykke loading, feedback, forms,
+samlinger og dialogs uten lokal produktstyling eller direkte Bits UI-import.
 
 ## Fullført
 
@@ -51,6 +50,19 @@ backendens kapabiliteter.
   AI-sesjon; fullført arbeidspakke skal overleveres før neste startes.
 - AI-first lesbarhet er et bindende styrings- og arkitekturkrav med eksplisitt checkpointport i
   `AGENTS.md`, migreringsplanen og målarkitekturen.
+- Authplattformen eksponerer diskriminerte initializing-, anonymous- og authenticated-states gjennom
+  ett rammeverksnøytralt grensesnitt, typed Svelte-context og testet controller.
+- Supabase- og utviklingsauth ligger bak adapters med deterministisk prioritet, sesjonsgjenoppretting,
+  callback, tokenhåndtering og idempotent utlogging.
+- Browser-runtime eier auth-SDK, native fetch og 401-navigasjon; Svelte-provideren publiserer bare
+  stabile context-fasader og tømmer Query-cachen ved utlogging.
+- Tenant fra route og dedikert build normaliseres til samme kontrakt. Build-tenant er autoritativ,
+  lagrede callback-slugs valideres og alle interne navigasjoner fungerer under base path.
+- TanStack Svelte Query-klient, tenant-key-konvensjon og lazy utviklings-devtools er koblet til den
+  typed API-klienten.
+- Session bootstrap, protected guards, fail-closed adminregler og backendstyrte kapabiliteter er
+  etablert med eksplisitte loading-, error-, redirect- og blocked-states.
+- WP-3-kvalitetsporten er nådd uten backendendringer.
 
 ## Nåtilstand
 
@@ -60,8 +72,10 @@ backendens kapabiliteter.
   av SvelteKit.
 - Contracts, ren domenelogikk og platformkjerne er nå autoritative for både videre Svelte-arbeid og
   de midlertidige React-broene.
-- Et ucommittert WP-3-utkast er påbegynt, men ikke kvalitetsportverifisert. Det omfatter auth- og
-  tenantkontrakter, Svelte Query-avhengigheter, session/guard-utkast og routekobling.
+- Auth, tenant, Query og session guards er autoritativt SvelteKit-fundament. Login- og øvrige
+  featureflater er fortsatt route-placeholdere frem til WP-4–WP-6.
+- WP-4 er registrert som neste arbeidspakke, men ingen UI-implementasjon fra den er startet i dette
+  checkpointet.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
@@ -71,56 +85,40 @@ backendens kapabiliteter.
 | ------------------------------------- | ---------------------------------------------------- |
 | Base branch                           | `main`                                               |
 | Fastslått basecommit                  | `5287c5e`                                            |
-| Siste semantiske checkpoint           | `docs: define AI-first session governance`           |
-| Lokale commits foran base             | 5                                                    |
-| Forventede ucommitterte frontendfiler | WP-3-utkastet beskrevet under                        |
-| Neste planlagte checkpoint            | `feat(sveltekit): establish WP-3 auth and data core` |
+| Siste semantiske checkpoint           | `feat(sveltekit): establish WP-3 auth and data core` |
+| Lokale commits foran base             | 6                                                    |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                        |
+| Neste planlagte checkpoint            | WP-4 tokens, tema og primitivegrense                 |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
 selvrefererende og umiddelbart utdatert. Hvis tabellen og git avviker, er differ og kode
 autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
-## Pågående ucommittert WP-3-utkast
-
-Følgende endringer er forventet ucommitterte etter styringscheckpointet:
-
-- `package.json` og `package-lock.json` med TanStack Svelte Query og devtools
-- `scripts/check-architecture-boundaries.mjs`
-- React-broer i `src/auth/`, `src/supabase.ts` og `src/features/policy/pages/vilkaar.ts`
-- nye eller endrede moduler i `src/lib/platform/{api,app,auth,query,tenant}/`,
-  `src/lib/features/session/` og `src/lib/domain/`
-- routekobling i tenant-layouts og `src/routes/auth/callback/`
-
-Utkastet ble startet før sesjonsavgrensningen ble korrigert. Det er formatert delvis og et tidlig
-`svelte-check` fant én warning som deretter ble rettet, men full typecheck, test, arkitekturkontroll
-og build er ikke kjørt på den samlede WP-3-diffen. Utkastet er ikke et godkjent checkpoint.
-
 ## Neste eksakte steg
 
-Neste `/start` skal bare gjenoppta WP-3:
+Neste `/start` skal bare starte første avgrensede WP-4-checkpoint:
 
-1. Kaldles det ucommitterte utkastet mot AI-first kodekontrakten og kontroller at ansvar, offentlige
-   innganger, typed states, adapters og sideeffekter er tydelige uten samtalekontekst.
-2. Sammenlign utkastet med WP-3-kontrakten og React-referansen; korriger ufullstendig eller for bred
-   implementasjon før nytt omfang legges til.
-3. Kjør fokuserte auth-, tenant-, endpoint- og guardtester, deretter `npm run check`, begge
-   hostingbuildene og relevant nettleserverifikasjon.
-4. Når WP-3-porten faktisk er grønn, oppdater statusen, opprett WP-3-checkpointet og avslutt
-   sesjonen. Ikke start WP-4 i samme `/start`-sesjon.
+1. Kaldkartlegg eksisterende globale stiler, tokens, theme-provider, UI-primitives og
+   designsystemkontroll mot `product-design-rules.md` og ADR-004; skill mellom autoritativ visuell
+   baseline og React-spesifikk konstruksjon.
+2. Etabler ett sentralt Svelte-eid fundament for tokens, font og lyst/mørkt tema samt den maskinelle
+   primitive-/Bits-grensen. Ikke start feature- eller app-shellmigrering.
+3. Verifiser representative token-/temastates, `npm run check`, tester og begge hostingbuildene før
+   et eventuelt WP-4-delcheckpoint.
 
 ## Arbeidspakkeregister
 
-| Arbeidspakke                     | Status       | Port/resultat                                                 |
-| -------------------------------- | ------------ | ------------------------------------------------------------- |
-| WP-0 Styring og baseline         | Fullført     | Dokumentgrunnlag, React-baseline og komplett adferdsinventar  |
-| WP-1 Build og routes             | Fullført     | Build, routes, hostingvarianter og arkitekturkontroll grønn   |
-| WP-2 Contracts/domain/platform   | Fullført     | Contracts, ren domain, fetch/API, 401 og adapters grønne      |
-| WP-3 Auth/tenant/serverdata      | Pågår        | Authport og deterministiske authstates er første eksakte steg |
-| WP-4 UI-fundament                | Ikke startet | —                                                             |
-| WP-5 App-shell                   | Ikke startet | —                                                             |
-| WP-6 Featuremigrering            | Ikke startet | —                                                             |
-| WP-7 Paritet og produksjonsbytte | Ikke startet | —                                                             |
+| Arbeidspakke                     | Status       | Port/resultat                                                |
+| -------------------------------- | ------------ | ------------------------------------------------------------ |
+| WP-0 Styring og baseline         | Fullført     | Dokumentgrunnlag, React-baseline og komplett adferdsinventar |
+| WP-1 Build og routes             | Fullført     | Build, routes, hostingvarianter og arkitekturkontroll grønn  |
+| WP-2 Contracts/domain/platform   | Fullført     | Contracts, ren domain, fetch/API, 401 og adapters grønne     |
+| WP-3 Auth/tenant/serverdata      | Fullført     | Auth, tenant, Query, guards, 401 og base path grønne         |
+| WP-4 UI-fundament                | Ikke startet | Tokens, tema og primitivegrense er første checkpoint         |
+| WP-5 App-shell                   | Ikke startet | —                                                            |
+| WP-6 Featuremigrering            | Ikke startet | —                                                            |
+| WP-7 Paritet og produksjonsbytte | Ikke startet | —                                                            |
 
 ## Featureregister
 
@@ -139,8 +137,8 @@ Neste `/start` skal bare gjenoppta WP-3:
 
 ## Åpne blokkeringer
 
-Ingen kjente blokkeringer. WP-3 kan bygges mot eksisterende Supabase-, tenant- og
-backendkontrakter uten backendendringer eller ny brukerbeslutning.
+Ingen kjente blokkeringer. Første WP-4-checkpoint kan gjennomføres mot eksisterende visuell
+baseline og de godkjente produkt-/arkitekturreglene uten backendendringer eller ny brukerbeslutning.
 
 ## Midlertidig kode og kjente avvik
 
@@ -148,39 +146,41 @@ backendkontrakter uten backendendringer eller ny brukerbeslutning.
   ansvaret erstattes; de er ikke del av SvelteKit-bundlen.
 - `src/types/` og de flyttede filene i `src/utils/` er midlertidige React-re-exports til autoritativ
   kode i `src/lib/contracts`, `src/lib/domain` og `src/lib/platform`.
-- Alle Svelte-featureflater er bevisst midlertidige route-placeholdere frem til WP-2–WP-5 gir
+- Alle Svelte-featureflater er bevisst midlertidige route-placeholdere frem til WP-4–WP-6 gir
   contracts, data, auth, UI og app-shell.
 - Eksisterende globale designstiler lastes av root layout som visuell baseline; de konsolideres i
   WP-4.
-- Det ucommitterte WP-3-utkastet er eksplisitt WIP og kan inneholde typer eller integrasjonsvalg som
-  må korrigeres før checkpoint. Ingen senere agent skal anta at utkastet er godkjent fordi filene
-  finnes.
+- Auth-, tenant- og guardflatene bruker foreløpige, ustylede feedbackelementer. WP-4 skal gi dem
+  offentlige loading-/errorpatterns; adferds- og datakontraktene fra WP-3 er autoritative.
 
 ## Siste verifikasjon
 
-| Kontroll                             | Resultat                                                                       |
-| ------------------------------------ | ------------------------------------------------------------------------------ |
-| Prettier på aktiv kode og dokumenter | Bestått 2026-08-22                                                             |
-| Relative dokumentlenker              | Bestått 2026-08-22                                                             |
-| `git diff --check`                   | Bestått 2026-08-22                                                             |
-| `npm test`                           | Bestått 2026-08-22: 15 filer, 48 tester                                        |
-| `npm run check`                      | Bestått 2026-08-22: Svelte/React-typecheck, arkitektur, design, lint og format |
-| Cloudflare Pages-build               | Bestått 2026-08-22: root path og `index.html`-fallback                         |
-| GitHub Pages-build                   | Bestått 2026-08-22: `/banebooking` og `404.html`-fallback                      |
-| Dev og preview                       | Bestått 2026-08-22: direkte routes i multi-tenant og dedikert tenant           |
-| Nettleserrender                      | Bestått 2026-08-22: hydrert adminroute, korrekt tittel og ingen konsollfeil    |
-| SvelteKit-bundle                     | Verifisert 2026-08-22: ingen React-runtime                                     |
-| WP-0 route-/featureinventar          | Komplett 2026-08-22                                                            |
-| Ucommittert WP-3-utkast              | Ikke fullverifisert; må kjøres fra kald start i neste AI-sesjon                |
+| Kontroll                             | Resultat                                                                        |
+| ------------------------------------ | ------------------------------------------------------------------------------- |
+| Prettier på aktiv kode og dokumenter | Bestått 2026-08-22                                                              |
+| Relative dokumentlenker              | Bestått 2026-08-22                                                              |
+| `git diff --check`                   | Bestått 2026-08-22                                                              |
+| `npm test`                           | Bestått 2026-08-22: 23 filer, 70 tester                                         |
+| `npm run check`                      | Bestått 2026-08-22: Svelte/React-typecheck, arkitektur, design, lint og format  |
+| Cloudflare Pages-build               | Bestått 2026-08-22: root path og `index.html`-fallback                          |
+| GitHub Pages-build                   | Bestått 2026-08-22: eksplisitt `/banebooking` og `404.html`-fallback            |
+| Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant               |
+| Nettleserrender                      | Bestått 2026-08-22: tenant/callback, protected/admin redirects, ingen feil      |
+| SvelteKit-bundle                     | Verifisert 2026-08-22: ingen React-runtime                                      |
+| WP-0 route-/featureinventar          | Komplett 2026-08-22                                                             |
+| WP-3 fokustester                     | Bestått 2026-08-22: auth, callback, adapters, tenant, Query, endpoint og guards |
 
 ## Filer i siste checkpoint
 
-- avgrenset `/start`- og handoverprotokoll i `AGENTS.md`
-- bindende AI-first styringskrav og checkpointport i `docs/migration-plan.md`
-- AI-first arkitekturkontrakt i `docs/sveltekit-architecture.md`
-- oppdatert dokumentindeks i `docs/README.md`
+- authkontrakter, controller og adapters i `src/lib/platform/auth/`
+- browser-runtime og typed providers i `src/lib/platform/app/`
+- Query-klient og key-kontrakt i `src/lib/platform/query/`
+- tenantnormalisering og base-path-kontrakt i `src/lib/platform/tenant/`
+- session-endpoints, query keys og guards i `src/lib/features/session/`
+- tenant-, protected/admin- og callback-routekobling i `src/routes/`
+- midlertidige React-re-exports i `src/auth/`, `src/supabase.ts` og policykilden
+- TanStack Svelte Query-avhengigheter, arkitekturkontroll og hostingkommandoer
 - `docs/migration-status.md`
 
-Denne listen beskriver bare styringscheckpointets leveranse. Det ucommitterte WP-3-utkastet er ikke
-del av checkpointet. `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og
-`git status` for pågående arbeid etter checkpointet.
+`/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
+pågående arbeid etter checkpointet.
