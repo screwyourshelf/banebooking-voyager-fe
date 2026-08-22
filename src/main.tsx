@@ -1,6 +1,7 @@
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import * as Sentry from "@sentry/react";
 
 import App from "./App";
 import BootHandoff from "./app/BootHandoff";
@@ -8,6 +9,18 @@ import { ReactQueryDevtoolsPanel } from "./components/ReactQueryDevtoolsPanel";
 import AuthProvider from "./providers/AuthProvider";
 import { prefetchCurrentRoute } from "./utils/prefetchRoute";
 import "./index.css";
+
+const sentryDsn = import.meta.env.VITE_SENTRY_DSN;
+
+Sentry.init({
+  dsn: sentryDsn,
+  enabled: import.meta.env.PROD && Boolean(sentryDsn),
+  environment: import.meta.env.MODE,
+  dataCollection: {
+    userInfo: false,
+    httpBodies: [],
+  },
+});
 
 prefetchCurrentRoute();
 
