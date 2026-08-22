@@ -1590,9 +1590,9 @@
     background: var(--app-choice-indicator);
   }
 
-  [data-ui="settings-radio-option"][data-selected="true"] [data-slot="radio-group-item"] {
+  [data-ui="settings-radio-option"][data-selected="true"]
+    :is([data-slot="radio-group-item"], [data-ui-primitive="radio"]) {
     border-color: var(--app-choice-indicator) !important;
-    background: var(--app-choice-indicator) !important;
   }
 
   [data-ui="settings-radio-option"][data-disabled="true"] {
@@ -1647,7 +1647,7 @@
     gap: 0.5rem;
   }
 
-  [data-ui="settings-choice-group"] [data-ui="control-choice"] {
+  [data-ui="settings-choice-group"] :is([data-ui="control-choice"], [data-ui-primitive="choice"]) {
     min-height: 2.5rem;
   }
 

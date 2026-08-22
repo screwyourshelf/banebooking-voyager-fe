@@ -19,6 +19,15 @@ export {
   PageLoading,
   RoutePlaceholder,
   Section,
+  SettingsChoiceGroup,
+  SettingsPanel,
+  SettingsRadioGroup,
+  SettingsRow,
+  SettingsSection,
+  SettingsStack,
+  SettingsSwitchRow,
+  SettingsText,
+  SettingsValue,
 } from "./patterns";
 export type {
   CollectionRowInteraction,
@@ -31,4 +40,8 @@ export type {
   FormVariant,
   SectionPadding,
   SectionVariant,
+  SettingsChoiceOption,
+  SettingsRadioGroupLayout,
+  SettingsRadioOption,
+  SettingsSectionTone,
 } from "./patterns";

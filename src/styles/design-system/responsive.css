@@ -252,7 +252,8 @@
       grid-template-columns: minmax(0, 1fr);
     }
 
-    [data-ui="settings-choice-group"] [data-ui="control-choice"] {
+    [data-ui="settings-choice-group"]
+      :is([data-ui="control-choice"], [data-ui-primitive="choice"]) {
       min-width: 4.25rem;
     }
 
