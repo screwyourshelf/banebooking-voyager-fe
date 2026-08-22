@@ -285,4 +285,43 @@
   [data-ui-primitive="choice"][data-selected="true"]::after {
     background: var(--control-choice-indicator, var(--app-choice-indicator));
   }
+
+  [data-ui-primitive="dialog-overlay"] {
+    position: fixed;
+    z-index: 80;
+    inset: 0;
+    background: rgb(0 0 0 / 0.8);
+    backdrop-filter: blur(3px);
+  }
+
+  [data-ui-primitive="dialog-surface"] {
+    position: fixed;
+    z-index: 81;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    min-width: 0;
+    max-height: calc(100dvh - 2rem);
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb, var(--app-line) 76%, transparent);
+    background: var(--app-surface);
+    box-shadow: var(--app-shadow-lg);
+    outline: none;
+  }
+
+  [data-ui-primitive="dialog-surface"][data-size="standard"] {
+    width: min(34rem, calc(100vw - 2rem));
+    border-radius: 1.5rem;
+  }
+
+  [data-ui-primitive="dialog-surface"][data-size="editor"] {
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    max-height: none;
+    transform: none;
+    border: 0;
+    border-radius: 0;
+  }
 }

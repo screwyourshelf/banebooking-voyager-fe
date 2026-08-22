@@ -107,6 +107,23 @@ aktivitetsmetadata krever en separat beslutning.
 - Datoer som sendes til API følger eksisterende kontrakt.
 - Visning av lagrede datoer går gjennom delte, rene formatteringsfunksjoner.
 
+## Dialoger og fokuserte editorer
+
+- Vanlig `Dialog` brukes til avgrenset lesing eller en kort handling i konteksten brukeren allerede
+  står i. Den har kompakt standardbredde, skrollbart innhold og valgfritt handlingsområde.
+- Editorvarianten brukes for sammensatte redigeringsforløp som brukerredigering og opprettelse av
+  kunngjøringer. Den er fullskjerm på mobil og en fokusert, størrelsesstyrt flate på desktop.
+- Åpning flytter fokus inn i dialogen, fokus holdes i den aktive dialogen, og lukking returnerer
+  fokus til kontrollen som åpnet den.
+- `Escape`, en eksplisitt lukke-/tilbakehandling og klikk utenfor lukker dialogen. Når en mutasjon
+  pågår, er alle tre lukkemåtene blokkert til mutasjonen er ferdig eller har feilet.
+- Dialoginnholdet skroller uten å flytte bakgrunnsflaten. Mobil editor tar hensyn til safe areas,
+  og editorens handlinger kan være sticky når innholdet er lengre enn viewporten.
+- Features styrer åpen tilstand og reagerer på det semantiske `onClose`. Portal, overlay,
+  fokusfelle, fokusretur, standardstørrelse og dismiss-atferd eies av dialogfamilien.
+- Dialoghandlinger følger de vanlige primær-, sekundær- og destruktivrollene. Pending state
+  deaktiverer handlinger som ikke kan gjentas og eksponeres som busy state til hjelpemidler.
+
 ## Samlinger og listerader
 
 `Collection.Row` er appens eneste offentlige entitetsrad. Feltene har fast betydning:
