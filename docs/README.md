@@ -2,10 +2,16 @@
 
 ## Gjeldende dokumenter
 
-| Dokument                                                           | Formål                                   |
-| ------------------------------------------------------------------ | ---------------------------------------- |
-| [`frontend-redesign-plan.md`](./frontend-redesign-plan.md)         | Autoritative design- og arkitekturregler |
-| [`frontend-redesign-handover.md`](./frontend-redesign-handover.md) | PR-omfang, avhengigheter og reviewfokus  |
+| Dokument                                                   | Formål                                       |
+| ---------------------------------------------------------- | -------------------------------------------- |
+| [`migration-status.md`](./migration-status.md)             | Nåtilstand og neste eksakte steg             |
+| [`migration-plan.md`](./migration-plan.md)                 | Arbeidsrekkefølge, metode og kvalitetsporter |
+| [`sveltekit-architecture.md`](./sveltekit-architecture.md) | Målarkitektur for SvelteKit-migreringen      |
+| [`product-design-rules.md`](./product-design-rules.md)     | Produktets visuelle og semantiske UI-regler  |
+| [`adr/`](./adr/README.md)                                  | Bindende arkitekturbeslutninger              |
 
-Fullførte planer og historiske analyser ligger i [`archive/`](./archive/README.md). De skal
-ikke brukes som gjeldende instruksjon uten kontroll mot dagens kode.
+Disse dokumentene er den komplette aktive instruksjonsflaten for frontendmigreringen. Historiske
+React-planer og PR-handover er fjernet fra arbeidskopien; nødvendig sporbarhet finnes i
+git-historikken.
+
+Codex fortsetter arbeidet gjennom start- og handoverprotokollen i [`../AGENTS.md`](../AGENTS.md).
