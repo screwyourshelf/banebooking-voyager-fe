@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import { ShieldAlert } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import ErrorShell from "@/app/ErrorShell";
 import {
   LOKAL_LAGRING_KREVES_FOR_INNLOGGING,
   synkroniserSupabaseToken,
 } from "@/auth/supabaseToken";
+import { ErrorDisplay } from "@/components/errors/ErrorDisplay";
 import { config } from "@/config";
 import { getSupabaseClient } from "@/supabase";
 import { lesLokalLagring, lokalLagringErTilgjengelig } from "@/utils/browserStorage";
@@ -95,9 +98,21 @@ export default function AuthCallbackPage() {
     };
   }, [kanLagreSession, navigate]);
 
+  if (!kanLagreSession) {
+    return (
+      <ErrorShell>
+        <ErrorDisplay
+          icon={ShieldAlert}
+          title="Kan ikke fullføre innloggingen"
+          description={LOKAL_LAGRING_KREVES_FOR_INNLOGGING}
+        />
+      </ErrorShell>
+    );
+  }
+
   return (
-    <div data-ui="auth-status" role={kanLagreSession ? "status" : "alert"}>
-      {kanLagreSession ? "Logger inn ..." : LOKAL_LAGRING_KREVES_FOR_INNLOGGING}
+    <div data-ui="auth-status" role="status">
+      Logger inn ...
     </div>
   );
 }
