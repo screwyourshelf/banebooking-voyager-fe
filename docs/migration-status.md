@@ -206,6 +206,19 @@ samlinger og dialogs uten lokal produktstyling eller direkte Bits UI-import.
   horisontal scrolling for vanlig brødtekst.
 - Ellevte avgrensede WP-4-checkpoint for Rich-text-editorgrensen er fullført uten featuremigrering
   eller backendendringer.
+- React-referansens sammensatte radbehov er kaldkartlagt: fire features bruker ekspanderbare
+  detaljrader, banearbeidsområdet bruker eksplisitt opp-/ned-reorder, og ingen feature bruker den
+  gamle `actions`-typen. Handlingsantall, summary/detail-eierskap, fokusrekkefølge, pending og
+  mobilgeometri er dermed avklart uten drag-and-drop eller meny.
+- `CollectionList` eier nå bindbar, kontrollert enkeltutviding over en intern Bits UI-accordion.
+  `CollectionRow` har offentlige `expand`- og `reorder`-interaksjoner; expand krever faktisk detalj-
+  eller handlingsinnhold, holder hurtighandlinger som søskenkontroller og støtter accordion-
+  tastatur. Reorder bruker native åpne-/opp-/nedknapper, Hugeicons, kantgrenser og felles busy-state.
+- De sammensatte radkontraktene har komponent-, tastatur- og axe-tester for kontrollert åpning,
+  fokus, hurtighandling, reorder og pending. Mobil/desktop og lyst/mørkt tema er kontrollert på
+  390×844 og 1280×900 uten overflow eller nettleserfeil.
+- Tolvte avgrensede WP-4-checkpoint for sammensatte CollectionRow-interaksjoner er fullført uten
+  offentlig `actions`-variant, filterkomposisjon, featuremigrering eller backendendringer.
 
 ## Nåtilstand
 
@@ -219,21 +232,21 @@ samlinger og dialogs uten lokal produktstyling eller direkte Bits UI-import.
   featureflater er fortsatt route-placeholdere frem til WP-4–WP-6.
 - WP-4 pågår. Tokens, font, lyst/mørkt tema, offentlige handlinger, Icon-, tekst-, Select-,
   Date-/Calendar- og Rich-text-kontroller samt Page-, Section-, feedback-, Form-, Settings-,
-  Dialog-, Document-, Navigation- og de første Collection-patternene er autoritative. Sammensatte
-  row interactions og offentlig filterkomposisjon gjenstår innen WP-4.
+  Dialog-, Document-, Navigation- og Collection-patternene inkludert sammensatte row interactions
+  er autoritative. Offentlig filterkomposisjon gjenstår innen WP-4.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                                          |
-| ------------------------------------- | ----------------------------------------------------------- |
-| Base branch                           | `main`                                                      |
-| Fastslått basecommit                  | `5287c5e`                                                   |
-| Siste semantiske checkpoint           | `feat(sveltekit): establish WP-4 rich-text editor patterns` |
-| Lokale commits foran base             | 17                                                          |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                               |
-| Neste planlagte checkpoint            | WP-4 sammensatte CollectionRow-interaksjoner                |
+| Felt                                  | Forventet tilstand                                                     |
+| ------------------------------------- | ---------------------------------------------------------------------- |
+| Base branch                           | `main`                                                                 |
+| Fastslått basecommit                  | `5287c5e`                                                              |
+| Siste semantiske checkpoint           | `feat(sveltekit): establish WP-4 compound collection row interactions` |
+| Lokale commits foran base             | 18                                                                     |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                                          |
+| Neste planlagte checkpoint            | WP-4 offentlig Collection-filterkomposisjon                            |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -244,28 +257,28 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 Neste `/start` skal bare starte neste avgrensede WP-4-checkpoint:
 
-1. Kaldkartlegg de reelle React-konsumentene som trenger `CollectionRow`-interaksjonene `actions`,
-   `expand` og `reorder`. Dokumenter handlingsantall, summary/detail-eierskap, fokusrekkefølge,
-   tastatur, loading/pending, mobilgeometri og eventuell drag-/menyprimitive før API-et utvides.
-2. Etabler bare variantene og interne primitives som de kartlagte konsumentene faktisk trenger.
-   Hele sammendragsflaten skal eie expand, hurtighandlinger skal være separate søskenkontroller, og
-   featurekode skal fortsatt uttrykke én diskriminert interaction uten lokal radanatomi.
-3. Legg komponent-, tastatur- og axe-tester for handlinger, expand/fokus og reorder dersom den har
-   en reell konsument. Kontroller mobil/desktop og lyst/mørkt tema, og kjør full check/test samt begge
-   hostingbuildene. Offentlig filterkomposisjon startes ikke i samme checkpoint.
+1. Kaldkartlegg `RecordCollectionHeader` og alle reelle React-konsumenter av toggle, filtergrupper,
+   selection og sortering. Dokumenter hvilke kontroller som er inline eller skjult på mobil,
+   antall valg, reset, valgt summary, tastatur, fokus, loading/pending og tomme filterresultater.
+2. Etabler én offentlig Collection-filterkomposisjon over eksisterende Input-, Select-, Switch- og
+   choicekontrakter, og legg bare til en intern menu/popover-primitive dersom kartlagt fokus- og
+   mobilatferd krever det. Featurekode skal beskrive filterstate uten lokal headeranatomi eller CSS.
+3. Legg komponent-, tastatur- og axe-tester for de kartlagte kontrollkombinasjonene, reset og busy.
+   Kontroller mobil/desktop og lyst/mørkt tema, kjør full check/test samt begge hostingbuildene, og
+   vurder deretter om WP-4-kvalitetsporten er komplett. WP-5 startes ikke i samme checkpoint.
 
 ## Arbeidspakkeregister
 
-| Arbeidspakke                     | Status       | Port/resultat                                                 |
-| -------------------------------- | ------------ | ------------------------------------------------------------- |
-| WP-0 Styring og baseline         | Fullført     | Dokumentgrunnlag, React-baseline og komplett adferdsinventar  |
-| WP-1 Build og routes             | Fullført     | Build, routes, hostingvarianter og arkitekturkontroll grønn   |
-| WP-2 Contracts/domain/platform   | Fullført     | Contracts, ren domain, fetch/API, 401 og adapters grønne      |
-| WP-3 Auth/tenant/serverdata      | Fullført     | Auth, tenant, Query, guards, 401 og base path grønne          |
-| WP-4 UI-fundament                | Pågår        | Etablerte patterns inkl. Date/Calendar og Rich-text er grønne |
-| WP-5 App-shell                   | Ikke startet | —                                                             |
-| WP-6 Featuremigrering            | Ikke startet | —                                                             |
-| WP-7 Paritet og produksjonsbytte | Ikke startet | —                                                             |
+| Arbeidspakke                     | Status       | Port/resultat                                                |
+| -------------------------------- | ------------ | ------------------------------------------------------------ |
+| WP-0 Styring og baseline         | Fullført     | Dokumentgrunnlag, React-baseline og komplett adferdsinventar |
+| WP-1 Build og routes             | Fullført     | Build, routes, hostingvarianter og arkitekturkontroll grønn  |
+| WP-2 Contracts/domain/platform   | Fullført     | Contracts, ren domain, fetch/API, 401 og adapters grønne     |
+| WP-3 Auth/tenant/serverdata      | Fullført     | Auth, tenant, Query, guards, 401 og base path grønne         |
+| WP-4 UI-fundament                | Pågår        | Patterns inkl. sammensatte Collection-rader er grønne        |
+| WP-5 App-shell                   | Ikke startet | —                                                            |
+| WP-6 Featuremigrering            | Ikke startet | —                                                            |
+| WP-7 Paritet og produksjonsbytte | Ikke startet | —                                                            |
 
 ## Featureregister
 
@@ -284,7 +297,7 @@ Neste `/start` skal bare starte neste avgrensede WP-4-checkpoint:
 
 ## Åpne blokkeringer
 
-Ingen kjente blokkeringer. Neste CollectionRow-checkpoint kan gjennomføres mot eksisterende
+Ingen kjente blokkeringer. Neste filtercheckpoint kan gjennomføres mot eksisterende
 React-konsumenter og de godkjente produkt-/arkitekturreglene uten backendendringer eller ny
 brukerbeslutning.
 
@@ -304,9 +317,9 @@ brukerbeslutning.
 - Collection eier nå hvor filtre og footer rendres, og `Input`, Select samt Settings-valg og toggle
   dekker de etablerte kontrollene. Sorteringens produktkomposisjon og offentlig filterkomposisjon
   gjenstår; featurekode er ikke flyttet til den nye Collection-familien i dette WP-4-checkpointet.
-- `CollectionRow` har foreløpig de tre interaction-variantene `static`, `open` og `action` som dekker
-  flere kartlagte konsumenter. `actions`, `expand` og `reorder` etableres først sammen med reelle
-  primitive- og fokusbehov senere i WP-4; de eksponeres ikke som uimplementerte offentlige typer.
+- `CollectionRow` har interaction-variantene `static`, `open`, `action`, `expand` og `reorder` med
+  kartlagte konsumenter og typed innhold. Den gamle React-typen `actions` har ingen faktisk
+  featurekonsument og eksponeres derfor ikke i Svelte-API-et før et reelt behov oppstår.
 - Temakontrakten og persistens er på plass, og Navigation-familien dekker den semantiske
   temahandlingen. Den faktiske brukerrettede bryteren kommer med app-shellen; det finnes ingen
   midlertidig route- eller featurelokal temakontroll.
@@ -326,8 +339,9 @@ brukerbeslutning.
   konto-dropdown og mobil «Mer»-overlay er bevisst ikke integrert eller bygget i dette
   patterncheckpointet.
 - Bits UI brukes bare i primitive wrappers med reelle sammensatte behov: Dialog for fokusfelle og
-  dismissable layer, Select for listbox, portal, typeahead og fokusretur, og Calendar/Popover for
-  datoaritmetikk, kalendergrid, portal og fokus. Button, Input, Textarea, Switch, Radio og
+  dismissable layer, Select for listbox, portal, typeahead og fokusretur, Calendar/Popover for
+  datoaritmetikk, kalendergrid, portal og fokus, og Collection-accordion for kontrollert
+  enkeltutviding og roving triggerfokus. Reorder, Button, Input, Textarea, Switch, Radio og
   ChoiceButton beholder enkel native atferd.
 - `RichTextEditor` laster Tiptap Core og dokumentutvidelsene lazy gjennom en browser-only adapter.
   React-avhengigheten `@tiptap/react` beholdes bare for React-referansen og brukes ikke av Svelte.
@@ -336,43 +350,41 @@ brukerbeslutning.
 
 ## Siste verifikasjon
 
-| Kontroll                             | Resultat                                                                            |
-| ------------------------------------ | ----------------------------------------------------------------------------------- |
-| Prettier på aktiv kode og dokumenter | Bestått 2026-08-22                                                                  |
-| Relative dokumentlenker              | Bestått 2026-08-22                                                                  |
-| `git diff --check`                   | Bestått 2026-08-22                                                                  |
-| `npm test`                           | Bestått 2026-08-22: 35 filer, 140 tester                                            |
-| `npm run check`                      | Bestått 2026-08-22: Svelte/React-typecheck, arkitektur, design, lint og format      |
-| Cloudflare Pages-build               | Bestått 2026-08-22: root path og `index.html`-fallback                              |
-| GitHub Pages-build                   | Bestått 2026-08-22: eksplisitt `/banebooking` og `404.html`-fallback                |
-| Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                   |
-| Nettleserrender                      | Bestått 2026-08-22: 390×844 og 1280/1440×900, Rich-text, lyst/mørkt, ingen feil     |
-| SvelteKit-bundle                     | Verifisert 2026-08-22: ingen React-runtime                                          |
-| WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                 |
-| WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon          |
-| WP-4 pattern-/a11y-tester            | Bestått 2026-08-22: 1 fil, 6 tester for semantikk, states, retry og axe             |
-| WP-4 collection-/a11y-tester         | Bestått 2026-08-22: 1 fil, 6 tester for anatomy, rows, groups, states, retry og axe |
-| WP-4 form-/a11y-tester               | Bestått 2026-08-22: 1 fil, 6 tester for feltkobling, states, submit og axe          |
-| WP-4 settings-/a11y-tester           | Bestått 2026-08-22: 1 fil, 6 tester for rows, valg, tastatur, states og axe         |
-| WP-4 dialog-/a11y-tester             | Bestått 2026-08-22: 1 fil, 7 tester for fokus, dismiss, actions, pending og axe     |
-| WP-4 select-/a11y-tester             | Bestått 2026-08-22: 1 fil, 6 tester for form, tastatur, states, fokus og axe        |
-| WP-4 document-/a11y-tester           | Bestått 2026-08-22: 1 fil, 5 tester for landmark, headings, facts, lenker og axe    |
-| WP-4 navigation-/a11y-tester         | Bestått 2026-08-22: 1 fil, 7 tester for lenker, aktiv state, handlinger og axe      |
-| WP-4 date-/a11y-tester               | Bestått 2026-08-22: 1 fil, 8 tester for form, tastatur, grenser, fokus og axe       |
-| WP-4 editor-/a11y-tester             | Bestått 2026-08-22: 1 fil, 7 tester for JSON, format, tabell, fokus, states og axe  |
+| Kontroll                             | Resultat                                                                           |
+| ------------------------------------ | ---------------------------------------------------------------------------------- |
+| Prettier på aktiv kode og dokumenter | Bestått 2026-08-22                                                                 |
+| Relative dokumentlenker              | Bestått 2026-08-22                                                                 |
+| `git diff --check`                   | Bestått 2026-08-22                                                                 |
+| `npm test`                           | Bestått 2026-08-22: 35 filer, 145 tester                                           |
+| `npm run check`                      | Bestått 2026-08-22: Svelte/React-typecheck, arkitektur, design, lint og format     |
+| Cloudflare Pages-build               | Bestått 2026-08-22: root path og `index.html`-fallback                             |
+| GitHub Pages-build                   | Bestått 2026-08-22: eksplisitt `/banebooking` og `404.html`-fallback               |
+| Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                  |
+| Nettleserrender                      | Bestått 2026-08-22: 390×844 og 1280×900, CollectionRow, lyst/mørkt, ingen feil     |
+| SvelteKit-bundle                     | Verifisert 2026-08-22: ingen React-runtime                                         |
+| WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                |
+| WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon         |
+| WP-4 pattern-/a11y-tester            | Bestått 2026-08-22: 1 fil, 6 tester for semantikk, states, retry og axe            |
+| WP-4 collection-/a11y-tester         | Bestått 2026-08-22: 1 fil, 11 tester for rows, expand, reorder, states og axe      |
+| WP-4 form-/a11y-tester               | Bestått 2026-08-22: 1 fil, 6 tester for feltkobling, states, submit og axe         |
+| WP-4 settings-/a11y-tester           | Bestått 2026-08-22: 1 fil, 6 tester for rows, valg, tastatur, states og axe        |
+| WP-4 dialog-/a11y-tester             | Bestått 2026-08-22: 1 fil, 7 tester for fokus, dismiss, actions, pending og axe    |
+| WP-4 select-/a11y-tester             | Bestått 2026-08-22: 1 fil, 6 tester for form, tastatur, states, fokus og axe       |
+| WP-4 document-/a11y-tester           | Bestått 2026-08-22: 1 fil, 5 tester for landmark, headings, facts, lenker og axe   |
+| WP-4 navigation-/a11y-tester         | Bestått 2026-08-22: 1 fil, 7 tester for lenker, aktiv state, handlinger og axe     |
+| WP-4 date-/a11y-tester               | Bestått 2026-08-22: 1 fil, 8 tester for form, tastatur, grenser, fokus og axe      |
+| WP-4 editor-/a11y-tester             | Bestått 2026-08-22: 1 fil, 7 tester for JSON, format, tabell, fokus, states og axe |
 
 ## Filer i siste checkpoint
 
-- offentlig `RichTextEditor`, intern verktøylinje og komponent-/tastatur-/axe-tester i
-  `src/lib/ui/patterns/`
-- browser-only Tiptap-adapter, typed controllergrense, editorinnhold og offentlig `Icon` i
+- offentlig bindbar enkeltutviding i `CollectionList`, diskriminerte `expand`-/`reorder`-kontrakter
+  og komponent-/tastatur-/axe-tester i `src/lib/ui/patterns/`
+- interne Bits UI-wrappers for accordion-listen og -raden samt oppdatert primitive-barrel i
   `src/lib/ui/primitives/`
-- offentlig UI-eksport i `src/lib/ui/index.ts` og de interne barrel-filene
-- sentral editor-, toolbar-, loading-, error-, ProseMirror- og tabellgeometri i
-  `src/styles/design-system/patterns.css` og `primitives.css`; erstattet editorstyling er fjernet fra
-  `feature-compositions.css`
-- Rich-text- og ikonkontrakt samt React-kaldkartlegging i `docs/product-design-rules.md`
-- direkte `@tiptap/core`-avhengighet for Svelte-adapteren i `package.json`/`package-lock.json`
+- sentral summary-, details-, action-, reorder-, pending- og responsiv geometri i
+  `src/styles/design-system/patterns.css` og primitivegrense i `primitives.css`
+- rad-, fokus-, tastatur-, pending- og React-kaldkartleggingskontrakt i
+  `docs/product-design-rules.md`
 - `docs/migration-status.md`
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for

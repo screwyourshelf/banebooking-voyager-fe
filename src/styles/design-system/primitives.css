@@ -936,4 +936,9 @@
     border: 0;
     border-radius: 0;
   }
+
+  [data-ui-primitive="accordion-list"],
+  [data-ui-primitive="accordion-row"] {
+    min-width: 0;
+  }
 }

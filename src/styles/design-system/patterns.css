@@ -2369,6 +2369,208 @@
     align-items: center;
   }
 
+  [data-ui="collection-row"][data-interaction="expand"] > [data-part="surface"] {
+    display: block;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  [data-ui="collection-row"][data-interaction="expand"]
+    > [data-part="surface"]
+    > [data-part="summary-row"] {
+    display: flex;
+    min-width: 0;
+    align-items: stretch;
+  }
+
+  [data-ui="collection-row"][data-interaction="expand"]
+    > [data-part="surface"]
+    > [data-part="summary-row"]
+    > [data-part="trigger-header"] {
+    display: flex;
+    min-width: 0;
+    flex: 1;
+  }
+
+  [data-ui="collection-row"][data-interaction="expand"]
+    > [data-part="surface"]
+    > [data-part="summary-row"]
+    > [data-part="trigger-header"]
+    > [data-part="trigger"] {
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    min-height: 4.625rem;
+    align-items: center;
+    gap: var(--app-space-md);
+    border: 0;
+    background: transparent;
+    padding: 0.625rem 0.75rem;
+    color: var(--app-ink);
+    font: inherit;
+    text-align: left;
+  }
+
+  [data-ui="collection-row"][data-interaction="expand"]
+    > [data-part="surface"]
+    > [data-part="summary-row"]
+    > [data-part="trigger-header"]
+    > [data-part="trigger"]:hover:not(:disabled) {
+    background: var(--app-surface-subtle);
+  }
+
+  [data-ui="collection-row"][data-interaction="expand"]
+    > [data-part="surface"]
+    > [data-part="summary-row"]
+    > [data-part="trigger-header"]
+    > [data-part="trigger"]:focus-visible,
+  [data-ui="collection-row"][data-interaction="reorder"]
+    > [data-part="surface"]
+    > [data-part="select"]:focus-visible {
+    z-index: 1;
+    outline: 3px solid color-mix(in srgb, var(--app-focus) 45%, transparent);
+    outline-offset: -3px;
+  }
+
+  [data-ui="collection-row"][data-interaction="expand"]
+    > [data-part="surface"]
+    > [data-part="summary-row"]
+    > [data-part="trigger-header"]
+    > [data-part="trigger"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  [data-ui="collection-row"][data-interaction="expand"]
+    > [data-part="surface"]
+    > [data-part="summary-row"]
+    > [data-part="trigger-header"]
+    > [data-part="trigger"]
+    > [data-part="indicator"] {
+    display: grid;
+    width: 1.25rem;
+    height: 1.25rem;
+    flex: 0 0 auto;
+    place-items: center;
+    color: var(--app-ink-faint);
+    transition: transform 160ms ease;
+  }
+
+  [data-ui="collection-row"][data-interaction="expand"]
+    > [data-part="surface"]
+    > [data-part="summary-row"]
+    > [data-part="trigger-header"]
+    > [data-part="trigger"]
+    > [data-part="indicator"]
+    > svg {
+    width: 100%;
+    height: 100%;
+    fill: none;
+    stroke: currentColor;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-width: 1.75;
+  }
+
+  [data-ui="collection-row"][data-interaction="expand"]
+    > [data-part="surface"][data-state="open"]
+    > [data-part="summary-row"]
+    > [data-part="trigger-header"]
+    > [data-part="trigger"]
+    > [data-part="indicator"] {
+    transform: rotate(180deg);
+  }
+
+  [data-ui="collection-row"][data-interaction="expand"]
+    > [data-part="surface"]
+    > [data-part="summary-row"]
+    > [data-part="summary-action"] {
+    display: flex;
+    flex: 0 0 auto;
+    align-items: center;
+    padding-right: 0.75rem;
+  }
+
+  [data-ui="collection-row"][data-interaction="expand"]
+    > [data-part="surface"]
+    > [data-part="details"] {
+    border-top: 1px solid var(--app-line);
+    background: var(--app-surface-subtle);
+  }
+
+  [data-ui="collection-row"][data-interaction="expand"]
+    > [data-part="surface"]
+    > [data-part="details"]
+    > [data-part="details-content"] {
+    display: grid;
+    gap: var(--app-space-lg);
+    padding: 0.875rem;
+  }
+
+  [data-ui="collection-row"][data-interaction="expand"]
+    > [data-part="surface"]
+    > [data-part="details"]
+    > [data-part="details-content"]
+    > [data-part="actions"] {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: var(--app-space-sm);
+  }
+
+  [data-ui="collection-row"][data-interaction="reorder"] > [data-part="surface"] {
+    overflow: hidden;
+    gap: 0;
+    padding: 0;
+  }
+
+  [data-ui="collection-row"][data-interaction="reorder"]
+    > [data-part="surface"]
+    > [data-part="select"] {
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    align-items: center;
+    gap: var(--app-space-md);
+    border: 0;
+    background: transparent;
+    padding: 0.625rem 0.75rem;
+    color: var(--app-ink);
+    font: inherit;
+    text-align: left;
+  }
+
+  [data-ui="collection-row"][data-interaction="reorder"]
+    > [data-part="surface"]
+    > [data-part="select"]:hover:not(:disabled) {
+    background: var(--app-surface-subtle);
+  }
+
+  [data-ui="collection-row"][data-interaction="reorder"]
+    > [data-part="surface"]
+    > [data-part="select"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  [data-ui="collection-row"][data-interaction="reorder"]
+    > [data-part="surface"]
+    > [data-part="actions"] {
+    display: grid;
+    flex: 0 0 auto;
+    align-content: center;
+    gap: 0.125rem;
+    border-left: 1px solid var(--app-line);
+    padding: 0.25rem;
+  }
+
+  [data-ui="collection-row"][data-interaction="reorder"]
+    > [data-part="surface"]
+    > [data-part="actions"]
+    > [data-ui-primitive="button"] {
+    color: var(--app-ink-soft);
+  }
+
   [data-ui="collection-status"] {
     display: inline-flex;
     width: fit-content;
@@ -2590,6 +2792,37 @@
       border-radius: 0;
       padding: 0.5rem 1.5rem;
       box-shadow: none;
+    }
+
+    [data-ui="collection-row"]:is([data-interaction="expand"], [data-interaction="reorder"])
+      > [data-part="surface"] {
+      padding: 0;
+    }
+
+    [data-ui="collection-row"][data-interaction="expand"]
+      > [data-part="surface"]
+      > [data-part="summary-row"]
+      > [data-part="trigger-header"]
+      > [data-part="trigger"],
+    [data-ui="collection-row"][data-interaction="reorder"]
+      > [data-part="surface"]
+      > [data-part="select"] {
+      min-height: 4.25rem;
+      padding: 0.5rem 1.5rem;
+    }
+
+    [data-ui="collection-row"][data-interaction="expand"]
+      > [data-part="surface"]
+      > [data-part="summary-row"]
+      > [data-part="summary-action"] {
+      padding-right: 1.5rem;
+    }
+
+    [data-ui="collection-row"][data-interaction="expand"]
+      > [data-part="surface"]
+      > [data-part="details"]
+      > [data-part="details-content"] {
+      padding: 1rem 1.5rem;
     }
 
     [data-ui="collection-list"] > [data-ui="collection-row"]:last-child > [data-part="surface"],

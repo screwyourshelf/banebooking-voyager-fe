@@ -227,8 +227,14 @@ Regler:
 - `action` og `actions` brukes når eksplisitte knapper er selve handlingen.
 - Hele sammendragsflaten er trigger for ekspanderbare rader. Hurtighandlinger er separate
   søskenkontroller.
+- En samling har høyst én åpen detaljrad. En forhåndsvalgt rad kan styres fra featurestate, og
+  fokus forblir på sammendragstriggeren når raden åpnes eller lukkes. Opp-/nedpil flytter fokus
+  mellom ekspanderbare sammendrag uten å aktivere dem.
 - Utvidet innhold gjentar ikke informasjon som allerede er synlig og lager ikke et nytt
   ekspanderingsnivå.
+- `reorder` bruker en egen åpnehandling og navngitte opp-/nedknapper i vanlig fokusrekkefølge.
+  Første og siste kant deaktiverer den utilgjengelige retningen; en pågående flytting deaktiverer
+  åpning og begge flyttehandlingene. Dagens konsument trenger ikke drag-and-drop eller meny.
 - `scope` beskriver hva listen viser. `notice` er en kort operativ beskjed.
 - Rader fyller beholderens bredde. Avstand legges mellom rader, ikke som tilfeldig horisontal marg.
 - Radius, ramme, flate og skygge kommer fra felles tokens.

@@ -8,6 +8,7 @@ import CollectionEmpty from "./CollectionEmpty.svelte";
 import CollectionError from "./CollectionError.svelte";
 import CollectionFixture from "./CollectionFixture.test.svelte";
 import CollectionLoading from "./CollectionLoading.svelte";
+import CollectionRowInteractionsFixture from "./CollectionRowInteractionsFixture.test.svelte";
 
 const axeOptions: axe.RunOptions = {
   // jsdom has no canvas implementation; color contrast is verified in browser rendering below.
@@ -122,5 +123,108 @@ describe("public collection states", () => {
       title: "Kunne ikke laste arrangementene",
     });
     expect((await axe.run(error.container, axeOptions)).violations).toEqual([]);
+  });
+});
+
+describe("compound collection row interactions", () => {
+  function renderInteractions(options: { busy?: boolean; value?: string } = {}) {
+    return render(CollectionRowInteractionsFixture, {
+      ...options,
+      onDetailsAction: vi.fn(),
+      onMoveDown: vi.fn(),
+      onMoveUp: vi.fn(),
+      onOpen: vi.fn(),
+      onQuickAction: vi.fn(),
+    });
+  }
+
+  it("keeps expansion on the summary while quick actions remain sibling controls", async () => {
+    const onQuickAction = vi.fn();
+    render(CollectionRowInteractionsFixture, {
+      onDetailsAction: () => undefined,
+      onMoveDown: () => undefined,
+      onMoveUp: () => undefined,
+      onOpen: () => undefined,
+      onQuickAction,
+      value: "",
+    });
+
+    const firstTrigger = screen.getByRole("button", { name: /Ada Lovelace/ });
+    const secondTrigger = screen.getByRole("button", { name: /Bane 1/ });
+    const quickAction = screen.getByRole("button", { name: "Book" });
+
+    expect(firstTrigger).toHaveAttribute("aria-expanded", "false");
+    expect(secondTrigger).toHaveAttribute("aria-expanded", "false");
+    expect(quickAction).not.toBe(secondTrigger);
+
+    await fireEvent.click(quickAction);
+    expect(onQuickAction).toHaveBeenCalledOnce();
+    expect(secondTrigger).toHaveAttribute("aria-expanded", "false");
+
+    secondTrigger.focus();
+    await fireEvent.click(secondTrigger);
+    expect(secondTrigger).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByText("Banereglement og bookingvilkår.")).toBeVisible();
+    expect(secondTrigger).toHaveFocus();
+  });
+
+  it("supports one controlled open row and accordion keyboard focus", async () => {
+    renderInteractions({ value: "first" });
+
+    const firstTrigger = screen.getByRole("button", { name: /Ada Lovelace/ });
+    const secondTrigger = screen.getByRole("button", { name: /Bane 1/ });
+
+    expect(firstTrigger).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByText("Medlemskap og sperrehistorikk.")).toBeVisible();
+
+    firstTrigger.focus();
+    await fireEvent.keyDown(firstTrigger, { key: "ArrowDown" });
+    expect(secondTrigger).toHaveFocus();
+
+    await fireEvent.keyDown(secondTrigger, { key: "Enter" });
+    expect(firstTrigger).toHaveAttribute("aria-expanded", "false");
+    expect(secondTrigger).toHaveAttribute("aria-expanded", "true");
+  });
+
+  it("keeps open and reorder actions in document focus order with explicit disabled edges", async () => {
+    const onMoveDown = vi.fn();
+    const onOpen = vi.fn();
+    render(CollectionRowInteractionsFixture, {
+      onDetailsAction: () => undefined,
+      onMoveDown,
+      onMoveUp: () => undefined,
+      onOpen,
+      onQuickAction: () => undefined,
+    });
+
+    const open = screen.getByRole("button", { name: "Åpne Sentralbanen" });
+    const moveUp = screen.getByRole("button", { name: "Flytt Sentralbanen opp" });
+    const moveDown = screen.getByRole("button", { name: "Flytt Sentralbanen ned" });
+
+    expect(screen.getByRole("group", { name: "Rekkefølge for Sentralbanen" })).toContainElement(
+      moveDown
+    );
+    expect(moveUp).toBeDisabled();
+    expect(moveDown).toBeEnabled();
+
+    await fireEvent.click(open);
+    await fireEvent.click(moveDown);
+    expect(onOpen).toHaveBeenCalledOnce();
+    expect(onMoveDown).toHaveBeenCalledOnce();
+  });
+
+  it("disables every reorder target and exposes busy state while a move is pending", () => {
+    const { container } = renderInteractions({ busy: true });
+    const reorderRow = container.querySelector('[data-interaction="reorder"]');
+
+    expect(reorderRow).toHaveAttribute("aria-busy", "true");
+    expect(screen.getByRole("button", { name: "Åpne Sentralbanen" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Flytt Sentralbanen opp" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "Flytt Sentralbanen ned" })).toBeDisabled();
+  });
+
+  it("has no detectable accessibility violations in expanded and reorder states", async () => {
+    const rows = renderInteractions({ value: "first" });
+    expect((await axe.run(rows.container, axeOptions)).violations).toEqual([]);
   });
 });

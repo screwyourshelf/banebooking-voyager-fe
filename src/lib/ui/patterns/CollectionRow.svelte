@@ -1,19 +1,37 @@
 <script lang="ts" module>
   import type { Snippet } from "svelte";
 
+  type CollectionRowExpandContent =
+    | { details: Snippet; actions?: Snippet }
+    | { details?: Snippet; actions: Snippet };
+
   export type CollectionRowInteraction =
     | { type: "static" }
     | { type: "open"; onOpen: () => void }
-    | { type: "action"; action: Snippet };
+    | { type: "action"; action: Snippet }
+    | ({ type: "expand"; value: string; summaryAction?: Snippet } & CollectionRowExpandContent)
+    | {
+        type: "reorder";
+        onOpen: () => void;
+        onMoveUp: () => void;
+        onMoveDown: () => void;
+        moveUpDisabled?: boolean;
+        moveDownDisabled?: boolean;
+      };
 
   export type CollectionRowLayout = "entity" | "schedule";
 </script>
 
 <script lang="ts">
+  import { ArrowDown02Icon, ArrowUp02Icon } from "@hugeicons/core-free-icons";
+  import AccordionRowPrimitive from "../primitives/AccordionRowPrimitive.svelte";
+  import Button from "../primitives/Button.svelte";
+  import Icon from "../primitives/Icon.svelte";
   import CollectionStatus, { type CollectionRowStatus } from "./CollectionStatus.svelte";
 
   type Props = {
     ariaLabel?: string;
+    busy?: boolean;
     category?: CollectionRowStatus;
     description?: string;
     disabled?: boolean;
@@ -28,6 +46,7 @@
 
   let {
     ariaLabel,
+    busy = false,
     category,
     description,
     disabled = false,
@@ -42,6 +61,7 @@
 
   const titleStatus = $derived(layout === "entity" ? status : undefined);
   const layoutStatus = $derived(layout === "schedule" ? status : undefined);
+  const isDisabled = $derived(disabled || busy);
 </script>
 
 {#snippet summary()}
@@ -72,14 +92,66 @@
   data-interaction={interaction.type}
   data-muted={muted || undefined}
   role="listitem"
+  aria-busy={busy || undefined}
 >
-  {#if interaction.type === "open"}
+  {#if interaction.type === "expand"}
+    <AccordionRowPrimitive
+      value={interaction.value}
+      disabled={isDisabled}
+      action={interaction.summaryAction}
+    >
+      {@render summary()}
+      {#snippet details()}
+        <div data-part="details-content">
+          {#if interaction.details}{@render interaction.details()}{/if}
+          {#if interaction.actions}
+            <div data-part="actions">{@render interaction.actions()}</div>
+          {/if}
+        </div>
+      {/snippet}
+    </AccordionRowPrimitive>
+  {:else if interaction.type === "reorder"}
+    <article data-part="surface">
+      <button
+        type="button"
+        data-part="select"
+        aria-label={ariaLabel ?? `Åpne ${title}`}
+        onclick={interaction.onOpen}
+        disabled={isDisabled}
+      >
+        {@render summary()}
+        <span data-part="indicator" aria-hidden="true">›</span>
+      </button>
+      <div data-part="actions" role="group" aria-label={`Rekkefølge for ${title}`}>
+        <Button
+          aria-label={`Flytt ${title} opp`}
+          title="Flytt opp"
+          variant="ghost"
+          size="icon"
+          disabled={isDisabled || interaction.moveUpDisabled}
+          onclick={interaction.onMoveUp}
+        >
+          <Icon icon={ArrowUp02Icon} />
+        </Button>
+        <Button
+          aria-label={`Flytt ${title} ned`}
+          title="Flytt ned"
+          variant="ghost"
+          size="icon"
+          disabled={isDisabled || interaction.moveDownDisabled}
+          onclick={interaction.onMoveDown}
+        >
+          <Icon icon={ArrowDown02Icon} />
+        </Button>
+      </div>
+    </article>
+  {:else if interaction.type === "open"}
     <button
       type="button"
       data-part="surface"
       aria-label={ariaLabel ?? `Åpne ${title}`}
       onclick={interaction.onOpen}
-      {disabled}
+      disabled={isDisabled}
     >
       {@render summary()}
       <span data-part="indicator" aria-hidden="true">›</span>

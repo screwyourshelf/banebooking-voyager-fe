@@ -1,3 +1,5 @@
+export { default as AccordionListPrimitive } from "./AccordionListPrimitive.svelte";
+export { default as AccordionRowPrimitive } from "./AccordionRowPrimitive.svelte";
 export { default as Button } from "./Button.svelte";
 export { default as ButtonLink } from "./ButtonLink.svelte";
 export type { ButtonSize, ButtonVariant } from "./Button.svelte";
