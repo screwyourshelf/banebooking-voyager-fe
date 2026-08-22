@@ -1,9 +1,12 @@
 <script lang="ts">
-  import { RoutePlaceholder } from "$lib/ui";
+  import { TermsScreen } from "$lib/features/policy";
+  import { getSessionDataContext } from "$lib/features/session";
+
+  const session = getSessionDataContext();
 </script>
 
-<RoutePlaceholder
-  eyebrow="Personvern"
-  title="Vilkår for bruk"
-  description="Vilkårsflaten migreres etter auth- og UI-fundamentet."
-/>
+<svelte:head><title>Vilkår for bruk | Banebooking</title></svelte:head>
+
+{#if session.klubb}
+  <TermsScreen klubb={session.klubb} />
+{/if}

@@ -3,11 +3,11 @@ import {
   lesLokalLagring,
   skrivLokalLagring,
 } from "$lib/platform/storage/browser-storage.client";
+import { SIGN_IN_STORAGE_REQUIRED_MESSAGE } from "./types";
 
 const SUPABASE_TOKEN_KEY = "supabase_token";
 
-export const LOKAL_LAGRING_KREVES_FOR_INNLOGGING =
-  "Nettleseren blokkerer lokal lagring. Tillat lagring eller nettstedsdata for denne siden for å logge inn.";
+export const LOKAL_LAGRING_KREVES_FOR_INNLOGGING = SIGN_IN_STORAGE_REQUIRED_MESSAGE;
 
 export function hentSupabaseToken() {
   return lesLokalLagring(SUPABASE_TOKEN_KEY);

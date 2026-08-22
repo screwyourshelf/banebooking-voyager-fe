@@ -1,6 +1,7 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
   import { base, resolve } from "$app/paths";
+  import { page } from "$app/state";
   import { publicConfig } from "$lib/platform/config";
   import { getCallbackDestination, stripBasePath } from "$lib/platform/tenant";
   import { ErrorState, Page, PageLoading } from "$lib/ui";
@@ -31,7 +32,8 @@
         const destination = getCallbackDestination(
           publicConfig,
           storage.lesLokalLagring("slug"),
-          base
+          base,
+          page.url.searchParams.get("returnTo")
         );
         await goto(resolve(stripBasePath(destination, base)), { replaceState: true });
       } catch (error) {

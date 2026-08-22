@@ -66,6 +66,25 @@ describe("tenant contract", () => {
     ).toBe("/banebooking/standard");
   });
 
+  it("bevarer bare callbackmål innenfor fastsatt tenant", () => {
+    expect(
+      getCallbackDestination(
+        { defaultSlug: "standard", tenantSlug: null },
+        "askim-tennis",
+        "/banebooking",
+        "/banebooking/askim-tennis/minside?tab=profil#persondata"
+      )
+    ).toBe("/banebooking/askim-tennis/minside?tab=profil#persondata");
+    expect(
+      getCallbackDestination(
+        { defaultSlug: "standard", tenantSlug: null },
+        "askim-tennis",
+        "/banebooking",
+        "/banebooking/annen-klubb/admin"
+      )
+    ).toBe("/banebooking/askim-tennis");
+  });
+
   it("fjerner base path før intern SvelteKit-navigasjon", () => {
     expect(stripBasePath("/banebooking/askim-tennis/login?returnTo=%2F", "/banebooking")).toBe(
       "/askim-tennis/login?returnTo=%2F"

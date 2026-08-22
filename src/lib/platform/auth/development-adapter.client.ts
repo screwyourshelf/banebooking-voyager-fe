@@ -6,6 +6,7 @@ import {
   lagreUtviklingssession,
 } from "./development-session.client";
 import type { AuthAdapter, AuthSession, AuthSessionListener, DevelopmentProfile } from "./types";
+import { requireSignInStorage } from "./sign-in-storage.client";
 
 type DevelopmentAuthAdapterOptions = {
   fetch: typeof globalThis.fetch;
@@ -65,6 +66,7 @@ export function createDevelopmentAuthAdapter({
 
     async signInAsDevelopmentProfile(profile: DevelopmentProfile) {
       if (!enabled) throw new Error("Utviklingsinnlogging er ikke tilgjengelig.");
+      requireSignInStorage();
 
       const response = await fetch(endpoint, {
         method: "POST",

@@ -30,9 +30,9 @@
   type="submit"
   {size}
   {variant}
+  {fullWidth}
   disabled={disabled || pending}
   data-ui="form-submit"
-  data-full-width={fullWidth ? "true" : undefined}
   data-pending={pending ? "true" : undefined}
   aria-busy={pending || undefined}
 >

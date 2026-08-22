@@ -1,6 +1,7 @@
 export {
   Button,
   ButtonLink,
+  AuthenticationProviderIcon,
   DatePicker,
   Icon,
   Input,
@@ -9,6 +10,7 @@ export {
   Textarea,
 } from "./primitives";
 export type {
+  AuthenticationProvider,
   ButtonSize,
   ButtonVariant,
   DatePickerPresentation,

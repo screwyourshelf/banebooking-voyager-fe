@@ -1,5 +1,8 @@
 export type DevelopmentProfile = "admin" | "utvidet" | "medlem";
 
+export const SIGN_IN_STORAGE_REQUIRED_MESSAGE =
+  "Nettleseren blokkerer lokal lagring. Tillat lagring eller nettstedsdata for denne siden for å logge inn.";
+
 export type AuthenticatedUser = {
   id: string;
   email: string | null;

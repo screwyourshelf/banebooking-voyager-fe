@@ -2,6 +2,7 @@ import type { Session, User } from "@supabase/supabase-js";
 import { getSupabaseClient } from "./supabase.client";
 import { harSupabaseToken, synkroniserSupabaseToken } from "./supabase-token.client";
 import type { AuthAdapter, AuthSession, AuthSessionListener, Unsubscribe } from "./types";
+import { requireSignInStorage } from "./sign-in-storage.client";
 
 function mapUser(user: User): AuthSession["user"] {
   return {
@@ -74,6 +75,7 @@ export function createSupabaseAuthAdapter(): AuthAdapter {
     },
 
     async signInWithOAuth(provider, redirectTo) {
+      requireSignInStorage();
       await ensureSubscription();
       const client = await getSupabaseClient();
       const { error } = await client.auth.signInWithOAuth({
@@ -88,6 +90,7 @@ export function createSupabaseAuthAdapter(): AuthAdapter {
     },
 
     async sendEmailOtp(email, redirectTo) {
+      requireSignInStorage();
       await ensureSubscription();
       const client = await getSupabaseClient();
       const { error } = await client.auth.signInWithOtp({
@@ -98,6 +101,7 @@ export function createSupabaseAuthAdapter(): AuthAdapter {
     },
 
     async verifyEmailOtp(email, token) {
+      requireSignInStorage();
       await ensureSubscription();
       const client = await getSupabaseClient();
       const { error } = await client.auth.verifyOtp({ email, token, type: "email" });

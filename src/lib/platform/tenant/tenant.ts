@@ -51,7 +51,8 @@ export function readSafeReturnPath(
 export function getCallbackDestination(
   config: Pick<PublicConfig, "defaultSlug" | "tenantSlug">,
   lastSlug: string | null,
-  basePath = ""
+  basePath = "",
+  returnTo: string | null = null
 ): AppPath {
   const safeLastSlug = lastSlug && isTenantRouteSlug(lastSlug) ? lastSlug : null;
   const tenant = resolveTenant(
@@ -59,7 +60,7 @@ export function getCallbackDestination(
     config
   );
   if (!tenant) throw new Error("Kunne ikke fastsette tenant etter innlogging.");
-  return buildTenantPath(tenant, "", basePath);
+  return readSafeReturnPath(returnTo, tenant, basePath) ?? buildTenantPath(tenant, "", basePath);
 }
 
 /** Fjerner SvelteKit-base path før en intern path sendes gjennom `$app/paths.resolve`. */
