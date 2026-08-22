@@ -9,6 +9,11 @@ export type { CollectionRowInteraction, CollectionRowLayout } from "./Collection
 export type { CollectionRowStatus, CollectionStatusTone } from "./CollectionStatus.svelte";
 export { default as Dialog } from "./Dialog.svelte";
 export type { DialogActionContext } from "./Dialog.svelte";
+export { default as Document } from "./Document.svelte";
+export { default as DocumentFacts } from "./DocumentFacts.svelte";
+export type { DocumentFact } from "./DocumentFacts.svelte";
+export { default as DocumentIntro } from "./DocumentIntro.svelte";
+export { default as DocumentSection } from "./DocumentSection.svelte";
 export { default as EditorDialog } from "./EditorDialog.svelte";
 export { default as ErrorState } from "./ErrorState.svelte";
 export { default as Feedback } from "./Feedback.svelte";

@@ -195,6 +195,27 @@ Regler:
 `Document` brukes for vilkår, obligatoriske kunngjøringer, reglement og annet strukturert innhold
 som skal leses fremfor redigeres. Det er en avgrenset leseflate, ikke en generell kortvariant.
 
+- `Document.Intro` prioriterer kort kontekst før hovedinnholdet og bevarer avsnitt eller
+  linjeskift i kunngjøringstekst.
+- `Document.Section` eier navngitte innholdsseksjoner på nivået under sidens hovedoverskrift.
+  Features lager ikke lokal seksjonsanatomi eller hopper over headingnivåer.
+- `Document.Facts` brukes for korte label/verdi-fakta som bookinggrenser og åpningstid. Løpende
+  tekst eller redigerbare felt uttrykkes ikke som fakta.
+- Lenkene bruker native lenkesemantikk og det sentrale dokumentuttrykket. Eksterne lenker beholder
+  sikker `rel`; kontaktlenker bruker riktig `mailto:`- eller `tel:`-mål.
+- Metadata for hele dokumentflaten, som vilkårsversjon eller «må bekreftes», plasseres i `Page` eller
+  dialoghodet. Dokumentnære label/verdi-data plasseres i `Document.Facts`.
+- Loading og lesefeil eies av `Page`/`PageLoading`/`ErrorState` før dokumentet rendres. En tom
+  dokumentflate brukes ikke som loadingstate.
+- Obligatoriske lesehandlinger komponerer `Form.Actions` etter innholdet. `Document` eier ikke
+  mutasjonsstate eller bekreftelseslogikk.
+- Vilkår dekker intro, nummererte seksjoner, oppdatert-metadata og kontaktlenke. Obligatoriske
+  kunngjøringer dekker bevart kunngjøringstekst, status og bekreftelse. Bookingreglement dekker
+  grupperte fakta i dialog. Sperre- og medlemskapsflyter kombinerer intro og lenker med delte
+  Settings-/Form-patterns.
+- Lesebredden, typografien, avstanden og mobiltilpasningen er sentral. Mobil og desktop beholder
+  samme innholdsrekkefølge og headinghierarki.
+
 ## Feedback, feil og lasting
 
 - Oppdatert innhold er primær bekreftelse etter en vellykket endring.

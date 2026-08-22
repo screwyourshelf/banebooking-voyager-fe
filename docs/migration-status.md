@@ -146,6 +146,18 @@ samlinger og dialogs uten lokal produktstyling eller direkte Bits UI-import.
   nettleserfeil.
 - Sjuende avgrensede WP-4-checkpoint for Select- og valglistpatterns er fullført uten kalender,
   combobox, featuremigrering eller backendendringer.
+- React-referansens dokumentbehov er kaldkartlagt mot vilkår, obligatorisk kunngjøring,
+  bookingreglement, sperret konto og medlemskapsbekreftelse. Intro, seksjonshierarki, fakta,
+  sidemetadata, lenker, handlinger, loading/error og responsiv lesing har eksplisitte eiere.
+- Offentlige `Document`, `DocumentIntro`, `DocumentSection` og `DocumentFacts` eier nå native
+  artikkelsemantikk, intro, navngitte `h2`-seksjoner og typed label/verdi-fakta gjennom `lib/ui`.
+  Sidemetadata forblir i `Page`, mens loading/error og obligatoriske handlinger komponeres med de
+  eksisterende feedback- og Form-patternene.
+- Document-kontraktene har komponent- og axe-tester for landmark, headinghierarki, seksjonsnavn,
+  fakta, metadata og lenker. Mobil/desktop og lyst/mørkt tema er kontrollert uten overflow;
+  introen bevarer rå kunngjøringslinjer uten å arve kildekodeinnrykk i strukturerte avsnitt.
+- Åttende avgrensede WP-4-checkpoint for Document- og leseinnholdspatterns er fullført uten
+  featuremigrering, rikteksteditor, navigation eller backendendringer.
 
 ## Nåtilstand
 
@@ -158,22 +170,23 @@ samlinger og dialogs uten lokal produktstyling eller direkte Bits UI-import.
 - Auth, tenant, Query og session guards er autoritativt SvelteKit-fundament. Login- og øvrige
   featureflater er fortsatt route-placeholdere frem til WP-4–WP-6.
 - WP-4 pågår. Tokens, font, lyst/mørkt tema, offentlige handlinger, tekstkontroller og Select samt
-  Page-, Section-, feedback-, Form-, Settings-, Dialog- og de første Collection-patternene er
-  autoritative. Document-, navigation-, dato-/kalender- og rikteksteditorfamiliene er ikke migrert
-  ennå; sammensatte row interactions og offentlig filterkomposisjon gjenstår innen WP-4.
+  Page-, Section-, feedback-, Form-, Settings-, Dialog-, Document- og de første
+  Collection-patternene er autoritative. Navigation-, dato-/kalender- og
+  rikteksteditorfamiliene er ikke migrert ennå; sammensatte row interactions og offentlig
+  filterkomposisjon gjenstår innen WP-4.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                                |
-| ------------------------------------- | ------------------------------------------------- |
-| Base branch                           | `main`                                            |
-| Fastslått basecommit                  | `5287c5e`                                         |
-| Siste semantiske checkpoint           | `feat(sveltekit): establish WP-4 select patterns` |
-| Lokale commits foran base             | 13                                                |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                     |
-| Neste planlagte checkpoint            | WP-4 Document-patterns                            |
+| Felt                                  | Forventet tilstand                                  |
+| ------------------------------------- | --------------------------------------------------- |
+| Base branch                           | `main`                                              |
+| Fastslått basecommit                  | `5287c5e`                                           |
+| Siste semantiske checkpoint           | `feat(sveltekit): establish WP-4 document patterns` |
+| Lokale commits foran base             | 14                                                  |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                       |
+| Neste planlagte checkpoint            | WP-4 Navigation-patterns                            |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -184,28 +197,28 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 Neste `/start` skal bare starte neste avgrensede WP-4-checkpoint:
 
-1. Kaldkartlegg React-referansens vilkår, obligatoriske kunngjøringer og annet lengre leseinnhold
-   mot minst tre reelle flater. Dokumenter intro, seksjonshierarki, fakta, metadata, lenker,
-   loading/error og mobil uten å migrere featureinnhold eller rikteksteditor.
-2. Etabler offentlig `Document`-familie med typed props/snippets og sentral lesegeometri,
-   typografi og responsivitet. Bruk native semantikk med mindre kartleggingen avdekker et faktisk
-   sammensatt atferdsbehov; featurekode skal ikke eie dokumentanatomi eller lokal CSS.
-3. Legg komponent- og axe-tester for headinghierarki, landmarks, seksjoner, fakta og lenker.
-   Kontroller representative Document-flater på mobil/desktop og lyst/mørkt tema, og kjør full
-   check/test samt begge hostingbuildene.
+1. Kaldkartlegg React-referansens desktop-sidefelt, mobile topp-/bunnnavigasjon, seksjonslenker og
+   konto-/tilbakehandlinger mot minst tre reelle flater. Dokumenter routeaktivitet, kapabiliteter,
+   tenantidentitet, tema, badges, fokus, loading og responsive skifter uten å bygge app-shell.
+2. Etabler den minste offentlige Navigation-familien og eventuelle primitive wrappers som de
+   kartlagte konsumentene faktisk trenger. Navigation skal eie semantikk, aktiv state, tastatur og
+   sentral mobil/desktop-geometri; featurekode skal ikke eie navigasjonsanatomi eller lokal CSS.
+3. Legg komponent-, tastatur- og axe-tester for lenker, aktiv route, skjulte/disabled handlinger og
+   fokus. Kontroller representative navigationflater på mobil/desktop og lyst/mørkt tema, og kjør
+   full check/test samt begge hostingbuildene.
 
 ## Arbeidspakkeregister
 
-| Arbeidspakke                     | Status       | Port/resultat                                                |
-| -------------------------------- | ------------ | ------------------------------------------------------------ |
-| WP-0 Styring og baseline         | Fullført     | Dokumentgrunnlag, React-baseline og komplett adferdsinventar |
-| WP-1 Build og routes             | Fullført     | Build, routes, hostingvarianter og arkitekturkontroll grønn  |
-| WP-2 Contracts/domain/platform   | Fullført     | Contracts, ren domain, fetch/API, 401 og adapters grønne     |
-| WP-3 Auth/tenant/serverdata      | Fullført     | Auth, tenant, Query, guards, 401 og base path grønne         |
-| WP-4 UI-fundament                | Pågår        | Page, Collection, Form, Settings, Dialog og Select grønne    |
-| WP-5 App-shell                   | Ikke startet | —                                                            |
-| WP-6 Featuremigrering            | Ikke startet | —                                                            |
-| WP-7 Paritet og produksjonsbytte | Ikke startet | —                                                            |
+| Arbeidspakke                     | Status       | Port/resultat                                                       |
+| -------------------------------- | ------------ | ------------------------------------------------------------------- |
+| WP-0 Styring og baseline         | Fullført     | Dokumentgrunnlag, React-baseline og komplett adferdsinventar        |
+| WP-1 Build og routes             | Fullført     | Build, routes, hostingvarianter og arkitekturkontroll grønn         |
+| WP-2 Contracts/domain/platform   | Fullført     | Contracts, ren domain, fetch/API, 401 og adapters grønne            |
+| WP-3 Auth/tenant/serverdata      | Fullført     | Auth, tenant, Query, guards, 401 og base path grønne                |
+| WP-4 UI-fundament                | Pågår        | Page, Collection, Form, Settings, Dialog, Select og Document grønne |
+| WP-5 App-shell                   | Ikke startet | —                                                                   |
+| WP-6 Featuremigrering            | Ikke startet | —                                                                   |
+| WP-7 Paritet og produksjonsbytte | Ikke startet | —                                                                   |
 
 ## Featureregister
 
@@ -255,6 +268,10 @@ brukerbeslutning.
 - Dialogfamilien og Bits-wrapperen er autoritative, men eksisterende React-dialogkonsumenter er
   fortsatt produksjonsreferanse frem til WP-6. Destruktive alert dialogs, mobile navigation sheets
   og featureinnhold er ikke utvidet inn i dette checkpointet.
+- Document-familien er autoritativ for intro, seksjoner og fakta, men eksisterende React-flater er
+  fortsatt produksjonsreferanse frem til WP-6. Sidemetadata, loading/error og obligatoriske
+  handlinger komponeres gjennom Page-, feedback- og Form-familiene; rikteksteditoren tilhører et
+  senere WP-4-checkpoint.
 - Bits UI brukes bare i primitive wrappers med reelle sammensatte behov: Dialog for fokusfelle og
   dismissable layer, og Select for listbox, portal, typeahead og fokusretur. Button, Input,
   Textarea, Switch, Radio og ChoiceButton beholder enkel native atferd.
@@ -266,12 +283,12 @@ brukerbeslutning.
 | Prettier på aktiv kode og dokumenter | Bestått 2026-08-22                                                                  |
 | Relative dokumentlenker              | Bestått 2026-08-22                                                                  |
 | `git diff --check`                   | Bestått 2026-08-22                                                                  |
-| `npm test`                           | Bestått 2026-08-22: 31 filer, 113 tester                                            |
+| `npm test`                           | Bestått 2026-08-22: 32 filer, 118 tester                                            |
 | `npm run check`                      | Bestått 2026-08-22: Svelte/React-typecheck, arkitektur, design, lint og format      |
 | Cloudflare Pages-build               | Bestått 2026-08-22: root path og `index.html`-fallback                              |
 | GitHub Pages-build                   | Bestått 2026-08-22: eksplisitt `/banebooking` og `404.html`-fallback                |
 | Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                   |
-| Nettleserrender                      | Bestått 2026-08-22: 390×844 og 1280×900, Select/portal, lyst/mørkt, ingen feil      |
+| Nettleserrender                      | Bestått 2026-08-22: 390×844 og 1440×900, Document, lyst/mørkt, ingen feil           |
 | SvelteKit-bundle                     | Verifisert 2026-08-22: ingen React-runtime                                          |
 | WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                 |
 | WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon          |
@@ -281,16 +298,16 @@ brukerbeslutning.
 | WP-4 settings-/a11y-tester           | Bestått 2026-08-22: 1 fil, 6 tester for rows, valg, tastatur, states og axe         |
 | WP-4 dialog-/a11y-tester             | Bestått 2026-08-22: 1 fil, 7 tester for fokus, dismiss, actions, pending og axe     |
 | WP-4 select-/a11y-tester             | Bestått 2026-08-22: 1 fil, 6 tester for form, tastatur, states, fokus og axe        |
+| WP-4 document-/a11y-tester           | Bestått 2026-08-22: 1 fil, 5 tester for landmark, headings, facts, lenker og axe    |
 
 ## Filer i siste checkpoint
 
-- Bits-basert, typed Select-primitive med fixture, komponent-, tastatur- og axe-tester i
-  `src/lib/ui/primitives/`
-- utvidet FormField-kontekst for eksplisitt label-ID og komplett Select-feltkobling
-- offentlig Select-API og `SelectOption`-type i `src/lib/ui/`
-- sentral trigger-, listbox-, option-, tomtilstands- og portalstyling i
-  `src/styles/design-system/`
-- Select- og valglistkontrakten i `docs/product-design-rules.md`
+- native, typed Document-patterns med fixture, komponent- og axe-tester i
+  `src/lib/ui/patterns/`
+- offentlig Document-API og `DocumentFact`-type i `src/lib/ui/`
+- sentral introregel som bevarer rå kunngjøringslinjer uten å forstyrre strukturerte avsnitt i
+  `src/styles/design-system/patterns.css`
+- Document- og leseinnholdskontrakten i `docs/product-design-rules.md`
 - `docs/migration-status.md`
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
