@@ -32,12 +32,16 @@
 
   const generatedId = $props.id();
   const resolvedControlId = $derived(controlId ?? `${generatedId}-control`);
+  const labelId = $derived(`${resolvedControlId}-label`);
   const descriptionId = $derived(description ? `${resolvedControlId}-description` : undefined);
   const errorId = $derived(error ? `${resolvedControlId}-error` : undefined);
 
   const formControlContext: FormControlContext = {
     get controlId() {
       return resolvedControlId;
+    },
+    get labelId() {
+      return labelId;
     },
     get descriptionId() {
       return descriptionId;
@@ -58,7 +62,7 @@
 
 <div {...attributes} data-ui="form-field" data-invalid={error ? "true" : undefined}>
   <div data-part="intro">
-    <label for={resolvedControlId} data-part="label">
+    <label id={labelId} for={resolvedControlId} data-part="label">
       {label}
       {#if required}<span data-part="required" aria-hidden="true">*</span>{/if}
     </label>

@@ -1,5 +1,5 @@
-export { Button, ButtonLink, Input, Textarea } from "./primitives";
-export type { ButtonSize, ButtonVariant, InputType } from "./primitives";
+export { Button, ButtonLink, Input, Select, Textarea } from "./primitives";
+export type { ButtonSize, ButtonVariant, InputType, SelectOption } from "./primitives";
 export {
   Collection,
   CollectionEmpty,

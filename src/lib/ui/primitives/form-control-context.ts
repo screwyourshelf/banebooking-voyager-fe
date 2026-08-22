@@ -2,6 +2,7 @@ import { createContext } from "svelte";
 
 export type FormControlContext = {
   readonly controlId: string;
+  readonly labelId: string;
   readonly descriptionId?: string;
   readonly errorId?: string;
   readonly invalid: boolean;

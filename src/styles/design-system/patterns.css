@@ -1101,6 +1101,7 @@
     > [data-part="control"]
     > :is(
       [data-ui-primitive="input"],
+      [data-ui-primitive="select-trigger"],
       [data-ui-primitive="textarea"],
       [data-slot="input"],
       [data-slot="select-trigger"],

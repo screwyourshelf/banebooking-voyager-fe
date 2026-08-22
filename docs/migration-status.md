@@ -131,6 +131,21 @@ samlinger og dialogs uten lokal produktstyling eller direkte Bits UI-import.
   kontrollert på 390×844 og 1440×900 i lyst og mørkt tema uten nettleserfeil.
 - Sjette avgrensede WP-4-checkpoint for Dialog- og overlaypatterns er fullført uten select,
   kalender, rikteksteditor, featuremigrering eller backendendringer.
+- React-referansens selectbehov er kaldkartlagt mot ny bane og brukerredigering som skjemaflater,
+  samt RecordControlPanel, statistikkfilter og Min profil som filter-/innstillingsflater. De deler
+  samme enkeltvalgskontrakt for placeholder, valgt verdi, tom liste, disabled, pending og feil.
+- En offentlig, generisk `Select`-primitive over Bits UI eier portal, listbox, typeahead,
+  tastaturnavigasjon, fokusretur og native formdata. Typed options og verdi, bindbar state og
+  semantisk `onValueChange` skjuler Bits-parts og DOM-hendelser for konsumentene.
+- `Select` arver kontroll-ID, label-ID, beskrivelse, required og feiltilstand fra `FormField`.
+  Produktkontrakten dekker også eksplisitt tomtilstand, disabled/pending og sentral trigger- og
+  listebredde uten lokale featurevarianter.
+- Select-kontrakten har komponent-, tastatur- og axe-tester for åpning, piltaster, typeahead,
+  valg, Escape, fokusretur, formkobling, tom liste, disabled, pending og invalid. Kontroll og
+  portal er visuelt kontrollert på 390×844 og 1280×900 i lyst og mørkt tema uten overflow eller
+  nettleserfeil.
+- Sjuende avgrensede WP-4-checkpoint for Select- og valglistpatterns er fullført uten kalender,
+  combobox, featuremigrering eller backendendringer.
 
 ## Nåtilstand
 
@@ -142,10 +157,10 @@ samlinger og dialogs uten lokal produktstyling eller direkte Bits UI-import.
   de midlertidige React-broene.
 - Auth, tenant, Query og session guards er autoritativt SvelteKit-fundament. Login- og øvrige
   featureflater er fortsatt route-placeholdere frem til WP-4–WP-6.
-- WP-4 pågår. Tokens, font, lyst/mørkt tema, offentlige native handlinger og tekstkontroller samt
+- WP-4 pågår. Tokens, font, lyst/mørkt tema, offentlige handlinger, tekstkontroller og Select samt
   Page-, Section-, feedback-, Form-, Settings-, Dialog- og de første Collection-patternene er
   autoritative. Document-, navigation-, dato-/kalender- og rikteksteditorfamiliene er ikke migrert
-  ennå; select, sammensatte row interactions og offentlig filterkomposisjon gjenstår innen WP-4.
+  ennå; sammensatte row interactions og offentlig filterkomposisjon gjenstår innen WP-4.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
@@ -155,10 +170,10 @@ samlinger og dialogs uten lokal produktstyling eller direkte Bits UI-import.
 | ------------------------------------- | ------------------------------------------------- |
 | Base branch                           | `main`                                            |
 | Fastslått basecommit                  | `5287c5e`                                         |
-| Siste semantiske checkpoint           | `feat(sveltekit): establish WP-4 dialog patterns` |
-| Lokale commits foran base             | 12                                                |
+| Siste semantiske checkpoint           | `feat(sveltekit): establish WP-4 select patterns` |
+| Lokale commits foran base             | 13                                                |
 | Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                     |
-| Neste planlagte checkpoint            | WP-4 Select- og valglistpatterns                  |
+| Neste planlagte checkpoint            | WP-4 Document-patterns                            |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -169,15 +184,15 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 Neste `/start` skal bare starte neste avgrensede WP-4-checkpoint:
 
-1. Kaldkartlegg React-referansens native og Radix-baserte enkeltvalg mot minst to skjemaflater og
-   to filter-/innstillingsflater. Dokumenter placeholder, valgt verdi, tom liste, disabled,
-   pending, feil, mobil og tastatur uten å ta inn kalender, combobox eller featuremigrering.
-2. Etabler én Bits-basert selectprimitive med typed verdi-/valgkontrakt, portal og fokusretur.
-   Integrer kontrollen med eksisterende `FormField`-kobling og offentlig UI-API uten at Bits-parts,
-   DOM-hendelser eller lokal bredde lekker til features.
-3. Legg komponent-, tastatur- og axe-tester for åpning, piltaster, typeahead, valg, Escape,
-   fokusretur, disabled/pending og invalid state. Kontroller mobil/desktop og lyst/mørkt tema, og
-   kjør full check/test samt begge hostingbuildene.
+1. Kaldkartlegg React-referansens vilkår, obligatoriske kunngjøringer og annet lengre leseinnhold
+   mot minst tre reelle flater. Dokumenter intro, seksjonshierarki, fakta, metadata, lenker,
+   loading/error og mobil uten å migrere featureinnhold eller rikteksteditor.
+2. Etabler offentlig `Document`-familie med typed props/snippets og sentral lesegeometri,
+   typografi og responsivitet. Bruk native semantikk med mindre kartleggingen avdekker et faktisk
+   sammensatt atferdsbehov; featurekode skal ikke eie dokumentanatomi eller lokal CSS.
+3. Legg komponent- og axe-tester for headinghierarki, landmarks, seksjoner, fakta og lenker.
+   Kontroller representative Document-flater på mobil/desktop og lyst/mørkt tema, og kjør full
+   check/test samt begge hostingbuildene.
 
 ## Arbeidspakkeregister
 
@@ -187,7 +202,7 @@ Neste `/start` skal bare starte neste avgrensede WP-4-checkpoint:
 | WP-1 Build og routes             | Fullført     | Build, routes, hostingvarianter og arkitekturkontroll grønn  |
 | WP-2 Contracts/domain/platform   | Fullført     | Contracts, ren domain, fetch/API, 401 og adapters grønne     |
 | WP-3 Auth/tenant/serverdata      | Fullført     | Auth, tenant, Query, guards, 401 og base path grønne         |
-| WP-4 UI-fundament                | Pågår        | Page, Collection, Form, Settings og Dialog-kontrakter grønne |
+| WP-4 UI-fundament                | Pågår        | Page, Collection, Form, Settings, Dialog og Select grønne    |
 | WP-5 App-shell                   | Ikke startet | —                                                            |
 | WP-6 Featuremigrering            | Ikke startet | —                                                            |
 | WP-7 Paritet og produksjonsbytte | Ikke startet | —                                                            |
@@ -209,9 +224,9 @@ Neste `/start` skal bare starte neste avgrensede WP-4-checkpoint:
 
 ## Åpne blokkeringer
 
-Ingen kjente blokkeringer. Neste Select-checkpoint kan gjennomføres mot eksisterende visuell
-baseline, installert Bits UI og de godkjente produkt-/arkitekturreglene uten backendendringer eller
-ny brukerbeslutning.
+Ingen kjente blokkeringer. Neste Document-checkpoint kan gjennomføres mot eksisterende visuell
+baseline og de godkjente produkt-/arkitekturreglene uten backendendringer, ny avhengighet eller ny
+brukerbeslutning.
 
 ## Midlertidig kode og kjente avvik
 
@@ -226,23 +241,23 @@ ny brukerbeslutning.
   respektive WP-4-patterns og WP-6-features erstatter dem.
 - Auth-, tenant-, callback- og guardflatene bruker offentlige Page-, loading-, feedback- og
   errorpatterns. Deres adferds- og datakontrakter fra WP-3 er fortsatt autoritative.
-- Collection eier nå hvor filtre og footer rendres, og native `Input` samt Settings-valg og toggle
-  dekker de etablerte kontrollene. Select, sortering og offentlig filterkomposisjon gjenstår;
-  featurekode er ikke flyttet til den nye Collection-familien i dette WP-4-checkpointet.
+- Collection eier nå hvor filtre og footer rendres, og `Input`, Select samt Settings-valg og toggle
+  dekker de etablerte kontrollene. Sorteringens produktkomposisjon og offentlig filterkomposisjon
+  gjenstår; featurekode er ikke flyttet til den nye Collection-familien i dette WP-4-checkpointet.
 - `CollectionRow` har foreløpig de tre interaction-variantene `static`, `open` og `action` som dekker
   flere kartlagte konsumenter. `actions`, `expand` og `reorder` etableres først sammen med reelle
   primitive- og fokusbehov senere i WP-4; de eksponeres ikke som uimplementerte offentlige typer.
 - Temakontrakten og persistens er på plass. En brukerrettet temabryter kommer med delt navigasjon;
   det finnes ingen midlertidig route- eller featurelokal temakontroll.
-- Form-, Settings- og tekstkontrollfamiliene er autoritative, men eksisterende React-skjemaer og
-  innstillingsflater er fortsatt produksjonsreferanse frem til de respektive WP-6-featurene
-  migreres. Select, dato og rikteksteditor får egne senere UI-checkpoints.
+- Form-, Settings-, Select- og tekstkontrollfamiliene er autoritative, men eksisterende
+  React-skjemaer og innstillingsflater er fortsatt produksjonsreferanse frem til de respektive
+  WP-6-featurene migreres. Dato og rikteksteditor får egne senere UI-checkpoints.
 - Dialogfamilien og Bits-wrapperen er autoritative, men eksisterende React-dialogkonsumenter er
   fortsatt produksjonsreferanse frem til WP-6. Destruktive alert dialogs, mobile navigation sheets
   og featureinnhold er ikke utvidet inn i dette checkpointet.
-- Bits UI er installert bare for reelle dialogbehov. Button, Input, Textarea, Switch, Radio og
-  ChoiceButton beholder enkel native atferd; neste Bits-wrapper opprettes først for selectens
-  sammensatte liste-, tastatur- og fokusbehov.
+- Bits UI brukes bare i primitive wrappers med reelle sammensatte behov: Dialog for fokusfelle og
+  dismissable layer, og Select for listbox, portal, typeahead og fokusretur. Button, Input,
+  Textarea, Switch, Radio og ChoiceButton beholder enkel native atferd.
 
 ## Siste verifikasjon
 
@@ -251,12 +266,12 @@ ny brukerbeslutning.
 | Prettier på aktiv kode og dokumenter | Bestått 2026-08-22                                                                  |
 | Relative dokumentlenker              | Bestått 2026-08-22                                                                  |
 | `git diff --check`                   | Bestått 2026-08-22                                                                  |
-| `npm test`                           | Bestått 2026-08-22: 30 filer, 107 tester                                            |
+| `npm test`                           | Bestått 2026-08-22: 31 filer, 113 tester                                            |
 | `npm run check`                      | Bestått 2026-08-22: Svelte/React-typecheck, arkitektur, design, lint og format      |
 | Cloudflare Pages-build               | Bestått 2026-08-22: root path og `index.html`-fallback                              |
 | GitHub Pages-build                   | Bestått 2026-08-22: eksplisitt `/banebooking` og `404.html`-fallback                |
 | Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                   |
-| Nettleserrender                      | Bestått 2026-08-22: 390×844 og 1440×900, Dialog/editor, lyst/mørkt, ingen feil      |
+| Nettleserrender                      | Bestått 2026-08-22: 390×844 og 1280×900, Select/portal, lyst/mørkt, ingen feil      |
 | SvelteKit-bundle                     | Verifisert 2026-08-22: ingen React-runtime                                          |
 | WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                 |
 | WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon          |
@@ -265,16 +280,17 @@ ny brukerbeslutning.
 | WP-4 form-/a11y-tester               | Bestått 2026-08-22: 1 fil, 6 tester for feltkobling, states, submit og axe          |
 | WP-4 settings-/a11y-tester           | Bestått 2026-08-22: 1 fil, 6 tester for rows, valg, tastatur, states og axe         |
 | WP-4 dialog-/a11y-tester             | Bestått 2026-08-22: 1 fil, 7 tester for fokus, dismiss, actions, pending og axe     |
+| WP-4 select-/a11y-tester             | Bestått 2026-08-22: 1 fil, 6 tester for form, tastatur, states, fokus og axe        |
 
 ## Filer i siste checkpoint
 
-- Bits-basert dialogprimitive samt interne title-/description-wrappers i
+- Bits-basert, typed Select-primitive med fixture, komponent-, tastatur- og axe-tester i
   `src/lib/ui/primitives/`
-- offentlige standard-/editorpatterns med fixture, komponent-, tastaturkontrakt- og axe-tester i
-  `src/lib/ui/patterns/`
-- offentlig Dialog-API i `src/lib/ui/`
-- sentral dialog-, overlay- og responsiv CSS i `src/styles/design-system/`
-- dialogkontrakten i `docs/product-design-rules.md` og Bits UI-avhengigheten i packagefilene
+- utvidet FormField-kontekst for eksplisitt label-ID og komplett Select-feltkobling
+- offentlig Select-API og `SelectOption`-type i `src/lib/ui/`
+- sentral trigger-, listbox-, option-, tomtilstands- og portalstyling i
+  `src/styles/design-system/`
+- Select- og valglistkontrakten i `docs/product-design-rules.md`
 - `docs/migration-status.md`
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for

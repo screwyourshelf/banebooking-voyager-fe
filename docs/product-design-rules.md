@@ -107,6 +107,23 @@ aktivitetsmetadata krever en separat beslutning.
 - Datoer som sendes til API følger eksisterende kontrakt.
 - Visning av lagrede datoer går gjennom delte, rene formatteringsfunksjoner.
 
+## Select og valglister
+
+- `Select` brukes for ett valg fra en avgrenset liste. Søkbare eller frie valg hører til et senere
+  combobox-mønster; datoer bruker kalenderfamilien.
+- Optionen består av typed `value`, synlig `label` og valgfri `disabled`. Features komponerer ikke
+  Bits-delene eller sender DOM-hendelser gjennom det offentlige API-et.
+- Placeholder beskriver forventet valg når ingen verdi finnes. En tom liste åpner en eksplisitt
+  «Ingen valg tilgjengelig»-tilstand og later ikke som placeholderen er et gyldig valg.
+- `disabled` uttrykker varig utilgjengelighet. `pending` låser samme kontroll midlertidig og
+  eksponerer busy state uten å skjule den valgte verdien.
+- I `Form.Field` arver kontrollen id, beskrivelse, required og feiltilstand. `name` må oppgis når
+  verdien skal inngå i native formdata eller native required-validering.
+- Triggeren åpnes med pekeren, `Enter`, `Space` eller piltast. Pilene navigerer, typeahead finner
+  etiketter, `Enter` velger og `Escape` lukker med fokus tilbake på triggeren.
+- Portal, tastaturnavigasjon, typeahead, fokusretur, standardbredde og mobil tilpasning eies av
+  Select-primitiven. Featurekode velger ikke lokal trigger- eller listebredde.
+
 ## Dialoger og fokuserte editorer
 
 - Vanlig `Dialog` brukes til avgrenset lesing eller en kort handling i konteksten brukeren allerede
