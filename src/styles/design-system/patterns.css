@@ -4685,3 +4685,87 @@
     opacity: 0.48;
   }
 }
+
+@layer components {
+  [data-ui="editor"] {
+    min-width: 0;
+    overflow: hidden;
+    border: 1px solid var(--app-line);
+    border-radius: 0.875rem;
+    background: var(--app-surface);
+  }
+
+  [data-ui="editor"]:focus-within {
+    border-color: var(--app-focus);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-focus) 28%, transparent);
+  }
+
+  [data-ui="editor"][data-state="disabled"] {
+    opacity: 0.68;
+  }
+
+  [data-ui="editor"] > [data-part="toolbar"] {
+    display: flex;
+    min-width: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.125rem;
+    border-bottom: 1px solid var(--app-line);
+    background: var(--app-surface-subtle);
+    padding: 0.375rem;
+  }
+
+  [data-ui="editor"] > [data-part="toolbar"] > [data-part="control"] {
+    width: 2rem;
+    height: 2rem;
+    min-height: 2rem;
+  }
+
+  [data-ui="editor"] > [data-part="toolbar"] > [data-part="control"][data-tone="column"] {
+    color: var(--app-focus);
+  }
+
+  [data-ui="editor"] > [data-part="toolbar"] > [data-part="control"][data-tone="row"] {
+    color: var(--app-brand);
+  }
+
+  [data-ui="editor"] > [data-part="toolbar"] > [data-part="control"][data-tone="danger"] {
+    color: var(--status-danger-text);
+  }
+
+  [data-ui="editor"] > [data-part="toolbar"] > [data-part="separator"] {
+    width: 1px;
+    height: 1.5rem;
+    margin-inline: 0.125rem;
+    background: var(--app-line);
+  }
+
+  [data-ui="editor"] > [data-part="loading"] {
+    display: grid;
+    min-height: 13.75rem;
+    place-items: center;
+    padding: 1rem;
+    color: var(--app-ink-faint);
+    font-size: var(--app-type-body-sm);
+  }
+
+  [data-ui="editor"] > [data-part="error"] {
+    display: grid;
+    min-height: 13.75rem;
+    align-content: center;
+    justify-items: start;
+    gap: 0.5rem;
+    padding: 1rem;
+    color: var(--status-danger-text);
+  }
+
+  [data-ui="editor"] > [data-part="error"] > span {
+    color: var(--app-ink-soft);
+    font-size: var(--app-type-body-sm);
+  }
+
+  [data-ui="editor"] > [data-part="content"] {
+    min-width: 0;
+    overflow-x: auto;
+  }
+}

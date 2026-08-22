@@ -38,6 +38,7 @@ export { default as NavigationSection } from "./NavigationSection.svelte";
 export { default as Page } from "./Page.svelte";
 export { default as PageLoading } from "./PageLoading.svelte";
 export { default as RoutePlaceholder } from "./RoutePlaceholder.svelte";
+export { default as RichTextEditor } from "./RichTextEditor.svelte";
 export { default as Section } from "./Section.svelte";
 export type { SectionPadding, SectionVariant } from "./Section.svelte";
 export { default as SettingsChoiceGroup } from "./SettingsChoiceGroup.svelte";

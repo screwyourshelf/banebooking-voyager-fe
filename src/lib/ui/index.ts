@@ -2,6 +2,7 @@ export {
   Button,
   ButtonLink,
   DatePicker,
+  Icon,
   Input,
   MultiDatePicker,
   Select,
@@ -11,6 +12,7 @@ export type {
   ButtonSize,
   ButtonVariant,
   DatePickerPresentation,
+  IconData,
   InputType,
   SelectOption,
 } from "./primitives";
@@ -44,6 +46,7 @@ export {
   NavigationSection,
   Page,
   PageLoading,
+  RichTextEditor,
   RoutePlaceholder,
   Section,
   SettingsChoiceGroup,

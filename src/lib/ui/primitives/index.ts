@@ -3,6 +3,8 @@ export { default as ButtonLink } from "./ButtonLink.svelte";
 export type { ButtonSize, ButtonVariant } from "./Button.svelte";
 export { default as DatePicker } from "./DatePicker.svelte";
 export type { DatePickerPresentation } from "./DatePicker.svelte";
+export { default as Icon } from "./Icon.svelte";
+export type { IconData } from "./Icon.svelte";
 export { default as Input } from "./Input.svelte";
 export type { InputType } from "./Input.svelte";
 export { default as MultiDatePicker } from "./MultiDatePicker.svelte";

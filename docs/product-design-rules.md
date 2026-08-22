@@ -83,6 +83,12 @@ aktivitetsmetadata krever en separat beslutning.
 - Tekstknapper bruker normalt ikke dekorative ikoner.
 - Ikoner beholdes når de tydeliggjør navigasjon, datavisning, leverandøridentitet, status eller en
   ren ikonhandling.
+- Nye Svelte-flater bruker Hugeicons Free gjennom den offentlige `Icon`-primitiven. Features lager
+  ikke lokale SVG-wrappers og blander ikke inn en ny ikonfamilie.
+- `Icon` er dekorativ og skjult for hjelpemidler. Den omsluttende knappen, lenken eller synlige
+  teksten eier alltid det tilgjengelige navnet og produktbetydningen.
+- Patterns velger faste kontrollikoner selv. Konsumenter leverer bare ikon-snippets når betydningen
+  faktisk eies av app-shellen eller produktinnholdet, som en navigasjonsdestinasjon.
 - Seksjonsfaner og vanlige innstillingsoverskrifter skal normalt stole på teksthierarkiet.
 
 ## Skjema og innstillinger
@@ -165,6 +171,35 @@ Den observerte konsumentkontrakten er:
   fokusfelle, fokusretur, standardstørrelse og dismiss-atferd eies av dialogfamilien.
 - Dialoghandlinger følger de vanlige primær-, sekundær- og destruktivrollene. Pending state
   deaktiverer handlinger som ikke kan gjentas og eksponeres som busy state til hjelpemidler.
+
+## Rikteksteditor
+
+Rikteksteditoren har to observerte konsumenter: oppretting og redigering av arrangementets
+publiserte nettsidepresentasjon. Begge bruker samme kontrakt og skal ikke bygge egne verktøylinjer
+eller Tiptap-adapters.
+
+- Det offentlige `RichTextEditor`-API-et bruker en serialisert Tiptap JSON-streng. Dette er samme
+  verdi som lagres i `nettsideBeskrivelse`; featurelaget eier publiseringsvalg, skjemautkast og
+  API-lagring, men tolker ikke editorens dokumenttre.
+- Tom streng er gyldig tomt innhold. Når brukeren redigerer, leveres et komplett serialisert
+  dokument gjennom bindbar `value` og det semantiske `onValueChange`-callbacket.
+- En ny ekstern `value`, for eksempel ved bytte av arrangement eller reset, erstatter editorinnholdet
+  uten å sende en konkurrerende change-hendelse. Markør- og formateringsstate kopieres ikke ut i
+  featurelaget.
+- Verktøylinjen dekker fet, kursiv, overskrift nivå 2 og 3, punktliste, nummerert liste, sitat og
+  innsetting/sletting av tabell. Når markøren står i en tabell, vises også legg til/slett kolonne,
+  legg til/slett rad og eksplisitt slett tabell.
+- Verktøylinjekontroller er navngitte knapper med pressed state. Vanlige Tiptap-/ProseMirror-
+  tastatursnarveier beholdes, og en verktøylinjehandling returnerer fokus til skriveflaten.
+- Editorens innhold lastes bare i browseren. Loading reserverer sluttgeometrien. Oppstartsfeil fanges
+  i en navngitt feilflate med retry; ugyldig lagret JSON feiler lukket uten å tilby en meningsløs
+  retry eller overskrive originalverdien.
+- `disabled` uttrykker varig låsing. `pending` låser editor og verktøylinje midlertidig, bevarer
+  innholdet og eksponerer busy state.
+- I `Form.Field` arver editoren kontroll-ID, label, beskrivelse, required og invalid state. `name`
+  speiler den serialiserte JSON-strengen i native `FormData` når konsumenten trenger det.
+- På mobil brytes verktøylinjen over flere linjer og skriveflaten beholder samme innholdsrekkefølge.
+  Brede tabeller skroller inne i editoren; de utvider ikke side- eller dialogbredden.
 
 ## Samlinger og listerader
 
