@@ -930,24 +930,94 @@
   }
 
   [data-ui="page-loading"] {
+    position: relative;
+    display: grid;
+    min-width: 0;
     min-height: 18rem;
+    align-content: start;
+    gap: 1.5rem;
+    overflow: hidden;
     border: 1px solid var(--app-line);
     border-radius: 1.25rem;
-    background:
-      linear-gradient(
-        100deg,
-        transparent 20%,
-        color-mix(in srgb, var(--app-surface) 72%, transparent) 45%,
-        transparent 70%
-      ),
-      var(--app-surface-subtle);
+    background: var(--app-surface-subtle);
+    padding: clamp(1rem, 4vw, 2rem);
+  }
+
+  [data-ui="page-loading"]::after {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      100deg,
+      transparent 20%,
+      color-mix(in srgb, var(--app-surface) 72%, transparent) 45%,
+      transparent 70%
+    );
     background-size: 220% 100%;
     animation: page-loading 1.5s ease-in-out infinite;
+    content: "";
+    pointer-events: none;
+  }
+
+  [data-ui="page-loading"] > [data-part="label"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+
+  [data-ui="page-loading"] > [data-part="header"],
+  [data-ui="page-loading"] > [data-part="surface"] {
+    display: grid;
+    min-width: 0;
+    gap: 0.625rem;
+  }
+
+  [data-ui="page-loading"] > [data-part="header"] > span,
+  [data-ui="page-loading"] > [data-part="surface"] > span {
+    display: block;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--app-line-strong) 64%, var(--app-surface));
+  }
+
+  [data-ui="page-loading"] > [data-part="header"] > [data-part="eyebrow"] {
+    width: 7rem;
+    height: 0.75rem;
+  }
+
+  [data-ui="page-loading"] > [data-part="header"] > [data-part="title"] {
+    width: min(70%, 22rem);
+    height: 2rem;
+  }
+
+  [data-ui="page-loading"] > [data-part="header"] > [data-part="description"] {
+    width: min(88%, 36rem);
+    height: 1rem;
+  }
+
+  [data-ui="page-loading"] > [data-part="surface"] {
+    border: 1px solid var(--app-line);
+    border-radius: 1rem;
+    background: var(--app-surface-raised);
+    padding: 1rem;
+  }
+
+  [data-ui="page-loading"] > [data-part="surface"] > span {
+    width: 100%;
+    height: 2.75rem;
+    border-radius: var(--app-record-radius);
   }
 
   @keyframes page-loading {
     to {
       background-position: -220% 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    [data-ui="page-loading"]::after {
+      animation: none;
     }
   }
 

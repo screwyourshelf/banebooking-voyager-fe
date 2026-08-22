@@ -5,7 +5,7 @@
   import { getApiClient } from "$lib/platform/api";
   import { getAuthContext } from "$lib/platform/auth";
   import { getTenantContext, stripBasePath } from "$lib/platform/tenant";
-  import { Button } from "$lib/ui";
+  import { ErrorState, Page, PageLoading } from "$lib/ui";
   import { createQuery } from "@tanstack/svelte-query";
   import type { Snippet } from "svelte";
   import { getBrukerWithCurrentTermsAcceptance, getKlubb } from "./api";
@@ -57,25 +57,31 @@
 </script>
 
 {#if auth.state.status === "initializing"}
-  <div data-ui="auth-status" role="status">Kontrollerer innlogging …</div>
+  <PageLoading label="Kontrollerer innlogging …" standalone />
 {:else if klubbQuery.isPending}
-  <div data-ui="auth-status" role="status">Laster klubben …</div>
+  <PageLoading label="Laster klubben …" standalone />
 {:else if klubbQuery.isError || !klubbQuery.data}
-  <section data-ui="route-error" aria-labelledby="tenant-error-title">
-    <h1 id="tenant-error-title">Fant ikke klubben</h1>
-    <p>Sjekk at adressen er riktig og prøv igjen.</p>
-    <Button variant="secondary" onclick={() => klubbQuery.refetch()}>Prøv igjen</Button>
-  </section>
+  <Page eyebrow="Klubb" title="Fant ikke klubben" standalone>
+    <ErrorState
+      title="Klubben kunne ikke lastes"
+      description="Sjekk at adressen er riktig og prøv igjen."
+      isRetrying={klubbQuery.isFetching}
+      onRetry={() => void klubbQuery.refetch()}
+    />
+  </Page>
 {:else if auth.state.status === "authenticated" && brukerQuery.isPending}
-  <div data-ui="auth-status" role="status">Kontrollerer tilgangen …</div>
+  <PageLoading label="Kontrollerer tilgangen …" standalone />
 {:else if auth.state.status === "authenticated" && brukerQuery.isError}
-  <section data-ui="route-error" aria-labelledby="user-error-title">
-    <h1 id="user-error-title">Kunne ikke laste brukerdata</h1>
-    <p>Prøv på nytt før du fortsetter.</p>
-    <Button variant="secondary" onclick={() => brukerQuery.refetch()}>Prøv igjen</Button>
-  </section>
+  <Page eyebrow="Tilgang" title="Kunne ikke laste brukerdata" standalone>
+    <ErrorState
+      title="Tilgangen kunne ikke kontrolleres"
+      description="Prøv på nytt før du fortsetter."
+      isRetrying={brukerQuery.isFetching}
+      onRetry={() => void brukerQuery.refetch()}
+    />
+  </Page>
 {:else if redirectTarget}
-  <div data-ui="auth-status" role="status">Sender deg til riktig side …</div>
+  <PageLoading label="Sender deg til riktig side …" standalone />
 {:else}
   {@render children()}
 {/if}

@@ -167,6 +167,19 @@ for (const targetRoot of targetRoots) {
           "primitiveanatomi kan bare defineres i ui/primitives"
         );
       }
+
+      if (
+        (normalizedPath.startsWith("src/lib/features/") ||
+          normalizedPath.startsWith("src/routes/")) &&
+        /\bdata-(?:ui|part)\s*=/.test(source)
+      ) {
+        report(
+          relativePath,
+          source,
+          source.match(/\bdata-(?:ui|part)\s*=/)?.[0] ?? "data-ui",
+          "routes og features skal komponere offentlig UI fremfor å definere produktanatomi"
+        );
+      }
     }
   }
 }

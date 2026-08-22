@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { RoutePlaceholder } from "$lib/ui/feedback";
+  import { RoutePlaceholder } from "$lib/ui";
 </script>
 
 <RoutePlaceholder

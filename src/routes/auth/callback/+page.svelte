@@ -3,6 +3,7 @@
   import { base, resolve } from "$app/paths";
   import { publicConfig } from "$lib/platform/config";
   import { getCallbackDestination, stripBasePath } from "$lib/platform/tenant";
+  import { ErrorState, Page, PageLoading } from "$lib/ui";
   import { onMount } from "svelte";
 
   let status = $state<"error" | "loading">("loading");
@@ -48,10 +49,9 @@
 </script>
 
 {#if status === "loading"}
-  <div data-ui="auth-status" role="status">Logger inn …</div>
+  <PageLoading label="Logger inn …" standalone />
 {:else}
-  <section data-ui="route-error" aria-labelledby="callback-error-title">
-    <h1 id="callback-error-title">Kan ikke fullføre innloggingen</h1>
-    <p>{errorMessage}</p>
-  </section>
+  <Page eyebrow="Innlogging" title="Kan ikke fullføre innloggingen" standalone>
+    <ErrorState title="Innloggingen ble avbrutt" description={errorMessage} />
+  </Page>
 {/if}

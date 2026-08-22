@@ -5,7 +5,7 @@
   import { getApiClient } from "$lib/platform/api";
   import { getAuthContext } from "$lib/platform/auth";
   import { buildLoginPath, getTenantContext, stripBasePath } from "$lib/platform/tenant";
-  import { Button } from "$lib/ui";
+  import { ErrorState, Feedback, Page, PageLoading } from "$lib/ui";
   import { createQuery } from "@tanstack/svelte-query";
   import type { Snippet } from "svelte";
   import { getBrukerWithCurrentTermsAcceptance } from "./api";
@@ -46,21 +46,27 @@
 </script>
 
 {#if auth.state.status === "initializing"}
-  <div data-ui="auth-status" role="status">Kontrollerer innlogging …</div>
+  <PageLoading label="Kontrollerer innlogging …" standalone />
 {:else if loginTarget}
-  <div data-ui="auth-status" role="status">Sender deg til innlogging …</div>
+  <PageLoading label="Sender deg til innlogging …" standalone />
 {:else if brukerQuery.isPending}
-  <div data-ui="auth-status" role="status">Kontrollerer tilgangen …</div>
+  <PageLoading label="Kontrollerer tilgangen …" standalone />
 {:else if brukerQuery.isError}
-  <section data-ui="route-error" aria-labelledby="guard-error-title">
-    <h1 id="guard-error-title">Kunne ikke kontrollere tilgangen</h1>
-    <Button variant="secondary" onclick={() => brukerQuery.refetch()}>Prøv igjen</Button>
-  </section>
+  <Page eyebrow="Tilgang" title="Kunne ikke kontrollere tilgangen" standalone>
+    <ErrorState
+      title="Brukerdata kunne ikke lastes"
+      isRetrying={brukerQuery.isFetching}
+      onRetry={() => void brukerQuery.refetch()}
+    />
+  </Page>
 {:else if !allowed}
-  <section data-ui="access-blocked" aria-labelledby="access-blocked-title">
-    <h1 id="access-blocked-title">Du har ikke tilgang</h1>
-    <p>Klubben har ikke gitt brukeren din tilgang til denne siden.</p>
-  </section>
+  <Page eyebrow="Tilgang" title="Du har ikke tilgang" standalone>
+    <Feedback
+      tone="warning"
+      title="Siden er ikke tilgjengelig for brukeren din"
+      description="Klubben har ikke gitt brukeren din tilgang til denne siden."
+    />
+  </Page>
 {:else}
   {@render children()}
 {/if}
