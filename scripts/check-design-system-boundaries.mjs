@@ -632,7 +632,7 @@ function findControlsOutsideFormField(filePath, source) {
 async function validateStylesheets(files) {
   const stylesheetFiles = files.filter((filePath) => path.extname(filePath) === ".css");
   const componentFiles = files.filter((filePath) =>
-    [".html", ".ts", ".tsx"].includes(path.extname(filePath))
+    [".html", ".svelte", ".ts", ".tsx"].includes(path.extname(filePath))
   );
   const sourceByPath = new Map(
     await Promise.all(files.map(async (filePath) => [filePath, await readFile(filePath, "utf8")]))
