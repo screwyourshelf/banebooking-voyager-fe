@@ -53,6 +53,7 @@ export {
   PageLoading,
   PageStatus,
   RichTextEditor,
+  ScheduleTime,
   RoutePlaceholder,
   Section,
   SettingsChoiceGroup,
@@ -64,6 +65,7 @@ export {
   SettingsSwitchRow,
   SettingsText,
   SettingsValue,
+  Weather,
 } from "./patterns";
 export type {
   CollectionRowInteraction,

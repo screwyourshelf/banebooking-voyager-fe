@@ -4,7 +4,7 @@
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** WP-6 — Featuremigrering (pågår; to checkpoints fullført)
+> **Aktiv arbeidspakke:** WP-6 — Featuremigrering (pågår; tre checkpoints fullført)
 >
 > **Sist oppdatert:** 2026-08-23
 
@@ -297,19 +297,36 @@ er ferdig migrert.
 - Andre WP-6-checkpoint er kontrollert i hele matrisen 390×844 og 1440×900, lyst og mørkt tema, for
   alle tre flater. Hver kombinasjon har én main-landmark, synlig h1, ingen horisontal overflow eller
   konsollfeil; feltfeil, fokus og ARIA-state er også kontrollert interaktivt.
+- Bookingroten er flyttet til én offentlig `lib/features/booking`-inngang med typed bootstrap-,
+  kalender-, booking-, avbestillings- og aktiv-arrangementendepunkter. Det samlede anonyme
+  bootstrapkallet er autoritativt, mens bare 404/405 bruker eksplisitt gren-/bane-/kalenderfallback.
+- TanStack Query eier tenant-, bruker-, bane- og datonøkler, 30-sekunders bakgrunnsoppfrisking med
+  forrige slotliste, bootstrapstartdata og eksakt cacheinvalidering. Booking og avbestilling er
+  optimistiske med tilbakeføring til den komplette forrige slotlisten og vedvarende inline-feil.
+- Bookingutvalget starter på lokal dato, første aktive gren med bane og første bane. Gren, dag og
+  bane, vær, regler, passerte tider, manglende oppsett, tom/error/loading og fysisk slotstatus er
+  bevart; handlingene styres utelukkende av backendens kapabiliteter og innlogget state.
+- Offentlige `ScheduleTime`- og `Weather`-patterns utvider designsystemet uten feature-CSS.
+  Bookingregler og arrangementskobling bruker de autoritative Dialog-, Document-, Settings-, Date-
+  og Collection-patternene, og den tynne bookingrotrouten komponerer bare featureinngangen.
+- Tredje WP-6-checkpoint er kontrollert på 390×844 og 1440×900 i lyst og mørkt tema med én
+  main-landmark, synlig h1, ingen horisontal overflow, riktige dialog-/fokusforløp og tom
+  warn/error-konsoll. Visuell QA avdekket og fjernet en selvmotsigende anonym «Din tid»-tittel fra
+  backenddata der fysisk status fortsatt var ledig.
 
 ## Nåtilstand
 
 - SvelteKit er den aktive dev-, test-, preview- og produksjonsbuilden.
-- Login, vilkår, root-feil/404 og de tre beskyttede policyflatene er reelle Svelte-featureflater;
-  øvrige produkt-URL-er rendrer fortsatt foreløpige routeflater til de migreres i WP-6.
+- Login, vilkår, root-feil/404, de tre beskyttede policyflatene og booking er reelle
+  Svelte-featureflater; øvrige produkt-URL-er rendrer fortsatt foreløpige routeflater til de
+  migreres i WP-6.
 - React-kilden er fortsatt produksjonsreferanse i arbeidskopien, men er ikke koblet til eller bundlet
   av SvelteKit.
 - Contracts, ren domenelogikk og platformkjerne er nå autoritative for både videre Svelte-arbeid og
   de midlertidige React-broene.
 - Auth, tenant, Query og session guards er autoritativt SvelteKit-fundament. Offentlig login,
-  callback-retur, vilkår, root-feil og hele sperre → kunngjøring → medlemskap-rekkefølgen er migrert;
-  booking og bookingbootstrap er neste checkpoint.
+  callback-retur, vilkår, root-feil, hele sperre → kunngjøring → medlemskap-rekkefølgen og booking
+  med bootstrap er migrert; Mine tider og Min side er neste checkpoint.
 - WP-4 er fullført. Tokens, font, lyst/mørkt tema, offentlige handlinger, Icon-, tekst-, Select-,
   Date-/Calendar- og Rich-text-kontroller samt Page-, Section-, feedback-, Form-, Settings-,
   Dialog-, Document-, Navigation- og Collection-patternene inkludert sammensatte rader og
@@ -322,14 +339,14 @@ er ferdig migrert.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                                        |
-| ------------------------------------- | --------------------------------------------------------- |
-| Base branch                           | `main`                                                    |
-| Fastslått basecommit                  | `5287c5e`                                                 |
-| Siste semantiske checkpoint           | `feat(sveltekit): migrate WP-6 protected policy surfaces` |
-| Lokale commits foran base             | 23                                                        |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                             |
-| Neste planlagte checkpoint            | WP-6 booking og bookingbootstrap                          |
+| Felt                                  | Forventet tilstand                           |
+| ------------------------------------- | -------------------------------------------- |
+| Base branch                           | `main`                                       |
+| Fastslått basecommit                  | `5287c5e`                                    |
+| Siste semantiske checkpoint           | `feat(sveltekit): migrate WP-6 booking flow` |
+| Lokale commits foran base             | 24                                           |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                |
+| Neste planlagte checkpoint            | WP-6 Mine tider og Min side                  |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -338,20 +355,21 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Neste `/start` skal bare starte tredje avgrensede WP-6-checkpoint for booking og bookingbootstrap:
+Neste `/start` skal bare starte fjerde avgrensede WP-6-checkpoint for Mine tider og Min side:
 
-1. Kaldkartlegg React-referansens `BookingBootstrapGate`, bootstrapcache, bookingquery keys,
-   `BookingPage`/`BookingView` og mutasjonshooks. Bekreft `booking-bootstrap`-responsen, fallback ved
-   404/405, dagens standarddato, første gren/bane, anonym kontra innlogget datatilgang,
-   slotkapabiliteter, vær/reglement og eksakte invalidation-/rollbackregler.
-2. Opprett én offentlig bookingfeature med typed endpoint- og querygrenser, bootstrap/fallback,
-   tenantnøkler, eksplisitt selection-state og den observerbare bookingflaten over DatePicker-,
-   Collection- og Dialog-patternene. Bookingrotrouten skal bare komponere featureinngangen, og
-   placeholderen fjernes først når lesing, valg og relevante bookinghandlinger virker samlet.
-3. Verifiser bootstrap/loading, retrybar feil, manglende oppsett/baner, tom slotliste,
-   bakgrunnsrefresh, anonym lesing, kapabilitetsstyrte handlinger, optimistisk booking/avbestilling,
-   rollback, inline mutationfeil og cacheinvalidering. Kontroller mobil/desktop og lyst/mørkt tema,
-   kjør full check/test og begge hostingbuildene; ikke start Mine tider/Min side i samme sesjon.
+1. Kaldkartlegg React-referansens `MinSidePage`, `MineBookingerPage`, `MineBookingerView`,
+   `MineBookingRow`, `MinProfilView`, `PersondataView`, `SlettMegDialog`, `useMineBookinger` og
+   `useBookingActions`. Bekreft beskyttede endpoints, historikkfilter, sortering/gruppering,
+   kapabiliteter, avbestilling/sletting og eksakte Query-invalideringer mot bookingens etablerte
+   tenantnøkler.
+2. Opprett én offentlig kontofeature med typed query-/mutasjonsgrenser og reelle flater for både
+   `/bookinger` og `/minside`. Gjenbruk session-context, bookingens query-keykonvensjon og de
+   autoritative Page-, Collection-, Settings-, Document-, Form- og Dialog-patternene; begge routes
+   skal bare komponere featureinnganger, og placeholderne fjernes samlet når hele kontoflyten virker.
+3. Verifiser loading/error/empty, kommende og historiske tider, fysisk bookingstatus,
+   kapabilitetsstyrt avbestilling med rollback/inline-feil, profil/persondata og slett-meg-dialogens
+   fokus og pending. Kontroller mobil/desktop og lyst/mørkt tema, kjør full check/test og begge
+   hostingbuildene; ikke start Arrangementer/Nyheter i samme sesjon.
 
 ## Arbeidspakkeregister
 
@@ -363,7 +381,7 @@ Neste `/start` skal bare starte tredje avgrensede WP-6-checkpoint for booking og
 | WP-3 Auth/tenant/serverdata      | Fullført     | Auth, tenant, Query, guards, 401 og base path grønne         |
 | WP-4 UI-fundament                | Fullført     | Alle kartlagte UI-familier og filterkomposisjon er grønne    |
 | WP-5 App-shell                   | Fullført     | Shell, navigation, routeaktivitet, konto og Mer grønne       |
-| WP-6 Featuremigrering            | Pågår        | Auth, feil og hele policy-/guardgruppen grønne               |
+| WP-6 Featuremigrering            | Pågår        | Auth, policy/guards og booking/bootstrap grønne              |
 | WP-7 Paritet og produksjonsbytte | Ikke startet | —                                                            |
 
 ## Featureregister
@@ -371,7 +389,7 @@ Neste `/start` skal bare starte tredje avgrensede WP-6-checkpoint for booking og
 | Gruppe                       | Status   | Merknad                                                     |
 | ---------------------------- | -------- | ----------------------------------------------------------- |
 | Auth, policy, feil og guards | Fullført | Offentlige og beskyttede flater samt guardrekkefølge grønne |
-| Booking og bootstrap         | Kartlagt | Kjerneflyt                                                  |
+| Booking og bootstrap         | Fullført | Kjerneflyt, mutationer og fallback grønne                   |
 | Mine tider og Min side       | Kartlagt | Beskyttet kontoflyt                                         |
 | Arrangementer og Nyheter     | Kartlagt | Offentlig/innlogget innhold                                 |
 | Baner og Grener              | Kartlagt | Delt adminarbeidsområde                                     |
@@ -383,9 +401,9 @@ Neste `/start` skal bare starte tredje avgrensede WP-6-checkpoint for booking og
 
 ## Åpne blokkeringer
 
-Ingen kjente blokkeringer. Neste bookingcheckpoint kan gjennomføres mot eksisterende
-React-referanse, autoritative booking-/bootstrapkontrakter og etablerte API-, Query-, tenant-,
-session- og UI-grenser uten backendendringer eller ny brukerbeslutning.
+Ingen kjente blokkeringer. Neste kontocheckpoint kan gjennomføres mot eksisterende React-referanse,
+autoritative Mine tider-/persondatakontrakter og etablerte API-, Query-, booking-, tenant-, session-
+og UI-grenser uten backendendringer eller ny brukerbeslutning.
 
 ## Midlertidig kode og kjente avvik
 
@@ -394,8 +412,8 @@ session- og UI-grenser uten backendendringer eller ny brukerbeslutning.
 - `src/types/` og de flyttede filene i `src/utils/` er midlertidige React-re-exports til autoritativ
   kode i `src/lib/contracts`, `src/lib/domain` og `src/lib/platform`.
 - Gjenværende Svelte-featureflater er bevisst midlertidige route-placeholdere til de migreres i
-  WP-6. Login-, vilkårs- og de tre beskyttede policyplaceholderne er fjernet; bookingroten er neste
-  forventede placeholder som erstattes.
+  WP-6. Login-, vilkårs-, de tre beskyttede policy- og bookingplaceholderne er fjernet; Mine tider
+  og Min side er de neste forventede placeholderne som erstattes samlet.
 - Eksisterende globale token-, font-, theme- og primitivefiler er autoritative. Eldre React-patterns
   og featurekomposisjoner i samme CSS-kjede er fortsatt visuell referanse og konsolideres når de
   respektive WP-4-patterns og WP-6-features erstatter dem.
@@ -441,12 +459,12 @@ session- og UI-grenser uten backendendringer eller ny brukerbeslutning.
 | Prettier på aktiv kode og dokumenter | Bestått 2026-08-23                                                                 |
 | Relative dokumentlenker              | Bestått 2026-08-23                                                                 |
 | `git diff --check`                   | Bestått 2026-08-23                                                                 |
-| `npm test`                           | Bestått 2026-08-23: 46 filer, 190 tester                                           |
+| `npm test`                           | Bestått 2026-08-23: 51 filer, 218 tester                                           |
 | `npm run check`                      | Bestått 2026-08-23: Svelte/React-typecheck, arkitektur, design, lint og format     |
 | Cloudflare Pages-build               | Bestått 2026-08-23: root path og `index.html`-fallback                             |
 | GitHub Pages-build                   | Bestått 2026-08-23: eksplisitt `/banebooking` og `404.html`-fallback               |
 | Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                  |
-| Nettleserrender                      | Bestått 2026-08-23: 12 protected-policykombinasjoner, ingen overflow/konsollfeil   |
+| Nettleserrender                      | Bestått 2026-08-23: booking i 4 viewport/temakombinasjoner, ingen overflow/feil    |
 | SvelteKit-bundle                     | Verifisert 2026-08-22: ingen React-runtime                                         |
 | WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                |
 | WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon         |
@@ -464,17 +482,15 @@ session- og UI-grenser uten backendendringer eller ny brukerbeslutning.
 | WP-5 navigation-/a11y-tester         | Bestått 2026-08-23: 2 filer, 12 tester for state, routes, fokus, overlay og axe    |
 | WP-6 auth-/policy-/a11y-tester       | Bestått 2026-08-23: 5 filer, 11 tester for login, OTP, callback, storage og vilkår |
 | WP-6 protected policy-/guardtester   | Bestått 2026-08-23: 5 filer, 16 tester for API, guard, mutation, validation og axe |
+| WP-6 booking-/bootstraptester        | Bestått 2026-08-23: 5 filer, 28 tester for API, state, mutation, rollback og axe   |
 
 ## Filer i siste checkpoint
 
-- tre beskyttede policyflater, typed endpoints, medlemskapsmodell, fixtures og API-/komponent-/axe-
-  tester i `src/lib/features/policy/`
-- eksplisitt brukerquery-invalidering i session-context/provider med key-test i
-  `src/lib/features/session/`
-- offentlig `PageStatus`, FormField-koblet Settings-radio og sentral styling/test i `src/lib/ui/`
-  og `src/styles/design-system/patterns.css`
-- tynne, funksjonelle routes for `sperret`, `kunngjøring` og `bekreft-medlemskap` i
-  `src/routes/[[slug=tenant]]/(protected)/`
+- offentlig bookingfeature med API-, query-, modell-, dialog-, schedule-, fixture-, kontrakt- og
+  komponent-/axe-tester i `src/lib/features/booking/`
+- typed `arrangementId` i bookingkontrakten og delte `ScheduleTime`-/`Weather`-patterns med sentral
+  styling i `src/lib/contracts/`, `src/lib/ui/` og `src/styles/design-system/patterns.css`
+- tynn, funksjonell bookingrot i `src/routes/[[slug=tenant]]/(public)/+page.svelte`
 - `docs/migration-status.md`
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for

@@ -41,7 +41,7 @@
     meta?: string;
     muted?: boolean;
     status?: CollectionRowStatus;
-    title: string;
+    title?: string;
   };
 
   let {
@@ -73,15 +73,19 @@
   >
     {#if leading}<span data-part="leading">{@render leading()}</span>{/if}
 
-    <span data-part="content">
-      <span data-part="title">
-        {#if category}<CollectionStatus {...category} />{/if}
-        <span data-part="title-text">{title}</span>
-        {#if titleStatus}<CollectionStatus {...titleStatus} />{/if}
+    {#if title || category || titleStatus || description || meta}
+      <span data-part="content">
+        {#if title || category || titleStatus}
+          <span data-part="title">
+            {#if category}<CollectionStatus {...category} />{/if}
+            {#if title}<span data-part="title-text">{title}</span>{/if}
+            {#if titleStatus}<CollectionStatus {...titleStatus} />{/if}
+          </span>
+        {/if}
+        {#if description}<span data-part="description">{description}</span>{/if}
+        {#if meta}<span data-part="meta">{meta}</span>{/if}
       </span>
-      {#if description}<span data-part="description">{description}</span>{/if}
-      {#if meta}<span data-part="meta">{meta}</span>{/if}
-    </span>
+    {/if}
 
     {#if layoutStatus}<CollectionStatus {...layoutStatus} />{/if}
   </span>
@@ -115,16 +119,16 @@
       <button
         type="button"
         data-part="select"
-        aria-label={ariaLabel ?? `Åpne ${title}`}
+        aria-label={ariaLabel ?? (title ? `Åpne ${title}` : "Åpne rad")}
         onclick={interaction.onOpen}
         disabled={isDisabled}
       >
         {@render summary()}
         <span data-part="indicator" aria-hidden="true">›</span>
       </button>
-      <div data-part="actions" role="group" aria-label={`Rekkefølge for ${title}`}>
+      <div data-part="actions" role="group" aria-label={`Rekkefølge for ${title ?? "rad"}`}>
         <Button
-          aria-label={`Flytt ${title} opp`}
+          aria-label={`Flytt ${title ?? "rad"} opp`}
           title="Flytt opp"
           variant="ghost"
           size="icon"
@@ -134,7 +138,7 @@
           <Icon icon={ArrowUp02Icon} />
         </Button>
         <Button
-          aria-label={`Flytt ${title} ned`}
+          aria-label={`Flytt ${title ?? "rad"} ned`}
           title="Flytt ned"
           variant="ghost"
           size="icon"
@@ -149,7 +153,7 @@
     <button
       type="button"
       data-part="surface"
-      aria-label={ariaLabel ?? `Åpne ${title}`}
+      aria-label={ariaLabel ?? (title ? `Åpne ${title}` : "Åpne rad")}
       onclick={interaction.onOpen}
       disabled={isDisabled}
     >

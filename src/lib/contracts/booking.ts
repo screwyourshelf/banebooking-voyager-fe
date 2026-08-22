@@ -6,6 +6,7 @@ export type BookingSuksessRespons = {
 
 // Requests
 export type OpprettBookingForespørsel = {
+  arrangementId?: string;
   baneId: string;
   dato: string;
   startTid: string;

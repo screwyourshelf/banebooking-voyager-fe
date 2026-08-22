@@ -1,9 +1,5 @@
 <script lang="ts">
-  import { RoutePlaceholder } from "$lib/ui";
+  import { BookingScreen } from "$lib/features/booking";
 </script>
 
-<RoutePlaceholder
-  eyebrow="Booking"
-  title="Book bane"
-  description="Routefundamentet er klart. Bookingflyten migreres i WP-6."
-/>
+<BookingScreen />
