@@ -78,6 +78,10 @@
       background: var(--app-sidebar);
     }
 
+    [data-ui="app-shell"][data-navigation-state] > [data-part="frame"] {
+      grid-template-columns: var(--app-sidebar-width) minmax(0, 1fr);
+    }
+
     [data-ui="app-shell"] > [data-part="frame"]::before {
       position: fixed;
       z-index: -1;
@@ -93,12 +97,61 @@
     [data-ui="app-shell"] > [data-part="frame"] > [data-part="sidebar"] {
       position: sticky;
       top: 0;
-      display: block;
+      display: flex;
       height: 100svh;
+      flex-direction: column;
+      gap: 1.25rem;
       overflow: hidden;
       border-right: var(--app-sidebar-divider-width) solid var(--app-sidebar-divider);
       background: linear-gradient(90deg, rgb(7 31 19 / 0.92), rgb(10 43 27 / 0.66));
       box-shadow: 1rem 0 3rem rgb(2 18 10 / 0.18);
+    }
+
+    [data-ui="app-shell"][data-navigation-state] > [data-part="frame"] > [data-part="sidebar"] {
+      padding: 1.25rem 1rem;
+    }
+
+    [data-ui="app-shell"][data-navigation-state]
+      > [data-part="frame"]
+      > [data-part="sidebar"]
+      > [data-ui="navigation"] {
+      width: 100%;
+      max-width: none;
+      flex: 1;
+      background: transparent;
+      padding: 0;
+    }
+
+    [data-ui="app-shell"][data-navigation-state]
+      > [data-part="frame"]
+      > [data-part="sidebar"]
+      > [data-ui="navigation-identity"] {
+      color: var(--app-sidebar-text);
+    }
+
+    [data-ui="app-shell"][data-navigation-state]
+      > [data-part="frame"]
+      > [data-part="sidebar"]
+      > [data-ui="navigation-identity"]
+      > [data-part="intro"]
+      > [data-part="meta"] {
+      color: var(--app-control-muted);
+    }
+
+    [data-ui="app-shell"]
+      > [data-part="frame"]
+      > [data-part="sidebar"]
+      > [data-ui="navigation-loading"] {
+      width: 100%;
+    }
+
+    [data-ui="app-shell"]
+      > [data-part="frame"]
+      > [data-part="sidebar"]
+      > [data-ui="navigation-loading"]
+      > [data-part="list"]
+      > [data-part="item"] {
+      background: rgb(255 255 255 / 0.14);
     }
 
     .app-sidebar-fixed {
@@ -154,6 +207,10 @@
     }
 
     .mobile-bottom-nav {
+      display: none;
+    }
+
+    [data-ui="app-shell"] > [data-part="bottom-navigation"] {
       display: none;
     }
 
@@ -565,6 +622,22 @@
       background: linear-gradient(90deg, rgb(5 27 17 / 0.93), rgb(8 39 24 / 0.7));
       box-shadow: 1.25rem 0 4rem rgb(2 18 10 / 0.2);
       backdrop-filter: none;
+    }
+
+    [data-ui="app-shell"]
+      > [data-part="frame"]
+      > [data-part="sidebar"]
+      > :is([data-ui="navigation"], [data-ui="navigation-loading"]) {
+      width: 100%;
+      max-width: none;
+      padding: 1.25rem 1rem;
+    }
+
+    [data-ui="app-shell"][data-navigation-state]
+      > [data-part="frame"]
+      > [data-part="sidebar"]
+      > :is([data-ui="navigation"], [data-ui="navigation-loading"]) {
+      padding: 0;
     }
 
     .app-sidebar {

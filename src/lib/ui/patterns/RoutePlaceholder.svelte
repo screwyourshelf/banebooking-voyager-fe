@@ -14,4 +14,4 @@
   <title>{title} | Banebooking</title>
 </svelte:head>
 
-<Page {eyebrow} {title} {description} standalone />
+<Page {eyebrow} {title} {description} />

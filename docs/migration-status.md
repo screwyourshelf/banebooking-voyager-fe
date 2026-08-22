@@ -4,7 +4,7 @@
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** WP-5 — App-shell og navigasjon (ikke startet)
+> **Aktiv arbeidspakke:** WP-5 — App-shell og navigasjon (pågår; første checkpoint fullført)
 >
 > **Sist oppdatert:** 2026-08-22
 
@@ -235,6 +235,21 @@ Navigation- og feedbackpatternene uten featureadferd eller parallelle routekonfi
 - Trettende avgrensede WP-4-checkpoint for offentlig Collection-filterkomposisjon er fullført uten
   featuremigrering eller backendendringer. Alle kartlagte featurebehov kan uttrykkes uten
   feature-CSS, og WP-4-kvalitetsporten er nådd.
+- React-appskallets desktop-sidefelt, mobil topp-/bunnflate, boot, auth-/tenantstates, konto, tema,
+  safe areas og arbeidsområde er kaldkartlagt mot SvelteKit-layouten og de offentlige
+  Navigation-patternene uten å kopiere React-providerne eller routekonfigurasjonen.
+- Offentlig `AppShell` eier én responsiv frame med typed, diskriminert kontrakt: alle klare
+  desktop-/mobilnavigasjonssnippets leveres samlet, eller hele navigasjonsrammen viser eksplisitt
+  loadinggeometri. Shell-et eier sidefelt, toppfelt, arbeidsområde, bunnfelt, safe areas og appens
+  eneste `main`-landmark.
+- Tenant-layouten komponerer `AppShell` rundt eksisterende `SessionGate`. Guard-, recovery- og
+  routeplaceholderflatene rendres nå inne i arbeidsområdet uten parallelle eller nestede
+  `main`-landmarks; featureinnholdet er ellers uendret.
+- App-shellkontrakten har komponent-, fokusrekkefølge- og axe-tester for landmarks, klare og
+  lastende navigasjonsflater og bootgeometri. Mobil/desktop og lyst/mørkt tema er kontrollert på
+  390×844 og 1440×900 uten overflow eller nettleserfeil.
+- Første avgrensede WP-5-checkpoint for responsiv app-shellramme og loadinggeometri er fullført uten
+  faktisk navigasjonsutvalg, konto-/Mer-overlay, featuremigrering eller backendendringer.
 
 ## Nåtilstand
 
@@ -250,21 +265,22 @@ Navigation- og feedbackpatternene uten featureadferd eller parallelle routekonfi
   Date-/Calendar- og Rich-text-kontroller samt Page-, Section-, feedback-, Form-, Settings-,
   Dialog-, Document-, Navigation- og Collection-patternene inkludert sammensatte rader og
   filterkomposisjon er autoritative.
-- WP-5 er neste arbeidspakke og er ikke startet. Navigation-patternene finnes, men app-shell,
-  routeaktivitet, konto-/temahandlinger og responsive shellskifter er ennå ikke integrert.
+- WP-5 pågår. Den responsive app-shellrammen, loadinggeometrien og ett stabilt arbeidsområde er
+  integrert. Navigasjonsutvalg, tenantidentitet, routeaktivitet, tema-, konto- og Mer-handlinger er
+  fortsatt neste checkpoint; tenant-layouten viser derfor Navigation-loading i mellomtiden.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                               |
-| ------------------------------------- | ------------------------------------------------ |
-| Base branch                           | `main`                                           |
-| Fastslått basecommit                  | `5287c5e`                                        |
-| Siste semantiske checkpoint           | `feat(sveltekit): complete WP-4 UI foundation`   |
-| Lokale commits foran base             | 19                                               |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                    |
-| Neste planlagte checkpoint            | WP-5 responsiv app-shellramme og loadinggeometri |
+| Felt                                  | Forventet tilstand                                        |
+| ------------------------------------- | --------------------------------------------------------- |
+| Base branch                           | `main`                                                    |
+| Fastslått basecommit                  | `5287c5e`                                                 |
+| Siste semantiske checkpoint           | `feat(sveltekit): establish WP-5 app shell frame`         |
+| Lokale commits foran base             | 20                                                        |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                             |
+| Neste planlagte checkpoint            | WP-5 navigasjonskomposisjon, routeaktivitet og handlinger |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -273,19 +289,19 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Neste `/start` skal bare starte første avgrensede WP-5-checkpoint:
+Neste `/start` skal bare starte andre avgrensede WP-5-checkpoint:
 
-1. Kaldkartlegg React-appskallets faktiske desktop-sidefelt, mobil topp-/bunnflate, boot/loading,
-   innlogget/anonym state, tenantidentitet, kontohandlinger, tema, safe areas og arbeidsområde.
-   Sammenhold dette med SvelteKit-layoutene og den offentlige Navigation-kontrakten; ikke kopier
-   React-providers eller en parallell routekonfigurasjon.
-2. Etabler én offentlig responsiv app-shellramme med typed snippets for navigation og arbeidsområde,
-   samt eksplisitt loadinggeometri. Koble den i tenant-layouten bare til eksisterende
-   auth-/tenant-/routegrunnlag; feature-placeholdere og selve navigasjonsutvalget beholdes uendret i
-   dette første checkpointet.
-3. Legg komponent- og axe-tester for landmarks, fokusrekkefølge, loading og responsive skifter.
-   Kontroller mobil/desktop og lyst/mørkt tema, kjør full check/test og begge hostingbuildene.
-   Konto-/Mer-overlay og neste WP-5-checkpoint startes ikke i samme sesjon.
+1. Kaldkartlegg hvordan eksisterende klubb-/brukerquery, typed auth-context, tenant-pathbygging og
+   SvelteKit-URL skal levere én eksplisitt navigasjonsstate. Routefilene skal ikke gjentas i en
+   parallell routekonfigurasjon, og backendkapabilitetene skal forbli autoritative.
+2. Komponer `AppShell` sine klare snippets med offentlige Navigation-patterns for desktop-sidefelt,
+   mobil topp-/bunnnavigasjon, tenantidentitet, tema, konto og Mer. Beregn aktiv state fra
+   normalisert URL, behold de tre prioriterte mobildestinasjonene uten duplisering i Mer, og etabler
+   sentral overlayatferd bare dersom den observerte fokus-/dismisskontrakten krever det.
+3. Legg tester for anonym/innlogget state, kapabilitetsskjuling, sammensatt routeaktivitet,
+   utlogging, tema, konto/Mer, fokusretur og direkte navigasjon. Kontroller mobil/desktop og
+   lyst/mørkt tema, kjør full check/test og begge hostingbuildene. Route metadata og lokal
+   tilbakehandling tas ikke inn dersom checkpointets faktiske flater ikke trenger dem.
 
 ## Arbeidspakkeregister
 
@@ -296,7 +312,7 @@ Neste `/start` skal bare starte første avgrensede WP-5-checkpoint:
 | WP-2 Contracts/domain/platform   | Fullført     | Contracts, ren domain, fetch/API, 401 og adapters grønne     |
 | WP-3 Auth/tenant/serverdata      | Fullført     | Auth, tenant, Query, guards, 401 og base path grønne         |
 | WP-4 UI-fundament                | Fullført     | Alle kartlagte UI-familier og filterkomposisjon er grønne    |
-| WP-5 App-shell                   | Ikke startet | —                                                            |
+| WP-5 App-shell                   | Pågår        | Responsiv frame og loadinggeometri grønne                    |
 | WP-6 Featuremigrering            | Ikke startet | —                                                            |
 | WP-7 Paritet og produksjonsbytte | Ikke startet | —                                                            |
 
@@ -317,7 +333,7 @@ Neste `/start` skal bare starte første avgrensede WP-5-checkpoint:
 
 ## Åpne blokkeringer
 
-Ingen kjente blokkeringer. Første app-shellcheckpoint kan gjennomføres mot eksisterende
+Ingen kjente blokkeringer. Neste navigasjonscheckpoint kan gjennomføres mot eksisterende
 React-referanse, autoritativ auth-/tenant-/route-state og de offentlige Navigation-patternene uten
 backendendringer eller ny brukerbeslutning.
 
@@ -329,6 +345,9 @@ backendendringer eller ny brukerbeslutning.
   kode i `src/lib/contracts`, `src/lib/domain` og `src/lib/platform`.
 - Alle Svelte-featureflater er bevisst midlertidige route-placeholdere frem til WP-5–WP-6 gir
   app-shell og featureadferd.
+- Tenant-layouten bruker bevisst `AppShell` sin Navigation-loadingvariant til neste WP-5-checkpoint
+  kobler faktisk tenant-, auth-, kapabilitets- og routebasert navigasjonsinnhold. Rammen og
+  arbeidsområdet er autoritative; den vedvarende loadingnavigasjonen er midlertidig og forventet.
 - Eksisterende globale token-, font-, theme- og primitivefiler er autoritative. Eldre React-patterns
   og featurekomposisjoner i samme CSS-kjede er fortsatt visuell referanse og konsolideres når de
   respektive WP-4-patterns og WP-6-features erstatter dem.
@@ -370,41 +389,42 @@ backendendringer eller ny brukerbeslutning.
 
 ## Siste verifikasjon
 
-| Kontroll                             | Resultat                                                                             |
-| ------------------------------------ | ------------------------------------------------------------------------------------ |
-| Prettier på aktiv kode og dokumenter | Bestått 2026-08-22                                                                   |
-| Relative dokumentlenker              | Bestått 2026-08-22                                                                   |
-| `git diff --check`                   | Bestått 2026-08-22                                                                   |
-| `npm test`                           | Bestått 2026-08-22: 35 filer, 150 tester                                             |
-| `npm run check`                      | Bestått 2026-08-22: Svelte/React-typecheck, arkitektur, design, lint og format       |
-| Cloudflare Pages-build               | Bestått 2026-08-22: root path og `index.html`-fallback                               |
-| GitHub Pages-build                   | Bestått 2026-08-22: eksplisitt `/banebooking` og `404.html`-fallback                 |
-| Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                    |
-| Nettleserrender                      | Bestått 2026-08-22: 390×844 og 1280×900, Collection controls, lyst/mørkt, ingen feil |
-| SvelteKit-bundle                     | Verifisert 2026-08-22: ingen React-runtime                                           |
-| WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                  |
-| WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon           |
-| WP-4 pattern-/a11y-tester            | Bestått 2026-08-22: 1 fil, 6 tester for semantikk, states, retry og axe              |
-| WP-4 collection-/a11y-tester         | Bestått 2026-08-22: 1 fil, 16 tester for rows, controls, states, pending og axe      |
-| WP-4 form-/a11y-tester               | Bestått 2026-08-22: 1 fil, 6 tester for feltkobling, states, submit og axe           |
-| WP-4 settings-/a11y-tester           | Bestått 2026-08-22: 1 fil, 6 tester for rows, valg, tastatur, states og axe          |
-| WP-4 dialog-/a11y-tester             | Bestått 2026-08-22: 1 fil, 7 tester for fokus, dismiss, actions, pending og axe      |
-| WP-4 select-/a11y-tester             | Bestått 2026-08-22: 1 fil, 6 tester for form, tastatur, states, fokus og axe         |
-| WP-4 document-/a11y-tester           | Bestått 2026-08-22: 1 fil, 5 tester for landmark, headings, facts, lenker og axe     |
-| WP-4 navigation-/a11y-tester         | Bestått 2026-08-22: 1 fil, 7 tester for lenker, aktiv state, handlinger og axe       |
-| WP-4 date-/a11y-tester               | Bestått 2026-08-22: 1 fil, 8 tester for form, tastatur, grenser, fokus og axe        |
-| WP-4 editor-/a11y-tester             | Bestått 2026-08-22: 1 fil, 7 tester for JSON, format, tabell, fokus, states og axe   |
+| Kontroll                             | Resultat                                                                           |
+| ------------------------------------ | ---------------------------------------------------------------------------------- |
+| Prettier på aktiv kode og dokumenter | Bestått 2026-08-22                                                                 |
+| Relative dokumentlenker              | Bestått 2026-08-22                                                                 |
+| `git diff --check`                   | Bestått 2026-08-22                                                                 |
+| `npm test`                           | Bestått 2026-08-22: 36 filer, 154 tester                                           |
+| `npm run check`                      | Bestått 2026-08-22: Svelte/React-typecheck, arkitektur, design, lint og format     |
+| Cloudflare Pages-build               | Bestått 2026-08-22: root path og `index.html`-fallback                             |
+| GitHub Pages-build                   | Bestått 2026-08-22: eksplisitt `/banebooking` og `404.html`-fallback               |
+| Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                  |
+| Nettleserrender                      | Bestått 2026-08-22: 390×844 og 1440×900, app-shell, lyst/mørkt, ingen feil         |
+| SvelteKit-bundle                     | Verifisert 2026-08-22: ingen React-runtime                                         |
+| WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                |
+| WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon         |
+| WP-4 pattern-/a11y-tester            | Bestått 2026-08-22: 1 fil, 6 tester for semantikk, states, retry og axe            |
+| WP-4 collection-/a11y-tester         | Bestått 2026-08-22: 1 fil, 16 tester for rows, controls, states, pending og axe    |
+| WP-4 form-/a11y-tester               | Bestått 2026-08-22: 1 fil, 6 tester for feltkobling, states, submit og axe         |
+| WP-4 settings-/a11y-tester           | Bestått 2026-08-22: 1 fil, 6 tester for rows, valg, tastatur, states og axe        |
+| WP-4 dialog-/a11y-tester             | Bestått 2026-08-22: 1 fil, 7 tester for fokus, dismiss, actions, pending og axe    |
+| WP-4 select-/a11y-tester             | Bestått 2026-08-22: 1 fil, 6 tester for form, tastatur, states, fokus og axe       |
+| WP-4 document-/a11y-tester           | Bestått 2026-08-22: 1 fil, 5 tester for landmark, headings, facts, lenker og axe   |
+| WP-4 navigation-/a11y-tester         | Bestått 2026-08-22: 1 fil, 7 tester for lenker, aktiv state, handlinger og axe     |
+| WP-4 date-/a11y-tester               | Bestått 2026-08-22: 1 fil, 8 tester for form, tastatur, grenser, fokus og axe      |
+| WP-4 editor-/a11y-tester             | Bestått 2026-08-22: 1 fil, 7 tester for JSON, format, tabell, fokus, states og axe |
+| WP-5 app-shell-/a11y-tester          | Bestått 2026-08-22: 1 fil, 4 tester for landmarks, fokus, loading og axe           |
 
 ## Filer i siste checkpoint
 
-- offentlig `CollectionControls`, typed header-toggle, diskriminerte filterfelt,
-  komponent-/tastatur-/axe-tester og offentlig UI-eksport i `src/lib/ui/patterns/` og
-  `src/lib/ui/index.ts`
-- bookingpresentasjonens eksplisitte pressed state i `src/lib/ui/primitives/DatePicker.svelte`
-- sentral header-, toggle-, selection-, filter-, search-, sort-, reset-, pending- og responsiv
-  geometri i `src/styles/design-system/patterns.css`
-- kontrollkartlegging, mobil/desktop-, fokus-, reset- og tomtilstandskontrakt i
-  `docs/product-design-rules.md`
+- offentlig `AppShell`, klare/loading navigasjonskontrakter, komponent-/fokus-/axe-tester og
+  offentlig UI-eksport i `src/lib/ui/patterns/` og `src/lib/ui/index.ts`
+- tenant-layoutens shellkomposisjon og guard-/routeinnhold uten nestede hovedlandmarks i
+  `src/routes/[[slug=tenant]]/+layout.svelte`, `src/lib/features/session/` og
+  `src/lib/ui/patterns/RoutePlaceholder.svelte`
+- sentral responsiv frame-, sidebar-, topbar-, workspace-, bunnnav- og safe-area-geometri i
+  `src/styles/design-system/patterns.css` og `src/styles/design-system/responsive.css`
+- kaldkartlagt app-shell-, state-, fokus- og eierskapskontrakt i `docs/product-design-rules.md`
 - `docs/migration-status.md`
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for

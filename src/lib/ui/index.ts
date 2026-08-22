@@ -17,6 +17,7 @@ export type {
   SelectOption,
 } from "./primitives";
 export {
+  AppShell,
   Collection,
   CollectionControls,
   CollectionEmpty,

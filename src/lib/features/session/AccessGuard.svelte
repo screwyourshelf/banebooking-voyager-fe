@@ -46,13 +46,13 @@
 </script>
 
 {#if auth.state.status === "initializing"}
-  <PageLoading label="Kontrollerer innlogging …" standalone />
+  <PageLoading label="Kontrollerer innlogging …" />
 {:else if loginTarget}
-  <PageLoading label="Sender deg til innlogging …" standalone />
+  <PageLoading label="Sender deg til innlogging …" />
 {:else if brukerQuery.isPending}
-  <PageLoading label="Kontrollerer tilgangen …" standalone />
+  <PageLoading label="Kontrollerer tilgangen …" />
 {:else if brukerQuery.isError}
-  <Page eyebrow="Tilgang" title="Kunne ikke kontrollere tilgangen" standalone>
+  <Page eyebrow="Tilgang" title="Kunne ikke kontrollere tilgangen">
     <ErrorState
       title="Brukerdata kunne ikke lastes"
       isRetrying={brukerQuery.isFetching}
@@ -60,7 +60,7 @@
     />
   </Page>
 {:else if !allowed}
-  <Page eyebrow="Tilgang" title="Du har ikke tilgang" standalone>
+  <Page eyebrow="Tilgang" title="Du har ikke tilgang">
     <Feedback
       tone="warning"
       title="Siden er ikke tilgjengelig for brukeren din"

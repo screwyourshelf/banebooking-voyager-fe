@@ -1,3 +1,4 @@
+export { default as AppShell } from "./AppShell.svelte";
 export { default as Collection } from "./Collection.svelte";
 export type { CollectionToggleControl } from "./Collection.svelte";
 export { default as CollectionControls } from "./CollectionControls.svelte";

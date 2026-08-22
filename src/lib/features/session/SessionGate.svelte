@@ -57,11 +57,11 @@
 </script>
 
 {#if auth.state.status === "initializing"}
-  <PageLoading label="Kontrollerer innlogging …" standalone />
+  <PageLoading label="Kontrollerer innlogging …" />
 {:else if klubbQuery.isPending}
-  <PageLoading label="Laster klubben …" standalone />
+  <PageLoading label="Laster klubben …" />
 {:else if klubbQuery.isError || !klubbQuery.data}
-  <Page eyebrow="Klubb" title="Fant ikke klubben" standalone>
+  <Page eyebrow="Klubb" title="Fant ikke klubben">
     <ErrorState
       title="Klubben kunne ikke lastes"
       description="Sjekk at adressen er riktig og prøv igjen."
@@ -70,9 +70,9 @@
     />
   </Page>
 {:else if auth.state.status === "authenticated" && brukerQuery.isPending}
-  <PageLoading label="Kontrollerer tilgangen …" standalone />
+  <PageLoading label="Kontrollerer tilgangen …" />
 {:else if auth.state.status === "authenticated" && brukerQuery.isError}
-  <Page eyebrow="Tilgang" title="Kunne ikke laste brukerdata" standalone>
+  <Page eyebrow="Tilgang" title="Kunne ikke laste brukerdata">
     <ErrorState
       title="Tilgangen kunne ikke kontrolleres"
       description="Prøv på nytt før du fortsetter."
@@ -81,7 +81,7 @@
     />
   </Page>
 {:else if redirectTarget}
-  <PageLoading label="Sender deg til riktig side …" standalone />
+  <PageLoading label="Sender deg til riktig side …" />
 {:else}
   {@render children()}
 {/if}

@@ -384,6 +384,27 @@ Den observerte produktkontrakten er:
 - Desktopbakgrunnen kan bruke klubbens bilde med mørkt scrim og retningsgradient. Innholdsflater
   eier sin egen kontrast, og mobil laster ikke bakgrunnsressursen.
 
+### App-shellkontrakt
+
+React-referansen og SvelteKit-grunnlaget er kaldkartlagt til én responsiv shellkontrakt:
+
+| Tilstand                            | Observerbar flate                                                                                       | Eier i SvelteKit                                                                                                     |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| Boot og tenant-/authkontroll        | Sidefelt eller mobil topp/bunn reserveres samtidig som arbeidsområdet viser navngitt loading            | `AppShell` sin loadingvariant komponerer `NavigationLoading`; `SessionGate` eier arbeidsområdets loading og recovery |
+| Klar desktop                        | Ett fast sidefelt foran arbeidsområdet, ingen separat toppbar eller bunnnavigasjon                      | `desktopNavigation`-snippeten i `AppShell`                                                                           |
+| Klar mobil                          | Klubbidentitet og verktøy øverst, arbeidsområde i midten og safe-area-tilpasset hovednavigasjon nederst | `mobileHeader`- og `mobileNavigation`-snippetene i samme `AppShell`                                                  |
+| Anonym eller innlogget              | Samme shellgeometri; konto og synlige destinasjoner endres uten å flytte arbeidsområdet                 | App-shellkonsumenten over normalisert auth- og kapabilitetsstate                                                     |
+| Manglende eller forsinket klubbdata | Identitetsplassen beholdes med loading eller stabil tekstlig fallback                                   | App-shellkonsumenten over tenantens klubbquery                                                                       |
+| Guardfeil og retry                  | Feilflaten rendres i det eksisterende arbeidsområdet; navigasjonsrammen forsvinner ikke                 | `SessionGate` og `AccessGuard` gjennom offentlige feedbackpatterns                                                   |
+
+- `AppShell` krever enten alle tre klare navigasjonssnippets eller én eksplisitt loadingetikett.
+  Delvis klar desktop/mobilnavigasjon er ikke en gyldig state.
+- På desktop går vanlig fokusrekkefølge fra sidefeltet til arbeidsområdet. På mobil går den fra
+  toppfeltet gjennom arbeidsområdet til bunnnavigasjonen. Skjulte responsive flater tilfører ikke
+  fokusmål.
+- Arbeidsområdet er app-shellens eneste `main`-landmark. `Page`, guard- og loadingflater inne i
+  shell-et oppretter ikke et nytt `main`.
+
 ## Statistikk og datavisualisering
 
 - Statistikk bruker rollene `key-value`, `chart-value`, `chart-label` og `chart-meta`.
