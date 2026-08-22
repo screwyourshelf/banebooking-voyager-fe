@@ -1019,6 +1019,30 @@
     gap: var(--app-space-sm);
   }
 
+  [data-ui="page-status"] {
+    display: inline-flex;
+    width: fit-content;
+    max-width: 100%;
+    flex: 0 0 auto;
+    align-items: center;
+    border-radius: 999px;
+    padding: 0.28rem var(--app-status-inline-padding);
+    font-size: var(--app-type-label);
+    font-weight: 720;
+    line-height: 1;
+    white-space: nowrap;
+  }
+
+  [data-ui="page-status"][data-tone="warning"] {
+    background: var(--status-warning-bg);
+    color: var(--status-warning-text);
+  }
+
+  [data-ui="page-status"][data-tone="danger"] {
+    background: var(--status-danger-bg);
+    color: var(--status-danger-text);
+  }
+
   [data-ui="page-loading"] {
     position: relative;
     display: grid;

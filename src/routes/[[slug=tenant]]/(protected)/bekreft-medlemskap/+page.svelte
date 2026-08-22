@@ -1,9 +1,24 @@
 <script lang="ts">
-  import { RoutePlaceholder } from "$lib/ui";
+  import { MembershipConfirmationScreen } from "$lib/features/policy";
+  import { getSessionDataContext } from "$lib/features/session";
+  import { buildTenantPath, getTenantContext } from "$lib/platform/tenant";
+
+  const session = getSessionDataContext();
+  const tenant = getTenantContext();
+  const termsHref = buildTenantPath(tenant, "vilkaar");
+
+  function refreshPolicyState() {
+    return session.invalidateBruker();
+  }
 </script>
 
-<RoutePlaceholder
-  eyebrow="Medlemskap"
-  title="Bekreft medlemskap"
-  description="Den obligatoriske medlemskapsflyten kobles til authguarden i WP-3 og migreres i WP-6."
-/>
+<svelte:head><title>Bekreft medlemskap | Banebooking</title></svelte:head>
+
+{#if session.klubb && session.bruker}
+  <MembershipConfirmationScreen
+    klubb={session.klubb}
+    bruker={session.bruker}
+    onConfirmed={refreshPolicyState}
+    {termsHref}
+  />
+{/if}

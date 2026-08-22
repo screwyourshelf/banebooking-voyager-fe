@@ -1,9 +1,12 @@
 <script lang="ts">
-  import { RoutePlaceholder } from "$lib/ui";
+  import { BlockedAccountScreen } from "$lib/features/policy";
+  import { getSessionDataContext } from "$lib/features/session";
+
+  const session = getSessionDataContext();
 </script>
 
-<RoutePlaceholder
-  eyebrow="Tilgang"
-  title="Kontoen er sperret"
-  description="Sperretilstanden kobles til backendautorisasjonen i WP-3."
-/>
+<svelte:head><title>Kontoen er sperret | Banebooking</title></svelte:head>
+
+{#if session.klubb}
+  <BlockedAccountScreen klubb={session.klubb} />
+{/if}

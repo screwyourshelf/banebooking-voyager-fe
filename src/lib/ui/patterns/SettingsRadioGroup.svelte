@@ -10,6 +10,7 @@
 
 <script lang="ts">
   import Radio from "../primitives/Radio.svelte";
+  import { getOptionalFormControlContext, mergeAriaIds } from "../primitives/form-control-context";
 
   type Props = {
     disabled?: boolean;
@@ -35,13 +36,20 @@
 
   const generatedId = $props.id();
   const groupName = $derived(name ?? `settings-radio-${generatedId}`);
+  const formControl = getOptionalFormControlContext();
+  const describedBy = $derived(mergeAriaIds(formControl?.descriptionId, formControl?.errorId));
 </script>
 
 <div
+  id={formControl?.controlId}
   data-ui="settings-radio-group"
   data-layout={layout}
   role="radiogroup"
-  aria-label={label}
+  aria-label={formControl ? undefined : label}
+  aria-labelledby={formControl?.labelId}
+  aria-describedby={describedBy}
+  aria-invalid={formControl?.invalid ? "true" : undefined}
+  aria-required={formControl?.required || undefined}
   aria-busy={pending || undefined}
 >
   {#each options as option, index (option.value)}

@@ -10,6 +10,7 @@ export type SessionDataContext = {
   readonly klubb: KlubbRespons | undefined;
   readonly klubbFetching: boolean;
   readonly klubbStatus: SessionQueryStatus;
+  invalidateBruker(): Promise<void>;
   refetchBruker(): Promise<unknown>;
   refetchKlubb(): Promise<unknown>;
 };

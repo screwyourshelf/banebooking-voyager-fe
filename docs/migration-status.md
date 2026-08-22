@@ -4,7 +4,7 @@
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** WP-6 — Featuremigrering (pågår; første checkpoint fullført)
+> **Aktiv arbeidspakke:** WP-6 — Featuremigrering (pågår; to checkpoints fullført)
 >
 > **Sist oppdatert:** 2026-08-23
 
@@ -285,18 +285,31 @@ er ferdig migrert.
 - Første WP-6-checkpoint er kontrollert på 390×844 og 1440×900 i lyst og mørkt tema med inline
   feltvalidering, fokus, én main-landmark, ingen horisontal overflow eller konsollfeil. Ekstern
   leverandørinnlogging ble verifisert ved adapter-/komponentgrensen uten å starte en reell OAuth-flyt.
+- Sperret konto, obligatorisk kunngjøring og medlemskapsbekreftelse er flyttet samlet til den
+  offentlige policy-featuren over sessionens autoritative klubb- og brukerdata. De tre tynne
+  routene komponerer reelle Svelte-flater, og deres routeplaceholdere er fjernet.
+- Kunngjørings- og medlemskapsbekreftelse bruker typed POST-endpoints og TanStack-mutations uten
+  retry. Vellykket bekreftelse invaliderer bare sessionens tenantnøklede brukerquery; mutationens
+  pending-state varer til guarddata er oppfrisket og `SessionGate` kan føre brukeren videre.
+- Medlemskapsflyten validerer fullt navn og medlemskapstype, fokuserer første ugyldige kontroll og
+  kobler label, beskrivelse, required og feil til radio-gruppen gjennom den sentrale FormField-
+  kontrakten. Offentlig `PageStatus` eier kompakt warning-/dangerstatus for alle tre policyflatene.
+- Andre WP-6-checkpoint er kontrollert i hele matrisen 390×844 og 1440×900, lyst og mørkt tema, for
+  alle tre flater. Hver kombinasjon har én main-landmark, synlig h1, ingen horisontal overflow eller
+  konsollfeil; feltfeil, fokus og ARIA-state er også kontrollert interaktivt.
 
 ## Nåtilstand
 
 - SvelteKit er den aktive dev-, test-, preview- og produksjonsbuilden.
-- Login, vilkår og root-feil/404 er reelle Svelte-featureflater; øvrige produkt-URL-er rendrer
-  fortsatt foreløpige routeflater til de migreres i WP-6.
+- Login, vilkår, root-feil/404 og de tre beskyttede policyflatene er reelle Svelte-featureflater;
+  øvrige produkt-URL-er rendrer fortsatt foreløpige routeflater til de migreres i WP-6.
 - React-kilden er fortsatt produksjonsreferanse i arbeidskopien, men er ikke koblet til eller bundlet
   av SvelteKit.
 - Contracts, ren domenelogikk og platformkjerne er nå autoritative for både videre Svelte-arbeid og
   de midlertidige React-broene.
 - Auth, tenant, Query og session guards er autoritativt SvelteKit-fundament. Offentlig login,
-  callback-retur, vilkår og root-feil er migrert; beskyttede policyflater er neste checkpoint.
+  callback-retur, vilkår, root-feil og hele sperre → kunngjøring → medlemskap-rekkefølgen er migrert;
+  booking og bookingbootstrap er neste checkpoint.
 - WP-4 er fullført. Tokens, font, lyst/mørkt tema, offentlige handlinger, Icon-, tekst-, Select-,
   Date-/Calendar- og Rich-text-kontroller samt Page-, Section-, feedback-, Form-, Settings-,
   Dialog-, Document-, Navigation- og Collection-patternene inkludert sammensatte rader og
@@ -309,14 +322,14 @@ er ferdig migrert.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                                              |
-| ------------------------------------- | --------------------------------------------------------------- |
-| Base branch                           | `main`                                                          |
-| Fastslått basecommit                  | `5287c5e`                                                       |
-| Siste semantiske checkpoint           | `feat(sveltekit): migrate WP-6 public auth and policy surfaces` |
-| Lokale commits foran base             | 22                                                              |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                                   |
-| Neste planlagte checkpoint            | WP-6 beskyttede policy- og guardflater                          |
+| Felt                                  | Forventet tilstand                                        |
+| ------------------------------------- | --------------------------------------------------------- |
+| Base branch                           | `main`                                                    |
+| Fastslått basecommit                  | `5287c5e`                                                 |
+| Siste semantiske checkpoint           | `feat(sveltekit): migrate WP-6 protected policy surfaces` |
+| Lokale commits foran base             | 23                                                        |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                             |
+| Neste planlagte checkpoint            | WP-6 booking og bookingbootstrap                          |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -325,21 +338,20 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Neste `/start` skal bare starte andre avgrensede WP-6-checkpoint for beskyttede policy- og
-guardflater:
+Neste `/start` skal bare starte tredje avgrensede WP-6-checkpoint for booking og bookingbootstrap:
 
-1. Kaldkartlegg eksakte respons-/requestkontrakter og mutationstilstander i React-referansens
-   `SperretPage`, `KunngjøringPage`, `BekreftMedlemskapPage` og hooks. Bekreft guardrekkefølge,
-   klubbkontakt/-nettside, fullt navn, medlemskapstype, kunngjørings-ID, feilmeldinger og hvilke
-   sessionqueries som skal invalideres etter bekreftelse.
-2. Utvid den offentlige policy-featuren med typed endpoint-/query-/mutasjonsgrenser og tre
-   idiomatiske Svelte-flater over Document-, Form-, Settings- og feedbackpatternene. De tre routes
-   skal bare komponere featureinngangen; routeplaceholdere fjernes samlet når hele guardgruppen er
-   funksjonell.
-3. Verifiser sperret → kunngjøring → medlemskap → ordinær route, loading, retry, blocked,
-   validering, pending, mutationfeil, suksessredirect og query-invalidering. Kontroller
-   mobil/desktop og lyst/mørkt tema, kjør full check/test og begge hostingbuildene; ikke start
-   bookinggruppen i samme sesjon.
+1. Kaldkartlegg React-referansens `BookingBootstrapGate`, bootstrapcache, bookingquery keys,
+   `BookingPage`/`BookingView` og mutasjonshooks. Bekreft `booking-bootstrap`-responsen, fallback ved
+   404/405, dagens standarddato, første gren/bane, anonym kontra innlogget datatilgang,
+   slotkapabiliteter, vær/reglement og eksakte invalidation-/rollbackregler.
+2. Opprett én offentlig bookingfeature med typed endpoint- og querygrenser, bootstrap/fallback,
+   tenantnøkler, eksplisitt selection-state og den observerbare bookingflaten over DatePicker-,
+   Collection- og Dialog-patternene. Bookingrotrouten skal bare komponere featureinngangen, og
+   placeholderen fjernes først når lesing, valg og relevante bookinghandlinger virker samlet.
+3. Verifiser bootstrap/loading, retrybar feil, manglende oppsett/baner, tom slotliste,
+   bakgrunnsrefresh, anonym lesing, kapabilitetsstyrte handlinger, optimistisk booking/avbestilling,
+   rollback, inline mutationfeil og cacheinvalidering. Kontroller mobil/desktop og lyst/mørkt tema,
+   kjør full check/test og begge hostingbuildene; ikke start Mine tider/Min side i samme sesjon.
 
 ## Arbeidspakkeregister
 
@@ -351,14 +363,14 @@ guardflater:
 | WP-3 Auth/tenant/serverdata      | Fullført     | Auth, tenant, Query, guards, 401 og base path grønne         |
 | WP-4 UI-fundament                | Fullført     | Alle kartlagte UI-familier og filterkomposisjon er grønne    |
 | WP-5 App-shell                   | Fullført     | Shell, navigation, routeaktivitet, konto og Mer grønne       |
-| WP-6 Featuremigrering            | Pågår        | Offentlig auth, vilkår og root-feil grønne                   |
+| WP-6 Featuremigrering            | Pågår        | Auth, feil og hele policy-/guardgruppen grønne               |
 | WP-7 Paritet og produksjonsbytte | Ikke startet | —                                                            |
 
 ## Featureregister
 
 | Gruppe                       | Status   | Merknad                                                     |
 | ---------------------------- | -------- | ----------------------------------------------------------- |
-| Auth, policy, feil og guards | Pågår    | Offentlig gruppe fullført; beskyttede policyflater gjenstår |
+| Auth, policy, feil og guards | Fullført | Offentlige og beskyttede flater samt guardrekkefølge grønne |
 | Booking og bootstrap         | Kartlagt | Kjerneflyt                                                  |
 | Mine tider og Min side       | Kartlagt | Beskyttet kontoflyt                                         |
 | Arrangementer og Nyheter     | Kartlagt | Offentlig/innlogget innhold                                 |
@@ -371,9 +383,9 @@ guardflater:
 
 ## Åpne blokkeringer
 
-Ingen kjente blokkeringer. Neste beskyttede policycheckpoint kan gjennomføres mot eksisterende
-React-referanse, brukerens sessionquery og autoritative API-, tenant-, guard- og UI-kontrakter uten
-backendendringer eller ny brukerbeslutning.
+Ingen kjente blokkeringer. Neste bookingcheckpoint kan gjennomføres mot eksisterende
+React-referanse, autoritative booking-/bootstrapkontrakter og etablerte API-, Query-, tenant-,
+session- og UI-grenser uten backendendringer eller ny brukerbeslutning.
 
 ## Midlertidig kode og kjente avvik
 
@@ -382,8 +394,8 @@ backendendringer eller ny brukerbeslutning.
 - `src/types/` og de flyttede filene i `src/utils/` er midlertidige React-re-exports til autoritativ
   kode i `src/lib/contracts`, `src/lib/domain` og `src/lib/platform`.
 - Gjenværende Svelte-featureflater er bevisst midlertidige route-placeholdere til de migreres i
-  WP-6. Login- og vilkårsplaceholderne er fjernet; sperre, obligatorisk kunngjøring og
-  medlemskapsbekreftelse er de neste forventede placeholderne som erstattes samlet.
+  WP-6. Login-, vilkårs- og de tre beskyttede policyplaceholderne er fjernet; bookingroten er neste
+  forventede placeholder som erstattes.
 - Eksisterende globale token-, font-, theme- og primitivefiler er autoritative. Eldre React-patterns
   og featurekomposisjoner i samme CSS-kjede er fortsatt visuell referanse og konsolideres når de
   respektive WP-4-patterns og WP-6-features erstatter dem.
@@ -429,12 +441,12 @@ backendendringer eller ny brukerbeslutning.
 | Prettier på aktiv kode og dokumenter | Bestått 2026-08-23                                                                 |
 | Relative dokumentlenker              | Bestått 2026-08-23                                                                 |
 | `git diff --check`                   | Bestått 2026-08-23                                                                 |
-| `npm test`                           | Bestått 2026-08-23: 42 filer, 177 tester                                           |
+| `npm test`                           | Bestått 2026-08-23: 46 filer, 190 tester                                           |
 | `npm run check`                      | Bestått 2026-08-23: Svelte/React-typecheck, arkitektur, design, lint og format     |
 | Cloudflare Pages-build               | Bestått 2026-08-23: root path og `index.html`-fallback                             |
 | GitHub Pages-build                   | Bestått 2026-08-23: eksplisitt `/banebooking` og `404.html`-fallback               |
 | Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                  |
-| Nettleserrender                      | Bestått 2026-08-23: 390×844 og 1440×900, auth/policy/404, lyst/mørkt, ingen feil   |
+| Nettleserrender                      | Bestått 2026-08-23: 12 protected-policykombinasjoner, ingen overflow/konsollfeil   |
 | SvelteKit-bundle                     | Verifisert 2026-08-22: ingen React-runtime                                         |
 | WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                |
 | WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon         |
@@ -451,17 +463,18 @@ backendendringer eller ny brukerbeslutning.
 | WP-5 app-shell-/a11y-tester          | Bestått 2026-08-22: 1 fil, 4 tester for landmarks, fokus, loading og axe           |
 | WP-5 navigation-/a11y-tester         | Bestått 2026-08-23: 2 filer, 12 tester for state, routes, fokus, overlay og axe    |
 | WP-6 auth-/policy-/a11y-tester       | Bestått 2026-08-23: 5 filer, 11 tester for login, OTP, callback, storage og vilkår |
+| WP-6 protected policy-/guardtester   | Bestått 2026-08-23: 5 filer, 16 tester for API, guard, mutation, validation og axe |
 
 ## Filer i siste checkpoint
 
-- offentlig loginfeature, ren valideringsmodell, komponent-/axe-tester og offentlig featureinngang
-  i `src/lib/features/auth/`
-- offentlig vilkårsfeature over klubbdata og Document-patterns med komponent-/axe-tester i
-  `src/lib/features/policy/`
-- storagekrav i authadapterne og tenantvalidert callback-/returnTo-kontrakt i
-  `src/lib/platform/auth/`, `src/lib/platform/tenant/` og `src/routes/auth/callback/`
-- tynne login-/vilkårsroutes og produktspesifikk 404-/root-feilflate i `src/routes/`
-- offentlig providerikon og fullbreddeknappkontrakt i `src/lib/ui/` med sentral primitive-CSS
+- tre beskyttede policyflater, typed endpoints, medlemskapsmodell, fixtures og API-/komponent-/axe-
+  tester i `src/lib/features/policy/`
+- eksplisitt brukerquery-invalidering i session-context/provider med key-test i
+  `src/lib/features/session/`
+- offentlig `PageStatus`, FormField-koblet Settings-radio og sentral styling/test i `src/lib/ui/`
+  og `src/styles/design-system/patterns.css`
+- tynne, funksjonelle routes for `sperret`, `kunngjøring` og `bekreft-medlemskap` i
+  `src/routes/[[slug=tenant]]/(protected)/`
 - `docs/migration-status.md`
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for

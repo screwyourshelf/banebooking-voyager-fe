@@ -8,6 +8,7 @@ import ErrorState from "./ErrorState.svelte";
 import Feedback from "./Feedback.svelte";
 import Page from "./Page.svelte";
 import PageLoading from "./PageLoading.svelte";
+import PageStatus from "./PageStatus.svelte";
 import Section from "./Section.svelte";
 
 const axeOptions: axe.RunOptions = {
@@ -30,6 +31,12 @@ describe("public page and section patterns", () => {
       "data-part",
       "description"
     );
+  });
+
+  it("gir sidestatus en kompakt sentral tonekontrakt", () => {
+    render(PageStatus, { label: "Må bekreftes", tone: "warning" });
+
+    expect(screen.getByText("Må bekreftes")).toHaveAttribute("data-tone", "warning");
   });
 
   it("gives titled sections an accessible name and central variants", () => {

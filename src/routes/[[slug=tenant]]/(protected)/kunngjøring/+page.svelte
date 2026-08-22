@@ -1,9 +1,19 @@
 <script lang="ts">
-  import { RoutePlaceholder } from "$lib/ui";
+  import { RequiredAnnouncementScreen } from "$lib/features/policy";
+  import { getSessionDataContext } from "$lib/features/session";
+
+  const session = getSessionDataContext();
+
+  function refreshPolicyState() {
+    return session.invalidateBruker();
+  }
 </script>
 
-<RoutePlaceholder
-  eyebrow="Fra klubben"
-  title="Kunngjøring"
-  description="Den obligatoriske kunngjøringsflyten kobles til authguarden i WP-3."
-/>
+<svelte:head><title>Kunngjøring | Banebooking</title></svelte:head>
+
+{#if session.bruker?.ulestKunngjøring}
+  <RequiredAnnouncementScreen
+    announcement={session.bruker.ulestKunngjøring}
+    onConfirmed={refreshPolicyState}
+  />
+{/if}
