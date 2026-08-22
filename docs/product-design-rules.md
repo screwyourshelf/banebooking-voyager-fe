@@ -107,6 +107,31 @@ aktivitetsmetadata krever en separat beslutning.
 - Datoer som sendes til API følger eksisterende kontrakt.
 - Visning av lagrede datoer går gjennom delte, rene formatteringsfunksjoner.
 
+Den observerte konsumentkontrakten er:
+
+| Presentasjon | Reelle flater                                                     | Ansvar                                                     |
+| ------------ | ----------------------------------------------------------------- | ---------------------------------------------------------- |
+| `field`      | Sperring, kunngjøring, medlemskap, banetid og gjentakende oppsett | Full feltverdi og valgfri forrige-/neste-dag-navigasjon    |
+| `filter`     | Egendefinert statistikkperiode og andre avgrensningsflater        | Kompakt dato med år i en filterkontroll                    |
+| `booking`    | Bookingpanelets valg mellom i dag, i morgen og annen dato         | Kompakt semantisk valgknapp i den eksisterende valggruppen |
+
+- Det offentlige kontroll-API-et bruker lokal ISO-dato `YYYY-MM-DD`, samme format som booking-,
+  kalender- og arrangementkontraktene. En feature som sender et tidspunkt, som en utløpsdato, eier
+  den eksplisitte konverteringen fra valgt dato til endpointets tidskontrakt.
+- `DatePicker` eier trigger, portal, norsk `nb-NO`-locale, mandag som første ukedag,
+  månedsnavigasjon, enkeltvalg, min-/maksgrenser, åpning, lukking og fokusretur. `field`, `filter` og
+  `booking` velger bare sentralt format og geometri; featurekode formaterer ikke triggeren selv.
+- `MultiDatePicker` eier inline kalender, deterministisk sortert flervalg og valgfri min-, maks- og
+  antallsgrense. Den bruker samme dag-, måneds-, locale- og fokuskontrakt som enkeltvalg.
+- `name` kobler enkeltvalg som én ISO-verdi og flervalg som gjentatte ISO-verdier til native
+  `FormData`. I `Form.Field` arver kontrollene label, beskrivelse, required og feiltilstand.
+- `disabled` uttrykker varig utilgjengelighet. `pending` låser den samme kontrollen midlertidig,
+  beholder valgt verdi og eksponerer busy state.
+- Åpning flytter fokus til valgt dato, piltaster flytter dagfokus, `Enter` velger, `Escape` lukker,
+  og både valg og lukking returnerer fokus til triggeren. Månedsnavigasjonen har norske navn.
+- Popoveren kollisjonstilpasses viewporten. Inline flervalg beholder kalendergeometrien og kan
+  skrolle horisontalt på smale flater uten at featurekode lager en mobilvariant.
+
 ## Select og valglister
 
 - `Select` brukes for ett valg fra en avgrenset liste. Søkbare eller frie valg hører til et senere
