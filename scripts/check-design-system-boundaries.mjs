@@ -12,13 +12,6 @@ const recordsRoot = path.join(sourceRoot, "components", "records");
 const recordCollectionHeaderPath = path.join(recordsRoot, "RecordCollectionHeader.tsx");
 const filterSwitchPath = path.join(sourceRoot, "components", "controls", "FilterSwitch.tsx");
 const controlChoicePath = path.join(sourceRoot, "components", "controls", "ControlChoice.tsx");
-const dateTimeInputPath = path.join(
-  featuresRoot,
-  "turnering",
-  "components",
-  "internal",
-  "DateTimeInput.tsx"
-);
 const pagePath = path.join(sourceRoot, "components", "Page.tsx");
 const createActionPath = path.join(sourceRoot, "components", "actions", "CreateAction.tsx");
 const sectionPath = path.join(sourceRoot, "components", "section", "index.tsx");
@@ -34,20 +27,6 @@ const statisticsFilterPath = path.join(
   "statistikk",
   "components",
   "StatistikkFilter.tsx"
-);
-const tournamentScoreInputPath = path.join(
-  featuresRoot,
-  "turnering",
-  "components",
-  "internal",
-  "ScoreInput.tsx"
-);
-const tournamentAdminSetupPath = path.join(
-  featuresRoot,
-  "turnering",
-  "views",
-  "admin",
-  "AdminOppsettContent.tsx"
 );
 const editorDialogPath = path.join(sourceRoot, "components", "dialogs", "EditorDialog.tsx");
 const loginPagePath = path.join(sourceRoot, "features", "auth", "pages", "LoginPage.tsx");
@@ -129,12 +108,8 @@ const featureStyleAllowlist = new Set([
 ]);
 const formControlOutsideFieldAllowlist = new Map([
   [statisticsFilterPath, new Map([["Select", 1]])],
-  [dateTimeInputPath, new Map([["Input", 1]])],
-  [tournamentScoreInputPath, new Map([["Input", 1]])],
-  [tournamentAdminSetupPath, new Map([["Input", 1]])],
 ]);
 const strictPatternRoots = [path.join(featuresRoot, "arrangement-admin")];
-const tournamentRoot = path.join(featuresRoot, "turnering");
 const privateRecordRowPrimitives = new Set([
   "RecordAccordionCard",
   "RecordAccordionList",
@@ -239,52 +214,41 @@ for (const filePath of sourceFiles) {
     }
   }
 
-  const tournamentStyleIndex = source.search(/\btournament-[a-z0-9_-]+/i);
-  if (tournamentStyleIndex >= 0) {
-    apiViolations.push({
-      filePath,
-      line: lineFor(source, tournamentStyleIndex),
-      message: "bruker et eget tournament-stilprefiks; bruk appens generelle designsystem",
-    });
-  }
-
   if (isComponentSource) {
     if (filePath.startsWith(`${featuresRoot}${path.sep}`)) {
-      if (!filePath.startsWith(`${tournamentRoot}${path.sep}`)) {
-        const privateRecordModuleIndex = source.search(
-          /from\s+["']@\/components\/records\/(?:RecordCard|RecordList)["']/
-        );
+      const privateRecordModuleIndex = source.search(
+        /from\s+["']@\/components\/records\/(?:RecordCard|RecordList)["']/
+      );
 
-        if (privateRecordModuleIndex >= 0) {
+      if (privateRecordModuleIndex >= 0) {
+        apiViolations.push({
+          filePath,
+          line: lineFor(source, privateRecordModuleIndex),
+          message: "importerer en intern radmodul; bruk Collection.Row og Collection.List",
+        });
+      }
+
+      for (const match of source.matchAll(
+        /import\s*\{([\s\S]*?)\}\s*from\s*["']@\/components\/records["']/g
+      )) {
+        const importedNames = match[1]
+          .split(",")
+          .map(
+            (name) =>
+              name
+                .trim()
+                .replace(/^type\s+/, "")
+                .split(/\s+as\s+/)[0]
+          )
+          .filter(Boolean);
+        const privateImport = importedNames.find((name) => privateRecordRowPrimitives.has(name));
+
+        if (privateImport) {
           apiViolations.push({
             filePath,
-            line: lineFor(source, privateRecordModuleIndex),
-            message: "importerer en intern radmodul; bruk Collection.Row og Collection.List",
+            line: lineFor(source, match.index),
+            message: `importerer den interne radbyggeklossen ${privateImport}; bruk Collection.Row`,
           });
-        }
-
-        for (const match of source.matchAll(
-          /import\s*\{([\s\S]*?)\}\s*from\s*["']@\/components\/records["']/g
-        )) {
-          const importedNames = match[1]
-            .split(",")
-            .map(
-              (name) =>
-                name
-                  .trim()
-                  .replace(/^type\s+/, "")
-                  .split(/\s+as\s+/)[0]
-            )
-            .filter(Boolean);
-          const privateImport = importedNames.find((name) => privateRecordRowPrimitives.has(name));
-
-          if (privateImport) {
-            apiViolations.push({
-              filePath,
-              line: lineFor(source, match.index),
-              message: `importerer den interne radbyggeklossen ${privateImport}; bruk Collection.Row`,
-            });
-          }
         }
       }
 
@@ -465,10 +429,7 @@ for (const filePath of sourceFiles) {
       }
     }
 
-    if (
-      filePath !== dateTimeInputPath &&
-      /type\s*=\s*["'](?:date|datetime-local)["']/.test(source)
-    ) {
+    if (/type\s*=\s*["'](?:date|datetime-local)["']/.test(source)) {
       const index = source.search(/type\s*=\s*["'](?:date|datetime-local)["']/);
       apiViolations.push({
         filePath,
@@ -808,7 +769,7 @@ async function validateStylesheets(files) {
   }
 
   const semanticPrefix =
-    /^(?:action|app|arrangement|booking|collection|content|control|date|editor|error|filter|guard|login|mine|mobile|navbar|news|page|query|record|section|settings|statistics|tournament|user|weather)-/;
+    /^(?:action|app|arrangement|booking|collection|content|control|date|editor|error|filter|guard|login|mine|mobile|navbar|news|page|query|record|section|settings|statistics|user|weather)-/;
 
   for (const filePath of componentFiles.filter((candidate) => candidate.endsWith(".tsx"))) {
     const source = sourceByPath.get(filePath);

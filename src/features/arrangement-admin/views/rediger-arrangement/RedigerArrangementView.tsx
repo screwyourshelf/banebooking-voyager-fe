@@ -20,10 +20,6 @@ import {
   formaterAntallBanetider,
 } from "@/utils/arrangementPresentation";
 
-import { useNavigate } from "react-router-dom";
-
-import { useOpprettTurnering } from "@/features/turnering/hooks/turnering/useOpprettTurnering";
-
 import { useRedigerArrangement } from "../../hooks/useRedigerArrangement";
 import { useArrangementBookinger } from "../../hooks/useArrangementBookinger";
 import { useOppdaterArrangementMetadata } from "../../hooks/useOppdaterArrangementMetadata";
@@ -98,9 +94,6 @@ export default function RedigerArrangementView({
     lagret: metadataLagret,
     resetTilbakemelding: resetMetadataFeedback,
   } = useOppdaterArrangementMetadata(valgtId);
-
-  const navigate = useNavigate();
-  const opprettTurnering = useOpprettTurnering();
 
   const { slettBooking, feil: slettBookingFeil } = useSlettArrangementBooking(valgtId);
   const {
@@ -493,42 +486,6 @@ export default function RedigerArrangementView({
 
               <Settings.Section
                 embedded
-                eyebrow="Integrasjon"
-                title="Turnering"
-                description="Koble arrangementet til turneringsadministrasjon ved behov."
-              >
-                <Settings.Panel>
-                  <Settings.Row
-                    title="Turneringsmodus"
-                    description={
-                      arrangement.turneringId
-                        ? "Arrangementet er koblet til en turnering."
-                        : "Opprett en turnering med arrangementet som grunnlag."
-                    }
-                  >
-                    {arrangement.turneringId ? (
-                      <Button
-                        type="button"
-                        onClick={() => navigate(`../turnering/${arrangement.turneringId}`)}
-                      >
-                        Administrer turnering
-                      </Button>
-                    ) : (
-                      <Button
-                        type="button"
-                        variant="outline"
-                        onClick={() => opprettTurnering.mutate({ arrangementId: arrangement.id })}
-                        disabled={opprettTurnering.isPending}
-                      >
-                        {opprettTurnering.isPending ? "Oppretter…" : "Opprett turnering"}
-                      </Button>
-                    )}
-                  </Settings.Row>
-                </Settings.Panel>
-              </Settings.Section>
-
-              <Settings.Section
-                embedded
                 eyebrow="Fareområde"
                 title="Avlys arrangement"
                 description="Alle tilknyttede banetider slettes. Handlingen må bekreftes."
@@ -541,7 +498,6 @@ export default function RedigerArrangementView({
                   >
                     <SlettArrangementDialog
                       tittel={arrangement.tittel}
-                      harTurnering={!!arrangement.turneringId}
                       onSlett={async () => {
                         await avlysArrangement();
                         onDeleted?.();
@@ -560,7 +516,6 @@ export default function RedigerArrangementView({
                     description="Arrangementoversikten er oppdatert."
                   />
                 ) : null}
-                <ServerFeil feil={opprettTurnering.error?.message ?? null} />
                 <ServerFeil feil={lagreFeil?.message ?? null} />
                 <Button type="submit" disabled={lagreMetadataLoading}>
                   {lagreMetadataLoading ? "Lagrer…" : "Lagre informasjon"}

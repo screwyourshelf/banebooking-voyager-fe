@@ -7,8 +7,6 @@ export const Kapabiliteter = {
   arrangement: {
     avlys: "arrangement:avlys",
     se: "arrangement:se",
-    seTurnering: "arrangement:seTurnering",
-    administrerTurnering: "arrangement:administrerTurnering",
   },
   klubb: {
     admin: "klubb:admin",
@@ -35,14 +33,5 @@ export const Kapabiliteter = {
   },
   statistikk: {
     lese: "statistikk:lese",
-  },
-  turnering: {
-    administrer: "turnering:administrer",
-    leggTilAnsvarlig: "turnering:leggTilAnsvarlig",
-    meldPaaKlasse: "turnering:meldPaaKlasse",
-    seKampprogram: "turnering:seKampprogram",
-    registrerResultat: "turnering:registrerResultat",
-    genererKampplan: "turnering:genererKampplan",
-    frøSluttspill: "turnering:frøSluttspill",
   },
 } as const;

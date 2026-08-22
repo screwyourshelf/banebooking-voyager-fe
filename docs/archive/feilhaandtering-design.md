@@ -389,58 +389,6 @@ Filer endret:
 
 ---
 
-### Steg 7 – Turnering ✅ UTFØRT
-
-**Filer:**
-
-- `src/features/turnering/hooks/turnering/useOpprettTurnering.ts`
-- `src/features/turnering/hooks/turnering/useLeggTilKlasse.ts`
-- `src/features/turnering/hooks/turnering/useFjernKlasse.ts`
-- `src/features/turnering/hooks/turnering/useOppdaterTurneringStatus.ts`
-- `src/features/turnering/hooks/paamelding/useMeldPaaKlasse.ts`
-- `src/features/turnering/hooks/paamelding/useOppdaterPaameldingSeed.ts`
-- `src/features/turnering/hooks/paamelding/useOppdaterPaameldingStatus.ts`
-- `src/features/turnering/hooks/paamelding/useTrekkPaamelding.ts`
-- `src/features/turnering/hooks/draw/useGenererDraw.ts`
-- `src/features/turnering/hooks/draw/useGenererKampplan.ts`
-- `src/features/turnering/hooks/draw/useFrøSluttspill.ts`
-- `src/features/turnering/hooks/draw/useRegistrerResultat.ts`
-- `src/features/turnering/hooks/admin/useAnsvarligMutations.ts`
-
-| #    | Hva                               | I dag         | Ny strategi                       |
-| ---- | --------------------------------- | ------------- | --------------------------------- |
-| 7.1  | `opprettTurnering` feiler         | `toast.error` | Inline under submit-knapp         |
-| 7.2  | `leggTilKlasse` feiler            | `toast.error` | Inline i `LeggTilKlasseDialog`    |
-| 7.3  | `fjernKlasse` feiler              | `toast.error` | Inline i bekreftelsesdialog       |
-| 7.4  | `registrerResultat` feiler        | `toast.error` | Inline i `ResultatDialog`         |
-| 7.5  | `meldPaaKlasse` feiler            | `toast.error` | Inline i `MeldPaaDialog`          |
-| 7.6  | `oppdaterPaameldingSeed` feiler   | `toast.error` | Inline i `SeedDialog`             |
-| 7.7  | `oppdaterPaameldingStatus` feiler | `toast.error` | Inline i `PaameldingStatusDialog` |
-| 7.8  | `trekkPaamelding` feiler          | `toast.error` | Inline i bekreftelsesdialog       |
-| 7.9  | `leggTilAnsvarlig` feiler         | `toast.error` | Inline i ansvarlig-dialog         |
-| 7.10 | `fjernAnsvarlig` feiler           | `toast.error` | Inline i bekreftelsesdialog       |
-| 7.11 | `oppdaterTurneringStatus` feiler  | `toast.error` | **Beholdes** – toggle-handling    |
-| 7.12 | `genererDraw` feiler              | `toast.error` | **Beholdes** – bakgrunnsoperasjon |
-| 7.13 | `genererKampplan` feiler          | `toast.error` | **Beholdes** – bakgrunnsoperasjon |
-| 7.14 | `frøSluttspill` feiler            | `toast.error` | **Beholdes** – bakgrunnsoperasjon |
-
-Steg 7 – Turnering
-Filer endret:
-Hooks (9 filer) — fjernet onError: toast.error:
-• useOpprettTurnering.ts · useLeggTilKlasse.ts · useFjernKlasse.ts
-• useMeldPaaKlasse.ts · useOppdaterPaameldingSeed.ts · useOppdaterPaameldingStatus.ts · useTrekkPaamelding.ts
-• useRegistrerResultat.ts · useAnsvarligMutations.ts
-Beholdt toast.error (7.11–7.14): useOppdaterTurneringStatus, useGenererDraw, useGenererKampplan, useFrøSluttspill
-Dialog-komponenter (5 filer) — ny serverFeil prop + <ServerFeil>: LeggTilKlasseDialog · ResultatDialog · MeldPaaDialog · SeedDialog · PaameldingStatusDialog
-Views (7 filer):
-• 7.1 – opprettTurnering: ArrangementView venter nå på turneringMutation.mutateAsync inni dialogen (dialog forblir åpen ved feil), serverFeil kombinerer arrangement- og turnering-feil. RedigerArrangementView viser <ServerFeil> inline i "Turneringsmodul"-seksjonen.
-• 7.2 – leggTilKlasse: AdminOppsettView sender serverFeil til LeggTilKlasseDialog.
-• 7.3 + 7.9 + 7.10 – fjernKlasse / ansvarlig: AdminOppsettView viser <ServerFeil> over klasselist og i ansvarlig-seksjonen (ingen bekreftelsesdialog eksisterte — fulgte booking-mønsteret fra steg 4).
-• 7.4 – registrerResultat: Begge AdminKampgjennomforingView og ResultatansvarligKampView sender kombinert serverFeil til ResultatDialog.
-• 7.5–7.8 – påmelding: AdminPaameldingView sender serverFeil til MeldPaaDialog, PaameldingStatusDialog, SeedDialog og viser trekkMutation.error inline. Lukke-tidspunktet for status- og seed-dialog er rettet (lukker nå kun onSuccess, ikke umiddelbart). TurneringSpillerView tilsvarende for spiller-flyt.
-
----
-
 ## Kodekonvensjon for inline mutation-feil
 
 Mutations i form/dialog skal **ikke** ha `onError: toast.error`. I stedet eksponeres

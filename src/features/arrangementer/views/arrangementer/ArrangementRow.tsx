@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   RecordDateRange,
@@ -26,13 +25,6 @@ import {
 type Props = {
   arrangement: ArrangementRespons;
   onAvlys: (arrangement: ArrangementRespons) => Promise<unknown>;
-};
-
-const TURNERING_STATUS_TEKST: Record<string, string> = {
-  Oppsett: "Påmelding åpner snart",
-  PaameldingAapen: "Påmelding åpen",
-  Pagaar: "Turnering pågår",
-  Avsluttet: "Avsluttet",
 };
 
 const INITIAL_DATOER = 3;
@@ -119,7 +111,6 @@ function formatCourts(courts: string[]) {
 }
 
 export default function ArrangementRow({ arrangement, onAvlys }: Props) {
-  const navigate = useNavigate();
   const [visibleDayCount, setVisibleDayCount] = useState(INITIAL_DATOER);
 
   const description = arrangement.beskrivelse?.trim() ?? "";
@@ -134,21 +125,14 @@ export default function ArrangementRow({ arrangement, onAvlys }: Props) {
     lifecycleStatus.label === "Kommende" && nextDate ? formatRelativeStart(nextDate) : undefined;
   const metadata = formaterArrangementMetadata(arrangement);
 
-  const canManageTournament =
-    !!arrangement.turneringId &&
-    harHandling(arrangement.kapabiliteter, Kapabiliteter.arrangement.administrerTurnering);
-  const canViewTournament =
-    !!arrangement.turneringId &&
-    harHandling(arrangement.kapabiliteter, Kapabiliteter.arrangement.seTurnering);
   const canCancel =
     !arrangement.erPassert &&
     harHandling(arrangement.kapabiliteter, Kapabiliteter.arrangement.avlys);
-  const hasActions = canManageTournament || canViewTournament || canCancel;
+  const hasActions = canCancel;
   const hasDetails =
     !!description ||
     !!arrangement.booketAv ||
     !!programSummary ||
-    !!arrangement.turneringStatus ||
     hasActions ||
     (!arrangement.erPassert && !programSummary);
 
@@ -169,23 +153,9 @@ export default function ArrangementRow({ arrangement, onAvlys }: Props) {
                 <>
                   {description ? <p>{description}</p> : null}
 
-                  <RecordFacts
-                    items={[
-                      ...(arrangement.booketAv
-                        ? [{ label: "Booket av", value: arrangement.booketAv }]
-                        : []),
-                      ...(arrangement.turneringStatus
-                        ? [
-                            {
-                              label: "Turnering",
-                              value:
-                                TURNERING_STATUS_TEKST[arrangement.turneringStatus] ??
-                                arrangement.turneringStatus,
-                            },
-                          ]
-                        : []),
-                    ]}
-                  />
+                  {arrangement.booketAv ? (
+                    <RecordFacts items={[{ label: "Booket av", value: arrangement.booketAv }]} />
+                  ) : null}
 
                   {programSummary ? (
                     <RecordProgram>
@@ -234,30 +204,9 @@ export default function ArrangementRow({ arrangement, onAvlys }: Props) {
               ),
               actions: hasActions ? (
                 <>
-                  {canManageTournament ? (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => navigate(`../turnering/${arrangement.turneringId}`)}
-                    >
-                      Administrer turnering
-                    </Button>
-                  ) : canViewTournament ? (
-                    <Button
-                      type="button"
-                      variant="outline"
-                      size="sm"
-                      onClick={() => navigate(`../turnering/${arrangement.turneringId}`)}
-                    >
-                      Se turnering
-                    </Button>
-                  ) : null}
-
                   {canCancel ? (
                     <SlettArrangementDialog
                       tittel={arrangement.tittel}
-                      harTurnering={arrangement.turneringId !== null}
                       onSlett={() => onAvlys(arrangement).then(() => undefined)}
                       trigger={
                         <Button type="button" variant="destructive" size="sm">

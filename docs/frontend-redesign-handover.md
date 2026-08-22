@@ -23,9 +23,6 @@ Branchen løfter appskallet og de primære arbeidsflatene til den nye visuelle p
 - Kunngjøringer, Nyheter og guard-/feilflater
 - innlogging, mobilnavigasjon og desktop-sidefelt
 
-Turnering er uttrykkelig utenfor redesignomfanget. Funksjonalitet og API-kontrakter er
-beholdt, med de additive backendendringene som er listet nedenfor.
-
 ## Arkitektur som skal bevares
 
 ### Komponentlag
@@ -121,7 +118,6 @@ Visuell kontroll skal minst dekke:
 
 ## Kjente avgrensninger
 
-- Turnering beholder dagens komponenter, toast-bruk og visuelle uttrykk.
 - Aktivitetsfarger mappes foreløpig fra aktivitetens slug i frontend.
 - Det finnes ikke automatiserte visuelle regresjonstester.
 - Overgangen bort fra flere klubber/tenants inngår ikke i denne leveransen.
