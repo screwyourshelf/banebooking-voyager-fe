@@ -2,6 +2,9 @@ import axios, { AxiosError, AxiosHeaders, type InternalAxiosRequestConfig } from
 import { hentUtviklingssession } from "@/auth/developmentSession";
 import { hentSupabaseToken, synkroniserSupabaseToken } from "@/auth/supabaseToken";
 import { getSupabaseClient } from "@/supabase";
+import { ApiError } from "$lib/platform/api";
+
+export { ApiError } from "$lib/platform/api";
 
 const rawBase = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
 const baseURL = import.meta.env.MODE === "development" || !rawBase ? "/api" : `${rawBase}/api`;
@@ -15,16 +18,6 @@ declare module "axios" {
 const api = axios.create({ baseURL, timeout: 20_000 });
 
 let isHandling401 = false;
-
-export class ApiError extends Error {
-  constructor(
-    message: string,
-    readonly status?: number
-  ) {
-    super(message);
-    this.name = "ApiError";
-  }
-}
 
 function setAuthHeader(config: InternalAxiosRequestConfig, token: string, scheme = "Bearer") {
   const headers =

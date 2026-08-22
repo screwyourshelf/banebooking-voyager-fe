@@ -59,6 +59,66 @@ for (const targetRoot of targetRoots) {
       ) {
         report(relativePath, source, specifier, "routes må bruke featurets offentlige inngang");
       }
+
+      if (
+        !normalizedPath.endsWith(".client.ts") &&
+        !normalizedPath.endsWith(".client.js") &&
+        !normalizedPath.includes(".test.") &&
+        /(?:^|\/)\w[\w-]*\.client(?:\.[jt]s)?$/.test(specifier)
+      ) {
+        report(
+          relativePath,
+          source,
+          specifier,
+          "universal kode kan ikke importere browser-only moduler"
+        );
+      }
+    }
+
+    if (
+      normalizedPath.startsWith("src/lib/contracts/") &&
+      imports.some((specifier) => !specifier.startsWith("."))
+    ) {
+      report(
+        relativePath,
+        source,
+        imports.find((specifier) => !specifier.startsWith(".")) ?? "import",
+        "contracts kan bare importere andre transportkontrakter relativt"
+      );
+    }
+
+    if (normalizedPath.startsWith("src/lib/domain/")) {
+      const browserGlobalMatch = source.match(
+        /\b(?:document|localStorage|navigator|sessionStorage|window)\b/
+      );
+      if (browserGlobalMatch) {
+        report(
+          relativePath,
+          source,
+          browserGlobalMatch[0],
+          "domain skal være ren og uten browser-globals"
+        );
+      }
+
+      const frameworkImport = imports.find(
+        (specifier) => specifier === "svelte" || specifier.startsWith("@sveltejs/")
+      );
+      if (frameworkImport) {
+        report(relativePath, source, frameworkImport, "domain skal være rammeverksuavhengig");
+      }
+    }
+
+    if (
+      !normalizedPath.startsWith("src/lib/platform/storage/") &&
+      source.match(/\b(?:localStorage|sessionStorage)\b/)
+    ) {
+      const storageMatch = source.match(/\b(?:localStorage|sessionStorage)\b/);
+      report(
+        relativePath,
+        source,
+        storageMatch?.[0] ?? "storage",
+        "browser storage kan bare brukes fra platform/storage"
+      );
     }
 
     if (filePath.endsWith(".svelte")) {

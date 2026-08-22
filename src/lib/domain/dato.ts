@@ -1,0 +1,208 @@
+import type { DayOfWeek } from "$lib/contracts/arrangement";
+
+export type UkedagIso = 1 | 2 | 3 | 4 | 5 | 6 | 7; // Man=1 ... Søn=7
+export type UkedagKortNorsk = "Man" | "Tir" | "Ons" | "Tor" | "Fre" | "Lør" | "Søn";
+
+export const ukedager: readonly UkedagKortNorsk[] = [
+  "Man",
+  "Tir",
+  "Ons",
+  "Tor",
+  "Fre",
+  "Lør",
+  "Søn",
+];
+
+export const ukedagKortTilIso: Record<UkedagKortNorsk, UkedagIso> = {
+  Man: 1,
+  Tir: 2,
+  Ons: 3,
+  Tor: 4,
+  Fre: 5,
+  Lør: 6,
+  Søn: 7,
+};
+
+export const ukedagIsoTilKort: Record<UkedagIso, UkedagKortNorsk> = {
+  1: "Man",
+  2: "Tir",
+  3: "Ons",
+  4: "Tor",
+  5: "Fre",
+  6: "Lør",
+  7: "Søn",
+};
+
+export function ukedagTilLangNorsk(d: UkedagIso): string {
+  switch (d) {
+    case 1:
+      return "Mandag";
+    case 2:
+      return "Tirsdag";
+    case 3:
+      return "Onsdag";
+    case 4:
+      return "Torsdag";
+    case 5:
+      return "Fredag";
+    case 6:
+      return "Lørdag";
+    case 7:
+      return "Søndag";
+  }
+}
+
+export function sorterUkedager<T extends UkedagIso>(dager: T[]): T[] {
+  return [...dager].sort((a, b) => a - b);
+}
+
+export function formatUkedagerLangNorsk(dager: UkedagIso[] | undefined): string {
+  if (!dager?.length) return "—";
+  return sorterUkedager(dager).map(ukedagTilLangNorsk).join(", ");
+}
+
+export function dateTilUkedagIso(d: Date): UkedagIso {
+  const js = d.getDay();
+  return (js === 0 ? 7 : js) as UkedagIso;
+}
+
+export function finnUkedagerIDatoPeriode(fra: Date, til: Date): Set<UkedagIso> {
+  const dager = new Set<UkedagIso>();
+  const start = new Date(fra.getFullYear(), fra.getMonth(), fra.getDate());
+  const slutt = new Date(til.getFullYear(), til.getMonth(), til.getDate());
+  for (let d = new Date(start); d <= slutt; d.setDate(d.getDate() + 1)) {
+    dager.add(dateTilUkedagIso(d));
+  }
+  return dager;
+}
+
+export function tilDatoTekst(dato: Date): string {
+  const år = dato.getFullYear();
+  const måned = String(dato.getMonth() + 1).padStart(2, "0");
+  const dag = String(dato.getDate()).padStart(2, "0");
+  return `${år}-${måned}-${dag}`;
+}
+
+export function formatDatoKort(datoInput: string | Date): string {
+  const dato = new Date(datoInput);
+  return dato.toLocaleDateString("nb-NO", { day: "2-digit", month: "2-digit", year: "numeric" });
+}
+
+export function formatTidspunktKort(datoInput: string | Date): string {
+  const dato = new Date(datoInput);
+  return dato.toLocaleString("nb-NO", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+}
+
+export function formatDatoLang(datoStr: string): string {
+  const dato = new Date(`${datoStr}T00:00:00`);
+  return dato.toLocaleDateString("nb-NO", { day: "numeric", month: "long", year: "numeric" });
+}
+
+export function formaterDatoGruppe(datoIso: string, referanseDato = new Date()) {
+  const dato = new Date(`${datoIso.slice(0, 10)}T00:00:00`);
+  const iDag = new Date(
+    referanseDato.getFullYear(),
+    referanseDato.getMonth(),
+    referanseDato.getDate()
+  );
+  const dagDifferanse = Math.round((dato.getTime() - iDag.getTime()) / 86_400_000);
+  const fullDato = dato.toLocaleDateString("nb-NO", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+  });
+
+  return {
+    relativeLabel: dagDifferanse === 0 ? "I dag" : dagDifferanse === 1 ? "I morgen" : null,
+    label: fullDato.charAt(0).toLocaleUpperCase("nb-NO") + fullDato.slice(1),
+  };
+}
+
+const dayOfWeekToIso: Record<DayOfWeek, UkedagIso> = {
+  Sunday: 7,
+  Monday: 1,
+  Tuesday: 2,
+  Wednesday: 3,
+  Thursday: 4,
+  Friday: 5,
+  Saturday: 6,
+};
+
+const isoToDayOfWeek: Record<UkedagIso, DayOfWeek> = {
+  1: "Monday",
+  2: "Tuesday",
+  3: "Wednesday",
+  4: "Thursday",
+  5: "Friday",
+  6: "Saturday",
+  7: "Sunday",
+};
+
+export function dayOfWeekTilIso(day: DayOfWeek): UkedagIso {
+  return dayOfWeekToIso[day];
+}
+
+export function isoTilDayOfWeek(iso: UkedagIso): DayOfWeek {
+  return isoToDayOfWeek[iso];
+}
+
+export function dayOfWeeksTilIso(days: DayOfWeek[]): UkedagIso[] {
+  return days.map(dayOfWeekTilIso);
+}
+
+export function isoTilDayOfWeeks(isos: UkedagIso[]): DayOfWeek[] {
+  return isos.map(isoTilDayOfWeek);
+}
+
+export function formatDayOfWeeksLangNorsk(days: DayOfWeek[] | undefined): string {
+  if (!days?.length) return "—";
+  const isoDager = dayOfWeeksTilIso(days);
+  return sorterUkedager(isoDager).map(ukedagTilLangNorsk).join(", ");
+}
+
+const dayOfWeekTilKortNorsk: Record<DayOfWeek, string> = {
+  Monday: "Man",
+  Tuesday: "Tir",
+  Wednesday: "Ons",
+  Thursday: "Tor",
+  Friday: "Fre",
+  Saturday: "Lør",
+  Sunday: "Søn",
+};
+
+/** Konverterer DayOfWeek til kort norsk visning ("Man", "Tir", etc.) */
+export function dayOfWeekKortNorsk(day: DayOfWeek): string {
+  return dayOfWeekTilKortNorsk[day];
+}
+
+/** Sorterer DayOfWeek-array etter ukedag (man=1, søn=7) */
+export function sorterDayOfWeeks(days: DayOfWeek[]): DayOfWeek[] {
+  return [...days].sort((a, b) => dayOfWeekToIso[a] - dayOfWeekToIso[b]);
+}
+
+/** Finner hvilke DayOfWeek som finnes i en datoperiode */
+export function finnDayOfWeeksIPeriode(fra: Date, til: Date): DayOfWeek[] {
+  const dager = finnUkedagerIDatoPeriode(fra, til);
+  return isoTilDayOfWeeks([...dager].sort((a, b) => a - b));
+}
+
+export function dagerIgjenTekst(datoIso: string): string {
+  const start = new Date(datoIso);
+  const iDag = new Date();
+
+  const startMidnatt = new Date(start.getFullYear(), start.getMonth(), start.getDate());
+  const iDagMidnatt = new Date(iDag.getFullYear(), iDag.getMonth(), iDag.getDate());
+
+  const diffMs = startMidnatt.getTime() - iDagMidnatt.getTime();
+  const dager = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+
+  if (dager === 0) return "I dag";
+  if (dager === 1) return "I morgen";
+  return `Om ${dager} dager`;
+}

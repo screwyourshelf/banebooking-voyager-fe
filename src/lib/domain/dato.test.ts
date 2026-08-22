@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { formaterDatoGruppe } from "./datoUtils";
+import { formaterDatoGruppe } from "./dato";
 
 describe("formaterDatoGruppe", () => {
   const referanseDato = new Date(2026, 7, 21);

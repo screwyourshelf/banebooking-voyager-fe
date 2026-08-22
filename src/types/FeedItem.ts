@@ -1,6 +1,1 @@
-export type FeedItemRespons = {
-  tittel: string;
-  innhold: string | null;
-  lenke: string;
-  publisertDato: string | null;
-};
+export * from "$lib/contracts/feed-item";

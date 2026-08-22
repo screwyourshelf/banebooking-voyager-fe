@@ -8,7 +8,7 @@ import {
   skrivLokalLagring,
   skrivSessionLagring,
   supabaseAuthStorage,
-} from "@/utils/browserStorage";
+} from "./browser-storage.client";
 
 function lagMinneLagring(): Storage {
   const data = new Map<string, string>();

@@ -4,15 +4,16 @@
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** WP-2 — Contracts, domain og platform
+> **Aktiv arbeidspakke:** WP-3 — Auth, tenant og serverdata
 >
 > **Sist oppdatert:** 2026-08-22
 
 ## Mål for aktiv arbeidspakke
 
-Flytt transportkontrakter og ren domenelogikk til målarkitekturen. Etabler deretter validert
-offentlig konfigurasjon, typed `fetch`-klient, normalisert `ApiError`, sentral 401-kontrakt og
-isolerte adapters for storage og observability.
+Etabler et typed, rammeverksnøytralt authgrensesnitt med Supabase- og utviklingsadapter,
+deterministisk sesjonsgjenoppretting og auth callback. Normaliser tenant-context, koble TanStack
+Svelte Query til den nye API-klienten og håndhev protected/admin guards uten å flytte autoritet fra
+backendens kapabiliteter.
 
 ## Fullført
 
@@ -36,6 +37,16 @@ isolerte adapters for storage og observability.
 - Første maskinelle SvelteKit-grenser håndhever offentlige featureinnganger, featureisolasjon,
   Bits-/Supabase-/Sentry-eierskap, komponenters HTTP-grense og forbud mot legacy Svelte-syntaks.
 - WP-1-kvalitetsporten er nådd uten backendendringer.
+- Alle eksisterende backend-DTO-er ligger i `lib/contracts`; React-referansen bruker midlertidige,
+  tynne re-exports uten dupliserte transporttyper.
+- Ren dato-, booking-, presentasjons- og kapabilitetslogikk ligger i `lib/domain` og testes uten DOM.
+- Platformlaget har injiserbar native `fetch`-klient med base URL, auth-header, JSON/body,
+  timeout/abort og normalisert `ApiError` uten sensitiv responsbody.
+- Samtidige 401-responser samles i én rammeverksnøytral effekt; storage er isolert i en
+  browser-only adapter og observability filtrerer sensitive kontekstfelter.
+- Arkitekturkontrollen håndhever rene contracts/domain, storage-eierskap og at universal kode ikke
+  importerer `*.client`-moduler.
+- WP-2-kvalitetsporten er nådd uten funksjonell kontraktendring eller backendendringer.
 
 ## Nåtilstand
 
@@ -43,19 +54,21 @@ isolerte adapters for storage og observability.
 - Alle produkt-URL-er rendrer foreløpige Svelte-routeflater; featureadferd er ikke migrert ennå.
 - React-kilden er fortsatt produksjonsreferanse i arbeidskopien, men er ikke koblet til eller bundlet
   av SvelteKit.
+- Contracts, ren domenelogikk og platformkjerne er nå autoritative for både videre Svelte-arbeid og
+  de midlertidige React-broene.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                                 |
-| ------------------------------------- | -------------------------------------------------- |
-| Base branch                           | `main`                                             |
-| Fastslått basecommit                  | `5287c5e`                                          |
-| Siste semantiske checkpoint           | `feat(sveltekit): establish WP-1 route foundation` |
-| Lokale commits foran base             | 3                                                  |
-| Forventede ucommitterte frontendfiler | Ingen                                              |
-| Neste planlagte checkpoint            | `feat(sveltekit): establish WP-2 platform core`    |
+| Felt                                  | Forventet tilstand                                   |
+| ------------------------------------- | ---------------------------------------------------- |
+| Base branch                           | `main`                                               |
+| Fastslått basecommit                  | `5287c5e`                                            |
+| Siste semantiske checkpoint           | `feat(sveltekit): establish WP-2 platform core`      |
+| Lokale commits foran base             | 4                                                    |
+| Forventede ucommitterte frontendfiler | Ingen                                                |
+| Neste planlagte checkpoint            | `feat(sveltekit): establish WP-3 auth and data core` |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -64,29 +77,28 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Etabler WP-2-kjernen i denne rekkefølgen:
+Etabler WP-3-kjernen i denne rekkefølgen:
 
-1. Flytt eksisterende backend-DTO-er til `lib/contracts` uten å endre transportkontraktene, og
-   behold midlertidige type-reexports bare når React-referansen trenger dem under overgangen.
-2. Flytt ren dato-, sorterings-, presentasjons- og kapabilitetslogikk til `lib/domain` med
-   DOM-frie Vitest-tester.
-3. Implementer en injiserbar typed klient rundt native `fetch` med base URL, auth-header, timeout,
-   abortsignal, JSON/body-håndtering og normalisert `ApiError`.
-4. Etabler sentral, idempotent 401-kontrakt og sikre storage-/observability-adapters, og kjør
-   WP-2-porten.
+1. Definer authport, deterministiske authstates og typed Svelte-context uten Supabase-kobling i
+   routes eller features.
+2. Flytt Supabase- og utviklingssesjon bak browser-only platformadapters, og implementer callback,
+   sesjonsgjenoppretting og idempotent utlogging mot den sentrale 401-kontrakten.
+3. Normaliser slug og dedikert tenant-build til én typed tenant-context som fungerer med base path.
+4. Etabler TanStack Svelte Query-klient, query-key-konvensjon og første typed endpointkontrakter, og
+   koble protected/admin route groups til deterministiske guards før WP-3-porten kjøres.
 
 ## Arbeidspakkeregister
 
-| Arbeidspakke                     | Status       | Port/resultat                                                |
-| -------------------------------- | ------------ | ------------------------------------------------------------ |
-| WP-0 Styring og baseline         | Fullført     | Dokumentgrunnlag, React-baseline og komplett adferdsinventar |
-| WP-1 Build og routes             | Fullført     | Build, routes, hostingvarianter og arkitekturkontroll grønn  |
-| WP-2 Contracts/domain/platform   | Pågår        | Transporttyper er første eksakte steg                        |
-| WP-3 Auth/tenant/serverdata      | Ikke startet | —                                                            |
-| WP-4 UI-fundament                | Ikke startet | —                                                            |
-| WP-5 App-shell                   | Ikke startet | —                                                            |
-| WP-6 Featuremigrering            | Ikke startet | —                                                            |
-| WP-7 Paritet og produksjonsbytte | Ikke startet | —                                                            |
+| Arbeidspakke                     | Status       | Port/resultat                                                 |
+| -------------------------------- | ------------ | ------------------------------------------------------------- |
+| WP-0 Styring og baseline         | Fullført     | Dokumentgrunnlag, React-baseline og komplett adferdsinventar  |
+| WP-1 Build og routes             | Fullført     | Build, routes, hostingvarianter og arkitekturkontroll grønn   |
+| WP-2 Contracts/domain/platform   | Fullført     | Contracts, ren domain, fetch/API, 401 og adapters grønne      |
+| WP-3 Auth/tenant/serverdata      | Pågår        | Authport og deterministiske authstates er første eksakte steg |
+| WP-4 UI-fundament                | Ikke startet | —                                                             |
+| WP-5 App-shell                   | Ikke startet | —                                                             |
+| WP-6 Featuremigrering            | Ikke startet | —                                                             |
+| WP-7 Paritet og produksjonsbytte | Ikke startet | —                                                             |
 
 ## Featureregister
 
@@ -105,13 +117,15 @@ Etabler WP-2-kjernen i denne rekkefølgen:
 
 ## Åpne blokkeringer
 
-Ingen kjente blokkeringer. WP-2 kan utføres fra eksisterende frontendkontrakter uten
-backendendringer eller ny brukerbeslutning.
+Ingen kjente blokkeringer. WP-3 kan bygges mot eksisterende Supabase-, tenant- og
+backendkontrakter uten backendendringer eller ny brukerbeslutning.
 
 ## Midlertidig kode og kjente avvik
 
 - React-kilde og React-avhengigheter er midlertidig referanse og skal fjernes etter hvert som
   ansvaret erstattes; de er ikke del av SvelteKit-bundlen.
+- `src/types/` og de flyttede filene i `src/utils/` er midlertidige React-re-exports til autoritativ
+  kode i `src/lib/contracts`, `src/lib/domain` og `src/lib/platform`.
 - Alle Svelte-featureflater er bevisst midlertidige route-placeholdere frem til WP-2–WP-5 gir
   contracts, data, auth, UI og app-shell.
 - Eksisterende globale designstiler lastes av root layout som visuell baseline; de konsolideres i
@@ -124,7 +138,7 @@ backendendringer eller ny brukerbeslutning.
 | Prettier på aktiv kode og dokumenter | Bestått 2026-08-22                                                             |
 | Relative dokumentlenker              | Bestått 2026-08-22                                                             |
 | `git diff --check`                   | Bestått 2026-08-22                                                             |
-| `npm test`                           | Bestått 2026-08-22: 10 filer, 36 tester                                        |
+| `npm test`                           | Bestått 2026-08-22: 15 filer, 48 tester                                        |
 | `npm run check`                      | Bestått 2026-08-22: Svelte/React-typecheck, arkitektur, design, lint og format |
 | Cloudflare Pages-build               | Bestått 2026-08-22: root path og `index.html`-fallback                         |
 | GitHub Pages-build                   | Bestått 2026-08-22: `/banebooking` og `404.html`-fallback                      |
@@ -135,15 +149,15 @@ backendendringer eller ny brukerbeslutning.
 
 ## Filer i siste checkpoint
 
-- build- og verktøykonfigurasjon i `package.json`, `svelte.config.js`, `vite.config.ts`,
-  `tsconfig*.json`, ESLint og Prettier
-- `src/app.html`, `src/app.d.ts`, root layout og error boundary
-- `src/routes/auth/callback/` og hele `src/routes/[[slug=tenant]]/` med route groups
-- `src/params/tenant.ts`
-- `src/lib/platform/config/`
-- `src/lib/ui/feedback/RoutePlaceholder.svelte`
-- `scripts/check-architecture-boundaries.mjs`
-- statiske hostingfiler i `public/`
+- transportkontrakter og barrel i `src/lib/contracts/`, med midlertidige React-re-exports i
+  `src/types/`
+- ren og DOM-fri logikk med tester i `src/lib/domain/`, med midlertidige React-re-exports i
+  `src/utils/`
+- typed HTTP-klient, `ApiError` og sentral 401-kontrakt i `src/lib/platform/api/`
+- browser-only storageadapter i `src/lib/platform/storage/`
+- sikker observabilityport i `src/lib/platform/observability/`
+- styrkede grenser i `scripts/check-architecture-boundaries.mjs`
+- kompatibilitetsbro fra eksisterende Axios-klient til autoritativ `ApiError`
 - `docs/migration-status.md`
 
 Denne listen beskriver checkpointets leveranse. `/start` bruker commit-diffen som autoritativ kilde

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   formaterArrangementMetadata,
   getArrangementLifecycleStatus,
-} from "./arrangementPresentation";
+} from "./arrangement-presentation";
 
 describe("arrangement presentation", () => {
   it("uses one lifecycle language for upcoming, ongoing and past arrangements", () => {
