@@ -18,6 +18,7 @@ export type {
 } from "./primitives";
 export {
   Collection,
+  CollectionControls,
   CollectionEmpty,
   CollectionError,
   CollectionGroup,
@@ -64,6 +65,13 @@ export type {
   CollectionRowLayout,
   CollectionRowStatus,
   CollectionStatusTone,
+  CollectionChoiceContext,
+  CollectionChoiceOption,
+  CollectionControlField,
+  CollectionControlGroup,
+  CollectionSearchControl,
+  CollectionSortControl,
+  CollectionToggleControl,
   DialogActionContext,
   DocumentFact,
   FeedbackTone,

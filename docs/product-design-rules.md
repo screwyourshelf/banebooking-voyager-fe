@@ -256,6 +256,45 @@ Regler:
 - Features lager ikke egne datobånd, markører eller kantlinjer.
 - Relative datoer som `I dag` er et aksentfarget tekstprefiks, ikke en badge.
 
+### Samlingskontroller
+
+`Collection` eier toggle, selection, filtergrupper, søk, sortering og sammensatte filterfelt. Den
+offentlige grensen er typed filterstate og semantiske callbacks; features bygger ikke header- eller
+filteranatomi med snippets eller lokal CSS. Et eksplisitt custom choice-snippet finnes bare for en
+kontroll som allerede eies av designsystemet, som bookingpresentasjonen av `DatePicker`.
+
+React-referansens reelle konsumenter er kaldkartlagt slik:
+
+| Kontrollkombinasjon                | Flater                                                                                        |
+| ---------------------------------- | --------------------------------------------------------------------------------------------- |
+| Header-toggle                      | Arrangementer, arrangementadmin, mine bookinger og brukerlisten                               |
+| Flervalgsfilter                    | Grenfilter i arrangementer, arrangementadmin, baner og mine bookinger; status i bookinglisten |
+| Søk, to filtergrupper og sortering | Brukerlisten                                                                                  |
+| Alltid synlig selection            | Bookingens gren/dag/bane og statistikkens bookingtype/gren/bane                               |
+| Typed select-, switch- og datofelt | Statistikkens periode, sammenligning og egendefinerte fra-/til-datoer                         |
+
+- Header-toggle forblir en navngitt switch ved samlingsoppsummeringen på mobil og desktop. Den
+  skjules ikke under et generelt filterpanel, og pending beholder etikett og valgt state mens
+  kontrollen låses.
+- Selection er alltid inline fordi den endrer selve arbeidsutvalget. Filterdetaljer er lukket bak
+  en navngitt disclosure på mobil; på desktop vises de inline uten en ekstra meny eller popover.
+  Søkefeltet forblir synlig når filterdetaljene er lukket.
+- Disclosure-knappen viser antall valgte filterverdier. Valgene er datadrevne, brytes over flere
+  linjer og har ingen kunstig maksimumsgrense i patternet. Enkeltvalg og flervalg bruker samme
+  native choice-knapp; featurestate avgjør om ett eller flere verdier er valgt.
+- Reset vises når søk eller filtergrupper er aktive og leverer én semantisk callback. Sortering er
+  en presentasjonsrekkefølge og gjør ikke alene filteret aktivt. Tømmeknappen i søket nuller bare
+  søket.
+- Filterfelt er en diskriminert kontrakt for `select`, `date` og `switch`. De komponerer de
+  eksisterende offentlige kontrollene med sentral label, bredde, disabled og pending; features
+  sender ikke rå DOM-hendelser eller Bits-deler.
+- Disclosure, choice, toggle og reset er native knapper i vanlig dokumentrekkefølge. Åpning og
+  lukking beholder fokus på disclosure-knappen. Select og kalender beholder sine etablerte
+  tastatur-, portal- og fokusreturkontrakter; ingen ny menu-/popover-primitive er nødvendig.
+- Pending setter busy state på kontrollgruppen og deaktiverer alle tilhørende fokusmål uten å
+  skjule valgt state. En filtrert tom liste presenteres med `CollectionEmpty` og kan komponere en
+  eksplisitt reset-handling; tomt resultat er ikke loading.
+
 ## Dokumentinnhold
 
 `Document` brukes for vilkår, obligatoriske kunngjøringer, reglement og annet strukturert innhold

@@ -1,4 +1,14 @@
 export { default as Collection } from "./Collection.svelte";
+export type { CollectionToggleControl } from "./Collection.svelte";
+export { default as CollectionControls } from "./CollectionControls.svelte";
+export type {
+  CollectionChoiceContext,
+  CollectionChoiceOption,
+  CollectionControlField,
+  CollectionControlGroup,
+  CollectionSearchControl,
+  CollectionSortControl,
+} from "./CollectionControls.svelte";
 export { default as CollectionEmpty } from "./CollectionEmpty.svelte";
 export { default as CollectionError } from "./CollectionError.svelte";
 export { default as CollectionGroup } from "./CollectionGroup.svelte";

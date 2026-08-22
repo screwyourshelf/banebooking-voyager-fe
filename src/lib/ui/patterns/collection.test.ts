@@ -5,6 +5,7 @@ import { fireEvent, render, screen } from "@testing-library/svelte";
 import axe from "axe-core";
 import { describe, expect, it, vi } from "vitest";
 import CollectionEmpty from "./CollectionEmpty.svelte";
+import CollectionControlsFixture from "./CollectionControlsFixture.test.svelte";
 import CollectionError from "./CollectionError.svelte";
 import CollectionFixture from "./CollectionFixture.test.svelte";
 import CollectionLoading from "./CollectionLoading.svelte";
@@ -226,5 +227,105 @@ describe("compound collection row interactions", () => {
   it("has no detectable accessibility violations in expanded and reorder states", async () => {
     const rows = renderInteractions({ value: "first" });
     expect((await axe.run(rows.container, axeOptions)).violations).toEqual([]);
+  });
+});
+
+describe("public collection controls", () => {
+  function renderControls(options: { pending?: boolean } = {}) {
+    const callbacks = {
+      onDateChange: vi.fn(),
+      onReset: vi.fn(),
+      onRoleChange: vi.fn(),
+      onSearchChange: vi.fn(),
+      onSortChange: vi.fn(),
+      onTogglePast: vi.fn(),
+    };
+
+    return {
+      callbacks,
+      result: render(CollectionControlsFixture, { ...callbacks, ...options }),
+    };
+  }
+
+  it("keeps selection inline and makes mobile filter detail an explicit disclosure", async () => {
+    const { result } = renderControls();
+    const selection = screen.getByRole("region", { name: "Velg dag" });
+    const filters = screen.getByRole("region", { name: "Filtrer brukere" });
+    const toggle = screen.getByRole("button", { name: /Filtre/ });
+
+    expect(selection).toHaveAttribute("data-open", "true");
+    expect(filters).toHaveAttribute("data-open", "false");
+    expect(toggle).toHaveAttribute("aria-expanded", "false");
+
+    toggle.focus();
+    await fireEvent.click(toggle);
+
+    expect(toggle).toHaveFocus();
+    expect(toggle).toHaveAttribute("aria-expanded", "true");
+    expect(filters).toHaveAttribute("data-open", "true");
+    expect(result.container.querySelectorAll('[data-ui="collection-controls"]')).toHaveLength(2);
+  });
+
+  it("reports toggle, search, choice and reset through semantic callbacks", async () => {
+    const { callbacks } = renderControls();
+    const showPast = screen.getByRole("switch", { name: "Vis tidligere" });
+    const search = screen.getByRole("searchbox", { name: "Søk etter bruker" });
+
+    await fireEvent.click(showPast);
+    await fireEvent.input(search, { target: { value: "Grace" } });
+    await fireEvent.click(screen.getByRole("button", { name: /Filtre/ }));
+    await fireEvent.click(screen.getByRole("button", { name: "Administrator" }));
+    await fireEvent.click(screen.getByRole("button", { name: "Nullstill" }));
+
+    expect(showPast).toHaveAttribute("aria-checked", "true");
+    expect(callbacks.onTogglePast).toHaveBeenCalledWith(true);
+    expect(callbacks.onSearchChange).toHaveBeenCalledWith("Grace");
+    expect(callbacks.onRoleChange).toHaveBeenCalledWith("admin");
+    expect(callbacks.onReset).toHaveBeenCalledOnce();
+  });
+
+  it("owns custom choices, typed fields, sorting and stable native focus targets", async () => {
+    renderControls();
+    await fireEvent.click(screen.getByRole("button", { name: /Filtre/ }));
+
+    expect(screen.getByRole("button", { name: "I dag" })).toHaveAttribute("aria-pressed", "true");
+    expect(screen.getByRole("button", { name: "Velg annen dato" })).toHaveAttribute(
+      "aria-pressed",
+      "false"
+    );
+    expect(screen.getByRole("combobox", { name: "Periode" })).toBeEnabled();
+    expect(screen.getByRole("combobox", { name: "Sorter etter" })).toBeEnabled();
+    expect(screen.getByRole("switch", { name: "Sammenlign med året før" })).toBeEnabled();
+
+    const choice = screen.getByRole("button", { name: "Medlem" });
+    choice.focus();
+    expect(choice).toHaveFocus();
+  });
+
+  it("locks every control and exposes busy state while filter work is pending", async () => {
+    const { callbacks } = renderControls({ pending: true });
+    const panels = screen
+      .getAllByRole("region")
+      .filter((region) => region.matches('[data-ui="collection-controls"]'));
+
+    expect(panels).toHaveLength(2);
+    expect(panels.every((panel) => panel.getAttribute("aria-busy") === "true")).toBe(true);
+    expect(screen.getByRole("switch", { name: "Vis tidligere" })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /Filtre/ })).toBeDisabled();
+    expect(screen.getByRole("button", { name: "I dag" })).toBeDisabled();
+
+    await fireEvent.click(screen.getByRole("switch", { name: "Vis tidligere" }));
+    expect(callbacks.onTogglePast).not.toHaveBeenCalled();
+  });
+
+  it("has no detectable accessibility violations in collapsed, open and pending states", async () => {
+    const collapsed = renderControls();
+    expect((await axe.run(collapsed.result.container, axeOptions)).violations).toEqual([]);
+    await fireEvent.click(screen.getByRole("button", { name: /Filtre/ }));
+    expect((await axe.run(collapsed.result.container, axeOptions)).violations).toEqual([]);
+    collapsed.result.unmount();
+
+    const pending = renderControls({ pending: true });
+    expect((await axe.run(pending.result.container, axeOptions)).violations).toEqual([]);
   });
 });

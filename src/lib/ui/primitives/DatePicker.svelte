@@ -144,6 +144,7 @@
       aria-busy={pending || undefined}
       aria-describedby={resolvedDescribedBy}
       aria-invalid={resolvedInvalid}
+      aria-pressed={presentation === "booking" ? selected : undefined}
       data-required={resolvedRequired || undefined}
     >
       <svg data-part="calendar-icon" aria-hidden="true" viewBox="0 0 20 20">

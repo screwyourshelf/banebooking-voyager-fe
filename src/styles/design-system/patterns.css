@@ -2108,16 +2108,354 @@
     white-space: nowrap;
   }
 
-  [data-ui="collection"] > [data-part="header"] > [data-part="context-action"] {
+  [data-ui="collection"] > [data-part="header"] > [data-part="header-actions"] {
     display: flex;
     flex: 0 0 auto;
+    align-items: center;
+    gap: var(--app-space-sm);
+  }
+
+  [data-ui="collection"]
+    > [data-part="header"]
+    > [data-part="header-actions"]
+    > [data-part="context-action"] {
+    display: flex;
     align-items: center;
   }
 
   [data-ui="collection"] > [data-part="filters"] {
     border-bottom: 1px solid color-mix(in srgb, var(--app-control-text) 14%, transparent);
     background: var(--app-control-surface);
+    color: var(--app-control-text);
+  }
+
+  [data-ui="collection-toggle"] {
+    display: flex;
+    min-width: 0;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.625rem;
+    border-radius: 0.75rem;
+    background: var(--filter-switch-bg, var(--app-surface-subtle));
+    padding: 0.5rem 0.625rem;
+    cursor: pointer;
+  }
+
+  [data-ui="collection-toggle"] > [data-part="content"] {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+  }
+
+  [data-ui="collection-toggle"] > [data-part="content"] > [data-part="title"] {
+    color: var(--filter-switch-text, var(--app-ink));
+    font-size: var(--app-type-label);
+    font-weight: 680;
+    white-space: nowrap;
+  }
+
+  [data-ui="collection-toggle"] > [data-part="content"] > [data-part="description"] {
+    color: var(--filter-switch-muted, var(--app-ink-faint));
+    font-size: var(--app-type-caption);
+  }
+
+  [data-ui="collection-toggle"]:has([data-ui-primitive="switch"]:disabled) {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  [data-ui="collection-controls"] {
+    --control-choice-indicator: var(--app-choice-indicator);
     padding: 0.625rem 0.875rem 0.75rem;
+  }
+
+  [data-ui="collection-controls"] + [data-ui="collection-controls"] {
+    border-top: 1px solid color-mix(in srgb, var(--app-control-text) 14%, transparent);
+  }
+
+  [data-ui="collection-controls"][data-indicator="activity"] {
+    --control-choice-indicator: var(--activity-accent);
+  }
+
+  [data-ui="collection-controls"] > [data-part="top"] {
+    display: grid;
+    min-height: 2.75rem;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: var(--app-space-sm);
+  }
+
+  [data-ui="collection-controls"] > [data-part="top"] > [data-part="label"] {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--app-control-muted);
+    font-size: var(--app-type-caption);
+    font-weight: 730;
+  }
+
+  [data-ui="collection-controls"]
+    > [data-part="top"]
+    > [data-part="label"]
+    > [data-ui-primitive="icon"] {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  [data-ui="collection-controls"] > [data-part="top"] > [data-part="search"] {
+    position: relative;
+    min-width: 0;
+  }
+
+  [data-ui="collection-controls"]
+    > [data-part="top"]
+    > [data-part="search"]
+    > [data-part="search-icon"] {
+    position: absolute;
+    z-index: 1;
+    top: 50%;
+    left: 0.875rem;
+    display: grid;
+    width: 1rem;
+    height: 1rem;
+    color: var(--app-ink-faint);
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  [data-ui="collection-controls"]
+    > [data-part="top"]
+    > [data-part="search"]
+    > [data-ui-primitive="input"] {
+    height: 2.75rem;
+    border-color: var(--app-line-strong);
+    background: var(--app-surface);
+    padding-right: 2.5rem;
+    padding-left: 2.5rem;
+    color: var(--app-ink);
+    font-size: var(--app-type-body-sm);
+    box-shadow: var(--app-shadow-sm);
+  }
+
+  [data-ui="collection-controls"]
+    > [data-part="top"]
+    > [data-part="search"]
+    > [data-ui-primitive="input"]::placeholder {
+    color: var(--app-ink-faint);
+  }
+
+  [data-ui="collection-controls"]
+    > [data-part="top"]
+    > [data-part="search"]
+    > input[type="search"]::-webkit-search-cancel-button {
+    display: none;
+  }
+
+  [data-ui="collection-controls"]
+    > [data-part="top"]
+    > [data-part="search"]
+    > [data-part="clear-search"] {
+    position: absolute;
+    z-index: 2;
+    top: 50%;
+    right: 0.5rem;
+    display: grid;
+    width: 2rem;
+    height: 2rem;
+    place-items: center;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--app-ink-faint);
+    transform: translateY(-50%);
+  }
+
+  [data-ui="collection-controls"]
+    > [data-part="top"]
+    > [data-part="search"]
+    > [data-part="clear-search"]:hover:not(:disabled) {
+    background: var(--muted);
+    color: var(--app-ink);
+  }
+
+  [data-ui="collection-controls"]
+    > [data-part="top"]
+    > [data-part="search"]
+    > [data-part="clear-search"]:focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--app-focus) 45%, transparent);
+    outline-offset: 1px;
+  }
+
+  [data-ui="collection-controls"]
+    > [data-part="top"]
+    > [data-part="search"]
+    > [data-part="clear-search"]:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  [data-ui="collection-controls"]
+    > [data-part="top"]
+    > [data-part="search"]
+    > [data-part="clear-search"]
+    > [data-ui-primitive="icon"] {
+    width: 0.9rem;
+    height: 0.9rem;
+  }
+
+  [data-ui="collection-controls"] > [data-part="top"] > [data-part="toggle"] {
+    position: relative;
+    height: 2.75rem;
+    border-color: color-mix(in srgb, var(--app-control-text) 18%, transparent);
+    background: color-mix(in srgb, var(--app-control-text) 8%, transparent);
+    color: var(--app-control-muted);
+  }
+
+  [data-ui="collection-controls"] > [data-part="top"] > [data-part="toggle"][aria-expanded="true"] {
+    border-color: color-mix(in srgb, var(--app-control-text) 30%, transparent);
+    background: color-mix(in srgb, var(--app-control-text) 14%, transparent);
+    color: var(--app-control-text);
+  }
+
+  [data-ui="collection-controls"] > [data-part="top"] > [data-part="toggle"] > [data-part="count"] {
+    display: grid;
+    min-width: 1.2rem;
+    height: 1.2rem;
+    place-items: center;
+    border-radius: 999px;
+    background: var(--app-control-text);
+    color: var(--app-control-surface);
+    font-size: var(--app-type-micro);
+    line-height: 1;
+  }
+
+  [data-ui="collection-controls"] > [data-part="content"] {
+    display: grid;
+    min-width: 0;
+    gap: var(--app-space-md);
+  }
+
+  [data-ui="collection-controls"][data-collapsible="true"] > [data-part="content"] {
+    margin-top: 0.625rem;
+    border-top: 1px solid color-mix(in srgb, var(--app-control-text) 14%, transparent);
+    padding-top: 0.75rem;
+  }
+
+  [data-ui="collection-controls"][data-collapsible="true"][data-open="false"]
+    > [data-part="content"] {
+    display: none;
+  }
+
+  [data-ui="collection-controls"] > [data-part="content"] > [data-part="group"] {
+    display: grid;
+    min-width: 0;
+    gap: 0.4rem;
+    border: 0;
+    margin: 0;
+    padding: 0;
+  }
+
+  [data-ui="collection-controls"] > [data-part="content"] > [data-part="group"] > legend,
+  [data-ui="collection-controls"] > [data-part="content"] > [data-part="field"] > label,
+  [data-ui="collection-controls"] > [data-part="content"] > [data-part="sort"] > label {
+    color: var(--app-control-muted);
+    font-size: var(--app-type-caption);
+    font-weight: 730;
+  }
+
+  [data-ui="collection-controls"]
+    > [data-part="content"]
+    > [data-part="group"]
+    > [data-part="choices"] {
+    display: flex;
+    min-width: 0;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  [data-ui="collection-controls"]
+    > [data-part="content"]
+    > [data-part="group"]
+    > [data-part="choices"]
+    > [data-part="custom-control"] {
+    display: contents;
+  }
+
+  [data-ui="collection-controls"] > [data-part="content"] > [data-part="field"],
+  [data-ui="collection-controls"] > [data-part="content"] > [data-part="sort"] {
+    display: grid;
+    min-width: min(100%, 13rem);
+    gap: 0.4rem;
+  }
+
+  [data-ui="collection-controls"]
+    > [data-part="content"]
+    > [data-part="field"]
+    > [data-ui-primitive="select-trigger"],
+  [data-ui="collection-controls"]
+    > [data-part="content"]
+    > [data-part="field"]
+    > [data-ui-primitive="date-picker"]
+    > [data-part="trigger"],
+  [data-ui="collection-controls"]
+    > [data-part="content"]
+    > [data-part="sort"]
+    > [data-ui-primitive="select-trigger"] {
+    width: 100%;
+    min-height: 2.5rem;
+    border-color: color-mix(in srgb, var(--app-control-text) 18%, transparent);
+    background: color-mix(in srgb, var(--app-control-text) 8%, transparent);
+    color: var(--app-control-text);
+    font-size: var(--app-type-body-sm);
+  }
+
+  [data-ui="collection-controls"]
+    > [data-part="content"]
+    > [data-part="field"][data-control="switch"]
+    > label {
+    display: flex;
+    min-height: 2.75rem;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--app-space-md);
+    border-radius: 0.75rem;
+    background: color-mix(in srgb, var(--app-control-text) 8%, transparent);
+    padding: 0.5rem 0.625rem;
+  }
+
+  [data-ui="collection-controls"]
+    > [data-part="content"]
+    > [data-part="field"][data-control="switch"]
+    > label
+    > [data-part="field-content"] {
+    display: grid;
+    min-width: 0;
+  }
+
+  [data-ui="collection-controls"]
+    > [data-part="content"]
+    > [data-part="field"][data-control="switch"]
+    > label
+    > [data-part="field-content"]
+    > strong {
+    color: var(--app-control-text);
+    font-size: var(--app-type-label);
+  }
+
+  [data-ui="collection-controls"]
+    > [data-part="content"]
+    > [data-part="field"][data-control="switch"]
+    > label
+    > [data-part="field-content"]
+    > small {
+    color: var(--app-control-muted);
+    font-size: var(--app-type-caption);
+  }
+
+  [data-ui="collection-controls"] > [data-part="content"] > [data-part="reset"] {
+    width: fit-content;
+    justify-self: end;
     color: var(--app-control-text);
   }
 
@@ -2775,7 +3113,83 @@
     }
 
     [data-ui="collection"] > [data-part="filters"] {
+      padding: 0;
+    }
+
+    [data-ui="collection"]
+      > [data-part="header"]
+      > [data-part="header-actions"]
+      > [data-ui="collection-toggle"] {
+      min-width: 11rem;
+    }
+
+    [data-ui="collection-controls"] {
       padding: 0.75rem 1.5rem 0.875rem;
+    }
+
+    [data-ui="collection-controls"] > [data-part="top"] > [data-part="label"],
+    [data-ui="collection-controls"] > [data-part="top"] > [data-part="toggle"] {
+      display: none;
+    }
+
+    [data-ui="collection-controls"] > [data-part="top"]:not(:has([data-part="search"])) {
+      display: none;
+    }
+
+    [data-ui="collection-controls"] > [data-part="top"] > [data-part="search"] {
+      max-width: 34rem;
+    }
+
+    [data-ui="collection-controls"] > [data-part="content"],
+    [data-ui="collection-controls"][data-collapsible="true"][data-open="false"]
+      > [data-part="content"] {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: end;
+      gap: var(--app-space-lg);
+      margin-top: 0;
+      border-top: 0;
+      padding-top: 0;
+    }
+
+    [data-ui="collection-controls"][data-has-search="true"] > [data-part="content"] {
+      margin-top: var(--app-space-md);
+      border-top: 1px solid color-mix(in srgb, var(--app-control-text) 14%, transparent);
+      padding-top: var(--app-space-md);
+    }
+
+    [data-ui="collection-controls"][data-mode="filter"]:not([data-has-search="true"])
+      > [data-part="content"]
+      > [data-part="group"] {
+      display: flex;
+      flex: 1;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    [data-ui="collection-controls"][data-mode="selection"]
+      > [data-part="content"]
+      > [data-part="group"] {
+      display: flex;
+      flex: 0 1 auto;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    [data-ui="collection-controls"] > [data-part="content"] > [data-part="field"],
+    [data-ui="collection-controls"] > [data-part="content"] > [data-part="sort"] {
+      flex: 0 1 15rem;
+    }
+
+    [data-ui="collection-controls"]
+      > [data-part="content"]
+      > [data-part="field"][data-width="wide"] {
+      flex: 1 1 18rem;
+    }
+
+    [data-ui="collection-controls"] > [data-part="content"] > [data-part="reset"] {
+      align-self: center;
+      margin-left: auto;
     }
 
     [data-ui="collection-list"],
