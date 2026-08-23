@@ -1,6 +1,7 @@
 {
-  "schemaVersion": 1,
-  "enforcementPhase": "fixtures-only",
+  "schemaVersion": 2,
+  "analyzerEnforcementPhase": "fixtures-only",
+  "themeContractEnforcementPhase": "active",
   "productionTreeEnforcementCheckpoint": "SWP-1.3",
   "rules": {
     "bitsUiOwner": {
@@ -91,6 +92,178 @@
       "src/styles/design-system/tokens.css",
       "src/lib/platform/theme/"
     ]
+  },
+  "theme": {
+    "entryStylesheet": "src/index.css",
+    "tokenStylesheet": "src/styles/design-system/tokens.css",
+    "namespaces": {
+      "color": {
+        "themeVariablePrefix": "--color-",
+        "roles": {
+          "accent": "--app-accent",
+          "accent-soft": "--app-accent-soft",
+          "activity-accent": "--activity-accent",
+          "background": "--background",
+          "backdrop-scrim": "--app-backdrop-scrim",
+          "border": "--border",
+          "brand": "--app-brand",
+          "brand-soft": "--app-brand-soft",
+          "brand-strong": "--app-brand-strong",
+          "canvas": "--app-canvas",
+          "chart-1": "--chart-1",
+          "chart-2": "--chart-2",
+          "control-muted": "--app-control-muted",
+          "control-surface": "--app-control-surface",
+          "control-surface-strong": "--app-control-surface-strong",
+          "control-text": "--app-control-text",
+          "focus": "--app-focus",
+          "foreground": "--foreground",
+          "ink": "--app-ink",
+          "ink-faint": "--app-ink-faint",
+          "ink-soft": "--app-ink-soft",
+          "line": "--app-line",
+          "line-strong": "--app-line-strong",
+          "nav-active": "--app-nav-active",
+          "nav-active-surface": "--app-nav-active-surface",
+          "ring": "--ring",
+          "sidebar": "--app-sidebar",
+          "sidebar-divider": "--app-sidebar-divider",
+          "sidebar-text": "--app-sidebar-text",
+          "status-available-bg": "--status-available-bg",
+          "status-available-indicator": "--status-available-indicator",
+          "status-available-text": "--status-available-text",
+          "status-busy-bg": "--status-busy-bg",
+          "status-busy-text": "--status-busy-text",
+          "status-danger-bg": "--status-danger-bg",
+          "status-danger-indicator": "--status-danger-indicator",
+          "status-danger-text": "--status-danger-text",
+          "status-event-bg": "--status-event-bg",
+          "status-event-text": "--status-event-text",
+          "status-own-bg": "--status-own-bg",
+          "status-own-text": "--status-own-text",
+          "status-past-bg": "--status-past-bg",
+          "status-past-text": "--status-past-text",
+          "status-warning-bg": "--status-warning-bg",
+          "status-warning-indicator": "--status-warning-indicator",
+          "status-warning-text": "--status-warning-text",
+          "surface": "--app-surface",
+          "surface-raised": "--app-surface-raised",
+          "surface-subtle": "--app-surface-subtle"
+        }
+      },
+      "fontFamily": {
+        "themeVariablePrefix": "--font-",
+        "roles": {
+          "body": "--app-font-body",
+          "display": "--app-font-display",
+          "sans": "--app-font-sans"
+        }
+      },
+      "fontSize": {
+        "themeVariablePrefix": "--text-",
+        "roles": {
+          "body": "--app-type-body",
+          "body-lg": "--app-type-body-lg",
+          "body-sm": "--app-type-body-sm",
+          "caption": "--app-type-caption",
+          "heading-md": "--app-type-heading-md",
+          "heading-sm": "--app-type-heading-sm",
+          "label": "--app-type-label",
+          "micro": "--app-type-micro",
+          "page-title": "--app-type-page-title",
+          "stat-chart-label": "--app-stat-chart-label-size",
+          "stat-chart-meta": "--app-stat-chart-meta-size",
+          "stat-chart-value": "--app-stat-chart-value-size",
+          "stat-key-value": "--app-stat-key-value-size"
+        }
+      },
+      "fontWeight": {
+        "themeVariablePrefix": "--font-weight-",
+        "roles": {
+          "stat-chart-label": "--app-stat-chart-label-weight",
+          "stat-chart-meta": "--app-stat-chart-meta-weight",
+          "stat-chart-value": "--app-stat-chart-value-weight",
+          "stat-key-value": "--app-stat-key-value-weight"
+        }
+      },
+      "radius": {
+        "themeVariablePrefix": "--radius-",
+        "roles": {
+          "control": "--app-control-radius",
+          "dialog": "--app-dialog-radius",
+          "record": "--app-record-radius",
+          "surface": "--app-surface-radius"
+        }
+      },
+      "shadow": {
+        "themeVariablePrefix": "--shadow-",
+        "roles": {
+          "record": "--app-record-shadow",
+          "surface-lg": "--app-shadow-lg",
+          "surface-md": "--app-shadow-md",
+          "surface-sm": "--app-shadow-sm"
+        }
+      },
+      "spacing": {
+        "themeVariablePrefix": "--spacing-",
+        "roles": {
+          "2xs": "--app-space-2xs",
+          "control-block": "--app-control-padding-block",
+          "control-gap": "--app-control-gap",
+          "control-inline": "--app-control-padding-inline",
+          "lg": "--app-space-lg",
+          "md": "--app-space-md",
+          "page": "--app-page-padding",
+          "record-gap": "--app-record-gap",
+          "record-inline": "--app-record-padding-inline",
+          "section": "--app-section-gap",
+          "sm": "--app-space-sm",
+          "status-inline": "--app-status-inline-padding",
+          "xs": "--app-space-xs"
+        }
+      },
+      "width": {
+        "themeVariablePrefix": "--width-",
+        "roles": {
+          "control": "--app-control-height",
+          "dialog": "--app-dialog-width",
+          "sidebar": "--app-sidebar-width",
+          "sidebar-rail": "--app-sidebar-rail-width"
+        }
+      },
+      "minWidth": {
+        "themeVariablePrefix": "--min-width-",
+        "roles": {
+          "control": "--app-control-min-width"
+        }
+      },
+      "maxWidth": {
+        "themeVariablePrefix": "--max-width-",
+        "roles": {
+          "content": "--app-content-max",
+          "dialog": "--app-dialog-width",
+          "page": "--app-page-width"
+        }
+      },
+      "height": {
+        "themeVariablePrefix": "--height-",
+        "roles": {
+          "control": "--app-control-height"
+        }
+      },
+      "minHeight": {
+        "themeVariablePrefix": "--min-height-",
+        "roles": {
+          "control": "--app-control-height"
+        }
+      },
+      "maxHeight": {
+        "themeVariablePrefix": "--max-height-",
+        "roles": {
+          "dialog": "--app-dialog-max-height"
+        }
+      }
+    }
   },
   "utilities": {
     "allowedVariants": {
@@ -184,6 +357,7 @@
     "semanticVisualFamilies": [
       {
         "utilityPrefixes": ["bg"],
+        "themeNamespace": "color",
         "roles": [
           "accent-soft",
           "background",
@@ -209,31 +383,19 @@
       },
       {
         "utilityPrefixes": ["text"],
+        "themeNamespace": "color",
         "roles": [
           "accent",
-          "body",
-          "body-lg",
-          "body-sm",
           "brand",
           "brand-strong",
-          "caption",
           "control-muted",
           "control-text",
           "foreground",
-          "heading-md",
-          "heading-sm",
           "ink",
           "ink-faint",
           "ink-soft",
-          "label",
-          "micro",
           "nav-active",
-          "page-title",
           "sidebar-text",
-          "stat-chart-label",
-          "stat-chart-meta",
-          "stat-chart-value",
-          "stat-key-value",
           "status-available-text",
           "status-busy-text",
           "status-danger-text",
@@ -244,15 +406,37 @@
         ]
       },
       {
+        "utilityPrefixes": ["text"],
+        "themeNamespace": "fontSize",
+        "roles": [
+          "body",
+          "body-lg",
+          "body-sm",
+          "caption",
+          "heading-md",
+          "heading-sm",
+          "label",
+          "micro",
+          "page-title",
+          "stat-chart-label",
+          "stat-chart-meta",
+          "stat-chart-value",
+          "stat-key-value"
+        ]
+      },
+      {
         "utilityPrefixes": ["border", "divide"],
+        "themeNamespace": "color",
         "roles": ["border", "line", "line-strong", "sidebar-divider"]
       },
       {
         "utilityPrefixes": ["outline", "ring"],
+        "themeNamespace": "color",
         "roles": ["focus", "ring"]
       },
       {
         "utilityPrefixes": ["fill", "stroke"],
+        "themeNamespace": "color",
         "roles": [
           "activity-accent",
           "accent",
@@ -266,27 +450,31 @@
       },
       {
         "utilityPrefixes": ["rounded"],
+        "themeNamespace": "radius",
         "roles": ["control", "dialog", "record", "surface"]
       },
       {
         "utilityPrefixes": ["shadow"],
+        "themeNamespace": "shadow",
         "roles": ["record", "surface-lg", "surface-md", "surface-sm"]
       },
       {
         "utilityPrefixes": ["font"],
-        "roles": [
-          "body",
-          "display",
-          "sans",
-          "stat-chart-label",
-          "stat-chart-meta",
-          "stat-chart-value",
-          "stat-key-value"
-        ]
+        "themeNamespace": "fontFamily",
+        "roles": ["body", "display", "sans"]
+      },
+      {
+        "utilityPrefixes": ["font"],
+        "themeNamespace": "fontWeight",
+        "roles": ["stat-chart-label", "stat-chart-meta", "stat-chart-value", "stat-key-value"]
+      },
+      {
+        "utilityPrefixes": ["gap", "space-x", "space-y"],
+        "themeNamespace": "spacing",
+        "roles": ["2xs", "control-gap", "lg", "md", "record-gap", "section", "sm", "xs"]
       },
       {
         "utilityPrefixes": [
-          "gap",
           "m",
           "mb",
           "ml",
@@ -300,26 +488,50 @@
           "pr",
           "pt",
           "px",
-          "py",
-          "space-x",
-          "space-y"
+          "py"
         ],
-        "roles": [
-          "2xs",
-          "control",
-          "lg",
-          "md",
-          "page",
-          "record",
-          "section",
-          "sm",
-          "status-inline",
-          "xs"
-        ]
+        "themeNamespace": "spacing",
+        "roles": ["2xs", "lg", "md", "page", "section", "sm", "xs"]
       },
       {
-        "utilityPrefixes": ["h", "max-h", "max-w", "min-h", "min-w", "w"],
-        "roles": ["content", "control", "dialog", "page", "sidebar", "sidebar-rail"]
+        "utilityPrefixes": ["pb", "pt", "py"],
+        "themeNamespace": "spacing",
+        "roles": ["control-block"]
+      },
+      {
+        "utilityPrefixes": ["pl", "pr", "px"],
+        "themeNamespace": "spacing",
+        "roles": ["control-inline", "record-inline", "status-inline"]
+      },
+      {
+        "utilityPrefixes": ["w"],
+        "themeNamespace": "width",
+        "roles": ["control", "dialog", "sidebar", "sidebar-rail"]
+      },
+      {
+        "utilityPrefixes": ["min-w"],
+        "themeNamespace": "minWidth",
+        "roles": ["control"]
+      },
+      {
+        "utilityPrefixes": ["max-w"],
+        "themeNamespace": "maxWidth",
+        "roles": ["content", "dialog", "page"]
+      },
+      {
+        "utilityPrefixes": ["h"],
+        "themeNamespace": "height",
+        "roles": ["control"]
+      },
+      {
+        "utilityPrefixes": ["min-h"],
+        "themeNamespace": "minHeight",
+        "roles": ["control"]
+      },
+      {
+        "utilityPrefixes": ["max-h"],
+        "themeNamespace": "maxHeight",
+        "roles": ["dialog"]
       }
     ],
     "forbiddenRawPalettePattern": "^(?:accent|bg|border|caret|decoration|divide|fill|from|outline|ring|stroke|text|to|via)-(?:amber|blue|cyan|emerald|fuchsia|gray|green|indigo|lime|neutral|orange|pink|purple|red|rose|sky|slate|stone|teal|violet|yellow|zinc)(?:-|$)"
@@ -366,7 +578,7 @@
     "namespaces": [
       {
         "name": "product-theme",
-        "prefixes": ["--aas-", "--app-", "--status-"],
+        "prefixes": ["--aas-", "--activity-", "--app-", "--status-"],
         "exact": [
           "--background",
           "--border",
@@ -391,10 +603,16 @@
           "--animate-",
           "--color-",
           "--font-",
+          "--height-",
+          "--max-height-",
+          "--max-width-",
+          "--min-height-",
+          "--min-width-",
           "--radius-",
           "--shadow-",
           "--spacing-",
-          "--text-"
+          "--text-",
+          "--width-"
         ],
         "exact": [],
         "definitionRoots": ["src/index.css", "src/lib/platform/theme/"],

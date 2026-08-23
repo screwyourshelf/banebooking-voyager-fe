@@ -9,7 +9,7 @@
   color-scheme: light;
   --radius: 0.625rem;
 
-  /* Ås tennisklubb palette. The three 500 values are sampled from the crest. */
+  /* Raw club identity. Components and Tailwind utilities never consume this palette directly. */
   --aas-green-500: #4c911f;
   --aas-orange-500: #f28d3b;
   --aas-blue-500: #1c4f99;
@@ -26,7 +26,7 @@
   --aas-blue-300: color-mix(in oklab, var(--aas-blue-500) 48%, white);
   --aas-blue-900: color-mix(in oklab, var(--aas-blue-500) 52%, black);
 
-  /* Product roles */
+  /* Semantic product color roles. Light and dark themes override these, not component markup. */
   --app-canvas: color-mix(in oklab, var(--aas-cream-500) 72%, var(--aas-green-50));
   --app-surface: #ffffff;
   --app-surface-subtle: #f7f8f3;
@@ -68,19 +68,33 @@
   --app-shadow-sm: 0 1px 2px rgb(18 36 23 / 0.05);
   --app-shadow-md: 0 12px 32px rgb(18 36 23 / 0.08);
   --app-shadow-lg: 0 24px 70px rgb(18 36 23 / 0.12);
+
+  /* Semantic product geometry. Values mirror the verified pre-Tailwind component baseline. */
   --app-content-max: 112rem;
   --app-page-width: 96rem;
   --app-sidebar-width: 15.5rem;
   --app-sidebar-rail-width: 4.5rem;
+  --app-control-height: 2.25rem;
+  --app-control-min-width: 10rem;
+  --app-dialog-width: 34rem;
+  --app-dialog-max-height: calc(100dvh - 2rem);
   --app-space-2xs: 0.125rem;
   --app-space-xs: 0.25rem;
   --app-space-sm: 0.5rem;
   --app-space-md: 0.75rem;
   --app-space-lg: 1rem;
+  --app-control-gap: var(--app-space-sm);
+  --app-control-padding-block: var(--app-space-sm);
+  --app-control-padding-inline: var(--app-space-md);
+  --app-page-padding: var(--app-space-lg);
+  --app-section-gap: var(--app-space-lg);
   --app-status-inline-padding: 0.55rem;
   --app-record-gap: 0.5rem;
   --app-record-padding-inline: 0.5rem;
+  --app-control-radius: 999px;
+  --app-dialog-radius: 1.5rem;
   --app-record-radius: 0.875rem;
+  --app-surface-radius: 1.25rem;
   --app-record-shadow: 0 4px 16px rgb(18 36 23 / 0.07);
   --app-radius-sm: calc(var(--radius) * 0.6);
 
@@ -162,7 +176,10 @@
   --status-danger-text: #9b312d;
   --status-danger-indicator: #c9534c;
 
-  /* Primitive roles consumed by native controls, Bits UI wrappers and Tailwind's base layer. */
+  /*
+   * Compatibility roles consumed by the current base CSS. New public UI uses the semantic
+   * --app-* roles exposed from src/index.css instead of adding more generic aliases here.
+   */
   --background: var(--app-surface);
   --foreground: var(--app-ink);
   --primary: var(--aas-green-700);

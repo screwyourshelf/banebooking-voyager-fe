@@ -8,10 +8,116 @@
 @source not "../scripts/styling-guards";
 @source not "./styling-baseline.test.ts";
 
+/*
+ * Tailwind's public vocabulary is a thin projection of the semantic product roles in tokens.css.
+ * Raw --aas-* identity values never cross this boundary, and theme switching only replaces the
+ * referenced product values.
+ */
 @theme inline {
-  --font-sans: "Figtree Variable", Figtree, ui-sans-serif, system-ui, sans-serif;
-  --color-ring: var(--ring);
-  --color-border: var(--border);
-  --color-foreground: var(--foreground);
+  --color-accent: var(--app-accent);
+  --color-accent-soft: var(--app-accent-soft);
+  --color-activity-accent: var(--activity-accent);
   --color-background: var(--background);
+  --color-backdrop-scrim: var(--app-backdrop-scrim);
+  --color-border: var(--border);
+  --color-brand: var(--app-brand);
+  --color-brand-soft: var(--app-brand-soft);
+  --color-brand-strong: var(--app-brand-strong);
+  --color-canvas: var(--app-canvas);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-control-muted: var(--app-control-muted);
+  --color-control-surface: var(--app-control-surface);
+  --color-control-surface-strong: var(--app-control-surface-strong);
+  --color-control-text: var(--app-control-text);
+  --color-focus: var(--app-focus);
+  --color-foreground: var(--foreground);
+  --color-ink: var(--app-ink);
+  --color-ink-faint: var(--app-ink-faint);
+  --color-ink-soft: var(--app-ink-soft);
+  --color-line: var(--app-line);
+  --color-line-strong: var(--app-line-strong);
+  --color-nav-active: var(--app-nav-active);
+  --color-nav-active-surface: var(--app-nav-active-surface);
+  --color-ring: var(--ring);
+  --color-sidebar: var(--app-sidebar);
+  --color-sidebar-divider: var(--app-sidebar-divider);
+  --color-sidebar-text: var(--app-sidebar-text);
+  --color-status-available-bg: var(--status-available-bg);
+  --color-status-available-indicator: var(--status-available-indicator);
+  --color-status-available-text: var(--status-available-text);
+  --color-status-busy-bg: var(--status-busy-bg);
+  --color-status-busy-text: var(--status-busy-text);
+  --color-status-danger-bg: var(--status-danger-bg);
+  --color-status-danger-indicator: var(--status-danger-indicator);
+  --color-status-danger-text: var(--status-danger-text);
+  --color-status-event-bg: var(--status-event-bg);
+  --color-status-event-text: var(--status-event-text);
+  --color-status-own-bg: var(--status-own-bg);
+  --color-status-own-text: var(--status-own-text);
+  --color-status-past-bg: var(--status-past-bg);
+  --color-status-past-text: var(--status-past-text);
+  --color-status-warning-bg: var(--status-warning-bg);
+  --color-status-warning-indicator: var(--status-warning-indicator);
+  --color-status-warning-text: var(--status-warning-text);
+  --color-surface: var(--app-surface);
+  --color-surface-raised: var(--app-surface-raised);
+  --color-surface-subtle: var(--app-surface-subtle);
+
+  --font-body: var(--app-font-body);
+  --font-display: var(--app-font-display);
+  --font-sans: var(--app-font-sans);
+  --font-weight-stat-chart-label: var(--app-stat-chart-label-weight);
+  --font-weight-stat-chart-meta: var(--app-stat-chart-meta-weight);
+  --font-weight-stat-chart-value: var(--app-stat-chart-value-weight);
+  --font-weight-stat-key-value: var(--app-stat-key-value-weight);
+
+  --text-body: var(--app-type-body);
+  --text-body-lg: var(--app-type-body-lg);
+  --text-body-sm: var(--app-type-body-sm);
+  --text-caption: var(--app-type-caption);
+  --text-heading-md: var(--app-type-heading-md);
+  --text-heading-sm: var(--app-type-heading-sm);
+  --text-label: var(--app-type-label);
+  --text-micro: var(--app-type-micro);
+  --text-page-title: var(--app-type-page-title);
+  --text-stat-chart-label: var(--app-stat-chart-label-size);
+  --text-stat-chart-meta: var(--app-stat-chart-meta-size);
+  --text-stat-chart-value: var(--app-stat-chart-value-size);
+  --text-stat-key-value: var(--app-stat-key-value-size);
+
+  --radius-control: var(--app-control-radius);
+  --radius-dialog: var(--app-dialog-radius);
+  --radius-record: var(--app-record-radius);
+  --radius-surface: var(--app-surface-radius);
+  --shadow-record: var(--app-record-shadow);
+  --shadow-surface-lg: var(--app-shadow-lg);
+  --shadow-surface-md: var(--app-shadow-md);
+  --shadow-surface-sm: var(--app-shadow-sm);
+
+  --spacing-2xs: var(--app-space-2xs);
+  --spacing-control-block: var(--app-control-padding-block);
+  --spacing-control-gap: var(--app-control-gap);
+  --spacing-control-inline: var(--app-control-padding-inline);
+  --spacing-lg: var(--app-space-lg);
+  --spacing-md: var(--app-space-md);
+  --spacing-page: var(--app-page-padding);
+  --spacing-record-gap: var(--app-record-gap);
+  --spacing-record-inline: var(--app-record-padding-inline);
+  --spacing-section: var(--app-section-gap);
+  --spacing-sm: var(--app-space-sm);
+  --spacing-status-inline: var(--app-status-inline-padding);
+  --spacing-xs: var(--app-space-xs);
+
+  --width-control: var(--app-control-height);
+  --width-dialog: var(--app-dialog-width);
+  --width-sidebar: var(--app-sidebar-width);
+  --width-sidebar-rail: var(--app-sidebar-rail-width);
+  --min-width-control: var(--app-control-min-width);
+  --max-width-content: var(--app-content-max);
+  --max-width-dialog: var(--app-dialog-width);
+  --max-width-page: var(--app-page-width);
+  --height-control: var(--app-control-height);
+  --min-height-control: var(--app-control-height);
+  --max-height-dialog: var(--app-dialog-max-height);
 }

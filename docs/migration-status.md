@@ -10,9 +10,9 @@
 
 ## Mål for arbeidspakken
 
-Etabler en eksplisitt semantisk theme-kontrakt, flytt global CSS inn i Tailwinds etablerte cascade
-layers og koble de verifiserte stylingguardene til produksjonstreet og `npm run check`. SWP-1 skal
-stenge ny stylinggjeld uten å endre produktmarkup, observerbart uttrykk eller backend.
+Den semantiske theme-kontrakten er etablert. Flytt deretter global CSS inn i Tailwinds etablerte
+cascade layers og koble de verifiserte stylingguardene til produksjonstreet og `npm run check`.
+SWP-1 skal stenge ny stylinggjeld uten å endre produktmarkup, observerbart uttrykk eller backend.
 
 ## Aktiv stylingretning
 
@@ -604,6 +604,14 @@ stenge ny stylinggjeld uten å endre produktmarkup, observerbart uttrykk eller b
 - SWP-0 er fullført. Kildegjeld, produksjonsstørrelse og 106 visualiseringskandidater er målt;
   elleve visuelle/interaktive referanser er frosset; og ti stabile stylingregler er bevist gjennom
   positive og negative AST-fixtures før første visuelle endring.
+- Første SWP-1-checkpoint har skilt rå `--aas-*`-identitet, semantiske produktroller og Tailwind-
+  eksponering eksplisitt. `@theme inline` projiserer 101 farge-, typografi-, radius-, skygge-,
+  spacing- og kontrollroller uten direkte råpalett eller lokal themevariant.
+- Guardkontrakten har schemaVersion 2 og kobler 239 eksakte utilitynavn til én Tailwind namespace
+  og én eksisterende produktvariabel. Tailwind-kompilering og custom-property-oppløsning beviser
+  alle mappingene; 43 eksponerte roller endrer beregnet verdi mellom lyst og mørkt theme.
+- Theme-kontrakten er aktiv og testet mot produksjons-CSS, mens de ti kildeguardene fortsatt kjøres
+  bare mot fixtures frem til SWP-1.3. Cascade, produktmarkup og backend er ikke endret.
 - Den aktive CSS-en er funksjonelt ryddet, men ikke målarkitekturen for styling: Tailwind brukes
   foreløpig hovedsakelig som Preflight/theme-bro, mens produktreglene ligger i globale selectorfiler.
   Dette migreres familievis etter SWP-planen uten visuell redesign.
@@ -612,14 +620,14 @@ stenge ny stylinggjeld uten å endre produktmarkup, observerbart uttrykk eller b
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                             |
-| ------------------------------------- | ---------------------------------------------- |
-| Base branch                           | `main`                                         |
-| Fastslått basecommit                  | `5287c5e`                                      |
-| Siste semantiske checkpoint           | `test(styling): complete SWP-0 guard contract` |
-| Lokale commits foran base             | 44                                             |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                  |
-| Neste planlagte checkpoint            | SWP-1.1 semantisk theme-kontrakt               |
+| Felt                                  | Forventet tilstand                                |
+| ------------------------------------- | ------------------------------------------------- |
+| Base branch                           | `main`                                            |
+| Fastslått basecommit                  | `5287c5e`                                         |
+| Siste semantiske checkpoint           | `feat(styling): establish SWP-1.1 theme contract` |
+| Lokale commits foran base             | 45                                                |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                     |
+| Neste planlagte checkpoint            | SWP-1.2 Tailwind cascade og base                  |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -628,23 +636,24 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Start bare **SWP-1 checkpoint 1 — semantisk theme-kontrakt**:
+Start bare **SWP-1 checkpoint 2 — Tailwind cascade og base**:
 
-1. Les hele SWP-1, ADR-006, `scripts/styling-guards/contract.json`, dagens `src/index.css` og
-   `src/styles/design-system/tokens.css`; ikke start cascadeoppryddingen eller fulltrekoblingen av
-   guardene i dette checkpointet.
-2. Skill rå klubbidentitet, semantiske produktroller og Tailwind-eksponerte roller eksplisitt.
-   Etabler `@theme inline` for de godkjente farge-, typografi-, radius-, skygge-, spacing- og
-   kontrollrollene uten å endre verdier, lyst/mørkt theme eller produktmarkup.
-3. Oppdater det maskinlesbare utilityvokabularet samtidig, slik at hver semantisk utility peker på
-   en faktisk eksponert theme-rolle og rå paletter, arbitrary verdier og lokale `dark:*`-varianter
-   fortsatt avvises i fixturene.
-4. Legg til smale kontrakttester som beviser mappingen fra semantisk utilityrolle til eksisterende
-   CSS custom property i lyst og mørkt theme. Guardene skal fortsatt ikke kjøres mot hele
-   produksjonstreet før SWP-1.3.
-5. Kjør berørte theme-/guardtester, `npm test`, `npm run check`, stylingbaselinen og relevant
-   visuell matrise; oppdater statusen til SWP-1.2 og opprett én lokal grønn commit. Stopp deretter;
-   ikke start cascadecheckpointet i samme sesjon.
+1. Les hele SWP-1 og ADR-006 på nytt, deretter `src/index.css`,
+   `src/styles/design-system.css`, alle fem CSS-filer under `src/styles/design-system/`, theme-
+   kontrakten og cascade-fixturene. Ikke koble analysatoren til produksjonstreet i dette
+   checkpointet.
+2. Legg themevariabler, Preflight-/dokumentbase, produktkomponenter og utilities konsekvent i
+   Tailwinds etablerte `theme`, `base`, `components` og `utilities`-lag. Bevar importrekkefølgen og
+   det observerbare uttrykket; ikke flytt selectors til Svelte-markup ennå.
+3. Fjern de 91 ulagrede reglene ved å gi dem korrekt lageier. De tre autoritative theme-reglene,
+   de 87 legacyreglene i `patterns.css` og reduced-motion-regelen i `responsive.css` skal ende i
+   registrert lag uten nye selectors, `!important`, rå deklarasjoner eller baselinegjeld.
+4. Utvid cascade-fixturene og smale kontrakttester slik at alle globale produksjonsregler kan
+   klassifiseres i et registrert lag. De øvrige produksjonstre-guardene forblir utsatt til
+   SWP-1.3.
+5. Kjør theme-/cascade-/guardtestene, `npm test`, `npm run check`, stylingbaselinen, begge
+   produksjonsbuildene og hele den visuelle referansematrisen. Oppdater statusen til SWP-1.3,
+   opprett én lokal grønn commit og stopp før fulltrekoblingen.
 
 ## Arbeidspakkeregister
 
@@ -659,7 +668,7 @@ Start bare **SWP-1 checkpoint 1 — semantisk theme-kontrakt**:
 | WP-6 Featuremigrering            | Fullført | Elleve checkpoints og alle Svelte-featureflater er grønne    |
 | WP-7 Paritet og produksjonsbytte | Fullført | Paritet, React-fjerning, CSS, drift og sluttport grønne      |
 | SWP-0 Baseline og guardkontrakt  | Fullført | Baseline, referanse og ti fixturetestede guardregler grønne  |
-| SWP-1 Theme og guards            | Aktiv    | Neste: semantisk `@theme inline`-kontrakt i SWP-1.1          |
+| SWP-1 Theme og guards            | Aktiv    | Theme-kontrakt grønn; neste er cascade/base i SWP-1.2        |
 | SWP-2 UI-primitives              | Venter   | Tailwind-konvertering bak stabil primitivegrense             |
 | SWP-3 Produktpatterns            | Venter   | Semantiske familier migreres i avhengighetsrekkefølge        |
 | SWP-4 App-shell/navigation       | Venter   | Responsiv shell og navigation etter stabile patterns         |
@@ -694,13 +703,13 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 - Stylingreferansen oppfyller bare testtenantens navngitte klubbendepunkter med faste svar og
   fryser nettleserklokken til 2026-08-23. Utviklingsinnloggingen bruker fortsatt den eksisterende
   lokale backendharnessen; vanlig utviklings- og produksjonsdata er upåvirket.
-- Stylingguardanalysatoren kjører med vilje bare mot de isolerte fixturene i SWP-0. Produksjonstreet
-  bruker fortsatt den avtakende baselinekontrakten; AST-guardene kobles håndhevende til hele treet
-  og `npm run check` først i SWP-1.3 etter at theme og cascade har fått målelige eiere.
+- Stylingguardanalysatoren kjører med vilje bare mot de 23 isolerte fixturene. Den aktive theme-
+  kontrakten valideres separat mot produksjonsfilene, men de ti AST-guardene kobles håndhevende til
+  hele treet og `npm run check` først i SWP-1.3 etter at cascade har fått målelige eiere.
 - Ingen midlertidige rammeverksadapters eller React-legacy gjenstår. Stylingbaselinen måler sju
-  aktive CSS-filer, 5974 linjer, 780 regler og 846 selektorer. Den ekstra linjen er Tailwinds
-  eksplisitte ekskludering av guardfixturekilden. De brede overgangsfilene er fortsatt
-  `patterns.css` med 3500 linjer, `responsive.css` med 503 linjer og
+  aktive CSS-filer, 6097 linjer, 780 regler og 846 selektorer. Linjeøkningen er bare den eksplisitte
+  `@theme inline`-mappingen og semantiske tokenaliaser; produktselectorene er uendret. De brede
+  overgangsfilene er fortsatt `patterns.css` med 3500 linjer, `responsive.css` med 503 linjer og
   `feature-compositions.css` med 731 linjer.
 - 91 regler er ulagrede: tre autoritative theme-regler, 87 legacyregler i `patterns.css` og én
   global reduced-motion-regel i `responsive.css`. Den foreløpige kaldreviewen tilskrev feilaktig
@@ -711,10 +720,13 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 - Tailwind er installert, men aktiv Svelte-markup bruker null utilities. De tre `@apply`-direktivene
   inneholder fem utilitytokens i primitive base-CSS. Dette er planlagt overgang, ikke
   målarkitektur.
-- 252 CSS custom-property-definisjoner og 850 referanser er registrert. Statistikk er eneste
-  featurestylingflate og har 106 eksplisitte unntakskandidater: 52 klasseforekomster, seks inline
-  custom-property-verdier, 32 SVG-geometriattributter og 16 semantiske visualiseringsroller. Den
-  varige allowlisten avgjøres først i SWP-5.2.
+- 360 CSS custom-property-definisjoner og 952 referanser er registrert. Økningen er 96 nye
+  Tailwind-deklarasjoner utover den gamle femrollesbroen og tolv semantiske geometritokenaliaser;
+  de sju nye råverdibærende deklarasjonene ligger i den autoritative theme-filen, mens legacygjeld
+  og aktive utilityforekomster er uendret. Statistikk er fortsatt eneste featurestylingflate; dens
+  106 unntakskandidater er 52 klasseforekomster, seks inline custom-property-verdier, 32 SVG-
+  geometriattributter og 16 semantiske visualiseringsroller. Den varige allowlisten avgjøres først
+  i SWP-5.2.
 - `npm audit` rapporterer seks lave transitive funn i den aktive SvelteKit-/Bits UI-kjeden og ingen
   moderate, høye eller kritiske funn. Audit tilbyr ikke en kompatibel oppgradering som fjerner de
   lave funnene; foreslåtte majorendringer er derfor ikke brukt som del av lift-and-shift-en.
@@ -722,9 +734,9 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
   i produksjonsgrafen eller byggartefaktene og er ikke React-/ReactDOM-runtime.
 - Statisk død-kodeanalyse rapporterer bare komplette DTO-typer som ennå ikke har en UI-konsument.
   De beholdes som transportkontrakt i `lib/contracts`; det finnes ingen tilsvarende ubrukt runtimekode.
-- SWP-0-buildens initial CSS er 21,3 KiB gzip for Cloudflare Pages og 21,4 KiB for GitHub Pages av
-  et uendret 50 KiB-budsjett. Største lazy JS-chunk er fortsatt 120,5 KiB av 130 KiB og har liten,
-  men grønn headroom.
+- SWP-1.1-buildens initial CSS er 21,4 KiB gzip for Cloudflare Pages og 21,5 KiB for GitHub Pages av
+  et uendret 50 KiB-budsjett. Den eksplisitte theme-kontrakten legger til henholdsvis 99 og 98 gzip-
+  byte fra SWP-0; største lazy JS-chunk er fortsatt 120,5 KiB av 130 KiB.
 
 ## Siste verifikasjon
 
@@ -733,8 +745,13 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 | Prettier på aktiv kode og dokumenter | Bestått 2026-08-23                                                                  |
 | Relative dokumentlenker              | Bestått 2026-08-23                                                                  |
 | `git diff --check`                   | Bestått 2026-08-23                                                                  |
-| `npm test`                           | Bestått 2026-08-23: 88 filer, 320 tester                                            |
+| `npm test`                           | Bestått 2026-08-23: 89 filer, 321 tester                                            |
 | `npm run check`                      | Bestått 2026-08-23: Svelte-typecheck, arkitektur, legacy, design, lint og format    |
+| SWP-1.1 theme-kontrakt               | Bestått: 101 roller, 239 utilities og 43 light/dark-skift via Tailwind-kompilering  |
+| SWP-1.1 guardfixtures                | Bestått: schemaVersion 2, 23 fixtures, 10 stabile regler og lukket råpalett         |
+| SWP-1.1 kildebaseline                | Bestått: 7 CSS-filer, 6097 linjer, 780 regler, 846 selectors og 2233 legacyavvik    |
+| SWP-1.1 visuell/interaktiv matrise   | Bestått: 11/11 pikselidentiske snapshots med fokus, overflow og tom konsoll         |
+| SWP-1.1 produksjonsbuild             | Bestått: 21,4/21,5 KiB CSS, 61 JS-chunks og 120,5 KiB største lazy chunk            |
 | SWP-0 kildebaseline                  | Bestått 2026-08-23: 7 CSS-filer, 5974 linjer, 780 regler, 846 selectors, 2233 avvik |
 | SWP-0 baselinekontrakt               | Bestått 2026-08-23: schemaVersion 1 regenererer deterministisk i Vitest/npm         |
 | SWP-0 visualiseringsinventar         | Komplett 2026-08-23: 106 klasse-, style-, SVG- og rollekandidater                   |
@@ -746,8 +763,8 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 | SWP-0 produksjons-CSS                | Identisk med SWP-0.1: samme assetnavn, råbyte og 21,3/21,4 KiB gzip                 |
 | Asset-recovery-kontrakt              | Bestått 2026-08-23: ferske assets uten sletting av auth-/site storage               |
 | Knip dead-code-review                | Bestått 2026-08-23: kun bevisst beholdte transporttyper rapporteres                 |
-| Cloudflare Pages-build               | Bestått 2026-08-23: 21,3 KiB initial CSS, root og `index.html`-fallback             |
-| GitHub Pages-build                   | Bestått 2026-08-23: 21,4 KiB CSS, `/banebooking` og `404.html`-fallback             |
+| Cloudflare Pages-build               | Bestått 2026-08-23: 21,4 KiB initial CSS, root og `index.html`-fallback             |
+| GitHub Pages-build                   | Bestått 2026-08-23: 21,5 KiB CSS, `/banebooking` og `404.html`-fallback             |
 | Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                   |
 | Nettleserrender                      | Bestått 2026-08-23: Statistikk i 4 flater uten overflow eller konsollfeil           |
 | SvelteKit-bundle                     | Verifisert 2026-08-23: 61 JS-chunks; lazygrensene og 120,5 KiB-maksimum er grønne   |
@@ -797,17 +814,19 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 ## Filer i siste checkpoint
 
-- `scripts/styling-guards/contract.json` med schemaVersion 1, ti stabile regler, utility- og
-  layereierskap, custom-property-kontrakt og lukket visualiseringsgeometri
-- de smale Svelte-/PostCSS-AST-modulene i `scripts/styling-guards/` samt README-en som avgrenser
-  fixture-only-fasen fra SWP-1s senere fulltrehåndheving
-- 23 små positive og negative Svelte-/CSS-fixtures med virtuelle produksjonsstier og
-  `fixtures/manifest.json` som fryser eksakt regel-ID og diagnostic
-- `scripts/check-styling-guard-fixtures.mjs`, npm-scriptet og
-  `src/styling-guard-fixtures.test.ts` som gjør fixtureintegriteten til en vanlig Vitest-kontrakt
-- Tailwind-kildeekskludering for guardfixturene og regenerert `docs/styling-baseline.json`; bare
-  konfigurasjonslinjetallet er endret, mens produkt-CSS, markup og backend er uendret
-- oppdatert migreringsstatus med SWP-1.1 som neste eksakte steg
+- `src/styles/design-system/tokens.css` med eksplisitt skille mellom rå klubbidentitet, semantiske
+  produktfarger, geometri og den eksisterende kompatibilitetsbroen; ingen aktiv verdi er endret
+- `src/index.css` med komplett `@theme inline`-projeksjon av 101 godkjente farge-, typografi-,
+  radius-, skygge-, spacing- og kontrollroller
+- `scripts/styling-guards/contract.json` schemaVersion 2 med eksakte Tailwind namespaces,
+  produktvariabelmapping og 239 godkjente utilities; de ti stabile regel-ID-ene er uendret
+- kontraktvalidering i `contract.mjs` og namespace-aware utilityanalyse i `utility-policy.mjs`,
+  inkludert positiv fixturedekning for farge, font, typografi, spacing og kontrollbredde
+- `theme-contract.mjs`, `scripts/check-styling-theme-contract.mjs`, npm-scriptet og
+  `src/styling-theme-contract.test.ts`, som kompilerer alle utilities og løser produktvariablene i
+  lyst og mørkt theme
+- regenerert `docs/styling-baseline.json` med uendret selector-, regel-, legacy- og
+  visualiseringsgjeld, samt denne statusen med SWP-1.2 som neste eksakte steg
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
 pågående arbeid etter checkpointet.

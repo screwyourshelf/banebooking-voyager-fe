@@ -215,14 +215,20 @@ function matchSemanticVisualUtility(className, contract) {
   const families = contract.utilities.semanticVisualFamilies.flatMap((family) =>
     family.utilityPrefixes.map((prefix) => ({ ...family, prefix }))
   );
-  families.sort((left, right) => right.prefix.length - left.prefix.length);
+  const matchingFamilies = families.filter((family) =>
+    withoutOpacity.startsWith(`${family.prefix}-`)
+  );
+  if (matchingFamilies.length === 0) return null;
 
-  for (const family of families) {
-    if (!withoutOpacity.startsWith(`${family.prefix}-`)) continue;
-    const role = withoutOpacity.slice(family.prefix.length + 1);
-    return { allowed: family.roles.includes(role), role };
-  }
-  return null;
+  const longestPrefixLength = Math.max(...matchingFamilies.map(({ prefix }) => prefix.length));
+  const exactPrefixFamilies = matchingFamilies.filter(
+    ({ prefix }) => prefix.length === longestPrefixLength
+  );
+  const role = withoutOpacity.slice(exactPrefixFamilies[0].prefix.length + 1);
+  return {
+    allowed: exactPrefixFamilies.some((family) => family.roles.includes(role)),
+    role,
+  };
 }
 
 function diagnostic(ruleId, message, location) {

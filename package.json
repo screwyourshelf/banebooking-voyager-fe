@@ -18,6 +18,7 @@
     "styling:baseline": "node scripts/measure-styling-baseline.mjs --check",
     "styling:baseline:update": "npm run test:e2e:production:build && node scripts/measure-styling-baseline.mjs --write",
     "styling:guards:fixtures": "node scripts/check-styling-guard-fixtures.mjs",
+    "styling:theme:check": "node scripts/check-styling-theme-contract.mjs",
     "typecheck": "npm run typecheck:svelte",
     "typecheck:svelte": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "architecture:check": "node scripts/check-architecture-boundaries.mjs",
