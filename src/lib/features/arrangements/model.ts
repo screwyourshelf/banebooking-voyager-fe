@@ -52,7 +52,7 @@ export function filterArrangementsByBranch(
   return arrangements.filter((arrangement) => selectedBranches.includes(arrangement.grenNavn));
 }
 
-export function formatArrangementDateRange(
+function formatArrangementDateRange(
   arrangement: Pick<ArrangementRespons, "startDato" | "sluttDato">,
   referenceDate = new Date()
 ) {
@@ -85,15 +85,12 @@ export function formatCourts(courts: readonly string[]) {
   return `${sorted.slice(0, -1).join(", ")} og ${sorted.at(-1)}`;
 }
 
-export function getUpcomingProgramDays(
-  days: readonly DagMedSlotsRespons[],
-  referenceDate = new Date()
-) {
+function getUpcomingProgramDays(days: readonly DagMedSlotsRespons[], referenceDate = new Date()) {
   const today = localIsoDate(referenceDate);
   return days.filter((day) => day.dato >= today && day.slots.length > 0);
 }
 
-export function createProgramSummary(days: readonly DagMedSlotsRespons[]) {
+function createProgramSummary(days: readonly DagMedSlotsRespons[]) {
   const slots = days.flatMap((day) => day.slots);
   if (slots.length === 0) return null;
   const start = slots.map((slot) => slot.startTid.slice(0, 5)).sort()[0];

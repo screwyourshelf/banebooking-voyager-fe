@@ -4,7 +4,7 @@
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Sist oppdatert:** 2026-08-22
+> **Sist oppdatert:** 2026-08-23
 
 ## Formål
 
@@ -26,6 +26,7 @@ Følgende ADR-er er bindende deler av målarkitekturen:
 - [ADR-002: State, data og API](./adr/002-state-data-and-api.md)
 - [ADR-003: Autentisering og tenant-routing](./adr/003-authentication-and-tenancy.md)
 - [ADR-004: UI- og komponentgrenser](./adr/004-ui-and-component-boundaries.md)
+- [ADR-005: Gjenoppretting før appmodulen starter](./adr/005-pre-module-startup-recovery.md)
 
 ## Arkitekturprinsipper
 
@@ -171,6 +172,11 @@ Isolerer integrasjoner og miljøavhengig kode:
 
 Supabase, Sentry og browser storage importeres bare gjennom dette laget. Browseravhengige moduler
 navngis `*.client.ts` eller lastes eksplisitt på klienten.
+
+Det eneste unntaket er den dokumenterte pre-module recoveryen i `src/app.html`: før platformlaget
+kan starte, kan den lese og skrive sin ene private `sessionStorage`-nøkkel for reload-cooldown.
+Den kan ikke lese eller slette produktdata, `localStorage` eller origin-delt Cache Storage. Se
+[ADR-005](./adr/005-pre-module-startup-recovery.md).
 
 ### `contracts`
 
@@ -381,6 +387,7 @@ Følgende skal inngå i `npm run check` når SvelteKit-grunnlaget etableres:
 - forbud mot feature-til-feature-importer
 - forbud mot direkte Supabase-, Sentry- og storage-importer utenfor platformlaget
 - forbud mot direkte `fetch` i komponenter
+- eksakt, maskinell storage-grense for pre-module bootstrapen
 - tester og `git diff --check`
 
 Arkitekturkontrollen skal bruke eksplisitte tillatte grenser. En voksende unntaksliste er teknisk

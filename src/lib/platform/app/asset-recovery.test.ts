@@ -31,11 +31,20 @@ describe("SvelteKit asset recovery", () => {
     expect(dom.window.clearTimeout).toHaveBeenCalled();
   });
 
-  it("avbryter Vite-feilen og viser manuell recovery innen cooldown", () => {
+  it("avbryter Vite-feilen og tilbyr origin-sikker recovery innen cooldown", async () => {
     const { dom } = createRecoveryDocument(
       `https://booking.example.test/askim?_app_reload=${Date.now()}`
     );
-    const fetch = vi.fn();
+    const localStore = storageFor(dom, "local");
+    const sessionStore = storageFor(dom, "session");
+    localStore.setItem("supabase.auth.token", "behold-auth");
+    sessionStore.setItem("annen-app-state", "behold-state");
+    const freshHtml =
+      '<!doctype html><div id="root"></div><script type="module" src="/_app/start.js"></script>';
+    const fetch = vi
+      .fn()
+      .mockResolvedValueOnce({ ok: true, text: async () => freshHtml })
+      .mockResolvedValue({ ok: true, arrayBuffer: async () => new ArrayBuffer(0) });
     Object.defineProperty(dom.window, "fetch", { value: fetch, configurable: true });
     dom.window.eval(recoveryScript);
 
@@ -47,9 +56,14 @@ describe("SvelteKit asset recovery", () => {
     expect(dom.window.document.querySelector("h1")?.textContent).toBe(
       "Siden trenger en ny innlasting"
     );
-    expect(dom.window.document.querySelector("button")?.textContent).toBe(
-      "Nullstill og last inn på nytt"
-    );
+    const button = dom.window.document.querySelector("button");
+    expect(button?.textContent).toBe("Last inn nyeste versjon");
+
+    button?.click();
+
+    await vi.waitFor(() => expect(fetch).toHaveBeenCalledTimes(2));
+    expect(localStore.getItem("supabase.auth.token")).toBe("behold-auth");
+    expect(sessionStore.getItem("annen-app-state")).toBe("behold-state");
   });
 
   it("henter fersk HTML og alle oppstartsassets én gang utenfor cooldown", async () => {
@@ -100,4 +114,8 @@ function extractRecoveryScript(html: string) {
   const script = scripts.find((candidate) => candidate.includes("vite:preloadError"));
   if (!script) throw new Error("Fant ikke asset-recovery i src/app.html.");
   return script;
+}
+
+function storageFor(dom: JSDOM, scope: "local" | "session") {
+  return Reflect.get(dom.window, `${scope}Storage`) as Storage;
 }

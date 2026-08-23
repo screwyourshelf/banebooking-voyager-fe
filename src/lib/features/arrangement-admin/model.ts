@@ -15,7 +15,7 @@ import { dateTilUkedagIso, finnDayOfWeeksIPeriode, isoTilDayOfWeek } from "$lib/
 export type ArrangementEditorMode = "create" | "edit";
 export type ArrangementEditorStep = "information" | "times";
 export type ScheduleMode = "recurring" | "manual";
-export type LocalBookingStatus = "active" | "available" | "conflict" | "unknown";
+type LocalBookingStatus = "active" | "available" | "conflict" | "unknown";
 export type LocalBookingSource = "existing" | "manual" | "recurring";
 
 export type LocalBooking = {
@@ -128,9 +128,7 @@ export function groupCourtsBySlotLength(
     });
 }
 
-export function bookingKey(
-  booking: Pick<LocalBooking, "courtId" | "date" | "endTime" | "startTime">
-) {
+function bookingKey(booking: Pick<LocalBooking, "courtId" | "date" | "endTime" | "startTime">) {
   return `${booking.date}_${booking.startTime}_${booking.endTime}_${booking.courtId}`;
 }
 
@@ -279,7 +277,7 @@ export function mapExistingBookings(
   );
 }
 
-export function sortBookings(bookings: readonly LocalBooking[]) {
+function sortBookings(bookings: readonly LocalBooking[]) {
   return [...bookings].sort(
     (left, right) =>
       left.date.localeCompare(right.date) ||

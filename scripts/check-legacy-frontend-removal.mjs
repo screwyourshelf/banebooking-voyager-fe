@@ -9,9 +9,13 @@ const packageLock = JSON.parse(await readFile(path.join(projectRoot, "package-lo
 const violations = [];
 
 const forbiddenPaths = [
+  ".lintstagedrc.js",
+  "copy-404.js",
   "index.html",
   "components.json",
+  "tsconfig.tsbuildinfo",
   "tsconfig.react.json",
+  "vite-env.d.ts",
   "src/App.tsx",
   "src/main.tsx",
   "src/supabase.ts",

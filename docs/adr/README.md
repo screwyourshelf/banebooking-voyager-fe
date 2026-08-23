@@ -9,3 +9,4 @@ skjule at beslutningen har endret seg; den erstattes av en ny ADR som viser til 
 | [002](./002-state-data-and-api.md)          | State, data og API              | Godkjent |
 | [003](./003-authentication-and-tenancy.md)  | Autentisering og tenant-routing | Godkjent |
 | [004](./004-ui-and-component-boundaries.md) | UI- og komponentgrenser         | Godkjent |
+| [005](./005-pre-module-startup-recovery.md) | Pre-module startup recovery     | Godkjent |

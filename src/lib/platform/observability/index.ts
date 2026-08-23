@@ -25,7 +25,7 @@ export const noopObservability: Observability = {
   captureMessage() {},
 };
 
-export function sanitizeObservabilityContext(
+function sanitizeObservabilityContext(
   context: ObservabilityContext | undefined
 ): ObservabilityContext | undefined {
   if (!context) return undefined;

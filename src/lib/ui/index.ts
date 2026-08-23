@@ -9,15 +9,7 @@ export {
   Select,
   Textarea,
 } from "./primitives";
-export type {
-  AuthenticationProvider,
-  ButtonSize,
-  ButtonVariant,
-  DatePickerPresentation,
-  IconData,
-  InputType,
-  SelectOption,
-} from "./primitives";
+export type { IconData, SelectOption } from "./primitives";
 export {
   AppShell,
   Collection,
@@ -73,34 +65,10 @@ export {
   Weather,
 } from "./patterns";
 export type {
-  CollectionRowInteraction,
-  CollectionRowLayout,
-  CollectionRowStatus,
-  CollectionStatusTone,
   CollectionChoiceContext,
-  CollectionChoiceOption,
   CollectionControlField,
   CollectionControlGroup,
-  CollectionSearchControl,
-  CollectionSortControl,
-  CollectionToggleControl,
   DialogActionContext,
   DocumentFact,
   FeedbackTone,
-  FormActionsAlign,
-  FormDensity,
-  FormVariant,
-  FormStep,
-  NavigationActionPresentation,
-  NavigationBadge,
-  NavigationLayout,
-  NavigationOverlayContext,
-  PageStatusTone,
-  SectionPadding,
-  SectionVariant,
-  SettingsChoiceOption,
-  SettingsRadioGroupLayout,
-  SettingsRadioOption,
-  SettingsSectionTone,
-  TabItem,
 } from "./patterns";

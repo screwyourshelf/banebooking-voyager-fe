@@ -1,4 +1,4 @@
-export type RichTextMark = "bold" | "italic" | "strike";
+type RichTextMark = "bold" | "italic" | "strike";
 
 export type RichTextContentNode = {
   type: string;

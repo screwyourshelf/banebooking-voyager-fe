@@ -196,7 +196,7 @@ export function shouldUseBookingBootstrapFallback(error: unknown) {
   return error instanceof ApiError && (error.status === 404 || error.status === 405);
 }
 
-export function invalidateBookingData(
+function invalidateBookingData(
   queryClient: QueryClient,
   slug: string,
   courtId: string,

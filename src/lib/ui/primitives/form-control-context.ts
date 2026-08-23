@@ -9,9 +9,10 @@ export type FormControlContext = {
   readonly required: boolean;
 };
 
-export const [getFormControlContext, setFormControlContext] = createContext<
+const [getFormControlContext, setFormControlContext] = createContext<
   FormControlContext | undefined
 >();
+export { setFormControlContext };
 
 export function getOptionalFormControlContext(): FormControlContext | undefined {
   try {

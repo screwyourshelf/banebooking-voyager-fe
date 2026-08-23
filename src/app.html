@@ -106,44 +106,17 @@
           );
         }
 
-        async function resetStoredSiteData() {
-          try {
-            localStorage.clear();
-          } catch {
-            // Recovery må fortsatt fungere når nettleserlagring er blokkert.
-          }
-
-          try {
-            sessionStorage.clear();
-          } catch {
-            // Recovery må fortsatt fungere når nettleserlagring er blokkert.
-          }
-
-          try {
-            if ("caches" in window) {
-              const cacheNames = await window.caches.keys();
-              await Promise.all(cacheNames.map((cacheName) => window.caches.delete(cacheName)));
-            }
-          } catch {
-            // Cache Storage er et ekstra sikkerhetsnett og finnes ikke i alle nettlesere.
-          }
-        }
-
-        async function reloadLatestVersion(button, resetSiteData = false) {
+        async function reloadLatestVersion(button) {
           const url = new URL(window.location.href);
           url.searchParams.set(recoveryQueryParameter, Date.now().toString());
 
           if (button) {
             button.disabled = true;
             button.setAttribute("aria-busy", "true");
-            button.textContent = resetSiteData
-              ? "Nullstiller og laster…"
-              : "Laster nyeste versjon…";
+            button.textContent = "Laster nyeste versjon…";
           }
 
           try {
-            if (resetSiteData) await resetStoredSiteData();
-
             const response = await fetch(url.toString(), {
               cache: "no-store",
               headers: { Accept: "text/html" },
@@ -199,12 +172,12 @@
           const description = document.createElement("p");
           description.textContent =
             "En nyere versjon er tilgjengelig, eller oppstarten tok for lang tid. " +
-            "Nullstilling logger deg ut og laster alle oppstartsfilene på nytt.";
+            "Last inn HTML og alle oppstartsfilene på nytt uten å endre innlogging eller andre nettstedsdata.";
 
           const button = document.createElement("button");
           button.type = "button";
-          button.textContent = "Nullstill og last inn på nytt";
-          button.addEventListener("click", () => void reloadLatestVersion(button, true));
+          button.textContent = "Last inn nyeste versjon";
+          button.addEventListener("click", () => void reloadLatestVersion(button));
 
           content.append(title, description, button);
           boot.replaceChildren(content);

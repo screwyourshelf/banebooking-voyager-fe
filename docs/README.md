@@ -12,6 +12,7 @@
 | [`e2e-harness.md`](./e2e-harness.md)                                             | Lokal Playwright-auth, prosesser og testdata |
 | [`development-and-operations.md`](./development-and-operations.md)               | Lokal utvikling, bygg og hostingkontrakt     |
 | [`sveltekit-architecture.md`](./sveltekit-architecture.md)                       | Målarkitektur for SvelteKit-migreringen      |
+| [`architecture-conformance-review.md`](./architecture-conformance-review.md)     | Etterreview av Svelte-/SvelteKit-konformitet |
 | [`product-design-rules.md`](./product-design-rules.md)                           | Produktets visuelle og semantiske UI-regler  |
 | [`adr/`](./adr/README.md)                                                        | Bindende arkitekturbeslutninger              |
 

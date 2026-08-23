@@ -1,7 +1,11 @@
 import { defineConfig, devices } from "@playwright/test";
+import { fileURLToPath } from "node:url";
 
 const ROOT_ORIGIN = "http://127.0.0.1:4175";
 const BASE_PATH_ORIGIN = "http://127.0.0.1:4176";
+const PRODUCTION_STATIC_SERVER = JSON.stringify(
+  fileURLToPath(new URL("./e2e/production-static-server.mjs", import.meta.url))
+);
 
 export default defineConfig({
   testDir: "./e2e",
@@ -29,8 +33,7 @@ export default defineConfig({
   webServer: [
     {
       name: "Cloudflare Pages production artifact",
-      command:
-        "node e2e/production-static-server.mjs --root .e2e-build/root --port 4175 --fallback index.html",
+      command: `node ${PRODUCTION_STATIC_SERVER} --root .e2e-build/root --port 4175 --fallback index.html`,
       url: ROOT_ORIGIN,
       reuseExistingServer: false,
       timeout: 30_000,
@@ -38,8 +41,7 @@ export default defineConfig({
     },
     {
       name: "GitHub Pages production artifact",
-      command:
-        "node e2e/production-static-server.mjs --root .e2e-build/base --port 4176 --base /banebooking --fallback 404.html",
+      command: `node ${PRODUCTION_STATIC_SERVER} --root .e2e-build/base --port 4176 --base /banebooking --fallback 404.html`,
       url: `${BASE_PATH_ORIGIN}/banebooking/`,
       reuseExistingServer: false,
       timeout: 30_000,

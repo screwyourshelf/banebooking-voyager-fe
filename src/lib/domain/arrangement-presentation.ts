@@ -16,7 +16,7 @@ export const ARRANGEMENT_KATEGORI_VALG: Array<{
   { value: "Annet", label: "Annet" },
 ];
 
-export function formaterArrangementKategori(kategori: ArrangementKategori) {
+function formaterArrangementKategori(kategori: ArrangementKategori) {
   return ARRANGEMENT_KATEGORI_VALG.find((valg) => valg.value === kategori)?.label ?? kategori;
 }
 

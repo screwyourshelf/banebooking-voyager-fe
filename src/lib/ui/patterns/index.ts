@@ -1,14 +1,10 @@
 export { default as AppShell } from "./AppShell.svelte";
 export { default as Collection } from "./Collection.svelte";
-export type { CollectionToggleControl } from "./Collection.svelte";
 export { default as CollectionControls } from "./CollectionControls.svelte";
 export type {
   CollectionChoiceContext,
-  CollectionChoiceOption,
   CollectionControlField,
   CollectionControlGroup,
-  CollectionSearchControl,
-  CollectionSortControl,
 } from "./CollectionControls.svelte";
 export { default as CollectionEmpty } from "./CollectionEmpty.svelte";
 export { default as CollectionError } from "./CollectionError.svelte";
@@ -16,8 +12,6 @@ export { default as CollectionGroup } from "./CollectionGroup.svelte";
 export { default as CollectionList } from "./CollectionList.svelte";
 export { default as CollectionLoading } from "./CollectionLoading.svelte";
 export { default as CollectionRow } from "./CollectionRow.svelte";
-export type { CollectionRowInteraction, CollectionRowLayout } from "./CollectionRow.svelte";
-export type { CollectionRowStatus, CollectionStatusTone } from "./CollectionStatus.svelte";
 export { default as Dialog } from "./Dialog.svelte";
 export type { DialogActionContext } from "./Dialog.svelte";
 export { default as Document } from "./Document.svelte";
@@ -30,50 +24,37 @@ export { default as ErrorState } from "./ErrorState.svelte";
 export { default as Feedback } from "./Feedback.svelte";
 export type { FeedbackTone } from "./Feedback.svelte";
 export { default as Form } from "./Form.svelte";
-export type { FormDensity, FormVariant } from "./Form.svelte";
 export { default as FormActions } from "./FormActions.svelte";
-export type { FormActionsAlign } from "./FormActions.svelte";
 export { default as FormField } from "./FormField.svelte";
 export { default as FormFields } from "./FormFields.svelte";
 export { default as FormSteps } from "./FormSteps.svelte";
-export type { FormStep } from "./FormSteps.svelte";
 export { default as FormSubmit } from "./FormSubmit.svelte";
 export { default as Metric } from "./Metric.svelte";
 export { default as MetricGrid } from "./MetricGrid.svelte";
 export { default as Navigation } from "./Navigation.svelte";
-export type { NavigationLayout } from "./Navigation.svelte";
 export { default as NavigationAction } from "./NavigationAction.svelte";
-export type { NavigationActionPresentation } from "./NavigationAction.svelte";
 export { default as NavigationIdentity } from "./NavigationIdentity.svelte";
 export { default as NavigationLink } from "./NavigationLink.svelte";
-export type { NavigationBadge } from "./NavigationLink.svelte";
 export { default as NavigationList } from "./NavigationList.svelte";
 export { default as NavigationLoading } from "./NavigationLoading.svelte";
 export { default as NavigationOverlay } from "./NavigationOverlay.svelte";
-export type { NavigationOverlayContext } from "./NavigationOverlay.svelte";
 export { default as NavigationSection } from "./NavigationSection.svelte";
 export { default as Page } from "./Page.svelte";
 export { default as PageLoading } from "./PageLoading.svelte";
 export { default as PageStatus } from "./PageStatus.svelte";
-export type { PageStatusTone } from "./PageStatus.svelte";
 export { default as RichTextEditor } from "./RichTextEditor.svelte";
 export { default as RichTextContent } from "./RichTextContent.svelte";
 export { default as ScheduleTime } from "./ScheduleTime.svelte";
 export { default as Section } from "./Section.svelte";
-export type { SectionPadding, SectionVariant } from "./Section.svelte";
 export { default as SettingsChoiceGroup } from "./SettingsChoiceGroup.svelte";
-export type { SettingsChoiceOption } from "./SettingsChoiceGroup.svelte";
 export { default as SettingsPanel } from "./SettingsPanel.svelte";
 export { default as SettingsRadioGroup } from "./SettingsRadioGroup.svelte";
-export type { SettingsRadioGroupLayout, SettingsRadioOption } from "./SettingsRadioGroup.svelte";
 export { default as SettingsRange } from "./SettingsRange.svelte";
 export { default as SettingsRow } from "./SettingsRow.svelte";
 export { default as SettingsSection } from "./SettingsSection.svelte";
-export type { SettingsSectionTone } from "./SettingsSection.svelte";
 export { default as SettingsStack } from "./SettingsStack.svelte";
 export { default as SettingsSwitchRow } from "./SettingsSwitchRow.svelte";
 export { default as SettingsText } from "./SettingsText.svelte";
 export { default as SettingsValue } from "./SettingsValue.svelte";
 export { default as Tabs } from "./Tabs.svelte";
-export type { TabItem } from "./Tabs.svelte";
 export { default as Weather } from "./Weather.svelte";

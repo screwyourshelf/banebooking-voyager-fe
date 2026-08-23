@@ -55,7 +55,7 @@ export const EMPTY_BOOKING_OVERRIDE: BookingOverrideDraft = {
   daysAhead: null,
 };
 
-export const DEFAULT_ACTIVITY_DRAFT: ActivityDraft = {
+const DEFAULT_ACTIVITY_DRAFT: ActivityDraft = {
   name: "",
   rules: "",
   active: true,

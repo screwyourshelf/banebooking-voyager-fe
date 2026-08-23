@@ -1,6 +1,6 @@
 import type { BaneRespons, BookingRegelRespons, GrenRespons } from "$lib/contracts";
 
-export const bookingRules: BookingRegelRespons = {
+const bookingRules: BookingRegelRespons = {
   aapningstid: "07:00",
   stengetid: "22:00",
   maksPerDag: 2,

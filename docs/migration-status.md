@@ -4,7 +4,7 @@
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** Ingen — WP-7 og hele lift-and-shift-en er fullført
+> **Aktiv arbeidspakke:** Ingen — lift-and-shift og etterfølgende arkitekturreview er fullført
 >
 > **Sist oppdatert:** 2026-08-23
 
@@ -540,6 +540,19 @@ midlertidige broer først når det autoritative SvelteKit-produktet har overtatt
   og tynne routes uten gjenværende routeplaceholdere eller backendendringer.
 - WP-7 er fullført. Route-/featureparitet, runtimeparitet, kritiske automatiserte E2E-flyter,
   produksjonsbevis, React-fjerning og CSS-/driftsopprydding er bevist med grønn sluttport.
+- Etterreviewen mot gjeldende Svelte 5-, SvelteKit- og Vite-praksis er dokumentert i
+  `docs/architecture-conformance-review.md`. Runes, ren `load`, stateeierskap, feature-/UI-grenser,
+  lazy loading, static hosting og produksjonsrouting er i samsvar med den godkjente arkitekturen.
+- Pre-module recovery kan ikke lenger slette origin-delt `localStorage`, `sessionStorage` eller
+  Cache Storage. Den henter bare fersk HTML/oppstartsressurser og bruker én privat cooldown-nøkkel;
+  ADR-005 og arkitekturkontrollen gjør unntaket eksplisitt og permanent.
+- Bekreftet død logikk, lytterstate og unødvendige offentlige eksportflater er fjernet. Knip finner
+  ingen ubrukte runtimefiler, verdi-eksporter eller direkte avhengigheter; komplette, foreløpig
+  ukonsumerte transporttyper beholdes bevisst som backendkontrakt.
+- Gamle React-/buildspor (`.lintstagedrc.js`, `copy-404.js`, root `vite-env.d.ts` og
+  `tsconfig.tsbuildinfo`) er fjernet og lagt til i legacykontrollens forbudsliste.
+- Vite er oppdatert til 8.2.2. Query-devtools er flyttet ut av runtimeavhengighetene og inn i
+  `devDependencies`; Svelte 5, SvelteKit og Svelte-Vite-pluginen var allerede oppdatert.
 - Sentral CSS og pakkegraf har bare aktive Svelte-konsumenter; den maskinelle kontrollen håndhever
   denne toveis rekkevidden videre.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
@@ -547,14 +560,14 @@ midlertidige broer først når det autoritative SvelteKit-produktet har overtatt
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                                  |
-| ------------------------------------- | --------------------------------------------------- |
-| Base branch                           | `main`                                              |
-| Fastslått basecommit                  | `5287c5e`                                           |
-| Siste semantiske checkpoint           | `refactor(sveltekit): complete WP-7 cleanup`        |
-| Lokale commits foran base             | 39                                                  |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                       |
-| Neste planlagte checkpoint            | Ingen; ekstern deploy krever eksplisitt godkjenning |
+| Felt                                  | Forventet tilstand                                        |
+| ------------------------------------- | --------------------------------------------------------- |
+| Base branch                           | `main`                                                    |
+| Fastslått basecommit                  | `5287c5e`                                                 |
+| Siste semantiske checkpoint           | `refactor(sveltekit): harden post-migration architecture` |
+| Lokale commits foran base             | 40                                                        |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                             |
+| Neste planlagte checkpoint            | Ingen; ekstern deploy krever eksplisitt godkjenning       |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -611,6 +624,10 @@ som krever eksplisitt godkjenning samt valg av målhost og produksjonskonfiguras
 - `npm audit` rapporterer seks lave transitive funn i den aktive SvelteKit-/Bits UI-kjeden og ingen
   moderate, høye eller kritiske funn. Audit tilbyr ikke en kompatibel oppgradering som fjerner de
   lave funnene; foreslåtte majorendringer er derfor ikke brukt som del av lift-and-shift-en.
+- `react-is@17.0.2` finnes bare transitivt i testverktøyenes `pretty-format`-kjede. Det ligger ikke
+  i produksjonsgrafen eller byggartefaktene og er ikke React-/ReactDOM-runtime.
+- Statisk død-kodeanalyse rapporterer bare komplette DTO-typer som ennå ikke har en UI-konsument.
+  De beholdes som transportkontrakt i `lib/contracts`; det finnes ingen tilsvarende ubrukt runtimekode.
 - Produksjonsbevisets initial CSS er 21,2 KiB gzip av et 50 KiB-budsjett. Største lazy JS-chunk er
   fortsatt 120,5 KiB av 130 KiB og har liten, men grønn headroom.
 
@@ -623,11 +640,14 @@ som krever eksplisitt godkjenning samt valg av målhost og produksjonskonfiguras
 | `git diff --check`                   | Bestått 2026-08-23                                                                 |
 | `npm test`                           | Bestått 2026-08-23: 86 filer, 318 tester                                           |
 | `npm run check`                      | Bestått 2026-08-23: Svelte-typecheck, arkitektur, legacy, design, lint og format   |
+| Asset-recovery-kontrakt              | Bestått 2026-08-23: ferske assets uten sletting av auth-/site storage              |
+| Knip dead-code-review                | Bestått 2026-08-23: kun bevisst beholdte transporttyper rapporteres                |
 | Cloudflare Pages-build               | Bestått 2026-08-23: root path og `index.html`-fallback                             |
 | GitHub Pages-build                   | Bestått 2026-08-23: eksplisitt `/banebooking` og `404.html`-fallback               |
 | Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                  |
 | Nettleserrender                      | Bestått 2026-08-23: Statistikk i 4 flater uten overflow eller konsollfeil          |
 | SvelteKit-bundle                     | Verifisert 2026-08-23: ingen React; Sentry dynamisk og ikke preloadet              |
+| Vite-/dependencygraf                 | Verifisert 2026-08-23: Vite 8.2.2, devtools dev-only, direkte pakkegraf komplett   |
 | WP-7 React-fjerningskontroll         | Bestått 2026-08-23: ingen TSX, broer eller React/Axios/Query/Radix-pakker          |
 | WP-7 CSS-/tokenrekkevidde            | Bestått 2026-08-23: toveis klasse-, anatomi-, slot- og tokenkontroll               |
 | WP-7 direkte pakkegraf               | Bestått 2026-08-23: ingen shadcn, zod, tw-animate eller overflødige Tiptap-entries |
@@ -637,7 +657,7 @@ som krever eksplisitt godkjenning samt valg av målhost og produksjonskonfiguras
 | WP-7 kritiske E2E-flyter             | Bestått 2026-08-23: 3 Playwright-flyter, base path og deterministisk opprydding    |
 | WP-7 visuelle referanser             | Bestått 2026-08-23: 4 snapshots over roller, viewporter og lyst/mørkt tema         |
 | WP-7 produksjonsroutematrise         | Bestått 2026-08-23: 4 routeklasser × root/base, direkte load, refresh og fallback  |
-| WP-7 produksjonsbundle               | Bestått 2026-08-23: 37,6–37,7 KiB JS, 21,2 KiB CSS, 120,5 KiB største lazy chunk   |
+| WP-7 produksjonsbundle               | Bestått 2026-08-23: 37,2–37,3 KiB JS, 21,2 KiB CSS, 120,5 KiB største lazy chunk   |
 | WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                |
 | WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon         |
 | WP-4 pattern-/a11y-tester            | Bestått 2026-08-22: 1 fil, 6 tester for semantikk, states, retry og axe            |
@@ -672,11 +692,12 @@ som krever eksplisitt godkjenning samt valg av målhost og produksjonskonfiguras
 
 ## Filer i siste checkpoint
 
-- ryddet `src/index.css` og sentral token-, pattern-, feature-composition- og responsiv CSS
-- synkronisert `package.json`/`package-lock.json` og permanent direkte pakkegrense i legacykontrollen
-- toveis CSS-/Svelte-rekkevidde i `scripts/check-design-system-boundaries.mjs`
-- ny `docs/development-and-operations.md`, oppdatert WP-7-inventar, produksjonsbevis,
-  dokumentindeks og migreringsstatus
+- origin-sikker pre-module recovery i `src/app.html`, kontrakttest og maskinell bootstrapgrense
+- ADR-005, arkitektur-/konformitetsreview, oppdatert målarkitektur, dokumentindeks og status
+- fjernet legacykonfigurasjon, genererte React-/TypeScript-spor, død kode og unødvendige
+  feature-/platform-/UI-eksporter
+- synkronisert `package.json`/`package-lock.json` med Vite 8.2.2 og dev-only Query-devtools
+- robust produksjons-E2E-serverreferanse som eksplisitt fil-URL i Playwright-konfigurasjonen
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
 pågående arbeid etter checkpointet.

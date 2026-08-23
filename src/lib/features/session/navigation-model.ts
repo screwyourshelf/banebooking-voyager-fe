@@ -28,7 +28,7 @@ export type AppNavigationItem = {
   mobileLabel?: string;
 };
 
-export type AppNavigationSection = {
+type AppNavigationSection = {
   id: "admin" | "overview" | "personal";
   items: AppNavigationItem[];
   label: string;

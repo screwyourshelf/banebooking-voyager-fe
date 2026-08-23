@@ -15,6 +15,8 @@ const targetRoots = [
 ];
 const violations = [];
 
+await checkBootstrapTemplate();
+
 for (const targetRoot of targetRoots) {
   for (const filePath of await collectSourceFiles(targetRoot)) {
     const source = await readFile(filePath, "utf8");
@@ -191,6 +193,48 @@ if (violations.length > 0) {
 }
 
 console.log("SvelteKit-arkitekturgrensene er intakte.");
+
+async function checkBootstrapTemplate() {
+  const filePath = path.join(sourceRoot, "app.html");
+  const source = await readFile(filePath, "utf8");
+  const relativePath = path.relative(root, filePath);
+
+  const originWideStorageMatch = source.match(/\blocalStorage\b|\b(?:window\.)?caches\b/);
+  if (originWideStorageMatch) {
+    report(
+      relativePath,
+      source,
+      originWideStorageMatch[0],
+      "bootstrap kan ikke lese eller slette origin-delt lagring"
+    );
+  }
+
+  const sessionStorageCalls = [
+    ...source.matchAll(/\bsessionStorage\.([A-Za-z]+)\s*\(\s*([^,\s)]+)/g),
+  ];
+  const sessionStorageReferences = source.match(/\bsessionStorage\b/g) ?? [];
+
+  if (sessionStorageCalls.length !== sessionStorageReferences.length) {
+    report(
+      relativePath,
+      source,
+      "sessionStorage",
+      "bootstrap kan bare bruke eksplisitte sessionStorage-kall"
+    );
+  }
+
+  for (const call of sessionStorageCalls) {
+    const [, method, firstArgument] = call;
+    if (!new Set(["getItem", "setItem"]).has(method) || firstArgument !== "recoveryStorageKey") {
+      report(
+        relativePath,
+        source,
+        call[0],
+        "bootstrap kan bare lese og skrive sin private recoveryStorageKey"
+      );
+    }
+  }
+}
 
 async function collectSourceFiles(directory) {
   let entries;

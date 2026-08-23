@@ -1,6 +1,6 @@
 import type { RolleType } from "$lib/contracts";
 
-export const ROLLE_VALG: Array<{ value: RolleType; label: string }> = [
+const ROLLE_VALG: Array<{ value: RolleType; label: string }> = [
   { value: "Medlem", label: "Medlem" },
   { value: "Utvidet", label: "Utvidet bruker" },
   { value: "KlubbAdmin", label: "Klubbadministrator" },
