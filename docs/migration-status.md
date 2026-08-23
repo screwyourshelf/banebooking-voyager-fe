@@ -1,14 +1,14 @@
 # Migreringsstatus
 
-> **Status:** Aktiv
+> **Status:** Fullført
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** WP-7 — Samlet paritet og produksjonsbytte (pågår; React-fjerning fullført)
+> **Aktiv arbeidspakke:** Ingen — WP-7 og hele lift-and-shift-en er fullført
 >
 > **Sist oppdatert:** 2026-08-23
 
-## Mål for aktiv arbeidspakke
+## Mål for arbeidspakken
 
 Bevis samlet route- og featureparitet, etabler kritiske ende-til-ende-flyter, kontroller bundle,
 ytelse, lazy loading og produksjonslik hosting, og fjern React-kilde, React-avhengigheter og andre
@@ -440,7 +440,7 @@ midlertidige broer først når det autoritative SvelteKit-produktet har overtatt
   featurestates uten å finne manglende produktfeatures. Importgrafen skiller 265 Svelte-eksklusive,
   295 React-eksklusive, 46 delte autoritative og 43 runtime-uoppnåelige produksjonskandidater.
 - `docs/wp-7-parity-and-cleanup-inventory.md` navngir alle aktive React-broer, 34 foreldreløse
-  legacyfiler, React-/Axios-/Query-/Radix-/shadcn-avhengigheter og en atomisk femtrinns
+  legacyfiler, React-/Axios-/Query-/Radix-/shadcn-avhengigheter og en atomisk sekstrinns
   fjerningsrekkefølge med faktiske konsumenter.
 - Inventaret fant to konkrete runtimegap før React kan fjernes: Svelte-runtime kobler foreløpig
   ikke observability/Sentry eller storagefeilrapportering, og deploy-recoveryen for utdaterte
@@ -487,15 +487,29 @@ midlertidige broer først når det autoritative SvelteKit-produktet har overtatt
   synkroniserte lockfilen; pakkegrafen inneholder ikke React, React DOM, Axios, React Query eller
   Radix.
 - `scripts/check-legacy-frontend-removal.mjs` avviser permanent React-/TSX-kilde, de gamle
-  brostiene, React-rootkonfigurasjon og de fjernede pakkene. Designsystemkontrollen leser nå den
-  aktive Svelte-anatomien og bevarer bare den eksplisitt utsatte CSS-til-komponent-rekkevidden til
-  neste checkpoint.
+  brostiene, React-rootkonfigurasjon og de fjernede pakkene. Designsystemkontrollen leste den aktive
+  Svelte-anatomien og holdt CSS-til-komponent-rekkevidden eksplisitt utsatt frem til det separate
+  sjette checkpointet.
 - Dialogprimitiven gjenoppretter body-scroll umiddelbart fordi flaten ikke har exit-transition.
   Overlaytestene lukker dialogene eksplisitt, slik at Bits UI ikke etterlater en utsatt global
   cleanup etter at JSDOM er avmontert.
 - Hele femte checkpoint er re-verifisert med 318 Vitest-tester, Svelte-only check, sju kritiske og
   visuelle E2E-tester, åtte produksjonsroutetester og begge hostingbuildene. Initial CSS falt til
   30,2 KiB gzip når TSX-treet sluttet å være Tailwind-kilde; ekstern deploy og backend er urørt.
+- Sjette WP-7-checkpoint har kaldmålt Svelte-treet mot sentral CSS og fjernet 102 ubrukte
+  legacyklasser, 71 ubrukte `data-*`-ankre, foreldreløse kommentarer og 40 tokens uten aktiv
+  konsument. Aktive grener i kombinerte selektorer er bevart, og alle fire fryste visuelle
+  referanser er identiske etter oppryddingen.
+- `src/index.css` er fri for shadcn- og ubrukt animate-CSS. `shadcn`, `zod`, `tw-animate-css` og fem
+  overflødige direkte Tiptap-oppføringer er fjernet; editoren importerer fortsatt sine tre
+  autoritative pakker. Pakkeryddingen fjernet 264 installerte pakker, og `nanoid` er oppdatert til
+  sikker patchversjon 3.3.18.
+- Designsystemkontrollen håndhever nå toveis rekkevidde for klasser, `data-ui`, primitives, slots og
+  tokens. Legacykontrollen avviser de fjernede direkte pakkene, og
+  `docs/development-and-operations.md` er autoritativ lokal kjøre-, bygg- og hostinginstruks.
+- Sjette checkpoint er verifisert med 318 Vitest-tester, tre kritiske E2E-flyter, fire uendrede
+  visuelle snapshots, åtte produksjonsroutetester, full check og begge hostingbuildene. Initial CSS
+  er redusert til 21,2 KiB gzip; ingen ekstern deploy eller backendendring er utført.
 
 ## Nåtilstand
 
@@ -524,22 +538,23 @@ midlertidige broer først når det autoritative SvelteKit-produktet har overtatt
   autoritative SvelteKit-flater.
 - WP-6 er fullført. Alle elleve featurecheckpoints er migrert til offentlige Svelte-featureinnganger
   og tynne routes uten gjenværende routeplaceholdere eller backendendringer.
-- WP-7 pågår. Route-/featureparitet, oppryddingsomfang, runtimeparitet, kritiske automatiserte
-  E2E-flyter, produksjonsbevis og React-fjerning er bevist. Bare det separate CSS-/driftscheckpointet
-  gjenstår.
+- WP-7 er fullført. Route-/featureparitet, runtimeparitet, kritiske automatiserte E2E-flyter,
+  produksjonsbevis, React-fjerning og CSS-/driftsopprydding er bevist med grønn sluttport.
+- Sentral CSS og pakkegraf har bare aktive Svelte-konsumenter; den maskinelle kontrollen håndhever
+  denne toveis rekkevidden videre.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                                |
-| ------------------------------------- | ------------------------------------------------- |
-| Base branch                           | `main`                                            |
-| Fastslått basecommit                  | `5287c5e`                                         |
-| Siste semantiske checkpoint           | `refactor(sveltekit): remove WP-7 React frontend` |
-| Lokale commits foran base             | 38                                                |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                     |
-| Neste planlagte checkpoint            | WP-7 CSS- og driftsopprydding                     |
+| Felt                                  | Forventet tilstand                                  |
+| ------------------------------------- | --------------------------------------------------- |
+| Base branch                           | `main`                                              |
+| Fastslått basecommit                  | `5287c5e`                                           |
+| Siste semantiske checkpoint           | `refactor(sveltekit): complete WP-7 cleanup`        |
+| Lokale commits foran base             | 39                                                  |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                       |
+| Neste planlagte checkpoint            | Ingen; ekstern deploy krever eksplisitt godkjenning |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -548,19 +563,12 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Neste `/start` skal bare gjennomføre sjette avgrensede WP-7-checkpoint for CSS- og
-driftsopprydding:
-
-1. Kaldmål aktive klasser, `data-ui`-verdier, tokens og CSS-variabler mot Svelte-treet. Fjern bare
-   beviselig ubrukte legacyselektorer og kommentarer i `feature-compositions.css`, `patterns.css`,
-   `responsive.css` og `tokens.css`; behold den fryste visuelle kontrakten.
-2. Fjern `shadcn/tailwind.css` fra `src/index.css`, deretter `shadcn`, `zod` og direkte Tiptap-pakker
-   som den faktiske pakkegrafen beviser er overflødige. Gjenåpne designsystemkontrollens
-   CSS-til-komponent-rekkevidde, kjør `npm audit` på den reduserte grafen og oppdater utviklings- og
-   driftsinstruksjonene.
-3. Kjør E2E-portene, full maskinport og begge hostingbuildene. Oppdater produksjonsbevis og status,
-   marker WP-7 fullført dersom ingen avvik gjenstår, og opprett ett lokalt checkpoint-commit. Ikke
-   deploy eksternt og ikke endre backend.
+Lift-and-shift-en har ingen gjenværende migreringscheckpoint. En senere `/start` skal rapportere den
+fullførte tilstanden og ikke starte ekstern deploy. Dersom brukeren eksplisitt bestiller
+produksjonsbytte, skal den separate driftsoppgaven følge
+[`development-and-operations.md`](./development-and-operations.md), kjøre portene på nytt hvis kode
+eller avhengigheter har endret seg, avklare målhost og miljøkonfigurasjon og deretter publisere det
+verifiserte statiske artefaktet. Backend er fortsatt utenfor omfanget.
 
 ## Arbeidspakkeregister
 
@@ -573,7 +581,7 @@ driftsopprydding:
 | WP-4 UI-fundament                | Fullført | Alle kartlagte UI-familier og filterkomposisjon er grønne    |
 | WP-5 App-shell                   | Fullført | Shell, navigation, routeaktivitet, konto og Mer grønne       |
 | WP-6 Featuremigrering            | Fullført | Elleve checkpoints og alle Svelte-featureflater er grønne    |
-| WP-7 Paritet og produksjonsbytte | Pågår    | React fjernet med grønne porter; CSS og drift gjenstår       |
+| WP-7 Paritet og produksjonsbytte | Fullført | Paritet, React-fjerning, CSS, drift og sluttport grønne      |
 
 ## Featureregister
 
@@ -592,25 +600,19 @@ driftsopprydding:
 
 ## Åpne blokkeringer
 
-Ingen kjente bruker- eller backendblokkeringer for CSS-/driftsoppryddingen. En faktisk ekstern
-deploy krever eksplisitt godkjenning og er ikke implisitt autorisert av neste checkpoint.
+Ingen åpne migrerings- eller backendblokkeringer. En faktisk ekstern deploy er en separat oppgave
+som krever eksplisitt godkjenning samt valg av målhost og produksjonskonfigurasjon.
 
 ## Midlertidig kode og kjente avvik
 
 - Playwright-harnessen omskriver bare testkontekstens API-header til `DevelopmentBearer`; vanlig
   dev-, preview- og produksjonstrafikk bruker fortsatt den autoritative `Bearer`-kontrakten.
-- `src/index.css` importerer fortsatt `shadcn/tailwind.css`, og delte CSS-filer inneholder legacy
-  React-selektorer. `shadcn`, `zod` og de direkte Tiptap-oppføringene uten kildeimport beholdes til
-  den samlede CSS-/pakkeoppryddingen i neste checkpoint.
-- `npm audit` rapporterer 10 transitive funn: 6 lave, 1 moderat og 3 høye. `fast-uri`, `hono` og
-  `js-yaml` kommer via `shadcn` og forventes fjernet med pakken; `nanoid` kommer via
-  lint-/buildverktøykjeden og må vurderes på nytt etter lockfilsoppryddingen.
-- Designsystemkontrollen håndhever aktive Svelte-anatomier, CSS-importgraf, variabler og
-  statistikkunntaket. Den motsatte CSS-til-komponent-rekkevidden er midlertidig utsatt for de fryste
-  legacyselektorene og skal gjenåpnes når de fjernes.
-- Produksjonsbevisets initial CSS er 30,2 KiB gzip av et 50 KiB-budsjett, og største lazy JS-chunk
-  er 120,5 KiB av 130 KiB. Begge er grønne; lazy-chunken har fortsatt liten headroom og følges opp
-  som eksplisitt mål i CSS-/driftsoppryddingen.
+- Ingen midlertidige migreringsadapters, legacyselektorer eller åpne TODO-er gjenstår.
+- `npm audit` rapporterer seks lave transitive funn i den aktive SvelteKit-/Bits UI-kjeden og ingen
+  moderate, høye eller kritiske funn. Audit tilbyr ikke en kompatibel oppgradering som fjerner de
+  lave funnene; foreslåtte majorendringer er derfor ikke brukt som del av lift-and-shift-en.
+- Produksjonsbevisets initial CSS er 21,2 KiB gzip av et 50 KiB-budsjett. Største lazy JS-chunk er
+  fortsatt 120,5 KiB av 130 KiB og har liten, men grønn headroom.
 
 ## Siste verifikasjon
 
@@ -627,12 +629,15 @@ deploy krever eksplisitt godkjenning og er ikke implisitt autorisert av neste ch
 | Nettleserrender                      | Bestått 2026-08-23: Statistikk i 4 flater uten overflow eller konsollfeil          |
 | SvelteKit-bundle                     | Verifisert 2026-08-23: ingen React; Sentry dynamisk og ikke preloadet              |
 | WP-7 React-fjerningskontroll         | Bestått 2026-08-23: ingen TSX, broer eller React/Axios/Query/Radix-pakker          |
+| WP-7 CSS-/tokenrekkevidde            | Bestått 2026-08-23: toveis klasse-, anatomi-, slot- og tokenkontroll               |
+| WP-7 direkte pakkegraf               | Bestått 2026-08-23: ingen shadcn, zod, tw-animate eller overflødige Tiptap-entries |
+| `npm audit`                          | 2026-08-23: 6 lave, 0 moderate, 0 høye og 0 kritiske                               |
 | WP-7 paritets-/oppryddingsinventar   | Komplett 2026-08-23: 18 routes, states, importgraf, deps og fjerningsrekkefølge    |
 | WP-7 runtimeparitetstester           | Bestått 2026-08-23: 5 filer, 13 tester                                             |
 | WP-7 kritiske E2E-flyter             | Bestått 2026-08-23: 3 Playwright-flyter, base path og deterministisk opprydding    |
 | WP-7 visuelle referanser             | Bestått 2026-08-23: 4 snapshots over roller, viewporter og lyst/mørkt tema         |
 | WP-7 produksjonsroutematrise         | Bestått 2026-08-23: 4 routeklasser × root/base, direkte load, refresh og fallback  |
-| WP-7 produksjonsbundle               | Bestått 2026-08-23: 37,6–37,7 KiB JS, 30,2 KiB CSS, 120,5 KiB største lazy chunk   |
+| WP-7 produksjonsbundle               | Bestått 2026-08-23: 37,6–37,7 KiB JS, 21,2 KiB CSS, 120,5 KiB største lazy chunk   |
 | WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                |
 | WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon         |
 | WP-4 pattern-/a11y-tester            | Bestått 2026-08-22: 1 fil, 6 tester for semantikk, states, retry og axe            |
@@ -667,14 +672,11 @@ deploy krever eksplisitt godkjenning og er ikke implisitt autorisert av neste ch
 
 ## Filer i siste checkpoint
 
-- React-roten, hele `src/components`, det gamle `src/features`, hooks/providers/auth/API,
-  kompatibilitetsbroer, foreldreløse typer og React-rootkonfigurasjon er fjernet
-- Svelte-only pakke-, TypeScript-, Vite-, ESLint- og Prettier-konfigurasjon med synkronisert lockfil
-  og permanent legacykontroll i `scripts/check-legacy-frontend-removal.mjs`
-- Svelte-only designsystemkontroll i `scripts/check-design-system-boundaries.mjs`, samt deterministisk
-  body-scroll-cleanup og overlayregresjon i dialog-/sessiontestene
-- re-verifisert route-, hosting-, viewport- og bundlebevis i
-  `docs/wp-7-production-evidence.md`, med oppdatert WP-7-inventar og migreringsstatus
+- ryddet `src/index.css` og sentral token-, pattern-, feature-composition- og responsiv CSS
+- synkronisert `package.json`/`package-lock.json` og permanent direkte pakkegrense i legacykontrollen
+- toveis CSS-/Svelte-rekkevidde i `scripts/check-design-system-boundaries.mjs`
+- ny `docs/development-and-operations.md`, oppdatert WP-7-inventar, produksjonsbevis,
+  dokumentindeks og migreringsstatus
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
 pågående arbeid etter checkpointet.

@@ -1,20 +1,5 @@
 @media (min-width: 48rem) {
   @layer components {
-    [data-ui="stack"][data-gap="xs"] {
-      gap: 0.375rem;
-    }
-    [data-ui="stack"][data-gap="sm"] {
-      gap: 0.75rem;
-    }
-    [data-ui="stack"][data-gap="md"] {
-      gap: 1rem;
-    }
-    [data-ui="stack"][data-gap="lg"] {
-      gap: 1.5rem;
-    }
-    [data-ui="stack"][data-gap="xl"] {
-      gap: 2rem;
-    }
     [data-ui="app-shell"][data-background="court"] {
       background:
         linear-gradient(var(--app-backdrop-scrim), var(--app-backdrop-scrim)),
@@ -42,31 +27,6 @@
 
     [data-ui="action-feedback"] > [data-part="action"] > button,
     [data-ui="action-feedback"] > [data-part="action"] > a {
-      width: auto;
-    }
-
-    [data-slot="alert-dialog-footer"]:has(> [data-ui="action-feedback"]) {
-      grid-template-columns: minmax(0, 1fr) auto auto;
-    }
-
-    [data-slot="alert-dialog-footer"] > [data-ui="action-feedback"] {
-      grid-column: 1 / -1;
-    }
-
-    [data-slot="alert-dialog-footer"]:has(> [data-ui="action-feedback"])
-      > [data-slot="alert-dialog-cancel"] {
-      grid-column: 2;
-    }
-
-    [data-slot="alert-dialog-footer"]:has(> [data-ui="action-feedback"])
-      > [data-slot="alert-dialog-action"] {
-      grid-column: 3;
-    }
-
-    [data-slot="alert-dialog-footer"]:has(> [data-ui="action-feedback"])
-      > [data-slot="alert-dialog-cancel"],
-    [data-slot="alert-dialog-footer"]:has(> [data-ui="action-feedback"])
-      > [data-slot="alert-dialog-action"] {
       width: auto;
     }
 
@@ -154,15 +114,6 @@
       background: rgb(255 255 255 / 0.14);
     }
 
-    .app-sidebar-fixed {
-      position: sticky;
-      top: 0;
-      display: flex !important;
-      align-self: flex-start;
-      min-height: 100svh;
-      border-right: var(--app-sidebar-divider-width) solid var(--app-sidebar-divider);
-    }
-
     [data-ui="app-shell"] > [data-part="workspace"],
     [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] {
       padding-bottom: 0;
@@ -194,30 +145,13 @@
       color: var(--app-control-muted);
     }
 
-    .error-shell {
-      display: grid;
-      place-items: center;
-      background:
-        linear-gradient(90deg, rgb(5 27 17 / 0.88), rgb(7 31 21 / 0.68) 50%, rgb(8 28 20 / 0.58)),
-        url("/backgrounds/tennis-net.avif") center / cover;
-    }
-
-    .app-sidebar {
-      padding: 1rem 0.625rem;
-    }
-
-    .mobile-bottom-nav {
-      display: none;
-    }
-
     [data-ui="app-shell"] > [data-part="bottom-navigation"] {
       display: none;
     }
 
     :is(
       [data-ui="app-shell"] > [data-part="workspace"] > [data-part="topbar"],
-      [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] > [data-part="topbar"],
-      .app-topbar
+      [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] > [data-part="topbar"]
     ) {
       display: none;
     }
@@ -309,8 +243,7 @@
       grid-template-columns: minmax(0, 1fr);
     }
 
-    [data-ui="settings-choice-group"]
-      :is([data-ui="control-choice"], [data-ui-primitive="choice"]) {
+    [data-ui="settings-choice-group"] [data-ui-primitive="choice"] {
       min-width: 4.25rem;
     }
 
@@ -336,10 +269,6 @@
       padding: 1.25rem 1.5rem;
     }
 
-    [data-surface="record-card"][data-interactive="true"] {
-      gap: 1rem;
-    }
-
     [data-ui="collection-row"][data-variant="ordered"] {
       min-height: 5.25rem;
     }
@@ -347,25 +276,6 @@
     [data-ui="collection-row"][data-variant="ordered"] > [data-part="select"] {
       gap: 1rem;
       padding: 0.75rem 1.5rem;
-    }
-
-    [data-ui="collection-row-summary"] {
-      grid-template-columns: minmax(0, 1fr) auto;
-    }
-
-    [data-ui="collection-row-summary"][data-has-leading="true"] {
-      grid-template-columns: auto minmax(0, 1fr) auto;
-    }
-
-    [data-ui="collection-row-summary"][data-layout="schedule"][data-has-leading="true"] {
-      grid-template-columns: max-content minmax(0, 1fr);
-      grid-template-rows: auto auto;
-    }
-
-    [data-ui="collection-row-summary"][data-layout="schedule"] > .record-status {
-      grid-row: 1;
-      grid-column: 2;
-      justify-self: start;
     }
 
     [data-ui="collection-row"][data-variant="actions"] > [data-part="actions"] {
@@ -379,12 +289,6 @@
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
       align-items: stretch;
-    }
-
-    [data-ui="collection-row"][data-variant="actions"]
-      > [data-part="actions"]
-      > [data-ui="record-card-actions"] {
-      padding-top: 0;
     }
 
     [data-ui="editor-dialog"] {
@@ -425,176 +329,8 @@
       padding: 1rem 1.25rem;
     }
 
-    [data-ui="editor-dialog"]
-      > [data-part="header"]
-      > [data-part="intro"]
-      > :is([data-slot="dialog-title"], [data-part="title"]) {
+    [data-ui="editor-dialog"] > [data-part="header"] > [data-part="intro"] > [data-part="title"] {
       font-size: 2rem !important;
-    }
-
-    .record-detail-grid {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1rem 1.5rem;
-    }
-
-    .record-collection {
-      border-radius: 1.5rem;
-    }
-
-    [data-ui="record-collection-header"] {
-      min-height: 5rem;
-      padding: 0.875rem 1.5rem;
-    }
-
-    [data-ui="record-collection-header"][data-has-context-action="true"]
-      > [data-part="summary"]
-      > [data-part="icon"] {
-      display: grid;
-    }
-
-    [data-ui="record-collection-header"] > [data-part="actions"] > [data-ui="filter-switch"] {
-      min-width: 11rem;
-    }
-
-    .page-content-skeleton__controls {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: end;
-      gap: var(--app-space-lg);
-      padding: 0 1.5rem 0.875rem;
-    }
-
-    .page-content-skeleton__controls > span {
-      width: 12rem;
-      height: 3.25rem;
-    }
-
-    .record-filter-panel {
-      padding: 0.75rem 1.5rem 0.875rem;
-    }
-
-    .record-filter-panel[data-trigger="header"][data-open="false"] {
-      border-bottom: 1px solid color-mix(in srgb, var(--app-control-text) 14%, transparent);
-      padding: 0.75rem 1.5rem 0.875rem;
-    }
-
-    .record-filter-panel:not([data-has-search="true"]) .record-filter-panel__top,
-    .record-filter-panel__toggle {
-      display: none !important;
-    }
-
-    .record-filter-panel__search {
-      max-width: 34rem;
-    }
-
-    .record-filter-panel__content,
-    .record-filter-panel[data-open="false"] .record-filter-panel__content,
-    .record-filter-panel[data-open="true"] .record-filter-panel__content {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: end;
-      gap: var(--app-space-lg);
-      margin-top: 0;
-      border-top: 0;
-      padding-top: 0;
-    }
-
-    .record-filter-panel[data-has-search="true"] .record-filter-panel__content {
-      margin-top: var(--app-space-md);
-      border-top: 1px solid color-mix(in srgb, var(--app-control-text) 14%, transparent);
-      padding-top: var(--app-space-md);
-    }
-
-    .record-filter-panel[data-mode="filter"]:not([data-has-search="true"])
-      .record-filter-panel__group {
-      display: flex;
-      flex: 1;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .record-filter-panel[data-mode="selection"] .record-filter-panel__group {
-      display: flex;
-      flex: 0 1 auto;
-      align-items: center;
-      gap: 0.75rem;
-    }
-
-    .record-filter-panel__field,
-    .record-filter-panel__sort {
-      flex: 0 1 15rem;
-    }
-
-    .record-filter-panel__field[data-width="wide"] {
-      flex: 1 1 18rem;
-    }
-
-    .record-filter-panel__reset {
-      align-self: center;
-      margin-left: auto;
-    }
-
-    :is(
-      [data-surface="record-card"][data-part="static"],
-      [data-ui="record-card-static"],
-      [data-ui="record-card-trigger"]
-    ) {
-      min-height: 5.25rem !important;
-      padding: 0.75rem 1.5rem !important;
-    }
-
-    [data-ui="record-card-trigger"] > [data-slot="accordion-trigger-icon"] {
-      margin-left: 1rem;
-    }
-
-    [data-ui="record-card-details"] {
-      padding: 1.25rem 1.5rem 1.5rem !important;
-    }
-
-    .record-collection-skeleton {
-      --record-skeleton-leading-column: 7rem;
-      --record-skeleton-leading-width: 6rem;
-    }
-
-    .record-collection-skeleton[data-layout="date"] {
-      --record-skeleton-leading-column: 9rem;
-      --record-skeleton-leading-width: 7rem;
-    }
-
-    .record-collection-skeleton__row {
-      min-height: 5.25rem;
-      grid-template-columns:
-        var(--record-skeleton-leading-column) minmax(var(--record-skeleton-main-column), 1fr)
-        5.5rem;
-      gap: 1rem;
-      padding: 0.75rem 1.5rem;
-    }
-
-    .record-date-groups {
-      gap: 1.25rem;
-      padding-block: 1rem 1.5rem;
-    }
-
-    .record-date-group__heading {
-      padding-inline: 1rem;
-    }
-
-    .record-details-layout {
-      gap: 1.25rem;
-    }
-
-    .record-program__header {
-      padding: 0.75rem 1rem;
-    }
-
-    .record-program__days {
-      padding: 1rem;
-    }
-
-    .record-program__slot {
-      grid-template-columns: 8rem minmax(0, 1fr);
-      padding-inline: 0.75rem;
-      font-size: var(--app-type-label);
     }
   }
 }
@@ -640,23 +376,6 @@
       padding: 0;
     }
 
-    .app-sidebar {
-      position: relative;
-      padding: 1.25rem 1rem;
-    }
-
-    .app-sidebar::before {
-      position: absolute;
-      top: -8rem;
-      right: -7rem;
-      width: 16rem;
-      height: 16rem;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgb(240 131 71 / 0.22), transparent 68%);
-      content: "";
-      pointer-events: none;
-    }
-
     [data-ui="app-shell"] > [data-part="workspace"],
     [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] {
       position: relative;
@@ -681,11 +400,6 @@
       text-shadow: 0 3px 24px rgb(0 0 0 / 0.28);
     }
 
-    [data-ui="app-shell"] .record-collection {
-      border-color: var(--app-line-strong);
-      box-shadow: 0 32px 90px rgb(4 17 12 / 0.32);
-    }
-
     [data-ui="page"] > [data-part="content"] {
       position: relative;
       gap: 1.25rem;
@@ -696,34 +410,10 @@
       gap: 0.75rem;
     }
 
-    [data-ui="tabs"][data-variant="section"] > [data-part="rail"] {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-    }
-
-    [data-ui="tabs"][data-variant="section"] > [data-part="rail"]::after {
-      position: absolute;
-      z-index: -1;
-      right: 0;
-      bottom: -0.75rem;
-      left: 0;
-      height: 2.5rem;
-      background: linear-gradient(180deg, rgb(10 35 25 / 0.18), transparent);
-      content: "";
-      pointer-events: none;
-    }
-
     [data-ui="tabs"][data-variant="section"]
       :is([data-slot="tabs-content"], [data-part="content"]) {
       position: relative;
       z-index: 1;
-    }
-
-    .mobile-bottom-nav {
-      display: none;
     }
 
     [data-ui="page"] {
@@ -753,46 +443,6 @@
   }
 }
 
-/* Wide record-list density follows the collection's available workspace. */
-@layer components {
-  @container (min-width: 42rem) {
-    .record-collection .record-list {
-      gap: 0;
-      padding: 0;
-    }
-
-    .record-collection [data-surface="record-card"] {
-      border-top: 0;
-      border-right: 0;
-      border-left: 0;
-      border-radius: 0;
-      box-shadow: none;
-    }
-
-    .record-collection [data-surface="record-card"]:last-child {
-      border-bottom: 0;
-    }
-
-    .record-collection
-      :is(
-        [data-surface="record-card"][data-part="static"],
-        [data-ui="record-card-static"],
-        [data-ui="record-card-trigger"]
-      ) {
-      min-height: 4.25rem !important;
-      padding: 0.5rem 1.5rem !important;
-    }
-
-    .record-collection [data-ui="collection-row-summary"] {
-      gap: 1.25rem;
-    }
-
-    .record-collection [data-ui="record-card-details"] {
-      padding: 1.125rem 1.5rem 1.25rem !important;
-    }
-  }
-}
-
 @media (min-width: 48rem) {
   @layer components {
     .statistics-dashboard,
@@ -802,10 +452,6 @@
 
     .statistics-dashboard__status {
       color: var(--app-control-muted);
-    }
-
-    .statistics-month-chart__heading {
-      flex-direction: row;
     }
 
     .statistics-chart-legend {

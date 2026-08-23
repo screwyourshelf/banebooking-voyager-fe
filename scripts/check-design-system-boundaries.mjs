@@ -18,6 +18,7 @@ const componentFiles = sourceFiles.filter((filePath) =>
 );
 const componentSource = componentFiles.map((filePath) => sourceByPath.get(filePath)).join("\n");
 const stylesheetSource = stylesheetFiles.map((filePath) => sourceByPath.get(filePath)).join("\n");
+const runtimeClassNames = new Set(["dark", "light", "ProseMirror", "selectedCell"]);
 const violations = [];
 
 validateStylesheetGraph();
@@ -140,6 +141,12 @@ function validatePublicAnatomy() {
       (match) => match[1]
     )
   );
+  const componentSlotNames = new Set(
+    [...componentSource.matchAll(/\bdata-slot\s*=\s*["']([^"']+)["']/g)].map((match) => match[1])
+  );
+  const stylesheetSlotNames = new Set(
+    [...stylesheetSource.matchAll(/\[data-slot\s*=\s*["']([^"']+)["']\]/g)].map((match) => match[1])
+  );
 
   for (const uiName of componentUiNames) {
     if (!stylesheetUiNames.has(uiName)) {
@@ -157,8 +164,39 @@ function validatePublicAnatomy() {
     }
   }
 
-  // CSS-til-komponent-rekkevidde gjenåpnes i det separate WP-7 CSS-checkpointet. Frem til da
-  // beholdes de fryste legacyselektorene, mens alle aktive Svelte-anatomier fortsatt må ha CSS.
+  for (const uiName of stylesheetUiNames) {
+    if (!componentUiNames.has(uiName)) {
+      violations.push(`CSS definerer data-ui="${uiName}", men ingen Svelte-komponent bruker den`);
+    }
+  }
+
+  for (const primitiveName of stylesheetPrimitiveNames) {
+    if (!componentPrimitiveNames.has(primitiveName)) {
+      violations.push(
+        `CSS definerer data-ui-primitive="${primitiveName}", men ingen Svelte-primitive bruker den`
+      );
+    }
+  }
+
+  for (const slotName of stylesheetSlotNames) {
+    if (!componentSlotNames.has(slotName)) {
+      violations.push(
+        `CSS definerer data-slot="${slotName}", men ingen Svelte-komponent bruker den`
+      );
+    }
+  }
+
+  const stylesheetClassNames = new Set(
+    [...stylesheetSource.matchAll(/(?:^|[^A-Za-z0-9_-])\.([A-Za-z_][A-Za-z0-9_-]*)/g)].map(
+      (match) => match[1]
+    )
+  );
+  for (const className of stylesheetClassNames) {
+    if (runtimeClassNames.has(className) || containsToken(componentSource, className)) continue;
+    violations.push(`CSS definerer .${className}, men klassen brukes ikke i Svelte-kilden`);
+  }
+
+  // Valider at alle aktive Svelte-anatomier fortsatt har den forventede CSS-rekkevidden.
   for (const filePath of stylesheetFiles) {
     const source = sourceByPath.get(filePath) ?? "";
     for (const ruleMatch of source.matchAll(/([^{}]+)\{/g)) {
@@ -202,6 +240,43 @@ function validateCssVariables() {
     if (definedCssVariables.has(variable) || runtimeCssVariables.has(variable)) continue;
     violations.push(`CSS bruker ${variable}, men variabelen er ikke definert`);
   }
+
+  const tokensSource = sourceByPath.get(tokensPath) ?? "";
+  const tokenDependencies = new Map();
+  for (const match of tokensSource.matchAll(/(--[A-Za-z0-9_-]+)\s*:\s*([^;]+);/g)) {
+    const dependencies = tokenDependencies.get(match[1]) ?? new Set();
+    for (const dependency of match[2].matchAll(/var\((--[A-Za-z0-9_-]+)/g)) {
+      dependencies.add(dependency[1]);
+    }
+    tokenDependencies.set(match[1], dependencies);
+  }
+
+  const nonTokenSource = [
+    ...stylesheetFiles
+      .filter((filePath) => filePath !== tokensPath)
+      .map((filePath) => sourceByPath.get(filePath) ?? ""),
+    componentSource,
+  ].join("\n");
+  const reachableTokens = new Set(
+    [...nonTokenSource.matchAll(/var\((--[A-Za-z0-9_-]+)/g)].map((match) => match[1])
+  );
+  const pendingTokens = [...reachableTokens];
+  while (pendingTokens.length > 0) {
+    const token = pendingTokens.pop();
+    for (const dependency of tokenDependencies.get(token) ?? []) {
+      if (reachableTokens.has(dependency)) continue;
+      reachableTokens.add(dependency);
+      pendingTokens.push(dependency);
+    }
+  }
+
+  for (const token of tokenDependencies.keys()) {
+    if (!reachableTokens.has(token)) {
+      violations.push(
+        `${path.relative(projectRoot, tokensPath)} definerer ${token}, men tokenet brukes ikke`
+      );
+    }
+  }
 }
 
 async function collectFiles(directory) {
@@ -228,4 +303,9 @@ function lineFor(source, index) {
 function definesClass(source, className) {
   const escaped = className.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
   return new RegExp(`\\.${escaped}(?=$|[^A-Za-z0-9_-])`, "m").test(source);
+}
+
+function containsToken(source, token) {
+  const escaped = token.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  return new RegExp(`(^|[^A-Za-z0-9_-])${escaped}(?=$|[^A-Za-z0-9_-])`, "m").test(source);
 }

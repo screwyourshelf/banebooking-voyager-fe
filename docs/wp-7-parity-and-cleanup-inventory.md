@@ -1,10 +1,10 @@
 # WP-7 paritets- og oppryddingsinventar
 
-> **Status:** Femte WP-7-checkpoint fullført
+> **Status:** Sjette og siste WP-7-checkpoint fullført
 >
 > **Inventargrunnlag:** `feature/sveltekit-lift-and-shift` ved `4520f65`; runtimefeltene er
 > oppdatert i andre checkpoint, E2E-feltene i tredje checkpoint, produksjonsbeviset i fjerde og
-> fjerningsresultatet i femte checkpoint
+> fjerningsresultatet i femte checkpoint og CSS-/driftsresultatet i sjette checkpoint
 >
 > **Dato:** 2026-08-23
 
@@ -178,17 +178,18 @@ bevart fordi de har eksplisitte testkonsumenter.
 
 ## Avhengighetsinventar
 
-### SvelteKit-avhengigheter som skal beholdes
+### Autoritative SvelteKit-avhengigheter
 
 - `@fontsource-variable/figtree`, `@hugeicons/core-free-icons`, `@internationalized/date`
 - `@supabase/supabase-js`
 - `@tanstack/svelte-query` og `@tanstack/svelte-query-devtools`
 - `@tiptap/core`, `@tiptap/extension-table` og `@tiptap/starter-kit`
-- `bits-ui`, `date-fns`, `tailwindcss` og `tw-animate-css`
+- `bits-ui`, `date-fns` og `tailwindcss`
 - SvelteKit-, Svelte-, test-, lint-, format- og TypeScript-verktøykjeden
 
-`shadcn` er foreløpig også en Svelte-buildkonsument fordi `src/index.css` importerer
-`shadcn/tailwind.css`. Importen må fjernes eller erstattes før pakken kan slettes.
+Editoradapteren importerer bare `@tiptap/core`, `@tiptap/extension-table` og
+`@tiptap/starter-kit` direkte. Starter-kit og tabellpakken eier sine øvrige Tiptap-avhengigheter
+transitivt.
 
 ### Fjernede avhengigheter med bare React-konsumenter
 
@@ -202,18 +203,20 @@ React-verktøyene `@types/react`, `@types/react-dom`, `@vitejs/plugin-react`,
 `eslint-plugin-react-hooks` og `eslint-plugin-react-refresh` er fjernet sammen med
 `tsconfig.react.json` og `typecheck:react`.
 
-### Allerede ubrukte eller bare foreldreløst brukte avhengigheter
+### Fjernede ubrukte eller bare foreldreløst brukte avhengigheter
 
 - `@hookform/resolvers`, `use-debounce`, `cmdk`, `embla-carousel-react`, `input-otp`,
-  `react-hook-form` og `vaul` er fjernet fordi de var ubrukte eller bare nådd av foreldreløse
-  React-filer. `zod` står igjen til den samlede ubrukte pakkeporten i neste checkpoint.
-- Ingen direkte kildeimport: `@tiptap/extension-link`, `@tiptap/extension-table-cell`,
-  `@tiptap/extension-table-header`, `@tiptap/extension-table-row` og `@tiptap/pm`. De må
-  kontrolleres mot Tiptaps transitive pakkegraph når `package.json` ryddes.
+  `react-hook-form` og `vaul` ble fjernet fordi de var ubrukte eller bare nådd av foreldreløse
+  React-filer.
+- `shadcn`, `zod` og `tw-animate-css` er fjernet etter at kilde- og CSS-grafen viste null aktive
+  konsumenter.
+- De direkte oppføringene for `@tiptap/extension-link`, `@tiptap/extension-table-cell`,
+  `@tiptap/extension-table-header`, `@tiptap/extension-table-row` og `@tiptap/pm` er fjernet.
+  Pakker som starter-kit og tabellutvidelsen trenger, ligger fortsatt korrekt transitivt i lockfilen.
 
-Etter femte checkpoint rapporterer `npm audit` 10 transitive funn. `fast-uri`, `hono` og `js-yaml`
-kommer via `shadcn`; `nanoid` kommer via lint-/buildverktøykjeden. Audit kjøres på nytt etter at
-`shadcn` og resten av den overflødige pakkegrafen er fjernet.
+Pakkeryddingen fjernet 264 installerte pakker. `nanoid` er oppdatert innenfor PostCSS sin tillatte
+patchrange til 3.3.18, og høyfunnene er borte. Endelig `npm audit` rapporterer seks lave transitive
+funn i den aktive SvelteKit-/Bits UI-verktøykjeden og ingen moderate, høye eller kritiske funn.
 
 ## Fjernede TODO-er og konfigurasjonsrester
 
@@ -228,26 +231,30 @@ Følgende React-rester er også fjernet:
 - `components.json` og shadcn-kommentaren i `.prettierignore`
 - React-roten `index.html`
 
-Legacy designselektorer og kommentarer i `feature-compositions.css`, `patterns.css` og
-`tokens.css` er bevisst beholdt til neste separate CSS-/driftscheckpoint.
+Det siste checkpointet fjernet de 102 ubrukte legacyklassene, 71 ubrukte `data-*`-ankrene og 40
+CSS-tokens uten aktive Svelte-konsumenter. `shadcn/tailwind.css` og den ubrukte
+`tw-animate-css`-importen er borte fra `src/index.css`. Den motsatte CSS-til-komponent-rekkevidden er
+gjenåpnet i designsystemkontrollen for klasser, `data-ui`, primitives, slots og tokens.
 
 ## Atomisk checkpointrekkefølge
 
-1. **WP-7 runtimeparitet — fullført.** Observability/Sentry, storagefeil og testet asset-recovery
+1. **WP-7 paritets- og oppryddingsinventar — fullført.** Routes, featurestates, importgraf,
+   avhengigheter, runtimegap og atomisk fjerningsrekkefølge ble avstemt før sletting.
+2. **WP-7 runtimeparitet — fullført.** Observability/Sentry, storagefeil og testet asset-recovery
    eies av Svelte-runtime. Hele React-referansen er beholdt til avtalte bevis er fullført.
-2. **WP-7 kritiske E2E-flyter — fullført.** En reproduserbar authharness og Playwright dekker login,
+3. **WP-7 kritiske E2E-flyter — fullført.** En reproduserbar authharness og Playwright dekker login,
    booking, avbestilling og klubbadminendring med test-eid opprydding, base path og uendret
    produksjonsauth. Backendkode er urørt.
-3. **WP-7 produksjonsbevis — fullført.** Direkte lasting/refresh for public, protected, admin og
+4. **WP-7 produksjonsbevis — fullført.** Direkte lasting/refresh for public, protected, admin og
    callback er grønn under root og `/banebooking`. Hostfallback, base path, bundlebudsjetter,
    lazy chunks, fryste viewporter, roller og temaer er dokumentert før referansen fjernes.
-4. **WP-7 React-fjerning — fullført.** React-roten, de 295 React-eksklusive filene, de 34
+5. **WP-7 React-fjerning — fullført.** React-roten, de 295 React-eksklusive filene, de 34
    foreldreløse legacyfilene, fem legacytestfiler og alle aktive broer er fjernet. De 46 delte
    autoritative filene er bevart. Axios/React Query/Radix/React-avhengigheter, React-typecheck og
    React-lintplugins er fjernet, og lockfilen er synkronisert.
-5. **WP-7 CSS- og driftsopprydding.** Fjern beviselig ubrukte legacyselektorer og
-   `shadcn/tailwind.css`, deretter `shadcn` og resterende ubrukte pakker. Oppdater utviklings- og
-   driftsinstruksjoner og kjør endelig kvalitetsport.
+6. **WP-7 CSS- og driftsopprydding — fullført.** Bare aktive Svelte-selektorer og tokens er bevart,
+   overflødige pakker er fjernet, utviklings-/driftsinstruksen er autoritativ og hele sluttporten er
+   grønn uten backendendring eller ekstern deploy.
 
 Hvert checkpoint skal kjøre `npm test`, `npm run check`, Cloudflare Pages-build,
 GitHub Pages-build og `git diff --check`. Fra React-fjerningscheckpointet skal en maskinell kontroll

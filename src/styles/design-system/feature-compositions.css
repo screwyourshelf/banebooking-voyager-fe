@@ -1,179 +1,6 @@
 @layer components {
   /* Feature-level compositions. Keep slices together; do not split per page. */
 
-  /* Shared record presentation */
-  .record-details-layout {
-    display: grid;
-    gap: 1rem;
-  }
-
-  .record-detail-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 0.875rem;
-  }
-
-  .record-detail-grid > div {
-    min-width: 0;
-  }
-
-  .record-detail-grid dt {
-    display: flex;
-    align-items: center;
-    gap: 0.35rem;
-    color: var(--app-ink-faint);
-    font-size: var(--app-type-caption);
-    font-weight: 680;
-  }
-
-  .record-detail-grid dt svg {
-    width: 0.85rem;
-    height: 0.85rem;
-  }
-
-  .record-detail-grid dd {
-    overflow-wrap: anywhere;
-    margin-top: 0.2rem;
-    color: var(--app-ink);
-    font-size: var(--app-type-body-sm);
-    line-height: 1.4;
-  }
-
-  .record-link-button {
-    color: var(--app-brand);
-    font-weight: 650;
-    text-decoration: underline;
-    text-decoration-color: color-mix(in srgb, var(--app-brand) 32%, transparent);
-    text-underline-offset: 0.2rem;
-  }
-
-  .record-date-range {
-    display: flex;
-    min-width: 0;
-    flex-direction: column;
-    gap: 0.1rem;
-    color: var(--app-ink-faint);
-    font-size: var(--app-type-caption);
-    font-variant-numeric: tabular-nums;
-    line-height: 1.25;
-  }
-
-  .record-date-range strong {
-    color: var(--app-ink);
-    font-size: var(--app-type-body-sm);
-    font-weight: 730;
-    white-space: nowrap;
-  }
-
-  .record-date-range small {
-    white-space: nowrap;
-  }
-
-  .record-details-layout > p {
-    max-width: 52rem;
-    color: var(--app-ink-soft);
-    font-size: var(--app-type-body-sm);
-    line-height: 1.55;
-    white-space: pre-wrap;
-  }
-
-  .record-program {
-    overflow: hidden;
-    border: 1px solid var(--app-line);
-    border-radius: 0.875rem;
-    background: var(--app-surface);
-  }
-
-  .record-program__header {
-    display: flex;
-    min-height: 3.75rem;
-    align-items: center;
-    justify-content: space-between;
-    gap: 0.75rem;
-    padding: 0.625rem 0.75rem;
-  }
-
-  .record-program__header > span {
-    display: flex;
-    min-width: 0;
-    flex-direction: column;
-    gap: 0.1rem;
-  }
-
-  .record-program__header strong {
-    color: var(--app-ink);
-    font-size: var(--app-type-body-sm);
-    font-weight: 730;
-  }
-
-  .record-program__header small {
-    color: var(--app-ink-faint);
-    font-size: var(--app-type-caption);
-    line-height: 1.35;
-  }
-
-  .record-program__days {
-    display: grid;
-    gap: 0.875rem;
-    border-top: 1px solid var(--app-line);
-    padding: 0.75rem;
-  }
-
-  .record-program__day {
-    display: grid;
-    gap: 0.35rem;
-  }
-
-  .record-program__day h4 {
-    color: var(--app-ink);
-    font-size: var(--app-type-caption);
-    font-weight: 740;
-  }
-
-  .record-program__slots {
-    overflow: hidden;
-    border: 1px solid var(--app-line);
-    border-radius: 0.625rem;
-    background: var(--app-surface-subtle);
-  }
-
-  .record-program__slot {
-    display: grid;
-    min-width: 0;
-    grid-template-columns: 6.75rem minmax(0, 1fr);
-    gap: 0.625rem;
-    padding: 0.5rem 0.625rem;
-    color: var(--app-ink-soft);
-    font-size: var(--app-type-caption);
-    line-height: 1.35;
-  }
-
-  .record-program__slot:not(:last-child) {
-    border-bottom: 1px solid var(--app-line);
-  }
-
-  .record-program__slot time {
-    color: var(--app-ink);
-    font-weight: 690;
-    font-variant-numeric: tabular-nums;
-    white-space: nowrap;
-  }
-
-  .record-program__slot span {
-    min-width: 0;
-  }
-
-  .record-program__more {
-    width: fit-content;
-    justify-self: end;
-  }
-
-  .record-empty-note {
-    color: var(--app-ink-faint);
-    font-size: var(--app-type-body-sm);
-    font-style: italic;
-  }
-
   /* Booking statistics */
   .statistics-dashboard,
   .statistics-dashboard__results {
@@ -330,10 +157,6 @@
   [data-ui="section"][data-context="statistics"][data-view="month-chart"] {
     display: grid;
     gap: 1.25rem;
-  }
-
-  .statistics-month-chart__heading {
-    flex-direction: column;
   }
 
   .statistics-chart-legend {
@@ -688,7 +511,6 @@
     padding-bottom: 0 !important;
   }
 
-  .statistics-court-table__heading,
   [data-ui="section"][data-context="statistics"][data-view="court-table"]
     > [data-ui="section-header"] {
     padding: 0.25rem 1rem 1rem;
@@ -836,7 +658,6 @@
     padding-bottom: 0 !important;
   }
 
-  .statistics-top-users__heading,
   [data-ui="section"][data-context="statistics"][data-view="top-users"]
     > [data-ui="section-header"] {
     padding: 0.25rem 1rem 1rem;

@@ -1,13 +1,14 @@
 # WP-7 produksjonsbevis
 
-> **Status:** Produksjonsbevis re-verifisert etter femte WP-7-checkpoint
+> **Status:** Produksjonsbevis re-verifisert etter sjette og siste WP-7-checkpoint
 >
 > **Dato:** 2026-08-23
 
-Fjerde checkpoint frøs produksjonsbeviset før React-referansen ble fjernet. Femte checkpoint har
-kjørt hele beviset på nytt etter fjerningen. Det dekker bygde statiske artefakter, hostfallbacker,
-base path, route-/refresh-atferd, visuelle referanser og bundlegrenser. Det utfører ingen ekstern
-deploy og endrer ikke backend eller produksjonsauth.
+Fjerde checkpoint frøs produksjonsbeviset før React-referansen ble fjernet. Femte og sjette
+checkpoint har kjørt hele beviset på nytt etter henholdsvis React-fjerning og CSS-/pakkerydding. Det
+dekker bygde statiske artefakter, hostfallbacker, base path, route-/refresh-atferd, visuelle
+referanser og bundlegrenser. Det utfører ingen ekstern deploy og endrer ikke backend eller
+produksjonsauth.
 
 ## Produksjonslik routematrise
 
@@ -58,7 +59,7 @@ og overskridelse av de fryste gzipbudsjettene.
 | Mål                           | Cloudflare Pages | GitHub Pages |  Budsjett |
 | ----------------------------- | ---------------: | -----------: | --------: |
 | Initial JavaScript, gzip      |         37,6 KiB |     37,7 KiB |    50 KiB |
-| Initial CSS, gzip             |         30,2 KiB |     30,2 KiB |    50 KiB |
+| Initial CSS, gzip             |         21,2 KiB |     21,2 KiB |    50 KiB |
 | Største lazy JavaScript, gzip |        120,5 KiB |    120,5 KiB |   130 KiB |
 | JavaScript-chunks             |               67 |           67 | Målepunkt |
 
@@ -67,10 +68,9 @@ Begge artefakter er uten kjente React-runtime-signaturer. Cloudflare-artefaktet 
 `/* /index.html 200` i `_redirects`; GitHub-artefaktet har `.nojekyll`, `/banebooking` i alle
 startupreferanser og `404.html` som fallback.
 
-Initial CSS bruker nå 60,4 % av budsjettet etter at det slettede TSX-treet ikke lenger inngår i
-Tailwinds kildegrunnlag. Største lazy chunk bruker fortsatt 92,7 %. Begge er grønne; legacy-CSS-en
-er ikke manuelt ryddet i dette checkpointet og forblir neste mål. Ingen visuelle paritetsavvik ble
-registrert i de fryste flatene.
+Initial CSS bruker nå 42,4 % av budsjettet etter at legacyselektorer, shadcn-temaet og ubrukte tokens
+er fjernet. Største lazy chunk bruker fortsatt 92,7 %. Begge er grønne. Alle fire fryste visuelle
+referanser er identiske etter oppryddingen, og ingen visuelle paritetsavvik er registrert.
 
 ## Kjøring
 
