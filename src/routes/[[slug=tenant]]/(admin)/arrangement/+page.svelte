@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { RoutePlaceholder } from "$lib/ui";
+  import { ArrangementAdminScreen } from "$lib/features/arrangement-admin";
+  import { getSessionDataContext } from "$lib/features/session";
+
+  const session = getSessionDataContext();
 </script>
 
-<RoutePlaceholder
-  eyebrow="Administrasjon"
-  title="Administrer arrangementer"
-  description="Arrangementeditoren migreres i WP-6."
-/>
+<svelte:head><title>Administrer arrangementer | Banebooking</title></svelte:head>
+
+<ArrangementAdminScreen capabilities={session.bruker?.kapabiliteter ?? []} />

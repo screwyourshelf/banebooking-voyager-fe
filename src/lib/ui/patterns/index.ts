@@ -35,6 +35,8 @@ export { default as FormActions } from "./FormActions.svelte";
 export type { FormActionsAlign } from "./FormActions.svelte";
 export { default as FormField } from "./FormField.svelte";
 export { default as FormFields } from "./FormFields.svelte";
+export { default as FormSteps } from "./FormSteps.svelte";
+export type { FormStep } from "./FormSteps.svelte";
 export { default as FormSubmit } from "./FormSubmit.svelte";
 export { default as Navigation } from "./Navigation.svelte";
 export type { NavigationLayout } from "./Navigation.svelte";
