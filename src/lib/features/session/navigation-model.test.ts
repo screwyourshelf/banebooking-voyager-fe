@@ -132,6 +132,16 @@ describe("app navigation model", () => {
         .flatMap((section) => section.items)
         .find((item) => item.id === "kunngjoringer")?.active
     ).toBe(true);
+
+    const encodedSeparator = buildReady({
+      capabilities: ["kunngjøring:admin"],
+      pathname: "/fjordvik/admin/ukjent%2Fkunngj%C3%B8ringer",
+    });
+    expect(
+      encodedSeparator.desktopSections
+        .flatMap((section) => section.items)
+        .find((item) => item.id === "kunngjoringer")?.active
+    ).toBe(false);
   });
 
   it("keeps the three authenticated mobile priorities out of the More menu", () => {

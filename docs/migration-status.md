@@ -413,7 +413,8 @@ er ferdig migrert.
 - Offentlig `RichTextContent` leser den støttede Tiptap-JSON-kontrakten uten rå HTML og faller trygt
   tilbake til eldre ren tekst. Den obligatoriske kunngjøringsflaten gjenbruker samme lesegrense.
   Nettleser-QA avdekket i tillegg at en prosentkodet norsk route kunne avvises av sessionguarden;
-  guard- og navigasjonsmodellene normaliserer nå URL-pathen før capability- og aktiv-state-sjekk.
+  guard- og navigasjonsmodellene normaliserer nå URL-pathen før capability- og aktiv-state-sjekk,
+  men bevarer kodede reservedelere slik at `%2F` ikke kan bli en falsk path-separator.
 - Tiende WP-6-checkpoint er kontrollert på 390×844 og 1440×1000 i lyst og mørkt tema med én
   main-landmark, synlig h1, korrekt aktiv navigasjon, ingen horisontal overflow og ingen nye
   warn/error-logger etter retting. Tomtilstand, editor, riktekstverktøy, dato, valideringsfokus,
@@ -455,7 +456,7 @@ er ferdig migrert.
 | Base branch                           | `main`                                             |
 | Fastslått basecommit                  | `5287c5e`                                          |
 | Siste semantiske checkpoint           | `feat(sveltekit): migrate WP-6 announcement admin` |
-| Lokale commits foran base             | 31                                                 |
+| Lokale commits foran base             | 32                                                 |
 | Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                      |
 | Neste planlagte checkpoint            | WP-6 Statistikk                                    |
 
@@ -574,7 +575,7 @@ backendendringer eller ny brukerbeslutning.
 | Prettier på aktiv kode og dokumenter | Bestått 2026-08-23                                                                 |
 | Relative dokumentlenker              | Bestått 2026-08-23                                                                 |
 | `git diff --check`                   | Bestått 2026-08-23                                                                 |
-| `npm test`                           | Bestått 2026-08-23: 83 filer, 308 tester                                           |
+| `npm test`                           | Bestått 2026-08-23: 83 filer, 309 tester                                           |
 | `npm run check`                      | Bestått 2026-08-23: Svelte/React-typecheck, arkitektur, design, lint og format     |
 | Cloudflare Pages-build               | Bestått 2026-08-23: root path og `index.html`-fallback                             |
 | GitHub Pages-build                   | Bestått 2026-08-23: eksplisitt `/banebooking` og `404.html`-fallback               |
@@ -592,7 +593,7 @@ backendendringer eller ny brukerbeslutning.
 | WP-4 document-/a11y-tester           | Bestått 2026-08-22: 1 fil, 5 tester for landmark, headings, facts, lenker og axe   |
 | WP-4 navigation-/a11y-tester         | Bestått 2026-08-22: 1 fil, 7 tester for lenker, aktiv state, handlinger og axe     |
 | WP-4 date-/a11y-tester               | Bestått 2026-08-23: 1 fil, 9 tester for form, tastatur, grenser, fokus og axe      |
-| WP-4 editor-/a11y-tester             | Bestått 2026-08-22: 1 fil, 7 tester for JSON, format, tabell, fokus, states og axe |
+| WP-4 editor-/a11y-tester             | Bestått 2026-08-23: 1 fil, 8 tester for JSON, tom verdi, tabell, fokus og axe      |
 | WP-5 app-shell-/a11y-tester          | Bestått 2026-08-22: 1 fil, 4 tester for landmarks, fokus, loading og axe           |
 | WP-5 navigation-/a11y-tester         | Bestått 2026-08-23: 2 filer, 12 tester for state, routes, fokus, overlay og axe    |
 | WP-6 auth-/policy-/a11y-tester       | Bestått 2026-08-23: 5 filer, 11 tester for login, OTP, callback, storage og vilkår |

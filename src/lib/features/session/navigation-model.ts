@@ -284,7 +284,7 @@ function pathsEqual(actual: string, expected: string) {
   const normalize = (value: string) => {
     let decoded = value;
     try {
-      decoded = decodeURIComponent(value);
+      decoded = decodeURI(value);
     } catch {
       // En ugyldig percent-koding beholdes og kan ikke bli falskt aktiv.
     }

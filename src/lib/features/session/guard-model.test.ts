@@ -72,5 +72,8 @@ describe("session guards", () => {
     expect(requiredCapabilitiesForPath("/askim-tennis/admin/kunngj%C3%B8ringer")).toEqual([
       "kunngjøring:admin",
     ]);
+    expect(
+      requiredCapabilitiesForPath("/askim-tennis/admin/ukjent%2Fkunngj%C3%B8ringer")
+    ).toBeNull();
   });
 });

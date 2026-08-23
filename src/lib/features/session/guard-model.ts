@@ -59,7 +59,7 @@ export function requiredCapabilitiesForPath(pathname: string): readonly string[]
 
 function decodePathname(pathname: string) {
   try {
-    return decodeURIComponent(pathname);
+    return decodeURI(pathname);
   } catch {
     return pathname;
   }
