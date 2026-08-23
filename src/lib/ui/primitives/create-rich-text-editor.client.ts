@@ -32,7 +32,7 @@ function parseContent(value: string): Content {
 }
 
 function serializeContent(editor: Editor): string {
-  return JSON.stringify(editor.getJSON());
+  return editor.isEmpty ? "" : JSON.stringify(editor.getJSON());
 }
 
 function setAccessibilityAttributes(

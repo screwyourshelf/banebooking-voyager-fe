@@ -53,6 +53,7 @@ export {
   Page,
   PageLoading,
   PageStatus,
+  RichTextContent,
   RichTextEditor,
   ScheduleTime,
   RoutePlaceholder,

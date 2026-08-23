@@ -281,6 +281,14 @@ function buildSections(items: AppNavigationItem[]): AppNavigationSection[] {
 }
 
 function pathsEqual(actual: string, expected: string) {
-  const normalize = (value: string) => value.replace(/\/+$/, "") || "/";
+  const normalize = (value: string) => {
+    let decoded = value;
+    try {
+      decoded = decodeURIComponent(value);
+    } catch {
+      // En ugyldig percent-koding beholdes og kan ikke bli falskt aktiv.
+    }
+    return decoded.replace(/\/+$/, "") || "/";
+  };
   return normalize(actual) === normalize(expected);
 }

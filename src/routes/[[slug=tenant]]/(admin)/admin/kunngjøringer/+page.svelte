@@ -1,9 +1,7 @@
 <script lang="ts">
-  import { RoutePlaceholder } from "$lib/ui";
+  import { AnnouncementAdminScreen } from "$lib/features/announcement-admin";
 </script>
 
-<RoutePlaceholder
-  eyebrow="Administrasjon"
-  title="Kunngjøringer"
-  description="Kunngjøringseditoren migreres i WP-6."
-/>
+<svelte:head><title>Kunngjøringer | Banebooking</title></svelte:head>
+
+<AnnouncementAdminScreen />

@@ -56,6 +56,7 @@ export { default as PageStatus } from "./PageStatus.svelte";
 export type { PageStatusTone } from "./PageStatus.svelte";
 export { default as RoutePlaceholder } from "./RoutePlaceholder.svelte";
 export { default as RichTextEditor } from "./RichTextEditor.svelte";
+export { default as RichTextContent } from "./RichTextContent.svelte";
 export { default as ScheduleTime } from "./ScheduleTime.svelte";
 export { default as Section } from "./Section.svelte";
 export type { SectionPadding, SectionVariant } from "./Section.svelte";

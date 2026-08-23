@@ -121,6 +121,19 @@ describe("app navigation model", () => {
     ).toBe(true);
   });
 
+  it("markerer percent-kodet norsk adminroute som aktiv", () => {
+    const state = buildReady({
+      capabilities: ["kunngjøring:admin"],
+      pathname: "/fjordvik/admin/kunngj%C3%B8ringer",
+    });
+
+    expect(
+      state.desktopSections
+        .flatMap((section) => section.items)
+        .find((item) => item.id === "kunngjoringer")?.active
+    ).toBe(true);
+  });
+
   it("keeps the three authenticated mobile priorities out of the More menu", () => {
     const state = buildReady();
     const primaryIds = state.mobilePrimary.map((item) => item.id);

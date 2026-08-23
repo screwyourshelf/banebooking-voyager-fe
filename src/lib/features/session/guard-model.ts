@@ -43,6 +43,7 @@ export function resolvePolicyRedirect({
 }
 
 export function requiredCapabilitiesForPath(pathname: string): readonly string[] | null {
+  const normalizedPathname = decodePathname(pathname);
   const rules: Array<[RegExp, readonly string[]]> = [
     [/\/arrangement\/?$/, ["arrangement:se"]],
     [/\/admin\/klubb\/?$/, ["klubb:admin"]],
@@ -53,7 +54,15 @@ export function requiredCapabilitiesForPath(pathname: string): readonly string[]
     [/\/admin\/statistikk\/?$/, ["statistikk:lese"]],
   ];
 
-  return rules.find(([pattern]) => pattern.test(pathname))?.[1] ?? null;
+  return rules.find(([pattern]) => pattern.test(normalizedPathname))?.[1] ?? null;
+}
+
+function decodePathname(pathname: string) {
+  try {
+    return decodeURIComponent(pathname);
+  } catch {
+    return pathname;
+  }
 }
 
 export function hasAnyRequiredCapability(

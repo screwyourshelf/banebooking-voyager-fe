@@ -8,6 +8,7 @@ export * from "./feed-item";
 export * from "./gren";
 export * from "./kalender-slot";
 export * from "./klubb";
+export * from "./kunngjoring";
 export * from "./medlemskap";
 export * from "./min-booking";
 export * from "./oppdater-klubb";

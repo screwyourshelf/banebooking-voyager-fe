@@ -11,6 +11,7 @@
     FormSubmit,
     Page,
     PageStatus,
+    RichTextContent,
   } from "$lib/ui";
   import { createMutation } from "@tanstack/svelte-query";
   import { confirmRequiredAnnouncement } from "./api";
@@ -55,7 +56,7 @@
   actions={confirmationStatus}
 >
   <Document label="Obligatorisk kunngjøring">
-    <DocumentIntro>{announcement.tekst}</DocumentIntro>
+    <DocumentIntro><RichTextContent value={announcement.tekst} /></DocumentIntro>
 
     <Form onsubmit={submit} pending={confirmation.isPending}>
       <FormActions>

@@ -67,4 +67,10 @@ describe("session guards", () => {
   it("krever en eksplisitt guardregel for hver adminpath", () => {
     expect(requiredCapabilitiesForPath("/askim-tennis/admin/ukjent")).toBeNull();
   });
+
+  it("matcher norske adminpaths slik nettleseren percent-koder dem", () => {
+    expect(requiredCapabilitiesForPath("/askim-tennis/admin/kunngj%C3%B8ringer")).toEqual([
+      "kunngjøring:admin",
+    ]);
+  });
 });

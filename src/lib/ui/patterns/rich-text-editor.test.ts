@@ -90,6 +90,18 @@ describe("RichTextEditor", () => {
     });
   });
 
+  it("serializes an editor emptied through commands as the public empty string", async () => {
+    const { onValueChange } = renderFixture({ value: "" });
+    await getEditor();
+    const toolbar = screen.getByRole("toolbar", { name: "Formatering" });
+
+    await fireEvent.click(within(toolbar).getByRole("button", { name: "Sett inn tabell" }));
+    await waitFor(() => expect(onValueChange).toHaveBeenCalled());
+    await fireEvent.click(within(toolbar).getAllByRole("button", { name: "Slett tabell" }).at(-1)!);
+
+    await waitFor(() => expect(onValueChange).toHaveBeenLastCalledWith(""));
+  });
+
   it("applies controlled external updates without emitting a competing change", async () => {
     const { onValueChange } = renderFixture();
     const editor = await getEditor();
