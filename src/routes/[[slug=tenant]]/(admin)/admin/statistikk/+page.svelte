@@ -1,9 +1,7 @@
 <script lang="ts">
-  import { RoutePlaceholder } from "$lib/ui";
+  import { StatisticsScreen } from "$lib/features/statistics";
 </script>
 
-<RoutePlaceholder
-  eyebrow="Administrasjon"
-  title="Statistikk"
-  description="Datavisualiseringen migreres i WP-6."
-/>
+<svelte:head><title>Statistikk | Banebooking</title></svelte:head>
+
+<StatisticsScreen />

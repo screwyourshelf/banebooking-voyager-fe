@@ -12,3 +12,4 @@ export * from "./kunngjoring";
 export * from "./medlemskap";
 export * from "./min-booking";
 export * from "./oppdater-klubb";
+export * from "./statistikk";

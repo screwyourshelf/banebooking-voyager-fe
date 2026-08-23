@@ -4,16 +4,15 @@
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** WP-6 — Featuremigrering (pågår; ti checkpoints fullført)
+> **Aktiv arbeidspakke:** WP-7 — Samlet paritet og produksjonsbytte (ikke startet)
 >
 > **Sist oppdatert:** 2026-08-23
 
 ## Mål for aktiv arbeidspakke
 
-Flytt produktfeature etter produktfeature til idiomatiske Svelte-moduler over det autoritative
-platform-, auth-, session- og UI-fundamentet. Hver URL erstattes atomisk med observerbar paritet,
-tynne routes, typed query-/mutasjonsgrenser og fjerning av bare den routeplaceholderen som faktisk
-er ferdig migrert.
+Bevis samlet route- og featureparitet, etabler kritiske ende-til-ende-flyter, kontroller bundle,
+ytelse, lazy loading og produksjonslik hosting, og fjern React-kilde, React-avhengigheter og andre
+midlertidige broer først når det autoritative SvelteKit-produktet har overtatt ansvaret fullt ut.
 
 ## Fullført
 
@@ -420,14 +419,31 @@ er ferdig migrert.
   warn/error-logger etter retting. Tomtilstand, editor, riktekstverktøy, dato, valideringsfokus,
   oppretting, detaljer, bekreftelser, deaktivering, Escape og fokusretur er kontrollert
   interaktivt; den midlertidige QA-kunngjøringen er deaktivert og fjernet fra aktiv state.
+- Statistikk er flyttet til én offentlig `lib/features/statistics`-inngang med typed kontrakt,
+  API-, Query- og modellgrenser for bookingstatistikk, grener og baner. Den tynne
+  `/admin/statistikk`-routen komponerer bare featureinngangen, og den siste routeplaceholderen samt
+  det nå ubrukte offentlige `RoutePlaceholder`-patternet er fjernet uten backendendringer.
+- Flaten bevarer lokale periodevalg, egendefinerte datoer, sammenligning med året før, gren- og
+  banefilter, medlemsfanens bookingtypefilter, nøkkeltall, månedslinje, bookingtypefordeling,
+  gren-/ukedagsfordeling, tidsstolper, banetabell og toppliste. TanStack Query beholder forrige
+  datasett under bakgrunnsrefresh; loading, retrybar feil, tomt datagrunnlag og full datavisning
+  komponerer autoritative Page-, Section-, Collection-, Tabs-, Select-, Date- og feedbackpatterns.
+- Offentlige `Metric`- og `MetricGrid`-patterns eier nøkkeltallsanatomien. Datavisualiseringene
+  bruker semantiske figurer, SVG og tekstalternativer uten featurelokal CSS eller tredjeparts
+  diagramruntime.
+- Ellevte WP-6-checkpoint er kontrollert på 390×844 og 1440×1000 i lyst og mørkt tema med én
+  main-landmark, synlig h1, korrekt tema, ingen horisontal overflow og tom warn/error-konsoll.
+  Faner, automatisk tastaturaktivering, periode, egendefinerte datofelt, sammenligning,
+  bookingtype, gren og bane er kontrollert interaktivt mot eksisterende utviklingsdata uten
+  mutasjoner. WP-6-kvalitetsporten er nådd; WP-7 er registrert, men ikke startet.
 
 ## Nåtilstand
 
 - SvelteKit er den aktive dev-, test-, preview- og produksjonsbuilden.
 - Login, vilkår, root-feil/404, de tre beskyttede policyflatene, booking, Mine tider, Min side,
-  Arrangementer, Nyheter, Baner, Grener, Klubb- og medlemskapsinnstillinger samt
-  Arrangementadministrasjon, Brukere og Kunngjøringsadministrasjon er reelle Svelte-featureflater;
-  Statistikk rendrer fortsatt en foreløpig routeflate til den migreres i WP-6.
+  Arrangementer, Nyheter, Baner, Grener, Klubb- og medlemskapsinnstillinger,
+  Arrangementadministrasjon, Brukere, Kunngjøringsadministrasjon og Statistikk er reelle
+  Svelte-featureflater. Ingen Svelte-routeplaceholdere gjenstår.
 - React-kilden er fortsatt produksjonsreferanse i arbeidskopien, men er ikke koblet til eller bundlet
   av SvelteKit.
 - Contracts, ren domenelogikk og platformkjerne er nå autoritative for både videre Svelte-arbeid og
@@ -435,9 +451,9 @@ er ferdig migrert.
 - Auth, tenant, Query og session guards er autoritativt SvelteKit-fundament. Offentlig login,
   callback-retur, vilkår, root-feil, hele sperre → kunngjøring → medlemskap-rekkefølgen og booking
   med bootstrap samt Mine tider, Min side, Arrangementer og Nyheter er migrert. Baner, Grener og
-  deres felles arbeidsområde, Klubb- og medlemskapsinnstillinger, Arrangementadministrasjon samt
-  Brukere, brukersperre og Kunngjøringsadministrasjon er implementert med typed
-  API-/Query-/mutationgrenser, lokal editorstate, validering og regler, og er checkpointgodkjent
+  deres felles arbeidsområde, Klubb- og medlemskapsinnstillinger, Arrangementadministrasjon,
+  Brukere, brukersperre, Kunngjøringsadministrasjon og Statistikk er implementert med typed
+  API-/Query-/mutationgrenser, lokal arbeidsflyt, validering og regler, og er checkpointgodkjent
   etter full maskinell og visuell port.
 - WP-4 er fullført. Tokens, font, lyst/mørkt tema, offentlige handlinger, Icon-, tekst-, Select-,
   Date-/Calendar-, Tabs- og Rich-text-kontroller samt Page-, Section-, feedback-, Form-, Settings-,
@@ -446,6 +462,8 @@ er ferdig migrert.
 - WP-5 er fullført. Responsiv shellramme, loadinggeometri, delt session-queryeierskap,
   tenantidentitet, auth-/kapabilitetsstyrt navigasjon, routeaktivitet, tema, konto og Mer er
   autoritative SvelteKit-flater.
+- WP-6 er fullført. Alle elleve featurecheckpoints er migrert til offentlige Svelte-featureinnganger
+  og tynne routes uten gjenværende routeplaceholdere eller backendendringer.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
@@ -455,10 +473,10 @@ er ferdig migrert.
 | ------------------------------------- | -------------------------------------------------- |
 | Base branch                           | `main`                                             |
 | Fastslått basecommit                  | `5287c5e`                                          |
-| Siste semantiske checkpoint           | `feat(sveltekit): migrate WP-6 announcement admin` |
-| Lokale commits foran base             | 32                                                 |
+| Siste semantiske checkpoint           | `feat(sveltekit): complete WP-6 feature migration` |
+| Lokale commits foran base             | 33                                                 |
 | Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                      |
-| Neste planlagte checkpoint            | WP-6 Statistikk                                    |
+| Neste planlagte checkpoint            | WP-7 samlet paritets- og oppryddingsinventar       |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -467,19 +485,18 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Neste `/start` skal bare gjennomføre ellevte avgrensede WP-6-checkpoint for Statistikk:
+Neste `/start` skal bare gjennomføre første avgrensede WP-7-checkpoint for samlet paritets- og
+oppryddingsinventar:
 
-1. Kaldkartlegg React-referansens periodevalg, sammenligning, gren-/banefilter, nøkkeltall,
-   medlemsstatistikk, bookingtype, måned, tidspunkt og banefordeling mot adferdsinventaret og
-   backendens eksisterende statistikkontrakt.
-2. Opprett én offentlig statistikk-featureinngang med typed API-, Query- og modellgrenser. Behold
-   forrige data under bakgrunnsrefresh og gjenbruk autoritative Page-, Section-, Collection-, Form-,
-   Select-, Date-, Tabs- og feedbackpatterns; den tynne `/admin/statistikk`-routen skal bare
-   komponere featureinngangen.
-3. Verifiser tilgang, førstegangsloading, bakgrunnsrefresh, filtre, tomt datagrunnlag, retrybar feil,
-   full datavisning, mobil/desktop og begge temaer. Kjør full maskinport og begge hostingbuildene,
-   fjern bare den erstattede routeplaceholderen og opprett ett lokalt checkpoint-commit. Ikke start
-   WP-7 i samme sesjon.
+1. Kaldavstem alle URL-er, tilgangsnivåer og observerbare featurestates i
+   `docs/behavior-inventory.md` mot SvelteKit-route- og featuretreet. Registrer eventuelle reelle
+   paritetsgap med konkret eier; ikke anta at gjenværende React-kode i seg selv er et gap.
+2. Inventer React-kilde, React-/Axios-/React Query-/Radix-avhengigheter, midlertidige re-exports,
+   adapters, TODO-er og ubrukte filer med faktiske importkonsumenter. Skill eksplisitt mellom kode
+   som kan fjernes etter bevist Svelte-eierskap og kode som fortsatt trengs for paritetsbevis.
+3. Dokumenter en atomisk fjernings- og verifikasjonsrekkefølge for de neste WP-7-checkpointene, kjør
+   full maskinport og begge hostingbuildene, og opprett ett lokalt checkpoint-commit. Ikke fjern
+   React eller start ekstern deploy i samme inventarsesjon.
 
 ## Arbeidspakkeregister
 
@@ -491,40 +508,40 @@ Neste `/start` skal bare gjennomføre ellevte avgrensede WP-6-checkpoint for Sta
 | WP-3 Auth/tenant/serverdata      | Fullført     | Auth, tenant, Query, guards, 401 og base path grønne         |
 | WP-4 UI-fundament                | Fullført     | Alle kartlagte UI-familier og filterkomposisjon er grønne    |
 | WP-5 App-shell                   | Fullført     | Shell, navigation, routeaktivitet, konto og Mer grønne       |
-| WP-6 Featuremigrering            | Pågår        | Ti checkpoints inkl. offentlig innhold og admin er grønne    |
+| WP-6 Featuremigrering            | Fullført     | Elleve checkpoints og alle Svelte-featureflater er grønne    |
 | WP-7 Paritet og produksjonsbytte | Ikke startet | —                                                            |
 
 ## Featureregister
 
-| Gruppe                       | Status   | Merknad                                                       |
-| ---------------------------- | -------- | ------------------------------------------------------------- |
-| Auth, policy, feil og guards | Fullført | Offentlige og beskyttede flater samt guardrekkefølge grønne   |
-| Booking og bootstrap         | Fullført | Kjerneflyt, mutationer og fallback grønne                     |
-| Mine tider og Min side       | Fullført | Beskyttet kontoflyt, mutationer og persondata grønne          |
-| Arrangementer og Nyheter     | Fullført | Offentlig/innlogget innhold, deeplink og trygg feed grønne    |
-| Baner og Grener              | Fullført | Delt adminarbeidsområde, mutations og nettlesermatrise grønne |
-| Klubb og medlemskap          | Fullført | Profil, medlemsstatus, mutations og nettlesermatrise grønne   |
-| Arrangementadministrasjon    | Fullført | Editor, staging, mutations og nettlesermatrise grønne         |
-| Brukere og sperre            | Fullført | Roller, sperrer, mutations og nettlesermatrise grønne         |
-| Kunngjøringer og editor      | Fullført | Riktekst, bekreftelser, mutations og nettlesermatrise grønne  |
-| Statistikk                   | Kartlagt | Datavisualisering                                             |
+| Gruppe                       | Status   | Merknad                                                        |
+| ---------------------------- | -------- | -------------------------------------------------------------- |
+| Auth, policy, feil og guards | Fullført | Offentlige og beskyttede flater samt guardrekkefølge grønne    |
+| Booking og bootstrap         | Fullført | Kjerneflyt, mutationer og fallback grønne                      |
+| Mine tider og Min side       | Fullført | Beskyttet kontoflyt, mutationer og persondata grønne           |
+| Arrangementer og Nyheter     | Fullført | Offentlig/innlogget innhold, deeplink og trygg feed grønne     |
+| Baner og Grener              | Fullført | Delt adminarbeidsområde, mutations og nettlesermatrise grønne  |
+| Klubb og medlemskap          | Fullført | Profil, medlemsstatus, mutations og nettlesermatrise grønne    |
+| Arrangementadministrasjon    | Fullført | Editor, staging, mutations og nettlesermatrise grønne          |
+| Brukere og sperre            | Fullført | Roller, sperrer, mutations og nettlesermatrise grønne          |
+| Kunngjøringer og editor      | Fullført | Riktekst, bekreftelser, mutations og nettlesermatrise grønne   |
+| Statistikk                   | Fullført | Filtre, sammenligning, visualisering og nettlesermatrise grønn |
 
 ## Åpne blokkeringer
 
-Ingen kjente blokkeringer for neste featurecheckpoint. Statistikk kan gjennomføres mot eksisterende
-React-referanse, adferdsinventar og etablerte API-, Query-, tenant-, session- og UI-grenser uten
-backendendringer eller ny brukerbeslutning.
+Ingen kjente blokkeringer for første WP-7-checkpoint. Samlet paritets- og oppryddingsinventar kan
+gjennomføres lokalt mot kode, git, tester, builds, React-referansen og adferdsinventaret uten
+backendendringer, ekstern deploy eller ny brukerbeslutning.
 
 ## Midlertidig kode og kjente avvik
 
 - React-kilde og React-avhengigheter er midlertidig referanse og skal fjernes etter hvert som
   ansvaret erstattes; de er ikke del av SvelteKit-bundlen.
-- `src/types/` og de flyttede filene i `src/utils/` er midlertidige React-re-exports til autoritativ
-  kode i `src/lib/contracts`, `src/lib/domain` og `src/lib/platform`.
-- Gjenværende Svelte-featureflater er bevisst midlertidige route-placeholdere til de migreres i
-  WP-6. Login-, vilkårs-, de tre beskyttede policy-, booking-, Mine tider- og Min side-placeholderne
-  samt Arrangementer-, Nyheter-, Baner-, Grener-, Klubbinnstillinger- og
-  Arrangementadministrasjon-, Brukere- og Kunngjøringsadministrasjon-placeholderne er fjernet.
+- `src/types/`, de flyttede filene i `src/utils/` og `src/features/statistikk/types.ts` er
+  midlertidige React-re-exports til autoritativ kode i `src/lib/contracts`, `src/lib/domain`,
+  `src/lib/platform` og Svelte-featuremodellen. De inventeres og fjernes sammen med faktiske
+  React-konsumenter i WP-7.
+- Ingen Svelte-routeplaceholdere gjenstår. Det ubrukte offentlige `RoutePlaceholder`-patternet er
+  også fjernet etter at Statistikk overtok den siste foreløpige routeflaten.
 - Det eksisterende lokale utviklingsoppsettet sender standard `Authorization: Bearer`, mens
   backendens isolerte utviklingsscheme forventer `DevelopmentBearer`. Automatiske tester og builds
   påvirkes ikke; full innlogget nettleser-QA brukte en midlertidig lokal header-rewrite-proxy mot en
@@ -575,12 +592,12 @@ backendendringer eller ny brukerbeslutning.
 | Prettier på aktiv kode og dokumenter | Bestått 2026-08-23                                                                 |
 | Relative dokumentlenker              | Bestått 2026-08-23                                                                 |
 | `git diff --check`                   | Bestått 2026-08-23                                                                 |
-| `npm test`                           | Bestått 2026-08-23: 83 filer, 309 tester                                           |
+| `npm test`                           | Bestått 2026-08-23: 87 filer, 321 tester                                           |
 | `npm run check`                      | Bestått 2026-08-23: Svelte/React-typecheck, arkitektur, design, lint og format     |
 | Cloudflare Pages-build               | Bestått 2026-08-23: root path og `index.html`-fallback                             |
 | GitHub Pages-build                   | Bestått 2026-08-23: eksplisitt `/banebooking` og `404.html`-fallback               |
 | Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                  |
-| Nettleserrender                      | Bestått 2026-08-23: Kunngjøring-admin i 4 flater uten overflow/nye konsollfeil     |
+| Nettleserrender                      | Bestått 2026-08-23: Statistikk i 4 flater uten overflow eller konsollfeil          |
 | SvelteKit-bundle                     | Verifisert 2026-08-22: ingen React-runtime                                         |
 | WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                |
 | WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon         |
@@ -611,16 +628,17 @@ backendendringer eller ny brukerbeslutning.
 | WP-6 Bruker-admin-nettleser          | Bestått 2026-08-23: 2 viewporter × 2 temaer, filtre, dialoger, fokus og konsoll    |
 | WP-6 Kunngjøring-admin-tester        | Bestått 2026-08-23: 5 filer, 11 tester for API, query, modell, riktekst og axe     |
 | WP-6 Kunngjøring-admin-nettleser     | Bestått 2026-08-23: 2 viewporter × 2 temaer, editor, mutations, fokus og konsoll   |
+| WP-6 Statistikk-tester               | Bestått 2026-08-23: 4 filer, 12 tester for API, query, modell, states og axe       |
+| WP-6 Statistikk-nettleser            | Bestått 2026-08-23: 2 viewporter × 2 temaer, faner, filtre, fokus og tom konsoll   |
 
 ## Filer i siste checkpoint
 
-- offentlig Kunngjøring-admin-feature med API-, query-key-, query-, modell-, editor-, dialog-,
-  fixture- og komponent-/axe-tester i `src/lib/features/announcement-admin/`
-- typed kunngjøringskontrakt i `src/lib/contracts/kunngjoring.ts`
-- trygg offentlig riktekstleser, editorens tomverdigrense og gjenbruk i obligatorisk kunngjøring
-- prosentkodet path-normalisering i sessionens guard- og navigasjonsmodeller
-- tynn, funksjonell Kunngjøring-admin-route i
-  `src/routes/[[slug=tenant]]/(admin)/admin/kunngjøringer/`
+- offentlig Statistikk-feature med API-, query-key-, query-, modell-, visualiserings-, fixture- og
+  komponent-/axe-tester i `src/lib/features/statistics/`
+- typed statistikkontrakt i `src/lib/contracts/statistikk.ts` og tynn legacy React-typebro
+- offentlige `Metric`- og `MetricGrid`-patterns samt sentral statistikkgeometri
+- tynn, funksjonell Statistikk-route i `src/routes/[[slug=tenant]]/(admin)/admin/statistikk/`
+- fjerning av den siste routeplaceholderen og det ubrukte `RoutePlaceholder`-patternet
 - `docs/migration-status.md`
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for

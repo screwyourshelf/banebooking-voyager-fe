@@ -209,7 +209,10 @@
 
   [data-ui="metric"] {
     min-width: 0;
+    overflow: hidden;
     border: 1px solid var(--app-line);
+    border-radius: var(--app-record-radius);
+    background: var(--app-surface);
     box-shadow: var(--app-shadow-sm);
   }
 
@@ -220,6 +223,7 @@
     grid-template-columns: auto minmax(0, 1fr);
     align-items: start;
     gap: 0.625rem;
+    padding: 0.875rem;
   }
 
   [data-ui="metric"] > [data-part="content"] > [data-part="icon"] {
@@ -684,7 +688,9 @@
     padding-bottom: 0 !important;
   }
 
-  .statistics-court-table__heading {
+  .statistics-court-table__heading,
+  [data-ui="section"][data-context="statistics"][data-view="court-table"]
+    > [data-ui="section-header"] {
     padding: 0.25rem 1rem 1rem;
   }
 
@@ -830,7 +836,9 @@
     padding-bottom: 0 !important;
   }
 
-  .statistics-top-users__heading {
+  .statistics-top-users__heading,
+  [data-ui="section"][data-context="statistics"][data-view="top-users"]
+    > [data-ui="section-header"] {
     padding: 0.25rem 1rem 1rem;
   }
 
@@ -868,19 +876,35 @@
 
   .statistics-loading__metric {
     height: 6.5rem;
+    border-radius: var(--app-record-radius);
+    background: var(--app-surface-subtle);
+    animation: collection-loading 1.5s ease-in-out infinite;
   }
 
   .statistics-loading__chart {
     display: grid;
     gap: 1rem;
+    border: 1px solid var(--app-line);
+    border-radius: var(--app-record-radius);
+    background: var(--app-surface);
+    padding: 1rem;
+    box-shadow: var(--app-shadow-sm);
   }
 
   .statistics-loading__title {
+    display: block;
     width: min(16rem, 65%);
     height: 1.5rem;
+    border-radius: var(--app-radius-sm);
+    background: var(--app-surface-subtle);
+    animation: collection-loading 1.5s ease-in-out infinite;
   }
 
   .statistics-loading__plot {
+    display: block;
     height: 14rem;
+    border-radius: var(--radius);
+    background: var(--app-surface-subtle);
+    animation: collection-loading 1.5s ease-in-out infinite;
   }
 }
