@@ -10,6 +10,8 @@
     "build:github-pages": "VITE_STATIC_HOST=github-pages VITE_BASE_PATH=/banebooking vite build",
     "preview": "vite preview",
     "test": "vitest run",
+    "test:e2e": "playwright test",
+    "test:e2e:headed": "playwright test --headed",
     "typecheck": "npm run typecheck:svelte && npm run typecheck:react",
     "typecheck:svelte": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "typecheck:react": "tsc --noEmit -p tsconfig.react.json",
@@ -68,6 +70,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@playwright/test": "^1.62.1",
     "@sveltejs/adapter-static": "^3.0.10",
     "@sveltejs/kit": "^2.70.3",
     "@sveltejs/vite-plugin-svelte": "^7.3.0",

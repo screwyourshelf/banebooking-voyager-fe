@@ -1,9 +1,9 @@
 # WP-7 paritets- og oppryddingsinventar
 
-> **Status:** Andre WP-7-checkpoint fullført
+> **Status:** Tredje WP-7-checkpoint fullført
 >
 > **Inventargrunnlag:** `feature/sveltekit-lift-and-shift` ved `4520f65`; runtimefeltene er
-> oppdatert i andre checkpoint
+> oppdatert i andre checkpoint og E2E-feltene i tredje checkpoint
 >
 > **Dato:** 2026-08-23
 
@@ -93,12 +93,13 @@ pre-module bootflate med eksplisitt nullstilling; Svelte-layouten fjerner flaten
 overtakelse. Kontrakten testes direkte mot den autoritative inline-koden og finnes i begge
 hostingfallbackene. React-roten er fortsatt inaktiv referanse og fjernes i eget checkpoint.
 
-### 3. Innlogget lokal E2E trenger en autoritativ utviklingsauthvei
+### 3. Innlogget lokal E2E har en autoritativ utviklingsauthvei — lukket
 
-Svelteklienten sender standard `Authorization: Bearer`, mens den isolerte lokale
-utviklingsbackenden forventer `DevelopmentBearer`. Tidligere visuell QA brukte en midlertidig
-header-rewrite-proxy. Dette er ikke et backend- eller produktparitetsgap, men det blokkerer en
-reproduserbar Playwright-port for booking, avbestilling og adminendring.
+Dette gapet er lukket av en frontend-/testeid Playwright-harness. Svelteklienten sender fortsatt
+standard `Authorization: Bearer`; bare Playwright-konteksten skriver egne `/api/**`-kall om til den
+isolerte utviklingsbackendens `DevelopmentBearer`. Login, booking, avbestilling og en klubbendring
+kjører nå reproduserbart under `/banebooking`, og booking-ID samt komplett klubbprofil har
+deterministisk ettertestopprydding. Den tidligere manuelle header-proxyen er ikke en forutsetning.
 
 Eier: WP-7-testharnessen over eksisterende auth-/API-kontrakter. Løsningen må ikke endre
 produksjonens authscheme eller backend uten en separat godkjenning.
@@ -224,9 +225,9 @@ Andre React-rester som må fjernes i samme oppryddingsrekkefølge er:
 
 1. **WP-7 runtimeparitet — fullført.** Observability/Sentry, storagefeil og testet asset-recovery
    eies av Svelte-runtime. Hele React-referansen er beholdt til avtalte bevis er fullført.
-2. **WP-7 kritiske E2E-flyter.** Etabler en reproduserbar authharness og Playwright for login,
-   booking, avbestilling og én representativ adminendring. Ingen backendendring eller ekstern
-   deploy uten ny autoritet.
+2. **WP-7 kritiske E2E-flyter — fullført.** En reproduserbar authharness og Playwright dekker login,
+   booking, avbestilling og klubbadminendring med test-eid opprydding, base path og uendret
+   produksjonsauth. Backendkode er urørt.
 3. **WP-7 produksjonsbevis.** Kjør direkte lasting/refresh på alle routeklasser under root og
    `/banebooking`, kontroller callback, bundle, lazy chunks og avtalte viewporter/roller/temaer.
    Frys beviset før referansen fjernes.
