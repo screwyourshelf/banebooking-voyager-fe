@@ -55,6 +55,10 @@ export interface SperrBrukerForespørsel {
   aktivTil: string | null;
 }
 
+export interface SperrBrukerRespons {
+  sperre: BrukerSperreRespons;
+}
+
 export interface OpphevSperreRespons {
   sperreId: string;
   opphevtTidspunkt: string;
