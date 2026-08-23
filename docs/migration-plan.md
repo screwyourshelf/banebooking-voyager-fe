@@ -1,10 +1,14 @@
 # Migreringsplan: SvelteKit lift-and-shift
 
-> **Status:** Aktiv og stabil utførelsesplan
+> **Status:** WP-0–WP-7 fullført; aktiv stylingoppfølging ligger i egen plan
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Sist oppdatert:** 2026-08-22
+> **Sist oppdatert:** 2026-08-23
+
+Den opprinnelige SvelteKit-lift-and-shift-en er fullført. Etterfølgende stylingarbeid fortsetter i
+[`styling-lift-and-shift-plan.md`](./styling-lift-and-shift-plan.md) og bruker `SWP-*`-pakker. Dette
+dokumentet beholdes som autoritativ metode og historisk kvalitetsport for WP-0–WP-7.
 
 ## Mål
 

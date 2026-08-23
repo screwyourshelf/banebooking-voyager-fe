@@ -1,20 +1,33 @@
 # Migreringsstatus
 
-> **Status:** Fullført
+> **Status:** Pågår — rammeverksløftet er fullført; styling lift-and-shift er aktiv
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** Ingen — lift-and-shift og etterfølgende arkitekturreview er fullført
+> **Aktiv arbeidspakke:** SWP-0 — kald baseline og guardkontrakt
 >
 > **Sist oppdatert:** 2026-08-23
 
 ## Mål for arbeidspakken
 
-Bevis samlet route- og featureparitet, etabler kritiske ende-til-ende-flyter, kontroller bundle,
-ytelse, lazy loading og produksjonslik hosting, og fjern React-kilde, React-avhengigheter og andre
-midlertidige broer først når det autoritative SvelteKit-produktet har overtatt ansvaret fullt ut.
+Etabler en deterministisk stylingbaseline før første visuelle endring: mål dagens globale CSS,
+kaskade, `!important`, tokens, Tailwind-/klassebruk, inline styling, unntak og produksjonsstørrelse.
+Frys deretter en representativ visuell og interaktiv referanse og spesifiser positive og negative
+guardfixtures. Arbeidspakken endrer ikke produktstyling.
 
-## Fullført
+## Aktiv stylingretning
+
+- Den opprinnelige SvelteKit-lift-and-shift-en og arkitekturreviewen er fullført og forblir grønn
+  baseline.
+- [`ADR-006`](./adr/006-tailwind-styling-and-theme-ownership.md) gjør Tailwind v4, semantiske
+  themes og offentlig UI-eierskap til målarkitektur for styling.
+- [`styling-lift-and-shift-plan.md`](./styling-lift-and-shift-plan.md) deler arbeidet i SWP-0–SWP-7
+  og er den aktive utførelsesplanen for `/start`.
+- Dagens globale CSS er overgangsbaseline. Nye avvik er forbudt, baselinegjeld kan bare reduseres,
+  og SWP-7 krever at alle legacyunntak er fjernet.
+- Backend, produktadferd, URL-er og API-kontrakter er utenfor stylingomfanget.
+
+## Fullført rammeverksløft og paritetsbaseline
 
 - Feature-branchen `feature/sveltekit-lift-and-shift` er opprettet.
 - SvelteKit-målarkitektur er dokumentert.
@@ -555,19 +568,22 @@ midlertidige broer først når det autoritative SvelteKit-produktet har overtatt
   `devDependencies`; Svelte 5, SvelteKit og Svelte-Vite-pluginen var allerede oppdatert.
 - Sentral CSS og pakkegraf har bare aktive Svelte-konsumenter; den maskinelle kontrollen håndhever
   denne toveis rekkevidden videre.
+- Den aktive CSS-en er funksjonelt ryddet, men ikke målarkitekturen for styling: Tailwind brukes
+  foreløpig hovedsakelig som Preflight/theme-bro, mens produktreglene ligger i globale selectorfiler.
+  Dette migreres familievis etter SWP-planen uten visuell redesign.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                                        |
-| ------------------------------------- | --------------------------------------------------------- |
-| Base branch                           | `main`                                                    |
-| Fastslått basecommit                  | `5287c5e`                                                 |
-| Siste semantiske checkpoint           | `refactor(sveltekit): harden post-migration architecture` |
-| Lokale commits foran base             | 40                                                        |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                             |
-| Neste planlagte checkpoint            | Ingen; ekstern deploy krever eksplisitt godkjenning       |
+| Felt                                  | Forventet tilstand                                      |
+| ------------------------------------- | ------------------------------------------------------- |
+| Base branch                           | `main`                                                  |
+| Fastslått basecommit                  | `5287c5e`                                               |
+| Siste semantiske checkpoint           | `docs(styling): establish Tailwind lift-and-shift plan` |
+| Lokale commits foran base             | 41                                                      |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                           |
+| Neste planlagte checkpoint            | SWP-0.1 maskinlesbar stylingbaseline                    |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -576,12 +592,22 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Lift-and-shift-en har ingen gjenværende migreringscheckpoint. En senere `/start` skal rapportere den
-fullførte tilstanden og ikke starte ekstern deploy. Dersom brukeren eksplisitt bestiller
-produksjonsbytte, skal den separate driftsoppgaven følge
-[`development-and-operations.md`](./development-and-operations.md), kjøre portene på nytt hvis kode
-eller avhengigheter har endret seg, avklare målhost og miljøkonfigurasjon og deretter publisere det
-verifiserte statiske artefaktet. Backend er fortsatt utenfor omfanget.
+Start bare **SWP-0 checkpoint 1 — maskinlesbar stylingbaseline**:
+
+1. Les hele SWP-0 og ADR-006; ikke endre Svelte-markup eller produktstyling.
+2. Opprett en deterministisk måler, foretrukket som `scripts/measure-styling-baseline.mjs`, og koble
+   den til et eksplisitt npm-script.
+3. Mål minst CSS-filer/linjer/regler, layered/unlayered regler, selectors per eierfamilie,
+   `!important`, rå visuelle verdier, CSS custom properties, Tailwind-utilities, `@apply`,
+   `style=`/`style:*`/`<style>`, featureklasser og gjeldende visualiseringsunntak.
+4. Lagre resultatet i et maskinlesbart, versjonert baselineformat med eksakt fil og eierpakke for
+   hvert legacyavvik. Baseline må kunne regenereres uten tidsstempel- eller rekkefølgestøy.
+5. Kjør en fersk produksjonsbuild og registrer initial CSS gzip og relevante lazy chunks uten å
+   endre eksisterende budsjetter.
+6. Legg til en test som regenererer og sammenligner baselineformatet, kjør berørte tester,
+   `npm run check`, build og `git diff --check`, oppdater denne statusen til SWP-0 checkpoint 2 og
+   opprett én lokal checkpoint-commit. Stopp deretter; ikke start screenshotcheckpointet i samme
+   sesjon.
 
 ## Arbeidspakkeregister
 
@@ -595,6 +621,14 @@ verifiserte statiske artefaktet. Backend er fortsatt utenfor omfanget.
 | WP-5 App-shell                   | Fullført | Shell, navigation, routeaktivitet, konto og Mer grønne       |
 | WP-6 Featuremigrering            | Fullført | Elleve checkpoints og alle Svelte-featureflater er grønne    |
 | WP-7 Paritet og produksjonsbytte | Fullført | Paritet, React-fjerning, CSS, drift og sluttport grønne      |
+| SWP-0 Baseline og guardkontrakt  | Aktiv    | Neste: maskinlesbar stylingbaseline                          |
+| SWP-1 Theme og guards            | Venter   | Starter etter frosset styling- og visuell baseline           |
+| SWP-2 UI-primitives              | Venter   | Tailwind-konvertering bak stabil primitivegrense             |
+| SWP-3 Produktpatterns            | Venter   | Semantiske familier migreres i avhengighetsrekkefølge        |
+| SWP-4 App-shell/navigation       | Venter   | Responsiv shell og navigation etter stabile patterns         |
+| SWP-5 Features og legacy-CSS     | Venter   | Visualiseringsunntak og siste globale selectors              |
+| SWP-6 Komponent-/API-opprydding  | Venter   | Utføres etter at stylingeierskap er synlig                   |
+| SWP-7 Uavhengig sluttreview      | Venter   | Kald audit og målt vellykket/delvis/ikke vellykket resultat  |
 
 ## Featureregister
 
@@ -613,14 +647,21 @@ verifiserte statiske artefaktet. Backend er fortsatt utenfor omfanget.
 
 ## Åpne blokkeringer
 
-Ingen åpne migrerings- eller backendblokkeringer. En faktisk ekstern deploy er en separat oppgave
-som krever eksplisitt godkjenning samt valg av målhost og produksjonskonfigurasjon.
+Ingen åpne styling-, migrerings- eller backendblokkeringer. En faktisk ekstern deploy er en separat
+oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonskonfigurasjon.
 
 ## Midlertidig kode og kjente avvik
 
 - Playwright-harnessen omskriver bare testkontekstens API-header til `DevelopmentBearer`; vanlig
   dev-, preview- og produksjonstrafikk bruker fortsatt den autoritative `Bearer`-kontrakten.
-- Ingen midlertidige migreringsadapters, legacyselektorer eller åpne TODO-er gjenstår.
+- Ingen midlertidige rammeverksadapters eller React-legacy gjenstår. Stylingreviewen har derimot
+  identifisert målrettet overgangsgjeld som skal baselineføres i SWP-0: `patterns.css` er 3500
+  linjer, `responsive.css` er 503 linjer og `feature-compositions.css` er 731 linjer.
+- 88 regler i `patterns.css` ligger utenfor `@layer`, og appens designfiler bruker samlet 75
+  `!important`. Tallene er kaldreviewdata og skal erstattes av den deterministiske SWP-0-målingen.
+- Tailwind er installert, men aktiv Svelte-markup bruker ennå ikke utility-first-mønsteret;
+  `@apply` forekommer bare tre steder i primitive base-CSS. Dette er planlagt overgang, ikke
+  målarkitektur.
 - `npm audit` rapporterer seks lave transitive funn i den aktive SvelteKit-/Bits UI-kjeden og ingen
   moderate, høye eller kritiske funn. Audit tilbyr ikke en kompatibel oppgradering som fjerner de
   lave funnene; foreslåtte majorendringer er derfor ikke brukt som del av lift-and-shift-en.
@@ -692,12 +733,10 @@ som krever eksplisitt godkjenning samt valg av målhost og produksjonskonfiguras
 
 ## Filer i siste checkpoint
 
-- origin-sikker pre-module recovery i `src/app.html`, kontrakttest og maskinell bootstrapgrense
-- ADR-005, arkitektur-/konformitetsreview, oppdatert målarkitektur, dokumentindeks og status
-- fjernet legacykonfigurasjon, genererte React-/TypeScript-spor, død kode og unødvendige
-  feature-/platform-/UI-eksporter
-- synkronisert `package.json`/`package-lock.json` med Vite 8.2.2 og dev-only Query-devtools
-- robust produksjons-E2E-serverreferanse som eksplisitt fil-URL i Playwright-konfigurasjonen
+- ADR-006 med Tailwind-, theme-, Bits UI- og featurestylinggrenser
+- `docs/styling-lift-and-shift-plan.md` med SWP-0–SWP-7, avtakende baseline og uavhengig sluttport
+- oppdatert `/start`-protokoll, dokumentindeks, målarkitektur, produktregler og ADR-register
+- aktiv SWP-0-status med ett eksakt, ikke-visuelt baselinecheckpoint
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
 pågående arbeid etter checkpointet.

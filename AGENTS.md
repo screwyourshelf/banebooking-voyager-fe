@@ -15,7 +15,9 @@ utsettes til slutt.
 Les i denne rekkefølgen:
 
 1. [`docs/migration-status.md`](./docs/migration-status.md)
-2. relevant arbeidspakke i [`docs/migration-plan.md`](./docs/migration-plan.md)
+2. relevant arbeidspakke i den aktive utførelsesplanen:
+   [`docs/styling-lift-and-shift-plan.md`](./docs/styling-lift-and-shift-plan.md) for `SWP-*`, ellers
+   [`docs/migration-plan.md`](./docs/migration-plan.md)
 3. [`docs/sveltekit-architecture.md`](./docs/sveltekit-architecture.md)
 4. [`docs/product-design-rules.md`](./docs/product-design-rules.md)
 5. relevante ADR-er i [`docs/adr/`](./docs/adr/README.md)
@@ -25,6 +27,7 @@ Dokumentrollene er faste:
 - arkitektur og ADR-er beskriver hvordan systemet skal bygges
 - produktreglene beskriver hvordan produktet skal opptre og se ut
 - migreringsplanen beskriver rekkefølge, arbeidsmetode og kvalitetsporter
+- stylingplanen beskriver den aktive Tailwind-/theme-migreringen etter fullført rammeverksløft
 - migreringsstatus beskriver sann nåsituasjon og neste eksakte steg
 - git er historikk; statusfilen er ikke en sesjonslogg
 
@@ -48,8 +51,9 @@ Når brukeren skriver `/start`, `fortsett lift-and-shift` eller tilsvarende:
    statusfilen.
 6. Kontroller siste verifikasjonsresultat. Kjør nødvendige, billige kontroller på nytt dersom kode
    eller avhengigheter har endret seg siden resultatet ble registrert.
-7. Velg ett avgrenset, verifiserbart checkpoint fra `Neste eksakte steg` og opprett en konkret
-   arbeidsplan for denne sesjonen. Aktiv arbeidspakke kan gå over flere AI-sesjoner.
+7. Velg ett avgrenset, verifiserbart checkpoint fra `Neste eksakte steg`, les hele den aktive
+   arbeidspakken og opprett en konkret arbeidsplan for denne sesjonen. Aktiv arbeidspakke kan gå
+   over flere AI-sesjoner.
 8. Fortsett autonomt bare innenfor checkpointet og den aktive arbeidspakken. `/start` betyr aldri
    at hele migreringen eller alle gjenværende arbeidspakker skal utføres i ett sveip.
 9. Når aktiv arbeidspakke eller avtalt checkpoint er fullført, gjennomfør handover og avslutt
@@ -111,7 +115,9 @@ For hver arbeidsflate:
 - Komponenter gjør ikke direkte HTTP-kall.
 - `load` er fri for sideeffekter.
 - Modulglobal mutable state brukes ikke for bruker, sesjon eller tenant.
-- Featurekode lager ikke lokal produktstyling eller parallelle designvarianter.
+- Tailwind-styling følger ADR-006: offentlig UI eier visuelle utilities, mens features og routes
+  ikke lager lokal produktstyling, restyler UI gjennom `class`/`style` eller innfører parallelle
+  designvarianter. Bare maskinelt registrert visualiseringsgeometri er unntatt.
 - Ny kode bruker Svelte 5 runes, snippets og typed context; legacy Svelte-syntaks brukes ikke.
 
 ## Handover ved slutten av hver sesjon

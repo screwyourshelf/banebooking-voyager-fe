@@ -6,6 +6,12 @@
 >
 > **Omfang:** Svelte 5, SvelteKit, frontendlag, dependency-/legacyopprydding og produksjonsbuild
 
+> **Etterfølgende beslutning:** Stylingens CSS-eierskap ble vurdert separat etter dette reviewet.
+> Tailwind-/theme-målarkitekturen og den aktive oppfølgingen ligger i
+> [ADR-006](./adr/006-tailwind-styling-and-theme-ownership.md) og
+> [stylingplanen](./styling-lift-and-shift-plan.md). Dette reviewets konklusjon om rammeverks- og
+> lagarkitektur står fast, men er ikke sluttbevis for den nye stylingretningen.
+
 ## Konklusjon
 
 Frontendens autoritative struktur følger målarkitekturen og gjeldende Svelte 5-/SvelteKit-praksis.

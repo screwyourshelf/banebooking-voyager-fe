@@ -42,8 +42,11 @@ npm run check
 ```
 
 `check` kjører Svelte-typekontroll, arkitektur-, legacy- og designsystemgrenser, lint og
-formatkontroll. Designsystemgrensen er toveis: aktiv Svelte-anatomi må ha sentral CSS, og CSS-klasser,
-`data-ui`, primitives, slots og tokens uten aktiv konsument avvises.
+formatkontroll. Før styling lift-and-shift-en er ferdig, validerer designsystemgrensen fortsatt den
+globale CSS-baselinen toveis: aktiv Svelte-anatomi må ha en stylingeier, og CSS-klasser, `data-ui`,
+primitives, slots og tokens uten aktiv konsument avvises. SWP-1 utvider porten med Tailwind-/theme-
+og featurestylingguards; den avtakende overgangsbaselinen og sluttkravene er definert i
+[`styling-lift-and-shift-plan.md`](./styling-lift-and-shift-plan.md).
 
 De kritiske innloggede flytene og de fryste visuelle referansene krever lokal database/backend:
 

@@ -27,6 +27,7 @@ Følgende ADR-er er bindende deler av målarkitekturen:
 - [ADR-003: Autentisering og tenant-routing](./adr/003-authentication-and-tenancy.md)
 - [ADR-004: UI- og komponentgrenser](./adr/004-ui-and-component-boundaries.md)
 - [ADR-005: Gjenoppretting før appmodulen starter](./adr/005-pre-module-startup-recovery.md)
+- [ADR-006: Tailwind-styling og theme-eierskap](./adr/006-tailwind-styling-and-theme-ownership.md)
 
 ## Arkitekturprinsipper
 
@@ -318,8 +319,8 @@ lokal kopi av hele bibliotekets komponentkatalog.
 ### Patterns
 
 Patterns er det offentlige Banebooking-designsystemet: `Page`, `Collection`, `Form`, `Settings`,
-`Dialog`, `Document`, navigation, feedback og loading. De eier semantikk, anatomi, størrelser og
-produktets `data-ui`/`data-part`-kontrakt.
+`Dialog`, `Document`, navigation, feedback og loading. De eier semantikk, anatomi, størrelser,
+Tailwind-basert visuell implementasjon og produktets `data-ui`/`data-part`-kontrakt.
 
 Patterns komponeres med typed props og snippets. De eksponerer semantiske callbacks som
 `onSave`, `onCancel` og `onSelect`, ikke interne DOM- eller Bits-hendelser.
@@ -333,7 +334,8 @@ Featurekomponenter uttrykker produktinnhold og arbeidsflyt. De:
 - importerer aldri Bits UI
 - gjør ikke HTTP-kall
 - setter ikke produktets `data-ui` eller `data-part` selv
-- har ingen feature-CSS eller lokale Tailwind-komposisjoner, med dokumenterte visualiseringsunntak
+- har ingen feature-CSS, inline produktstyling, UI-klasseoverstyringer eller lokale visuelle
+  Tailwind-komposisjoner, med maskinelt dokumenterte visualiseringsunntak
 
 De bindende produktreglene i [`product-design-rules.md`](./product-design-rules.md) gjelder for
 alle patterns og features.
@@ -383,6 +385,8 @@ Følgende skal inngå i `npm run check` når SvelteKit-grunnlaget etableres:
 - `svelte-check`
 - ESLint og Prettier med Svelte-støtte
 - eksisterende design-systemkontroll tilpasset `.svelte`
+- semantisk Tailwind-/theme-vokabular, featurestylingforbud og avtakende stylingbaseline etter
+  ADR-006
 - forbud mot Bits UI-import utenfor `ui/primitives`
 - forbud mot feature-til-feature-importer
 - forbud mot direkte Supabase-, Sentry- og storage-importer utenfor platformlaget

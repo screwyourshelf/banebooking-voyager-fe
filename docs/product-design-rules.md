@@ -2,14 +2,15 @@
 
 > **Status:** Bindende produktkontrakt
 >
-> **Sist oppdatert:** 2026-08-22
+> **Sist oppdatert:** 2026-08-23
 
 ## Formål
 
 Dette dokumentet beskriver Banebookings visuelle språk, informasjonssemantikk og offentlige
 UI-mønstre uavhengig av frontendrammeverk. Det skal brukes sammen med
 [`sveltekit-architecture.md`](./sveltekit-architecture.md) og
-[`ADR-004`](./adr/004-ui-and-component-boundaries.md).
+[`ADR-004`](./adr/004-ui-and-component-boundaries.md) samt
+[`ADR-006`](./adr/006-tailwind-styling-and-theme-ownership.md).
 
 Designsystemet skal gjøre den naturlige løsningen til den riktige løsningen. En feature beskriver
 innhold, tilstand og handlinger; den konstruerer ikke sin egen visuelle grammatikk.
@@ -48,10 +49,10 @@ familie før det lages lokal struktur.
    primitivefiler.
 4. Admin er tilgang og domene, ikke et visuelt designsystem. Det finnes ikke parallelle
    adminvarianter av `Page`, `Form`, `Section` eller `Collection`.
-5. Farger, typografi, radius, avstander, sidebredder og responsive skifter defineres i tokens og
-   sentrale patternfiler.
-6. Features har ingen egne CSS-filer, utilitykomposisjoner eller inline produktstyling. Eksplisitte
-   datavisualiseringer er eneste datadrevne unntak.
+5. Farger, typografi, radius, avstander, sidebredder og responsive skifter eies av semantiske
+   theme-roller og de offentlige patternene.
+6. Features har ingen egne produktvarianter, UI-klasseoverstyringer eller inline produktstyling.
+   Eksplisitte datavisualiseringer er eneste datadrevne unntak og kan bare eie geometri.
 7. Rå primitives brukes ikke til featurekomposisjon når et produktpattern eier problemet.
 8. En ny variant må løse samme problem for minst to reelle konsumenter.
 9. Unntakslisten i designsystemkontrollen er lukket teknisk gjeld og skal bare reduseres.
@@ -424,7 +425,7 @@ React-referansen og SvelteKit-grunnlaget er kaldkartlagt til én responsiv shell
 
 ## CSS-grammatikk
 
-Delte produktkomponenter uttrykker anatomi med dataattributter:
+Delte produktkomponenter uttrykker offentlig anatomi og state med dataattributter:
 
 ```html
 <section data-ui="section" data-variant="surface">
@@ -440,14 +441,16 @@ Delte produktkomponenter uttrykker anatomi med dataattributter:
 - `data-ui` identifiserer produktkomponenten.
 - `data-part` beskriver en faktisk del som `intro`, `content`, `title`, `description` eller
   `actions`.
-- En partselektor bindes til faktisk barnestruktur med `>`; generelle etterkommerselektorer som kan
-  treffe nestede komponenter er forbudt.
+- Når egen CSS trenger en partselektor, bindes den til faktisk barnestruktur med `>`; generelle
+  etterkommerselektorer som kan treffe nestede komponenter er forbudt.
 - `data-variant`, `data-state` og `data-density` beskriver forskjeller uten modifier-klasser.
 - `data-surface` og `data-layout` brukes bare når de beskriver faktisk flate eller layout.
 - Uklare navn som `copy`, `wrapper` og `container` brukes ikke som anatomi.
 - Featurekode setter ikke `data-ui` eller `data-part`; offentlig produkt-UI uttrykker strukturen.
 - Bits UI sine egne tilstandsattributter er primitive detaljer og blir ikke produktets offentlige
   kontrakt.
+- Stylingteknologien er en arkitekturbeslutning. Produktkontrakten krever semantiske theme-roller og
+  offentlig UI-eierskap, ikke én global selectorfil eller en bestemt intern klasseform.
 
 ## Ferdigkriterier
 
