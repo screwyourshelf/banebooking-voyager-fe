@@ -1,9 +1,10 @@
 <script lang="ts">
-  import { RoutePlaceholder } from "$lib/ui";
+  import { base } from "$app/paths";
+  import { MyBookingsScreen } from "$lib/features/account";
+  import { buildTenantPath, getTenantContext } from "$lib/platform/tenant";
+
+  const tenant = getTenantContext();
+  const bookingHref = buildTenantPath(tenant, "", base);
 </script>
 
-<RoutePlaceholder
-  eyebrow="Min konto"
-  title="Mine tider"
-  description="Bookingoversikten migreres i WP-6."
-/>
+<MyBookingsScreen {bookingHref} />
