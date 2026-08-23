@@ -4,7 +4,7 @@
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** WP-7 — Samlet paritet og produksjonsbytte (ikke startet)
+> **Aktiv arbeidspakke:** WP-7 — Samlet paritet og produksjonsbytte (pågår; inventar fullført)
 >
 > **Sist oppdatert:** 2026-08-23
 
@@ -435,7 +435,17 @@ midlertidige broer først når det autoritative SvelteKit-produktet har overtatt
   main-landmark, synlig h1, korrekt tema, ingen horisontal overflow og tom warn/error-konsoll.
   Faner, automatisk tastaturaktivering, periode, egendefinerte datofelt, sammenligning,
   bookingtype, gren og bane er kontrollert interaktivt mot eksisterende utviklingsdata uten
-  mutasjoner. WP-6-kvalitetsporten er nådd; WP-7 er registrert, men ikke startet.
+  mutasjoner. WP-6-kvalitetsporten er nådd.
+- Første WP-7-checkpoint har kaldavstemt alle 18 URL-flater, tilgangsnivåer og kritiske
+  featurestates uten å finne manglende produktfeatures. Importgrafen skiller 265 Svelte-eksklusive,
+  295 React-eksklusive, 46 delte autoritative og 43 runtime-uoppnåelige produksjonskandidater.
+- `docs/wp-7-parity-and-cleanup-inventory.md` navngir alle aktive React-broer, 34 foreldreløse
+  legacyfiler, React-/Axios-/Query-/Radix-/shadcn-avhengigheter og en atomisk femtrinns
+  fjerningsrekkefølge med faktiske konsumenter.
+- Inventaret fant to konkrete runtimegap før React kan fjernes: Svelte-runtime kobler foreløpig
+  ikke observability/Sentry eller storagefeilrapportering, og deploy-recoveryen for utdaterte
+  oppstartsfiler finnes bare i Reacts `index.html`. Lokal innlogget E2E mangler i tillegg en
+  reproduserbar authharness over det eksisterende utviklingsschemet.
 
 ## Nåtilstand
 
@@ -464,19 +474,21 @@ midlertidige broer først når det autoritative SvelteKit-produktet har overtatt
   autoritative SvelteKit-flater.
 - WP-6 er fullført. Alle elleve featurecheckpoints er migrert til offentlige Svelte-featureinnganger
   og tynne routes uten gjenværende routeplaceholdere eller backendendringer.
+- WP-7 pågår. Route-/featurepariteten og oppryddingsomfanget er bevist og dokumentert; runtimegap,
+  automatiserte E2E-flyter, produksjonsbevis og React-fjerning gjenstår i avtalte checkpoints.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                                 |
-| ------------------------------------- | -------------------------------------------------- |
-| Base branch                           | `main`                                             |
-| Fastslått basecommit                  | `5287c5e`                                          |
-| Siste semantiske checkpoint           | `feat(sveltekit): complete WP-6 feature migration` |
-| Lokale commits foran base             | 33                                                 |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                      |
-| Neste planlagte checkpoint            | WP-7 samlet paritets- og oppryddingsinventar       |
+| Felt                                  | Forventet tilstand                            |
+| ------------------------------------- | --------------------------------------------- |
+| Base branch                           | `main`                                        |
+| Fastslått basecommit                  | `5287c5e`                                     |
+| Siste semantiske checkpoint           | `docs(sveltekit): inventory WP-7 parity`      |
+| Lokale commits foran base             | 34                                            |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                 |
+| Neste planlagte checkpoint            | WP-7 runtimeparitet for observability og boot |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -485,31 +497,31 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Neste `/start` skal bare gjennomføre første avgrensede WP-7-checkpoint for samlet paritets- og
-oppryddingsinventar:
+Neste `/start` skal bare gjennomføre andre avgrensede WP-7-checkpoint for runtimeparitet:
 
-1. Kaldavstem alle URL-er, tilgangsnivåer og observerbare featurestates i
-   `docs/behavior-inventory.md` mot SvelteKit-route- og featuretreet. Registrer eventuelle reelle
-   paritetsgap med konkret eier; ikke anta at gjenværende React-kode i seg selv er et gap.
-2. Inventer React-kilde, React-/Axios-/React Query-/Radix-avhengigheter, midlertidige re-exports,
-   adapters, TODO-er og ubrukte filer med faktiske importkonsumenter. Skill eksplisitt mellom kode
-   som kan fjernes etter bevist Svelte-eierskap og kode som fortsatt trengs for paritetsbevis.
-3. Dokumenter en atomisk fjernings- og verifikasjonsrekkefølge for de neste WP-7-checkpointene, kjør
-   full maskinport og begge hostingbuildene, og opprett ett lokalt checkpoint-commit. Ikke fjern
-   React eller start ekstern deploy i samme inventarsesjon.
+1. Etabler en browser-only Sentry-adapter bak `lib/platform/observability`, initialiser den fra
+   `lib/platform/app` med validert offentlig config og koble storagefeilreporteren uten å sende
+   tokens, sessiondata eller sensitiv responskontekst. Featurekode skal ikke importere Sentry.
+2. Kaldkartlegg React-HTML-ens `vite:preloadError`- og resetforløp mot SvelteKit-builden. Flytt den
+   nødvendige atferden til en smal SvelteKit-eid oppstartsgrense, eller dokumenter med testbart
+   hostingbevis hvorfor den kan pensjoneres; ikke behold to aktive implementasjoner.
+3. Legg kontraktstester rundt initialisering, disabled/no-DSN, kontekstfiltrering, storagefeil og
+   valgt asset-recoveryatferd. Kjør full maskinport og begge hostingbuildene og opprett ett lokalt
+   checkpoint-commit. Ikke fjern øvrig React-kilde, etabler Playwright eller start ekstern deploy i
+   samme sesjon.
 
 ## Arbeidspakkeregister
 
-| Arbeidspakke                     | Status       | Port/resultat                                                |
-| -------------------------------- | ------------ | ------------------------------------------------------------ |
-| WP-0 Styring og baseline         | Fullført     | Dokumentgrunnlag, React-baseline og komplett adferdsinventar |
-| WP-1 Build og routes             | Fullført     | Build, routes, hostingvarianter og arkitekturkontroll grønn  |
-| WP-2 Contracts/domain/platform   | Fullført     | Contracts, ren domain, fetch/API, 401 og adapters grønne     |
-| WP-3 Auth/tenant/serverdata      | Fullført     | Auth, tenant, Query, guards, 401 og base path grønne         |
-| WP-4 UI-fundament                | Fullført     | Alle kartlagte UI-familier og filterkomposisjon er grønne    |
-| WP-5 App-shell                   | Fullført     | Shell, navigation, routeaktivitet, konto og Mer grønne       |
-| WP-6 Featuremigrering            | Fullført     | Elleve checkpoints og alle Svelte-featureflater er grønne    |
-| WP-7 Paritet og produksjonsbytte | Ikke startet | —                                                            |
+| Arbeidspakke                     | Status   | Port/resultat                                                |
+| -------------------------------- | -------- | ------------------------------------------------------------ |
+| WP-0 Styring og baseline         | Fullført | Dokumentgrunnlag, React-baseline og komplett adferdsinventar |
+| WP-1 Build og routes             | Fullført | Build, routes, hostingvarianter og arkitekturkontroll grønn  |
+| WP-2 Contracts/domain/platform   | Fullført | Contracts, ren domain, fetch/API, 401 og adapters grønne     |
+| WP-3 Auth/tenant/serverdata      | Fullført | Auth, tenant, Query, guards, 401 og base path grønne         |
+| WP-4 UI-fundament                | Fullført | Alle kartlagte UI-familier og filterkomposisjon er grønne    |
+| WP-5 App-shell                   | Fullført | Shell, navigation, routeaktivitet, konto og Mer grønne       |
+| WP-6 Featuremigrering            | Fullført | Elleve checkpoints og alle Svelte-featureflater er grønne    |
+| WP-7 Paritet og produksjonsbytte | Pågår    | 18 routes og featurestates avstemt; fjerningskart grønt      |
 
 ## Featureregister
 
@@ -528,62 +540,30 @@ oppryddingsinventar:
 
 ## Åpne blokkeringer
 
-Ingen kjente blokkeringer for første WP-7-checkpoint. Samlet paritets- og oppryddingsinventar kan
-gjennomføres lokalt mot kode, git, tester, builds, React-referansen og adferdsinventaret uten
-backendendringer, ekstern deploy eller ny brukerbeslutning.
+Ingen kjente bruker- eller backendblokkeringer for runtimecheckpointet. Valg av aktuell
+Sentry-browserintegrasjon skal verifiseres mot offisiell dokumentasjon før implementasjon, men
+endrer ikke ADR-en: bare platformlaget kan eie integrasjonen.
 
 ## Midlertidig kode og kjente avvik
 
-- React-kilde og React-avhengigheter er midlertidig referanse og skal fjernes etter hvert som
-  ansvaret erstattes; de er ikke del av SvelteKit-bundlen.
-- `src/types/`, de flyttede filene i `src/utils/` og `src/features/statistikk/types.ts` er
-  midlertidige React-re-exports til autoritativ kode i `src/lib/contracts`, `src/lib/domain`,
-  `src/lib/platform` og Svelte-featuremodellen. De inventeres og fjernes sammen med faktiske
-  React-konsumenter i WP-7.
-- Ingen Svelte-routeplaceholdere gjenstår. Det ubrukte offentlige `RoutePlaceholder`-patternet er
-  også fjernet etter at Statistikk overtok den siste foreløpige routeflaten.
-- Det eksisterende lokale utviklingsoppsettet sender standard `Authorization: Bearer`, mens
-  backendens isolerte utviklingsscheme forventer `DevelopmentBearer`. Automatiske tester og builds
-  påvirkes ikke; full innlogget nettleser-QA brukte en midlertidig lokal header-rewrite-proxy mot en
-  eksisterende utviklingsbackend. Ingen frontend- eller backendkontrakt ble endret som del av
-  checkpointet.
-- Eksisterende globale token-, font-, theme- og primitivefiler er autoritative. Eldre React-patterns
-  og featurekomposisjoner i samme CSS-kjede er fortsatt visuell referanse og konsolideres når de
-  respektive WP-4-patterns og WP-6-features erstatter dem.
-- Auth-, tenant-, callback- og guardflatene bruker offentlige Page-, loading-, feedback- og
-  errorpatterns. Deres adferds- og datakontrakter fra WP-3 er fortsatt autoritative.
-- Collection eier header-toggle, selection, filtergrupper, søk, sortering, typed filterfelt, reset,
-  filtrert tomtilstand og footer gjennom offentlig UI-API. React-featurekode er fortsatt
-  produksjonsreferanse og flyttes først i WP-6.
-- `CollectionRow` har interaction-variantene `static`, `open`, `action`, `expand` og `reorder` med
-  kartlagte konsumenter og typed innhold. Den gamle React-typen `actions` har ingen faktisk
-  featurekonsument og eksponeres derfor ikke i Svelte-API-et før et reelt behov oppstår.
-- Temakontrakten og persistens er på plass, og Navigation-familien dekker den semantiske
-  temahandlingen. Den faktiske brukerrettede bryteren kommer med app-shellen; det finnes ingen
-  midlertidig route- eller featurelokal temakontroll.
-- Form-, Settings-, Select-, Date-/Calendar-, Tabs-, Rich-text- og tekstkontrollfamiliene er
-  autoritative, men eksisterende React-skjemaer og innstillingsflater er fortsatt
-  produksjonsreferanse frem til de respektive WP-6-featurene migreres.
-- Dialogfamilien og Bits-wrapperen er autoritative, men eksisterende React-dialogkonsumenter er
-  fortsatt produksjonsreferanse frem til WP-6. Destruktive alert dialogs, mobile navigation sheets
-  og featureinnhold er ikke utvidet inn i dette checkpointet.
-- Document-familien er autoritativ for intro, seksjoner og fakta, men eksisterende React-flater er
-  fortsatt produksjonsreferanse frem til WP-6. Sidemetadata, loading/error og obligatoriske
-  handlinger komponeres gjennom Page-, feedback- og Form-familiene; redigering bruker den
-  autoritative Rich-text-editorgrensen.
-- Navigation-familien er autoritativ for identity, grupper, lister, lenker, handlinger, badges,
-  loading, konto-/Mer-overlay og indre mobil/desktop-geometri. WP-5-komposisjonen er autoritativ for
-  SvelteKit-routeaktivitet og auth-/tenant-/kapabilitetsutvalg; React-appskallet er nå bare visuell
-  referanse frem til React-kilden fjernes etter full paritet.
-- Bits UI brukes bare i primitive wrappers med reelle sammensatte behov: Dialog for fokusfelle og
-  dismissable layer, Select for listbox, portal, typeahead og fokusretur, Calendar/Popover for
-  datoaritmetikk, kalendergrid, portal og fokus, Tabs for lokale seksjoner med roving fokus og
-  Collection-accordion for kontrollert enkeltutviding og roving triggerfokus. Reorder, Button,
-  Input, Textarea, Switch, Radio og ChoiceButton beholder enkel native atferd.
-- `RichTextEditor` laster Tiptap Core og dokumentutvidelsene lazy gjennom en browser-only adapter.
-  React-avhengigheten `@tiptap/react` beholdes bare for React-referansen og brukes ikke av Svelte.
-- `Icon` renderer Hugeicons Free-data som dekorativ SVG. Patterns og omsluttende kontroller eier
-  produktbetydning og tilgjengelig navn; nye Svelte-flater skal ikke etablere lokale SVG-wrappers.
+- `docs/wp-7-parity-and-cleanup-inventory.md` er autoritativt fjerningskart. React-kilden er fortsatt
+  referanse og er ikke del av SvelteKit-bundlen; 295 React-eksklusive filer fjernes først etter
+  runtime-, E2E- og produksjonsbevis.
+- 46 delte contract-, domain-, platform- og CSS-filer har både Svelte- og React-konsumenter. De er
+  autoritative og skal ikke slettes sammen med legacytreet.
+- Aktive broer i `src/types/index.ts`, `src/types/Klubbdetaljer.ts`, navngitte `src/utils/`-filer,
+  `src/auth/`, `src/supabase.ts`, `src/features/policy/pages/vilkaar.ts` og
+  `src/features/statistikk/types.ts` har bare React-konsumenter og fjernes med dem.
+- 34 foreldreløse legacyfiler og alle pakkegrupper er eksakt listet i fjerningskartet. De er ikke
+  slettet i inventarcheckpointet.
+- Observabilityadapteren er testet, men Sentry og storagefeil er ikke koblet til Svelte-runtime.
+  Reacts oppstartsasset-recovery finnes bare i rotens inaktive `index.html`. Begge er åpne
+  runtimegap med navngitt eier.
+- Lokal innlogget E2E trenger fortsatt en reproduserbar authharness fordi klientens standard
+  `Bearer` og den isolerte utviklingsbackendens `DevelopmentBearer` ikke er samme scheme. Tidligere
+  nettleser-QA brukte en midlertidig lokal rewrite-proxy; ingen kontrakt er endret.
+- `src/index.css` importerer fortsatt `shadcn/tailwind.css`, og delte CSS-filer inneholder legacy
+  React-selektorer. Visuell referanse fryses før selector- og pakkeoppryddingen.
 
 ## Siste verifikasjon
 
@@ -598,7 +578,8 @@ backendendringer, ekstern deploy eller ny brukerbeslutning.
 | GitHub Pages-build                   | Bestått 2026-08-23: eksplisitt `/banebooking` og `404.html`-fallback               |
 | Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                  |
 | Nettleserrender                      | Bestått 2026-08-23: Statistikk i 4 flater uten overflow eller konsollfeil          |
-| SvelteKit-bundle                     | Verifisert 2026-08-22: ingen React-runtime                                         |
+| SvelteKit-bundle                     | Verifisert 2026-08-23: ingen React-runtime                                         |
+| WP-7 paritets-/oppryddingsinventar   | Komplett 2026-08-23: 18 routes, states, importgraf, deps og fjerningsrekkefølge    |
 | WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                |
 | WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon         |
 | WP-4 pattern-/a11y-tester            | Bestått 2026-08-22: 1 fil, 6 tester for semantikk, states, retry og axe            |
@@ -633,13 +614,12 @@ backendendringer, ekstern deploy eller ny brukerbeslutning.
 
 ## Filer i siste checkpoint
 
-- offentlig Statistikk-feature med API-, query-key-, query-, modell-, visualiserings-, fixture- og
-  komponent-/axe-tester i `src/lib/features/statistics/`
-- typed statistikkontrakt i `src/lib/contracts/statistikk.ts` og tynn legacy React-typebro
-- offentlige `Metric`- og `MetricGrid`-patterns samt sentral statistikkgeometri
-- tynn, funksjonell Statistikk-route i `src/routes/[[slug=tenant]]/(admin)/admin/statistikk/`
-- fjerning av den siste routeplaceholderen og det ubrukte `RoutePlaceholder`-patternet
-- `docs/migration-status.md`
+- full route-, tilgangs- og featurestateavstemming samt import-, bro-, TODO-, avhengighets- og
+  fjerningskart i `docs/wp-7-parity-and-cleanup-inventory.md`
+- korrigert URL-state i `docs/behavior-inventory.md` og registrert aktivt dokument i
+  `docs/README.md`
+- sann WP-7-nåtilstand, runtimegap, verifikasjon og neste eksakte checkpoint i
+  `docs/migration-status.md`
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
 pågående arbeid etter checkpointet.

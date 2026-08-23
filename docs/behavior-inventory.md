@@ -36,26 +36,26 @@ adressen.
 
 `{tenant}` under betyr enten `/{slug}` i multi-tenantmodus eller tomt segment i dedikert build.
 
-| URL                            | Flate                           | Tilgang og kapabilitet                                      | Viktig URL-state                         |
-| ------------------------------ | ------------------------------- | ----------------------------------------------------------- | ---------------------------------------- | ---------------------------- |
-| `{tenant}`                     | Book bane                       | Offentlig lesing; handlinger bestemmes per slot             | Ingen; gren, bane og dato er lokal state |
-| `{tenant}/vilkaar`             | Vilkår                          | Offentlig                                                   | Ingen                                    |
-| `{tenant}/login`               | Logg inn                        | Offentlig; innlogget bruker sendes til opprinnelig mål/root | Opprinnelig mål bevares gjennom login    |
-| `{tenant}/minside`             | Min side                        | Innlogging                                                  | `?tab=profil                             | persondata` velger startfane |
-| `{tenant}/bookinger`           | Mine tider                      | Innlogging                                                  | Ingen; historikkvalg er lokal state      |
-| `{tenant}/arrangementer`       | Arrangementer                   | Offentlig; innlogget svar kan inneholde flere handlinger    | `?arrangement={id}` åpner detaljrad      |
-| `{tenant}/nyheter`             | Nyheter                         | Offentlig                                                   | Ingen                                    |
-| `{tenant}/arrangement`         | Administrer arrangementer       | Innlogging + `arrangement:se`                               | Ingen; editor og steg er lokal state     |
-| `{tenant}/admin/klubb`         | Klubbinnstillinger              | Innlogging + `klubb:admin`                                  | Ingen; seksjon er lokal state            |
-| `{tenant}/admin/baner`         | Baner i felles arbeidsområde    | Innlogging + `baner:admin`                                  | Ingen                                    |
-| `{tenant}/admin/grener`        | Grener i felles arbeidsområde   | Innlogging + `grener:admin`                                 | Ingen                                    |
-| `{tenant}/admin/brukere`       | Brukere                         | Innlogging + `brukere:lese` eller `brukere:admin`           | Ingen; søk/filter er lokal state         |
-| `{tenant}/admin/kunngjøringer` | Kunngjøringer                   | Innlogging + `kunngjøring:admin`                            | Ingen                                    |
-| `{tenant}/admin/statistikk`    | Statistikk                      | Innlogging + `statistikk:lese`                              | Ingen; periode/filter er lokal state     |
-| `{tenant}/bekreft-medlemskap`  | Obligatorisk medlemsbekreftelse | Innlogget bruker som er flagget av backend                  | Guardstyrt                               |
-| `{tenant}/kunngjøring`         | Obligatorisk kunngjøring        | Innlogget bruker med ulest obligatorisk kunngjøring         | Guardstyrt                               |
-| `{tenant}/sperret`             | Sperret konto                   | Innlogget bruker som backend markerer sperret               | Guardstyrt                               |
-| `/auth/callback`               | Innloggingscallback             | Offentlig teknisk route                                     | OAuth/OTP-parametere fra leverandør      |
+| URL                            | Flate                           | Tilgang og kapabilitet                                      | Viktig URL-state                                       |
+| ------------------------------ | ------------------------------- | ----------------------------------------------------------- | ------------------------------------------------------ |
+| `{tenant}`                     | Book bane                       | Offentlig lesing; handlinger bestemmes per slot             | Ingen; gren, bane og dato er lokal state               |
+| `{tenant}/vilkaar`             | Vilkår                          | Offentlig                                                   | Ingen                                                  |
+| `{tenant}/login`               | Logg inn                        | Offentlig; innlogget bruker sendes til opprinnelig mål/root | Opprinnelig mål bevares gjennom login                  |
+| `{tenant}/minside`             | Min side                        | Innlogging                                                  | `?tab=profil` eller `?tab=persondata` velger startfane |
+| `{tenant}/bookinger`           | Mine tider                      | Innlogging                                                  | Ingen; historikkvalg er lokal state                    |
+| `{tenant}/arrangementer`       | Arrangementer                   | Offentlig; innlogget svar kan inneholde flere handlinger    | `?arrangement={id}` åpner detaljrad                    |
+| `{tenant}/nyheter`             | Nyheter                         | Offentlig                                                   | Ingen                                                  |
+| `{tenant}/arrangement`         | Administrer arrangementer       | Innlogging + `arrangement:se`                               | Ingen; editor og steg er lokal state                   |
+| `{tenant}/admin/klubb`         | Klubbinnstillinger              | Innlogging + `klubb:admin`                                  | Ingen; seksjon er lokal state                          |
+| `{tenant}/admin/baner`         | Baner i felles arbeidsområde    | Innlogging + `baner:admin`                                  | Ingen                                                  |
+| `{tenant}/admin/grener`        | Grener i felles arbeidsområde   | Innlogging + `grener:admin`                                 | Ingen                                                  |
+| `{tenant}/admin/brukere`       | Brukere                         | Innlogging + `brukere:lese` eller `brukere:admin`           | Ingen; søk/filter er lokal state                       |
+| `{tenant}/admin/kunngjøringer` | Kunngjøringer                   | Innlogging + `kunngjøring:admin`                            | Ingen                                                  |
+| `{tenant}/admin/statistikk`    | Statistikk                      | Innlogging + `statistikk:lese`                              | Ingen; periode/filter er lokal state                   |
+| `{tenant}/bekreft-medlemskap`  | Obligatorisk medlemsbekreftelse | Innlogget bruker som er flagget av backend                  | Guardstyrt                                             |
+| `{tenant}/kunngjøring`         | Obligatorisk kunngjøring        | Innlogget bruker med ulest obligatorisk kunngjøring         | Guardstyrt                                             |
+| `{tenant}/sperret`             | Sperret konto                   | Innlogget bruker som backend markerer sperret               | Guardstyrt                                             |
+| `/auth/callback`               | Innloggingscallback             | Offentlig teknisk route                                     | OAuth/OTP-parametere fra leverandør                    |
 
 `/admin` har ingen egen produktside. Den er bare URL-prefiks for adminflatene.
 
