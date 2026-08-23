@@ -534,6 +534,17 @@ guardfixtures. Arbeidspakken endrer ikke produktstyling.
   de konkrete lazy Sentry-, Supabase- og rikteksteditorchunkene. Måleverktøy og baselinefil er
   eksplisitt utelukket fra Tailwinds tekstskanning; en kald `HEAD`-sammenligning bekrefter at
   produksjons-CSS og klasseutvalg er byteidentisk med tilstanden før checkpointet.
+- Andre SWP-0-checkpoint har frosset elleve navngitte Playwright-referanser over de faktiske
+  SvelteKit-routene. Matrisen dekker app-shell/navigation, Page/Section, Collection,
+  Form/Settings, Dialog/Select/Calendar, rikteksteditor og statistikk på 390×844 og 1440×1000 i
+  lyst og mørkt theme.
+- Referansedata, tenant, roller, kapabiliteter, dato og nettlesertid er deterministiske ved
+  testgrensen. Alle flater krever én `main`, synlig `h1`, ingen horisontal overflow og tom
+  warn/error-konsoll; dialog, Select, Calendar, editor og Tabs har eksplisitte fokus-, tastatur- og
+  fokusreturforløp.
+- Hele matrisen, de tre kritiske E2E-flytene og begge produksjonsroutematriser er grønne.
+  Cloudflare- og GitHub-artefaktenes CSS beholder eksakt SWP-0.1-assetnavn, råstørrelse og
+  gzipstørrelse; checkpointet endrer verken produktmarkup, produktstyling eller backend.
 
 ## Nåtilstand
 
@@ -587,14 +598,14 @@ guardfixtures. Arbeidspakken endrer ikke produktstyling.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                          |
-| ------------------------------------- | ------------------------------------------- |
-| Base branch                           | `main`                                      |
-| Fastslått basecommit                  | `5287c5e`                                   |
-| Siste semantiske checkpoint           | `test(styling): establish SWP-0.1 baseline` |
-| Lokale commits foran base             | 42                                          |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit               |
-| Neste planlagte checkpoint            | SWP-0.2 visuell og interaktiv referanse     |
+| Felt                                  | Forventet tilstand                        |
+| ------------------------------------- | ----------------------------------------- |
+| Base branch                           | `main`                                    |
+| Fastslått basecommit                  | `5287c5e`                                 |
+| Siste semantiske checkpoint           | `test(styling): freeze SWP-0.2 reference` |
+| Lokale commits foran base             | 43                                        |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit             |
+| Neste planlagte checkpoint            | SWP-0.3 guarddesign og fixturekontrakter  |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -603,21 +614,22 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Start bare **SWP-0 checkpoint 2 — visuell og interaktiv referanse**:
+Start bare **SWP-0 checkpoint 3 — guarddesign og fixturekontrakter**:
 
-1. Les hele SWP-0, ADR-006 og den maskinlesbare baselinen; ikke endre produktstyling, markup eller
-   backend.
-2. Fastsett en navngitt screenshotmatrise som dekker app-shell/navigation, Page/Section,
-   Collection, Form/Settings, Dialog/Select/Calendar, editor og statistikk. Gjenbruk eksisterende
-   Playwright-harness og fixtures fremfor å opprette en parallell testapp.
-3. Dekk 390×844 og 1440×1000 samt lyst/mørkt theme der uttrykket faktisk skifter. Hvert bilde skal
-   ha deterministisk route, rolle, data/state og viewport; nettverks- eller animasjonsstøy skal
-   fjernes ved testgrensen, ikke med produktendringer.
-4. Registrer og test fokusstart/-retur, relevante tastaturforløp, én `main`, synlig `h1`,
-   horisontal overflow og tom warn/error-konsoll for de representative flatene.
-5. Kjør den komplette nye snapshotmatrisen og berørte E2E-flyter, sammenlign produksjons-CSS mot
-   SWP-0.1-baselinen, oppdater statusen til checkpoint 3 og opprett én lokal grønn commit. Stopp
-   deretter; ikke start guardfixturecheckpointet i samme sesjon.
+1. Les hele SWP-0, ADR-006, den maskinlesbare stylingbaselinen og den frosne
+   `styling-reference-matrix.md`; ikke endre produktstyling, produktmarkup eller backend.
+2. Definer en maskinlesbar guardkontrakt med stabile regel-ID-er for tillatte semantiske visuelle
+   utilities, identitetsnøytrale strukturutilities og det lukkede visualiseringsunntaket.
+3. Opprett små positive og negative Svelte-/CSS-fixtures som dekker alle ti guardkrav i
+   stylingplanen: lag/importgrenser, lokal featurestyling, offentlig UI-overstyring, ulovlig
+   utilityvokabular, dynamiske klasser, `@apply`/globale selektorer/important, custom-property-
+   eierskap og cascade layers.
+4. Legg til en fixtureintegritetstest som beviser forventet regel-ID og diagnostikk for hver
+   fixture. Ikke koble de nye guardene til hele produksjonstreet; den håndhevende fulltregrensen
+   etableres først i SWP-1.
+5. Kjør fixturetestene, `npm test`, `npm run check`, stylingbaselinen og hele snapshotmatrisen;
+   oppdater statusen til SWP-1.1 og opprett én lokal grønn commit. Stopp deretter; ikke start
+   theme-kontrakten i samme sesjon.
 
 ## Arbeidspakkeregister
 
@@ -631,7 +643,7 @@ Start bare **SWP-0 checkpoint 2 — visuell og interaktiv referanse**:
 | WP-5 App-shell                   | Fullført | Shell, navigation, routeaktivitet, konto og Mer grønne       |
 | WP-6 Featuremigrering            | Fullført | Elleve checkpoints og alle Svelte-featureflater er grønne    |
 | WP-7 Paritet og produksjonsbytte | Fullført | Paritet, React-fjerning, CSS, drift og sluttport grønne      |
-| SWP-0 Baseline og guardkontrakt  | Aktiv    | Maskinbaseline grønn; neste: visuell/interaktiv referanse    |
+| SWP-0 Baseline og guardkontrakt  | Aktiv    | Baseline/referanse grønne; neste: guard- og fixturekontrakt  |
 | SWP-1 Theme og guards            | Venter   | Starter etter frosset styling- og visuell baseline           |
 | SWP-2 UI-primitives              | Venter   | Tailwind-konvertering bak stabil primitivegrense             |
 | SWP-3 Produktpatterns            | Venter   | Semantiske familier migreres i avhengighetsrekkefølge        |
@@ -664,6 +676,9 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 - Playwright-harnessen omskriver bare testkontekstens API-header til `DevelopmentBearer`; vanlig
   dev-, preview- og produksjonstrafikk bruker fortsatt den autoritative `Bearer`-kontrakten.
+- Stylingreferansen oppfyller bare testtenantens navngitte klubbendepunkter med faste svar og
+  fryser nettleserklokken til 2026-08-23. Utviklingsinnloggingen bruker fortsatt den eksisterende
+  lokale backendharnessen; vanlig utviklings- og produksjonsdata er upåvirket.
 - Ingen midlertidige rammeverksadapters eller React-legacy gjenstår. Stylingbaselinen måler sju
   aktive CSS-filer, 5973 linjer, 780 regler og 846 selektorer. De brede overgangsfilene er fortsatt
   `patterns.css` med 3500 linjer, `responsive.css` med 503 linjer og
@@ -704,6 +719,10 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 | SWP-0 kildebaseline                  | Bestått 2026-08-23: 7 CSS-filer, 780 regler, 846 selektorer, 2233 avvik            |
 | SWP-0 baselinekontrakt               | Bestått 2026-08-23: schemaVersion 1 regenererer deterministisk i Vitest/npm        |
 | SWP-0 visualiseringsinventar         | Komplett 2026-08-23: 106 klasse-, style-, SVG- og rollekandidater                  |
+| SWP-0 visuell referansematrise       | Bestått 2026-08-23: 11 snapshots over alle stylingfamilier, viewporter og themes   |
+| SWP-0 interaksjonskontrakt           | Bestått 2026-08-23: fokus, tastatur, main/h1, overflow og tom warn/error-konsoll   |
+| SWP-0 komplett E2E-port              | Bestått 2026-08-23: 3 kritiske flyter + 11 visuelle/interaktive referanser         |
+| SWP-0 produksjons-CSS                | Identisk med SWP-0.1: samme assetnavn, råbyte og 21,3/21,4 KiB gzip                |
 | Asset-recovery-kontrakt              | Bestått 2026-08-23: ferske assets uten sletting av auth-/site storage              |
 | Knip dead-code-review                | Bestått 2026-08-23: kun bevisst beholdte transporttyper rapporteres                |
 | Cloudflare Pages-build               | Bestått 2026-08-23: 21,3 KiB initial CSS, root og `index.html`-fallback            |
@@ -757,14 +776,16 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 ## Filer i siste checkpoint
 
-- `scripts/measure-styling-baseline.mjs` og de smale målemodulene for eierskap, CSS/Svelte-kilde og
-  root/base-produksjonsartefakter
-- `docs/styling-baseline.json` med schemaVersion 1, eksakte kildeavvik, visualiseringskandidater og
-  produksjonsmål uten tidsstempel
-- `src/styling-baseline.test.ts`, eksplisitte npm-script og direkte PostCSS-parseravhengigheter for
-  deterministisk regenerering og sammenligning
-- Tailwind-kildeekskludering for måleverktøy, test og generert baseline samt oppdatert
-  migreringsstatus med SWP-0.2 som neste eksakte steg
+- `e2e/visual-regressions.spec.ts` med elleve navngitte routeflater og eksplisitte invariants for
+  snapshots, landmarks, overflow, konsoll, fokus og tastatur
+- `e2e/styling-reference-fixtures.ts` med fast tenant, rolle, kapabiliteter, tid og data over den
+  eksisterende Playwright-authharnessen
+- elleve PNG-referanser ved visual-regression-spesifikasjonen; sju er nye, tre eksisterende er
+  byteidentiske og medlemskapsreferansen er bevisst flyttet til en deterministisk state
+- `docs/styling-reference-matrix.md`, dokumentindeksen og E2E-harnessdokumentasjonen med den
+  autoritative route-, state-, viewport-, theme- og interaksjonskontrakten
+- oppdatert migreringsstatus med SWP-0.3 som neste eksakte steg; produktkode, stylingbaseline og
+  backend er uendret
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
 pågående arbeid etter checkpointet.

@@ -37,9 +37,10 @@ Kjør porten med:
 npm run test:e2e
 ```
 
-Denne porten inkluderer tre kritiske mutasjonsflyter og fire fryste visuelle referanser. De
-visuelle testene bruker stabile, test-eide klubb-/brukersvar og den samme authharnessen, men utfører
-ingen mutasjoner.
+Denne porten inkluderer tre kritiske mutasjonsflyter og elleve fryste visuelle referanser. De
+visuelle testene bruker stabile, test-eide svar og den samme authharnessen, men utfører ingen
+mutasjoner. Den navngitte route-, rolle-, state-, viewport-, theme- og interaksjonskontrakten ligger
+i [`styling-reference-matrix.md`](./styling-reference-matrix.md).
 
 ## Produksjonsartefakter og routes
 
