@@ -102,6 +102,9 @@ describe("session navigation composition", () => {
 
     await fireEvent.click(within(menu).getByRole("button", { name: "Logg ut" }));
     expect(callbacks.onSignOut).toHaveBeenCalledOnce();
+
+    await fireEvent.click(within(dialog).getByRole("button", { name: "Lukk meny" }));
+    await waitFor(() => expect(screen.queryByRole("dialog", { name: "Kari Nordmann" })).toBeNull());
   });
 
   it("has no detectable accessibility violations in the shell and More overlay", async () => {
@@ -112,5 +115,8 @@ describe("session navigation composition", () => {
     await fireEvent.click(within(bottom).getByRole("button", { name: "Mer" }));
     const dialog = await screen.findByRole("dialog", { name: "Kari Nordmann" });
     expect((await axe.run(dialog, axeOptions)).violations).toEqual([]);
+
+    await fireEvent.click(within(dialog).getByRole("button", { name: "Lukk meny" }));
+    await waitFor(() => expect(screen.queryByRole("dialog", { name: "Kari Nordmann" })).toBeNull());
   });
 });

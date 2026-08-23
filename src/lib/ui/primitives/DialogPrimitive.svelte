@@ -35,6 +35,10 @@
 
     onClose?.();
   }
+
+  // Flaten har ingen exit-transition; umiddelbar gjenoppretting unngår en hengende global
+  // body-scroll-cleanup etter at dialogtreet er avmontert.
+  const restoreScrollDelay = 0;
 </script>
 
 <Dialog.Root bind:open onOpenChange={handleOpenChange}>
@@ -46,6 +50,7 @@
       aria-busy={pending || undefined}
       escapeKeydownBehavior={pending ? "ignore" : "close"}
       interactOutsideBehavior={pending ? "ignore" : "close"}
+      {restoreScrollDelay}
     >
       {@render children({ close })}
     </Dialog.Content>

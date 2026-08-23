@@ -1,21 +1,21 @@
 # WP-7 paritets- og oppryddingsinventar
 
-> **Status:** Fjerde WP-7-checkpoint fullført
+> **Status:** Femte WP-7-checkpoint fullført
 >
 > **Inventargrunnlag:** `feature/sveltekit-lift-and-shift` ved `4520f65`; runtimefeltene er
-> oppdatert i andre checkpoint, E2E-feltene i tredje checkpoint og produksjonsbeviset i fjerde
-> checkpoint
+> oppdatert i andre checkpoint, E2E-feltene i tredje checkpoint, produksjonsbeviset i fjerde og
+> fjerningsresultatet i femte checkpoint
 >
 > **Dato:** 2026-08-23
 
 ## Formål og avgrensning
 
-Dette dokumentet er fjerningskartet for resten av WP-7. Det avstemmer den autoritative
+Dette dokumentet er fjerningskartet og det varige beviset for WP-7. Det avstemmer den autoritative
 adferdskontrakten mot SvelteKit-treet og skiller mellom:
 
-- reelle produkt- eller produksjonsgap som må lukkes før React-referansen fjernes
-- React-kode og kompatibilitetsbroer som fortsatt har faktiske konsumenter
-- allerede ubrukte filer og avhengigheter
+- reelle produkt- eller produksjonsgap som ble lukket før React-referansen ble fjernet
+- React-kode og kompatibilitetsbroer som hadde faktiske konsumenter før femte checkpoint
+- allerede ubrukte filer og avhengigheter som ble fjernet sammen med React-roten
 - autoritativ Svelte-, contract-, domain-, platform- og CSS-kode som må bevares
 
 Inventaret er en kaldlesing av routes, guards, offentlige featureinnganger, testnavn, importgraf,
@@ -93,7 +93,7 @@ standardfeilen, gjør høyst ett automatisk recoveryforsøk per cooldown og oppf
 module scripts, modulepreloads og CSS før dokumentet erstattes. Fastlåst oppstart beholder en
 pre-module bootflate med eksplisitt nullstilling; Svelte-layouten fjerner flaten ved vellykket
 overtakelse. Kontrakten testes direkte mot den autoritative inline-koden og finnes i begge
-hostingfallbackene. React-roten er fortsatt inaktiv referanse og fjernes i eget checkpoint.
+hostingfallbackene. Den inaktive React-roten og dens parallelle recoverykode er nå fjernet.
 
 ### 3. Innlogget lokal E2E har en autoritativ utviklingsauthvei — lukket
 
@@ -106,19 +106,20 @@ deterministisk ettertestopprydding. Den tidligere manuelle header-proxyen er ikk
 Eier: WP-7-testharnessen over eksisterende auth-/API-kontrakter. Løsningen må ikke endre
 produksjonens authscheme eller backend uten en separat godkjenning.
 
-## Kilde- og importinventar
+## Kilde- og importinventar før fjerning
 
 En statisk importgraf over `src/` fant 649 produksjonskandidater:
 
-| Klasse                          | Antall | Betydning                                                                          |
-| ------------------------------- | -----: | ---------------------------------------------------------------------------------- |
-| Bare SvelteKit-grafen           |    265 | Bevares                                                                            |
-| Bare React-roten `src/main.tsx` |    295 | Kan fjernes etter paritetsfrys                                                     |
-| Nådd av begge runtimegrafer     |     46 | Contracts, domain, platform og sentral CSS; må ikke slettes med React              |
-| Ikke nådd av noen runtimegraf   |     43 | 34 reelt foreldreløse legacyfiler, 7 test-/konvensjonsfiler og 2 deklarasjonsfiler |
+| Klasse                          | Antall | Betydning                                                                       |
+| ------------------------------- | -----: | ------------------------------------------------------------------------------- |
+| Bare SvelteKit-grafen           |    265 | Bevares                                                                         |
+| Bare React-roten `src/main.tsx` |    295 | Fjernet i femte checkpoint                                                      |
+| Nådd av begge runtimegrafer     |     46 | Autoritative contracts, domain, platform og sentral CSS ble bevart              |
+| Ikke nådd av noen runtimegraf   |     43 | 34 legacyfiler ble fjernet; test-/konvensjons- og deklarasjonsfiler ble avstemt |
 
-React-referansen har 214 `.tsx`/`.jsx`-filer og 21 423 linjer. Den aktive SvelteKit-builden bruker
-`src/app.html`; rotens `index.html` og `src/main.tsx` er bare React-referanse.
+React-referansen hadde 214 `.tsx`/`.jsx`-filer og 21 423 linjer. Femte checkpoint fjernet hele
+treet, de 34 foreldreløse legacyfilene, fem legacytestfiler og rotens `index.html`. Den aktive
+SvelteKit-builden bruker fortsatt `src/app.html`.
 
 ### Autoritativ delt kode
 
@@ -126,38 +127,39 @@ De 46 delte filene består av:
 
 - `src/lib/contracts/**` og `src/lib/domain/**`
 - de delte platformfilene for API-feil/-klient, auth, config og storage
-- `src/lib/features/statistics/model.ts`, som legacy Statistikk importerer gjennom en tynn typebro
+- `src/lib/features/statistics/model.ts`, som legacy Statistikk tidligere importerte gjennom en
+  tynn typebro
 - `src/index.css` og designsystemets token-, primitive-, pattern-, responsive- og midlertidige
   feature-composition-filer
 
-Disse filene skal beholdes. React-konsumenter og broer fjernes fra utsiden og inn; den
-autoritative implementasjonen flyttes ikke tilbake til legacybaner.
+Disse filene er beholdt. React-konsumenter og broer er fjernet fra utsiden og inn; den autoritative
+implementasjonen ble ikke flyttet tilbake til legacybaner.
 
-### Aktive kompatibilitetsbroer
+### Fjernede kompatibilitetsbroer
 
-| Bro                                                                       |                Faktiske legacykonsumenter | Fjerning                               |
-| ------------------------------------------------------------------------- | ----------------------------------------: | -------------------------------------- |
-| `src/types/index.ts`                                                      | 63 importsetninger i React-features/hooks | Sammen med React-featuretreet          |
-| `src/types/Klubbdetaljer.ts`                                              |                 1 (`ReglementDialog.tsx`) | Sammen med bookingreferansen           |
-| `src/utils/arrangementPresentation.ts`                                    |                                         6 | Sammen med arrangementreferansen       |
-| `src/utils/bookingUtils.ts`                                               |                                         3 | Sammen med bookingreferansen           |
-| `src/utils/browserStorage.ts`                                             |                                        10 | Sammen med React boot/auth/theme       |
-| `src/utils/brukerPresentation.ts`                                         |                                         7 | Sammen med konto-/brukerreferansen     |
-| `src/utils/datoUtils.ts`                                                  |                                        17 | Sammen med React-featuretreet          |
-| `src/utils/handlingUtils.ts`                                              |                                        11 | Sammen med React capabilitykonsumenter |
-| `src/utils/kapabiliteter.ts`                                              |                                        12 | Sammen med React capabilitykonsumenter |
-| `src/features/statistikk/types.ts`                                        |                                         9 | Sammen med React Statistikk            |
-| `src/auth/authTypes.ts`                                                   |                                         2 | Sammen med React authprovider          |
-| `src/auth/developmentSession.ts`, `supabaseToken.ts` og `src/supabase.ts` |                                 3, 5 og 5 | Sammen med React auth/API              |
-| `src/features/policy/pages/vilkaar.ts`                                    |                        1 (`useBruker.ts`) | Sammen med React brukerhook            |
+| Bro                                                                       |                Faktiske legacykonsumenter | Resultat                            |
+| ------------------------------------------------------------------------- | ----------------------------------------: | ----------------------------------- |
+| `src/types/index.ts`                                                      | 63 importsetninger i React-features/hooks | Fjernet med React-featuretreet      |
+| `src/types/Klubbdetaljer.ts`                                              |                 1 (`ReglementDialog.tsx`) | Fjernet med bookingreferansen       |
+| `src/utils/arrangementPresentation.ts`                                    |                                         6 | Fjernet med arrangementreferansen   |
+| `src/utils/bookingUtils.ts`                                               |                                         3 | Fjernet med bookingreferansen       |
+| `src/utils/browserStorage.ts`                                             |                                        10 | Fjernet med React boot/auth/theme   |
+| `src/utils/brukerPresentation.ts`                                         |                                         7 | Fjernet med konto-/brukerreferansen |
+| `src/utils/datoUtils.ts`                                                  |                                        17 | Fjernet med React-featuretreet      |
+| `src/utils/handlingUtils.ts`                                              |                                        11 | Fjernet med capabilitykonsumentene  |
+| `src/utils/kapabiliteter.ts`                                              |                                        12 | Fjernet med capabilitykonsumentene  |
+| `src/features/statistikk/types.ts`                                        |                                         9 | Fjernet med React Statistikk        |
+| `src/auth/authTypes.ts`                                                   |                                         2 | Fjernet med React authprovider      |
+| `src/auth/developmentSession.ts`, `supabaseToken.ts` og `src/supabase.ts` |                                 3, 5 og 5 | Fjernet med React auth/API          |
+| `src/features/policy/pages/vilkaar.ts`                                    |                        1 (`useBruker.ts`) | Fjernet med React brukerhook        |
 
-`src/api/api.ts` er ikke en tynn bro: det er Reacts Axios-klient med 7 direkte konsumenter og en
-re-export av den autoritative `ApiError`. Hele filen fjernes med React-dataflyten.
+`src/api/api.ts` var ikke en tynn bro: det var Reacts Axios-klient med 7 direkte konsumenter og en
+re-export av den autoritative `ApiError`. Hele filen er fjernet med React-dataflyten.
 
-### Foreldreløse legacyfiler
+### Fjernede foreldreløse legacyfiler
 
-Følgende 22 genererte React/shadcn-filer har ingen konsument fra React-roten. `input-group.tsx` og
-`toggle.tsx` importeres bare av andre filer i samme foreldreløse gruppe:
+Følgende 22 genererte React/shadcn-filer hadde ingen konsument fra React-roten. `input-group.tsx` og
+`toggle.tsx` ble bare importert av andre filer i samme foreldreløse gruppe:
 
 `aspect-ratio.tsx`, `avatar.tsx`, `badge.tsx`, `breadcrumb.tsx`, `carousel.tsx`, `checkbox.tsx`,
 `collapsible.tsx`, `command.tsx`, `context-menu.tsx`, `drawer.tsx`, `form.tsx`, `hover-card.tsx`,
@@ -165,13 +167,14 @@ Følgende 22 genererte React/shadcn-filer har ingen konsument fra React-roten. `
 `progress.tsx`, `scroll-area.tsx`, `slider.tsx`, `toggle-group.tsx` og `toggle.tsx` under
 `src/components/ui/`.
 
-Følgende 12 enkeltfil-re-exports under `src/types/` har ingen importkonsument fordi React nå bruker
+Følgende 12 enkeltfil-re-exports under `src/types/` hadde ingen importkonsument fordi React brukte
 `src/types/index.ts`: `Arrangement.ts`, `Bane.ts`, `Booking.ts`, `BookingBootstrap.ts`,
 `BookingSlot.ts`, `Bruker.ts`, `FeedItem.ts`, `Gren.ts`, `KalenderSlot.ts`, `Medlemskap.ts`,
 `MinBooking.ts` og `OppdaterKlubb.ts`.
 
-`src/params/tenant.ts`, `src/app.d.ts` og `src/vite-env.d.ts` er SvelteKit-/TypeScript-konvensjoner,
-ikke foreldreløse filer. `*-test-data.ts` og observabilitymodulen har eksplisitte testkonsumenter.
+Alle 34 filene over er fjernet. `src/params/tenant.ts`, `src/app.d.ts` og `src/vite-env.d.ts` er
+bevart som SvelteKit-/TypeScript-konvensjoner. `*-test-data.ts` og observabilitymodulen er også
+bevart fordi de har eksplisitte testkonsumenter.
 
 ## Avhengighetsinventar
 
@@ -187,41 +190,46 @@ ikke foreldreløse filer. `*-test-data.ts` og observabilitymodulen har eksplisit
 `shadcn` er foreløpig også en Svelte-buildkonsument fordi `src/index.css` importerer
 `shadcn/tailwind.css`. Importen må fjernes eller erstattes før pakken kan slettes.
 
-### Avhengigheter med bare React-konsumenter
+### Fjernede avhengigheter med bare React-konsumenter
 
 `@hugeicons/react`, `@sentry/react`, `@tanstack/react-query`,
 `@tanstack/react-query-devtools`, `@tiptap/react`, `axios`, `class-variance-authority`, `clsx`,
 `lucide-react`, `next-themes`, `radix-ui`, `react`, `react-day-picker`, `react-dom`,
-`react-router-dom`, `sonner` og `tailwind-merge` kan fjernes når deres React-konsumenter er slettet.
+`react-router-dom`, `sonner` og `tailwind-merge` er fjernet sammen med React-konsumentene.
 `date-fns` kan ikke fjernes fordi den autoritative Svelte-statistikkmodellen bruker pakken.
 
 React-verktøyene `@types/react`, `@types/react-dom`, `@vitejs/plugin-react`,
-`eslint-plugin-react-hooks` og `eslint-plugin-react-refresh` fjernes samtidig med
+`eslint-plugin-react-hooks` og `eslint-plugin-react-refresh` er fjernet sammen med
 `tsconfig.react.json` og `typecheck:react`.
 
 ### Allerede ubrukte eller bare foreldreløst brukte avhengigheter
 
-- Ingen importkonsument: `@hookform/resolvers`, `use-debounce` og `zod`.
-- Bare foreldreløse shadcn-filer: `cmdk`, `embla-carousel-react`, `input-otp`, `react-hook-form` og
-  `vaul`.
+- `@hookform/resolvers`, `use-debounce`, `cmdk`, `embla-carousel-react`, `input-otp`,
+  `react-hook-form` og `vaul` er fjernet fordi de var ubrukte eller bare nådd av foreldreløse
+  React-filer. `zod` står igjen til den samlede ubrukte pakkeporten i neste checkpoint.
 - Ingen direkte kildeimport: `@tiptap/extension-link`, `@tiptap/extension-table-cell`,
   `@tiptap/extension-table-header`, `@tiptap/extension-table-row` og `@tiptap/pm`. De må
   kontrolleres mot Tiptaps transitive pakkegraph når `package.json` ryddes.
 
-## TODO-er og konfigurasjonsrester
+Etter femte checkpoint rapporterer `npm audit` 10 transitive funn. `fast-uri`, `hono` og `js-yaml`
+kommer via `shadcn`; `nanoid` kommer via lint-/buildverktøykjeden. Audit kjøres på nytt etter at
+`shadcn` og resten av den overflødige pakkegrafen er fjernet.
 
-Det finnes én faktisk TODO i aktiv arbeidskopi: React-regelunntaket i `eslint.config.js` for
-`react-hooks/refs` og `react-hooks/set-state-in-effect`. Det fjernes med React-lintoppsettet; det
-skal ikke flyttes til Svelte-konfigurasjonen.
+## Fjernede TODO-er og konfigurasjonsrester
 
-Andre React-rester som må fjernes i samme oppryddingsrekkefølge er:
+React-regelunntaket i `eslint.config.js` for `react-hooks/refs` og
+`react-hooks/set-state-in-effect` er fjernet med React-lintoppsettet og er ikke flyttet til
+Svelte-konfigurasjonen.
+
+Følgende React-rester er også fjernet:
 
 - `tsconfig.react.json` og `typecheck:react`
 - React-plugins og React-regler i `eslint.config.js`
 - `components.json` og shadcn-kommentaren i `.prettierignore`
 - React-roten `index.html`
-- legacy designselektorer og kommentarer i `feature-compositions.css`, `patterns.css` og
-  `tokens.css` først etter at Svelte-render og skjermbilder er fryst
+
+Legacy designselektorer og kommentarer i `feature-compositions.css`, `patterns.css` og
+`tokens.css` er bevisst beholdt til neste separate CSS-/driftscheckpoint.
 
 ## Atomisk checkpointrekkefølge
 
@@ -233,10 +241,10 @@ Andre React-rester som må fjernes i samme oppryddingsrekkefølge er:
 3. **WP-7 produksjonsbevis — fullført.** Direkte lasting/refresh for public, protected, admin og
    callback er grønn under root og `/banebooking`. Hostfallback, base path, bundlebudsjetter,
    lazy chunks, fryste viewporter, roller og temaer er dokumentert før referansen fjernes.
-4. **WP-7 React-fjerning.** Slett React-roten, de 295 React-eksklusive filene, de 34 foreldreløse
-   legacyfilene og alle aktive broer i én commit. Behold de 46 delte autoritative filene. Fjern
-   samtidig Axios/React Query/Radix/React-avhengigheter, React-typecheck og React-lintplugins; kjør
-   `npm install` for en konsistent lockfil.
+4. **WP-7 React-fjerning — fullført.** React-roten, de 295 React-eksklusive filene, de 34
+   foreldreløse legacyfilene, fem legacytestfiler og alle aktive broer er fjernet. De 46 delte
+   autoritative filene er bevart. Axios/React Query/Radix/React-avhengigheter, React-typecheck og
+   React-lintplugins er fjernet, og lockfilen er synkronisert.
 5. **WP-7 CSS- og driftsopprydding.** Fjern beviselig ubrukte legacyselektorer og
    `shadcn/tailwind.css`, deretter `shadcn` og resterende ubrukte pakker. Oppdater utviklings- og
    driftsinstruksjoner og kjør endelig kvalitetsport.
@@ -244,3 +252,4 @@ Andre React-rester som må fjernes i samme oppryddingsrekkefølge er:
 Hvert checkpoint skal kjøre `npm test`, `npm run check`, Cloudflare Pages-build,
 GitHub Pages-build og `git diff --check`. Fra React-fjerningscheckpointet skal en maskinell kontroll
 i tillegg avvise React-kilde, React-runtime, Axios, React Query, Radix og midlertidige broer.
+`scripts/check-legacy-frontend-removal.mjs` eier denne permanente kontrollen fra femte checkpoint.

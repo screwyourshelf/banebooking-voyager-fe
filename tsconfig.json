@@ -5,30 +5,11 @@
     "checkJs": true,
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
-    "jsx": "react-jsx",
     "moduleResolution": "bundler",
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true
-  },
-  "exclude": [
-    "src/App.tsx",
-    "src/main.tsx",
-    "src/api/**",
-    "src/app/**",
-    "src/auth/**",
-    "src/components/**",
-    "src/contexts/**",
-    "src/features/**",
-    "src/hooks/**",
-    "src/lib/utils.ts",
-    "src/providers/**",
-    "src/routes/*.ts",
-    "src/routes/*.tsx",
-    "src/supabase.ts",
-    "src/types/**",
-    "src/utils/**"
-  ]
+  }
 }
