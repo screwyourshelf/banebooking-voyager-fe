@@ -1,7 +1,7 @@
-import { expect, test as base, type APIRequestContext } from "@playwright/test";
+import { expect, test as base, type APIRequestContext, type Page } from "@playwright/test";
 import { E2E_BACKEND_ORIGIN, E2E_TENANT_SLUG } from "./environment";
 
-type DevelopmentProfile = "admin" | "medlem" | "utvidet";
+export type DevelopmentProfile = "admin" | "medlem" | "utvidet";
 
 type DevelopmentLoginResponse = {
   accessToken: string;
@@ -43,7 +43,14 @@ type ClubCleanup = {
 
 export type E2EHarness = {
   preserveClubSettings(): Promise<ClubResponse>;
+  signIn(page: Page, profile: DevelopmentProfile): Promise<void>;
   tenantPath(path?: string): string;
+};
+
+const developmentProfileLabels: Record<DevelopmentProfile, string> = {
+  admin: "Klubbadministrator",
+  medlem: "Medlem",
+  utvidet: "Utvidet bruker",
 };
 
 export const test = base.extend<{ e2e: E2EHarness }>({
@@ -94,9 +101,16 @@ export const test = base.extend<{ e2e: E2EHarness }>({
         cleanupState.club = { original, restoreToken };
         return original;
       },
+      async signIn(page, profile) {
+        await page.goto(buildTenantPath("login"));
+        await page.getByText("Testinnlogging").click();
+        await page
+          .getByRole("button", { name: developmentProfileLabels[profile], exact: true })
+          .click();
+        await expect(page.getByRole("heading", { level: 1, name: "Book bane" })).toBeVisible();
+      },
       tenantPath(path = "") {
-        const suffix = path.replace(/^\/+|\/+$/g, "");
-        return `./${E2E_TENANT_SLUG}${suffix ? `/${suffix}` : ""}`;
+        return buildTenantPath(path);
       },
     });
 
@@ -164,4 +178,9 @@ function toClubUpdateRequest(club: ClubResponse): ClubUpdateRequest {
     feedUrl: club.feedUrl,
     feedSynligAntallDager: club.feedSynligAntallDager,
   };
+}
+
+function buildTenantPath(path = "") {
+  const suffix = path.replace(/^\/+|\/+$/g, "");
+  return `./${E2E_TENANT_SLUG}${suffix ? `/${suffix}` : ""}`;
 }

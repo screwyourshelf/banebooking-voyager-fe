@@ -1,4 +1,5 @@
 import adapter from "@sveltejs/adapter-static";
+import { isAbsolute } from "node:path";
 import { loadEnv } from "vite";
 
 const mode = process.env.NODE_ENV === "production" ? "production" : "development";
@@ -23,14 +24,31 @@ function resolveStaticHost() {
   return "cloudflare-pages";
 }
 
+function resolveStaticOutputDirectory() {
+  const configured = env.BANEBOOKING_STATIC_OUTPUT_DIR?.trim();
+  if (!configured) return "dist";
+  const segments = configured.split(/[\\/]/);
+  if (
+    isAbsolute(configured) ||
+    /^[a-z]:[\\/]/i.test(configured) ||
+    segments.some((segment) => !segment || segment === "." || segment === "..")
+  ) {
+    throw new Error(
+      "BANEBOOKING_STATIC_OUTPUT_DIR må være en normalisert, relativ undermappe i frontend-repoet."
+    );
+  }
+  return configured;
+}
+
 const staticHost = resolveStaticHost();
+const staticOutputDirectory = resolveStaticOutputDirectory();
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
   kit: {
     adapter: adapter({
-      pages: "dist",
-      assets: "dist",
+      pages: staticOutputDirectory,
+      assets: staticOutputDirectory,
       fallback: staticHost === "github-pages" ? "404.html" : "index.html",
       precompress: false,
       strict: true,

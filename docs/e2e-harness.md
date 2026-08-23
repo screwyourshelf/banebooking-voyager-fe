@@ -36,3 +36,21 @@ Kjør porten med:
 ```bash
 npm run test:e2e
 ```
+
+Denne porten inkluderer tre kritiske mutasjonsflyter og fire fryste visuelle referanser. De
+visuelle testene bruker stabile, test-eide klubb-/brukersvar og den samme authharnessen, men utfører
+ingen mutasjoner.
+
+## Produksjonsartefakter og routes
+
+Den separate produksjonsporten bygger både root path og `/banebooking` til ignorerte,
+isolerte mapper, verifiserer base path, fallbackmarkører, gzipbudsjetter og lazy chunks, og kjører
+direkte load/refresh for public, protected, admin og callback:
+
+```bash
+npm run test:e2e:production
+```
+
+Produksjonsporten bruker deterministiske nettverkssvar og trenger ikke backend eller database.
+Detaljert route-, viewport- og bundlebevis finnes i
+[`wp-7-production-evidence.md`](./wp-7-production-evidence.md).

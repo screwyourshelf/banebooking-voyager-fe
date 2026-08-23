@@ -1,9 +1,10 @@
 # WP-7 paritets- og oppryddingsinventar
 
-> **Status:** Tredje WP-7-checkpoint fullført
+> **Status:** Fjerde WP-7-checkpoint fullført
 >
 > **Inventargrunnlag:** `feature/sveltekit-lift-and-shift` ved `4520f65`; runtimefeltene er
-> oppdatert i andre checkpoint og E2E-feltene i tredje checkpoint
+> oppdatert i andre checkpoint, E2E-feltene i tredje checkpoint og produksjonsbeviset i fjerde
+> checkpoint
 >
 > **Dato:** 2026-08-23
 
@@ -71,8 +72,9 @@ Kontraktene er uttrykt i samlokaliserte modell-, API-, Query- og komponenttester
 | Kunngjøringsadministrasjon | ingen/aktiv, loading/retry, riktekst, dato, validering, pending, suksess og deaktivering                               | Dekket   |
 | Statistikk                 | førstegangsloading, tidligere data under refresh, filtre, tomt datagrunnlag, retry og full visning                     | Dekket   |
 
-Dette er komponent-, kontrakt- og tidligere nettleserbevis. Automatiserte ende-til-ende-flyter er
-fortsatt en egen WP-7-leveranse og kan ikke utledes av denne tabellen.
+Dette er komponent-, kontrakt- og tidligere nettleserbevis. De kritiske automatiserte flytene og
+den produksjonslike routematrisen er nå frosset som egne bevis i
+[`wp-7-production-evidence.md`](./wp-7-production-evidence.md).
 
 ## Runtimegap avdekket i inventaret
 
@@ -228,9 +230,9 @@ Andre React-rester som må fjernes i samme oppryddingsrekkefølge er:
 2. **WP-7 kritiske E2E-flyter — fullført.** En reproduserbar authharness og Playwright dekker login,
    booking, avbestilling og klubbadminendring med test-eid opprydding, base path og uendret
    produksjonsauth. Backendkode er urørt.
-3. **WP-7 produksjonsbevis.** Kjør direkte lasting/refresh på alle routeklasser under root og
-   `/banebooking`, kontroller callback, bundle, lazy chunks og avtalte viewporter/roller/temaer.
-   Frys beviset før referansen fjernes.
+3. **WP-7 produksjonsbevis — fullført.** Direkte lasting/refresh for public, protected, admin og
+   callback er grønn under root og `/banebooking`. Hostfallback, base path, bundlebudsjetter,
+   lazy chunks, fryste viewporter, roller og temaer er dokumentert før referansen fjernes.
 4. **WP-7 React-fjerning.** Slett React-roten, de 295 React-eksklusive filene, de 34 foreldreløse
    legacyfilene og alle aktive broer i én commit. Behold de 46 delte autoritative filene. Fjern
    samtidig Axios/React Query/Radix/React-avhengigheter, React-typecheck og React-lintplugins; kjør

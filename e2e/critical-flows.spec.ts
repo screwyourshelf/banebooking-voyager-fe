@@ -1,4 +1,3 @@
-import type { Page } from "@playwright/test";
 import { expect, test } from "./harness";
 
 test("development login preserves tenant and base path", async ({ page, e2e }) => {
@@ -13,7 +12,7 @@ test("development login preserves tenant and base path", async ({ page, e2e }) =
 });
 
 test("member books and cancels the same slot", async ({ page, e2e }) => {
-  await signIn(page, e2e.tenantPath("login"), "Medlem");
+  await e2e.signIn(page, "medlem");
   const tomorrowSlots = page.waitForResponse(
     (response) => response.url().includes("/kalender?") && response.ok()
   );
@@ -48,7 +47,7 @@ test("member books and cancels the same slot", async ({ page, e2e }) => {
 test("administrator changes and restores the club name", async ({ page, e2e }) => {
   const originalClub = await e2e.preserveClubSettings();
   const temporaryName = `${originalClub.navn} E2E`;
-  await signIn(page, e2e.tenantPath("login"), "Klubbadministrator");
+  await e2e.signIn(page, "admin");
   await page.goto(e2e.tenantPath("admin/klubb"));
 
   const clubName = page.getByLabel("Klubbnavn");
@@ -63,10 +62,3 @@ test("administrator changes and restores the club name", async ({ page, e2e }) =
   await expect(page.getByText("Klubbinnstillingene er lagret")).toBeVisible();
   await expect(clubName).toHaveValue(originalClub.navn);
 });
-
-async function signIn(page: Page, loginPath: string, profile: string) {
-  await page.goto(loginPath);
-  await page.getByText("Testinnlogging").click();
-  await page.getByRole("button", { name: profile, exact: true }).click();
-  await expect(page.getByRole("heading", { level: 1, name: "Book bane" })).toBeVisible();
-}

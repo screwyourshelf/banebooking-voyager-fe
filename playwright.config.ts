@@ -9,6 +9,7 @@ import {
 
 export default defineConfig({
   testDir: "./e2e",
+  testIgnore: "production-routes.spec.ts",
   fullyParallel: false,
   workers: 1,
   timeout: 60_000,

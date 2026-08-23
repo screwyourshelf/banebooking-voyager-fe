@@ -4,7 +4,7 @@
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** WP-7 — Samlet paritet og produksjonsbytte (pågår; kritisk E2E fullført)
+> **Aktiv arbeidspakke:** WP-7 — Samlet paritet og produksjonsbytte (pågår; produksjonsbevis fullført)
 >
 > **Sist oppdatert:** 2026-08-23
 
@@ -467,6 +467,17 @@ midlertidige broer først når det autoritative SvelteKit-produktet har overtatt
 - `docs/e2e-harness.md` dokumenterer databaseforutsetning, eide backend-/frontendprosesser,
   authgrensen, testdata og opprydding. E2E-porten, full maskinport og begge hostingbuildene er
   grønne; backend-repoet er fortsatt urørt.
+- Fjerde WP-7-checkpoint har etablert en produksjonslik Playwright-matrise over bygde Cloudflare
+  Pages- og GitHub Pages-artefakter. Public, protected, admin og prerenderet callback lastes direkte
+  og refreshes under både root path og `/banebooking`; hostfallback og anonym guard verifiseres
+  eksplisitt i åtte tester.
+- Fire visuelle referanser fryser anonym login, offentlige vilkår, medlemskonto og
+  klubbadministrasjon på 390×844 og 1440×1000 i lyst/mørkt tema. En separat nettleserkontroll
+  bekrefter landmark, heading, tema, bredde og tom warn/error-konsoll.
+- Bundleporten validerer base path, hostingmarkører, fravær av React-runtime, initial JS/CSS,
+  største lazy chunk og at Sentry, Supabase og ProseMirror ikke preloades. Mål og avvik er
+  dokumentert i `docs/wp-7-production-evidence.md`; ingen ekstern deploy eller backendendring er
+  utført.
 
 ## Nåtilstand
 
@@ -495,21 +506,22 @@ midlertidige broer først når det autoritative SvelteKit-produktet har overtatt
   autoritative SvelteKit-flater.
 - WP-6 er fullført. Alle elleve featurecheckpoints er migrert til offentlige Svelte-featureinnganger
   og tynne routes uten gjenværende routeplaceholdere eller backendendringer.
-- WP-7 pågår. Route-/featureparitet, oppryddingsomfang, runtimeparitet og kritiske automatiserte
-  E2E-flyter er bevist. Produksjonsbevis og React-fjerning gjenstår i avtalte checkpoints.
+- WP-7 pågår. Route-/featureparitet, oppryddingsomfang, runtimeparitet, kritiske automatiserte
+  E2E-flyter og produksjonsbevis er bevist. React-fjerning og separat CSS-/driftsopprydding gjenstår
+  i avtalte checkpoints.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                                   |
-| ------------------------------------- | ---------------------------------------------------- |
-| Base branch                           | `main`                                               |
-| Fastslått basecommit                  | `5287c5e`                                            |
-| Siste semantiske checkpoint           | `test(sveltekit): establish WP-7 critical E2E flows` |
-| Lokale commits foran base             | 36                                                   |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                        |
-| Neste planlagte checkpoint            | WP-7 produksjonsbevis                                |
+| Felt                                  | Forventet tilstand                                    |
+| ------------------------------------- | ----------------------------------------------------- |
+| Base branch                           | `main`                                                |
+| Fastslått basecommit                  | `5287c5e`                                             |
+| Siste semantiske checkpoint           | `test(sveltekit): establish WP-7 production evidence` |
+| Lokale commits foran base             | 37                                                    |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                         |
+| Neste planlagte checkpoint            | WP-7 React-fjerning                                   |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -518,29 +530,30 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Neste `/start` skal bare gjennomføre fjerde avgrensede WP-7-checkpoint for produksjonsbevis:
+Neste `/start` skal bare gjennomføre femte avgrensede WP-7-checkpoint for React-fjerning:
 
-1. Etabler en produksjonslik Playwright-matrise som beviser direkte lasting og refresh for offentlige,
-   beskyttede, admin- og callback-routeklasser under både root path og `/banebooking`. Gjenbruk den
-   eksplisitte authharnessen; ikke utvid produksjonsauth eller backend.
-2. Frys avtalte skjermbilder for sentrale viewporter, roller og temaer, og kontroller bundle,
-   preload, lazy chunks og hostfallbacker mot de bygde artefaktene. Registrer målbare avvik før
-   React-referansen fjernes.
-3. Kjør E2E-porten, full maskinport og begge hostingbuildene og opprett ett lokalt checkpoint-commit.
-   Ikke start ekstern deploy uten eksplisitt godkjenning, og ikke fjern React i samme sesjon.
+1. Slett React-roten, de 295 React-eksklusive filene, de 34 foreldreløse legacyfilene og alle aktive
+   kompatibilitetsbroer som er navngitt i `docs/wp-7-parity-and-cleanup-inventory.md`. Behold de 46
+   delte autoritative contract-, domain-, platform- og CSS-filene.
+2. Fjern React-, Axios-, React Query- og Radix-avhengigheter, React-typecheck, React-lintplugins og
+   tilhørende rotkonfigurasjon. Kjør `npm install` slik at lockfilen samsvarer, og etabler den
+   maskinelle kontrollen som avviser gjenværende React-runtime, Axios, React Query, Radix og broer.
+3. Kjør E2E-portene, full maskinport og begge hostingbuildene og opprett ett lokalt
+   checkpoint-commit. Ikke gjør legacy CSS-/shadcn-oppryddingen eller ekstern deploy i samme sesjon,
+   og ikke endre backend.
 
 ## Arbeidspakkeregister
 
-| Arbeidspakke                     | Status   | Port/resultat                                                   |
-| -------------------------------- | -------- | --------------------------------------------------------------- |
-| WP-0 Styring og baseline         | Fullført | Dokumentgrunnlag, React-baseline og komplett adferdsinventar    |
-| WP-1 Build og routes             | Fullført | Build, routes, hostingvarianter og arkitekturkontroll grønn     |
-| WP-2 Contracts/domain/platform   | Fullført | Contracts, ren domain, fetch/API, 401 og adapters grønne        |
-| WP-3 Auth/tenant/serverdata      | Fullført | Auth, tenant, Query, guards, 401 og base path grønne            |
-| WP-4 UI-fundament                | Fullført | Alle kartlagte UI-familier og filterkomposisjon er grønne       |
-| WP-5 App-shell                   | Fullført | Shell, navigation, routeaktivitet, konto og Mer grønne          |
-| WP-6 Featuremigrering            | Fullført | Elleve checkpoints og alle Svelte-featureflater er grønne       |
-| WP-7 Paritet og produksjonsbytte | Pågår    | Inventar, runtime og kritisk E2E grønne; produksjonsbevis neste |
+| Arbeidspakke                     | Status   | Port/resultat                                                  |
+| -------------------------------- | -------- | -------------------------------------------------------------- |
+| WP-0 Styring og baseline         | Fullført | Dokumentgrunnlag, React-baseline og komplett adferdsinventar   |
+| WP-1 Build og routes             | Fullført | Build, routes, hostingvarianter og arkitekturkontroll grønn    |
+| WP-2 Contracts/domain/platform   | Fullført | Contracts, ren domain, fetch/API, 401 og adapters grønne       |
+| WP-3 Auth/tenant/serverdata      | Fullført | Auth, tenant, Query, guards, 401 og base path grønne           |
+| WP-4 UI-fundament                | Fullført | Alle kartlagte UI-familier og filterkomposisjon er grønne      |
+| WP-5 App-shell                   | Fullført | Shell, navigation, routeaktivitet, konto og Mer grønne         |
+| WP-6 Featuremigrering            | Fullført | Elleve checkpoints og alle Svelte-featureflater er grønne      |
+| WP-7 Paritet og produksjonsbytte | Pågår    | Inventar, runtime, E2E og produksjonsbevis grønne; React neste |
 
 ## Featureregister
 
@@ -559,8 +572,8 @@ Neste `/start` skal bare gjennomføre fjerde avgrensede WP-7-checkpoint for prod
 
 ## Åpne blokkeringer
 
-Ingen kjente bruker- eller backendblokkeringer for lokalt produksjonsbevis. En faktisk ekstern
-deploy krever eksplisitt godkjenning og er ikke implisitt autorisert av neste checkpoint.
+Ingen kjente bruker- eller backendblokkeringer for React-fjerningen. En faktisk ekstern deploy
+krever eksplisitt godkjenning og er ikke implisitt autorisert av neste checkpoint.
 
 ## Midlertidig kode og kjente avvik
 
@@ -580,7 +593,11 @@ deploy krever eksplisitt godkjenning og er ikke implisitt autorisert av neste ch
 - Playwright-harnessen omskriver bare testkontekstens API-header til `DevelopmentBearer`; vanlig
   dev-, preview- og produksjonstrafikk bruker fortsatt den autoritative `Bearer`-kontrakten.
 - `src/index.css` importerer fortsatt `shadcn/tailwind.css`, og delte CSS-filer inneholder legacy
-  React-selektorer. Visuell referanse fryses før selector- og pakkeoppryddingen.
+  React-selektorer. Den visuelle referansen er nå fryst; selector- og shadcn-oppryddingen skjer
+  likevel først i det separate CSS-/driftscheckpointet etter React-fjerningen.
+- Produksjonsbevisets initial CSS er 45,8 KiB gzip av et 50 KiB-budsjett, og største lazy JS-chunk
+  er 120,5 KiB av 130 KiB. Begge er grønne med liten headroom og følges opp som eksplisitte mål i
+  CSS-/driftsoppryddingen.
 
 ## Siste verifikasjon
 
@@ -599,6 +616,9 @@ deploy krever eksplisitt godkjenning og er ikke implisitt autorisert av neste ch
 | WP-7 paritets-/oppryddingsinventar   | Komplett 2026-08-23: 18 routes, states, importgraf, deps og fjerningsrekkefølge    |
 | WP-7 runtimeparitetstester           | Bestått 2026-08-23: 5 filer, 13 tester                                             |
 | WP-7 kritiske E2E-flyter             | Bestått 2026-08-23: 3 Playwright-flyter, base path og deterministisk opprydding    |
+| WP-7 visuelle referanser             | Bestått 2026-08-23: 4 snapshots over roller, viewporter og lyst/mørkt tema         |
+| WP-7 produksjonsroutematrise         | Bestått 2026-08-23: 4 routeklasser × root/base, direkte load, refresh og fallback  |
+| WP-7 produksjonsbundle               | Bestått 2026-08-23: 37,6–37,7 KiB JS, 45,8 KiB CSS, 120,5 KiB største lazy chunk   |
 | WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                |
 | WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon         |
 | WP-4 pattern-/a11y-tester            | Bestått 2026-08-22: 1 fil, 6 tester for semantikk, states, retry og axe            |
@@ -633,13 +653,13 @@ deploy krever eksplisitt godkjenning og er ikke implisitt autorisert av neste ch
 
 ## Filer i siste checkpoint
 
-- Playwright-konfigurasjon med eksplisitt backend-/frontendprosess, `/banebooking`-base path og
-  Chromium-prosjekt i `playwright.config.ts`
-- test-eid authrewrite, booking-ID-sporing og klubbprofilgjenoppretting i `e2e/harness.ts`
-- kritiske login-, booking-, avbestillings- og klubbadminflyter i `e2e/critical-flows.spec.ts`
-- kjøre-, auth-, prosess- og testdatakontrakt i `docs/e2e-harness.md`
-- Playwright-avhengighet, scripts, ignorerte artefakter og oppdatert WP-7-status i pakke-, doc- og
-  statusfiler
+- isolerte produksjonsbuilds, statisk testhost, bundleverifikasjon og root-/base-path-konfigurasjon
+  i `scripts/`, `e2e/`, `svelte.config.js`, `package.json` og `playwright.production.config.ts`
+- produksjonslik load-/refreshmatrise i `e2e/production-routes.spec.ts`
+- sentral innlogging og fire visuelle snapshots i `e2e/harness.ts`,
+  `e2e/critical-flows.spec.ts`, `e2e/visual-regressions.spec.ts` og snapshotmappen
+- målt route-, hosting-, viewport- og bundlebevis i `docs/wp-7-production-evidence.md`, med oppdatert
+  E2E-kontrakt, WP-7-inventar og migreringsstatus
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
 pågående arbeid etter checkpointet.

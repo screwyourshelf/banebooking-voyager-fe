@@ -8,6 +8,7 @@
 | [`migration-plan.md`](./migration-plan.md)                                       | Arbeidsrekkefølge, metode og kvalitetsporter |
 | [`behavior-inventory.md`](./behavior-inventory.md)                               | Observerbar React-baseline og routekontrakt  |
 | [`wp-7-parity-and-cleanup-inventory.md`](./wp-7-parity-and-cleanup-inventory.md) | Bevist paritet og fjerningskart for WP-7     |
+| [`wp-7-production-evidence.md`](./wp-7-production-evidence.md)                   | Route-, skjermbilde- og bundlebevis for WP-7 |
 | [`e2e-harness.md`](./e2e-harness.md)                                             | Lokal Playwright-auth, prosesser og testdata |
 | [`sveltekit-architecture.md`](./sveltekit-architecture.md)                       | Målarkitektur for SvelteKit-migreringen      |
 | [`product-design-rules.md`](./product-design-rules.md)                           | Produktets visuelle og semantiske UI-regler  |
