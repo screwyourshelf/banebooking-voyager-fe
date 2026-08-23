@@ -1,4 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { createBrowserStorageErrorReporter } from "$lib/platform/app/browser-startup.client";
+import type { Observability } from "$lib/platform/observability";
 import {
   fjernFraLokalLagring,
   lesLokalLagring,
@@ -102,6 +104,29 @@ describe("browserStorage", () => {
     });
     expect(JSON.stringify(reporter.mock.calls)).not.toContain("supabase_token");
     expect(JSON.stringify(reporter.mock.calls)).not.toContain("hemmelig-token");
+  });
+
+  it("kobler lagringsfeil til observability uten nøkkel, verdi eller feilmelding", () => {
+    const captureMessage = vi.fn();
+    const observability: Observability = {
+      captureException: vi.fn(),
+      captureMessage,
+    };
+    const reportStorageError = createBrowserStorageErrorReporter(observability);
+
+    reportStorageError({
+      lagringstype: "localStorage",
+      operasjon: "les",
+      feil: new DOMException("token=hemmelig", "SecurityError"),
+    });
+
+    expect(captureMessage).toHaveBeenCalledWith("Browser storage is unavailable", {
+      errorName: "SecurityError",
+      operation: "les",
+      storageType: "localStorage",
+    });
+    expect(JSON.stringify(captureMessage.mock.calls)).not.toContain("supabase-token");
+    expect(JSON.stringify(captureMessage.mock.calls)).not.toContain("hemmelig");
   });
 
   it("kontrollerer både skrive- og slettetilgang før innlogging", () => {

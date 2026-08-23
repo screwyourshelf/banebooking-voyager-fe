@@ -102,8 +102,13 @@
         resolveApiClient(runtime.api);
         await runtime.initialize();
       })
-      .catch(() => {
+      .catch((error) => {
         if (!alive) return;
+        void import("./browser-startup.client").then(({ getBrowserObservability }) => {
+          getBrowserObservability().captureException(error, {
+            source: "app-runtime.initialize",
+          });
+        });
         authState = { status: "anonymous", user: null };
         resolveController(null);
         resolveApiClient(null);

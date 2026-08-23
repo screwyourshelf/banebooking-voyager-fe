@@ -4,7 +4,7 @@
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** WP-7 — Samlet paritet og produksjonsbytte (pågår; inventar fullført)
+> **Aktiv arbeidspakke:** WP-7 — Samlet paritet og produksjonsbytte (pågår; runtimeparitet fullført)
 >
 > **Sist oppdatert:** 2026-08-23
 
@@ -446,6 +446,17 @@ midlertidige broer først når det autoritative SvelteKit-produktet har overtatt
   ikke observability/Sentry eller storagefeilrapportering, og deploy-recoveryen for utdaterte
   oppstartsfiler finnes bare i Reacts `index.html`. Lokal innlogget E2E mangler i tillegg en
   reproduserbar authharness over det eksisterende utviklingsschemet.
+- Andre WP-7-checkpoint har lukket begge runtimegapene. En browser-only `@sentry/browser`-adapter
+  initialiseres fra SvelteKits klienthook bare i produksjon med konfigurert DSN; disabled/no-DSN
+  forblir no-op og Sentry-chunken er en ikke-preloadet dynamisk inngang.
+- SvelteKits `handleError`, app-runtimeinitialisering og storagefeil rapporteres gjennom samme
+  platformgrense. Brukerdata, cookies, headere, HTTP-bodyer, URL-query, stackvariabler og sensitiv
+  nested kontekst er slått av eller filtrert før sending; storagehendelsen inneholder ikke nøkkel,
+  verdi eller feilmelding.
+- Den aktive `src/app.html` eier nå den dokumenterte `vite:preloadError`-recoveryen før
+  applikasjonsmodulene lastes: ett automatisk forsøk oppfrisker HTML og alle oppstartsassets, en
+  cooldown stanser løkker, og fastlåst oppstart tilbyr eksplisitt nullstilling. Svelte-layouten
+  fjerner bootflaten når appen har overtatt.
 
 ## Nåtilstand
 
@@ -474,21 +485,22 @@ midlertidige broer først når det autoritative SvelteKit-produktet har overtatt
   autoritative SvelteKit-flater.
 - WP-6 er fullført. Alle elleve featurecheckpoints er migrert til offentlige Svelte-featureinnganger
   og tynne routes uten gjenværende routeplaceholdere eller backendendringer.
-- WP-7 pågår. Route-/featurepariteten og oppryddingsomfanget er bevist og dokumentert; runtimegap,
-  automatiserte E2E-flyter, produksjonsbevis og React-fjerning gjenstår i avtalte checkpoints.
+- WP-7 pågår. Route-/featurepariteten og oppryddingsomfanget er bevist, og runtimepariteten for
+  observability, storagefeil og asset-recovery er fullført. Automatiserte E2E-flyter,
+  produksjonsbevis og React-fjerning gjenstår i avtalte checkpoints.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                            |
-| ------------------------------------- | --------------------------------------------- |
-| Base branch                           | `main`                                        |
-| Fastslått basecommit                  | `5287c5e`                                     |
-| Siste semantiske checkpoint           | `docs(sveltekit): inventory WP-7 parity`      |
-| Lokale commits foran base             | 34                                            |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                 |
-| Neste planlagte checkpoint            | WP-7 runtimeparitet for observability og boot |
+| Felt                                  | Forventet tilstand                               |
+| ------------------------------------- | ------------------------------------------------ |
+| Base branch                           | `main`                                           |
+| Fastslått basecommit                  | `5287c5e`                                        |
+| Siste semantiske checkpoint           | `feat(sveltekit): establish WP-7 runtime parity` |
+| Lokale commits foran base             | 35                                               |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                    |
+| Neste planlagte checkpoint            | WP-7 kritiske E2E-flyter                         |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -497,18 +509,18 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Neste `/start` skal bare gjennomføre andre avgrensede WP-7-checkpoint for runtimeparitet:
+Neste `/start` skal bare gjennomføre tredje avgrensede WP-7-checkpoint for kritiske E2E-flyter:
 
-1. Etabler en browser-only Sentry-adapter bak `lib/platform/observability`, initialiser den fra
-   `lib/platform/app` med validert offentlig config og koble storagefeilreporteren uten å sende
-   tokens, sessiondata eller sensitiv responskontekst. Featurekode skal ikke importere Sentry.
-2. Kaldkartlegg React-HTML-ens `vite:preloadError`- og resetforløp mot SvelteKit-builden. Flytt den
-   nødvendige atferden til en smal SvelteKit-eid oppstartsgrense, eller dokumenter med testbart
-   hostingbevis hvorfor den kan pensjoneres; ikke behold to aktive implementasjoner.
-3. Legg kontraktstester rundt initialisering, disabled/no-DSN, kontekstfiltrering, storagefeil og
-   valgt asset-recoveryatferd. Kjør full maskinport og begge hostingbuildene og opprett ett lokalt
-   checkpoint-commit. Ikke fjern øvrig React-kilde, etabler Playwright eller start ekstern deploy i
-   samme sesjon.
+1. Etabler en reproduserbar, frontend-/testeid authharness som lar Playwright bruke eksisterende
+   utviklingsprofiler mot den isolerte utviklingsbackenden uten å endre produksjonens `Bearer`-
+   kontrakt eller backendkode. Den tidligere ad hoc header-rewrite-proxyen skal ikke være skjult
+   forutsetning.
+2. Etabler Playwright og automatiser login, booking, avbestilling og én representativ adminendring
+   med deterministisk opprydding. Bevar tenant/base-path-kontrakten og dokumenter eksakt hvilke
+   testdata og prosesser harnessen eier.
+3. Kjør E2E-porten, full maskinport og begge hostingbuildene og opprett ett lokalt
+   checkpoint-commit. Ikke start ekstern deploy, produksjonsbevis eller React-fjerning i samme
+   sesjon.
 
 ## Arbeidspakkeregister
 
@@ -521,7 +533,7 @@ Neste `/start` skal bare gjennomføre andre avgrensede WP-7-checkpoint for runti
 | WP-4 UI-fundament                | Fullført | Alle kartlagte UI-familier og filterkomposisjon er grønne    |
 | WP-5 App-shell                   | Fullført | Shell, navigation, routeaktivitet, konto og Mer grønne       |
 | WP-6 Featuremigrering            | Fullført | Elleve checkpoints og alle Svelte-featureflater er grønne    |
-| WP-7 Paritet og produksjonsbytte | Pågår    | 18 routes og featurestates avstemt; fjerningskart grønt      |
+| WP-7 Paritet og produksjonsbytte | Pågår    | Inventar og runtimeparitet grønne; E2E er neste checkpoint   |
 
 ## Featureregister
 
@@ -540,9 +552,9 @@ Neste `/start` skal bare gjennomføre andre avgrensede WP-7-checkpoint for runti
 
 ## Åpne blokkeringer
 
-Ingen kjente bruker- eller backendblokkeringer for runtimecheckpointet. Valg av aktuell
-Sentry-browserintegrasjon skal verifiseres mot offisiell dokumentasjon før implementasjon, men
-endrer ikke ADR-en: bare platformlaget kan eie integrasjonen.
+Ingen kjente bruker- eller backendblokkeringer for neste E2E-checkpoint. Authschemeforskjellen er
+en navngitt teknisk harnessoppgave; den skal løses i frontend-/testlaget og gir ikke godkjenning til
+å endre backend eller produksjonsauth.
 
 ## Midlertidig kode og kjente avvik
 
@@ -556,9 +568,9 @@ endrer ikke ADR-en: bare platformlaget kan eie integrasjonen.
   `src/features/statistikk/types.ts` har bare React-konsumenter og fjernes med dem.
 - 34 foreldreløse legacyfiler og alle pakkegrupper er eksakt listet i fjerningskartet. De er ikke
   slettet i inventarcheckpointet.
-- Observabilityadapteren er testet, men Sentry og storagefeil er ikke koblet til Svelte-runtime.
-  Reacts oppstartsasset-recovery finnes bare i rotens inaktive `index.html`. Begge er åpne
-  runtimegap med navngitt eier.
+- Rotens `index.html` har fortsatt React-referansens inaktive recoverykode. Den aktive og testede
+  implementasjonen eies nå av `src/app.html`; React-kopien kjører ikke og fjernes atomisk sammen
+  med React-roten etter E2E- og produksjonsbevis.
 - Lokal innlogget E2E trenger fortsatt en reproduserbar authharness fordi klientens standard
   `Bearer` og den isolerte utviklingsbackendens `DevelopmentBearer` ikke er samme scheme. Tidligere
   nettleser-QA brukte en midlertidig lokal rewrite-proxy; ingen kontrakt er endret.
@@ -572,14 +584,15 @@ endrer ikke ADR-en: bare platformlaget kan eie integrasjonen.
 | Prettier på aktiv kode og dokumenter | Bestått 2026-08-23                                                                 |
 | Relative dokumentlenker              | Bestått 2026-08-23                                                                 |
 | `git diff --check`                   | Bestått 2026-08-23                                                                 |
-| `npm test`                           | Bestått 2026-08-23: 87 filer, 321 tester                                           |
+| `npm test`                           | Bestått 2026-08-23: 91 filer, 334 tester                                           |
 | `npm run check`                      | Bestått 2026-08-23: Svelte/React-typecheck, arkitektur, design, lint og format     |
 | Cloudflare Pages-build               | Bestått 2026-08-23: root path og `index.html`-fallback                             |
 | GitHub Pages-build                   | Bestått 2026-08-23: eksplisitt `/banebooking` og `404.html`-fallback               |
 | Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                  |
 | Nettleserrender                      | Bestått 2026-08-23: Statistikk i 4 flater uten overflow eller konsollfeil          |
-| SvelteKit-bundle                     | Verifisert 2026-08-23: ingen React-runtime                                         |
+| SvelteKit-bundle                     | Verifisert 2026-08-23: ingen React; Sentry dynamisk og ikke preloadet              |
 | WP-7 paritets-/oppryddingsinventar   | Komplett 2026-08-23: 18 routes, states, importgraf, deps og fjerningsrekkefølge    |
+| WP-7 runtimeparitetstester           | Bestått 2026-08-23: 5 filer, 13 tester                                             |
 | WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                |
 | WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon         |
 | WP-4 pattern-/a11y-tester            | Bestått 2026-08-22: 1 fil, 6 tester for semantikk, states, retry og axe            |
@@ -614,11 +627,13 @@ endrer ikke ADR-en: bare platformlaget kan eie integrasjonen.
 
 ## Filer i siste checkpoint
 
-- full route-, tilgangs- og featurestateavstemming samt import-, bro-, TODO-, avhengighets- og
-  fjerningskart i `docs/wp-7-parity-and-cleanup-inventory.md`
-- korrigert URL-state i `docs/behavior-inventory.md` og registrert aktivt dokument i
-  `docs/README.md`
-- sann WP-7-nåtilstand, runtimegap, verifikasjon og neste eksakte checkpoint i
+- browser-only, lazy Sentry-adapter og privacykontrakter i `src/lib/platform/observability/`
+- SvelteKit-klienthook, app-startup, storagekobling og initfeilrapportering i `src/hooks.client.ts`
+  og `src/lib/platform/app/`
+- pre-module boot- og asset-recovery med kontraktstester i `src/app.html` og
+  `src/lib/platform/app/asset-recovery.test.ts`
+- eksplisitt `@sentry/browser`-runtimeavhengighet og JSDOM-testtyper i pakke- og lockfil
+- oppdatert runtime-/fjerningskart i `docs/wp-7-parity-and-cleanup-inventory.md` og sann handover i
   `docs/migration-status.md`
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for

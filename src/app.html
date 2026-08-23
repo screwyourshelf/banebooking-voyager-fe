@@ -9,12 +9,257 @@
     />
     <meta name="theme-color" content="#0b3a4a" />
     <meta name="color-scheme" content="dark light" />
+    <style>
+      #boot {
+        position: fixed;
+        z-index: 9999;
+        inset: 0;
+        display: grid;
+        place-items: center;
+        padding: 1.5rem;
+        background: #f2f3ed;
+        color: #173c25;
+        font-family: system-ui, sans-serif;
+        text-align: center;
+      }
+
+      @media (prefers-color-scheme: dark) {
+        #boot {
+          background: #0f1611;
+          color: white;
+        }
+      }
+
+      #boot [data-boot-part="loader"] {
+        width: 36px;
+        height: 36px;
+        border: 3px solid rgb(23 60 37 / 0.18);
+        border-top-color: currentColor;
+        border-radius: 50%;
+        animation: boot-spin 0.8s linear infinite;
+      }
+
+      #boot [data-boot-part="recovery"] {
+        max-width: 28rem;
+      }
+
+      #boot h1 {
+        margin: 0 0 0.75rem;
+        font-size: 1.25rem;
+      }
+
+      #boot p {
+        margin: 0 0 1rem;
+        opacity: 0.78;
+        line-height: 1.5;
+      }
+
+      #boot button {
+        border: 1px solid rgb(23 60 37 / 0.25);
+        border-radius: 0.5rem;
+        padding: 0.65rem 1rem;
+        background: #173c25;
+        color: white;
+        font: inherit;
+        font-weight: 600;
+        cursor: pointer;
+      }
+
+      @keyframes boot-spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+    <script>
+      (() => {
+        const appStartedEvent = "banebooking:app-started";
+        const recoveryStorageKey = "banebooking:asset-recovery-at";
+        const recoveryQueryParameter = "_app_reload";
+        const recoveryCooldownMs = 60_000;
+        const recoveryMessageDelayMs = 30_000;
+        let recoveryStarted = false;
+
+        async function refreshStartupAssets(html, pageUrl) {
+          const parsedDocument = new DOMParser().parseFromString(html, "text/html");
+          const startupAssetPaths = Array.from(
+            parsedDocument.querySelectorAll(
+              'script[type="module"][src], link[rel="modulepreload"][href], link[rel="stylesheet"][href]'
+            )
+          )
+            .map((element) => element.getAttribute("src") ?? element.getAttribute("href"))
+            .filter(Boolean);
+          const startupAssetUrls = [
+            ...new Set(startupAssetPaths.map((path) => new URL(path, pageUrl).toString())),
+          ];
+
+          await Promise.all(
+            startupAssetUrls.map(async (assetUrl) => {
+              const response = await fetch(assetUrl, { cache: "reload" });
+              if (!response.ok) {
+                throw new Error(`Kunne ikke hente en oppstartsfil (${response.status}).`);
+              }
+
+              // Safari må konsumere responsen før den ferske filen er skrevet til HTTP-cachen.
+              await response.arrayBuffer();
+            })
+          );
+        }
+
+        async function resetStoredSiteData() {
+          try {
+            localStorage.clear();
+          } catch {
+            // Recovery må fortsatt fungere når nettleserlagring er blokkert.
+          }
+
+          try {
+            sessionStorage.clear();
+          } catch {
+            // Recovery må fortsatt fungere når nettleserlagring er blokkert.
+          }
+
+          try {
+            if ("caches" in window) {
+              const cacheNames = await window.caches.keys();
+              await Promise.all(cacheNames.map((cacheName) => window.caches.delete(cacheName)));
+            }
+          } catch {
+            // Cache Storage er et ekstra sikkerhetsnett og finnes ikke i alle nettlesere.
+          }
+        }
+
+        async function reloadLatestVersion(button, resetSiteData = false) {
+          const url = new URL(window.location.href);
+          url.searchParams.set(recoveryQueryParameter, Date.now().toString());
+
+          if (button) {
+            button.disabled = true;
+            button.setAttribute("aria-busy", "true");
+            button.textContent = resetSiteData
+              ? "Nullstiller og laster…"
+              : "Laster nyeste versjon…";
+          }
+
+          try {
+            if (resetSiteData) await resetStoredSiteData();
+
+            const response = await fetch(url.toString(), {
+              cache: "no-store",
+              headers: { Accept: "text/html" },
+            });
+            if (!response.ok) throw new Error(`Kunne ikke hente appen (${response.status}).`);
+
+            const html = await response.text();
+            if (!html.includes('id="root"') || !html.includes('type="module"')) {
+              throw new Error("Svaret inneholdt ikke Banebooking-appen.");
+            }
+
+            await refreshStartupAssets(html, url);
+            window.history.replaceState(
+              window.history.state,
+              "",
+              `${url.pathname}${url.search}${url.hash}`
+            );
+            document.open();
+            document.write(html);
+            document.close();
+          } catch {
+            window.location.replace(url.toString());
+          }
+        }
+
+        function canRecoverAutomatically() {
+          const recoveryAtInUrl = Number(
+            new URL(window.location.href).searchParams.get(recoveryQueryParameter) ?? "0"
+          );
+          if (Date.now() - recoveryAtInUrl < recoveryCooldownMs) return false;
+
+          try {
+            const lastRecoveryAt = Number(sessionStorage.getItem(recoveryStorageKey) ?? "0");
+            if (Date.now() - lastRecoveryAt < recoveryCooldownMs) return false;
+
+            sessionStorage.setItem(recoveryStorageKey, Date.now().toString());
+            return true;
+          } catch {
+            return true;
+          }
+        }
+
+        function showRecoveryMessage() {
+          const boot = document.getElementById("boot");
+          if (!boot || boot.querySelector('[data-boot-part="recovery"]')) return;
+
+          const content = document.createElement("div");
+          content.dataset.bootPart = "recovery";
+
+          const title = document.createElement("h1");
+          title.textContent = "Siden trenger en ny innlasting";
+
+          const description = document.createElement("p");
+          description.textContent =
+            "En nyere versjon er tilgjengelig, eller oppstarten tok for lang tid. " +
+            "Nullstilling logger deg ut og laster alle oppstartsfilene på nytt.";
+
+          const button = document.createElement("button");
+          button.type = "button";
+          button.textContent = "Nullstill og last inn på nytt";
+          button.addEventListener("click", () => void reloadLatestVersion(button, true));
+
+          content.append(title, description, button);
+          boot.replaceChildren(content);
+        }
+
+        function recoverFromAssetError() {
+          if (recoveryStarted) return;
+          recoveryStarted = true;
+
+          if (canRecoverAutomatically()) {
+            void reloadLatestVersion();
+          } else {
+            showRecoveryMessage();
+          }
+        }
+
+        const recoveryMessageTimer = window.setTimeout(showRecoveryMessage, recoveryMessageDelayMs);
+
+        window.addEventListener(
+          appStartedEvent,
+          () => {
+            window.clearTimeout(recoveryMessageTimer);
+            document.getElementById("boot")?.remove();
+          },
+          { once: true }
+        );
+
+        // Vite dokumenterer hendelsen for utdaterte chunks etter en ny deploy.
+        window.addEventListener("vite:preloadError", (event) => {
+          event.preventDefault();
+          recoverFromAssetError();
+        });
+
+        // Inngangsmodulen kan feile før Vites dynamiske importhåndtering har startet.
+        window.addEventListener(
+          "error",
+          (event) => {
+            const target = event.target;
+            if (target instanceof HTMLScriptElement && target.type === "module") {
+              recoverFromAssetError();
+            }
+          },
+          true
+        );
+      })();
+    </script>
     <link rel="icon" href="%sveltekit.assets%/favicon.svg?v=3" type="image/svg+xml" />
     <link rel="icon" href="%sveltekit.assets%/favicon.ico?v=3" sizes="any" />
     <link rel="apple-touch-icon" href="%sveltekit.assets%/apple-touch-icon.png?v=3" />
     %sveltekit.head%
   </head>
   <body data-sveltekit-preload-data="hover">
+    <div id="boot" role="status" aria-label="Laster Banebooking">
+      <div data-boot-part="loader"></div>
+    </div>
     <div id="root" style="display: contents">%sveltekit.body%</div>
   </body>
 </html>

@@ -1,8 +1,9 @@
 # WP-7 paritets- og oppryddingsinventar
 
-> **Status:** Første WP-7-checkpoint fullført
+> **Status:** Andre WP-7-checkpoint fullført
 >
-> **Fastslått mot:** `feature/sveltekit-lift-and-shift` ved `4520f65`
+> **Inventargrunnlag:** `feature/sveltekit-lift-and-shift` ved `4520f65`; runtimefeltene er
+> oppdatert i andre checkpoint
 >
 > **Dato:** 2026-08-23
 
@@ -73,29 +74,24 @@ Kontraktene er uttrykt i samlokaliserte modell-, API-, Query- og komponenttester
 Dette er komponent-, kontrakt- og tidligere nettleserbevis. Automatiserte ende-til-ende-flyter er
 fortsatt en egen WP-7-leveranse og kan ikke utledes av denne tabellen.
 
-## Reelle gap før React kan fjernes
+## Runtimegap avdekket i inventaret
 
-### 1. Observability er definert, men ikke koblet til runtime
+### 1. Observability var definert, men ikke koblet til runtime — lukket
 
-`src/lib/platform/observability/index.ts` har bare testkonsumenten
-`src/lib/platform/observability/index.test.ts`. Svelte-runtime initialiserer ikke Sentry, kobler
-ikke storage-reporteren og rapporterer ikke uventede runtimefeil. React-referansen gjør alle tre
-delene gjennom `src/main.tsx` og `AppErrorBoundary.tsx`, mens vilkårsflaten fortsatt opplyser om
-Sentry.
+SvelteKit-klienthooken initialiserer nå en browser-only `@sentry/browser`-adapter fra
+`lib/platform/app`, rapporterer uventede klient- og app-runtimefeil og kobler storage-reporteren.
+Adapteren er no-op uten produksjonsmodus og DSN, lastes som en ikke-preloadet dynamisk chunk og
+slår eksplisitt av eller filtrerer brukerdata, cookies, headere, bodyer, URL-query, stackvariabler
+og sensitiv nested kontekst. Featurekode importerer ikke Sentry.
 
-Eier: `lib/platform/observability` og `lib/platform/app`. Gapet må lukkes bak platformgrensen med
-sensitiv kontekstfiltrering før `@sentry/react` og React-feilgrensen fjernes.
+### 2. Gjenoppretting etter utdaterte oppstartsfiler fantes bare i React-HTML-en — lukket
 
-### 2. Gjenoppretting etter utdaterte oppstartsfiler finnes bare i React-HTML-en
-
-Rotfilen `index.html` lytter på `vite:preloadError`, laster oppstartsassets på nytt og tilbyr
-kontrollert nullstilling ved en fastlåst deploy. SvelteKits aktive `src/app.html` har ikke denne
-atferden. Den er ikke registrert som en produktfeature i adferdsinventaret, men er en reell
-produksjonsrobusthetsforskjell som må avgjøres under produksjonslik hostingtest.
-
-Eier: `lib/platform/app` og `src/app.html`. Atferden skal enten flyttes til en smal SvelteKit-eid
-oppstartsgrense eller eksplisitt pensjoneres med dokumentert hostingbevis; React-HTML-en skal ikke
-slettes før avgjørelsen er tatt.
+Den aktive `src/app.html` lytter nå på Vites dokumenterte `vite:preloadError`, avbryter
+standardfeilen, gjør høyst ett automatisk recoveryforsøk per cooldown og oppfrisker fersk HTML,
+module scripts, modulepreloads og CSS før dokumentet erstattes. Fastlåst oppstart beholder en
+pre-module bootflate med eksplisitt nullstilling; Svelte-layouten fjerner flaten ved vellykket
+overtakelse. Kontrakten testes direkte mot den autoritative inline-koden og finnes i begge
+hostingfallbackene. React-roten er fortsatt inaktiv referanse og fjernes i eget checkpoint.
 
 ### 3. Innlogget lokal E2E trenger en autoritativ utviklingsauthvei
 
@@ -226,8 +222,8 @@ Andre React-rester som må fjernes i samme oppryddingsrekkefølge er:
 
 ## Atomisk checkpointrekkefølge
 
-1. **WP-7 runtimeparitet.** Koble observability/Sentry og storagefeil til Svelte-runtime. Avklar og
-   test gjenoppretting etter utdaterte oppstartsfiler. Behold hele React-referansen.
+1. **WP-7 runtimeparitet — fullført.** Observability/Sentry, storagefeil og testet asset-recovery
+   eies av Svelte-runtime. Hele React-referansen er beholdt til avtalte bevis er fullført.
 2. **WP-7 kritiske E2E-flyter.** Etabler en reproduserbar authharness og Playwright for login,
    booking, avbestilling og én representativ adminendring. Ingen backendendring eller ekstern
    deploy uten ny autoritet.
