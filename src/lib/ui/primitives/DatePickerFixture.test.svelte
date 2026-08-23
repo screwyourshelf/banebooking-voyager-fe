@@ -53,6 +53,10 @@
       <DatePicker value="2026-01-01" presentation="filter" />
     </FormField>
 
+    <FormField label="Tom dato">
+      <DatePicker calendarLabel="Velg tom dato" />
+    </FormField>
+
     <FormField label="Bookingdatoer" description="Velg én eller flere datoer." required>
       <MultiDatePicker
         bind:value={dates}

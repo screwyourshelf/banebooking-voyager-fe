@@ -951,4 +951,8 @@
   [data-ui-primitive="accordion-row"] {
     min-width: 0;
   }
+
+  [data-ui-primitive="tabs"] {
+    min-width: 0;
+  }
 }

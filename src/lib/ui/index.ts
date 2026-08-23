@@ -66,6 +66,7 @@ export {
   SettingsSwitchRow,
   SettingsText,
   SettingsValue,
+  Tabs,
   Weather,
 } from "./patterns";
 export type {
@@ -97,4 +98,5 @@ export type {
   SettingsRadioGroupLayout,
   SettingsRadioOption,
   SettingsSectionTone,
+  TabItem,
 } from "./patterns";

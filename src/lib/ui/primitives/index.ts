@@ -15,4 +15,6 @@ export { default as MultiDatePicker } from "./MultiDatePicker.svelte";
 export { default as Select } from "./Select.svelte";
 export type { SelectOption } from "./Select.svelte";
 export { default as Switch } from "./Switch.svelte";
+export { default as TabsPrimitive } from "./TabsPrimitive.svelte";
+export type { TabsPrimitiveItem } from "./TabsPrimitive.svelte";
 export { default as Textarea } from "./Textarea.svelte";

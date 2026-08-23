@@ -7,6 +7,7 @@ import type {
   OppdaterGrenForespørsel,
 } from "$lib/contracts";
 import type { ApiClient } from "$lib/platform/api";
+import { invalidateTenantQueries } from "$lib/platform/query";
 import {
   createActivity,
   createCourt,
@@ -111,15 +112,4 @@ export function updateActivityMutationOptions(
     onSuccess: () => invalidateTenantQueries(queryClient, slug),
     retry: false,
   };
-}
-
-function invalidateTenantQueries(queryClient: QueryClient, slug: string) {
-  // Booking bootstrap and later admin surfaces can hold the same tenant resources under their own
-  // feature keys. Invalidating the tenant boundary avoids a forbidden feature-to-feature import.
-  return queryClient.invalidateQueries({
-    predicate: ({ queryKey }) =>
-      queryKey.some(
-        (part) => typeof part === "object" && part !== null && "slug" in part && part.slug === slug
-      ),
-  });
 }

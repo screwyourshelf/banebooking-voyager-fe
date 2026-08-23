@@ -77,6 +77,20 @@ describe("DatePicker and MultiDatePicker", () => {
     ).toHaveAttribute("aria-disabled", "true");
   });
 
+  it("opens an empty picker on the current local month", async () => {
+    renderFixture();
+    const trigger = screen.getByRole("button", { name: "Tom dato" });
+    await fireEvent.click(trigger);
+    await waitFor(() => expect(trigger).toHaveAttribute("aria-expanded", "true"));
+    expect(document.querySelector('[data-ui-primitive="date-popover"]')).toBeInTheDocument();
+    expect(document.querySelector('[data-ui-primitive="calendar"]')).toBeInTheDocument();
+
+    const calendar = await screen.findByLabelText(/Velg tom dato/i);
+    expect(
+      within(calendar).getByRole("heading", { name: /Velg tom dato august 2026/i })
+    ).toBeVisible();
+  });
+
   it("selects with the arrow keys and Enter, closes and returns focus to the trigger", async () => {
     const { onDateChange } = renderFixture();
     const trigger = getStartDateTrigger();

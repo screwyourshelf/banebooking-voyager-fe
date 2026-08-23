@@ -1,9 +1,15 @@
 <script lang="ts">
-  import { RoutePlaceholder } from "$lib/ui";
+  import { ClubAndMembershipAdminScreen } from "$lib/features/club-and-membership-admin";
+  import { getSessionDataContext } from "$lib/features/session";
+
+  const session = getSessionDataContext();
 </script>
 
-<RoutePlaceholder
-  eyebrow="Administrasjon"
-  title="Klubbinnstillinger"
-  description="Klubb- og medlemskapsinnstillingene migreres i WP-6."
-/>
+<svelte:head><title>Klubbinnstillinger | Banebooking</title></svelte:head>
+
+{#if session.klubb}
+  <ClubAndMembershipAdminScreen
+    club={session.klubb}
+    capabilities={session.bruker?.kapabiliteter ?? []}
+  />
+{/if}

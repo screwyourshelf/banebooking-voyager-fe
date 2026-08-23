@@ -70,4 +70,6 @@ export { default as SettingsStack } from "./SettingsStack.svelte";
 export { default as SettingsSwitchRow } from "./SettingsSwitchRow.svelte";
 export { default as SettingsText } from "./SettingsText.svelte";
 export { default as SettingsValue } from "./SettingsValue.svelte";
+export { default as Tabs } from "./Tabs.svelte";
+export type { TabItem } from "./Tabs.svelte";
 export { default as Weather } from "./Weather.svelte";
