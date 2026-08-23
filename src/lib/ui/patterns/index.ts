@@ -62,6 +62,7 @@ export type { SettingsChoiceOption } from "./SettingsChoiceGroup.svelte";
 export { default as SettingsPanel } from "./SettingsPanel.svelte";
 export { default as SettingsRadioGroup } from "./SettingsRadioGroup.svelte";
 export type { SettingsRadioGroupLayout, SettingsRadioOption } from "./SettingsRadioGroup.svelte";
+export { default as SettingsRange } from "./SettingsRange.svelte";
 export { default as SettingsRow } from "./SettingsRow.svelte";
 export { default as SettingsSection } from "./SettingsSection.svelte";
 export type { SettingsSectionTone } from "./SettingsSection.svelte";

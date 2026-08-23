@@ -1,9 +1,20 @@
 <script lang="ts">
-  import { RoutePlaceholder } from "$lib/ui";
+  import { base } from "$app/paths";
+  import { CourtAndActivityAdminScreen } from "$lib/features/court-and-activity-admin";
+  import { getSessionDataContext } from "$lib/features/session";
+  import { buildTenantPath, getTenantContext } from "$lib/platform/tenant";
+
+  const session = getSessionDataContext();
+  const tenant = getTenantContext();
+  const courtsHref = buildTenantPath(tenant, "admin/baner", base);
+  const activitiesHref = buildTenantPath(tenant, "admin/grener", base);
 </script>
 
-<RoutePlaceholder
-  eyebrow="Administrasjon"
-  title="Baner"
-  description="Det felles arbeidsområdet for baner og grener migreres i WP-6."
+<svelte:head><title>Baner og grener | Banebooking</title></svelte:head>
+
+<CourtAndActivityAdminScreen
+  section="courts"
+  capabilities={session.bruker?.kapabiliteter ?? []}
+  {courtsHref}
+  {activitiesHref}
 />

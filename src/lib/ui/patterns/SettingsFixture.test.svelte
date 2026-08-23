@@ -3,6 +3,7 @@
     SettingsChoiceGroup,
     SettingsPanel,
     SettingsRadioGroup,
+    SettingsRange,
     SettingsRow,
     SettingsSection,
     SettingsStack,
@@ -16,18 +17,21 @@
     onChoice,
     onMethod,
     onPublished,
+    onRange,
     pending = false,
   }: {
     disabled?: boolean;
     onChoice: (value: string) => void;
     onMethod: (value: string) => void;
     onPublished: (checked: boolean) => void;
+    onRange: (value: number) => void;
     pending?: boolean;
   } = $props();
 
   let method = $state("repeat");
   let published = $state(true);
   let selectedCourts = $state<string[]>(["court-1"]);
+  let maxBookings = $state(2);
 
   function changeMethod(value: string) {
     method = value;
@@ -41,6 +45,12 @@
     onChoice(value);
   }
 </script>
+
+{#snippet rangeLabels()}
+  <span>1</span><span>5</span>
+{/snippet}
+
+{#snippet rangeValue()}<SettingsValue>{maxBookings}</SettingsValue>{/snippet}
 
 <SettingsStack>
   <SettingsSection
@@ -92,6 +102,21 @@
           onToggle={toggleCourt}
           {disabled}
           {pending}
+        />
+      </SettingsRow>
+
+      <SettingsRow title="Maks per dag" right={rangeValue}>
+        <SettingsRange
+          aria-label="Maks bookinger per dag"
+          value={maxBookings}
+          min="1"
+          max="5"
+          labels={rangeLabels}
+          oninput={(event) => {
+            maxBookings = Number(event.currentTarget.value);
+            onRange(maxBookings);
+          }}
+          {disabled}
         />
       </SettingsRow>
     </SettingsPanel>

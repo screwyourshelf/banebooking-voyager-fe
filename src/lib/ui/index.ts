@@ -59,6 +59,7 @@ export {
   SettingsChoiceGroup,
   SettingsPanel,
   SettingsRadioGroup,
+  SettingsRange,
   SettingsRow,
   SettingsSection,
   SettingsStack,

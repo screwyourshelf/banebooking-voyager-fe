@@ -16,6 +16,7 @@ function renderFixture(options: { disabled?: boolean; pending?: boolean } = {}) 
     onChoice: vi.fn(),
     onMethod: vi.fn(),
     onPublished: vi.fn(),
+    onRange: vi.fn(),
   };
 
   return {
@@ -87,6 +88,17 @@ describe("public settings anatomy", () => {
     expect(radios[0]).toHaveFocus();
     choice.focus();
     expect(choice).toHaveFocus();
+  });
+
+  it("owns native range anatomy, labels and semantic value changes", async () => {
+    const { callbacks } = renderFixture();
+    const range = screen.getByRole("slider", { name: "Maks bookinger per dag" });
+
+    expect(range).toHaveAttribute("min", "1");
+    expect(range).toHaveAttribute("max", "5");
+    expect(screen.getByText("Maks per dag")).toBeVisible();
+    await fireEvent.input(range, { target: { value: "4" } });
+    expect(callbacks.onRange).toHaveBeenCalledWith(4);
   });
 
   it("disables every choice while disabled or pending and exposes busy state", async () => {
