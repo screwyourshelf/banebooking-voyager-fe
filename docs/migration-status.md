@@ -1,19 +1,18 @@
 # Migreringsstatus
 
-> **Status:** Pågår — rammeverksløftet er fullført; styling lift-and-shift er aktiv
+> **Status:** Pågår — rammeverksløftet og SWP-0 er fullført; SWP-1 er aktiv
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** SWP-0 — kald baseline og guardkontrakt
+> **Aktiv arbeidspakke:** SWP-1 — Tailwind theme-fundament og håndhevende guards
 >
 > **Sist oppdatert:** 2026-08-23
 
 ## Mål for arbeidspakken
 
-Etabler en deterministisk stylingbaseline før første visuelle endring: mål dagens globale CSS,
-kaskade, `!important`, tokens, Tailwind-/klassebruk, inline styling, unntak og produksjonsstørrelse.
-Frys deretter en representativ visuell og interaktiv referanse og spesifiser positive og negative
-guardfixtures. Arbeidspakken endrer ikke produktstyling.
+Etabler en eksplisitt semantisk theme-kontrakt, flytt global CSS inn i Tailwinds etablerte cascade
+layers og koble de verifiserte stylingguardene til produksjonstreet og `npm run check`. SWP-1 skal
+stenge ny stylinggjeld uten å endre produktmarkup, observerbart uttrykk eller backend.
 
 ## Aktiv stylingretning
 
@@ -545,6 +544,18 @@ guardfixtures. Arbeidspakken endrer ikke produktstyling.
 - Hele matrisen, de tre kritiske E2E-flytene og begge produksjonsroutematriser er grønne.
   Cloudflare- og GitHub-artefaktenes CSS beholder eksakt SWP-0.1-assetnavn, råstørrelse og
   gzipstørrelse; checkpointet endrer verken produktmarkup, produktstyling eller backend.
+- Tredje SWP-0-checkpoint har etablert en versjonert, maskinlesbar guardkontrakt med ti stabile
+  regel-ID-er. Kontrakten skiller identitetsnøytrale strukturutilities fra semantiske visuelle
+  theme-roller og registrerer Bits-/UI-eiere, CSS-importer, custom properties, cascade layers og
+  det lukkede visualiseringsunntaket for datadrevet geometri.
+- Svelte- og PostCSS-AST-analysatoren kjøres foreløpig bare mot 23 små fixtures med virtuelle
+  produksjonsstier. Hver regel har minst én positiv og én negativ fixture; manifestet beviser
+  eksakt regel-ID og diagnostic for importgrenser, featurestyling, UI-overstyring, utilities,
+  dynamiske klasser, `@apply`, globale selectors, `!important`, custom properties og layers.
+- Guardfixturene er eksplisitt utelukket fra Tailwinds kildeskanning. Den regenererte baselinen
+  har én ekstra konfigurasjonslinje, men fortsatt 780 CSS-regler, 846 selectors, 2233 legacyavvik
+  og samme produksjons-CSS-assetnavn, råbyte og gzipstørrelse som SWP-0.1. Produktkode, markup,
+  produktstyling og backend er uendret.
 
 ## Nåtilstand
 
@@ -590,6 +601,9 @@ guardfixtures. Arbeidspakken endrer ikke produktstyling.
   `devDependencies`; Svelte 5, SvelteKit og Svelte-Vite-pluginen var allerede oppdatert.
 - Sentral CSS og pakkegraf har bare aktive Svelte-konsumenter; den maskinelle kontrollen håndhever
   denne toveis rekkevidden videre.
+- SWP-0 er fullført. Kildegjeld, produksjonsstørrelse og 106 visualiseringskandidater er målt;
+  elleve visuelle/interaktive referanser er frosset; og ti stabile stylingregler er bevist gjennom
+  positive og negative AST-fixtures før første visuelle endring.
 - Den aktive CSS-en er funksjonelt ryddet, men ikke målarkitekturen for styling: Tailwind brukes
   foreløpig hovedsakelig som Preflight/theme-bro, mens produktreglene ligger i globale selectorfiler.
   Dette migreres familievis etter SWP-planen uten visuell redesign.
@@ -598,14 +612,14 @@ guardfixtures. Arbeidspakken endrer ikke produktstyling.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                        |
-| ------------------------------------- | ----------------------------------------- |
-| Base branch                           | `main`                                    |
-| Fastslått basecommit                  | `5287c5e`                                 |
-| Siste semantiske checkpoint           | `test(styling): freeze SWP-0.2 reference` |
-| Lokale commits foran base             | 43                                        |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit             |
-| Neste planlagte checkpoint            | SWP-0.3 guarddesign og fixturekontrakter  |
+| Felt                                  | Forventet tilstand                             |
+| ------------------------------------- | ---------------------------------------------- |
+| Base branch                           | `main`                                         |
+| Fastslått basecommit                  | `5287c5e`                                      |
+| Siste semantiske checkpoint           | `test(styling): complete SWP-0 guard contract` |
+| Lokale commits foran base             | 44                                             |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                  |
+| Neste planlagte checkpoint            | SWP-1.1 semantisk theme-kontrakt               |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -614,22 +628,23 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Start bare **SWP-0 checkpoint 3 — guarddesign og fixturekontrakter**:
+Start bare **SWP-1 checkpoint 1 — semantisk theme-kontrakt**:
 
-1. Les hele SWP-0, ADR-006, den maskinlesbare stylingbaselinen og den frosne
-   `styling-reference-matrix.md`; ikke endre produktstyling, produktmarkup eller backend.
-2. Definer en maskinlesbar guardkontrakt med stabile regel-ID-er for tillatte semantiske visuelle
-   utilities, identitetsnøytrale strukturutilities og det lukkede visualiseringsunntaket.
-3. Opprett små positive og negative Svelte-/CSS-fixtures som dekker alle ti guardkrav i
-   stylingplanen: lag/importgrenser, lokal featurestyling, offentlig UI-overstyring, ulovlig
-   utilityvokabular, dynamiske klasser, `@apply`/globale selektorer/important, custom-property-
-   eierskap og cascade layers.
-4. Legg til en fixtureintegritetstest som beviser forventet regel-ID og diagnostikk for hver
-   fixture. Ikke koble de nye guardene til hele produksjonstreet; den håndhevende fulltregrensen
-   etableres først i SWP-1.
-5. Kjør fixturetestene, `npm test`, `npm run check`, stylingbaselinen og hele snapshotmatrisen;
-   oppdater statusen til SWP-1.1 og opprett én lokal grønn commit. Stopp deretter; ikke start
-   theme-kontrakten i samme sesjon.
+1. Les hele SWP-1, ADR-006, `scripts/styling-guards/contract.json`, dagens `src/index.css` og
+   `src/styles/design-system/tokens.css`; ikke start cascadeoppryddingen eller fulltrekoblingen av
+   guardene i dette checkpointet.
+2. Skill rå klubbidentitet, semantiske produktroller og Tailwind-eksponerte roller eksplisitt.
+   Etabler `@theme inline` for de godkjente farge-, typografi-, radius-, skygge-, spacing- og
+   kontrollrollene uten å endre verdier, lyst/mørkt theme eller produktmarkup.
+3. Oppdater det maskinlesbare utilityvokabularet samtidig, slik at hver semantisk utility peker på
+   en faktisk eksponert theme-rolle og rå paletter, arbitrary verdier og lokale `dark:*`-varianter
+   fortsatt avvises i fixturene.
+4. Legg til smale kontrakttester som beviser mappingen fra semantisk utilityrolle til eksisterende
+   CSS custom property i lyst og mørkt theme. Guardene skal fortsatt ikke kjøres mot hele
+   produksjonstreet før SWP-1.3.
+5. Kjør berørte theme-/guardtester, `npm test`, `npm run check`, stylingbaselinen og relevant
+   visuell matrise; oppdater statusen til SWP-1.2 og opprett én lokal grønn commit. Stopp deretter;
+   ikke start cascadecheckpointet i samme sesjon.
 
 ## Arbeidspakkeregister
 
@@ -643,8 +658,8 @@ Start bare **SWP-0 checkpoint 3 — guarddesign og fixturekontrakter**:
 | WP-5 App-shell                   | Fullført | Shell, navigation, routeaktivitet, konto og Mer grønne       |
 | WP-6 Featuremigrering            | Fullført | Elleve checkpoints og alle Svelte-featureflater er grønne    |
 | WP-7 Paritet og produksjonsbytte | Fullført | Paritet, React-fjerning, CSS, drift og sluttport grønne      |
-| SWP-0 Baseline og guardkontrakt  | Aktiv    | Baseline/referanse grønne; neste: guard- og fixturekontrakt  |
-| SWP-1 Theme og guards            | Venter   | Starter etter frosset styling- og visuell baseline           |
+| SWP-0 Baseline og guardkontrakt  | Fullført | Baseline, referanse og ti fixturetestede guardregler grønne  |
+| SWP-1 Theme og guards            | Aktiv    | Neste: semantisk `@theme inline`-kontrakt i SWP-1.1          |
 | SWP-2 UI-primitives              | Venter   | Tailwind-konvertering bak stabil primitivegrense             |
 | SWP-3 Produktpatterns            | Venter   | Semantiske familier migreres i avhengighetsrekkefølge        |
 | SWP-4 App-shell/navigation       | Venter   | Responsiv shell og navigation etter stabile patterns         |
@@ -679,8 +694,12 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 - Stylingreferansen oppfyller bare testtenantens navngitte klubbendepunkter med faste svar og
   fryser nettleserklokken til 2026-08-23. Utviklingsinnloggingen bruker fortsatt den eksisterende
   lokale backendharnessen; vanlig utviklings- og produksjonsdata er upåvirket.
+- Stylingguardanalysatoren kjører med vilje bare mot de isolerte fixturene i SWP-0. Produksjonstreet
+  bruker fortsatt den avtakende baselinekontrakten; AST-guardene kobles håndhevende til hele treet
+  og `npm run check` først i SWP-1.3 etter at theme og cascade har fått målelige eiere.
 - Ingen midlertidige rammeverksadapters eller React-legacy gjenstår. Stylingbaselinen måler sju
-  aktive CSS-filer, 5973 linjer, 780 regler og 846 selektorer. De brede overgangsfilene er fortsatt
+  aktive CSS-filer, 5974 linjer, 780 regler og 846 selektorer. Den ekstra linjen er Tailwinds
+  eksplisitte ekskludering av guardfixturekilden. De brede overgangsfilene er fortsatt
   `patterns.css` med 3500 linjer, `responsive.css` med 503 linjer og
   `feature-compositions.css` med 731 linjer.
 - 91 regler er ulagrede: tre autoritative theme-regler, 87 legacyregler i `patterns.css` og én
@@ -709,83 +728,86 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 ## Siste verifikasjon
 
-| Kontroll                             | Resultat                                                                           |
-| ------------------------------------ | ---------------------------------------------------------------------------------- |
-| Prettier på aktiv kode og dokumenter | Bestått 2026-08-23                                                                 |
-| Relative dokumentlenker              | Bestått 2026-08-23                                                                 |
-| `git diff --check`                   | Bestått 2026-08-23                                                                 |
-| `npm test`                           | Bestått 2026-08-23: 87 filer, 319 tester                                           |
-| `npm run check`                      | Bestått 2026-08-23: Svelte-typecheck, arkitektur, legacy, design, lint og format   |
-| SWP-0 kildebaseline                  | Bestått 2026-08-23: 7 CSS-filer, 780 regler, 846 selektorer, 2233 avvik            |
-| SWP-0 baselinekontrakt               | Bestått 2026-08-23: schemaVersion 1 regenererer deterministisk i Vitest/npm        |
-| SWP-0 visualiseringsinventar         | Komplett 2026-08-23: 106 klasse-, style-, SVG- og rollekandidater                  |
-| SWP-0 visuell referansematrise       | Bestått 2026-08-23: 11 snapshots over alle stylingfamilier, viewporter og themes   |
-| SWP-0 interaksjonskontrakt           | Bestått 2026-08-23: fokus, tastatur, main/h1, overflow og tom warn/error-konsoll   |
-| SWP-0 komplett E2E-port              | Bestått 2026-08-23: 3 kritiske flyter + 11 visuelle/interaktive referanser         |
-| SWP-0 produksjons-CSS                | Identisk med SWP-0.1: samme assetnavn, råbyte og 21,3/21,4 KiB gzip                |
-| Asset-recovery-kontrakt              | Bestått 2026-08-23: ferske assets uten sletting av auth-/site storage              |
-| Knip dead-code-review                | Bestått 2026-08-23: kun bevisst beholdte transporttyper rapporteres                |
-| Cloudflare Pages-build               | Bestått 2026-08-23: 21,3 KiB initial CSS, root og `index.html`-fallback            |
-| GitHub Pages-build                   | Bestått 2026-08-23: 21,4 KiB CSS, `/banebooking` og `404.html`-fallback            |
-| Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                  |
-| Nettleserrender                      | Bestått 2026-08-23: Statistikk i 4 flater uten overflow eller konsollfeil          |
-| SvelteKit-bundle                     | Verifisert 2026-08-23: 61 JS-chunks; lazygrensene og 120,5 KiB-maksimum er grønne  |
-| SWP-0 målerisolasjon                 | Verifisert 2026-08-23: CSS og klasseutvalg er byteidentisk med ren `HEAD`          |
-| Vite-/dependencygraf                 | Verifisert 2026-08-23: Vite 8.2.2, devtools dev-only, direkte pakkegraf komplett   |
-| WP-7 React-fjerningskontroll         | Bestått 2026-08-23: ingen TSX, broer eller React/Axios/Query/Radix-pakker          |
-| WP-7 CSS-/tokenrekkevidde            | Bestått 2026-08-23: toveis klasse-, anatomi-, slot- og tokenkontroll               |
-| WP-7 direkte pakkegraf               | Bestått 2026-08-23: ingen shadcn, zod, tw-animate eller overflødige Tiptap-entries |
-| `npm audit`                          | 2026-08-23: 6 lave, 0 moderate, 0 høye og 0 kritiske                               |
-| WP-7 paritets-/oppryddingsinventar   | Komplett 2026-08-23: 18 routes, states, importgraf, deps og fjerningsrekkefølge    |
-| WP-7 runtimeparitetstester           | Bestått 2026-08-23: 5 filer, 13 tester                                             |
-| WP-7 kritiske E2E-flyter             | Bestått 2026-08-23: 3 Playwright-flyter, base path og deterministisk opprydding    |
-| WP-7 visuelle referanser             | Bestått 2026-08-23: 4 snapshots over roller, viewporter og lyst/mørkt tema         |
-| WP-7 produksjonsroutematrise         | Bestått 2026-08-23: 4 routeklasser × root/base, direkte load, refresh og fallback  |
-| WP-7 produksjonsbundle               | Bestått 2026-08-23: 37,2–37,3 KiB JS, 21,2 KiB CSS, 120,5 KiB største lazy chunk   |
-| WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                |
-| WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon         |
-| WP-4 pattern-/a11y-tester            | Bestått 2026-08-22: 1 fil, 6 tester for semantikk, states, retry og axe            |
-| WP-4 collection-/a11y-tester         | Bestått 2026-08-22: 1 fil, 16 tester for rows, controls, states, pending og axe    |
-| WP-4 form-/a11y-tester               | Bestått 2026-08-22: 1 fil, 6 tester for feltkobling, states, submit og axe         |
-| WP-4 settings-/a11y-tester           | Bestått 2026-08-22: 1 fil, 6 tester for rows, valg, tastatur, states og axe        |
-| WP-4 dialog-/a11y-tester             | Bestått 2026-08-22: 1 fil, 7 tester for fokus, dismiss, actions, pending og axe    |
-| WP-4 select-/a11y-tester             | Bestått 2026-08-22: 1 fil, 6 tester for form, tastatur, states, fokus og axe       |
-| WP-4 document-/a11y-tester           | Bestått 2026-08-22: 1 fil, 5 tester for landmark, headings, facts, lenker og axe   |
-| WP-4 navigation-/a11y-tester         | Bestått 2026-08-22: 1 fil, 7 tester for lenker, aktiv state, handlinger og axe     |
-| WP-4 date-/a11y-tester               | Bestått 2026-08-23: 1 fil, 9 tester for form, tastatur, grenser, fokus og axe      |
-| WP-4 editor-/a11y-tester             | Bestått 2026-08-23: 1 fil, 8 tester for JSON, tom verdi, tabell, fokus og axe      |
-| WP-5 app-shell-/a11y-tester          | Bestått 2026-08-22: 1 fil, 4 tester for landmarks, fokus, loading og axe           |
-| WP-5 navigation-/a11y-tester         | Bestått 2026-08-23: 2 filer, 12 tester for state, routes, fokus, overlay og axe    |
-| WP-6 auth-/policy-/a11y-tester       | Bestått 2026-08-23: 5 filer, 11 tester for login, OTP, callback, storage og vilkår |
-| WP-6 protected policy-/guardtester   | Bestått 2026-08-23: 5 filer, 16 tester for API, guard, mutation, validation og axe |
-| WP-6 booking-/bootstraptester        | Bestått 2026-08-23: 5 filer, 28 tester for API, state, mutation, rollback og axe   |
-| WP-6 konto-/persondatatester         | Bestått 2026-08-23: 5 filer, 16 tester for API, state, mutation, rollback og axe   |
-| WP-6 offentlig innhold-tester        | Bestått 2026-08-23: 6 filer, 14 tester for API, query, modell, deeplink og axe     |
-| WP-6 Baner-/Grener-tester            | Bestått 2026-08-23: 4 filer, 14 tester for API, query, modell, editor og axe       |
-| WP-6 Baner-/Grener-nettleser         | Bestått 2026-08-23: 2 routes × 2 viewporter × 2 temaer, interaksjon og tom konsoll |
-| WP-6 Klubb-/medlemskapstester        | Bestått 2026-08-23: 6 filer, 22 tester for API, query, modell, tabs, dato og axe   |
-| WP-6 Klubb-/medlemskapsnettleser     | Bestått 2026-08-23: 2 faner × 2 viewporter × 2 temaer, dato, validering og konsoll |
-| WP-6 Arrangement-admin-tester        | Bestått 2026-08-23: 3 filer, 8 tester for API, modell, staging, steg og axe        |
-| WP-6 Arrangement-admin-nettleser     | Bestått 2026-08-23: 2 viewporter × 2 temaer, mutations, konflikt, fokus og konsoll |
-| WP-6 Bruker-admin-tester             | Bestått 2026-08-23: 4 filer, 10 tester for API, query, modell, mutations og axe    |
-| WP-6 Bruker-admin-nettleser          | Bestått 2026-08-23: 2 viewporter × 2 temaer, filtre, dialoger, fokus og konsoll    |
-| WP-6 Kunngjøring-admin-tester        | Bestått 2026-08-23: 5 filer, 11 tester for API, query, modell, riktekst og axe     |
-| WP-6 Kunngjøring-admin-nettleser     | Bestått 2026-08-23: 2 viewporter × 2 temaer, editor, mutations, fokus og konsoll   |
-| WP-6 Statistikk-tester               | Bestått 2026-08-23: 4 filer, 12 tester for API, query, modell, states og axe       |
-| WP-6 Statistikk-nettleser            | Bestått 2026-08-23: 2 viewporter × 2 temaer, faner, filtre, fokus og tom konsoll   |
+| Kontroll                             | Resultat                                                                            |
+| ------------------------------------ | ----------------------------------------------------------------------------------- |
+| Prettier på aktiv kode og dokumenter | Bestått 2026-08-23                                                                  |
+| Relative dokumentlenker              | Bestått 2026-08-23                                                                  |
+| `git diff --check`                   | Bestått 2026-08-23                                                                  |
+| `npm test`                           | Bestått 2026-08-23: 88 filer, 320 tester                                            |
+| `npm run check`                      | Bestått 2026-08-23: Svelte-typecheck, arkitektur, legacy, design, lint og format    |
+| SWP-0 kildebaseline                  | Bestått 2026-08-23: 7 CSS-filer, 5974 linjer, 780 regler, 846 selectors, 2233 avvik |
+| SWP-0 baselinekontrakt               | Bestått 2026-08-23: schemaVersion 1 regenererer deterministisk i Vitest/npm         |
+| SWP-0 visualiseringsinventar         | Komplett 2026-08-23: 106 klasse-, style-, SVG- og rollekandidater                   |
+| SWP-0 visuell referansematrise       | Bestått 2026-08-23: 11 snapshots over alle stylingfamilier, viewporter og themes    |
+| SWP-0 interaksjonskontrakt           | Bestått 2026-08-23: fokus, tastatur, main/h1, overflow og tom warn/error-konsoll    |
+| SWP-0 guardkontrakt                  | Bestått 2026-08-23: schemaVersion 1, 10 stabile regel-ID-er og lukket vokabular     |
+| SWP-0 guardfixtures                  | Bestått 2026-08-23: 23 positive/negative Svelte-/CSS-fixtures med eksakt diagnostic |
+| SWP-0 komplett E2E-port              | Bestått 2026-08-23: 3 kritiske flyter + 11 visuelle/interaktive referanser          |
+| SWP-0 produksjons-CSS                | Identisk med SWP-0.1: samme assetnavn, råbyte og 21,3/21,4 KiB gzip                 |
+| Asset-recovery-kontrakt              | Bestått 2026-08-23: ferske assets uten sletting av auth-/site storage               |
+| Knip dead-code-review                | Bestått 2026-08-23: kun bevisst beholdte transporttyper rapporteres                 |
+| Cloudflare Pages-build               | Bestått 2026-08-23: 21,3 KiB initial CSS, root og `index.html`-fallback             |
+| GitHub Pages-build                   | Bestått 2026-08-23: 21,4 KiB CSS, `/banebooking` og `404.html`-fallback             |
+| Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                   |
+| Nettleserrender                      | Bestått 2026-08-23: Statistikk i 4 flater uten overflow eller konsollfeil           |
+| SvelteKit-bundle                     | Verifisert 2026-08-23: 61 JS-chunks; lazygrensene og 120,5 KiB-maksimum er grønne   |
+| SWP-0 målerisolasjon                 | Verifisert 2026-08-23: CSS og klasseutvalg er byteidentisk med ren `HEAD`           |
+| Vite-/dependencygraf                 | Verifisert 2026-08-23: Vite 8.2.2, devtools dev-only, direkte pakkegraf komplett    |
+| WP-7 React-fjerningskontroll         | Bestått 2026-08-23: ingen TSX, broer eller React/Axios/Query/Radix-pakker           |
+| WP-7 CSS-/tokenrekkevidde            | Bestått 2026-08-23: toveis klasse-, anatomi-, slot- og tokenkontroll                |
+| WP-7 direkte pakkegraf               | Bestått 2026-08-23: ingen shadcn, zod, tw-animate eller overflødige Tiptap-entries  |
+| `npm audit`                          | 2026-08-23: 6 lave, 0 moderate, 0 høye og 0 kritiske                                |
+| WP-7 paritets-/oppryddingsinventar   | Komplett 2026-08-23: 18 routes, states, importgraf, deps og fjerningsrekkefølge     |
+| WP-7 runtimeparitetstester           | Bestått 2026-08-23: 5 filer, 13 tester                                              |
+| WP-7 kritiske E2E-flyter             | Bestått 2026-08-23: 3 Playwright-flyter, base path og deterministisk opprydding     |
+| WP-7 visuelle referanser             | Bestått 2026-08-23: 4 snapshots over roller, viewporter og lyst/mørkt tema          |
+| WP-7 produksjonsroutematrise         | Bestått 2026-08-23: 4 routeklasser × root/base, direkte load, refresh og fallback   |
+| WP-7 produksjonsbundle               | Bestått 2026-08-23: 37,2–37,3 KiB JS, 21,2 KiB CSS, 120,5 KiB største lazy chunk    |
+| WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                 |
+| WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon          |
+| WP-4 pattern-/a11y-tester            | Bestått 2026-08-22: 1 fil, 6 tester for semantikk, states, retry og axe             |
+| WP-4 collection-/a11y-tester         | Bestått 2026-08-22: 1 fil, 16 tester for rows, controls, states, pending og axe     |
+| WP-4 form-/a11y-tester               | Bestått 2026-08-22: 1 fil, 6 tester for feltkobling, states, submit og axe          |
+| WP-4 settings-/a11y-tester           | Bestått 2026-08-22: 1 fil, 6 tester for rows, valg, tastatur, states og axe         |
+| WP-4 dialog-/a11y-tester             | Bestått 2026-08-22: 1 fil, 7 tester for fokus, dismiss, actions, pending og axe     |
+| WP-4 select-/a11y-tester             | Bestått 2026-08-22: 1 fil, 6 tester for form, tastatur, states, fokus og axe        |
+| WP-4 document-/a11y-tester           | Bestått 2026-08-22: 1 fil, 5 tester for landmark, headings, facts, lenker og axe    |
+| WP-4 navigation-/a11y-tester         | Bestått 2026-08-22: 1 fil, 7 tester for lenker, aktiv state, handlinger og axe      |
+| WP-4 date-/a11y-tester               | Bestått 2026-08-23: 1 fil, 9 tester for form, tastatur, grenser, fokus og axe       |
+| WP-4 editor-/a11y-tester             | Bestått 2026-08-23: 1 fil, 8 tester for JSON, tom verdi, tabell, fokus og axe       |
+| WP-5 app-shell-/a11y-tester          | Bestått 2026-08-22: 1 fil, 4 tester for landmarks, fokus, loading og axe            |
+| WP-5 navigation-/a11y-tester         | Bestått 2026-08-23: 2 filer, 12 tester for state, routes, fokus, overlay og axe     |
+| WP-6 auth-/policy-/a11y-tester       | Bestått 2026-08-23: 5 filer, 11 tester for login, OTP, callback, storage og vilkår  |
+| WP-6 protected policy-/guardtester   | Bestått 2026-08-23: 5 filer, 16 tester for API, guard, mutation, validation og axe  |
+| WP-6 booking-/bootstraptester        | Bestått 2026-08-23: 5 filer, 28 tester for API, state, mutation, rollback og axe    |
+| WP-6 konto-/persondatatester         | Bestått 2026-08-23: 5 filer, 16 tester for API, state, mutation, rollback og axe    |
+| WP-6 offentlig innhold-tester        | Bestått 2026-08-23: 6 filer, 14 tester for API, query, modell, deeplink og axe      |
+| WP-6 Baner-/Grener-tester            | Bestått 2026-08-23: 4 filer, 14 tester for API, query, modell, editor og axe        |
+| WP-6 Baner-/Grener-nettleser         | Bestått 2026-08-23: 2 routes × 2 viewporter × 2 temaer, interaksjon og tom konsoll  |
+| WP-6 Klubb-/medlemskapstester        | Bestått 2026-08-23: 6 filer, 22 tester for API, query, modell, tabs, dato og axe    |
+| WP-6 Klubb-/medlemskapsnettleser     | Bestått 2026-08-23: 2 faner × 2 viewporter × 2 temaer, dato, validering og konsoll  |
+| WP-6 Arrangement-admin-tester        | Bestått 2026-08-23: 3 filer, 8 tester for API, modell, staging, steg og axe         |
+| WP-6 Arrangement-admin-nettleser     | Bestått 2026-08-23: 2 viewporter × 2 temaer, mutations, konflikt, fokus og konsoll  |
+| WP-6 Bruker-admin-tester             | Bestått 2026-08-23: 4 filer, 10 tester for API, query, modell, mutations og axe     |
+| WP-6 Bruker-admin-nettleser          | Bestått 2026-08-23: 2 viewporter × 2 temaer, filtre, dialoger, fokus og konsoll     |
+| WP-6 Kunngjøring-admin-tester        | Bestått 2026-08-23: 5 filer, 11 tester for API, query, modell, riktekst og axe      |
+| WP-6 Kunngjøring-admin-nettleser     | Bestått 2026-08-23: 2 viewporter × 2 temaer, editor, mutations, fokus og konsoll    |
+| WP-6 Statistikk-tester               | Bestått 2026-08-23: 4 filer, 12 tester for API, query, modell, states og axe        |
+| WP-6 Statistikk-nettleser            | Bestått 2026-08-23: 2 viewporter × 2 temaer, faner, filtre, fokus og tom konsoll    |
 
 ## Filer i siste checkpoint
 
-- `e2e/visual-regressions.spec.ts` med elleve navngitte routeflater og eksplisitte invariants for
-  snapshots, landmarks, overflow, konsoll, fokus og tastatur
-- `e2e/styling-reference-fixtures.ts` med fast tenant, rolle, kapabiliteter, tid og data over den
-  eksisterende Playwright-authharnessen
-- elleve PNG-referanser ved visual-regression-spesifikasjonen; sju er nye, tre eksisterende er
-  byteidentiske og medlemskapsreferansen er bevisst flyttet til en deterministisk state
-- `docs/styling-reference-matrix.md`, dokumentindeksen og E2E-harnessdokumentasjonen med den
-  autoritative route-, state-, viewport-, theme- og interaksjonskontrakten
-- oppdatert migreringsstatus med SWP-0.3 som neste eksakte steg; produktkode, stylingbaseline og
-  backend er uendret
+- `scripts/styling-guards/contract.json` med schemaVersion 1, ti stabile regler, utility- og
+  layereierskap, custom-property-kontrakt og lukket visualiseringsgeometri
+- de smale Svelte-/PostCSS-AST-modulene i `scripts/styling-guards/` samt README-en som avgrenser
+  fixture-only-fasen fra SWP-1s senere fulltrehåndheving
+- 23 små positive og negative Svelte-/CSS-fixtures med virtuelle produksjonsstier og
+  `fixtures/manifest.json` som fryser eksakt regel-ID og diagnostic
+- `scripts/check-styling-guard-fixtures.mjs`, npm-scriptet og
+  `src/styling-guard-fixtures.test.ts` som gjør fixtureintegriteten til en vanlig Vitest-kontrakt
+- Tailwind-kildeekskludering for guardfixturene og regenerert `docs/styling-baseline.json`; bare
+  konfigurasjonslinjetallet er endret, mens produkt-CSS, markup og backend er uendret
+- oppdatert migreringsstatus med SWP-1.1 som neste eksakte steg
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
 pågående arbeid etter checkpointet.

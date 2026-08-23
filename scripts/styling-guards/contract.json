@@ -1,0 +1,482 @@
+{
+  "schemaVersion": 1,
+  "enforcementPhase": "fixtures-only",
+  "productionTreeEnforcementCheckpoint": "SWP-1.3",
+  "rules": {
+    "bitsUiOwner": {
+      "id": "STYLING-001-BITS-OWNER",
+      "title": "Bits UI har én primitiveeier",
+      "planRequirements": [1]
+    },
+    "featureStyling": {
+      "id": "STYLING-002-FEATURE-STYLING",
+      "title": "Features og routes eier ikke produktstyling",
+      "planRequirements": [2]
+    },
+    "publicUiOverride": {
+      "id": "STYLING-003-UI-OVERRIDE",
+      "title": "Offentlig UI kan ikke restyles av konsumenter",
+      "planRequirements": [3]
+    },
+    "utilityVocabulary": {
+      "id": "STYLING-004-UTILITY-VOCABULARY",
+      "title": "Utilities bruker et lukket produktvokabular",
+      "planRequirements": [4]
+    },
+    "themeRole": {
+      "id": "STYLING-005-THEME-ROLE",
+      "title": "Visuelle utilityroller finnes i theme-kontrakten",
+      "planRequirements": [5]
+    },
+    "staticClassSet": {
+      "id": "STYLING-006-STATIC-CLASS-SET",
+      "title": "Dynamiske klasser kan løses statisk",
+      "planRequirements": [6]
+    },
+    "cssApplication": {
+      "id": "STYLING-007-CSS-APPLICATION",
+      "title": "App-CSS har ingen apply-, important- eller produktselector-bro",
+      "planRequirements": [7]
+    },
+    "customProperty": {
+      "id": "STYLING-008-CUSTOM-PROPERTY",
+      "title": "Custom properties har én registrert definisjonseier",
+      "planRequirements": [8]
+    },
+    "cascadeLayer": {
+      "id": "STYLING-009-CASCADE-LAYER",
+      "title": "Global CSS ligger i Tailwinds etablerte cascade layers",
+      "planRequirements": [9]
+    },
+    "visualizationException": {
+      "id": "STYLING-010-VISUALIZATION-EXCEPTION",
+      "title": "Visualiseringsunntaket er lukket til datadrevet geometri",
+      "planRequirements": [2, 8]
+    }
+  },
+  "planRequirements": [
+    { "number": 1, "ruleKeys": ["bitsUiOwner"] },
+    {
+      "number": 2,
+      "ruleKeys": ["featureStyling", "visualizationException"]
+    },
+    { "number": 3, "ruleKeys": ["publicUiOverride"] },
+    { "number": 4, "ruleKeys": ["utilityVocabulary"] },
+    { "number": 5, "ruleKeys": ["themeRole"] },
+    { "number": 6, "ruleKeys": ["staticClassSet"] },
+    { "number": 7, "ruleKeys": ["cssApplication"] },
+    {
+      "number": 8,
+      "ruleKeys": ["customProperty", "visualizationException"]
+    },
+    { "number": 9, "ruleKeys": ["cascadeLayer"] },
+    {
+      "number": 10,
+      "fixtureInvariant": "Every rule has at least one allowed and one rejected fixture."
+    }
+  ],
+  "ownership": {
+    "bitsUiOwnerRoots": ["src/lib/ui/primitives/"],
+    "featureAndRouteRoots": ["src/lib/features/", "src/routes/"],
+    "publicUiImportPrefixes": ["$lib/ui"],
+    "publicUiOwnerRoots": ["src/lib/ui/primitives/", "src/lib/ui/patterns/"],
+    "rootStylesheetImports": [
+      {
+        "importer": "src/routes/+layout.svelte",
+        "specifier": "../index.css"
+      }
+    ],
+    "themeDefinitionRoots": [
+      "src/index.css",
+      "src/styles/design-system/tokens.css",
+      "src/lib/platform/theme/"
+    ]
+  },
+  "utilities": {
+    "allowedVariants": {
+      "exact": [
+        "2xl",
+        "active",
+        "disabled",
+        "focus",
+        "focus-visible",
+        "hover",
+        "lg",
+        "md",
+        "motion-reduce",
+        "sm",
+        "xl"
+      ],
+      "patterns": [
+        "^(?:aria|data)-\\[[a-z0-9_-]+(?:=[a-z0-9_-]+)?\\]$",
+        "^(?:group|peer)-(?:aria|data)-\\[[a-z0-9_-]+(?:=[a-z0-9_-]+)?\\]$"
+      ]
+    },
+    "identityNeutralStructure": {
+      "exact": [
+        "absolute",
+        "block",
+        "contents",
+        "fixed",
+        "flex",
+        "flex-1",
+        "flex-auto",
+        "flex-col",
+        "flex-initial",
+        "flex-none",
+        "flex-nowrap",
+        "flex-row",
+        "flex-wrap",
+        "flow-root",
+        "grid",
+        "grow",
+        "grow-0",
+        "h-full",
+        "hidden",
+        "inline",
+        "inline-block",
+        "inline-flex",
+        "inline-grid",
+        "isolate",
+        "items-baseline",
+        "items-center",
+        "items-end",
+        "items-start",
+        "items-stretch",
+        "justify-around",
+        "justify-between",
+        "justify-center",
+        "justify-end",
+        "justify-evenly",
+        "justify-start",
+        "min-h-0",
+        "min-w-0",
+        "object-contain",
+        "object-cover",
+        "overflow-auto",
+        "overflow-hidden",
+        "overflow-scroll",
+        "overflow-visible",
+        "overflow-x-auto",
+        "overflow-x-hidden",
+        "overflow-y-auto",
+        "overflow-y-hidden",
+        "pointer-events-none",
+        "pointer-events-auto",
+        "relative",
+        "shrink",
+        "shrink-0",
+        "size-full",
+        "sr-only",
+        "static",
+        "sticky",
+        "w-full"
+      ],
+      "patterns": [
+        "^col-span-(?:1|2|3|4|5|6|full)$",
+        "^grid-cols-(?:1|2|3|4|5|6|none|subgrid)$",
+        "^grid-rows-(?:1|2|3|4|5|6|none|subgrid)$",
+        "^order-(?:first|last|none|[1-9]|1[0-2])$",
+        "^row-span-(?:1|2|3|4|5|6|full)$",
+        "^z-(?:0|10|20|30|40|50|auto)$"
+      ]
+    },
+    "semanticVisualFamilies": [
+      {
+        "utilityPrefixes": ["bg"],
+        "roles": [
+          "accent-soft",
+          "background",
+          "backdrop-scrim",
+          "brand",
+          "brand-soft",
+          "canvas",
+          "control-surface",
+          "control-surface-strong",
+          "nav-active-surface",
+          "sidebar",
+          "status-available-bg",
+          "status-busy-bg",
+          "status-danger-bg",
+          "status-event-bg",
+          "status-own-bg",
+          "status-past-bg",
+          "status-warning-bg",
+          "surface",
+          "surface-raised",
+          "surface-subtle"
+        ]
+      },
+      {
+        "utilityPrefixes": ["text"],
+        "roles": [
+          "accent",
+          "body",
+          "body-lg",
+          "body-sm",
+          "brand",
+          "brand-strong",
+          "caption",
+          "control-muted",
+          "control-text",
+          "foreground",
+          "heading-md",
+          "heading-sm",
+          "ink",
+          "ink-faint",
+          "ink-soft",
+          "label",
+          "micro",
+          "nav-active",
+          "page-title",
+          "sidebar-text",
+          "stat-chart-label",
+          "stat-chart-meta",
+          "stat-chart-value",
+          "stat-key-value",
+          "status-available-text",
+          "status-busy-text",
+          "status-danger-text",
+          "status-event-text",
+          "status-own-text",
+          "status-past-text",
+          "status-warning-text"
+        ]
+      },
+      {
+        "utilityPrefixes": ["border", "divide"],
+        "roles": ["border", "line", "line-strong", "sidebar-divider"]
+      },
+      {
+        "utilityPrefixes": ["outline", "ring"],
+        "roles": ["focus", "ring"]
+      },
+      {
+        "utilityPrefixes": ["fill", "stroke"],
+        "roles": [
+          "activity-accent",
+          "accent",
+          "brand",
+          "chart-1",
+          "chart-2",
+          "status-available-indicator",
+          "status-danger-indicator",
+          "status-warning-indicator"
+        ]
+      },
+      {
+        "utilityPrefixes": ["rounded"],
+        "roles": ["control", "dialog", "record", "surface"]
+      },
+      {
+        "utilityPrefixes": ["shadow"],
+        "roles": ["record", "surface-lg", "surface-md", "surface-sm"]
+      },
+      {
+        "utilityPrefixes": ["font"],
+        "roles": [
+          "body",
+          "display",
+          "sans",
+          "stat-chart-label",
+          "stat-chart-meta",
+          "stat-chart-value",
+          "stat-key-value"
+        ]
+      },
+      {
+        "utilityPrefixes": [
+          "gap",
+          "m",
+          "mb",
+          "ml",
+          "mr",
+          "mt",
+          "mx",
+          "my",
+          "p",
+          "pb",
+          "pl",
+          "pr",
+          "pt",
+          "px",
+          "py",
+          "space-x",
+          "space-y"
+        ],
+        "roles": [
+          "2xs",
+          "control",
+          "lg",
+          "md",
+          "page",
+          "record",
+          "section",
+          "sm",
+          "status-inline",
+          "xs"
+        ]
+      },
+      {
+        "utilityPrefixes": ["h", "max-h", "max-w", "min-h", "min-w", "w"],
+        "roles": ["content", "control", "dialog", "page", "sidebar", "sidebar-rail"]
+      }
+    ],
+    "forbiddenRawPalettePattern": "^(?:accent|bg|border|caret|decoration|divide|fill|from|outline|ring|stroke|text|to|via)-(?:amber|blue|cyan|emerald|fuchsia|gray|green|indigo|lime|neutral|orange|pink|purple|red|rose|sky|slate|stone|teal|violet|yellow|zinc)(?:-|$)"
+  },
+  "css": {
+    "allowedLayers": ["theme", "base", "components", "utilities"],
+    "allowedThemeSelectors": [":root", ".dark"],
+    "allowedBaseSelectors": [
+      "*",
+      "*::after",
+      "*::before",
+      "::backdrop",
+      "::selection",
+      "a",
+      "body",
+      "button",
+      "html",
+      "img",
+      "input",
+      "select",
+      "svg",
+      "textarea"
+    ],
+    "allowedThirdPartySelectorPatterns": [
+      "^\\.ProseMirror(?:$|[ .:\\[])",
+      "^\\.selectedCell(?:$|[ .:\\[])"
+    ],
+    "globalImports": [
+      {
+        "importer": "src/index.css",
+        "specifierPatterns": [
+          "^tailwindcss$",
+          "^@fontsource-variable/figtree$",
+          "^\\./styles/design-system\\.css$"
+        ]
+      },
+      {
+        "importer": "src/styles/design-system.css",
+        "specifierPatterns": ["^\\./design-system/[a-z0-9-]+\\.css$"]
+      }
+    ]
+  },
+  "customProperties": {
+    "namespaces": [
+      {
+        "name": "product-theme",
+        "prefixes": ["--aas-", "--app-", "--status-"],
+        "exact": [
+          "--background",
+          "--border",
+          "--chart-1",
+          "--chart-2",
+          "--foreground",
+          "--input",
+          "--muted",
+          "--muted-foreground",
+          "--primary",
+          "--primary-foreground",
+          "--radius",
+          "--ring"
+        ],
+        "definitionRoots": ["src/styles/design-system/tokens.css", "src/lib/platform/theme/"],
+        "usageRoots": ["src/"],
+        "requiresReference": true
+      },
+      {
+        "name": "tailwind-theme",
+        "prefixes": [
+          "--animate-",
+          "--color-",
+          "--font-",
+          "--radius-",
+          "--shadow-",
+          "--spacing-",
+          "--text-"
+        ],
+        "exact": [],
+        "definitionRoots": ["src/index.css", "src/lib/platform/theme/"],
+        "usageRoots": ["src/"]
+      },
+      {
+        "name": "statistics-geometry",
+        "prefixes": [],
+        "exact": [
+          "--statistics-bar-height",
+          "--statistics-bar-width",
+          "--statistics-hour-count",
+          "--statistics-line-chart-width"
+        ],
+        "definitionRoots": ["src/lib/features/statistics/"],
+        "usageRoots": ["src/lib/features/statistics/"],
+        "requiresLocalDefinition": true,
+        "requiresLocalReference": true
+      }
+    ]
+  },
+  "visualizationException": {
+    "ownerRoots": ["src/lib/features/statistics/"],
+    "customProperties": [
+      "--statistics-bar-height",
+      "--statistics-bar-width",
+      "--statistics-hour-count",
+      "--statistics-line-chart-width"
+    ],
+    "svgGeometryAttributes": [
+      "cx",
+      "cy",
+      "height",
+      "points",
+      "r",
+      "rx",
+      "ry",
+      "stroke-dasharray",
+      "stroke-dashoffset",
+      "viewBox",
+      "width",
+      "x",
+      "x1",
+      "x2",
+      "y",
+      "y1",
+      "y2"
+    ],
+    "statisticRoles": ["chart-label", "chart-meta", "chart-value", "key-value"],
+    "scopedCssGeometryProperties": [
+      "block-size",
+      "bottom",
+      "grid-template-columns",
+      "grid-template-rows",
+      "height",
+      "inset",
+      "inset-block",
+      "inset-inline",
+      "left",
+      "max-height",
+      "max-width",
+      "min-height",
+      "min-width",
+      "right",
+      "stroke-dasharray",
+      "stroke-dashoffset",
+      "top",
+      "transform",
+      "width"
+    ],
+    "forbiddenSvgPresentationAttributes": [
+      "color",
+      "fill",
+      "font-family",
+      "font-size",
+      "opacity",
+      "stroke",
+      "stroke-width"
+    ],
+    "svgPresentationValueAllowlist": {
+      "fill": ["none"],
+      "stroke": ["none"]
+    }
+  }
+}

@@ -1,0 +1,7 @@
+@layer base {
+  body {
+    --app-surface: #fff;
+    background: var(--app-surface);
+    color: var(--missing-role);
+  }
+}
