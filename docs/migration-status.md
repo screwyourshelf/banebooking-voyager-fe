@@ -523,6 +523,17 @@ guardfixtures. Arbeidspakken endrer ikke produktstyling.
 - Sjette checkpoint er verifisert med 318 Vitest-tester, tre kritiske E2E-flyter, fire uendrede
   visuelle snapshots, åtte produksjonsroutetester, full check og begge hostingbuildene. Initial CSS
   er redusert til 21,2 KiB gzip; ingen ekstern deploy eller backendendring er utført.
+- Første SWP-0-checkpoint har etablert en deterministisk PostCSS-/Svelte-AST-måler med eksplisitt
+  npm-grense, versjonert JSON-baseline og en Vitest-kontrakt som regenererer og sammenligner hele
+  kildedelen uten tidsstempel- eller rekkefølgestøy.
+- Baseline schemaVersion 1 fører hvert legacyavvik med eksakt fil, linje, eierfamilie,
+  eierpakke og planlagt fjerningscheckpoint. Den måler også alle lokale custom properties,
+  utilityforekomster, markupstyling og de nåværende statistikkunntakene for klasse, inline
+  geometri, SVG og semantiske visualiseringsroller.
+- Ferske Cloudflare Pages- og GitHub Pages-builds registrerer initial CSS/JS, største lazy chunk og
+  de konkrete lazy Sentry-, Supabase- og rikteksteditorchunkene. Måleverktøy og baselinefil er
+  eksplisitt utelukket fra Tailwinds tekstskanning; en kald `HEAD`-sammenligning bekrefter at
+  produksjons-CSS og klasseutvalg er byteidentisk med tilstanden før checkpointet.
 
 ## Nåtilstand
 
@@ -576,14 +587,14 @@ guardfixtures. Arbeidspakken endrer ikke produktstyling.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                                      |
-| ------------------------------------- | ------------------------------------------------------- |
-| Base branch                           | `main`                                                  |
-| Fastslått basecommit                  | `5287c5e`                                               |
-| Siste semantiske checkpoint           | `docs(styling): establish Tailwind lift-and-shift plan` |
-| Lokale commits foran base             | 41                                                      |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                           |
-| Neste planlagte checkpoint            | SWP-0.1 maskinlesbar stylingbaseline                    |
+| Felt                                  | Forventet tilstand                          |
+| ------------------------------------- | ------------------------------------------- |
+| Base branch                           | `main`                                      |
+| Fastslått basecommit                  | `5287c5e`                                   |
+| Siste semantiske checkpoint           | `test(styling): establish SWP-0.1 baseline` |
+| Lokale commits foran base             | 42                                          |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit               |
+| Neste planlagte checkpoint            | SWP-0.2 visuell og interaktiv referanse     |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -592,22 +603,21 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Start bare **SWP-0 checkpoint 1 — maskinlesbar stylingbaseline**:
+Start bare **SWP-0 checkpoint 2 — visuell og interaktiv referanse**:
 
-1. Les hele SWP-0 og ADR-006; ikke endre Svelte-markup eller produktstyling.
-2. Opprett en deterministisk måler, foretrukket som `scripts/measure-styling-baseline.mjs`, og koble
-   den til et eksplisitt npm-script.
-3. Mål minst CSS-filer/linjer/regler, layered/unlayered regler, selectors per eierfamilie,
-   `!important`, rå visuelle verdier, CSS custom properties, Tailwind-utilities, `@apply`,
-   `style=`/`style:*`/`<style>`, featureklasser og gjeldende visualiseringsunntak.
-4. Lagre resultatet i et maskinlesbart, versjonert baselineformat med eksakt fil og eierpakke for
-   hvert legacyavvik. Baseline må kunne regenereres uten tidsstempel- eller rekkefølgestøy.
-5. Kjør en fersk produksjonsbuild og registrer initial CSS gzip og relevante lazy chunks uten å
-   endre eksisterende budsjetter.
-6. Legg til en test som regenererer og sammenligner baselineformatet, kjør berørte tester,
-   `npm run check`, build og `git diff --check`, oppdater denne statusen til SWP-0 checkpoint 2 og
-   opprett én lokal checkpoint-commit. Stopp deretter; ikke start screenshotcheckpointet i samme
-   sesjon.
+1. Les hele SWP-0, ADR-006 og den maskinlesbare baselinen; ikke endre produktstyling, markup eller
+   backend.
+2. Fastsett en navngitt screenshotmatrise som dekker app-shell/navigation, Page/Section,
+   Collection, Form/Settings, Dialog/Select/Calendar, editor og statistikk. Gjenbruk eksisterende
+   Playwright-harness og fixtures fremfor å opprette en parallell testapp.
+3. Dekk 390×844 og 1440×1000 samt lyst/mørkt theme der uttrykket faktisk skifter. Hvert bilde skal
+   ha deterministisk route, rolle, data/state og viewport; nettverks- eller animasjonsstøy skal
+   fjernes ved testgrensen, ikke med produktendringer.
+4. Registrer og test fokusstart/-retur, relevante tastaturforløp, én `main`, synlig `h1`,
+   horisontal overflow og tom warn/error-konsoll for de representative flatene.
+5. Kjør den komplette nye snapshotmatrisen og berørte E2E-flyter, sammenlign produksjons-CSS mot
+   SWP-0.1-baselinen, oppdater statusen til checkpoint 3 og opprett én lokal grønn commit. Stopp
+   deretter; ikke start guardfixturecheckpointet i samme sesjon.
 
 ## Arbeidspakkeregister
 
@@ -621,7 +631,7 @@ Start bare **SWP-0 checkpoint 1 — maskinlesbar stylingbaseline**:
 | WP-5 App-shell                   | Fullført | Shell, navigation, routeaktivitet, konto og Mer grønne       |
 | WP-6 Featuremigrering            | Fullført | Elleve checkpoints og alle Svelte-featureflater er grønne    |
 | WP-7 Paritet og produksjonsbytte | Fullført | Paritet, React-fjerning, CSS, drift og sluttport grønne      |
-| SWP-0 Baseline og guardkontrakt  | Aktiv    | Neste: maskinlesbar stylingbaseline                          |
+| SWP-0 Baseline og guardkontrakt  | Aktiv    | Maskinbaseline grønn; neste: visuell/interaktiv referanse    |
 | SWP-1 Theme og guards            | Venter   | Starter etter frosset styling- og visuell baseline           |
 | SWP-2 UI-primitives              | Venter   | Tailwind-konvertering bak stabil primitivegrense             |
 | SWP-3 Produktpatterns            | Venter   | Semantiske familier migreres i avhengighetsrekkefølge        |
@@ -654,14 +664,23 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 - Playwright-harnessen omskriver bare testkontekstens API-header til `DevelopmentBearer`; vanlig
   dev-, preview- og produksjonstrafikk bruker fortsatt den autoritative `Bearer`-kontrakten.
-- Ingen midlertidige rammeverksadapters eller React-legacy gjenstår. Stylingreviewen har derimot
-  identifisert målrettet overgangsgjeld som skal baselineføres i SWP-0: `patterns.css` er 3500
-  linjer, `responsive.css` er 503 linjer og `feature-compositions.css` er 731 linjer.
-- 88 regler i `patterns.css` ligger utenfor `@layer`, og appens designfiler bruker samlet 75
-  `!important`. Tallene er kaldreviewdata og skal erstattes av den deterministiske SWP-0-målingen.
-- Tailwind er installert, men aktiv Svelte-markup bruker ennå ikke utility-first-mønsteret;
-  `@apply` forekommer bare tre steder i primitive base-CSS. Dette er planlagt overgang, ikke
+- Ingen midlertidige rammeverksadapters eller React-legacy gjenstår. Stylingbaselinen måler sju
+  aktive CSS-filer, 5973 linjer, 780 regler og 846 selektorer. De brede overgangsfilene er fortsatt
+  `patterns.css` med 3500 linjer, `responsive.css` med 503 linjer og
+  `feature-compositions.css` med 731 linjer.
+- 91 regler er ulagrede: tre autoritative theme-regler, 87 legacyregler i `patterns.css` og én
+  global reduced-motion-regel i `responsive.css`. Den foreløpige kaldreviewen tilskrev feilaktig
+  begge de to siste gruppene til `patterns.css`; AST-baselinen er nå autoritativ.
+- Baseline fører 2233 overgangsavvik: 843 globale produktselektorer, 1117 rå visuelle
+  deklarasjoner, 75 `!important`, 49 komponentlokale custom-property-definisjoner, 88 ulagrede
+  legacyregler, tre `@apply`, 52 featureklasseforekomster og seks inline styles.
+- Tailwind er installert, men aktiv Svelte-markup bruker null utilities. De tre `@apply`-direktivene
+  inneholder fem utilitytokens i primitive base-CSS. Dette er planlagt overgang, ikke
   målarkitektur.
+- 252 CSS custom-property-definisjoner og 850 referanser er registrert. Statistikk er eneste
+  featurestylingflate og har 106 eksplisitte unntakskandidater: 52 klasseforekomster, seks inline
+  custom-property-verdier, 32 SVG-geometriattributter og 16 semantiske visualiseringsroller. Den
+  varige allowlisten avgjøres først i SWP-5.2.
 - `npm audit` rapporterer seks lave transitive funn i den aktive SvelteKit-/Bits UI-kjeden og ingen
   moderate, høye eller kritiske funn. Audit tilbyr ikke en kompatibel oppgradering som fjerner de
   lave funnene; foreslåtte majorendringer er derfor ikke brukt som del av lift-and-shift-en.
@@ -669,8 +688,9 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
   i produksjonsgrafen eller byggartefaktene og er ikke React-/ReactDOM-runtime.
 - Statisk død-kodeanalyse rapporterer bare komplette DTO-typer som ennå ikke har en UI-konsument.
   De beholdes som transportkontrakt i `lib/contracts`; det finnes ingen tilsvarende ubrukt runtimekode.
-- Produksjonsbevisets initial CSS er 21,2 KiB gzip av et 50 KiB-budsjett. Største lazy JS-chunk er
-  fortsatt 120,5 KiB av 130 KiB og har liten, men grønn headroom.
+- SWP-0-buildens initial CSS er 21,3 KiB gzip for Cloudflare Pages og 21,4 KiB for GitHub Pages av
+  et uendret 50 KiB-budsjett. Største lazy JS-chunk er fortsatt 120,5 KiB av 130 KiB og har liten,
+  men grønn headroom.
 
 ## Siste verifikasjon
 
@@ -679,15 +699,19 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 | Prettier på aktiv kode og dokumenter | Bestått 2026-08-23                                                                 |
 | Relative dokumentlenker              | Bestått 2026-08-23                                                                 |
 | `git diff --check`                   | Bestått 2026-08-23                                                                 |
-| `npm test`                           | Bestått 2026-08-23: 86 filer, 318 tester                                           |
+| `npm test`                           | Bestått 2026-08-23: 87 filer, 319 tester                                           |
 | `npm run check`                      | Bestått 2026-08-23: Svelte-typecheck, arkitektur, legacy, design, lint og format   |
+| SWP-0 kildebaseline                  | Bestått 2026-08-23: 7 CSS-filer, 780 regler, 846 selektorer, 2233 avvik            |
+| SWP-0 baselinekontrakt               | Bestått 2026-08-23: schemaVersion 1 regenererer deterministisk i Vitest/npm        |
+| SWP-0 visualiseringsinventar         | Komplett 2026-08-23: 106 klasse-, style-, SVG- og rollekandidater                  |
 | Asset-recovery-kontrakt              | Bestått 2026-08-23: ferske assets uten sletting av auth-/site storage              |
 | Knip dead-code-review                | Bestått 2026-08-23: kun bevisst beholdte transporttyper rapporteres                |
-| Cloudflare Pages-build               | Bestått 2026-08-23: root path og `index.html`-fallback                             |
-| GitHub Pages-build                   | Bestått 2026-08-23: eksplisitt `/banebooking` og `404.html`-fallback               |
+| Cloudflare Pages-build               | Bestått 2026-08-23: 21,3 KiB initial CSS, root og `index.html`-fallback            |
+| GitHub Pages-build                   | Bestått 2026-08-23: 21,4 KiB CSS, `/banebooking` og `404.html`-fallback            |
 | Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                  |
 | Nettleserrender                      | Bestått 2026-08-23: Statistikk i 4 flater uten overflow eller konsollfeil          |
-| SvelteKit-bundle                     | Verifisert 2026-08-23: ingen React; Sentry dynamisk og ikke preloadet              |
+| SvelteKit-bundle                     | Verifisert 2026-08-23: 61 JS-chunks; lazygrensene og 120,5 KiB-maksimum er grønne  |
+| SWP-0 målerisolasjon                 | Verifisert 2026-08-23: CSS og klasseutvalg er byteidentisk med ren `HEAD`          |
 | Vite-/dependencygraf                 | Verifisert 2026-08-23: Vite 8.2.2, devtools dev-only, direkte pakkegraf komplett   |
 | WP-7 React-fjerningskontroll         | Bestått 2026-08-23: ingen TSX, broer eller React/Axios/Query/Radix-pakker          |
 | WP-7 CSS-/tokenrekkevidde            | Bestått 2026-08-23: toveis klasse-, anatomi-, slot- og tokenkontroll               |
@@ -733,10 +757,14 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 ## Filer i siste checkpoint
 
-- ADR-006 med Tailwind-, theme-, Bits UI- og featurestylinggrenser
-- `docs/styling-lift-and-shift-plan.md` med SWP-0–SWP-7, avtakende baseline og uavhengig sluttport
-- oppdatert `/start`-protokoll, dokumentindeks, målarkitektur, produktregler og ADR-register
-- aktiv SWP-0-status med ett eksakt, ikke-visuelt baselinecheckpoint
+- `scripts/measure-styling-baseline.mjs` og de smale målemodulene for eierskap, CSS/Svelte-kilde og
+  root/base-produksjonsartefakter
+- `docs/styling-baseline.json` med schemaVersion 1, eksakte kildeavvik, visualiseringskandidater og
+  produksjonsmål uten tidsstempel
+- `src/styling-baseline.test.ts`, eksplisitte npm-script og direkte PostCSS-parseravhengigheter for
+  deterministisk regenerering og sammenligning
+- Tailwind-kildeekskludering for måleverktøy, test og generert baseline samt oppdatert
+  migreringsstatus med SWP-0.2 som neste eksakte steg
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
 pågående arbeid etter checkpointet.

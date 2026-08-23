@@ -2,6 +2,11 @@
 @import "@fontsource-variable/figtree";
 @import "./styles/design-system.css";
 
+@source not "../docs/styling-baseline.json";
+@source not "../scripts/measure-styling-baseline.mjs";
+@source not "../scripts/styling-baseline";
+@source not "./styling-baseline.test.ts";
+
 @theme inline {
   --font-sans: "Figtree Variable", Figtree, ui-sans-serif, system-ui, sans-serif;
   --color-ring: var(--ring);
