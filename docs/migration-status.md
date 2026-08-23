@@ -4,7 +4,7 @@
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** WP-6 — Featuremigrering (pågår; fire checkpoints fullført)
+> **Aktiv arbeidspakke:** WP-6 — Featuremigrering (pågår; fem checkpoints fullført)
 >
 > **Sist oppdatert:** 2026-08-23
 
@@ -328,21 +328,34 @@ er ferdig migrert.
 - Fjerde WP-6-checkpoint er kontrollert på 390×844 og 1440×900 i lyst og mørkt tema for Mine tider,
   profil, persondata og slettedialog. Hver flate har én main-landmark, synlig h1, ingen horisontal
   overflow og tom warn/error-konsoll; fokus og dialogstate er også kontrollert interaktivt.
+- Arrangementer og Nyheter er flyttet til to isolerte offentlige featureinnganger med egne typed
+  API-, query-key-, query- og modellgrenser. De tynne routene komponerer reelle Svelte-flater, og
+  begge routeplaceholderne er fjernet uten backendendringer.
+- Arrangementlisten velger offentlig eller innlogget endpoint fra session-state, støtter historikk,
+  aktivitetsfilter, lokal paginering og kontrollert detaljutviding fra `?arrangement={id}`. Avlysning
+  er kapabilitetsstyrt, bruker typed mutation/dialog og invaliderer bare tenantens arrangementcache.
+- Nyhetsfeeden er offentlig, lokalt paginert og presenterer backendens HTML som trygg tekst.
+  Gyldige eksterne HTTP(S)-lenker åpnes i ny fane med `noopener noreferrer`; loading, retrybar feil,
+  tomtilstand og bakgrunnsoppfrisking eies av de autoritative Collection-patternene.
+- Femte WP-6-checkpoint er kontrollert med offentlig produksjonsdata på 390×844 og 1440×900 i lyst
+  og mørkt tema. Begge flater har én main-landmark, synlig h1 og ingen sideoverflow;
+  arrangement-deeplink og historikkbryter er kontrollert interaktivt. Lokal proxy ga bare forventet
+  Vite-HMR-støy, uten applikasjonsfeil.
 
 ## Nåtilstand
 
 - SvelteKit er den aktive dev-, test-, preview- og produksjonsbuilden.
-- Login, vilkår, root-feil/404, de tre beskyttede policyflatene, booking, Mine tider og Min side er reelle
-  Svelte-featureflater; øvrige produkt-URL-er rendrer fortsatt foreløpige routeflater til de
-  migreres i WP-6.
+- Login, vilkår, root-feil/404, de tre beskyttede policyflatene, booking, Mine tider, Min side,
+  Arrangementer og Nyheter er reelle Svelte-featureflater; øvrige produkt-URL-er rendrer fortsatt
+  foreløpige routeflater til de migreres i WP-6.
 - React-kilden er fortsatt produksjonsreferanse i arbeidskopien, men er ikke koblet til eller bundlet
   av SvelteKit.
 - Contracts, ren domenelogikk og platformkjerne er nå autoritative for både videre Svelte-arbeid og
   de midlertidige React-broene.
 - Auth, tenant, Query og session guards er autoritativt SvelteKit-fundament. Offentlig login,
   callback-retur, vilkår, root-feil, hele sperre → kunngjøring → medlemskap-rekkefølgen og booking
-  med bootstrap samt Mine tider og Min side er migrert; Arrangementer og Nyheter er neste
-  checkpoint.
+  med bootstrap samt Mine tider, Min side, Arrangementer og Nyheter er migrert; Baner, Grener og
+  deres felles arbeidsområde er neste checkpoint.
 - WP-4 er fullført. Tokens, font, lyst/mørkt tema, offentlige handlinger, Icon-, tekst-, Select-,
   Date-/Calendar- og Rich-text-kontroller samt Page-, Section-, feedback-, Form-, Settings-,
   Dialog-, Document-, Navigation- og Collection-patternene inkludert sammensatte rader og
@@ -355,14 +368,14 @@ er ferdig migrert.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                            |
-| ------------------------------------- | --------------------------------------------- |
-| Base branch                           | `main`                                        |
-| Fastslått basecommit                  | `5287c5e`                                     |
-| Siste semantiske checkpoint           | `feat(sveltekit): migrate WP-6 account flows` |
-| Lokale commits foran base             | 25                                            |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                 |
-| Neste planlagte checkpoint            | WP-6 Arrangementer og Nyheter                 |
+| Felt                                  | Forventet tilstand                             |
+| ------------------------------------- | ---------------------------------------------- |
+| Base branch                           | `main`                                         |
+| Fastslått basecommit                  | `5287c5e`                                      |
+| Siste semantiske checkpoint           | `feat(sveltekit): migrate WP-6 public content` |
+| Lokale commits foran base             | 26                                             |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                  |
+| Neste planlagte checkpoint            | WP-6 Baner, Grener og felles arbeidsområde     |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -371,21 +384,21 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Neste `/start` skal bare starte femte avgrensede WP-6-checkpoint for Arrangementer og Nyheter:
+Neste `/start` skal bare starte sjette avgrensede WP-6-checkpoint for Baner, Grener og deres felles
+arbeidsområde:
 
-1. Kaldkartlegg React-referansens `ArrangementerPage`, `ArrangementerView`,
-   `ArrangementerContent`, `useArrangementer`, `NyheterPage`, `NyheterView` og `NyheterContent`.
-   Bekreft offentlig kontra innlogget arrangementendpoint, historikk, aktivitetsfiltre,
-   queryparameteren `?arrangement={id}`, kapabiliteter, detaljhandlinger, nyhetslenker og lokal
-   paginering mot adferdsinventaret.
-2. Opprett avgrensede offentlige featureinnganger med typed querygrenser og reelle flater for
-   `/arrangementer` og `/nyheter`. Gjenbruk session-context samt autoritative Page-, Collection-,
-   Document- og Dialog-patterns; routene skal bare komponere featureinnganger, og placeholderne
-   fjernes samlet når begge offentlige innholdsflater virker anonymt og innlogget.
-3. Verifiser loading/error/empty, kommende og historiske arrangementer, URL-styrt detaljrad,
-   kapabilitetsstyrte handlinger, sikker ekstern nyhetsnavigasjon og paginering. Kontroller
-   mobil/desktop og lyst/mørkt tema, kjør full check/test og begge hostingbuildene; ikke start
-   Baner/Grener i samme sesjon.
+1. Kaldkartlegg React-referansens Baner-/Grener-sider, view/content-hooks og delte arbeidsområde.
+   Bekreft seksjonsnavigasjon, `baner:admin`/`grener:admin`, lokal valgt entity, typed CRUD-,
+   aktivering-, reorder- og bookinginnstillingskontrakter samt alle editor-, dirty- og feilstates
+   mot adferdsinventaret og backend-DTO-ene.
+2. Opprett én avgrenset offentlig admin-featureinngang med typed API-, query- og mutationgrenser for
+   `/admin/baner` og `/admin/grener`. Gjenbruk session-context samt autoritative Page-, Navigation-,
+   Collection-, Settings-, Form-, Select-, Dialog- og editorpatterns; routene skal bare velge
+   seksjon og komponere featureinngangen, og placeholderne fjernes samlet når arbeidsområdet virker.
+3. Verifiser kapabilitetsstyrt tilgang og seksjoner, loading/error/empty, oppretting, redigering,
+   aktivering/deaktivering, reorder, baneoverstyringer, grenregler, validering, dirty/pending og
+   mutasjonsfeil. Kontroller mobil/desktop og lyst/mørkt tema, kjør full check/test og begge
+   hostingbuildene; ikke start Klubb- og medlemskapsinnstillinger i samme sesjon.
 
 ## Arbeidspakkeregister
 
@@ -397,7 +410,7 @@ Neste `/start` skal bare starte femte avgrensede WP-6-checkpoint for Arrangement
 | WP-3 Auth/tenant/serverdata      | Fullført     | Auth, tenant, Query, guards, 401 og base path grønne         |
 | WP-4 UI-fundament                | Fullført     | Alle kartlagte UI-familier og filterkomposisjon er grønne    |
 | WP-5 App-shell                   | Fullført     | Shell, navigation, routeaktivitet, konto og Mer grønne       |
-| WP-6 Featuremigrering            | Pågår        | Auth, policy/guards, booking og kontoflyt grønne             |
+| WP-6 Featuremigrering            | Pågår        | Auth, policy, booking, konto og offentlig innhold grønne     |
 | WP-7 Paritet og produksjonsbytte | Ikke startet | —                                                            |
 
 ## Featureregister
@@ -407,7 +420,7 @@ Neste `/start` skal bare starte femte avgrensede WP-6-checkpoint for Arrangement
 | Auth, policy, feil og guards | Fullført | Offentlige og beskyttede flater samt guardrekkefølge grønne |
 | Booking og bootstrap         | Fullført | Kjerneflyt, mutationer og fallback grønne                   |
 | Mine tider og Min side       | Fullført | Beskyttet kontoflyt, mutationer og persondata grønne        |
-| Arrangementer og Nyheter     | Kartlagt | Offentlig/innlogget innhold                                 |
+| Arrangementer og Nyheter     | Fullført | Offentlig/innlogget innhold, deeplink og trygg feed grønne  |
 | Baner og Grener              | Kartlagt | Delt adminarbeidsområde                                     |
 | Klubb og medlemskap          | Kartlagt | Admininnstillinger                                          |
 | Arrangementadministrasjon    | Kartlagt | Sammensatt editor og bookinger                              |
@@ -417,9 +430,9 @@ Neste `/start` skal bare starte femte avgrensede WP-6-checkpoint for Arrangement
 
 ## Åpne blokkeringer
 
-Ingen kjente blokkeringer for neste featurecheckpoint. Arrangementer og Nyheter kan gjennomføres
-mot eksisterende React-referanse, adferdsinventar og etablerte API-, Query-, tenant-, session- og
-UI-grenser uten backendendringer eller ny brukerbeslutning.
+Ingen kjente blokkeringer for neste featurecheckpoint. Baner, Grener og deres felles arbeidsområde
+kan gjennomføres mot eksisterende React-referanse, adferdsinventar og etablerte API-, Query-,
+tenant-, session- og UI-grenser uten backendendringer eller ny brukerbeslutning.
 
 ## Midlertidig kode og kjente avvik
 
@@ -429,7 +442,8 @@ UI-grenser uten backendendringer eller ny brukerbeslutning.
   kode i `src/lib/contracts`, `src/lib/domain` og `src/lib/platform`.
 - Gjenværende Svelte-featureflater er bevisst midlertidige route-placeholdere til de migreres i
   WP-6. Login-, vilkårs-, de tre beskyttede policy-, booking-, Mine tider- og Min side-placeholderne
-  er fjernet; Arrangementer og Nyheter er de neste forventede placeholderne som erstattes samlet.
+  samt Arrangementer- og Nyheter-placeholderne er fjernet; Baner og Grener er de neste forventede
+  placeholderne som erstattes samlet.
 - Det eksisterende lokale utviklingsoppsettet sender standard `Authorization: Bearer`, mens
   backendens isolerte utviklingsscheme forventer `DevelopmentBearer`. Automatiske tester og builds
   påvirkes ikke; full innlogget nettleser-QA brukte en midlertidig lokal header-rewrite-proxy mot en
@@ -479,12 +493,12 @@ UI-grenser uten backendendringer eller ny brukerbeslutning.
 | Prettier på aktiv kode og dokumenter | Bestått 2026-08-23                                                                 |
 | Relative dokumentlenker              | Bestått 2026-08-23                                                                 |
 | `git diff --check`                   | Bestått 2026-08-23                                                                 |
-| `npm test`                           | Bestått 2026-08-23: 56 filer, 234 tester                                           |
+| `npm test`                           | Bestått 2026-08-23: 62 filer, 248 tester                                           |
 | `npm run check`                      | Bestått 2026-08-23: Svelte/React-typecheck, arkitektur, design, lint og format     |
 | Cloudflare Pages-build               | Bestått 2026-08-23: root path og `index.html`-fallback                             |
 | GitHub Pages-build                   | Bestått 2026-08-23: eksplisitt `/banebooking` og `404.html`-fallback               |
 | Dev og preview                       | Bestått 2026-08-22: previewbase samt dev i multi-/dedikert tenant                  |
-| Nettleserrender                      | Bestått 2026-08-23: kontoflyt i 4 viewport/temakombinasjoner, ingen overflow/feil  |
+| Nettleserrender                      | Bestått 2026-08-23: offentlig innhold i 8 flater, ingen app-overflow/-feil         |
 | SvelteKit-bundle                     | Verifisert 2026-08-22: ingen React-runtime                                         |
 | WP-0 route-/featureinventar          | Komplett 2026-08-22                                                                |
 | WP-4 fokustester                     | Bestått 2026-08-22: 2 filer, 6 tester for tema, storage og DOM-applikasjon         |
@@ -504,16 +518,19 @@ UI-grenser uten backendendringer eller ny brukerbeslutning.
 | WP-6 protected policy-/guardtester   | Bestått 2026-08-23: 5 filer, 16 tester for API, guard, mutation, validation og axe |
 | WP-6 booking-/bootstraptester        | Bestått 2026-08-23: 5 filer, 28 tester for API, state, mutation, rollback og axe   |
 | WP-6 konto-/persondatatester         | Bestått 2026-08-23: 5 filer, 16 tester for API, state, mutation, rollback og axe   |
+| WP-6 offentlig innhold-tester        | Bestått 2026-08-23: 6 filer, 14 tester for API, query, modell, deeplink og axe     |
 
 ## Filer i siste checkpoint
 
-- offentlig kontofeature med API-, query-key-, mutation-, modell-, bookingrad-, profil-,
-  persondata-, slettedialog-, fixture-, kontrakt- og komponent-/axe-tester i
-  `src/lib/features/account/`
-- browser-only JSON-download-adapter i `src/lib/platform/download/`
-- tynne, funksjonelle Mine tider- og Min side-routes i
-  `src/routes/[[slug=tenant]]/(protected)/bookinger/` og
-  `src/routes/[[slug=tenant]]/(protected)/minside/`
+- offentlig Arrangementer-feature med API-, query-key-, query-, modell-, detaljrad-,
+  avlysningsdialog-, fixture-, kontrakt- og komponent-/axe-tester i
+  `src/lib/features/arrangements/`
+- offentlig Nyheter-feature med API-, query-key-, query-, modell-, feedrad-, fixture-, kontrakt-
+  og komponent-/axe-tester i `src/lib/features/news/`
+- tynne, funksjonelle Arrangementer- og Nyheter-routes i
+  `src/routes/[[slug=tenant]]/(public)/arrangementer/` og
+  `src/routes/[[slug=tenant]]/(public)/nyheter/`
+- samlet offentlig featureintegrasjonstest i `src/lib/features/public-content.test.ts`
 - `docs/migration-status.md`
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for

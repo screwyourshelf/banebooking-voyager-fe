@@ -1,9 +1,5 @@
 <script lang="ts">
-  import { RoutePlaceholder } from "$lib/ui";
+  import { NewsScreen } from "$lib/features/news";
 </script>
 
-<RoutePlaceholder
-  eyebrow="Klubben"
-  title="Nyheter"
-  description="Den offentlige nyhetsflaten migreres i WP-6."
-/>
+<NewsScreen />
