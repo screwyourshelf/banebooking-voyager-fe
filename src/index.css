@@ -906,6 +906,18 @@
   stroke-width: var(--app-visualization-comparison-stroke-width);
 }
 
+@utility stroke-dasharray-visualization-comparison {
+  stroke-dasharray: var(--app-visualization-comparison-stroke-dasharray);
+}
+
+@utility text-anchor-end {
+  text-anchor: end;
+}
+
+@utility text-anchor-middle {
+  text-anchor: middle;
+}
+
 @utility transition-visualization-bar {
   transition: height var(--app-visualization-bar-transition-duration) ease;
 }

@@ -3,30 +3,11 @@ import path from "node:path";
 import postcss from "postcss";
 import selectorParser from "postcss-selector-parser";
 import { parse } from "svelte/compiler";
-import { analyzeProductionStylingTree } from "../styling-guards/production-tree-contract.mjs";
+import { loadStylingGuardContract } from "../styling-guards/contract.mjs";
+import { checkStylingProductionTree } from "../styling-guards/production-tree-contract.mjs";
 import { emptySelectorFacts, ownerForMarkup, ownerForStylesheet } from "./ownership.mjs";
 
 const legacyStylesheets = new Set();
-
-const svgGeometryAttributes = new Set([
-  "cx",
-  "cy",
-  "height",
-  "points",
-  "r",
-  "rx",
-  "ry",
-  "stroke-dasharray",
-  "stroke-dashoffset",
-  "viewBox",
-  "width",
-  "x",
-  "x1",
-  "x2",
-  "y",
-  "y1",
-  "y2",
-]);
 
 const tailwindUtilityRoots = new Set([
   "absolute",
@@ -142,6 +123,7 @@ const tailwindUtilityRoots = new Set([
 ]);
 
 export async function measureStylingSource(projectRoot) {
+  const contract = await loadStylingGuardContract();
   const sourceRoot = path.join(projectRoot, "src");
   const sourceFiles = await collectFiles(sourceRoot);
   const cssFiles = sourceFiles.filter((file) => file.endsWith(".css"));
@@ -151,10 +133,10 @@ export async function measureStylingSource(projectRoot) {
       (file.endsWith(".svelte") && !file.endsWith(".test.svelte"))
   );
 
-  const [css, markup, productionTree] = await Promise.all([
+  const [css, markup] = await Promise.all([
     measureStylesheets(projectRoot, cssFiles),
-    measureMarkup(projectRoot, markupFiles),
-    analyzeProductionStylingTree(projectRoot),
+    measureMarkup(projectRoot, markupFiles, contract.visualizationException),
+    checkStylingProductionTree(projectRoot),
   ]);
   const tailwindUtilities = sortEntries([
     ...css.applyDirectives.flatMap((directive) =>
@@ -170,9 +152,6 @@ export async function measureStylingSource(projectRoot) {
     ...markup.tailwindUtilities,
   ]);
   const visualizationExceptions = sortEntries([
-    ...markup.featureClasses
-      .filter(({ ownerFamily }) => ownerFamily === "statistics-visualization")
-      .map((entry) => ({ exceptionKind: "feature-class", ...entry })),
     ...markup.styleAttributes
       .filter(({ disposition }) => disposition === "visualization-exception-candidate")
       .map((entry) => ({ exceptionKind: "inline-custom-property", ...entry })),
@@ -183,10 +162,6 @@ export async function measureStylingSource(projectRoot) {
       exceptionKind: "svg-geometry",
       ...entry,
     })),
-    ...markup.statisticRoles.map((entry) => ({
-      exceptionKind: "statistic-role",
-      ...entry,
-    })),
   ]);
   const legacyDebt = buildLegacyDebt(css, markup);
   const selectorsByOwnerFamily = countBy(css.selectors, "ownerFamily");
@@ -195,8 +170,6 @@ export async function measureStylingSource(projectRoot) {
   return {
     scope: {
       css: "All versioned src/**/*.css files.",
-      guardDiagnostics:
-        "Exact rule ID, file, line, column and message for the nine production-tree guards; *.test.svelte is excluded explicitly.",
       legacyStylesheets: [...legacyStylesheets].sort(compareStrings),
       markup:
         "src/app.html and production .svelte files under src; *.test.svelte fixtures are excluded.",
@@ -215,7 +188,6 @@ export async function measureStylingSource(projectRoot) {
       cssLineCount: sum(css.files, "lineCount"),
       cssRuleCount: css.rules.length,
       featureClassOccurrenceCount: markup.featureClasses.length,
-      guardDiagnosticCount: productionTree.diagnostics.length,
       importantDeclarationCount: css.importantDeclarations.length,
       layeredCssRuleCount: css.rules.filter(({ layer }) => layer !== null).length,
       legacyDebtCount: legacyDebt.length,
@@ -242,7 +214,6 @@ export async function measureStylingSource(projectRoot) {
       applyDirectives: css.applyDirectives,
     },
     markup,
-    guardDiagnostics: productionTree.diagnostics,
     tailwindUtilities,
     visualizationExceptions,
     legacyDebt,
@@ -395,7 +366,7 @@ async function measureStylesheets(projectRoot, absoluteFiles) {
   };
 }
 
-async function measureMarkup(projectRoot, absoluteFiles) {
+async function measureMarkup(projectRoot, absoluteFiles, visualizationException) {
   const files = [];
   const classTokens = [];
   const dynamicClassAttributes = [];
@@ -414,6 +385,7 @@ async function measureMarkup(projectRoot, absoluteFiles) {
     const source = await readFile(absoluteFile, "utf8");
     const ast = parse(source, { filename: file, modern: true });
     const owner = ownerForMarkup(file);
+    const visualizationOwner = visualizationException.owners[file] ?? null;
     const fileCounts = {
       classTokenCount: 0,
       cssImportCount: 0,
@@ -453,7 +425,7 @@ async function measureMarkup(projectRoot, absoluteFiles) {
         const disposition =
           file === "src/app.html"
             ? "startup-document-contract"
-            : owner.ownerFamily === "statistics-visualization"
+            : visualizationOwner
               ? "visualization-exception-candidate"
               : "transition-debt";
         styleBlocks.push({
@@ -523,10 +495,7 @@ async function measureMarkup(projectRoot, absoluteFiles) {
           ) {
             featureClasses.push({
               ...entry,
-              disposition:
-                owner.ownerFamily === "statistics-visualization"
-                  ? "visualization-exception-candidate"
-                  : "transition-debt",
+              disposition: "transition-debt",
             });
           }
         }
@@ -546,7 +515,7 @@ async function measureMarkup(projectRoot, absoluteFiles) {
         const customProperties = [...attributeSource.matchAll(/--[A-Za-z0-9_-]+/g)].map(
           (match) => match[0]
         );
-        const disposition = markupStyleDisposition(file, owner, customProperties);
+        const disposition = markupStyleDisposition(file, visualizationOwner, customProperties);
         styleAttributes.push({
           ...location,
           customProperties: [...new Set(customProperties)].sort(compareStrings),
@@ -560,7 +529,7 @@ async function measureMarkup(projectRoot, absoluteFiles) {
 
       if (attribute.type === "StyleDirective") {
         const customProperties = attribute.name.startsWith("--") ? [attribute.name] : [];
-        const disposition = markupStyleDisposition(file, owner, customProperties);
+        const disposition = markupStyleDisposition(file, visualizationOwner, customProperties);
         styleDirectives.push({
           ...location,
           disposition,
@@ -587,8 +556,7 @@ async function measureMarkup(projectRoot, absoluteFiles) {
       if (
         insideSvg &&
         attribute.type === "Attribute" &&
-        svgGeometryAttributes.has(attribute.name) &&
-        owner.ownerFamily === "statistics-visualization"
+        visualizationOwner?.svgGeometryAttributes.includes(attribute.name)
       ) {
         geometryAttributes.push({
           ...location,
@@ -657,17 +625,17 @@ function buildLegacyDebt(css, markup) {
     debt.push({ debtKind: "feature-dynamic-class", ...dynamicClass });
   }
   for (const styleAttribute of markup.styleAttributes.filter(
-    ({ disposition }) => disposition !== "startup-document-contract"
+    ({ disposition }) => disposition === "transition-debt"
   )) {
     debt.push({ debtKind: "inline-style", ...styleAttribute });
   }
   for (const styleDirective of markup.styleDirectives.filter(
-    ({ disposition }) => disposition !== "startup-document-contract"
+    ({ disposition }) => disposition === "transition-debt"
   )) {
     debt.push({ debtKind: "style-directive", ...styleDirective });
   }
   for (const styleBlock of markup.styleBlocks.filter(
-    ({ disposition }) => disposition !== "startup-document-contract"
+    ({ disposition }) => disposition === "transition-debt"
   )) {
     debt.push({ debtKind: "component-style-block", ...styleBlock });
   }
@@ -801,12 +769,12 @@ function isVisualProperty(property) {
   );
 }
 
-function markupStyleDisposition(file, owner, customProperties) {
+function markupStyleDisposition(file, visualizationOwner, customProperties) {
   if (file === "src/app.html") return "startup-document-contract";
   if (
-    owner.ownerFamily === "statistics-visualization" &&
+    visualizationOwner &&
     customProperties.length > 0 &&
-    customProperties.every((name) => name.startsWith("--statistics-"))
+    customProperties.every((name) => visualizationOwner.customProperties.includes(name))
   ) {
     return "visualization-exception-candidate";
   }

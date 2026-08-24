@@ -80,7 +80,7 @@
           {@const y = top + (1 - share) * (height - top - bottom)}
           <g data-visualization="grid">
             <line x1={left} x2={chartWidth - right} y1={y} y2={y}></line>
-            <text x={left - 8} y={y + 4} text-anchor="end">
+            <text x={left - 8} y={y + 4}>
               {formatHours(Math.round(maximum * share))}
             </text>
           </g>
@@ -115,7 +115,7 @@
             >
               <title>{month} {item.point.år}: {formatHours(item.value)}</title>
             </circle>
-            <text data-visualization="label" x={item.x} y={height - 13} text-anchor="middle">
+            <text data-visualization="label" x={item.x} y={height - 13}>
               {hasMultipleYears ? `${month} ${String(item.point.år).slice(-2)}` : month}
             </text>
           </g>
@@ -128,9 +128,5 @@
 <style>
   [data-visualization="line-plot"] {
     width: var(--statistics-line-chart-width);
-  }
-
-  [data-visualization="line"][data-series="previous"] {
-    stroke-dasharray: 7 6;
   }
 </style>

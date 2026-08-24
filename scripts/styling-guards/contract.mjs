@@ -9,11 +9,11 @@ export async function loadStylingGuardContract(url = contractUrl) {
 }
 
 export function validateStylingGuardContract(contract) {
-  if (contract?.schemaVersion !== 2) {
-    throw new Error("Styling guard-kontrakten må ha schemaVersion 2.");
+  if (contract?.schemaVersion !== 3) {
+    throw new Error("Styling guard-kontrakten må ha schemaVersion 3.");
   }
   if (
-    contract.analyzerEnforcementPhase !== "active" ||
+    contract.analyzerEnforcementPhase !== "final" ||
     contract.cascadeContractEnforcementPhase !== "active" ||
     contract.themeContractEnforcementPhase !== "active" ||
     contract.productionTreeEnforcementCheckpoint !== "SWP-1.3"
@@ -61,6 +61,7 @@ export function validateStylingGuardContract(contract) {
   validateProductionTreeContract(contract, ruleEntries);
   validateThemeVocabulary(contract);
   validateCssCascadeContract(contract);
+  validateVisualizationExceptionContract(contract);
 }
 
 function validateProductionTreeContract(contract, ruleEntries) {
@@ -69,7 +70,8 @@ function validateProductionTreeContract(contract, ruleEntries) {
     productionTree.sourceRoots?.join(",") !== "src/" ||
     productionTree.sourceExtensions?.join(",") !== ".css,.svelte" ||
     productionTree.excludedFileSuffixes?.join(",") !== ".test.svelte" ||
-    productionTree.legacyBaselinePath !== "docs/styling-baseline.json"
+    productionTree.transitionBaselineRemovalCheckpoint !== "SWP-5.5" ||
+    Object.hasOwn(productionTree, "legacyBaselinePath")
   ) {
     throw new Error(
       "Produksjonstreet må analysere src/**/*.css og produksjons-Svelte med bare *.test.svelte som eksplisitt kildeunntak."
@@ -114,6 +116,97 @@ function validateCssCascadeContract(contract) {
     if (!stylesheets.includes(requiredStylesheet)) {
       throw new Error(`Cascade-kontrakten mangler ${requiredStylesheet}.`);
     }
+  }
+
+  const importantExceptions = contract.css?.allowedImportantDeclarations ?? [];
+  if (
+    importantExceptions.length !== 1 ||
+    importantExceptions[0].stylesheet !== "src/styles/design-system/base.css" ||
+    importantExceptions[0].atRule !== "prefers-reduced-motion: reduce" ||
+    importantExceptions[0].selectors?.join(",") !== "*,*::before,*::after" ||
+    importantExceptions[0].properties?.join(",") !==
+      "animation-duration,animation-iteration-count,scroll-behavior,transition-duration"
+  ) {
+    throw new Error(
+      "Bare den dokumenterte reduced-motion-fallbacken kan bruke app-eid !important."
+    );
+  }
+}
+
+function validateVisualizationExceptionContract(contract) {
+  const visualization = contract.visualizationException ?? {};
+  const owners = Object.entries(visualization.owners ?? {});
+  const expectedOwners = [
+    "src/lib/features/statistics/StatisticsBookingType.svelte",
+    "src/lib/features/statistics/StatisticsDistribution.svelte",
+    "src/lib/features/statistics/StatisticsHourChart.svelte",
+    "src/lib/features/statistics/StatisticsMonthChart.svelte",
+  ];
+  if (owners.map(([sourcePath]) => sourcePath).join(",") !== expectedOwners.join(",")) {
+    throw new Error("Visualiseringsunntaket må ha fire eksakte, sorterte statistikkeiere.");
+  }
+
+  const geometryVocabulary = new Set(visualization.svgGeometryAttributeVocabulary ?? []);
+  const presentationAttributes = new Set(visualization.svgPresentationAttributes ?? []);
+  if (
+    geometryVocabulary.size !== visualization.svgGeometryAttributeVocabulary?.length ||
+    presentationAttributes.size !== visualization.svgPresentationAttributes?.length ||
+    geometryVocabulary.size === 0 ||
+    presentationAttributes.size === 0 ||
+    [...geometryVocabulary].some((attribute) => presentationAttributes.has(attribute))
+  ) {
+    throw new Error("SVG-geometri og presentasjonsattributter må være unike, lukkede vokabular.");
+  }
+  if (visualization.seriesValues?.join(",") !== "current,previous") {
+    throw new Error("Visualiseringsserier må være låst til current og previous.");
+  }
+
+  const customProperties = [];
+  const customPropertyOwners = [];
+  for (const [sourcePath, owner] of owners) {
+    for (const field of [
+      "customProperties",
+      "scopedCssGeometryProperties",
+      "svgGeometryAttributes",
+      "visualizationAnchors",
+    ]) {
+      assertUniqueStrings(owner[field], `${sourcePath}.${field}`);
+    }
+    if (owner.customProperties.length === 0 && owner.svgGeometryAttributes.length === 0) {
+      throw new Error(`${sourcePath} eier ingen faktisk datadrevet geometri.`);
+    }
+    if (owner.svgGeometryAttributes.some((attribute) => !geometryVocabulary.has(attribute))) {
+      throw new Error(`${sourcePath} bruker SVG-geometri utenfor det lukkede vokabularet.`);
+    }
+    if (owner.visualizationAnchors.some((anchor) => !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(anchor))) {
+      throw new Error(`${sourcePath} har et ugyldig data-visualization-anker.`);
+    }
+    customProperties.push(...owner.customProperties);
+    if (owner.customProperties.length > 0) customPropertyOwners.push(sourcePath);
+  }
+
+  const geometryNamespace = contract.customProperties?.namespaces?.find(
+    ({ name }) => name === "statistics-geometry"
+  );
+  if (
+    !geometryNamespace ||
+    [...customProperties].sort().join(",") !== [...geometryNamespace.exact].sort().join(",") ||
+    customPropertyOwners.join(",") !== geometryNamespace.definitionRoots.join(",") ||
+    customPropertyOwners.join(",") !== geometryNamespace.usageRoots.join(",")
+  ) {
+    throw new Error(
+      "Statistics-geometry-namespace og de eksakte visualiseringseierne må beskrive samme kontrakt."
+    );
+  }
+}
+
+function assertUniqueStrings(values, label) {
+  if (
+    !Array.isArray(values) ||
+    values.some((value) => typeof value !== "string" || value === "") ||
+    new Set(values).size !== values.length
+  ) {
+    throw new Error(`${label} må være en unik liste med ikke-tomme strenger.`);
   }
 }
 

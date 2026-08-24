@@ -38,19 +38,20 @@ export function analyzeCssSource({ contract, css, scope, sourcePath }) {
     if (hasKeyframesAncestor(rule)) return;
 
     if (scope === "global") validateGlobalSelectors({ contract, diagnostics, rule, sourcePath });
-    if (scope === "visualization" && rule.selector.includes(":global")) {
-      diagnostics.push(
-        cssDiagnostic(
-          contract.rules.visualizationException.id,
-          "visualiseringsunntaket tillater ikke :global-selektorer",
-          rule
-        )
-      );
+    if (scope === "visualization") {
+      validateVisualizationSelectors({ contract, diagnostics, rule, sourcePath });
     }
   });
 
   root.walkDecls((declaration) => {
-    if (declaration.important) {
+    const valueCustomProperties = [...declaration.value.matchAll(/var\((--[A-Za-z0-9_-]+)/g)].map(
+      (match) => match[1]
+    );
+
+    if (
+      declaration.important &&
+      !isAllowedImportantDeclaration({ contract, declaration, sourcePath })
+    ) {
       diagnostics.push(
         cssDiagnostic(
           contract.rules.cssApplication.id,
@@ -64,7 +65,9 @@ export function analyzeCssSource({ contract, css, scope, sourcePath }) {
       customProperties.definitions.push(customPropertyFact(declaration.prop, declaration));
     } else if (
       scope === "visualization" &&
-      !contract.visualizationException.scopedCssGeometryProperties.includes(declaration.prop)
+      !contract.visualizationException.owners[sourcePath].scopedCssGeometryProperties.includes(
+        declaration.prop
+      )
     ) {
       diagnostics.push(
         cssDiagnostic(
@@ -73,10 +76,23 @@ export function analyzeCssSource({ contract, css, scope, sourcePath }) {
           declaration
         )
       );
+    } else if (
+      scope === "visualization" &&
+      !valueCustomProperties.some((name) =>
+        contract.visualizationException.owners[sourcePath].customProperties.includes(name)
+      )
+    ) {
+      diagnostics.push(
+        cssDiagnostic(
+          contract.rules.visualizationException.id,
+          `den skoperte CSS-egenskapen «${declaration.prop}» må konsumere en registrert geometry-custom-property for ${sourcePath}`,
+          declaration
+        )
+      );
     }
 
-    for (const match of declaration.value.matchAll(/var\((--[A-Za-z0-9_-]+)/g)) {
-      customProperties.references.push(customPropertyFact(match[1], declaration));
+    for (const name of valueCustomProperties) {
+      customProperties.references.push(customPropertyFact(name, declaration));
     }
   });
 
@@ -118,6 +134,18 @@ export function validateCustomPropertyFacts({
       continue;
     }
 
+    if (
+      isVisualization &&
+      !contract.visualizationException.owners[sourcePath].customProperties.includes(name)
+    ) {
+      diagnostics.push({
+        ...firstFact,
+        message: `${name} er ikke registrert for visualiseringseieren ${sourcePath}`,
+        ruleId: contract.rules.visualizationException.id,
+      });
+      continue;
+    }
+
     if (definitions.length > 0 && !pathMatchesAnyRoot(sourcePath, namespace.definitionRoots)) {
       diagnostics.push({
         ...definitions[0],
@@ -151,6 +179,8 @@ export function validateCustomPropertyFacts({
     } else if (namespace.requiresReference && references.length === 0) {
       diagnostics.push({
         ...definitions[0],
+        customPropertyName: name,
+        diagnosticKind: "missing-project-reference",
         message: `${name} defineres uten en registrert konsument`,
         ruleId: contract.rules.customProperty.id,
       });
@@ -160,16 +190,37 @@ export function validateCustomPropertyFacts({
   return diagnostics;
 }
 
-export function inlineCustomPropertyFacts(attributeSource, location) {
-  const definitions = [...attributeSource.matchAll(/(--[A-Za-z0-9_-]+)\s*:/g)].map((match) => ({
-    ...location,
-    name: match[1],
-  }));
-  const references = [...attributeSource.matchAll(/var\((--[A-Za-z0-9_-]+)/g)].map((match) => ({
-    ...location,
-    name: match[1],
-  }));
-  return { definitions, references };
+export function inlineCustomPropertyFacts(styleSource, location) {
+  if (styleSource === null) {
+    return { definitions: [], isCustomPropertyDeclarationList: false, references: [] };
+  }
+
+  let root;
+  try {
+    root = postcss.parse(`inline-style { ${styleSource} }`);
+  } catch {
+    return { definitions: [], isCustomPropertyDeclarationList: false, references: [] };
+  }
+
+  const rule = root.nodes.length === 1 && root.first?.type === "rule" ? root.first : null;
+  const declarations = rule?.nodes.filter((node) => node.type === "decl") ?? [];
+  const isCustomPropertyDeclarationList =
+    rule !== null &&
+    declarations.length > 0 &&
+    declarations.length === rule.nodes.length &&
+    declarations.every(
+      (declaration) => declaration.prop.startsWith("--") && !declaration.important
+    );
+  const definitions = declarations
+    .filter(({ prop }) => prop.startsWith("--"))
+    .map(({ prop }) => ({ ...location, name: prop }));
+  const references = declarations.flatMap((declaration) =>
+    [...declaration.value.matchAll(/var\((--[A-Za-z0-9_-]+)/g)].map((match) => ({
+      ...location,
+      name: match[1],
+    }))
+  );
+  return { definitions, isCustomPropertyDeclarationList, references };
 }
 
 function analyzeCascadeLayerRoot({ contract, root }) {
@@ -229,6 +280,67 @@ function validateGlobalSelectors({ contract, diagnostics, rule, sourcePath }) {
   }
 }
 
+function validateVisualizationSelectors({ contract, diagnostics, rule, sourcePath }) {
+  const ruleId = contract.rules.visualizationException.id;
+  if (rule.selector.includes(":global")) {
+    diagnostics.push(
+      cssDiagnostic(ruleId, "visualiseringsunntaket tillater ikke :global-selektorer", rule)
+    );
+    return;
+  }
+
+  const owner = contract.visualizationException.owners[sourcePath];
+  const allowedAnchors = new Set(owner.visualizationAnchors);
+  const allowedSeries = new Set(contract.visualizationException.seriesValues);
+  let selectorAst;
+  try {
+    selectorAst = selectorParser().astSync(rule.selector);
+  } catch (error) {
+    throw new Error(`Kunne ikke parse visualiseringsselektoren «${rule.selector}».`, {
+      cause: error,
+    });
+  }
+
+  for (const selector of selectorAst.nodes) {
+    const anchors = [];
+    const series = [];
+    selector.walkAttributes((attribute) => {
+      if (attribute.attribute === "data-visualization") anchors.push(attribute.value ?? null);
+      if (attribute.attribute === "data-series") series.push(attribute.value ?? null);
+    });
+
+    if (anchors.length === 0) {
+      diagnostics.push(
+        cssDiagnostic(
+          ruleId,
+          `visualiseringsselektoren «${selector.toString()}» mangler et registrert data-visualization-anker`,
+          rule
+        )
+      );
+    }
+    for (const anchor of anchors) {
+      if (anchor !== null && allowedAnchors.has(anchor)) continue;
+      diagnostics.push(
+        cssDiagnostic(
+          ruleId,
+          `visualiseringsankeret «${anchor ?? "dynamisk"}» er ikke registrert for ${sourcePath}`,
+          rule
+        )
+      );
+    }
+    for (const value of series) {
+      if (value !== null && allowedSeries.has(value)) continue;
+      diagnostics.push(
+        cssDiagnostic(
+          ruleId,
+          `visualiseringsserien «${value ?? "dynamisk"}» er ikke registrert`,
+          rule
+        )
+      );
+    }
+  }
+}
+
 function isAllowedGlobalSelector({ contract, layer, selector, sourcePath }) {
   if (
     layer === "theme" &&
@@ -250,6 +362,23 @@ function isAllowedGlobalSelector({ contract, layer, selector, sourcePath }) {
   );
 }
 
+function isAllowedImportantDeclaration({ contract, declaration, sourcePath }) {
+  const rule = declaration.parent?.type === "rule" ? declaration.parent : null;
+  if (!rule) return false;
+  const selectors = parseSelectors(rule);
+  const mediaRule = nearestAtRule(declaration, "media");
+  const mediaQuery = mediaRule?.params.trim().replace(/^\((.*)\)$/, "$1") ?? null;
+
+  return contract.css.allowedImportantDeclarations.some(
+    (exception) =>
+      exception.stylesheet === sourcePath &&
+      exception.atRule === mediaQuery &&
+      exception.properties.includes(declaration.prop) &&
+      selectors.length === exception.selectors.length &&
+      selectors.every((selector) => exception.selectors.includes(selector))
+  );
+}
+
 function parseSelectors(rule) {
   try {
     return selectorParser()
@@ -266,6 +395,15 @@ function enclosingLayer(node) {
     if (parent.type === "atrule" && parent.name.toLowerCase() === "layer") {
       return parent.params.trim() || "anonymous";
     }
+    parent = parent.parent;
+  }
+  return null;
+}
+
+function nearestAtRule(node, name) {
+  let parent = node.parent;
+  while (parent) {
+    if (parent.type === "atrule" && parent.name.toLowerCase() === name) return parent;
     parent = parent.parent;
   }
   return null;

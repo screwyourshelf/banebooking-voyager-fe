@@ -1,6 +1,6 @@
 # SWP-5.1: kald route- og featureaudit
 
-> **Status:** Fullført auditgrunnlag for SWP-5.2
+> **Status:** Fullført auditgrunnlag; sluttkontrakten er låst i SWP-5.5
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
@@ -94,3 +94,25 @@ kan ikke slettes i SWP-5.2 fordi reduced-motion-basen fortsatt har globalt dokum
 
 Dette er en eierkontrakt, ikke en forhåndsgodkjenning av nye unntak. Produksjonsguardene skal ende
 med null featureklasser og null produktidentitet i visualiseringsunntaket.
+
+## SWP-5.5: varig sluttkontrakt
+
+Auditens skille er nå håndhevet uten transition-baseline. Produksjonstreet må ha null diagnostics,
+legacygjeld må være tom, og den separate allowlisten inneholder fortsatt nøyaktig seks inline
+geometry-verdier og 32 SVG-geometriattributter. Statiske SVG-presentasjonsverdier for
+`text-anchor` og sammenligningslinjens dasharray eies av offentlig `DataVisualization` og theme,
+ikke av featureunntaket.
+
+| Eksakt featureeier              | Custom properties                                    | Skopert CSS                                    | SVG-geometri                                                          |
+| ------------------------------- | ---------------------------------------------------- | ---------------------------------------------- | --------------------------------------------------------------------- |
+| `StatisticsBookingType.svelte`  | Ingen                                                | Ingen                                          | `cx`, `cy`, `r`, `stroke-dasharray`, `stroke-dashoffset`, `viewBox`   |
+| `StatisticsDistribution.svelte` | `--statistics-bar-width`                             | `width`                                        | Ingen                                                                 |
+| `StatisticsHourChart.svelte`    | `--statistics-bar-height`, `--statistics-hour-count` | `grid-template-columns`, `height`, `min-width` | Ingen                                                                 |
+| `StatisticsMonthChart.svelte`   | `--statistics-line-chart-width`                      | `width`                                        | `cx`, `cy`, `height`, `points`, `r`, `viewBox`, `width`, `x*` og `y*` |
+
+Kontrakten registrerer også hvert statiske `data-visualization`-anker og de to serieverdiene
+`current`/`previous` per eksakt eierfil. Nye featurefiler, custom properties, skoperte egenskaper,
+SVG-geometriattributter, selectorankre eller SVG-presentasjonsattributter feiler derfor uten en
+eksplisitt kontraktendring og ny verifikasjon. Hver skoperte CSS-deklarasjon må i tillegg konsumere
+en registrert lokal geometry-custom-property; en statisk verdi kan ikke bruke unntaket som en ny
+presentasjonsbane.

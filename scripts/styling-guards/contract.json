@@ -1,6 +1,6 @@
 {
-  "schemaVersion": 2,
-  "analyzerEnforcementPhase": "active",
+  "schemaVersion": 3,
+  "analyzerEnforcementPhase": "final",
   "cascadeContractEnforcementPhase": "active",
   "themeContractEnforcementPhase": "active",
   "productionTreeEnforcementCheckpoint": "SWP-1.3",
@@ -98,7 +98,7 @@
     "sourceRoots": ["src/"],
     "sourceExtensions": [".css", ".svelte"],
     "excludedFileSuffixes": [".test.svelte"],
-    "legacyBaselinePath": "docs/styling-baseline.json",
+    "transitionBaselineRemovalCheckpoint": "SWP-5.5",
     "enforcedRuleIds": [
       "STYLING-001-BITS-OWNER",
       "STYLING-002-FEATURE-STYLING",
@@ -1238,10 +1238,13 @@
         "stroke-1",
         "stroke-3",
         "stroke-15",
+        "stroke-dasharray-visualization-comparison",
         "stroke-visualization-comparison",
         "stroke-visualization-round",
         "table-fixed",
         "tabular-nums",
+        "text-anchor-end",
+        "text-anchor-middle",
         "text-center",
         "text-ellipsis",
         "text-left",
@@ -2811,6 +2814,7 @@
       "*::before",
       "::backdrop",
       "::selection",
+      ":focus-visible",
       "a",
       "body",
       "button",
@@ -2818,8 +2822,22 @@
       "img",
       "input",
       "select",
+      "small",
       "svg",
       "textarea"
+    ],
+    "allowedImportantDeclarations": [
+      {
+        "atRule": "prefers-reduced-motion: reduce",
+        "properties": [
+          "animation-duration",
+          "animation-iteration-count",
+          "scroll-behavior",
+          "transition-duration"
+        ],
+        "selectors": ["*", "*::before", "*::after"],
+        "stylesheet": "src/styles/design-system/base.css"
+      }
     ],
     "allowedThirdPartySelectorPatterns": [
       "^\\.ProseMirror(?:$|[ .:\\[])",
@@ -2862,6 +2880,7 @@
         "name": "tailwind-theme",
         "prefixes": [
           "--animate-",
+          "--background-",
           "--background-image-",
           "--background-size-",
           "--border-width-",
@@ -2908,31 +2927,111 @@
           "--statistics-hour-count",
           "--statistics-line-chart-width"
         ],
-        "definitionRoots": ["src/lib/features/statistics/"],
-        "usageRoots": ["src/lib/features/statistics/"],
+        "definitionRoots": [
+          "src/lib/features/statistics/StatisticsDistribution.svelte",
+          "src/lib/features/statistics/StatisticsHourChart.svelte",
+          "src/lib/features/statistics/StatisticsMonthChart.svelte"
+        ],
+        "usageRoots": [
+          "src/lib/features/statistics/StatisticsDistribution.svelte",
+          "src/lib/features/statistics/StatisticsHourChart.svelte",
+          "src/lib/features/statistics/StatisticsMonthChart.svelte"
+        ],
         "requiresLocalDefinition": true,
         "requiresLocalReference": true
       }
     ]
   },
   "visualizationException": {
-    "ownerRoots": ["src/lib/features/statistics/"],
-    "customProperties": [
-      "--statistics-bar-height",
-      "--statistics-bar-width",
-      "--statistics-hour-count",
-      "--statistics-line-chart-width"
-    ],
-    "svgGeometryAttributes": [
+    "owners": {
+      "src/lib/features/statistics/StatisticsBookingType.svelte": {
+        "customProperties": [],
+        "scopedCssGeometryProperties": [],
+        "svgGeometryAttributes": [
+          "cx",
+          "cy",
+          "r",
+          "stroke-dasharray",
+          "stroke-dashoffset",
+          "viewBox"
+        ],
+        "visualizationAnchors": [
+          "donut-center",
+          "donut-chart",
+          "donut-description",
+          "donut-description-meta",
+          "donut-description-value",
+          "donut-legend",
+          "donut-legend-item",
+          "donut-meta",
+          "donut-segment",
+          "donut-svg",
+          "donut-swatch",
+          "donut-term",
+          "donut-track",
+          "donut-value"
+        ]
+      },
+      "src/lib/features/statistics/StatisticsDistribution.svelte": {
+        "customProperties": ["--statistics-bar-width"],
+        "scopedCssGeometryProperties": ["width"],
+        "svgGeometryAttributes": [],
+        "visualizationAnchors": [
+          "bar",
+          "bars",
+          "list",
+          "row",
+          "row-label",
+          "row-label-meta",
+          "row-label-title",
+          "row-label-value",
+          "summary"
+        ]
+      },
+      "src/lib/features/statistics/StatisticsHourChart.svelte": {
+        "customProperties": ["--statistics-bar-height", "--statistics-hour-count"],
+        "scopedCssGeometryProperties": ["grid-template-columns", "height", "min-width"],
+        "svgGeometryAttributes": [],
+        "visualizationAnchors": ["hour", "hour-bar", "hour-bars", "hour-label", "hour-plot"]
+      },
+      "src/lib/features/statistics/StatisticsMonthChart.svelte": {
+        "customProperties": ["--statistics-line-chart-width"],
+        "scopedCssGeometryProperties": ["width"],
+        "svgGeometryAttributes": [
+          "cx",
+          "cy",
+          "height",
+          "points",
+          "r",
+          "viewBox",
+          "width",
+          "x",
+          "x1",
+          "x2",
+          "y",
+          "y1",
+          "y2"
+        ],
+        "visualizationAnchors": ["grid", "label", "line", "line-plot", "point", "svg"]
+      }
+    },
+    "seriesValues": ["current", "previous"],
+    "svgGeometryAttributeVocabulary": [
       "cx",
       "cy",
+      "d",
       "height",
+      "markerHeight",
+      "markerWidth",
+      "pathLength",
       "points",
+      "preserveAspectRatio",
       "r",
       "rx",
       "ry",
       "stroke-dasharray",
       "stroke-dashoffset",
+      "transform",
       "viewBox",
       "width",
       "x",
@@ -2942,40 +3041,71 @@
       "y1",
       "y2"
     ],
-    "statisticRoles": ["chart-label", "chart-meta", "chart-value", "key-value"],
-    "scopedCssGeometryProperties": [
-      "block-size",
-      "bottom",
-      "grid-template-columns",
-      "grid-template-rows",
-      "height",
-      "inset",
-      "inset-block",
-      "inset-inline",
-      "left",
-      "max-height",
-      "max-width",
-      "min-height",
-      "min-width",
-      "right",
-      "stroke-dasharray",
-      "stroke-dashoffset",
-      "top",
-      "transform",
-      "width"
-    ],
-    "forbiddenSvgPresentationAttributes": [
+    "svgPresentationAttributes": [
+      "alignment-baseline",
+      "baseline-shift",
+      "clip",
+      "clip-path",
+      "clip-rule",
       "color",
+      "color-interpolation",
+      "color-interpolation-filters",
+      "color-profile",
+      "color-rendering",
+      "cursor",
+      "direction",
+      "display",
+      "dominant-baseline",
+      "enable-background",
       "fill",
+      "fill-opacity",
+      "fill-rule",
+      "filter",
+      "flood-color",
+      "flood-opacity",
       "font-family",
       "font-size",
+      "font-size-adjust",
+      "font-stretch",
+      "font-style",
+      "font-variant",
+      "font-weight",
+      "glyph-orientation-horizontal",
+      "glyph-orientation-vertical",
+      "image-rendering",
+      "isolation",
+      "kerning",
+      "letter-spacing",
+      "lighting-color",
+      "marker-end",
+      "marker-mid",
+      "marker-start",
+      "mask",
+      "mix-blend-mode",
       "opacity",
+      "overflow",
+      "paint-order",
+      "pointer-events",
+      "shape-rendering",
+      "stop-color",
+      "stop-opacity",
       "stroke",
-      "stroke-width"
-    ],
-    "svgPresentationValueAllowlist": {
-      "fill": ["none"],
-      "stroke": ["none"]
-    }
+      "stroke-linecap",
+      "stroke-linejoin",
+      "stroke-miterlimit",
+      "stroke-opacity",
+      "stroke-width",
+      "text-anchor",
+      "text-decoration",
+      "text-rendering",
+      "transform-box",
+      "transform-origin",
+      "unicode-bidi",
+      "vector-effect",
+      "visibility",
+      "white-space",
+      "word-spacing",
+      "writing-mode"
+    ]
   }
 }

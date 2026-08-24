@@ -814,6 +814,7 @@
     --app-collection-busy-transition-duration: 140ms;
     --app-visualization-bar-transition-duration: 180ms;
     --app-collection-transition-easing: ease;
+    --app-visualization-comparison-stroke-dasharray: 7 6;
     --app-visualization-comparison-stroke-width: 2.5;
     --app-collection-focus-inset: -3px;
     --app-collection-row-indicator-size: 1.5rem;

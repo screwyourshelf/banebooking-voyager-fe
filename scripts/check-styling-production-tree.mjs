@@ -3,10 +3,7 @@ import { checkStylingProductionTree } from "./styling-guards/production-tree-con
 
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 const result = await checkStylingProductionTree(projectRoot);
-const activeRuleCount = Object.values(result.diagnosticCountsByRule).filter(
-  (count) => count > 0
-).length;
 
 console.log(
-  `Styling-produksjonstreet matcher baselinen: ${result.sourceFileCount} filer, ${result.diagnosticCount} registrerte avvik over ${activeRuleCount} aktive regel-ID-er.`
+  `Styling-produksjonstreet er uten avvik: ${result.sourceFileCount} filer, ${Object.keys(result.diagnosticCountsByRule).length} håndhevede regel-ID-er.`
 );

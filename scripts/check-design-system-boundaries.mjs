@@ -21,6 +21,11 @@ const componentFiles = sourceFiles.filter((filePath) =>
 const componentSource = componentFiles.map((filePath) => sourceByPath.get(filePath)).join("\n");
 const stylesheetSource = stylesheetFiles.map((filePath) => sourceByPath.get(filePath)).join("\n");
 const runtimeClassNames = new Set(["dark", "light", "ProseMirror", "selectedCell"]);
+const visualizationInlineGeometryOwners = new Set([
+  "src/lib/features/statistics/StatisticsDistribution.svelte",
+  "src/lib/features/statistics/StatisticsHourChart.svelte",
+  "src/lib/features/statistics/StatisticsMonthChart.svelte",
+]);
 const violations = [];
 
 validateStylesheetGraph();
@@ -85,10 +90,8 @@ function validateFeatureStyling() {
     if (!filePath.startsWith(featuresRoot) || !filePath.endsWith(".svelte")) continue;
 
     const source = sourceByPath.get(filePath) ?? "";
-    const relativePath = path.relative(projectRoot, filePath);
-    const isStatisticsVisualization = filePath.startsWith(
-      `${path.join(featuresRoot, "statistics")}${path.sep}`
-    );
+    const relativePath = path.relative(projectRoot, filePath).split(path.sep).join("/");
+    const isInlineGeometryOwner = visualizationInlineGeometryOwners.has(relativePath);
 
     for (const match of source.matchAll(/\bclass\s*=\s*["']([^"']+)["']/g)) {
       for (const className of match[1].split(/\s+/).filter(Boolean)) {
@@ -102,7 +105,7 @@ function validateFeatureStyling() {
     }
 
     for (const match of source.matchAll(/\bstyle\s*=/g)) {
-      if (isStatisticsVisualization) continue;
+      if (isInlineGeometryOwner) continue;
       report(
         relativePath,
         source,

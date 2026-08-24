@@ -83,8 +83,9 @@ Følgende er ikke tillatt uten et navngitt, maskinelt unntak:
 - Features og routes har ingen ulovlige `style`-attributter, `<style>`-blokker, CSS-importer,
   visuelle utilitykomposisjoner eller klasseoverstyringer av offentlig UI.
 - Offentlig UI bruker bare godkjente semantiske visuelle utilities og statisk analyserbare klasser.
-- Rå produktfarger, app-eid `!important`, ulovlige arbitrary values og legacy globale
-  produktselektorer er null i sluttporten.
+- Rå produktfarger, uregistrert app-eid `!important`, ulovlige arbitrary values og legacy globale
+  produktselektorer er null i sluttporten. Det eneste registrerte `!important`-unntaket er den
+  globale reduced-motion-fallbacken for dokumentet.
 - Lyst og mørkt theme, representative viewporter, fokus, tastatur og visuelle snapshots er grønne.
 - Sluttevalueringen i stylingplanen beviser at theme-identitet kan endres sentralt.
 

@@ -60,7 +60,7 @@
     {
       "id": "positive-css-application",
       "fixture": "positive/css-application.css",
-      "sourcePath": "src/styles/base.css",
+      "sourcePath": "src/styles/design-system/base.css",
       "outcome": "allowed",
       "coversRules": ["STYLING-007-CSS-APPLICATION"],
       "diagnostics": []
@@ -92,7 +92,7 @@
     {
       "id": "positive-visualization-exception",
       "fixture": "positive/visualization-exception.svelte",
-      "sourcePath": "src/lib/features/statistics/GuardChart.svelte",
+      "sourcePath": "src/lib/features/statistics/StatisticsMonthChart.svelte",
       "outcome": "allowed",
       "coversRules": ["STYLING-010-VISUALIZATION-EXCEPTION"],
       "diagnostics": []
@@ -136,6 +136,14 @@
         {
           "ruleId": "STYLING-002-FEATURE-STYLING",
           "message": "feature-/routekode kan ikke eie <style>-blokk"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "data-visualization kan bare brukes av en eksakt registrert visualiseringseier; fant src/lib/features/example/StyledScreen.svelte"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "data-series kan bare brukes av en eksakt registrert visualiseringseier; fant src/lib/features/example/StyledScreen.svelte"
         }
       ]
     },
@@ -282,17 +290,29 @@
     {
       "id": "negative-visualization-exception",
       "fixture": "negative/visualization-exception.svelte",
-      "sourcePath": "src/lib/features/statistics/IdentityChart.svelte",
+      "sourcePath": "src/lib/features/statistics/StatisticsMonthChart.svelte",
       "outcome": "rejected",
       "coversRules": ["STYLING-010-VISUALIZATION-EXCEPTION"],
       "diagnostics": [
+        {
+          "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
+          "message": "visualiseringsunntaket tillater bare en deklarasjonsliste med navngitte geometry-custom-properties i style"
+        },
         {
           "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
           "message": "--statistics-series-color er ikke registrert i det lukkede visualiseringsunntaket"
         },
         {
           "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
-          "message": "statistikkrollen «brand-heading» er ikke registrert"
+          "message": "SVG-geometriattributtet «rx» er ikke registrert for src/lib/features/statistics/StatisticsMonthChart.svelte"
+        },
+        {
+          "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
+          "message": "statistikkroller er ikke tillatt; produktidentitet skal eies av offentlig UI"
+        },
+        {
+          "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
+          "message": "visualiseringsankeret «identity» er ikke registrert for src/lib/features/statistics/StatisticsMonthChart.svelte"
         },
         {
           "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
@@ -300,7 +320,19 @@
         },
         {
           "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
-          "message": "visualiseringsunntaket tillater ikke SVG-attributtet «fill»"
+          "message": "den skoperte CSS-egenskapen «width» må konsumere en registrert geometry-custom-property for src/lib/features/statistics/StatisticsMonthChart.svelte"
+        },
+        {
+          "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
+          "message": "visualiseringsunntaket tillater ikke SVG-presentasjonsattributtet «fill»"
+        },
+        {
+          "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
+          "message": "visualiseringsunntaket tillater ikke SVG-presentasjonsattributtet «filter»"
+        },
+        {
+          "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
+          "message": "visualiseringsunntaket tillater ikke SVG-presentasjonsattributtet «text-anchor»"
         }
       ]
     }

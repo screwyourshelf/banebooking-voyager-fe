@@ -7,7 +7,7 @@ import { format, resolveConfig } from "prettier";
 import { measureProductionBuilds } from "./styling-baseline/production-measurement.mjs";
 import { measureStylingSource } from "./styling-baseline/source-measurement.mjs";
 
-const baselineSchemaVersion = 2;
+const baselineSchemaVersion = 3;
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 const baselinePath = path.join(projectRoot, "docs/styling-baseline.json");
 const mode = readMode(process.argv.slice(2));
@@ -69,7 +69,9 @@ function validateBaseline(baseline) {
     baseline?.schemaVersion !== baselineSchemaVersion ||
     !baseline.source?.summary ||
     !Array.isArray(baseline.source?.legacyDebt) ||
-    !Array.isArray(baseline.source?.guardDiagnostics) ||
+    baseline.source.legacyDebt.length !== 0 ||
+    Object.hasOwn(baseline.source, "guardDiagnostics") ||
+    Object.hasOwn(baseline.source.summary, "guardDiagnosticCount") ||
     !Array.isArray(baseline.productionBuilds) ||
     baseline.productionBuilds.length !== 2
   ) {

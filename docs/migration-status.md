@@ -1,10 +1,10 @@
 # Migreringsstatus
 
-> **Status:** Pågår — rammeverksløftet og SWP-0–SWP-4 er fullført; SWP-5.1–SWP-5.4 er fullført
+> **Status:** Pågår — rammeverksløftet og SWP-0–SWP-5 er fullført
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** SWP-5 — features, visualisering og siste legacy-CSS
+> **Aktiv arbeidspakke:** Ingen — SWP-5 er levert; neste pakke er SWP-6
 >
 > **Sist oppdatert:** 2026-08-24
 
@@ -16,10 +16,11 @@ statisk analyserbare Tailwind-utilities. SWP-5.1 kaldavstemte alle routes/featur
 flyttet statistikkens statiske presentasjon til typed offentlig UI. De 106 overgangskandidatene er
 redusert til 38 faktiske geometrier etter eierkartet i
 [`swp-5-route-feature-audit.md`](./swp-5-route-feature-audit.md). SWP-5.3 slettet den tomme
-featurekomposisjonsfilen, og SWP-5.4 samlet dokumentbase, motion og keyframes i den eksplisitte
-globale `base.css`-flaten før de tre siste legacy-stilarkene ble slettet. Fortsett med SWP-5.5:
-fjern transition-baselinen og lås den varige allowlisten til faktisk datadrevet geometri. Bevar
-produktadferd og backend.
+featurekomposisjonsfilen, SWP-5.4 samlet dokumentbase, motion og keyframes i den eksplisitte globale
+`base.css`-flaten før de tre siste legacy-stilarkene ble slettet, og SWP-5.5 har fjernet
+transition-baselinen. Produksjonstreet krever nå null diagnostics, legacygjeld er null, og den
+varige allowlisten er låst til 38 faktisk datadrevne geometrier hos fire eksakte statistikkeiere.
+Produktadferd og backend er bevart.
 
 ## Aktiv stylingretning
 
@@ -30,8 +31,7 @@ produktadferd og backend.
 - [`styling-lift-and-shift-plan.md`](./styling-lift-and-shift-plan.md) deler arbeidet i SWP-0–SWP-7
   og er den aktive utførelsesplanen for `/start`.
 - Den globale CSS-flaten er ferdig avgrenset til Tailwind-inngangen, theme og dokumentert base.
-  Transition-baselinen kan bare reduseres og skal fjernes i SWP-5.5; geometri føres separat i en
-  lukket, varig allowlist.
+  Transition-baselinen er fjernet; geometri føres separat i en lukket, varig allowlist.
 - Backend, produktadferd, URL-er og API-kontrakter er utenfor stylingomfanget.
 
 ## Fullført rammeverksløft og paritetsbaseline
@@ -863,7 +863,8 @@ produktadferd og backend.
 - `DataVisualization`, `DataTable`, `VisualizationLayout`, `VisualizationLegend` og
   `VisualizationLoading` eksponerer statiske semantiske utilities uten offentlig `class`/`style`-
   overstyring. Tre eksplisitt registrerte statistikkfiler beholder bare skopert CSS for bredde,
-  høyde, gridkolonner og stroke-dasharray; arkitektur- og stylingguardene lukker unntaket.
+  høyde og gridkolonner; arkitektur- og stylingguardene lukker unntaket. Sammenligningslinjens
+  statiske dasharray ble flyttet videre til offentlig UI/theme i SWP-5.5.
 - 125 komponentregler og 132 selectors er erstattet og slettet fra
   `feature-compositions.css`/`responsive.css`. Kildebaselinen er redusert fra 2588 til 2038
   CSS-linjer, 135 til 10 regler, 144 til 12 selectors, 363 til 36 legacyavvik og 106 til 38
@@ -877,25 +878,34 @@ produktadferd og backend.
   `patterns.css`-filene og lukket produksjonslisten til fire autoritative CSS-filer. Kildebaselinen
   har 2037 linjer, ti regler, tolv selectors, ni overgangsavvik og 38 geometrier; begge bygde
   CSS-assets er byteidentiske med SWP-5.2/SWP-5.3.
-- Hele SWP-5.2-porten er grønn med 345 tester, elleve pikselidentiske visuelle referanser, full
-  check og begge hostbuildene. Initial CSS er 28 350/28 370 gzip-byte innenfor 50 KiB-budsjettet;
-  backend, API-er og produktadferd er uendret.
+- SWP-5.5 har erstattet den avtakende diagnostikkbaselinen med en nullavviksport. Custom-property-
+  analysen løser nå registrerte konsumenter på tvers av hele produksjonstreet, schema 3-baselinen
+  inneholder ingen guarddiagnostics, og de tidligere 619 baselinefunnene er borte uten å svekke de
+  ni håndhevede regel-ID-ene.
+- Den varige visualiseringskontrakten navngir fire eksakte featureeiere, fire custom properties,
+  fire skoperte CSS-egenskaper, femten faktisk brukte SVG-attributtnavn, alle statiske
+  `data-visualization`-ankere og de to seriene. `text-anchor` og statisk dasharray er flyttet til
+  offentlig UI/theme; SVG-presentasjon, statisk skopert presentasjon, nye eiere og nye geometrinavn
+  avvises.
+- Hele SWP-5-porten er grønn med null legacygjeld, 38 datadrevne geometrier, 345 tester, elleve
+  pikselidentiske visuelle referanser, full check og begge hostbuildene. Initial CSS er
+  28 424/28 443 gzip-byte innenfor 50 KiB-budsjettet; backend, API-er og produktadferd er uendret.
 - Den aktive CSS-en har ikke lenger featureeide produktselectors. Tailwind er produkteier for alle
-  SWP-2–SWP-4-flater og statistikkpresentasjonen; SWP-5 fortsetter med ren filopprydding og låsing
-  av den varige geometriallowlisten uten visuell redesign.
+  SWP-2–SWP-4-flater og statistikkpresentasjonen; den varige geometriallowlisten er låst uten
+  visuell redesign.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                                  |
-| ------------------------------------- | --------------------------------------------------- |
-| Base branch                           | `main`                                              |
-| Fastslått basecommit                  | `5287c5e`                                           |
-| Siste semantiske checkpoint           | `refactor(styling): remove legacy stylesheet files` |
-| Lokale commits foran base             | 64                                                  |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                       |
-| Neste planlagte checkpoint            | SWP-5.5 lås varig visualiseringsallowlist           |
+| Felt                                  | Forventet tilstand                            |
+| ------------------------------------- | --------------------------------------------- |
+| Base branch                           | `main`                                        |
+| Fastslått basecommit                  | `5287c5e`                                     |
+| Siste semantiske checkpoint           | `refactor(styling): finalize SWP-5 ownership` |
+| Lokale commits foran base             | 65                                            |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                 |
+| Neste planlagte checkpoint            | SWP-6.1 review store featureorkestratorer     |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -904,17 +914,14 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Start **SWP-5 checkpoint 5 — fjern transition-baseline og lås visualiseringsallowlist**:
+Start **SWP-6 checkpoint 1 — review store featureorkestratorer** i en ny `/start`:
 
-1. Avstem de 619 registrerte produksjonsdiagnostikkene mot ferdig theme-/UI-eierskap og fjern den
-   migreringsspesifikke baselinepasseringen når produksjonstreet kan håndheves uten overgangsgjeld.
-2. Begrens statistikkunntaket til eksakte eierfiler, de fire brukte geometry-custom-properties,
-   faktisk brukte skoperte CSS-egenskaper og SVG-geometriattributter; ingen identitet eller
-   presentasjonsattributter skal tillates.
-3. Oppdater positive og negative guardfixtures, skill varig geometri fra legacygjeld i måleren og
-   dokumenter sluttkontrakten.
-4. Kjør full test-, check-, E2E-, snapshot- og produksjonsbuildport uten produkt-, API- eller
-   backendendringer, og avslutt SWP-5 før SWP-6 startes.
+1. Kaldmål ansvar, størrelse, importgraf, state og arbeidsflyt i `ArrangementEditor`,
+   `CourtsSection` og andre store featureorkestratorer.
+2. Trekk bare ut state/controller eller arbeidsflyt når eierbildet blir tydeligere uten generisk
+   abstraksjon eller prop-forwarding.
+3. Bevar offentlig featureinngang, produktadferd, URL-er, API-er og backend; verifiser berørte
+   flyter før checkpoint.
 
 ## Arbeidspakkeregister
 
@@ -933,7 +940,7 @@ Start **SWP-5 checkpoint 5 — fjern transition-baseline og lås visualiseringsa
 | SWP-2 UI-primitives              | Fullført | Alle fire primitivecheckpoints og full kvalitetport er grønne |
 | SWP-3 Produktpatterns            | Fullført | Alle fem patterncheckpoints og full kvalitetport er grønne    |
 | SWP-4 App-shell/navigation       | Fullført | Alle fire checkpoints og full kvalitetport er grønne          |
-| SWP-5 Features og legacy-CSS     | Aktiv    | SWP-5.1–5.4 fullført; neste er sluttkontrakten i SWP-5.5      |
+| SWP-5 Features og legacy-CSS     | Fullført | Null legacygjeld, null guardavvik og 38 låste geometrier      |
 | SWP-6 Komponent-/API-opprydding  | Venter   | Utføres etter at stylingeierskap er synlig                    |
 | SWP-7 Uavhengig sluttreview      | Venter   | Kald audit og målt vellykket/delvis/ikke vellykket resultat   |
 
@@ -966,22 +973,21 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
   fryser nettleserklokken til 2026-08-23. Utviklingsinnloggingen bruker fortsatt den eksisterende
   lokale backendharnessen; vanlig utviklings- og produksjonsdata er upåvirket.
 - Stylingguardanalysatoren kjører de ni ikke-cascade-reglene håndhevende mot 181 produksjonskilder
-  og fører 619 eksakte baselinefunn: seks CSS-application- og 613 custom-property-funn. Bare
-  allerede registrerte diagnostics passerer; både nye og
-  fjernede funn krever eksplisitt avstemming, slik at slettet gjeld ikke senere kan gjeninnføres.
-  Cascade-regelen validerer separat alle fire stilark, mens de 23 isolerte fixturene fortsatt beviser
-  positiv og negativ atferd for alle ti stabile regel-ID-er.
+  og krever null diagnostics. Project-wide custom-property-koblinger valideres på tvers av filer;
+  schema 3 har ingen legacy-baselinepassering eller lagrede guarddiagnostics. Cascade-regelen
+  validerer separat alle fire stilark, mens de 23 isolerte fixturene fortsatt beviser positiv og
+  negativ atferd for alle ti stabile regel-ID-er.
 - Ingen midlertidige rammeverksadapters, React-legacy eller globale produktselector-filer gjenstår.
-  Stylingbaselinen måler fire aktive CSS-filer og 2037 linjer. `index.css` er Tailwind-inngang,
+  Stylingbaselinen måler fire aktive CSS-filer og 2050 linjer. `index.css` er Tailwind-inngang,
   `tokens.css` eier theme, og `base.css` eier bare dokumentdefaults, tilgjengelighetsfallbacks og
   keyframes. De ti selectorreglene ligger i registrerte lag: tre i `theme` og sju i `base`;
   `components` og `utilities` har ingen app-eide selectorregler.
 - De 91 tidligere ulagrede reglene har nå eksplisitt eier. Den gamle gjeldstypen for ulagrede
   legacyregler er redusert fra 88 til null; de tre theme-reglene var ikke legacygjeld.
-- Baseline fører ni overgangsavvik: tre skoperte visualiseringsblokker og seks inline geometrier.
-  Featureklasser, globale produktselectors, statistikkroller og `@apply` er null. De fire
-  `!important`-deklarasjonene tilhører den dokumenterte globale reduced-motion-fallbacken og er ikke
-  legacygjeld.
+- Baseline fører null overgangsavvik. De tre skoperte geometry-konsumentene og seks inlineverdiene
+  er flyttet til den separate permanente visualiseringskontrakten; featureklasser, globale
+  produktselectors, statistikkroller og `@apply` er null. De fire `!important`-deklarasjonene
+  tilhører den eksakt registrerte globale reduced-motion-fallbacken og er ikke legacygjeld.
 - Alle SWP-2-komponentene, SWP-3-patternene, hele SWP-4 og statistikkens statiske presentasjon
   bruker statiske Tailwind-utilities hos offentlig UI. `Metric`, `MetricGrid` og de nye data-/
   visualiseringspatternene eier hele produktuttrykket. `Button` har ingen patternspesifikk
@@ -996,7 +1002,7 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 - Page bruker typed AppShell-context og lokale responsive utilities for shell-heading,
   beskrivelse, tittelskygge og motion uten en dyp global DOM-bro. Section eier igjen standardgapet
   og har en typed `data-table`-layout; ingen statistikkselector overstyrer komponentanatomien.
-- 1416 CSS custom-property-definisjoner og 914 referanser er registrert. SWP-2.1–SWP-5.2 har lagt til
+- 1417 CSS custom-property-definisjoner og 915 referanser er registrert. SWP-2.1–SWP-5.5 har lagt til
   semantiske action-, field-, fokus-, choice-, switch-, radio-, select-, calendar-, dialog-,
   riktekst-, Page-, Section-, feedback-, Document-, kontrollgeometri-, motion- og typografiroller i
   den autoritative theme-filen, inkludert Collection-, Dialog-, Tabs- og riktekstoverflater, rader,
@@ -1008,9 +1014,10 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
   loading-sheen-utility, seks SWP-3.1-varianter, tolv SWP-3.2-varianter, 28 SWP-3.3-varianter, 22
   SWP-3.4-varianter, de seksten skoperte ProseMirror-variantene, to smale SWP-4.1-child-varianter og
   to smale SWP-4.2-topbarvarianter.
-  Statistikk er eneste feature med et stylingunntak. Etter SWP-5.2 består inventaret bare av seks
+  Statistikk er eneste feature med et stylingunntak. Den låste sluttallowlisten består bare av seks
   inline custom-property-verdier og 32 SVG-geometriattributter; featureklasser og semantiske
-  statistikkroller er null. Den endelige allowlisten låses i SWP-5.5.
+  statistikkroller er null. Fire eksakte filer eier geometrien; nye navn, eiere, selectorankre eller
+  SVG-presentasjonsattributter avvises.
 - `npm audit` rapporterer seks lave transitive funn i den aktive SvelteKit-/Bits UI-kjeden og ingen
   moderate, høye eller kritiske funn. Audit tilbyr ikke en kompatibel oppgradering som fjerner de
   lave funnene; foreslåtte majorendringer er derfor ikke brukt som del av lift-and-shift-en.
@@ -1018,9 +1025,9 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
   i produksjonsgrafen eller byggartefaktene og er ikke React-/ReactDOM-runtime.
 - Statisk død-kodeanalyse rapporterer bare komplette DTO-typer som ennå ikke har en UI-konsument.
   De beholdes som transportkontrakt i `lib/contracts`; det finnes ingen tilsvarende ubrukt runtimekode.
-- SWP-5.2-buildens initial CSS er 27,7/27,7 KiB gzip for Cloudflare Pages/GitHub Pages av et uendret
-  50 KiB-budsjett; eksakt er målingen 28 350 og 28 370 gzip-byte når statistikkens offentlige
-  visualiseringsutilities erstatter legacy-CSS. Initial JS er 38 157/38 194 gzip-byte, 60 chunks,
+- SWP-5.5-buildens initial CSS er 27,8/27,8 KiB gzip for Cloudflare Pages/GitHub Pages av et uendret
+  50 KiB-budsjett; eksakt er målingen 28 424 og 28 443 gzip-byte etter at siste statiske SVG-
+  presentasjon er flyttet til offentlig UI/theme. Initial JS er 38 151/38 191 gzip-byte, 60 chunks,
   og største lazy JS-chunk er fortsatt 123 363 byte (120,5 KiB) av 130 KiB.
 
 ## Siste verifikasjon
@@ -1031,6 +1038,13 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 | Relative dokumentlenker              | Bestått 2026-08-24                                                                  |
 | `git diff --check`                   | Bestått 2026-08-24                                                                  |
 | AI-first lesbarhetskontroll          | Bestått: eksplisitte eiere, typer, statiske klasser og samlokaliserte tester        |
+| SWP-5.5 transition-baseline          | Bestått: schema 3 uten guarddiagnostics; 181 kilder og 9 regler gir 0 avvik         |
+| SWP-5.5 permanent allowlist          | Bestått: 4 eiere, 6 inlineverdier, 32 SVG-geometrier og 0 identitetsverdier         |
+| SWP-5.5 produksjons-/baselineport    | Bestått: 4 CSS-filer, 2050 linjer, 10 regler, 0 legacyavvik og 38 geometrier        |
+| SWP-5.5 produksjonsbuild             | Bestått: 28 424/28 443 CSS-byte, 60 JS-chunks og 120,5 KiB største lazy chunk       |
+| SWP-5 full enhetstest-/checkport     | Bestått: 94 filer, 345 tester og komplett `npm run check`                           |
+| SWP-5 kritisk/visuell E2E            | Bestått: 3 kritiske flyter og 11/11 pikselidentiske snapshots                       |
+| SWP-5 produksjonsroutematrise        | Bestått: 8/8 public, protected, admin og callback over root/base path               |
 | SWP-5.4 legacyfilsletting            | Bestått: tre filer/importer fjernet; dokumentert `base.css`; build byteidentisk     |
 | SWP-5.4 produksjons-/baselineport    | Bestått: 4 CSS-filer, 2037 linjer, 10 regler, 9 legacyavvik og 38 kandidater        |
 | SWP-5.4 visuell matrise              | Bestått: 11/11 pikselidentiske snapshots                                            |
@@ -1252,12 +1266,14 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 ## Filer i siste checkpoint
 
-- ny dokumentert `base.css` med dokumentdefaults, tilgjengelighetsfallbacks og fem keyframes
-- slettet `primitives.css`, `responsive.css` og `patterns.css` samt deres importer
-- stylingguardens autoritative produksjonsliste, baselineklassifisering og maskinbaseline med fire
-  CSS-filer, ni overgangsavvik og byteidentiske produksjonsassets
-- designsystempekeren og denne statusen med SWP-5.4 fullført og SWP-5.5 som neste eksakte
-  checkpoint; produktkode, API og backend-repoet er urørt
+- schema 3-guardkontrakt og produksjonsanalyse uten transition-baseline, med project-wide
+  custom-property-validering og null tillatte diagnostics
+- permanent visualiseringsallowlist per eksakt eierfil, geometri, skopert egenskap, selectoranker
+  og serieverdi samt styrkede positive/negative fixtures og kontrakttest
+- statisk SVG-tekstjustering og sammenligningsdash flyttet fra featuremarkup/CSS til offentlig
+  `DataVisualization`, Tailwind-utilities og theme
+- maskinbaseline med fire CSS-filer, null legacygjeld og 38 varige geometrier samt oppdatert ADR,
+  audit og denne statusen; API, produktflyt og backend-repoet er urørt
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
 pågående arbeid etter checkpointet.

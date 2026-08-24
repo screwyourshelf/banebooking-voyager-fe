@@ -12,11 +12,20 @@ import {
 } from "./utility-policy.mjs";
 
 export function analyzeStylingSource({ contract, source, sourcePath }) {
+  return analyzeStylingSourceDetails({ contract, source, sourcePath }).diagnostics;
+}
+
+export function analyzeStylingSourceDetails({ contract, source, sourcePath }) {
   const result = sourcePath.endsWith(".css")
     ? analyzeGlobalStylesheet({ contract, source, sourcePath })
     : analyzeSvelteComponent({ contract, source, sourcePath });
 
-  return result.map((entry) => ({ file: sourcePath, ...entry })).sort(compareDiagnostics);
+  return {
+    customProperties: result.customProperties,
+    diagnostics: result.diagnostics
+      .map((entry) => ({ file: sourcePath, ...entry }))
+      .sort(compareDiagnostics),
+  };
 }
 
 function analyzeGlobalStylesheet({ contract, source, sourcePath }) {
@@ -26,15 +35,18 @@ function analyzeGlobalStylesheet({ contract, source, sourcePath }) {
     scope: "global",
     sourcePath,
   });
-  return [
-    ...analysis.diagnostics,
-    ...validateCustomPropertyFacts({
-      contract,
-      customProperties: analysis.customProperties,
-      isVisualization: false,
-      sourcePath,
-    }),
-  ];
+  return {
+    customProperties: analysis.customProperties,
+    diagnostics: [
+      ...analysis.diagnostics,
+      ...validateCustomPropertyFacts({
+        contract,
+        customProperties: analysis.customProperties,
+        isVisualization: false,
+        sourcePath,
+      }),
+    ],
+  };
 }
 
 function analyzeSvelteComponent({ contract, source, sourcePath }) {
@@ -52,10 +64,7 @@ function analyzeSvelteComponent({ contract, source, sourcePath }) {
   const publicUiComponents = collectPublicUiComponents(importNodes, contract);
   const isFeatureOrRoute = pathMatchesAnyRoot(sourcePath, contract.ownership.featureAndRouteRoots);
   const isPublicUiOwner = pathMatchesAnyRoot(sourcePath, contract.ownership.publicUiOwnerRoots);
-  const isVisualization = pathMatchesAnyRoot(
-    sourcePath,
-    contract.visualizationException.ownerRoots
-  );
+  const isVisualization = Object.hasOwn(contract.visualizationException.owners, sourcePath);
 
   for (const importNode of importNodes) {
     analyzeImport({ contract, diagnostics, importNode, isFeatureOrRoute, source, sourcePath });
@@ -64,6 +73,17 @@ function analyzeSvelteComponent({ contract, source, sourcePath }) {
   for (const styleNode of styleNodes) {
     const location = offsetLocation(source, styleNode.start ?? 0);
     if (isVisualization) {
+      if (
+        contract.visualizationException.owners[sourcePath].scopedCssGeometryProperties.length === 0
+      ) {
+        diagnostics.push(
+          diagnostic(
+            contract.rules.visualizationException.id,
+            `${sourcePath} er ikke registrert som eier av skopert visualiserings-CSS`,
+            location
+          )
+        );
+      }
       const styleAnalysis = analyzeCssSource({
         contract,
         css: styleNode.content?.styles ?? "",
@@ -125,6 +145,7 @@ function analyzeSvelteComponent({ contract, source, sourcePath }) {
           insideSvg,
           isVisualization,
           source,
+          sourcePath,
         });
         continue;
       }
@@ -161,7 +182,7 @@ function analyzeSvelteComponent({ contract, source, sourcePath }) {
     })
   );
 
-  return diagnostics;
+  return { customProperties, diagnostics };
 }
 
 function analyzeImport({
@@ -208,6 +229,7 @@ function analyzeFeatureAttribute({
   insideSvg,
   isVisualization,
   source,
+  sourcePath,
 }) {
   const location = offsetLocation(source, attribute.start ?? 0);
 
@@ -253,13 +275,13 @@ function analyzeFeatureAttribute({
       return;
     }
 
-    const attributeSource = source.slice(attribute.start ?? 0, attribute.end ?? 0);
-    const facts = inlineCustomPropertyFacts(attributeSource, location);
-    if (facts.definitions.length === 0) {
+    const styleSource = reconstructInlineStyle(attribute);
+    const facts = inlineCustomPropertyFacts(styleSource, location);
+    if (!facts.isCustomPropertyDeclarationList) {
       diagnostics.push(
         diagnostic(
           contract.rules.visualizationException.id,
-          "visualiseringsunntaket tillater bare navngitte geometry-custom-properties i style",
+          "visualiseringsunntaket tillater bare en deklarasjonsliste med navngitte geometry-custom-properties i style",
           location
         )
       );
@@ -294,13 +316,37 @@ function analyzeFeatureAttribute({
     return;
   }
 
-  if (attribute.type === "Attribute" && attribute.name === "data-stat-role" && isVisualization) {
-    const role = staticAttributeValue(attribute);
-    if (!role || !contract.visualizationException.statisticRoles.includes(role)) {
+  if (attribute.type === "Attribute" && attribute.name === "data-stat-role") {
+    diagnostics.push(
+      diagnostic(
+        isVisualization
+          ? contract.rules.visualizationException.id
+          : contract.rules.featureStyling.id,
+        "statistikkroller er ikke tillatt; produktidentitet skal eies av offentlig UI",
+        location
+      )
+    );
+    return;
+  }
+
+  if (attribute.type === "Attribute" && attribute.name === "data-visualization") {
+    if (!isVisualization) {
+      diagnostics.push(
+        diagnostic(
+          contract.rules.featureStyling.id,
+          `data-visualization kan bare brukes av en eksakt registrert visualiseringseier; fant ${sourcePath}`,
+          location
+        )
+      );
+      return;
+    }
+    const value = staticAttributeValue(attribute);
+    const allowedAnchors = contract.visualizationException.owners[sourcePath].visualizationAnchors;
+    if (!value || !allowedAnchors.includes(value)) {
       diagnostics.push(
         diagnostic(
           contract.rules.visualizationException.id,
-          `statistikkrollen «${role ?? "dynamisk"}» er ikke registrert`,
+          `visualiseringsankeret «${value ?? "dynamisk"}» er ikke registrert for ${sourcePath}`,
           location
         )
       );
@@ -308,24 +354,66 @@ function analyzeFeatureAttribute({
     return;
   }
 
-  if (
-    insideSvg &&
-    isVisualization &&
-    attribute.type === "Attribute" &&
-    contract.visualizationException.forbiddenSvgPresentationAttributes.includes(attribute.name)
-  ) {
+  if (attribute.type === "Attribute" && attribute.name === "data-series") {
+    if (!isVisualization) {
+      diagnostics.push(
+        diagnostic(
+          contract.rules.featureStyling.id,
+          `data-series kan bare brukes av en eksakt registrert visualiseringseier; fant ${sourcePath}`,
+          location
+        )
+      );
+      return;
+    }
     const value = staticAttributeValue(attribute);
-    const allowedValues =
-      contract.visualizationException.svgPresentationValueAllowlist[attribute.name] ?? [];
-    if (!value || !allowedValues.includes(value)) {
+    if (!value || !contract.visualizationException.seriesValues.includes(value)) {
       diagnostics.push(
         diagnostic(
           contract.rules.visualizationException.id,
-          `visualiseringsunntaket tillater ikke SVG-attributtet «${attribute.name}»`,
+          `visualiseringsserien «${value ?? "dynamisk"}» er ikke registrert`,
           location
         )
       );
     }
+    return;
+  }
+
+  if (!insideSvg || attribute.type !== "Attribute") return;
+
+  if (contract.visualizationException.svgGeometryAttributeVocabulary.includes(attribute.name)) {
+    const isAllowedGeometry =
+      isVisualization &&
+      contract.visualizationException.owners[sourcePath].svgGeometryAttributes.includes(
+        attribute.name
+      );
+    if (!isAllowedGeometry) {
+      diagnostics.push(
+        diagnostic(
+          isVisualization
+            ? contract.rules.visualizationException.id
+            : contract.rules.featureStyling.id,
+          isVisualization
+            ? `SVG-geometriattributtet «${attribute.name}» er ikke registrert for ${sourcePath}`
+            : `feature-/routekode kan ikke eie SVG-geometriattributtet «${attribute.name}»`,
+          location
+        )
+      );
+    }
+    return;
+  }
+
+  if (contract.visualizationException.svgPresentationAttributes.includes(attribute.name)) {
+    diagnostics.push(
+      diagnostic(
+        isVisualization
+          ? contract.rules.visualizationException.id
+          : contract.rules.featureStyling.id,
+        isVisualization
+          ? `visualiseringsunntaket tillater ikke SVG-presentasjonsattributtet «${attribute.name}»`
+          : `feature-/routekode kan ikke eie SVG-presentasjonsattributtet «${attribute.name}»`,
+        location
+      )
+    );
   }
 }
 
@@ -418,6 +506,31 @@ function visitMarkup(root, insideSvg, visitor) {
 function mergeCustomProperties(target, source) {
   target.definitions.push(...source.definitions);
   target.references.push(...source.references);
+}
+
+function reconstructInlineStyle(attribute) {
+  if (Array.isArray(attribute.value)) {
+    const chunks = [];
+    for (const part of attribute.value) {
+      if (part.type === "Text") chunks.push(part.data);
+      else if (part.type === "ExpressionTag") chunks.push("0");
+      else return null;
+    }
+    return chunks.join("");
+  }
+
+  const expression = attribute.value?.type === "ExpressionTag" ? attribute.value.expression : null;
+  if (expression?.type === "Literal" && typeof expression.value === "string") {
+    return expression.value;
+  }
+  if (expression?.type !== "TemplateLiteral") return null;
+
+  return expression.quasis
+    .map(
+      ({ value }, index) =>
+        `${value.cooked ?? value.raw}${index < expression.expressions.length ? "0" : ""}`
+    )
+    .join("");
 }
 
 function diagnostic(ruleId, message, location) {

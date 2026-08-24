@@ -6,7 +6,8 @@ import { fileURLToPath } from "node:url";
 import { analyzeStylingSource } from "./styling-guards/analyze.mjs";
 import { loadStylingGuardContract } from "./styling-guards/contract.mjs";
 import {
-  assertProductionStylingDiagnosticsMatch,
+  assertNoProductionStylingDiagnostics,
+  analyzeProductionStylingTree,
   checkStylingProductionTree,
   collectProductionStylingSourcePaths,
 } from "./styling-guards/production-tree-contract.mjs";
@@ -17,7 +18,9 @@ const contract = await loadStylingGuardContract();
 const manifest = JSON.parse(await readFile(path.join(fixturesRoot, "manifest.json"), "utf8"));
 
 await checkStylingProductionTree(projectRoot);
+assert.equal(Object.hasOwn(contract.productionTree, "legacyBaselinePath"), false);
 await proveProductionDiscoveryIsNarrowAndExplicit();
+await proveCustomPropertyReferencesResolveAcrossTheProject();
 await proveEveryProductionRuleRejectsANewOccurrence();
 
 console.log(
@@ -57,6 +60,31 @@ async function proveProductionDiscoveryIsNarrowAndExplicit() {
   }
 }
 
+async function proveCustomPropertyReferencesResolveAcrossTheProject() {
+  const temporaryRoot = await mkdtemp(path.join(os.tmpdir(), "banebooking-styling-reference-"));
+  const tokenPath = path.join(temporaryRoot, "src/styles/design-system/tokens.css");
+  const entryPath = path.join(temporaryRoot, "src/index.css");
+  try {
+    await mkdir(path.dirname(tokenPath), { recursive: true });
+    await writeFile(tokenPath, "@layer theme { :root { --app-guard-cross-file: #fff; } }\n");
+    await writeFile(
+      entryPath,
+      "@theme inline { --color-guard-cross-file: var(--app-guard-cross-file); }\n"
+    );
+
+    const resolved = await analyzeProductionStylingTree(temporaryRoot, contract);
+    assert.deepEqual(resolved.diagnostics, []);
+
+    await writeFile(entryPath, "@theme inline { --color-guard-cross-file: #fff; }\n");
+    const unresolved = await analyzeProductionStylingTree(temporaryRoot, contract);
+    assert.equal(unresolved.diagnostics.length, 1);
+    assert.equal(unresolved.diagnostics[0].ruleId, contract.rules.customProperty.id);
+    assert.match(unresolved.diagnostics[0].message, /uten en registrert konsument/);
+  } finally {
+    await rm(temporaryRoot, { recursive: true });
+  }
+}
+
 async function proveEveryProductionRuleRejectsANewOccurrence() {
   for (const ruleId of contract.productionTree.enforcedRuleIds) {
     const fixture = manifest.fixtures.find(
@@ -75,7 +103,7 @@ async function proveEveryProductionRuleRejectsANewOccurrence() {
     const [newDiagnostic] = newDiagnostics;
     const expectedLocation = `${fixture.sourcePath}:${newDiagnostic.line}:${newDiagnostic.column} [${ruleId}]`;
     assert.throws(
-      () => assertProductionStylingDiagnosticsMatch([], [newDiagnostic]),
+      () => assertNoProductionStylingDiagnostics([newDiagnostic]),
       (error) => error instanceof Error && error.message.includes(expectedLocation)
     );
   }
