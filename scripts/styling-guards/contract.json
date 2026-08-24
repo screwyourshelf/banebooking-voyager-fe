@@ -115,6 +115,25 @@
     "entryStylesheet": "src/index.css",
     "tokenStylesheet": "src/styles/design-system/tokens.css",
     "namespaces": {
+      "animation": {
+        "themeVariablePrefix": "--animate-",
+        "roles": {
+          "page-loading": "--app-page-loading-animation"
+        }
+      },
+      "backgroundImage": {
+        "themeVariablePrefix": "--background-image-",
+        "roles": {
+          "page-loading-sheen": "--app-page-loading-sheen-background",
+          "section-soft": "--app-section-soft-background"
+        }
+      },
+      "backgroundSize": {
+        "themeVariablePrefix": "--background-size-",
+        "roles": {
+          "page-loading-sheen": "--app-page-loading-sheen-background-size"
+        }
+      },
       "color": {
         "themeVariablePrefix": "--color-",
         "roles": {
@@ -149,6 +168,17 @@
           "control-text": "--app-control-text",
           "dialog-border": "--app-dialog-border",
           "dialog-overlay": "--app-dialog-overlay",
+          "document-intro-surface": "--app-document-intro-surface",
+          "document-link-decoration": "--app-document-link-decoration",
+          "feedback-danger-border": "--app-feedback-danger-border",
+          "feedback-danger-surface": "--app-feedback-danger-surface",
+          "feedback-description": "--app-feedback-description",
+          "feedback-info-border": "--app-feedback-info-border",
+          "feedback-info-surface": "--app-feedback-info-surface",
+          "feedback-success-border": "--app-feedback-success-border",
+          "feedback-success-surface": "--app-feedback-success-surface",
+          "feedback-warning-border": "--app-feedback-warning-border",
+          "feedback-warning-surface": "--app-feedback-warning-surface",
           "field-control-border": "--app-field-control-border",
           "field-control-surface": "--app-field-control-surface",
           "field-control-text": "--app-field-control-text",
@@ -165,6 +195,9 @@
           "line-strong": "--app-line-strong",
           "nav-active": "--app-nav-active",
           "nav-active-surface": "--app-nav-active-surface",
+          "page-description": "--app-page-description-text",
+          "page-heading": "--app-page-heading-text",
+          "page-loading-placeholder": "--app-page-loading-placeholder",
           "ring": "--ring",
           "selection-indicator": "--app-choice-indicator",
           "sidebar": "--app-sidebar",
@@ -232,10 +265,20 @@
           "calendar-heading": "--app-calendar-heading-font-weight",
           "calendar-selected": "--app-calendar-selected-font-weight",
           "choice": "--app-choice-font-weight",
+          "document-fact-label": "--app-document-fact-label-font-weight",
+          "document-fact-value": "--app-document-fact-value-font-weight",
+          "document-link": "--app-document-link-font-weight",
+          "document-section-title": "--app-document-section-title-font-weight",
+          "document-strong": "--app-document-strong-font-weight",
+          "feedback-title": "--app-feedback-title-font-weight",
+          "page-eyebrow": "--app-page-eyebrow-font-weight",
+          "page-status": "--app-page-status-font-weight",
+          "page-title": "--app-page-title-font-weight",
           "rich-text-heading-2": "--app-rich-text-heading-2-font-weight",
           "rich-text-heading-3": "--app-rich-text-heading-3-font-weight",
           "rich-text-strong": "--app-rich-text-strong-font-weight",
           "rich-text-table-heading": "--app-rich-text-table-heading-font-weight",
+          "section-title": "--app-section-title-font-weight",
           "stat-chart-label": "--app-stat-chart-label-weight",
           "stat-chart-meta": "--app-stat-chart-meta-weight",
           "stat-chart-value": "--app-stat-chart-value-weight",
@@ -247,15 +290,36 @@
         "roles": {
           "choice": "--app-choice-line-height",
           "control": "--app-control-line-height",
+          "document-fact-value": "--app-document-fact-value-line-height",
+          "document-intro": "--app-document-intro-line-height",
+          "document-section-content": "--app-document-section-content-line-height",
+          "document-section-description": "--app-document-section-description-line-height",
+          "document-section-title": "--app-document-section-title-line-height",
+          "feedback-description": "--app-feedback-description-line-height",
+          "feedback-title": "--app-feedback-title-line-height",
+          "page-description": "--app-page-description-line-height",
+          "page-status": "--app-page-status-line-height",
+          "page-title": "--app-page-title-line-height",
           "rich-text-content": "--app-rich-text-content-line-height",
           "rich-text-heading-2": "--app-rich-text-heading-2-line-height",
           "rich-text-heading-3": "--app-rich-text-heading-3-line-height",
+          "section-description": "--app-section-description-line-height",
+          "section-title": "--app-section-title-line-height",
           "select-option": "--app-select-option-line-height"
+        }
+      },
+      "letterSpacing": {
+        "themeVariablePrefix": "--tracking-",
+        "roles": {
+          "document-fact-label": "--app-document-fact-label-letter-spacing",
+          "page-eyebrow": "--app-page-eyebrow-letter-spacing",
+          "page-title": "--app-page-title-letter-spacing"
         }
       },
       "textUnderlineOffset": {
         "themeVariablePrefix": "--text-underline-offset-",
         "roles": {
+          "document-link": "--app-document-link-underline-offset",
           "rich-text-link": "--app-rich-text-link-underline-offset"
         }
       },
@@ -263,6 +327,7 @@
         "themeVariablePrefix": "--border-width-",
         "roles": {
           "dialog-surface": "--app-dialog-surface-border-bottom-width",
+          "feedback-indicator": "--app-feedback-indicator-border-width",
           "radio-selected": "--app-radio-selected-border-width",
           "rich-text-quote": "--app-rich-text-quote-border-width"
         }
@@ -276,7 +341,12 @@
           "control": "--app-control-radius",
           "dialog": "--app-dialog-radius",
           "dialog-surface": "--app-dialog-surface-radius",
+          "document": "--app-document-radius",
+          "document-fact": "--app-document-fact-radius",
+          "document-wide": "--app-document-wide-radius",
+          "page-loading-surface": "--app-page-loading-surface-radius",
           "record": "--app-record-radius",
+          "section": "--app-section-radius",
           "select-content": "--app-select-content-radius",
           "surface": "--app-surface-radius",
           "textarea": "--app-textarea-radius"
@@ -312,9 +382,25 @@
           "dialog-surface-top": "--app-dialog-surface-top",
           "dialog-surface-translate-x": "--app-dialog-surface-translate-x",
           "dialog-surface-translate-y": "--app-dialog-surface-translate-y",
+          "document-wide-block": "--app-document-wide-padding-block",
+          "document-wide-inline": "--app-document-wide-padding-inline",
           "lg": "--app-space-lg",
           "md": "--app-space-md",
           "page": "--app-page-padding",
+          "page-content-desktop-bottom": "--app-page-content-desktop-padding-bottom",
+          "page-content-desktop-gap": "--app-page-content-desktop-gap",
+          "page-desktop-bottom": "--app-page-desktop-padding-block-end",
+          "page-desktop-inline-end": "--app-page-desktop-padding-inline-end",
+          "page-desktop-inline-start": "--app-page-desktop-padding-inline-start",
+          "page-desktop-top": "--app-page-desktop-padding-block-start",
+          "page-header-wide": "--app-page-header-wide-gap",
+          "page-intro": "--app-page-intro-gap",
+          "page-loading": "--app-page-loading-padding",
+          "page-loading-line": "--app-page-loading-line-gap",
+          "page-status-block": "--app-page-status-padding-block",
+          "page-wide-bottom": "--app-page-wide-padding-block-end",
+          "page-wide-inline": "--app-page-wide-padding-inline",
+          "page-wide-top": "--app-page-wide-padding-block-start",
           "record-gap": "--app-record-gap",
           "record-inline": "--app-record-padding-inline",
           "rich-text-flow": "--app-rich-text-flow-gap",
@@ -330,7 +416,8 @@
           "status-inline": "--app-status-inline-padding",
           "switch-padding": "--app-switch-padding",
           "switch-thumb-shift": "--app-switch-thumb-shift",
-          "xs": "--app-space-xs"
+          "xs": "--app-space-xs",
+          "xl": "--app-space-xl"
         }
       },
       "gridTemplateColumns": {
@@ -338,7 +425,9 @@
         "roles": {
           "calendar-header": "--app-calendar-header-columns",
           "date-navigation": "--app-date-navigation-columns",
-          "date-navigation-compact": "--app-date-navigation-compact-columns"
+          "date-navigation-compact": "--app-date-navigation-compact-columns",
+          "document-facts": "--app-document-facts-columns",
+          "feedback-wide": "--app-feedback-wide-columns"
         }
       },
       "opacity": {
@@ -360,6 +449,9 @@
           "dialog": "--app-dialog-width",
           "dialog-surface": "--app-dialog-surface-width",
           "editor-dialog": "--app-editor-dialog-width",
+          "page-loading-description": "--app-page-loading-description-width",
+          "page-loading-eyebrow": "--app-page-loading-eyebrow-width",
+          "page-loading-title": "--app-page-loading-title-width",
           "radio": "--app-radio-size",
           "sidebar": "--app-sidebar-width",
           "sidebar-rail": "--app-sidebar-rail-width",
@@ -384,7 +476,12 @@
           "calendar": "--app-calendar-max-width",
           "content": "--app-content-max",
           "dialog": "--app-dialog-width",
+          "document": "--app-document-max-width",
           "page": "--app-page-width",
+          "page-description": "--app-page-description-max-width",
+          "page-intro": "--app-page-intro-max-width",
+          "page-title": "--app-page-title-max-width",
+          "section-description": "--app-section-description-max-width",
           "select-content": "--app-select-content-max-width"
         }
       },
@@ -396,6 +493,10 @@
           "control-icon": "--app-control-icon-size",
           "choice-indicator": "--app-choice-indicator-height",
           "editor-dialog": "--app-editor-dialog-height",
+          "page-loading-description": "--app-page-loading-description-height",
+          "page-loading-eyebrow": "--app-page-loading-eyebrow-height",
+          "page-loading-row": "--app-page-loading-row-height",
+          "page-loading-title": "--app-page-loading-title-height",
           "radio": "--app-radio-size",
           "search-control": "--app-search-control-height",
           "switch": "--app-switch-height",
@@ -411,6 +512,7 @@
           "control": "--app-control-height",
           "date-trigger": "--app-date-trigger-min-height",
           "form-control": "--app-form-control-min-height",
+          "page-loading": "--app-page-loading-min-height",
           "rich-text-editor": "--app-rich-text-editor-min-height",
           "select-option": "--app-select-option-min-height",
           "select-scroll": "--app-select-scroll-button-min-height",
@@ -437,7 +539,13 @@
         "checked",
         "compact-control",
         "disabled",
+        "document-intro-child",
+        "document-intro-flow",
+        "document-link",
+        "document-section-flow",
+        "document-strong",
         "enabled",
+        "feedback-action-control",
         "focus",
         "focus-visible",
         "hover",
@@ -473,17 +581,20 @@
       "exact": [
         "absolute",
         "align-top",
+        "animate-none",
         "appearance-none",
         "block",
         "bg-transparent",
         "border",
         "border-0",
+        "border-b",
         "border-collapse",
         "border-t",
         "border-transparent",
         "border-x",
         "contents",
         "capitalize",
+        "content-start",
         "cursor-default",
         "cursor-not-allowed",
         "cursor-pointer",
@@ -528,12 +639,16 @@
         "justify-end",
         "justify-evenly",
         "justify-start",
+        "justify-self-end",
+        "justify-self-stretch",
         "left-1/2",
         "list-decimal",
         "list-disc",
         "max-h-none",
         "max-h-select-content",
         "max-h-select-viewport",
+        "max-w-full",
+        "m-0",
         "min-h-0",
         "min-w-select-content",
         "min-w-0",
@@ -584,7 +699,11 @@
         "translate-y-1/2",
         "translate-y-px",
         "underline",
+        "uppercase",
+        "whitespace-normal",
         "whitespace-nowrap",
+        "whitespace-pre-wrap",
+        "w-auto",
         "w-fit",
         "w-full",
         "w-screen",
@@ -602,6 +721,21 @@
       ]
     },
     "semanticVisualFamilies": [
+      {
+        "utilityPrefixes": ["animate"],
+        "themeNamespace": "animation",
+        "roles": ["page-loading"]
+      },
+      {
+        "utilityPrefixes": ["bg"],
+        "themeNamespace": "backgroundImage",
+        "roles": ["page-loading-sheen", "section-soft"]
+      },
+      {
+        "utilityPrefixes": ["bg-size"],
+        "themeNamespace": "backgroundSize",
+        "roles": ["page-loading-sheen"]
+      },
       {
         "utilityPrefixes": ["bg"],
         "themeNamespace": "color",
@@ -622,9 +756,15 @@
           "control-surface",
           "control-surface-strong",
           "dialog-overlay",
+          "document-intro-surface",
+          "feedback-danger-surface",
+          "feedback-info-surface",
+          "feedback-success-surface",
+          "feedback-warning-surface",
           "field-control-surface",
           "field-surface",
           "nav-active-surface",
+          "page-loading-placeholder",
           "selection-indicator",
           "sidebar",
           "status-available-bg",
@@ -655,11 +795,14 @@
           "control-muted",
           "control-text",
           "field-control-text",
+          "feedback-description",
           "foreground",
           "ink",
           "ink-faint",
           "ink-soft",
           "nav-active",
+          "page-description",
+          "page-heading",
           "sidebar-text",
           "status-available-text",
           "status-busy-text",
@@ -697,6 +840,10 @@
           "choice-border",
           "choice-selected-border",
           "dialog-border",
+          "feedback-danger-border",
+          "feedback-info-border",
+          "feedback-success-border",
+          "feedback-warning-border",
           "field-control-border",
           "focus",
           "line",
@@ -707,6 +854,21 @@
         ]
       },
       {
+        "utilityPrefixes": ["border-s"],
+        "themeNamespace": "color",
+        "roles": [
+          "status-available-indicator",
+          "status-danger-indicator",
+          "status-own-text",
+          "status-warning-indicator"
+        ]
+      },
+      {
+        "utilityPrefixes": ["decoration"],
+        "themeNamespace": "color",
+        "roles": ["brand-strong", "document-link-decoration"]
+      },
+      {
         "utilityPrefixes": ["border-b"],
         "themeNamespace": "borderWidth",
         "roles": ["dialog-surface"]
@@ -715,6 +877,11 @@
         "utilityPrefixes": ["border-l"],
         "themeNamespace": "borderWidth",
         "roles": ["rich-text-quote"]
+      },
+      {
+        "utilityPrefixes": ["border-s"],
+        "themeNamespace": "borderWidth",
+        "roles": ["feedback-indicator"]
       },
       {
         "utilityPrefixes": ["border"],
@@ -755,7 +922,12 @@
           "control",
           "dialog",
           "dialog-surface",
+          "document",
+          "document-fact",
+          "document-wide",
+          "page-loading-surface",
           "record",
+          "section",
           "select-content",
           "surface",
           "textarea"
@@ -786,10 +958,20 @@
           "calendar-heading",
           "calendar-selected",
           "choice",
+          "document-fact-label",
+          "document-fact-value",
+          "document-link",
+          "document-section-title",
+          "document-strong",
+          "feedback-title",
+          "page-eyebrow",
+          "page-status",
+          "page-title",
           "rich-text-heading-2",
           "rich-text-heading-3",
           "rich-text-strong",
           "rich-text-table-heading",
+          "section-title",
           "stat-chart-label",
           "stat-chart-meta",
           "stat-chart-value",
@@ -802,16 +984,33 @@
         "roles": [
           "choice",
           "control",
+          "document-fact-value",
+          "document-intro",
+          "document-section-content",
+          "document-section-description",
+          "document-section-title",
+          "feedback-description",
+          "feedback-title",
+          "page-description",
+          "page-status",
+          "page-title",
           "rich-text-content",
           "rich-text-heading-2",
           "rich-text-heading-3",
+          "section-description",
+          "section-title",
           "select-option"
         ]
       },
       {
+        "utilityPrefixes": ["tracking"],
+        "themeNamespace": "letterSpacing",
+        "roles": ["document-fact-label", "page-eyebrow", "page-title"]
+      },
+      {
         "utilityPrefixes": ["underline-offset"],
         "themeNamespace": "textUnderlineOffset",
-        "roles": ["rich-text-link"]
+        "roles": ["document-link", "rich-text-link"]
       },
       {
         "utilityPrefixes": ["gap", "space-x", "space-y"],
@@ -825,8 +1024,14 @@
           "section",
           "select-trigger-gap",
           "sm",
-          "xs"
+          "xs",
+          "xl"
         ]
+      },
+      {
+        "utilityPrefixes": ["gap"],
+        "themeNamespace": "spacing",
+        "roles": ["page-content-desktop-gap", "page-header-wide", "page-intro", "page-loading-line"]
       },
       {
         "utilityPrefixes": [
@@ -846,7 +1051,42 @@
           "py"
         ],
         "themeNamespace": "spacing",
-        "roles": ["2xs", "lg", "md", "page", "section", "sm", "xs"]
+        "roles": ["2xs", "lg", "md", "page", "section", "sm", "xs", "xl"]
+      },
+      {
+        "utilityPrefixes": ["p"],
+        "themeNamespace": "spacing",
+        "roles": ["page-loading"]
+      },
+      {
+        "utilityPrefixes": ["px"],
+        "themeNamespace": "spacing",
+        "roles": ["document-wide-inline", "page-wide-inline"]
+      },
+      {
+        "utilityPrefixes": ["py"],
+        "themeNamespace": "spacing",
+        "roles": ["document-wide-block", "page-status-block"]
+      },
+      {
+        "utilityPrefixes": ["pt"],
+        "themeNamespace": "spacing",
+        "roles": ["page-desktop-top", "page-wide-top"]
+      },
+      {
+        "utilityPrefixes": ["pr"],
+        "themeNamespace": "spacing",
+        "roles": ["page-desktop-inline-end"]
+      },
+      {
+        "utilityPrefixes": ["pb"],
+        "themeNamespace": "spacing",
+        "roles": ["page-content-desktop-bottom", "page-desktop-bottom", "page-wide-bottom"]
+      },
+      {
+        "utilityPrefixes": ["pl"],
+        "themeNamespace": "spacing",
+        "roles": ["page-desktop-inline-start"]
       },
       {
         "utilityPrefixes": ["mt"],
@@ -942,7 +1182,13 @@
       {
         "utilityPrefixes": ["grid-cols"],
         "themeNamespace": "gridTemplateColumns",
-        "roles": ["calendar-header", "date-navigation", "date-navigation-compact"]
+        "roles": [
+          "calendar-header",
+          "date-navigation",
+          "date-navigation-compact",
+          "document-facts",
+          "feedback-wide"
+        ]
       },
       {
         "utilityPrefixes": ["opacity"],
@@ -961,6 +1207,9 @@
           "dialog",
           "dialog-surface",
           "editor-dialog",
+          "page-loading-description",
+          "page-loading-eyebrow",
+          "page-loading-title",
           "radio",
           "sidebar",
           "sidebar-rail",
@@ -983,7 +1232,18 @@
       {
         "utilityPrefixes": ["max-w"],
         "themeNamespace": "maxWidth",
-        "roles": ["calendar", "content", "dialog", "page", "select-content"]
+        "roles": [
+          "calendar",
+          "content",
+          "dialog",
+          "document",
+          "page",
+          "page-description",
+          "page-intro",
+          "page-title",
+          "section-description",
+          "select-content"
+        ]
       },
       {
         "utilityPrefixes": ["h"],
@@ -994,6 +1254,10 @@
           "control",
           "control-icon",
           "editor-dialog",
+          "page-loading-description",
+          "page-loading-eyebrow",
+          "page-loading-row",
+          "page-loading-title",
           "radio",
           "search-control",
           "switch",
@@ -1010,6 +1274,7 @@
           "control",
           "date-trigger",
           "form-control",
+          "page-loading",
           "rich-text-editor",
           "select-option",
           "select-scroll",
@@ -1096,6 +1361,8 @@
         "name": "tailwind-theme",
         "prefixes": [
           "--animate-",
+          "--background-image-",
+          "--background-size-",
           "--border-width-",
           "--blur-",
           "--color-",
@@ -1113,6 +1380,7 @@
           "--spacing-",
           "--text-underline-offset-",
           "--text-",
+          "--tracking-",
           "--width-"
         ],
         "exact": [],

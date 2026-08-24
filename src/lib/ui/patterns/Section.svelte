@@ -27,23 +27,55 @@
   const headingId = $props.id();
   const hasHeader = $derived(Boolean(title || description || actions));
   const dataPadding = $derived(padding === "small" ? "sm" : padding === "large" ? "lg" : "md");
+  // De fire diagramflatene beholder sin datadrevne gap-komposisjon frem til SWP-5.2.
+  const statisticsCompositionOwnsGap = $derived(
+    attributes["data-context"] === "statistics" &&
+      ["booking-types", "distribution", "hour-chart", "month-chart"].includes(
+        String(attributes["data-view"])
+      )
+  );
 </script>
 
 <section
   {...attributes}
+  class={[
+    "grid min-w-0",
+    !statisticsCompositionOwnsGap && "gap-section",
+    variant === "soft"
+      ? "rounded-section bg-section-soft"
+      : variant === "surface"
+        ? "border border-line rounded-section bg-surface-raised text-ink shadow-surface-sm"
+        : "",
+    padding === "small" ? "p-md" : padding === "large" ? "p-xl" : "p-lg",
+  ]}
   data-ui="section"
   data-variant={variant}
   data-padding={dataPadding}
   aria-labelledby={title ? headingId : undefined}
 >
   {#if hasHeader}
-    <header data-ui="section-header">
-      <div data-part="intro">
-        {#if title}<h2 id={headingId} data-part="title">{title}</h2>{/if}
-        {#if description}<p data-part="description">{description}</p>{/if}
+    <header class="flex items-start justify-between gap-md" data-ui="section-header">
+      <div class="grid min-w-0 gap-xs" data-part="intro">
+        {#if title}
+          <h2
+            class="text-ink text-body-lg font-section-title leading-section-title"
+            id={headingId}
+            data-part="title"
+          >
+            {title}
+          </h2>
+        {/if}
+        {#if description}
+          <p
+            class="max-w-section-description text-ink-soft text-body-sm leading-section-description"
+            data-part="description"
+          >
+            {description}
+          </p>
+        {/if}
       </div>
-      {#if actions}<div data-part="actions">{@render actions()}</div>{/if}
+      {#if actions}<div class="flex-none" data-part="actions">{@render actions()}</div>{/if}
     </header>
   {/if}
-  <div data-part="content">{@render children?.()}</div>
+  <div class="grid min-w-0 gap-md" data-part="content">{@render children?.()}</div>
 </section>

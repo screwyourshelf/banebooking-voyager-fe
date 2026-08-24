@@ -15,6 +15,7 @@ export async function checkStylingThemeContract(projectRoot) {
   const failures = [];
   const expectedThemeDeclarations = expectedThemeDeclarationMap(contract);
   const themeRule = readInlineThemeRule(entrySource, contract.theme.entryStylesheet, failures);
+  const customUtilityRules = readCustomUtilityRules(entrySource, contract.theme.entryStylesheet);
 
   if (themeRule) {
     validateThemeDeclarations(themeRule, expectedThemeDeclarations, failures);
@@ -47,7 +48,7 @@ export async function checkStylingThemeContract(projectRoot) {
 
   const semanticUtilities = semanticUtilityEntries(contract);
   if (themeRule) {
-    await validateTailwindUtilities(themeRule, semanticUtilities, failures);
+    await validateTailwindUtilities(themeRule, customUtilityRules, semanticUtilities, failures);
   }
 
   if (darkChangedRoleCount === 0) {
@@ -62,6 +63,11 @@ export async function checkStylingThemeContract(projectRoot) {
     semanticUtilityCount: semanticUtilities.length,
     themeRoleCount: expectedThemeDeclarations.size,
   };
+}
+
+function readCustomUtilityRules(source, sourcePath) {
+  const root = postcss.parse(source, { from: sourcePath });
+  return (root.nodes ?? []).filter((node) => node.type === "atrule" && node.name === "utility");
 }
 
 function expectedThemeDeclarationMap(contract) {
@@ -175,8 +181,15 @@ function resolveCustomProperty(values, name, failures, theme, stack = []) {
   return resolved;
 }
 
-async function validateTailwindUtilities(themeRule, semanticUtilities, failures) {
-  const compiler = await compile(`${themeRule.toString()}\n@tailwind utilities;`);
+async function validateTailwindUtilities(
+  themeRule,
+  customUtilityRules,
+  semanticUtilities,
+  failures
+) {
+  const compiler = await compile(
+    `${themeRule.toString()}\n${customUtilityRules.map((rule) => rule.toString()).join("\n")}\n@tailwind utilities;`
+  );
   const generatedRoot = postcss.parse(
     compiler.build(semanticUtilities.map(({ className }) => className))
   );

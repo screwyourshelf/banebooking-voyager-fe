@@ -14,11 +14,24 @@
   let { items, label, ...attributes }: Props = $props();
 </script>
 
-<dl {...attributes} data-ui="document-facts" aria-label={label}>
+<dl
+  {...attributes}
+  class="grid grid-cols-document-facts gap-sm m-0"
+  data-ui="document-facts"
+  aria-label={label}
+>
   {#each items as item (item.label)}
-    <div>
-      <dt>{item.label}</dt>
-      <dd>{item.value}</dd>
+    <div
+      class="grid content-start gap-xs border border-line rounded-document-fact bg-surface-subtle p-md"
+    >
+      <dt
+        class="text-ink-faint text-caption font-document-fact-label tracking-document-fact-label uppercase"
+      >
+        {item.label}
+      </dt>
+      <dd class="m-0 text-ink text-body-sm font-document-fact-value leading-document-fact-value">
+        {item.value}
+      </dd>
     </div>
   {/each}
 </dl>

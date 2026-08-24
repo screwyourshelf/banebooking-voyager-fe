@@ -21,7 +21,18 @@ describe("public Document patterns", () => {
 
     const document = screen.getByRole("article", { name: "Vilkårsdokument" });
     expect(document).toHaveAttribute("data-ui", "document");
+    expect(document).toHaveClass(
+      "max-w-document",
+      "rounded-document",
+      "document-section-flow:border-t",
+      "document-link:decoration-document-link-decoration"
+    );
     expect(within(document).getByText(/Disse vilkårene gjelder/)).toBeInTheDocument();
+    expect(within(document).getByText(/Disse vilkårene gjelder/).parentElement).toHaveClass(
+      "bg-document-intro-surface",
+      "document-intro-flow:mt-md",
+      "md:px-document-wide-inline"
+    );
   });
 
   it("owns named sections and a stable h2 hierarchy", () => {
@@ -31,6 +42,10 @@ describe("public Document patterns", () => {
     expect(firstSection).toHaveAttribute("data-ui", "document-section");
     expect(within(firstSection).getByRole("heading", { level: 2 })).toHaveTextContent(
       "1. Bruk av tjenesten"
+    );
+    expect(within(firstSection).getByRole("heading", { level: 2 })).toHaveClass(
+      "font-document-section-title",
+      "leading-document-section-title"
     );
     expect(within(firstSection).getByText("Dette gjelder alle som booker.")).toHaveAttribute(
       "data-part",
@@ -44,6 +59,7 @@ describe("public Document patterns", () => {
     render(DocumentFixture);
 
     const facts = screen.getByLabelText("Gjeldende bookingregler");
+    expect(facts).toHaveClass("grid-cols-document-facts", "gap-sm");
     expect(
       within(facts)
         .getAllByRole("term")

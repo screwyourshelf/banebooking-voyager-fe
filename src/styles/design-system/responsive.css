@@ -17,19 +17,6 @@
         url("/backgrounds/tennis-net.avif") center / cover fixed;
     }
 
-    [data-ui="action-feedback"] {
-      grid-template-columns: minmax(0, 1fr) auto;
-    }
-
-    [data-ui="action-feedback"] > [data-part="action"] {
-      justify-self: end;
-    }
-
-    [data-ui="action-feedback"] > [data-part="action"] > button,
-    [data-ui="action-feedback"] > [data-part="action"] > a {
-      width: auto;
-    }
-
     [data-ui="app-shell"] > [data-part="frame"] {
       position: relative;
       display: grid;
@@ -127,22 +114,10 @@
       padding-bottom: 0;
     }
 
-    [data-ui="app-shell"]
-      [data-ui="page"]
-      > [data-part="content"]
-      > [data-part="header"]
-      > [data-part="intro"]
-      > [data-part="title"] {
-      color: var(--app-control-text);
-    }
-
-    [data-ui="app-shell"]
-      [data-ui="page"]
-      > [data-part="content"]
-      > [data-part="header"]
-      > [data-part="intro"]
-      > [data-part="description"] {
-      color: var(--app-control-muted);
+    /* SWP-4 flytter den responsive Page-/shell-komposisjonen til sin endelige eier. */
+    [data-ui="app-shell"] [data-ui="page"] {
+      --app-page-description-text: var(--app-control-muted);
+      --app-page-heading-text: var(--app-control-text);
     }
 
     [data-ui="app-shell"] > [data-part="bottom-navigation"] {
@@ -154,33 +129,6 @@
       [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] > [data-part="topbar"]
     ) {
       display: none;
-    }
-
-    [data-ui="page"] {
-      padding: 1.75rem 2rem 2.5rem;
-    }
-
-    [data-ui="page"] > [data-part="content"] > [data-part="header"] {
-      flex-direction: row;
-      align-items: flex-end;
-      justify-content: space-between;
-      gap: 2rem;
-    }
-
-    [data-ui="page"]
-      > [data-part="content"]
-      > [data-part="header"]
-      > [data-part="intro"]
-      > [data-part="description"] {
-      font-size: var(--app-type-body-lg);
-    }
-
-    [data-ui="page"] > [data-part="content"] {
-      gap: 1.5rem;
-    }
-
-    [data-ui="page"] > [data-part="content"] > [data-part="header"] > [data-part="intro"] {
-      gap: 0.5rem;
     }
 
     [data-ui="tabs"][data-variant="section"] {
@@ -253,15 +201,6 @@
 
     [data-ui="form-submit"][data-full-width="true"] {
       width: 100%;
-    }
-
-    [data-ui="document"] {
-      border-radius: 1.5rem;
-    }
-
-    [data-ui="document-intro"],
-    [data-ui="document-section"] {
-      padding: 1.25rem 1.5rem;
     }
 
     [data-ui="collection-row"][data-variant="ordered"] {
@@ -383,12 +322,6 @@
       text-shadow: 0 3px 24px rgb(0 0 0 / 0.28);
     }
 
-    [data-ui="page"] > [data-part="content"] {
-      position: relative;
-      gap: 1.25rem;
-      padding: 1rem 1rem 2.5rem;
-    }
-
     [data-ui="tabs"][data-variant="section"] {
       gap: 0.75rem;
     }
@@ -400,7 +333,6 @@
     }
 
     [data-ui="page"] {
-      padding: 3rem 3rem 4.5rem 2.5rem;
       animation: app-desktop-content-enter 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
     }
   }

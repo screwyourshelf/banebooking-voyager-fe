@@ -5,6 +5,7 @@ import process from "node:process";
 const projectRoot = process.cwd();
 const sourceRoot = path.join(projectRoot, "src");
 const primitivesRoot = `${path.join(sourceRoot, "lib", "ui", "primitives")}${path.sep}`;
+const patternsRoot = `${path.join(sourceRoot, "lib", "ui", "patterns")}${path.sep}`;
 const stylesheetEntryPath = path.join(sourceRoot, "index.css");
 const tokensPath = path.join(sourceRoot, "styles", "design-system", "tokens.css");
 const sourceFiles = await collectFiles(sourceRoot);
@@ -150,9 +151,9 @@ function validatePublicAnatomy() {
   );
 
   for (const uiName of componentUiNames) {
-    if (!stylesheetUiNames.has(uiName)) {
+    if (!stylesheetUiNames.has(uiName) && !patternHasComponentOwnedClass(uiName)) {
       violations.push(
-        `data-ui="${uiName}" brukes i en komponent, men mangler en sentral CSS-regel`
+        `data-ui="${uiName}" mangler både en sentral CSS-regel og Tailwind-klasser på patterneierens element`
       );
     }
   }
@@ -287,12 +288,24 @@ function validateCssVariables() {
 }
 
 function primitiveHasComponentOwnedClass(primitiveName) {
+  return ownerElementHasClass({
+    markerName: "data-ui-primitive",
+    ownerRoot: primitivesRoot,
+    value: primitiveName,
+  });
+}
+
+function patternHasComponentOwnedClass(uiName) {
+  return ownerElementHasClass({ markerName: "data-ui", ownerRoot: patternsRoot, value: uiName });
+}
+
+function ownerElementHasClass({ markerName, ownerRoot, value }) {
   const markerPattern = new RegExp(
-    `\\bdata-ui-primitive\\s*=\\s*["']${escapeRegExp(primitiveName)}["']`
+    `\\b${escapeRegExp(markerName)}\\s*=\\s*["']${escapeRegExp(value)}["']`
   );
 
   for (const [filePath, source] of sourceByPath) {
-    if (!filePath.startsWith(primitivesRoot) || !filePath.endsWith(".svelte")) continue;
+    if (!filePath.startsWith(ownerRoot) || !filePath.endsWith(".svelte")) continue;
 
     for (const openingTag of source.matchAll(/<[A-Za-z][A-Za-z0-9_.:-]*(?:\s[^<>]*?)?>/gs)) {
       if (markerPattern.test(openingTag[0]) && /\bclass\s*=/.test(openingTag[0])) return true;

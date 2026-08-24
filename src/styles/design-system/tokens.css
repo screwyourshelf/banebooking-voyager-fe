@@ -92,6 +92,60 @@
     --app-switch-track: var(--app-line-strong);
     --app-dialog-border: color-mix(in srgb, var(--app-line) 76%, transparent);
     --app-dialog-overlay: rgb(0 0 0 / 0.8);
+    --app-document-intro-surface: color-mix(in srgb, var(--app-brand-soft) 42%, var(--app-surface));
+    --app-document-link-decoration: color-mix(in srgb, var(--app-brand) 38%, transparent);
+    --app-feedback-danger-border: color-mix(
+      in srgb,
+      var(--status-danger-indicator) 34%,
+      var(--app-line)
+    );
+    --app-feedback-danger-surface: color-mix(
+      in srgb,
+      var(--status-danger-bg) 72%,
+      var(--app-surface)
+    );
+    --app-feedback-description: color-mix(in srgb, currentColor 86%, var(--app-ink));
+    --app-feedback-info-border: color-mix(in srgb, var(--status-own-text) 24%, var(--app-line));
+    --app-feedback-info-surface: color-mix(in srgb, var(--status-own-bg) 72%, var(--app-surface));
+    --app-feedback-success-border: color-mix(
+      in srgb,
+      var(--status-available-indicator) 34%,
+      var(--app-line)
+    );
+    --app-feedback-success-surface: color-mix(
+      in srgb,
+      var(--status-available-bg) 72%,
+      var(--app-surface)
+    );
+    --app-feedback-warning-border: color-mix(
+      in srgb,
+      var(--status-warning-indicator) 34%,
+      var(--app-line)
+    );
+    --app-feedback-warning-surface: color-mix(
+      in srgb,
+      var(--status-warning-bg) 72%,
+      var(--app-surface)
+    );
+    --app-page-description-text: var(--app-ink-soft);
+    --app-page-heading-text: var(--app-ink);
+    --app-page-loading-placeholder: color-mix(
+      in srgb,
+      var(--app-line-strong) 64%,
+      var(--app-surface)
+    );
+    --app-page-loading-sheen-background: linear-gradient(
+      100deg,
+      transparent 20%,
+      color-mix(in srgb, var(--app-surface) 72%, transparent) 45%,
+      transparent 70%
+    );
+    --app-page-loading-sheen-background-size: 220% 100%;
+    --app-section-soft-background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--app-surface-subtle) 72%, transparent),
+      transparent
+    );
     --activity-accent: var(--aas-green-300);
     --app-shadow-sm: 0 1px 2px rgb(18 36 23 / 0.05);
     --app-shadow-md: 0 12px 32px rgb(18 36 23 / 0.08);
@@ -104,6 +158,11 @@
     /* Semantic product geometry. Values mirror the verified pre-Tailwind component baseline. */
     --app-content-max: 112rem;
     --app-page-width: 96rem;
+    --app-document-max-width: 58rem;
+    --app-page-description-max-width: 42rem;
+    --app-page-intro-max-width: 54rem;
+    --app-page-title-max-width: 18ch;
+    --app-section-description-max-width: 65ch;
     --app-sidebar-width: 15.5rem;
     --app-sidebar-rail-width: 4.5rem;
     --app-control-height: 2.25rem;
@@ -138,17 +197,28 @@
     --app-rich-text-editor-min-height: 13.75rem;
     --app-rich-text-table-min-width: 30rem;
     --app-rich-text-table-cell-min-width: 5rem;
+    --app-page-loading-min-height: 18rem;
+    --app-page-loading-eyebrow-width: 7rem;
+    --app-page-loading-title-width: min(70%, 22rem);
+    --app-page-loading-description-width: min(88%, 36rem);
+    --app-page-loading-eyebrow-height: 0.75rem;
+    --app-page-loading-title-height: 2rem;
+    --app-page-loading-description-height: 1rem;
+    --app-page-loading-row-height: 2.75rem;
     --app-dialog-width: 34rem;
     --app-dialog-max-height: calc(100dvh - 2rem);
     --app-dialog-surface-width: min(var(--app-dialog-width), calc(100vw - 2rem));
     --app-dialog-surface-max-height: var(--app-dialog-max-height);
     --app-dialog-surface-border-bottom-width: 1px;
+    --app-feedback-indicator-border-width: var(--app-space-xs);
     --app-rich-text-quote-border-width: 3px;
     --app-editor-dialog-width: min(52rem, calc(100vw - 2rem));
     --app-editor-dialog-height: min(48rem, calc(100dvh - 2rem));
     --app-date-navigation-columns: 2.75rem minmax(0, 1fr) 2.75rem;
     --app-date-navigation-compact-columns: 2.5rem minmax(0, 1fr) 2.5rem;
     --app-calendar-header-columns: 2.25rem minmax(0, 1fr) 2.25rem;
+    --app-document-facts-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    --app-feedback-wide-columns: minmax(0, 1fr) auto;
     --app-select-disabled-opacity: 0.45;
     --app-date-disabled-opacity: 0.55;
     --app-calendar-disabled-opacity: 0.35;
@@ -157,6 +227,7 @@
     --app-space-sm: 0.5rem;
     --app-space-md: 0.75rem;
     --app-space-lg: 1rem;
+    --app-space-xl: 1.5rem;
     --app-control-gap: var(--app-space-sm);
     --app-control-padding-block: var(--app-space-sm);
     --app-control-padding-inline: var(--app-space-md);
@@ -170,6 +241,22 @@
     --app-select-option-indicator-padding: 2.25rem;
     --app-date-control-padding-inline: 0.875rem;
     --app-calendar-cell-padding: 0.1rem;
+    --app-document-wide-padding-block: 1.25rem;
+    --app-document-wide-padding-inline: 1.5rem;
+    --app-page-content-desktop-gap: 1.25rem;
+    --app-page-content-desktop-padding-bottom: 2.5rem;
+    --app-page-desktop-padding-block-end: 4.5rem;
+    --app-page-desktop-padding-block-start: 3rem;
+    --app-page-desktop-padding-inline-end: 3rem;
+    --app-page-desktop-padding-inline-start: 2.5rem;
+    --app-page-header-wide-gap: 2rem;
+    --app-page-intro-gap: 0.375rem;
+    --app-page-loading-line-gap: 0.625rem;
+    --app-page-loading-padding: clamp(1rem, 4vw, 2rem);
+    --app-page-status-padding-block: 0.28rem;
+    --app-page-wide-padding-block-end: 2.5rem;
+    --app-page-wide-padding-block-start: 1.75rem;
+    --app-page-wide-padding-inline: 2rem;
     --app-rich-text-flow-gap: 0.6rem;
     --app-rich-text-list-padding-inline: 1.4rem;
     --app-rich-text-list-item-gap: 0.2rem;
@@ -195,7 +282,12 @@
     --app-textarea-radius: 0.75rem;
     --app-dialog-radius: 1.5rem;
     --app-dialog-surface-radius: var(--app-dialog-radius);
+    --app-document-fact-radius: var(--radius);
+    --app-document-radius: 1.25rem;
+    --app-document-wide-radius: 1.5rem;
+    --app-page-loading-surface-radius: 1rem;
     --app-record-radius: 0.875rem;
+    --app-section-radius: 1rem;
     --app-surface-radius: 1.25rem;
     --app-record-shadow: 0 4px 16px rgb(18 36 23 / 0.07);
     --app-radius-sm: calc(var(--radius) * 0.6);
@@ -213,17 +305,44 @@
     --app-choice-font-weight: 680;
     --app-calendar-heading-font-weight: 700;
     --app-calendar-selected-font-weight: 750;
+    --app-document-fact-label-font-weight: 720;
+    --app-document-fact-value-font-weight: 680;
+    --app-document-link-font-weight: 650;
+    --app-document-section-title-font-weight: 740;
+    --app-document-strong-font-weight: 700;
+    --app-feedback-title-font-weight: 720;
+    --app-page-eyebrow-font-weight: 750;
+    --app-page-status-font-weight: 720;
+    --app-page-title-font-weight: 720;
     --app-rich-text-heading-2-font-weight: 700;
     --app-rich-text-heading-3-font-weight: 650;
     --app-rich-text-strong-font-weight: 700;
     --app-rich-text-table-heading-font-weight: 650;
+    --app-section-title-font-weight: 720;
     --app-control-line-height: 1.2;
     --app-choice-line-height: 1.15;
+    --app-document-fact-value-line-height: 1.4;
+    --app-document-intro-line-height: 1.6;
+    --app-document-section-content-line-height: 1.65;
+    --app-document-section-description-line-height: 1.5;
+    --app-document-section-title-line-height: 1.3;
+    --app-feedback-description-line-height: 1.5;
+    --app-feedback-title-line-height: 1.35;
+    --app-page-description-line-height: 1.4;
+    --app-page-status-line-height: 1;
+    --app-page-title-line-height: 1.05;
     --app-select-option-line-height: 1.3;
     --app-rich-text-content-line-height: 1.6;
     --app-rich-text-heading-2-line-height: 1.3;
     --app-rich-text-heading-3-line-height: 1.35;
+    --app-section-description-line-height: 1.45;
+    --app-section-title-line-height: 1.25;
+    --app-document-link-underline-offset: 0.18em;
     --app-rich-text-link-underline-offset: 2px;
+    --app-document-fact-label-letter-spacing: 0.06em;
+    --app-page-eyebrow-letter-spacing: 0.11em;
+    --app-page-title-letter-spacing: -0.035em;
+    --app-page-loading-animation: page-loading-sheen 1.5s ease-in-out infinite;
     --app-type-micro-compact: 0.75rem;
     --app-type-micro-comfortable: 0.8125rem;
     --app-type-caption-compact: 0.8125rem;
