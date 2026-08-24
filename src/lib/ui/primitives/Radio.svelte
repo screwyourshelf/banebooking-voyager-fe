@@ -16,6 +16,7 @@
 
 <input
   {...attributes}
+  class="w-radio h-radio flex-none appearance-none border border-line-strong rounded-control bg-surface cursor-pointer checked:border-radio-selected checked:border-selection-indicator focus-visible:outline-3 focus-visible:outline-focus-outline focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
   type="radio"
   {value}
   {checked}

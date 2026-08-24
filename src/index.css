@@ -30,6 +30,15 @@
   --color-canvas: var(--app-canvas);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
+  --color-choice-border: var(--app-choice-control-border);
+  --color-choice-hover-surface: var(--app-choice-control-hover-bg);
+  --color-choice-hover-text: var(--app-choice-control-hover-text);
+  --color-choice-indicator: var(--app-choice-control-indicator);
+  --color-choice-selected-border: var(--app-choice-control-selected-border);
+  --color-choice-selected-surface: var(--app-choice-control-selected-bg);
+  --color-choice-selected-text: var(--app-choice-control-selected-text);
+  --color-choice-surface: var(--app-choice-control-bg);
+  --color-choice-text: var(--app-choice-control-text);
   --color-control-muted: var(--app-control-muted);
   --color-control-surface: var(--app-control-surface);
   --color-control-surface-strong: var(--app-control-surface-strong);
@@ -48,6 +57,7 @@
   --color-nav-active: var(--app-nav-active);
   --color-nav-active-surface: var(--app-nav-active-surface);
   --color-ring: var(--ring);
+  --color-selection-indicator: var(--app-choice-indicator);
   --color-sidebar: var(--app-sidebar);
   --color-sidebar-divider: var(--app-sidebar-divider);
   --color-sidebar-text: var(--app-sidebar-text);
@@ -71,11 +81,13 @@
   --color-surface: var(--app-surface);
   --color-surface-raised: var(--app-surface-raised);
   --color-surface-subtle: var(--app-surface-subtle);
+  --color-switch-track: var(--app-switch-track);
 
   --font-body: var(--app-font-body);
   --font-display: var(--app-font-display);
   --font-sans: var(--app-font-sans);
   --font-weight-action: var(--app-action-font-weight);
+  --font-weight-choice: var(--app-choice-font-weight);
   --font-weight-stat-chart-label: var(--app-stat-chart-label-weight);
   --font-weight-stat-chart-meta: var(--app-stat-chart-meta-weight);
   --font-weight-stat-chart-value: var(--app-stat-chart-value-weight);
@@ -94,14 +106,18 @@
   --text-stat-chart-meta: var(--app-stat-chart-meta-size);
   --text-stat-chart-value: var(--app-stat-chart-value-size);
   --text-stat-key-value: var(--app-stat-key-value-size);
+  --leading-choice: var(--app-choice-line-height);
   --leading-control: var(--app-control-line-height);
 
+  --border-width-radio-selected: var(--app-radio-selected-border-width);
+  --radius-choice: var(--app-choice-radius);
   --radius-control: var(--app-control-radius);
   --radius-dialog: var(--app-dialog-radius);
   --radius-record: var(--app-record-radius);
   --radius-surface: var(--app-surface-radius);
   --radius-textarea: var(--app-textarea-radius);
   --shadow-record: var(--app-record-shadow);
+  --shadow-switch-thumb: var(--app-switch-thumb-shadow);
   --shadow-surface-lg: var(--app-shadow-lg);
   --shadow-surface-md: var(--app-shadow-md);
   --shadow-surface-sm: var(--app-shadow-sm);
@@ -109,6 +125,9 @@
   --spacing-2xs: var(--app-space-2xs);
   --spacing-action-compact-block: var(--app-action-compact-padding-block);
   --spacing-action-inline: var(--app-action-padding-inline);
+  --spacing-choice-block: var(--app-choice-padding-block);
+  --spacing-choice-indicator-offset: var(--app-choice-indicator-offset);
+  --spacing-choice-inline: var(--app-choice-padding-inline);
   --spacing-control-block: var(--app-control-padding-block);
   --spacing-control-gap: var(--app-control-gap);
   --spacing-control-inline: var(--app-control-padding-inline);
@@ -121,6 +140,8 @@
   --spacing-section: var(--app-section-gap);
   --spacing-sm: var(--app-space-sm);
   --spacing-status-inline: var(--app-status-inline-padding);
+  --spacing-switch-padding: var(--app-switch-padding);
+  --spacing-switch-thumb-shift: var(--app-switch-thumb-shift);
   --spacing-xs: var(--app-space-xs);
 
   --width-control: var(--app-control-height);
@@ -128,13 +149,22 @@
   --width-dialog: var(--app-dialog-width);
   --width-sidebar: var(--app-sidebar-width);
   --width-sidebar-rail: var(--app-sidebar-rail-width);
+  --width-radio: var(--app-radio-size);
+  --width-switch: var(--app-switch-width);
+  --width-switch-thumb: var(--app-switch-thumb-size);
+  --min-width-choice: var(--app-choice-control-min-width);
   --min-width-control: var(--app-control-min-width);
   --max-width-content: var(--app-content-max);
   --max-width-dialog: var(--app-dialog-width);
   --max-width-page: var(--app-page-width);
   --height-control: var(--app-control-height);
   --height-compact-control: var(--app-compact-control-height);
+  --height-choice-indicator: var(--app-choice-indicator-height);
+  --height-radio: var(--app-radio-size);
   --height-search-control: var(--app-search-control-height);
+  --height-switch: var(--app-switch-height);
+  --height-switch-thumb: var(--app-switch-thumb-size);
+  --min-height-choice: var(--app-choice-control-min-height);
   --min-height-compact-control: var(--app-compact-control-height);
   --min-height-control: var(--app-control-height);
   --min-height-form-control: var(--app-form-control-min-height);

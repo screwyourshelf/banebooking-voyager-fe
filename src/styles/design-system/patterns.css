@@ -907,23 +907,23 @@
   }
 
   [data-ui="settings-choice-group"] {
-    --control-choice-border: var(--app-line);
-    --control-choice-bg: var(--app-surface);
-    --control-choice-text: var(--app-ink-soft);
-    --control-choice-hover-bg: var(--app-surface-subtle);
-    --control-choice-hover-text: var(--app-ink);
-    --control-choice-selected-border: color-mix(
+    --app-choice-control-border: var(--app-line);
+    --app-choice-control-bg: var(--app-surface);
+    --app-choice-control-text: var(--app-ink-soft);
+    --app-choice-control-hover-bg: var(--app-surface-subtle);
+    --app-choice-control-hover-text: var(--app-ink);
+    --app-choice-control-selected-border: color-mix(
       in srgb,
       var(--app-choice-indicator) 42%,
       var(--app-line)
     );
-    --control-choice-selected-bg: color-mix(
+    --app-choice-control-selected-bg: color-mix(
       in srgb,
       var(--app-choice-indicator) 8%,
       var(--app-surface)
     );
-    --control-choice-selected-text: var(--app-ink);
-    --control-choice-indicator: var(--app-choice-indicator);
+    --app-choice-control-selected-text: var(--app-ink);
+    --app-choice-control-indicator: var(--app-choice-indicator);
 
     display: flex;
     flex-wrap: wrap;
@@ -931,7 +931,7 @@
   }
 
   [data-ui="settings-choice-group"] [data-ui-primitive="choice"] {
-    min-height: 2.5rem;
+    --app-choice-control-min-height: 2.5rem;
   }
 
   [data-ui="settings-range"] > [data-part="control"] {
@@ -1425,7 +1425,7 @@
   }
 
   [data-ui="collection-controls"] {
-    --control-choice-indicator: var(--app-choice-indicator);
+    --app-choice-control-indicator: var(--app-choice-indicator);
     padding: 0.625rem 0.875rem 0.75rem;
   }
 
@@ -1434,7 +1434,7 @@
   }
 
   [data-ui="collection-controls"][data-indicator="activity"] {
-    --control-choice-indicator: var(--activity-accent);
+    --app-choice-control-indicator: var(--activity-accent);
   }
 
   [data-ui="collection-controls"] > [data-part="top"] {
@@ -2673,7 +2673,7 @@
   }
 
   [data-ui="editor-dialog"] > [data-part="header"] > [data-part="intro"] > [data-part="eyebrow"] {
-    color: var(--control-choice-indicator);
+    color: var(--app-choice-control-indicator);
     font-size: var(--app-type-label);
     font-weight: 750;
     letter-spacing: 0.1em;
@@ -2742,15 +2742,19 @@
 
   /* Shared compact control surfaces and choices */
   [data-surface="control"] {
-    --control-choice-border: color-mix(in srgb, var(--app-control-text) 14%, transparent);
-    --control-choice-bg: color-mix(in srgb, var(--app-control-text) 8%, transparent);
-    --control-choice-text: var(--app-control-muted);
-    --control-choice-hover-bg: color-mix(in srgb, var(--app-control-text) 14%, transparent);
-    --control-choice-hover-text: var(--app-control-text);
-    --control-choice-selected-border: color-mix(in srgb, var(--app-control-text) 28%, transparent);
-    --control-choice-selected-bg: color-mix(in srgb, var(--app-control-text) 14%, transparent);
-    --control-choice-selected-text: var(--app-control-text);
-    --control-choice-indicator: var(--app-choice-indicator);
+    --app-choice-control-border: color-mix(in srgb, var(--app-control-text) 14%, transparent);
+    --app-choice-control-bg: color-mix(in srgb, var(--app-control-text) 8%, transparent);
+    --app-choice-control-text: var(--app-control-muted);
+    --app-choice-control-hover-bg: color-mix(in srgb, var(--app-control-text) 14%, transparent);
+    --app-choice-control-hover-text: var(--app-control-text);
+    --app-choice-control-selected-border: color-mix(
+      in srgb,
+      var(--app-control-text) 28%,
+      transparent
+    );
+    --app-choice-control-selected-bg: color-mix(in srgb, var(--app-control-text) 14%, transparent);
+    --app-choice-control-selected-text: var(--app-control-text);
+    --app-choice-control-indicator: var(--app-choice-indicator);
     --filter-switch-bg: color-mix(in srgb, var(--app-control-text) 8%, transparent);
     --filter-switch-text: var(--app-control-text);
     --filter-switch-muted: var(--app-control-muted);

@@ -77,10 +77,21 @@
     --app-focus-outline: color-mix(in srgb, var(--app-focus) 45%, transparent);
     --app-field-focus-ring: color-mix(in srgb, var(--app-focus) 32%, transparent);
     --app-field-invalid-ring: color-mix(in srgb, var(--status-danger-indicator) 20%, transparent);
+    --app-choice-control-border: var(--app-line);
+    --app-choice-control-bg: var(--app-surface);
+    --app-choice-control-text: var(--app-ink-soft);
+    --app-choice-control-hover-bg: var(--app-surface-subtle);
+    --app-choice-control-hover-text: var(--app-ink);
+    --app-choice-control-selected-border: var(--app-line-strong);
+    --app-choice-control-selected-bg: var(--app-nav-active-surface);
+    --app-choice-control-selected-text: var(--app-nav-active);
+    --app-choice-control-indicator: var(--app-choice-indicator);
+    --app-switch-track: var(--app-line-strong);
     --activity-accent: var(--aas-green-300);
     --app-shadow-sm: 0 1px 2px rgb(18 36 23 / 0.05);
     --app-shadow-md: 0 12px 32px rgb(18 36 23 / 0.08);
     --app-shadow-lg: 0 24px 70px rgb(18 36 23 / 0.12);
+    --app-switch-thumb-shadow: 0 1px 2px color-mix(in srgb, var(--app-ink) 22%, transparent);
 
     /* Semantic product geometry. Values mirror the verified pre-Tailwind component baseline. */
     --app-content-max: 112rem;
@@ -92,6 +103,14 @@
     --app-form-control-min-height: 2.625rem;
     --app-search-control-height: 2.75rem;
     --app-textarea-min-height: 4rem;
+    --app-choice-control-min-height: var(--app-control-height);
+    --app-choice-control-min-width: 0rem;
+    --app-choice-indicator-height: 2px;
+    --app-radio-size: 1rem;
+    --app-radio-selected-border-width: 0.25rem;
+    --app-switch-width: 2rem;
+    --app-switch-height: 1.15rem;
+    --app-switch-thumb-size: 0.9rem;
     --app-control-min-width: 10rem;
     --app-dialog-width: 34rem;
     --app-dialog-max-height: calc(100dvh - 2rem);
@@ -105,13 +124,19 @@
     --app-control-padding-inline: var(--app-space-md);
     --app-action-padding-inline: 0.875rem;
     --app-action-compact-padding-block: 0.375rem;
+    --app-choice-padding-block: 0.35rem;
+    --app-choice-padding-inline: 0.625rem;
+    --app-choice-indicator-offset: 0.15rem;
     --app-search-control-padding-inline: 2.5rem;
+    --app-switch-padding: 1px;
+    --app-switch-thumb-shift: 0.85rem;
     --app-page-padding: var(--app-space-lg);
     --app-section-gap: var(--app-space-lg);
     --app-status-inline-padding: 0.55rem;
     --app-record-gap: 0.5rem;
     --app-record-padding-inline: 0.5rem;
     --app-control-radius: 999px;
+    --app-choice-radius: 0.675rem;
     --app-textarea-radius: 0.75rem;
     --app-dialog-radius: 1.5rem;
     --app-record-radius: 0.875rem;
@@ -129,7 +154,9 @@
     --app-font-sans: var(--app-font-body);
     --app-font-display: var(--app-font-body);
     --app-action-font-weight: 650;
+    --app-choice-font-weight: 680;
     --app-control-line-height: 1.2;
+    --app-choice-line-height: 1.15;
     --app-type-micro-compact: 0.75rem;
     --app-type-micro-comfortable: 0.8125rem;
     --app-type-caption-compact: 0.8125rem;

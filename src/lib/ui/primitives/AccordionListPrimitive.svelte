@@ -28,6 +28,7 @@
 
 <Accordion.Root
   {...accordionAttributes}
+  class="min-w-0"
   type="single"
   {value}
   onValueChange={handleValueChange}

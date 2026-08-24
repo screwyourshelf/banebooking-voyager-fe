@@ -134,6 +134,15 @@
           "canvas": "--app-canvas",
           "chart-1": "--chart-1",
           "chart-2": "--chart-2",
+          "choice-border": "--app-choice-control-border",
+          "choice-hover-surface": "--app-choice-control-hover-bg",
+          "choice-hover-text": "--app-choice-control-hover-text",
+          "choice-indicator": "--app-choice-control-indicator",
+          "choice-selected-border": "--app-choice-control-selected-border",
+          "choice-selected-surface": "--app-choice-control-selected-bg",
+          "choice-selected-text": "--app-choice-control-selected-text",
+          "choice-surface": "--app-choice-control-bg",
+          "choice-text": "--app-choice-control-text",
           "control-muted": "--app-control-muted",
           "control-surface": "--app-control-surface",
           "control-surface-strong": "--app-control-surface-strong",
@@ -152,6 +161,7 @@
           "nav-active": "--app-nav-active",
           "nav-active-surface": "--app-nav-active-surface",
           "ring": "--ring",
+          "selection-indicator": "--app-choice-indicator",
           "sidebar": "--app-sidebar",
           "sidebar-divider": "--app-sidebar-divider",
           "sidebar-text": "--app-sidebar-text",
@@ -174,7 +184,8 @@
           "status-warning-text": "--status-warning-text",
           "surface": "--app-surface",
           "surface-raised": "--app-surface-raised",
-          "surface-subtle": "--app-surface-subtle"
+          "surface-subtle": "--app-surface-subtle",
+          "switch-track": "--app-switch-track"
         }
       },
       "fontFamily": {
@@ -207,6 +218,7 @@
         "themeVariablePrefix": "--font-weight-",
         "roles": {
           "action": "--app-action-font-weight",
+          "choice": "--app-choice-font-weight",
           "stat-chart-label": "--app-stat-chart-label-weight",
           "stat-chart-meta": "--app-stat-chart-meta-weight",
           "stat-chart-value": "--app-stat-chart-value-weight",
@@ -216,12 +228,20 @@
       "lineHeight": {
         "themeVariablePrefix": "--leading-",
         "roles": {
+          "choice": "--app-choice-line-height",
           "control": "--app-control-line-height"
+        }
+      },
+      "borderWidth": {
+        "themeVariablePrefix": "--border-width-",
+        "roles": {
+          "radio-selected": "--app-radio-selected-border-width"
         }
       },
       "radius": {
         "themeVariablePrefix": "--radius-",
         "roles": {
+          "choice": "--app-choice-radius",
           "control": "--app-control-radius",
           "dialog": "--app-dialog-radius",
           "record": "--app-record-radius",
@@ -233,6 +253,7 @@
         "themeVariablePrefix": "--shadow-",
         "roles": {
           "record": "--app-record-shadow",
+          "switch-thumb": "--app-switch-thumb-shadow",
           "surface-lg": "--app-shadow-lg",
           "surface-md": "--app-shadow-md",
           "surface-sm": "--app-shadow-sm"
@@ -244,6 +265,9 @@
           "2xs": "--app-space-2xs",
           "action-compact-block": "--app-action-compact-padding-block",
           "action-inline": "--app-action-padding-inline",
+          "choice-block": "--app-choice-padding-block",
+          "choice-indicator-offset": "--app-choice-indicator-offset",
+          "choice-inline": "--app-choice-padding-inline",
           "control-block": "--app-control-padding-block",
           "control-gap": "--app-control-gap",
           "control-inline": "--app-control-padding-inline",
@@ -256,6 +280,8 @@
           "section": "--app-section-gap",
           "sm": "--app-space-sm",
           "status-inline": "--app-status-inline-padding",
+          "switch-padding": "--app-switch-padding",
+          "switch-thumb-shift": "--app-switch-thumb-shift",
           "xs": "--app-space-xs"
         }
       },
@@ -265,13 +291,17 @@
           "compact-control": "--app-compact-control-height",
           "control": "--app-control-height",
           "dialog": "--app-dialog-width",
+          "radio": "--app-radio-size",
           "sidebar": "--app-sidebar-width",
-          "sidebar-rail": "--app-sidebar-rail-width"
+          "sidebar-rail": "--app-sidebar-rail-width",
+          "switch": "--app-switch-width",
+          "switch-thumb": "--app-switch-thumb-size"
         }
       },
       "minWidth": {
         "themeVariablePrefix": "--min-width-",
         "roles": {
+          "choice": "--app-choice-control-min-width",
           "control": "--app-control-min-width"
         }
       },
@@ -288,12 +318,17 @@
         "roles": {
           "compact-control": "--app-compact-control-height",
           "control": "--app-control-height",
-          "search-control": "--app-search-control-height"
+          "choice-indicator": "--app-choice-indicator-height",
+          "radio": "--app-radio-size",
+          "search-control": "--app-search-control-height",
+          "switch": "--app-switch-height",
+          "switch-thumb": "--app-switch-thumb-size"
         }
       },
       "minHeight": {
         "themeVariablePrefix": "--min-height-",
         "roles": {
+          "choice": "--app-choice-control-min-height",
           "compact-control": "--app-compact-control-height",
           "control": "--app-control-height",
           "form-control": "--app-form-control-min-height",
@@ -313,6 +348,7 @@
       "exact": [
         "2xl",
         "active",
+        "checked",
         "disabled",
         "enabled",
         "focus",
@@ -333,6 +369,7 @@
     "identityNeutralStructure": {
       "exact": [
         "absolute",
+        "appearance-none",
         "block",
         "bg-transparent",
         "border",
@@ -341,6 +378,7 @@
         "cursor-not-allowed",
         "cursor-pointer",
         "duration-120",
+        "duration-160",
         "field-sizing-content",
         "fixed",
         "flex",
@@ -407,6 +445,7 @@
         "sticky",
         "text-center",
         "transition",
+        "translate-x-0",
         "translate-y-px",
         "whitespace-nowrap",
         "w-full"
@@ -434,10 +473,15 @@
           "brand",
           "brand-soft",
           "canvas",
+          "choice-hover-surface",
+          "choice-indicator",
+          "choice-selected-surface",
+          "choice-surface",
           "control-surface",
           "control-surface-strong",
           "field-surface",
           "nav-active-surface",
+          "selection-indicator",
           "sidebar",
           "status-available-bg",
           "status-busy-bg",
@@ -448,7 +492,8 @@
           "status-warning-bg",
           "surface",
           "surface-raised",
-          "surface-subtle"
+          "surface-subtle",
+          "switch-track"
         ]
       },
       {
@@ -459,6 +504,9 @@
           "action-primary-text",
           "brand",
           "brand-strong",
+          "choice-hover-text",
+          "choice-selected-text",
+          "choice-text",
           "control-muted",
           "control-text",
           "foreground",
@@ -500,12 +548,20 @@
         "themeNamespace": "color",
         "roles": [
           "border",
+          "choice-border",
+          "choice-selected-border",
           "focus",
           "line",
           "line-strong",
+          "selection-indicator",
           "sidebar-divider",
           "status-danger-indicator"
         ]
+      },
+      {
+        "utilityPrefixes": ["border"],
+        "themeNamespace": "borderWidth",
+        "roles": ["radio-selected"]
       },
       {
         "utilityPrefixes": ["outline", "ring"],
@@ -529,12 +585,12 @@
       {
         "utilityPrefixes": ["rounded"],
         "themeNamespace": "radius",
-        "roles": ["control", "dialog", "record", "surface", "textarea"]
+        "roles": ["choice", "control", "dialog", "record", "surface", "textarea"]
       },
       {
         "utilityPrefixes": ["shadow"],
         "themeNamespace": "shadow",
-        "roles": ["record", "surface-lg", "surface-md", "surface-sm"]
+        "roles": ["record", "surface-lg", "surface-md", "surface-sm", "switch-thumb"]
       },
       {
         "utilityPrefixes": ["font"],
@@ -546,6 +602,7 @@
         "themeNamespace": "fontWeight",
         "roles": [
           "action",
+          "choice",
           "stat-chart-label",
           "stat-chart-meta",
           "stat-chart-value",
@@ -555,7 +612,7 @@
       {
         "utilityPrefixes": ["leading"],
         "themeNamespace": "lineHeight",
-        "roles": ["control"]
+        "roles": ["choice", "control"]
       },
       {
         "utilityPrefixes": ["gap", "space-x", "space-y"],
@@ -599,14 +656,53 @@
         ]
       },
       {
+        "utilityPrefixes": ["py"],
+        "themeNamespace": "spacing",
+        "roles": ["choice-block"]
+      },
+      {
+        "utilityPrefixes": ["px"],
+        "themeNamespace": "spacing",
+        "roles": ["choice-inline"]
+      },
+      {
+        "utilityPrefixes": ["bottom"],
+        "themeNamespace": "spacing",
+        "roles": ["choice-indicator-offset"]
+      },
+      {
+        "utilityPrefixes": ["inset-x"],
+        "themeNamespace": "spacing",
+        "roles": ["sm"]
+      },
+      {
+        "utilityPrefixes": ["p"],
+        "themeNamespace": "spacing",
+        "roles": ["switch-padding"]
+      },
+      {
+        "utilityPrefixes": ["translate-x"],
+        "themeNamespace": "spacing",
+        "roles": ["switch-thumb-shift"]
+      },
+      {
         "utilityPrefixes": ["w"],
         "themeNamespace": "width",
-        "roles": ["compact-control", "control", "dialog", "sidebar", "sidebar-rail"]
+        "roles": [
+          "compact-control",
+          "control",
+          "dialog",
+          "radio",
+          "sidebar",
+          "sidebar-rail",
+          "switch",
+          "switch-thumb"
+        ]
       },
       {
         "utilityPrefixes": ["min-w"],
         "themeNamespace": "minWidth",
-        "roles": ["control"]
+        "roles": ["choice", "control"]
       },
       {
         "utilityPrefixes": ["max-w"],
@@ -616,12 +712,20 @@
       {
         "utilityPrefixes": ["h"],
         "themeNamespace": "height",
-        "roles": ["compact-control", "control", "search-control"]
+        "roles": [
+          "choice-indicator",
+          "compact-control",
+          "control",
+          "radio",
+          "search-control",
+          "switch",
+          "switch-thumb"
+        ]
       },
       {
         "utilityPrefixes": ["min-h"],
         "themeNamespace": "minHeight",
-        "roles": ["compact-control", "control", "form-control", "textarea"]
+        "roles": ["choice", "compact-control", "control", "form-control", "textarea"]
       },
       {
         "utilityPrefixes": ["max-h"],
@@ -704,6 +808,7 @@
         "name": "tailwind-theme",
         "prefixes": [
           "--animate-",
+          "--border-width-",
           "--color-",
           "--font-",
           "--height-",

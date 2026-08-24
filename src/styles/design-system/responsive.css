@@ -239,7 +239,7 @@
     }
 
     [data-ui="settings-choice-group"] [data-ui-primitive="choice"] {
-      min-width: 4.25rem;
+      --app-choice-control-min-width: 4.25rem;
     }
 
     [data-ui="form-actions"] {

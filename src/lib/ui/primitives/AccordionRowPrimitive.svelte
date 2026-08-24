@@ -13,7 +13,13 @@
   let { action, children: summary, details, disabled = false, value }: Props = $props();
 </script>
 
-<Accordion.Item {value} {disabled} data-ui-primitive="accordion-row" data-part="surface">
+<Accordion.Item
+  class="min-w-0"
+  {value}
+  {disabled}
+  data-ui-primitive="accordion-row"
+  data-part="surface"
+>
   <div data-part="summary-row">
     <Accordion.Header level={3} data-part="trigger-header">
       <Accordion.Trigger data-part="trigger">
