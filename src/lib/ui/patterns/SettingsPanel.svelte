@@ -9,8 +9,13 @@
   let { children, ...attributes }: Props = $props();
 </script>
 
-<div {...attributes} data-ui="settings-panel">
-  <div data-ui="row-list" data-divided="true" data-density="compact">
+<div {...attributes} class="block border-0 rounded-none bg-transparent" data-ui="settings-panel">
+  <div
+    class="overflow-hidden text-body-sm settings-panel-row:border-t settings-panel-row:border-settings-row-divider"
+    data-ui="row-list"
+    data-divided="true"
+    data-density="compact"
+  >
     {@render children?.()}
   </div>
 </div>

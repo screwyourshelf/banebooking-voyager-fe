@@ -9,4 +9,10 @@
   setFormFieldsContext({ name: "form-fields" });
 </script>
 
-<div {...attributes} data-ui="form-fields">{@render children?.()}</div>
+<div
+  {...attributes}
+  class="grid min-w-0 bg-surface form-fields-flow:border-t form-fields-flow:border-line"
+  data-ui="form-fields"
+>
+  {@render children?.()}
+</div>

@@ -9,9 +9,15 @@
   let { labels, ...attributes }: Props = $props();
 </script>
 
-<div data-ui="settings-range">
-  <input {...attributes} type="range" data-part="control" />
+<div class="block" data-ui="settings-range">
+  <input {...attributes} class="w-full accent-brand" type="range" data-part="control" />
   {#if labels}
-    <div data-part="labels" aria-hidden="true">{@render labels()}</div>
+    <div
+      class="flex justify-between px-xs text-ink-faint text-caption tabular-nums"
+      data-part="labels"
+      aria-hidden="true"
+    >
+      {@render labels()}
+    </div>
   {/if}
 </div>

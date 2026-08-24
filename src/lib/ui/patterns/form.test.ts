@@ -6,6 +6,7 @@ import axe from "axe-core";
 import { describe, expect, it, vi } from "vitest";
 import Input from "../primitives/Input.svelte";
 import FormFixture from "./FormFixture.test.svelte";
+import FormStepsFixture from "./FormStepsFixture.test.svelte";
 import InvalidFormFieldFixture from "./InvalidFormFieldFixture.test.svelte";
 
 const axeOptions: axe.RunOptions = {
@@ -14,6 +15,70 @@ const axeOptions: axe.RunOptions = {
 };
 
 describe("public form anatomy", () => {
+  it("owns the semantic Tailwind vocabulary for fields, actions and pending submission", () => {
+    const { container } = render(FormFixture, {
+      onCancel: () => undefined,
+      onSubmit: () => undefined,
+      pending: true,
+    });
+
+    expect(container.querySelector('[data-ui="form"]')).toHaveClass("w-full");
+    expect(container.querySelector('[data-ui="form-fields"]')).toHaveClass(
+      "grid",
+      "bg-surface",
+      "form-fields-flow:border-t"
+    );
+    expect(container.querySelector('[data-ui="form-field"]')).toHaveClass(
+      "gap-form-field-gap",
+      "p-form-field",
+      "md:px-form-field-wide-inline"
+    );
+    expect(container.querySelector('[data-part="control"]')).toHaveClass(
+      "gap-form-control",
+      "form-field-control:min-h-form-control"
+    );
+    expect(container.querySelector('[data-ui="form-actions"]')).toHaveClass(
+      "bg-form-actions-surface",
+      "pb-form-actions",
+      "form-submit-control:w-full"
+    );
+    expect(container.querySelector('[data-part="spinner"]')).toHaveClass(
+      "border-form-submit-spinner",
+      "animate-form-submit",
+      "motion-reduce:animate-none"
+    );
+  });
+
+  it("owns step navigation state, utility hooks and value changes", async () => {
+    const onValueChange = vi.fn();
+    const { container } = render(FormStepsFixture, { onValueChange });
+    const details = screen.getByRole("button", { name: "1 Detaljer" });
+    const schedule = screen.getByRole("button", { name: "2 Tidspunkt" });
+    const detailsIndicator = details.querySelector('[data-part="indicator"]');
+    const scheduleIndicator = schedule.querySelector('[data-part="indicator"]');
+
+    expect(container.querySelector('[data-ui="form-steps"]')).toHaveClass("min-h-full", "flex-col");
+    expect(container.querySelector('[data-part="navigation"]')).toHaveClass(
+      "px-form-step-navigation-inline",
+      "md:px-form-step-navigation-wide-inline"
+    );
+    expect(details.closest("li")).toHaveClass(
+      "form-step-trigger:rounded-none",
+      "form-step-trigger:font-form-step"
+    );
+    expect(details).toHaveAttribute("aria-current", "step");
+    expect(detailsIndicator).toHaveClass("h-form-step-indicator", "bg-choice-indicator");
+    expect(scheduleIndicator).toHaveClass("bg-transparent");
+
+    await fireEvent.click(schedule);
+
+    expect(onValueChange).toHaveBeenCalledWith("schedule");
+    expect(details).not.toHaveAttribute("aria-current");
+    expect(schedule).toHaveAttribute("aria-current", "step");
+    expect(detailsIndicator).toHaveClass("bg-transparent");
+    expect(scheduleIndicator).toHaveClass("bg-choice-indicator");
+  });
+
   it("owns stable label, description, required and validation relationships", async () => {
     const { rerender } = render(FormFixture, {
       invalid: true,

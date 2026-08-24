@@ -140,69 +140,6 @@
       min-width: 24rem;
     }
 
-    [data-ui="settings-section"] {
-      border-radius: 1.5rem;
-    }
-
-    [data-ui="settings-section"][data-embedded="true"] {
-      border-radius: 0;
-    }
-
-    [data-ui="settings-section"] > [data-part="header"] {
-      padding: 1rem 1.25rem;
-    }
-
-    [data-ui="settings-section"]
-      > [data-part="header"]
-      > [data-part="intro"]
-      > [data-part="title"] {
-      font-size: var(--app-type-body-lg);
-    }
-
-    [data-ui="settings-row"]:not([data-kind="switch"]) {
-      display: grid;
-      grid-template-columns: minmax(12rem, 0.65fr) minmax(15rem, 1fr);
-      align-items: start;
-      gap: 1.5rem;
-    }
-
-    [data-ui="settings-row"]:not([data-kind="switch"]) > div:last-child {
-      margin-top: 0 !important;
-    }
-
-    [data-ui="form-field"] {
-      padding: 1rem 1.25rem;
-    }
-
-    [data-ui="form-steps"] > [data-part="navigation"] {
-      padding: 0.75rem 1.25rem 0;
-    }
-
-    [data-ui="settings-radio-group"] {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
-
-    [data-ui="settings-radio-group"][data-layout="stacked"] {
-      grid-template-columns: minmax(0, 1fr);
-    }
-
-    [data-ui="settings-choice-group"] [data-ui-primitive="choice"] {
-      --app-choice-control-min-width: 4.25rem;
-    }
-
-    [data-ui="form-actions"] {
-      padding: 0.875rem 1rem;
-    }
-
-    [data-ui="form-submit"] {
-      width: auto;
-      min-width: 9rem;
-    }
-
-    [data-ui="form-submit"][data-full-width="true"] {
-      width: 100%;
-    }
-
     [data-ui="collection-row"][data-variant="ordered"] {
       min-height: 5.25rem;
     }

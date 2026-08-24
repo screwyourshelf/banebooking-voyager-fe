@@ -60,16 +60,48 @@
   setFormControlContext(formControlContext);
 </script>
 
-<div {...attributes} data-ui="form-field" data-invalid={error ? "true" : undefined}>
-  <div data-part="intro">
-    <label id={labelId} for={resolvedControlId} data-part="label">
+<div
+  {...attributes}
+  class="grid min-w-0 gap-form-field-gap p-form-field md:px-form-field-wide-inline md:py-lg"
+  data-ui="form-field"
+  data-invalid={error ? "true" : undefined}
+>
+  <div class="grid min-w-0 gap-form-field-intro" data-part="intro">
+    <label
+      class="inline-flex w-fit items-baseline gap-xs text-ink text-body-sm font-form-label leading-form-label"
+      id={labelId}
+      for={resolvedControlId}
+      data-part="label"
+    >
       {label}
-      {#if required}<span data-part="required" aria-hidden="true">*</span>{/if}
+      {#if required}
+        <span class="text-status-danger-text" data-part="required" aria-hidden="true">*</span>
+      {/if}
     </label>
-    {#if description}<p id={descriptionId} data-part="description">{description}</p>{/if}
+    {#if description}
+      <p
+        class="m-0 text-ink-faint text-caption leading-form-supporting"
+        id={descriptionId}
+        data-part="description"
+      >
+        {description}
+      </p>
+    {/if}
   </div>
-  <div data-part="control">
+  <div
+    class="grid min-w-0 gap-form-control form-field-control:w-full form-field-control:min-h-form-control"
+    data-part="control"
+  >
     {@render children()}
-    {#if error}<p id={errorId} data-part="error" role="alert">{error}</p>{/if}
+    {#if error}
+      <p
+        class="m-0 text-status-danger-text text-caption leading-form-supporting"
+        id={errorId}
+        data-part="error"
+        role="alert"
+      >
+        {error}
+      </p>
+    {/if}
   </div>
 </div>

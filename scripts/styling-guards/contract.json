@@ -118,6 +118,7 @@
       "animation": {
         "themeVariablePrefix": "--animate-",
         "roles": {
+          "form-submit": "--app-form-submit-animation",
           "page-loading": "--app-page-loading-animation"
         }
       },
@@ -179,6 +180,7 @@
           "feedback-success-surface": "--app-feedback-success-surface",
           "feedback-warning-border": "--app-feedback-warning-border",
           "feedback-warning-surface": "--app-feedback-warning-surface",
+          "form-actions-surface": "--app-form-actions-surface",
           "field-control-border": "--app-field-control-border",
           "field-control-surface": "--app-field-control-surface",
           "field-control-text": "--app-field-control-text",
@@ -203,6 +205,17 @@
           "sidebar": "--app-sidebar",
           "sidebar-divider": "--app-sidebar-divider",
           "sidebar-text": "--app-sidebar-text",
+          "settings-choice-selected-border": "--app-settings-choice-selected-border",
+          "settings-choice-selected-surface": "--app-settings-choice-selected-surface",
+          "settings-danger-actions-border": "--app-settings-danger-actions-border",
+          "settings-danger-actions-surface": "--app-settings-danger-actions-surface",
+          "settings-danger-border": "--app-settings-danger-border",
+          "settings-danger-header-border": "--app-settings-danger-header-border",
+          "settings-danger-header-surface": "--app-settings-danger-header-surface",
+          "settings-header-surface": "--app-settings-header-surface",
+          "settings-radio-selected-border": "--app-settings-radio-selected-border",
+          "settings-radio-selected-surface": "--app-settings-radio-selected-surface",
+          "settings-row-divider": "--app-settings-row-divider",
           "status-available-bg": "--status-available-bg",
           "status-available-indicator": "--status-available-indicator",
           "status-available-text": "--status-available-text",
@@ -271,6 +284,9 @@
           "document-section-title": "--app-document-section-title-font-weight",
           "document-strong": "--app-document-strong-font-weight",
           "feedback-title": "--app-feedback-title-font-weight",
+          "form-label": "--app-form-label-font-weight",
+          "form-step": "--app-form-step-font-weight",
+          "form-step-number": "--app-form-step-number-font-weight",
           "page-eyebrow": "--app-page-eyebrow-font-weight",
           "page-status": "--app-page-status-font-weight",
           "page-title": "--app-page-title-font-weight",
@@ -279,6 +295,11 @@
           "rich-text-strong": "--app-rich-text-strong-font-weight",
           "rich-text-table-heading": "--app-rich-text-table-heading-font-weight",
           "section-title": "--app-section-title-font-weight",
+          "settings-eyebrow": "--app-settings-eyebrow-font-weight",
+          "settings-radio-description": "--app-settings-radio-description-font-weight",
+          "settings-radio-option": "--app-settings-radio-option-font-weight",
+          "settings-row-title": "--app-settings-row-title-font-weight",
+          "settings-title": "--app-settings-title-font-weight",
           "stat-chart-label": "--app-stat-chart-label-weight",
           "stat-chart-meta": "--app-stat-chart-meta-weight",
           "stat-chart-value": "--app-stat-chart-value-weight",
@@ -297,6 +318,8 @@
           "document-section-title": "--app-document-section-title-line-height",
           "feedback-description": "--app-feedback-description-line-height",
           "feedback-title": "--app-feedback-title-line-height",
+          "form-label": "--app-form-label-line-height",
+          "form-supporting": "--app-form-supporting-line-height",
           "page-description": "--app-page-description-line-height",
           "page-status": "--app-page-status-line-height",
           "page-title": "--app-page-title-line-height",
@@ -305,7 +328,12 @@
           "rich-text-heading-3": "--app-rich-text-heading-3-line-height",
           "section-description": "--app-section-description-line-height",
           "section-title": "--app-section-title-line-height",
-          "select-option": "--app-select-option-line-height"
+          "select-option": "--app-select-option-line-height",
+          "settings-description": "--app-settings-description-line-height",
+          "settings-eyebrow": "--app-settings-eyebrow-line-height",
+          "settings-row-description": "--app-settings-row-description-line-height",
+          "settings-row-title": "--app-settings-row-title-line-height",
+          "settings-text": "--app-settings-text-line-height"
         }
       },
       "letterSpacing": {
@@ -313,7 +341,8 @@
         "roles": {
           "document-fact-label": "--app-document-fact-label-letter-spacing",
           "page-eyebrow": "--app-page-eyebrow-letter-spacing",
-          "page-title": "--app-page-title-letter-spacing"
+          "page-title": "--app-page-title-letter-spacing",
+          "settings-eyebrow": "--app-settings-eyebrow-letter-spacing"
         }
       },
       "textUnderlineOffset": {
@@ -328,6 +357,7 @@
         "roles": {
           "dialog-surface": "--app-dialog-surface-border-bottom-width",
           "feedback-indicator": "--app-feedback-indicator-border-width",
+          "form-submit-spinner": "--app-form-submit-spinner-border-width",
           "radio-selected": "--app-radio-selected-border-width",
           "rich-text-quote": "--app-rich-text-quote-border-width"
         }
@@ -344,9 +374,13 @@
           "document": "--app-document-radius",
           "document-fact": "--app-document-fact-radius",
           "document-wide": "--app-document-wide-radius",
+          "form-actions": "--app-form-actions-radius",
           "page-loading-surface": "--app-page-loading-surface-radius",
           "record": "--app-record-radius",
           "section": "--app-section-radius",
+          "settings-radio-option": "--app-settings-radio-option-radius",
+          "settings-section": "--app-settings-section-radius",
+          "settings-section-wide": "--app-settings-section-wide-radius",
           "select-content": "--app-select-content-radius",
           "surface": "--app-surface-radius",
           "textarea": "--app-textarea-radius"
@@ -384,6 +418,15 @@
           "dialog-surface-translate-y": "--app-dialog-surface-translate-y",
           "document-wide-block": "--app-document-wide-padding-block",
           "document-wide-inline": "--app-document-wide-padding-inline",
+          "form-actions": "--app-form-actions-padding-bottom",
+          "form-actions-wide": "--app-form-actions-wide-padding-top",
+          "form-control": "--app-form-control-gap",
+          "form-field": "--app-form-field-padding",
+          "form-field-gap": "--app-form-field-gap",
+          "form-field-intro": "--app-form-field-intro-gap",
+          "form-field-wide-inline": "--app-form-field-wide-padding-inline",
+          "form-step-navigation-inline": "--app-form-step-navigation-padding-inline",
+          "form-step-navigation-wide-inline": "--app-form-step-navigation-wide-padding-inline",
           "lg": "--app-space-lg",
           "md": "--app-space-md",
           "page": "--app-page-padding",
@@ -412,6 +455,12 @@
           "select-option-indicator": "--app-select-option-indicator-padding",
           "select-trigger-gap": "--app-select-trigger-gap",
           "section": "--app-section-gap",
+          "settings-radio-indicator": "--app-settings-radio-indicator-bottom",
+          "settings-radio-option": "--app-settings-radio-option-padding-block",
+          "settings-section-description": "--app-settings-section-description-margin-top",
+          "settings-section-eyebrow": "--app-settings-section-eyebrow-margin-bottom",
+          "settings-section-header": "--app-settings-section-header-padding",
+          "settings-header-wide": "--app-settings-header-wide-padding-inline",
           "sm": "--app-space-sm",
           "status-inline": "--app-status-inline-padding",
           "switch-padding": "--app-switch-padding",
@@ -427,7 +476,8 @@
           "date-navigation": "--app-date-navigation-columns",
           "date-navigation-compact": "--app-date-navigation-compact-columns",
           "document-facts": "--app-document-facts-columns",
-          "feedback-wide": "--app-feedback-wide-columns"
+          "feedback-wide": "--app-feedback-wide-columns",
+          "settings-row": "--app-settings-row-columns"
         }
       },
       "opacity": {
@@ -435,7 +485,8 @@
         "roles": {
           "calendar-disabled": "--app-calendar-disabled-opacity",
           "date-disabled": "--app-date-disabled-opacity",
-          "select-disabled": "--app-select-disabled-opacity"
+          "select-disabled": "--app-select-disabled-opacity",
+          "settings-disabled": "--app-settings-disabled-opacity"
         }
       },
       "width": {
@@ -466,8 +517,10 @@
           "calendar-compact": "--app-calendar-compact-min-width",
           "choice": "--app-choice-control-min-width",
           "control": "--app-control-min-width",
+          "form-submit": "--app-form-submit-min-width",
           "rich-text-table": "--app-rich-text-table-min-width",
-          "rich-text-table-cell": "--app-rich-text-table-cell-min-width"
+          "rich-text-table-cell": "--app-rich-text-table-cell-min-width",
+          "settings-choice": "--app-settings-choice-min-width"
         }
       },
       "maxWidth": {
@@ -477,12 +530,14 @@
           "content": "--app-content-max",
           "dialog": "--app-dialog-width",
           "document": "--app-document-max-width",
+          "form-steps": "--app-form-steps-max-width",
           "page": "--app-page-width",
           "page-description": "--app-page-description-max-width",
           "page-intro": "--app-page-intro-max-width",
           "page-title": "--app-page-title-max-width",
           "section-description": "--app-section-description-max-width",
-          "select-content": "--app-select-content-max-width"
+          "select-content": "--app-select-content-max-width",
+          "settings-description": "--app-settings-description-max-width"
         }
       },
       "height": {
@@ -493,6 +548,7 @@
           "control-icon": "--app-control-icon-size",
           "choice-indicator": "--app-choice-indicator-height",
           "editor-dialog": "--app-editor-dialog-height",
+          "form-step-indicator": "--app-form-step-indicator-height",
           "page-loading-description": "--app-page-loading-description-height",
           "page-loading-eyebrow": "--app-page-loading-eyebrow-height",
           "page-loading-row": "--app-page-loading-row-height",
@@ -514,6 +570,8 @@
           "form-control": "--app-form-control-min-height",
           "page-loading": "--app-page-loading-min-height",
           "rich-text-editor": "--app-rich-text-editor-min-height",
+          "settings-choice": "--app-settings-choice-min-height",
+          "settings-radio-option": "--app-settings-radio-option-min-height",
           "select-option": "--app-select-option-min-height",
           "select-scroll": "--app-select-scroll-button-min-height",
           "select-trigger": "--app-select-trigger-min-height",
@@ -546,6 +604,12 @@
         "document-strong",
         "enabled",
         "feedback-action-control",
+        "form-field-control",
+        "form-fields-flow",
+        "form-step-trigger",
+        "form-steps-form",
+        "form-submit-content",
+        "form-submit-control",
         "focus",
         "focus-visible",
         "hover",
@@ -569,6 +633,12 @@
         "rich-text-table",
         "rich-text-table-cell",
         "rich-text-table-heading",
+        "settings-choice-control",
+        "settings-choice-selected",
+        "settings-danger-actions",
+        "settings-panel-row",
+        "settings-stack-embedded-section",
+        "settings-stack-flow",
         "sm",
         "xl"
       ],
@@ -589,9 +659,12 @@
         "border-0",
         "border-b",
         "border-collapse",
+        "border-current",
+        "border-r-transparent",
         "border-t",
         "border-transparent",
         "border-x",
+        "bottom-0",
         "contents",
         "capitalize",
         "content-start",
@@ -644,14 +717,17 @@
         "left-1/2",
         "list-decimal",
         "list-disc",
+        "list-none",
         "max-h-none",
         "max-h-select-content",
         "max-h-select-viewport",
         "max-w-full",
         "m-0",
         "min-h-0",
+        "min-h-full",
         "min-w-select-content",
         "min-w-0",
+        "mt-0",
         "mx-auto",
         "no-underline",
         "object-contain",
@@ -675,6 +751,7 @@
         "pointer-events-auto",
         "place-items-center",
         "p-0",
+        "pb-0",
         "px-0",
         "relative",
         "resize-none",
@@ -683,6 +760,7 @@
         "select-none",
         "shrink",
         "shrink-0",
+        "shadow-none",
         "size-full",
         "sr-only",
         "static",
@@ -724,7 +802,7 @@
       {
         "utilityPrefixes": ["animate"],
         "themeNamespace": "animation",
-        "roles": ["page-loading"]
+        "roles": ["form-submit", "page-loading"]
       },
       {
         "utilityPrefixes": ["bg"],
@@ -763,10 +841,16 @@
           "feedback-warning-surface",
           "field-control-surface",
           "field-surface",
+          "form-actions-surface",
           "nav-active-surface",
           "page-loading-placeholder",
           "selection-indicator",
           "sidebar",
+          "settings-choice-selected-surface",
+          "settings-danger-actions-surface",
+          "settings-danger-header-surface",
+          "settings-header-surface",
+          "settings-radio-selected-surface",
           "status-available-bg",
           "status-busy-bg",
           "status-danger-bg",
@@ -833,7 +917,7 @@
         ]
       },
       {
-        "utilityPrefixes": ["border", "divide"],
+        "utilityPrefixes": ["border", "border-t", "divide"],
         "themeNamespace": "color",
         "roles": [
           "border",
@@ -850,8 +934,19 @@
           "line-strong",
           "selection-indicator",
           "sidebar-divider",
+          "settings-choice-selected-border",
+          "settings-danger-actions-border",
+          "settings-danger-border",
+          "settings-danger-header-border",
+          "settings-radio-selected-border",
+          "settings-row-divider",
           "status-danger-indicator"
         ]
+      },
+      {
+        "utilityPrefixes": ["accent"],
+        "themeNamespace": "color",
+        "roles": ["brand"]
       },
       {
         "utilityPrefixes": ["border-s"],
@@ -886,7 +981,7 @@
       {
         "utilityPrefixes": ["border"],
         "themeNamespace": "borderWidth",
-        "roles": ["radio-selected"]
+        "roles": ["form-submit-spinner", "radio-selected"]
       },
       {
         "utilityPrefixes": ["outline", "ring"],
@@ -925,13 +1020,22 @@
           "document",
           "document-fact",
           "document-wide",
+          "form-actions",
           "page-loading-surface",
           "record",
           "section",
           "select-content",
+          "settings-radio-option",
+          "settings-section",
+          "settings-section-wide",
           "surface",
           "textarea"
         ]
+      },
+      {
+        "utilityPrefixes": ["rounded-t"],
+        "themeNamespace": "radius",
+        "roles": ["control"]
       },
       {
         "utilityPrefixes": ["shadow"],
@@ -964,6 +1068,9 @@
           "document-section-title",
           "document-strong",
           "feedback-title",
+          "form-label",
+          "form-step",
+          "form-step-number",
           "page-eyebrow",
           "page-status",
           "page-title",
@@ -972,6 +1079,11 @@
           "rich-text-strong",
           "rich-text-table-heading",
           "section-title",
+          "settings-eyebrow",
+          "settings-radio-description",
+          "settings-radio-option",
+          "settings-row-title",
+          "settings-title",
           "stat-chart-label",
           "stat-chart-meta",
           "stat-chart-value",
@@ -991,6 +1103,8 @@
           "document-section-title",
           "feedback-description",
           "feedback-title",
+          "form-label",
+          "form-supporting",
           "page-description",
           "page-status",
           "page-title",
@@ -999,13 +1113,18 @@
           "rich-text-heading-3",
           "section-description",
           "section-title",
-          "select-option"
+          "select-option",
+          "settings-description",
+          "settings-eyebrow",
+          "settings-row-description",
+          "settings-row-title",
+          "settings-text"
         ]
       },
       {
         "utilityPrefixes": ["tracking"],
         "themeNamespace": "letterSpacing",
-        "roles": ["document-fact-label", "page-eyebrow", "page-title"]
+        "roles": ["document-fact-label", "page-eyebrow", "page-title", "settings-eyebrow"]
       },
       {
         "utilityPrefixes": ["underline-offset"],
@@ -1018,6 +1137,9 @@
         "roles": [
           "2xs",
           "control-gap",
+          "form-control",
+          "form-field-gap",
+          "form-field-intro",
           "lg",
           "md",
           "record-gap",
@@ -1056,12 +1178,19 @@
       {
         "utilityPrefixes": ["p"],
         "themeNamespace": "spacing",
-        "roles": ["page-loading"]
+        "roles": ["form-field", "page-loading", "settings-section-header"]
       },
       {
         "utilityPrefixes": ["px"],
         "themeNamespace": "spacing",
-        "roles": ["document-wide-inline", "page-wide-inline"]
+        "roles": [
+          "document-wide-inline",
+          "form-field-wide-inline",
+          "form-step-navigation-inline",
+          "form-step-navigation-wide-inline",
+          "page-wide-inline",
+          "settings-header-wide"
+        ]
       },
       {
         "utilityPrefixes": ["py"],
@@ -1071,7 +1200,7 @@
       {
         "utilityPrefixes": ["pt"],
         "themeNamespace": "spacing",
-        "roles": ["page-desktop-top", "page-wide-top"]
+        "roles": ["form-actions-wide", "page-desktop-top", "page-wide-top"]
       },
       {
         "utilityPrefixes": ["pr"],
@@ -1081,7 +1210,12 @@
       {
         "utilityPrefixes": ["pb"],
         "themeNamespace": "spacing",
-        "roles": ["page-content-desktop-bottom", "page-desktop-bottom", "page-wide-bottom"]
+        "roles": [
+          "form-actions",
+          "page-content-desktop-bottom",
+          "page-desktop-bottom",
+          "page-wide-bottom"
+        ]
       },
       {
         "utilityPrefixes": ["pl"],
@@ -1091,7 +1225,12 @@
       {
         "utilityPrefixes": ["mt"],
         "themeNamespace": "spacing",
-        "roles": ["rich-text-flow", "rich-text-list-item"]
+        "roles": ["rich-text-flow", "rich-text-list-item", "settings-section-description"]
+      },
+      {
+        "utilityPrefixes": ["mb"],
+        "themeNamespace": "spacing",
+        "roles": ["settings-section-eyebrow"]
       },
       {
         "utilityPrefixes": ["pl"],
@@ -1132,7 +1271,7 @@
       {
         "utilityPrefixes": ["py"],
         "themeNamespace": "spacing",
-        "roles": ["choice-block", "select-option-block"]
+        "roles": ["choice-block", "select-option-block", "settings-radio-option"]
       },
       {
         "utilityPrefixes": ["px"],
@@ -1147,7 +1286,7 @@
       {
         "utilityPrefixes": ["bottom"],
         "themeNamespace": "spacing",
-        "roles": ["choice-indicator-offset", "dialog-surface-bottom"]
+        "roles": ["choice-indicator-offset", "dialog-surface-bottom", "settings-radio-indicator"]
       },
       {
         "utilityPrefixes": ["top"],
@@ -1162,7 +1301,7 @@
       {
         "utilityPrefixes": ["inset-x"],
         "themeNamespace": "spacing",
-        "roles": ["sm"]
+        "roles": ["md", "sm"]
       },
       {
         "utilityPrefixes": ["p"],
@@ -1187,13 +1326,14 @@
           "date-navigation",
           "date-navigation-compact",
           "document-facts",
-          "feedback-wide"
+          "feedback-wide",
+          "settings-row"
         ]
       },
       {
         "utilityPrefixes": ["opacity"],
         "themeNamespace": "opacity",
-        "roles": ["calendar-disabled", "date-disabled", "select-disabled"]
+        "roles": ["calendar-disabled", "date-disabled", "select-disabled", "settings-disabled"]
       },
       {
         "utilityPrefixes": ["w"],
@@ -1225,8 +1365,10 @@
           "calendar-compact",
           "choice",
           "control",
+          "form-submit",
           "rich-text-table",
-          "rich-text-table-cell"
+          "rich-text-table-cell",
+          "settings-choice"
         ]
       },
       {
@@ -1237,12 +1379,14 @@
           "content",
           "dialog",
           "document",
+          "form-steps",
           "page",
           "page-description",
           "page-intro",
           "page-title",
           "section-description",
-          "select-content"
+          "select-content",
+          "settings-description"
         ]
       },
       {
@@ -1254,6 +1398,7 @@
           "control",
           "control-icon",
           "editor-dialog",
+          "form-step-indicator",
           "page-loading-description",
           "page-loading-eyebrow",
           "page-loading-row",
@@ -1276,6 +1421,8 @@
           "form-control",
           "page-loading",
           "rich-text-editor",
+          "settings-choice",
+          "settings-radio-option",
           "select-option",
           "select-scroll",
           "select-trigger",

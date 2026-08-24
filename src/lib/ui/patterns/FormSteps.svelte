@@ -33,24 +33,51 @@
   }
 </script>
 
-<div data-ui="form-steps">
-  <nav data-part="navigation" aria-label={label}>
-    <ol data-part="list">
+<div class="flex min-w-0 min-h-full flex-1 flex-col" data-ui="form-steps">
+  <nav
+    class="flex-none border-b border-line bg-surface px-form-step-navigation-inline pt-sm pb-0 md:px-form-step-navigation-wide-inline md:pt-md"
+    data-part="navigation"
+    aria-label={label}
+  >
+    <ol class="grid max-w-form-steps grid-cols-2 gap-xs m-0 p-0 list-none" data-part="list">
       {#each items as item, index (item.value)}
-        <li data-state={item.value === resolvedValue ? "active" : "inactive"}>
+        {@const active = item.value === resolvedValue}
+        <li
+          class={[
+            "form-step-trigger:relative form-step-trigger:w-full form-step-trigger:justify-start form-step-trigger:gap-sm form-step-trigger:rounded-none form-step-trigger:text-body-sm form-step-trigger:font-form-step",
+            active ? "form-step-trigger:text-ink" : "form-step-trigger:text-ink-faint",
+          ]}
+          data-state={active ? "active" : "inactive"}
+        >
           <Button
             data-part="trigger"
             variant="ghost"
             size="small"
-            aria-current={item.value === resolvedValue ? "step" : undefined}
+            aria-current={active ? "step" : undefined}
             onclick={() => select(item.value)}
           >
-            <span data-part="number">{index + 1}</span>
+            <span
+              class="text-choice-indicator font-form-step-number tabular-nums"
+              data-part="number">{index + 1}</span
+            >
             <span>{item.label}</span>
+            <span
+              class={[
+                "absolute inset-x-md bottom-0 h-form-step-indicator rounded-t-control pointer-events-none",
+                active ? "bg-choice-indicator" : "bg-transparent",
+              ]}
+              data-part="indicator"
+              aria-hidden="true"
+            ></span>
           </Button>
         </li>
       {/each}
     </ol>
   </nav>
-  <div data-part="content">{@render children()}</div>
+  <div
+    class="flex min-w-0 min-h-0 flex-1 flex-col form-steps-form:min-h-full form-steps-form:flex-1"
+    data-part="content"
+  >
+    {@render children()}
+  </div>
 </div>

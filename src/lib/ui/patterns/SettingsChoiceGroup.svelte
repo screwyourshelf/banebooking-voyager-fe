@@ -29,6 +29,7 @@
 </script>
 
 <div
+  class="flex flex-wrap gap-sm settings-choice-control:min-h-settings-choice settings-choice-selected:border-settings-choice-selected-border settings-choice-selected:bg-settings-choice-selected-surface settings-choice-selected:text-ink md:settings-choice-control:min-w-settings-choice"
   data-ui="settings-choice-group"
   role="group"
   aria-label={label}

@@ -27,6 +27,10 @@
 
 <form
   {...attributes}
+  class={[
+    "w-full",
+    variant === "editor" ? "" : density === "compact" ? "space-y-xs" : "space-y-sm",
+  ]}
   novalidate={noValidate}
   data-ui="form"
   data-density={density}

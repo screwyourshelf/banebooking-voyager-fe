@@ -14,6 +14,7 @@
  * referenced product values.
  */
 @theme inline {
+  --animate-form-submit: var(--app-form-submit-animation);
   --animate-page-loading: var(--app-page-loading-animation);
   --background-image-page-loading-sheen: var(--app-page-loading-sheen-background);
   --background-image-section-soft: var(--app-section-soft-background);
@@ -61,6 +62,7 @@
   --color-feedback-success-surface: var(--app-feedback-success-surface);
   --color-feedback-warning-border: var(--app-feedback-warning-border);
   --color-feedback-warning-surface: var(--app-feedback-warning-surface);
+  --color-form-actions-surface: var(--app-form-actions-surface);
   --color-field-control-border: var(--app-field-control-border);
   --color-field-control-surface: var(--app-field-control-surface);
   --color-field-control-text: var(--app-field-control-text);
@@ -85,6 +87,17 @@
   --color-sidebar: var(--app-sidebar);
   --color-sidebar-divider: var(--app-sidebar-divider);
   --color-sidebar-text: var(--app-sidebar-text);
+  --color-settings-choice-selected-border: var(--app-settings-choice-selected-border);
+  --color-settings-choice-selected-surface: var(--app-settings-choice-selected-surface);
+  --color-settings-danger-actions-border: var(--app-settings-danger-actions-border);
+  --color-settings-danger-actions-surface: var(--app-settings-danger-actions-surface);
+  --color-settings-danger-border: var(--app-settings-danger-border);
+  --color-settings-danger-header-border: var(--app-settings-danger-header-border);
+  --color-settings-danger-header-surface: var(--app-settings-danger-header-surface);
+  --color-settings-header-surface: var(--app-settings-header-surface);
+  --color-settings-radio-selected-border: var(--app-settings-radio-selected-border);
+  --color-settings-radio-selected-surface: var(--app-settings-radio-selected-surface);
+  --color-settings-row-divider: var(--app-settings-row-divider);
   --color-status-available-bg: var(--status-available-bg);
   --color-status-available-indicator: var(--status-available-indicator);
   --color-status-available-text: var(--status-available-text);
@@ -122,6 +135,9 @@
   --font-weight-document-section-title: var(--app-document-section-title-font-weight);
   --font-weight-document-strong: var(--app-document-strong-font-weight);
   --font-weight-feedback-title: var(--app-feedback-title-font-weight);
+  --font-weight-form-label: var(--app-form-label-font-weight);
+  --font-weight-form-step: var(--app-form-step-font-weight);
+  --font-weight-form-step-number: var(--app-form-step-number-font-weight);
   --font-weight-page-eyebrow: var(--app-page-eyebrow-font-weight);
   --font-weight-page-status: var(--app-page-status-font-weight);
   --font-weight-page-title: var(--app-page-title-font-weight);
@@ -130,6 +146,11 @@
   --font-weight-rich-text-strong: var(--app-rich-text-strong-font-weight);
   --font-weight-rich-text-table-heading: var(--app-rich-text-table-heading-font-weight);
   --font-weight-section-title: var(--app-section-title-font-weight);
+  --font-weight-settings-eyebrow: var(--app-settings-eyebrow-font-weight);
+  --font-weight-settings-radio-description: var(--app-settings-radio-description-font-weight);
+  --font-weight-settings-radio-option: var(--app-settings-radio-option-font-weight);
+  --font-weight-settings-row-title: var(--app-settings-row-title-font-weight);
+  --font-weight-settings-title: var(--app-settings-title-font-weight);
   --font-weight-stat-chart-label: var(--app-stat-chart-label-weight);
   --font-weight-stat-chart-meta: var(--app-stat-chart-meta-weight);
   --font-weight-stat-chart-value: var(--app-stat-chart-value-weight);
@@ -157,6 +178,8 @@
   --leading-document-section-title: var(--app-document-section-title-line-height);
   --leading-feedback-description: var(--app-feedback-description-line-height);
   --leading-feedback-title: var(--app-feedback-title-line-height);
+  --leading-form-label: var(--app-form-label-line-height);
+  --leading-form-supporting: var(--app-form-supporting-line-height);
   --leading-page-description: var(--app-page-description-line-height);
   --leading-page-status: var(--app-page-status-line-height);
   --leading-page-title: var(--app-page-title-line-height);
@@ -166,14 +189,21 @@
   --leading-section-description: var(--app-section-description-line-height);
   --leading-section-title: var(--app-section-title-line-height);
   --leading-select-option: var(--app-select-option-line-height);
+  --leading-settings-description: var(--app-settings-description-line-height);
+  --leading-settings-eyebrow: var(--app-settings-eyebrow-line-height);
+  --leading-settings-row-description: var(--app-settings-row-description-line-height);
+  --leading-settings-row-title: var(--app-settings-row-title-line-height);
+  --leading-settings-text: var(--app-settings-text-line-height);
   --text-underline-offset-document-link: var(--app-document-link-underline-offset);
   --text-underline-offset-rich-text-link: var(--app-rich-text-link-underline-offset);
   --tracking-document-fact-label: var(--app-document-fact-label-letter-spacing);
   --tracking-page-eyebrow: var(--app-page-eyebrow-letter-spacing);
   --tracking-page-title: var(--app-page-title-letter-spacing);
+  --tracking-settings-eyebrow: var(--app-settings-eyebrow-letter-spacing);
 
   --border-width-dialog-surface: var(--app-dialog-surface-border-bottom-width);
   --border-width-feedback-indicator: var(--app-feedback-indicator-border-width);
+  --border-width-form-submit-spinner: var(--app-form-submit-spinner-border-width);
   --border-width-radio-selected: var(--app-radio-selected-border-width);
   --border-width-rich-text-quote: var(--app-rich-text-quote-border-width);
   --radius-calendar-day: var(--app-calendar-day-radius);
@@ -185,9 +215,13 @@
   --radius-document: var(--app-document-radius);
   --radius-document-fact: var(--app-document-fact-radius);
   --radius-document-wide: var(--app-document-wide-radius);
+  --radius-form-actions: var(--app-form-actions-radius);
   --radius-page-loading-surface: var(--app-page-loading-surface-radius);
   --radius-record: var(--app-record-radius);
   --radius-section: var(--app-section-radius);
+  --radius-settings-radio-option: var(--app-settings-radio-option-radius);
+  --radius-settings-section: var(--app-settings-section-radius);
+  --radius-settings-section-wide: var(--app-settings-section-wide-radius);
   --radius-select-content: var(--app-select-content-radius);
   --radius-surface: var(--app-surface-radius);
   --radius-textarea: var(--app-textarea-radius);
@@ -216,6 +250,15 @@
   --spacing-dialog-surface-translate-y: var(--app-dialog-surface-translate-y);
   --spacing-document-wide-block: var(--app-document-wide-padding-block);
   --spacing-document-wide-inline: var(--app-document-wide-padding-inline);
+  --spacing-form-actions: var(--app-form-actions-padding-bottom);
+  --spacing-form-actions-wide: var(--app-form-actions-wide-padding-top);
+  --spacing-form-control: var(--app-form-control-gap);
+  --spacing-form-field: var(--app-form-field-padding);
+  --spacing-form-field-intro: var(--app-form-field-intro-gap);
+  --spacing-form-field-wide-inline: var(--app-form-field-wide-padding-inline);
+  --spacing-form-field-gap: var(--app-form-field-gap);
+  --spacing-form-step-navigation-inline: var(--app-form-step-navigation-padding-inline);
+  --spacing-form-step-navigation-wide-inline: var(--app-form-step-navigation-wide-padding-inline);
   --spacing-lg: var(--app-space-lg);
   --spacing-md: var(--app-space-md);
   --spacing-page: var(--app-page-padding);
@@ -244,6 +287,12 @@
   --spacing-select-option-indicator: var(--app-select-option-indicator-padding);
   --spacing-select-trigger-gap: var(--app-select-trigger-gap);
   --spacing-section: var(--app-section-gap);
+  --spacing-settings-radio-indicator: var(--app-settings-radio-indicator-bottom);
+  --spacing-settings-radio-option: var(--app-settings-radio-option-padding-block);
+  --spacing-settings-section-description: var(--app-settings-section-description-margin-top);
+  --spacing-settings-section-eyebrow: var(--app-settings-section-eyebrow-margin-bottom);
+  --spacing-settings-section-header: var(--app-settings-section-header-padding);
+  --spacing-settings-header-wide: var(--app-settings-header-wide-padding-inline);
   --spacing-sm: var(--app-space-sm);
   --spacing-status-inline: var(--app-status-inline-padding);
   --spacing-switch-padding: var(--app-switch-padding);
@@ -256,10 +305,12 @@
   --grid-template-columns-date-navigation-compact: var(--app-date-navigation-compact-columns);
   --grid-template-columns-document-facts: var(--app-document-facts-columns);
   --grid-template-columns-feedback-wide: var(--app-feedback-wide-columns);
+  --grid-template-columns-settings-row: var(--app-settings-row-columns);
 
   --opacity-calendar-disabled: var(--app-calendar-disabled-opacity);
   --opacity-date-disabled: var(--app-date-disabled-opacity);
   --opacity-select-disabled: var(--app-select-disabled-opacity);
+  --opacity-settings-disabled: var(--app-settings-disabled-opacity);
 
   --width-calendar-day-compact: var(--app-calendar-compact-day-width);
   --width-control: var(--app-control-height);
@@ -281,23 +332,28 @@
   --min-width-calendar-compact: var(--app-calendar-compact-min-width);
   --min-width-choice: var(--app-choice-control-min-width);
   --min-width-control: var(--app-control-min-width);
+  --min-width-form-submit: var(--app-form-submit-min-width);
   --min-width-rich-text-table: var(--app-rich-text-table-min-width);
   --min-width-rich-text-table-cell: var(--app-rich-text-table-cell-min-width);
+  --min-width-settings-choice: var(--app-settings-choice-min-width);
   --max-width-calendar: var(--app-calendar-max-width);
   --max-width-content: var(--app-content-max);
   --max-width-dialog: var(--app-dialog-width);
   --max-width-document: var(--app-document-max-width);
+  --max-width-form-steps: var(--app-form-steps-max-width);
   --max-width-page: var(--app-page-width);
   --max-width-page-description: var(--app-page-description-max-width);
   --max-width-page-intro: var(--app-page-intro-max-width);
   --max-width-page-title: var(--app-page-title-max-width);
   --max-width-section-description: var(--app-section-description-max-width);
   --max-width-select-content: var(--app-select-content-max-width);
+  --max-width-settings-description: var(--app-settings-description-max-width);
   --height-control-icon: var(--app-control-icon-size);
   --height-control: var(--app-control-height);
   --height-compact-control: var(--app-compact-control-height);
   --height-choice-indicator: var(--app-choice-indicator-height);
   --height-editor-dialog: var(--app-editor-dialog-height);
+  --height-form-step-indicator: var(--app-form-step-indicator-height);
   --height-page-loading-description: var(--app-page-loading-description-height);
   --height-page-loading-eyebrow: var(--app-page-loading-eyebrow-height);
   --height-page-loading-row: var(--app-page-loading-row-height);
@@ -314,6 +370,8 @@
   --min-height-form-control: var(--app-form-control-min-height);
   --min-height-page-loading: var(--app-page-loading-min-height);
   --min-height-rich-text-editor: var(--app-rich-text-editor-min-height);
+  --min-height-settings-choice: var(--app-settings-choice-min-height);
+  --min-height-settings-radio-option: var(--app-settings-radio-option-min-height);
   --min-height-select-option: var(--app-select-option-min-height);
   --min-height-select-scroll: var(--app-select-scroll-button-min-height);
   --min-height-select-trigger: var(--app-select-trigger-min-height);
@@ -332,6 +390,18 @@
 @custom-variant document-section-flow (& > [data-ui="document-section"] + [data-ui="document-section"]);
 @custom-variant document-strong (& strong);
 @custom-variant feedback-action-control (& > :is(button, a));
+@custom-variant form-field-control (
+  & > :is(
+      [data-ui-primitive="input"],
+      [data-ui-primitive="select-trigger"],
+      [data-ui-primitive="textarea"]
+    )
+);
+@custom-variant form-fields-flow (& > * + *);
+@custom-variant form-step-trigger (& > [data-part="trigger"]);
+@custom-variant form-steps-form (& > [data-ui="form"]);
+@custom-variant form-submit-content (& [data-ui="form-submit"]:not([data-full-width="true"]));
+@custom-variant form-submit-control (& [data-ui="form-submit"]);
 @custom-variant rich-text-root (& .ProseMirror);
 @custom-variant rich-text-child (& .ProseMirror > *);
 @custom-variant rich-text-flow (& .ProseMirror > * + *);
@@ -348,6 +418,14 @@
 @custom-variant rich-text-table-cell (& .ProseMirror :is(th, td));
 @custom-variant rich-text-table-heading (& .ProseMirror th);
 @custom-variant rich-text-selected-cell (& .ProseMirror .selectedCell);
+@custom-variant settings-choice-control (& [data-ui-primitive="choice"]);
+@custom-variant settings-choice-selected (& [data-ui-primitive="choice"][data-selected="true"]);
+@custom-variant settings-danger-actions (& [data-ui="form-actions"]);
+@custom-variant settings-panel-row (& > * + *);
+@custom-variant settings-stack-embedded-section (
+  & > [data-ui="settings-section"][data-embedded="true"]:not(:first-child)
+);
+@custom-variant settings-stack-flow (& > * + *);
 
 @utility bg-size-page-loading-sheen {
   background-size: var(--app-page-loading-sheen-background-size);

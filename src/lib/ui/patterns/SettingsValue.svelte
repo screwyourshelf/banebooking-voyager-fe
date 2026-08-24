@@ -4,4 +4,6 @@
   let { children }: { children: Snippet } = $props();
 </script>
 
-<strong data-ui="settings-value">{@render children()}</strong>
+<strong class="text-ink text-body-sm tabular-nums" data-ui="settings-value"
+  >{@render children()}</strong
+>

@@ -26,6 +26,56 @@ function renderFixture(options: { disabled?: boolean; pending?: boolean } = {}) 
 }
 
 describe("public settings anatomy", () => {
+  it("owns the semantic Tailwind vocabulary for sections, rows and settings controls", () => {
+    const { result } = renderFixture();
+    const section = screen.getByRole("region", { name: "Publisering og oppsett" });
+    const header = section.querySelector('[data-part="header"]');
+    const row = screen.getByText("Status").closest('[data-ui="settings-row"]');
+    const radioGroup = screen.getByRole("radiogroup", { name: "Velg oppsettstype" });
+    const selectedRadioOption = screen
+      .getByRole("radio", { name: /Gjentakende/ })
+      .closest('[data-ui="settings-radio-option"]');
+    const choiceGroup = screen.getByRole("group", { name: "Baner" });
+    const range = screen.getByRole("slider", { name: "Maks bookinger per dag" });
+
+    expect(result.container.querySelector('[data-ui="settings-stack"]')).toHaveClass(
+      "settings-stack-flow:mt-lg"
+    );
+    expect(section).toHaveClass(
+      "bg-surface-raised",
+      "rounded-settings-section",
+      "md:rounded-settings-section-wide"
+    );
+    expect(header).toHaveClass(
+      "p-settings-section-header",
+      "md:px-settings-header-wide",
+      "bg-settings-header-surface"
+    );
+    expect(section.querySelector('[data-ui="settings-panel"]')).toHaveClass(
+      "border-0",
+      "bg-transparent"
+    );
+    expect(row).toHaveClass("px-sm", "py-sm", "md:grid-cols-settings-row");
+    expect(radioGroup).toHaveClass("gap-sm", "md:grid-cols-2");
+    expect(selectedRadioOption).toHaveClass(
+      "border-settings-radio-selected-border",
+      "bg-settings-radio-selected-surface"
+    );
+    expect(selectedRadioOption?.querySelector('[data-part="indicator"]')).toHaveClass(
+      "bg-choice-indicator"
+    );
+    expect(choiceGroup).toHaveClass(
+      "settings-choice-control:min-h-settings-choice",
+      "settings-choice-selected:bg-settings-choice-selected-surface"
+    );
+    expect(range).toHaveClass("w-full", "accent-brand");
+    expect(screen.getByText("Aktiv")).toHaveClass("text-ink", "tabular-nums");
+    expect(screen.getByText("I dag kl. 14.30.")).toHaveClass(
+      "text-ink-soft",
+      "whitespace-pre-wrap"
+    );
+  });
+
   it("owns the section heading, panel and status-row relationships", () => {
     const { result } = renderFixture();
     const section = screen.getByRole("region", { name: "Publisering og oppsett" });

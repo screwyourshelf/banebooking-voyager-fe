@@ -36,7 +36,13 @@
   data-pending={pending ? "true" : undefined}
   aria-busy={pending || undefined}
 >
-  {#if pending}<span data-part="spinner" aria-hidden="true"></span>{/if}
+  {#if pending}
+    <span
+      class="w-control-icon h-control-icon flex-none border-form-submit-spinner border-current border-r-transparent rounded-control animate-form-submit motion-reduce:animate-none"
+      data-part="spinner"
+      aria-hidden="true"
+    ></span>
+  {/if}
   <span data-part="label" aria-live={pending ? "polite" : undefined}>
     {#if pending}{pendingLabel}{:else}{@render children()}{/if}
   </span>

@@ -20,14 +20,11 @@
   }: Props = $props();
 
   const dataPart = $derived(attributes["data-part"]);
-  // Contextual pattern selectors stay authoritative until their SWP-3 migration.
-  const patternOwnsMinimumWidth = $derived(attributes["data-ui"] === "form-submit");
+  // De resterende kontekstbroene eies av senere SWP-3-checkpoints.
   const patternOwnsVariant = $derived(dataPart === "toggle");
-  const patternOwnsTypographyAndShape = $derived(dataPart === "trigger");
   const patternOwnsGhostText = $derived(
     dataPart === "back" ||
       dataPart === "reset" ||
-      dataPart === "trigger" ||
       (dataPart === "control" && Boolean(attributes["data-tone"]))
   );
 </script>
@@ -36,9 +33,9 @@
   {...attributes}
   class={[
     "inline-flex items-center justify-center gap-control-gap border font-action text-center no-underline whitespace-nowrap cursor-pointer transition duration-120 focus-visible:outline-3 focus-visible:outline-focus-outline focus-visible:outline-offset-2 enabled:active:translate-y-px disabled:cursor-not-allowed disabled:opacity-50",
-    !patternOwnsMinimumWidth && "min-w-0",
+    "min-w-0",
     fullWidth && "w-full",
-    !patternOwnsTypographyAndShape && "rounded-control",
+    "rounded-control",
     !patternOwnsVariant && variant === "primary"
       ? "border-transparent bg-brand text-action-primary-text enabled:hover:bg-action-primary-hover"
       : !patternOwnsVariant && variant === "secondary"
@@ -52,9 +49,7 @@
     size === "default"
       ? "min-h-control px-action-inline py-control-block text-label leading-control"
       : size === "small"
-        ? patternOwnsTypographyAndShape
-          ? "min-h-compact-control px-control-inline py-action-compact-block leading-control"
-          : "min-h-compact-control px-control-inline py-action-compact-block text-caption leading-control"
+        ? "min-h-compact-control px-control-inline py-action-compact-block text-caption leading-control"
         : size === "icon"
           ? "w-control min-h-control justify-center p-0 text-label leading-control"
           : "w-compact-control h-compact-control min-h-compact-control justify-center p-0",
