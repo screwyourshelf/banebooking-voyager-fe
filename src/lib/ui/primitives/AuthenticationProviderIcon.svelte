@@ -7,7 +7,7 @@
 </script>
 
 {#if provider === "google"}
-  <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" focusable="false">
     <path
       d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"
       fill="#4285f4"
@@ -26,7 +26,7 @@
     />
   </svg>
 {:else}
-  <svg viewBox="1.9 0 57 61" aria-hidden="true" focusable="false">
+  <svg viewBox="1.9 0 57 61" width="20" height="20" aria-hidden="true" focusable="false">
     <path
       d="M56.71 11.35C56.71 5.72 52.11.05 46.5 1.15L16.39 7.95c-5.23 1.44-9.31 4.04-10.21 10.21L1.93 49.48c0 5.64 4.57 10.21 10.21 10.21H48.2c5.64 0 10.21-4.57 10.21-10.21l-1.7-38.13Z"
       fill="#002147"

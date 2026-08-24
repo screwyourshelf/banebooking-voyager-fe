@@ -16,6 +16,10 @@
 @theme inline {
   --color-accent: var(--app-accent);
   --color-accent-soft: var(--app-accent-soft);
+  --color-action-destructive-hover: var(--app-action-destructive-hover);
+  --color-action-primary-hover: var(--app-action-primary-hover);
+  --color-action-primary-text: var(--app-action-primary-text);
+  --color-action-secondary: var(--app-action-secondary);
   --color-activity-accent: var(--activity-accent);
   --color-background: var(--background);
   --color-backdrop-scrim: var(--app-backdrop-scrim);
@@ -31,6 +35,10 @@
   --color-control-surface-strong: var(--app-control-surface-strong);
   --color-control-text: var(--app-control-text);
   --color-focus: var(--app-focus);
+  --color-focus-outline: var(--app-focus-outline);
+  --color-field-focus-ring: var(--app-field-focus-ring);
+  --color-field-invalid-ring: var(--app-field-invalid-ring);
+  --color-field-surface: var(--app-field-surface);
   --color-foreground: var(--foreground);
   --color-ink: var(--app-ink);
   --color-ink-faint: var(--app-ink-faint);
@@ -67,6 +75,7 @@
   --font-body: var(--app-font-body);
   --font-display: var(--app-font-display);
   --font-sans: var(--app-font-sans);
+  --font-weight-action: var(--app-action-font-weight);
   --font-weight-stat-chart-label: var(--app-stat-chart-label-weight);
   --font-weight-stat-chart-meta: var(--app-stat-chart-meta-weight);
   --font-weight-stat-chart-value: var(--app-stat-chart-value-weight);
@@ -85,17 +94,21 @@
   --text-stat-chart-meta: var(--app-stat-chart-meta-size);
   --text-stat-chart-value: var(--app-stat-chart-value-size);
   --text-stat-key-value: var(--app-stat-key-value-size);
+  --leading-control: var(--app-control-line-height);
 
   --radius-control: var(--app-control-radius);
   --radius-dialog: var(--app-dialog-radius);
   --radius-record: var(--app-record-radius);
   --radius-surface: var(--app-surface-radius);
+  --radius-textarea: var(--app-textarea-radius);
   --shadow-record: var(--app-record-shadow);
   --shadow-surface-lg: var(--app-shadow-lg);
   --shadow-surface-md: var(--app-shadow-md);
   --shadow-surface-sm: var(--app-shadow-sm);
 
   --spacing-2xs: var(--app-space-2xs);
+  --spacing-action-compact-block: var(--app-action-compact-padding-block);
+  --spacing-action-inline: var(--app-action-padding-inline);
   --spacing-control-block: var(--app-control-padding-block);
   --spacing-control-gap: var(--app-control-gap);
   --spacing-control-inline: var(--app-control-padding-inline);
@@ -104,12 +117,14 @@
   --spacing-page: var(--app-page-padding);
   --spacing-record-gap: var(--app-record-gap);
   --spacing-record-inline: var(--app-record-padding-inline);
+  --spacing-search-control-inline: var(--app-search-control-padding-inline);
   --spacing-section: var(--app-section-gap);
   --spacing-sm: var(--app-space-sm);
   --spacing-status-inline: var(--app-status-inline-padding);
   --spacing-xs: var(--app-space-xs);
 
   --width-control: var(--app-control-height);
+  --width-compact-control: var(--app-compact-control-height);
   --width-dialog: var(--app-dialog-width);
   --width-sidebar: var(--app-sidebar-width);
   --width-sidebar-rail: var(--app-sidebar-rail-width);
@@ -118,6 +133,11 @@
   --max-width-dialog: var(--app-dialog-width);
   --max-width-page: var(--app-page-width);
   --height-control: var(--app-control-height);
+  --height-compact-control: var(--app-compact-control-height);
+  --height-search-control: var(--app-search-control-height);
+  --min-height-compact-control: var(--app-compact-control-height);
   --min-height-control: var(--app-control-height);
+  --min-height-form-control: var(--app-form-control-min-height);
+  --min-height-textarea: var(--app-textarea-min-height);
   --max-height-dialog: var(--app-dialog-max-height);
 }

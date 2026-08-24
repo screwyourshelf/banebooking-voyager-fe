@@ -2763,7 +2763,6 @@
   }
 
   [data-control="switch"] {
-    --primary: var(--app-choice-indicator);
     --ring: var(--app-choice-indicator);
   }
 

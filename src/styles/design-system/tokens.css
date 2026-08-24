@@ -65,6 +65,18 @@
     --app-control-surface-strong: #225c3b;
     --app-control-text: #ffffff;
     --app-control-muted: #c7dacd;
+    --app-action-primary-text: #ffffff;
+    --app-action-primary-hover: color-mix(in oklab, var(--app-brand) 84%, var(--app-ink));
+    --app-action-secondary: color-mix(in oklab, var(--app-surface) 72%, var(--app-line));
+    --app-action-destructive-hover: color-mix(
+      in oklab,
+      var(--status-danger-bg) 84%,
+      var(--status-danger-text)
+    );
+    --app-field-surface: color-mix(in srgb, var(--app-line-strong) 30%, transparent);
+    --app-focus-outline: color-mix(in srgb, var(--app-focus) 45%, transparent);
+    --app-field-focus-ring: color-mix(in srgb, var(--app-focus) 32%, transparent);
+    --app-field-invalid-ring: color-mix(in srgb, var(--status-danger-indicator) 20%, transparent);
     --activity-accent: var(--aas-green-300);
     --app-shadow-sm: 0 1px 2px rgb(18 36 23 / 0.05);
     --app-shadow-md: 0 12px 32px rgb(18 36 23 / 0.08);
@@ -76,6 +88,10 @@
     --app-sidebar-width: 15.5rem;
     --app-sidebar-rail-width: 4.5rem;
     --app-control-height: 2.25rem;
+    --app-compact-control-height: 2rem;
+    --app-form-control-min-height: 2.625rem;
+    --app-search-control-height: 2.75rem;
+    --app-textarea-min-height: 4rem;
     --app-control-min-width: 10rem;
     --app-dialog-width: 34rem;
     --app-dialog-max-height: calc(100dvh - 2rem);
@@ -87,12 +103,16 @@
     --app-control-gap: var(--app-space-sm);
     --app-control-padding-block: var(--app-space-sm);
     --app-control-padding-inline: var(--app-space-md);
+    --app-action-padding-inline: 0.875rem;
+    --app-action-compact-padding-block: 0.375rem;
+    --app-search-control-padding-inline: 2.5rem;
     --app-page-padding: var(--app-space-lg);
     --app-section-gap: var(--app-space-lg);
     --app-status-inline-padding: 0.55rem;
     --app-record-gap: 0.5rem;
     --app-record-padding-inline: 0.5rem;
     --app-control-radius: 999px;
+    --app-textarea-radius: 0.75rem;
     --app-dialog-radius: 1.5rem;
     --app-record-radius: 0.875rem;
     --app-surface-radius: 1.25rem;
@@ -108,6 +128,8 @@
     --app-font-body: "Figtree Variable", Figtree, ui-sans-serif, system-ui, sans-serif;
     --app-font-sans: var(--app-font-body);
     --app-font-display: var(--app-font-body);
+    --app-action-font-weight: 650;
+    --app-control-line-height: 1.2;
     --app-type-micro-compact: 0.75rem;
     --app-type-micro-comfortable: 0.8125rem;
     --app-type-caption-compact: 0.8125rem;
@@ -183,8 +205,7 @@
    */
     --background: var(--app-surface);
     --foreground: var(--app-ink);
-    --primary: var(--aas-green-700);
-    --primary-foreground: #ffffff;
+    --primary-foreground: var(--app-action-primary-text);
     --muted: var(--app-surface-subtle);
     --muted-foreground: var(--app-ink-soft);
     --border: var(--app-line);
@@ -219,6 +240,7 @@
     --app-nav-indicator-on-dark: var(--aas-green-300);
     --app-control-surface: #194d32;
     --app-control-surface-strong: #225c3b;
+    --app-action-primary-text: #102115;
     --app-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.25);
     --app-shadow-md: 0 12px 32px rgb(0 0 0 / 0.24);
     --app-shadow-lg: 0 24px 70px rgb(0 0 0 / 0.34);
@@ -244,8 +266,6 @@
 
     --background: var(--app-canvas);
     --foreground: var(--app-ink);
-    --primary: var(--aas-green-300);
-    --primary-foreground: #102115;
     --muted: var(--app-surface-subtle);
     --muted-foreground: var(--app-ink-soft);
     --border: var(--app-line);

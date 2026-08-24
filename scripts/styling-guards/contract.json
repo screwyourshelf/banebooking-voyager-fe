@@ -120,6 +120,10 @@
         "roles": {
           "accent": "--app-accent",
           "accent-soft": "--app-accent-soft",
+          "action-destructive-hover": "--app-action-destructive-hover",
+          "action-primary-hover": "--app-action-primary-hover",
+          "action-primary-text": "--app-action-primary-text",
+          "action-secondary": "--app-action-secondary",
           "activity-accent": "--activity-accent",
           "background": "--background",
           "backdrop-scrim": "--app-backdrop-scrim",
@@ -134,7 +138,11 @@
           "control-surface": "--app-control-surface",
           "control-surface-strong": "--app-control-surface-strong",
           "control-text": "--app-control-text",
+          "field-focus-ring": "--app-field-focus-ring",
+          "field-invalid-ring": "--app-field-invalid-ring",
+          "field-surface": "--app-field-surface",
           "focus": "--app-focus",
+          "focus-outline": "--app-focus-outline",
           "foreground": "--foreground",
           "ink": "--app-ink",
           "ink-faint": "--app-ink-faint",
@@ -198,10 +206,17 @@
       "fontWeight": {
         "themeVariablePrefix": "--font-weight-",
         "roles": {
+          "action": "--app-action-font-weight",
           "stat-chart-label": "--app-stat-chart-label-weight",
           "stat-chart-meta": "--app-stat-chart-meta-weight",
           "stat-chart-value": "--app-stat-chart-value-weight",
           "stat-key-value": "--app-stat-key-value-weight"
+        }
+      },
+      "lineHeight": {
+        "themeVariablePrefix": "--leading-",
+        "roles": {
+          "control": "--app-control-line-height"
         }
       },
       "radius": {
@@ -210,7 +225,8 @@
           "control": "--app-control-radius",
           "dialog": "--app-dialog-radius",
           "record": "--app-record-radius",
-          "surface": "--app-surface-radius"
+          "surface": "--app-surface-radius",
+          "textarea": "--app-textarea-radius"
         }
       },
       "shadow": {
@@ -226,6 +242,8 @@
         "themeVariablePrefix": "--spacing-",
         "roles": {
           "2xs": "--app-space-2xs",
+          "action-compact-block": "--app-action-compact-padding-block",
+          "action-inline": "--app-action-padding-inline",
           "control-block": "--app-control-padding-block",
           "control-gap": "--app-control-gap",
           "control-inline": "--app-control-padding-inline",
@@ -234,6 +252,7 @@
           "page": "--app-page-padding",
           "record-gap": "--app-record-gap",
           "record-inline": "--app-record-padding-inline",
+          "search-control-inline": "--app-search-control-padding-inline",
           "section": "--app-section-gap",
           "sm": "--app-space-sm",
           "status-inline": "--app-status-inline-padding",
@@ -243,6 +262,7 @@
       "width": {
         "themeVariablePrefix": "--width-",
         "roles": {
+          "compact-control": "--app-compact-control-height",
           "control": "--app-control-height",
           "dialog": "--app-dialog-width",
           "sidebar": "--app-sidebar-width",
@@ -266,13 +286,18 @@
       "height": {
         "themeVariablePrefix": "--height-",
         "roles": {
-          "control": "--app-control-height"
+          "compact-control": "--app-compact-control-height",
+          "control": "--app-control-height",
+          "search-control": "--app-search-control-height"
         }
       },
       "minHeight": {
         "themeVariablePrefix": "--min-height-",
         "roles": {
-          "control": "--app-control-height"
+          "compact-control": "--app-compact-control-height",
+          "control": "--app-control-height",
+          "form-control": "--app-form-control-min-height",
+          "textarea": "--app-textarea-min-height"
         }
       },
       "maxHeight": {
@@ -289,12 +314,14 @@
         "2xl",
         "active",
         "disabled",
+        "enabled",
         "focus",
         "focus-visible",
         "hover",
         "lg",
         "md",
         "motion-reduce",
+        "placeholder",
         "sm",
         "xl"
       ],
@@ -307,7 +334,14 @@
       "exact": [
         "absolute",
         "block",
+        "bg-transparent",
+        "border",
+        "border-transparent",
         "contents",
+        "cursor-not-allowed",
+        "cursor-pointer",
+        "duration-120",
+        "field-sizing-content",
         "fixed",
         "flex",
         "flex-1",
@@ -342,8 +376,14 @@
         "justify-start",
         "min-h-0",
         "min-w-0",
+        "no-underline",
         "object-contain",
         "object-cover",
+        "opacity-50",
+        "opacity-100",
+        "outline-3",
+        "outline-none",
+        "outline-offset-2",
         "overflow-auto",
         "overflow-hidden",
         "overflow-scroll",
@@ -354,13 +394,21 @@
         "overflow-y-hidden",
         "pointer-events-none",
         "pointer-events-auto",
+        "p-0",
         "relative",
+        "resize-none",
+        "ring-3",
+        "rounded-none",
         "shrink",
         "shrink-0",
         "size-full",
         "sr-only",
         "static",
         "sticky",
+        "text-center",
+        "transition",
+        "translate-y-px",
+        "whitespace-nowrap",
         "w-full"
       ],
       "patterns": [
@@ -378,6 +426,9 @@
         "themeNamespace": "color",
         "roles": [
           "accent-soft",
+          "action-destructive-hover",
+          "action-primary-hover",
+          "action-secondary",
           "background",
           "backdrop-scrim",
           "brand",
@@ -385,6 +436,7 @@
           "canvas",
           "control-surface",
           "control-surface-strong",
+          "field-surface",
           "nav-active-surface",
           "sidebar",
           "status-available-bg",
@@ -404,6 +456,7 @@
         "themeNamespace": "color",
         "roles": [
           "accent",
+          "action-primary-text",
           "brand",
           "brand-strong",
           "control-muted",
@@ -445,12 +498,19 @@
       {
         "utilityPrefixes": ["border", "divide"],
         "themeNamespace": "color",
-        "roles": ["border", "line", "line-strong", "sidebar-divider"]
+        "roles": [
+          "border",
+          "focus",
+          "line",
+          "line-strong",
+          "sidebar-divider",
+          "status-danger-indicator"
+        ]
       },
       {
         "utilityPrefixes": ["outline", "ring"],
         "themeNamespace": "color",
-        "roles": ["focus", "ring"]
+        "roles": ["field-focus-ring", "field-invalid-ring", "focus", "focus-outline", "ring"]
       },
       {
         "utilityPrefixes": ["fill", "stroke"],
@@ -469,7 +529,7 @@
       {
         "utilityPrefixes": ["rounded"],
         "themeNamespace": "radius",
-        "roles": ["control", "dialog", "record", "surface"]
+        "roles": ["control", "dialog", "record", "surface", "textarea"]
       },
       {
         "utilityPrefixes": ["shadow"],
@@ -484,7 +544,18 @@
       {
         "utilityPrefixes": ["font"],
         "themeNamespace": "fontWeight",
-        "roles": ["stat-chart-label", "stat-chart-meta", "stat-chart-value", "stat-key-value"]
+        "roles": [
+          "action",
+          "stat-chart-label",
+          "stat-chart-meta",
+          "stat-chart-value",
+          "stat-key-value"
+        ]
+      },
+      {
+        "utilityPrefixes": ["leading"],
+        "themeNamespace": "lineHeight",
+        "roles": ["control"]
       },
       {
         "utilityPrefixes": ["gap", "space-x", "space-y"],
@@ -514,17 +585,23 @@
       {
         "utilityPrefixes": ["pb", "pt", "py"],
         "themeNamespace": "spacing",
-        "roles": ["control-block"]
+        "roles": ["action-compact-block", "control-block"]
       },
       {
         "utilityPrefixes": ["pl", "pr", "px"],
         "themeNamespace": "spacing",
-        "roles": ["control-inline", "record-inline", "status-inline"]
+        "roles": [
+          "action-inline",
+          "control-inline",
+          "record-inline",
+          "search-control-inline",
+          "status-inline"
+        ]
       },
       {
         "utilityPrefixes": ["w"],
         "themeNamespace": "width",
-        "roles": ["control", "dialog", "sidebar", "sidebar-rail"]
+        "roles": ["compact-control", "control", "dialog", "sidebar", "sidebar-rail"]
       },
       {
         "utilityPrefixes": ["min-w"],
@@ -539,12 +616,12 @@
       {
         "utilityPrefixes": ["h"],
         "themeNamespace": "height",
-        "roles": ["control"]
+        "roles": ["compact-control", "control", "search-control"]
       },
       {
         "utilityPrefixes": ["min-h"],
         "themeNamespace": "minHeight",
-        "roles": ["control"]
+        "roles": ["compact-control", "control", "form-control", "textarea"]
       },
       {
         "utilityPrefixes": ["max-h"],
@@ -615,7 +692,6 @@
           "--input",
           "--muted",
           "--muted-foreground",
-          "--primary",
           "--primary-foreground",
           "--radius",
           "--ring"
@@ -631,6 +707,7 @@
           "--color-",
           "--font-",
           "--height-",
+          "--leading-",
           "--max-height-",
           "--max-width-",
           "--min-height-",

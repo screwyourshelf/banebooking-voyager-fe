@@ -114,6 +114,8 @@ export const test = base.extend<{ e2e: E2EHarness }>({
       },
     });
 
+    await context.unrouteAll({ behavior: "wait" });
+
     for (const tracked of trackedBookings.values()) {
       const response = await request.delete(
         `${E2E_BACKEND_ORIGIN}/api/klubb/${encodeURIComponent(E2E_TENANT_SLUG)}/bookinger/${encodeURIComponent(tracked.bookingId)}`,

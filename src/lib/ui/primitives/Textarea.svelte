@@ -33,6 +33,7 @@
 
 <textarea
   {...attributes}
+  class="w-full min-w-0 min-h-textarea border border-line-strong rounded-textarea bg-field-surface p-md text-ink text-body-sm outline-none field-sizing-content resize-none transition duration-120 placeholder:text-ink-faint placeholder:opacity-100 focus-visible:border-focus focus-visible:ring-3 focus-visible:ring-field-focus-ring aria-[invalid=true]:border-status-danger-indicator aria-[invalid=true]:ring-3 aria-[invalid=true]:ring-field-invalid-ring aria-[invalid=true]:focus-visible:border-status-danger-indicator aria-[invalid=true]:focus-visible:ring-field-invalid-ring disabled:cursor-not-allowed disabled:opacity-50"
   bind:value
   id={resolvedId}
   required={resolvedRequired || undefined}

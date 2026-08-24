@@ -135,7 +135,7 @@
           disabled={isDisabled || interaction.moveUpDisabled}
           onclick={interaction.onMoveUp}
         >
-          <Icon icon={ArrowUp02Icon} />
+          <Icon icon={ArrowUp02Icon} size="button" />
         </Button>
         <Button
           aria-label={`Flytt ${title ?? "rad"} ned`}
@@ -145,7 +145,7 @@
           disabled={isDisabled || interaction.moveDownDisabled}
           onclick={interaction.onMoveDown}
         >
-          <Icon icon={ArrowDown02Icon} />
+          <Icon icon={ArrowDown02Icon} size="button" />
         </Button>
       </div>
     </article>

@@ -50,7 +50,7 @@
           data-part="close"
           disabled={pending}
           onclick={close}
-          size="icon"
+          size="compact-icon"
           variant="ghost"
         >
           <span aria-hidden="true">×</span>
