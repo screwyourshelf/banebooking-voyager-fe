@@ -3,6 +3,7 @@ import path from "node:path";
 import postcss from "postcss";
 import selectorParser from "postcss-selector-parser";
 import { parse } from "svelte/compiler";
+import { analyzeProductionStylingTree } from "../styling-guards/production-tree-contract.mjs";
 import { emptySelectorFacts, ownerForMarkup, ownerForStylesheet } from "./ownership.mjs";
 
 const legacyStylesheets = new Set([
@@ -155,8 +156,11 @@ export async function measureStylingSource(projectRoot) {
       (file.endsWith(".svelte") && !file.endsWith(".test.svelte"))
   );
 
-  const css = await measureStylesheets(projectRoot, cssFiles);
-  const markup = await measureMarkup(projectRoot, markupFiles);
+  const [css, markup, productionTree] = await Promise.all([
+    measureStylesheets(projectRoot, cssFiles),
+    measureMarkup(projectRoot, markupFiles),
+    analyzeProductionStylingTree(projectRoot),
+  ]);
   const tailwindUtilities = sortEntries([
     ...css.applyDirectives.flatMap((directive) =>
       directive.utilities.map((utility) => ({
@@ -196,6 +200,8 @@ export async function measureStylingSource(projectRoot) {
   return {
     scope: {
       css: "All versioned src/**/*.css files.",
+      guardDiagnostics:
+        "Exact rule ID, file, line, column and message for the nine production-tree guards; *.test.svelte is excluded explicitly.",
       legacyStylesheets: [...legacyStylesheets].sort(compareStrings),
       markup:
         "src/app.html and production .svelte files under src; *.test.svelte fixtures are excluded.",
@@ -214,6 +220,7 @@ export async function measureStylingSource(projectRoot) {
       cssLineCount: sum(css.files, "lineCount"),
       cssRuleCount: css.rules.length,
       featureClassOccurrenceCount: markup.featureClasses.length,
+      guardDiagnosticCount: productionTree.diagnostics.length,
       importantDeclarationCount: css.importantDeclarations.length,
       layeredCssRuleCount: css.rules.filter(({ layer }) => layer !== null).length,
       legacyDebtCount: legacyDebt.length,
@@ -240,6 +247,7 @@ export async function measureStylingSource(projectRoot) {
       applyDirectives: css.applyDirectives,
     },
     markup,
+    guardDiagnostics: productionTree.diagnostics,
     tailwindUtilities,
     visualizationExceptions,
     legacyDebt,

@@ -13,7 +13,7 @@ export function validateStylingGuardContract(contract) {
     throw new Error("Styling guard-kontrakten må ha schemaVersion 2.");
   }
   if (
-    contract.analyzerEnforcementPhase !== "fixtures-only" ||
+    contract.analyzerEnforcementPhase !== "active" ||
     contract.cascadeContractEnforcementPhase !== "active" ||
     contract.themeContractEnforcementPhase !== "active" ||
     contract.productionTreeEnforcementCheckpoint !== "SWP-1.3"
@@ -58,8 +58,33 @@ export function validateStylingGuardContract(contract) {
     throw new Error("Guardkrav 10 må definere fixtureintegritetsinvarianten.");
   }
 
+  validateProductionTreeContract(contract, ruleEntries);
   validateThemeVocabulary(contract);
   validateCssCascadeContract(contract);
+}
+
+function validateProductionTreeContract(contract, ruleEntries) {
+  const productionTree = contract.productionTree ?? {};
+  if (
+    productionTree.sourceRoots?.join(",") !== "src/" ||
+    productionTree.sourceExtensions?.join(",") !== ".css,.svelte" ||
+    productionTree.excludedFileSuffixes?.join(",") !== ".test.svelte" ||
+    productionTree.legacyBaselinePath !== "docs/styling-baseline.json"
+  ) {
+    throw new Error(
+      "Produksjonstreet må analysere src/**/*.css og produksjons-Svelte med bare *.test.svelte som eksplisitt kildeunntak."
+    );
+  }
+
+  const cascadeRuleId = contract.rules.cascadeLayer.id;
+  const expectedRuleIds = ruleEntries
+    .map(([, rule]) => rule.id)
+    .filter((ruleId) => ruleId !== cascadeRuleId);
+  if (productionTree.enforcedRuleIds?.join(",") !== expectedRuleIds.join(",")) {
+    throw new Error(
+      "Produksjonstreet skal håndheve alle stylingregler unntatt den separate cascade-porten."
+    );
+  }
 }
 
 function validateCssCascadeContract(contract) {

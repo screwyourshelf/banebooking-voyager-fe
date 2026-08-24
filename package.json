@@ -19,6 +19,7 @@
     "styling:baseline:update": "npm run test:e2e:production:build && node scripts/measure-styling-baseline.mjs --write",
     "styling:cascade:check": "node scripts/check-styling-cascade-contract.mjs",
     "styling:guards:fixtures": "node scripts/check-styling-guard-fixtures.mjs",
+    "styling:guards:production": "node scripts/check-styling-production-tree.mjs",
     "styling:theme:check": "node scripts/check-styling-theme-contract.mjs",
     "typecheck": "npm run typecheck:svelte",
     "typecheck:svelte": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
@@ -29,7 +30,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run typecheck && npm run architecture:check && npm run legacy:check && npm run design-system:check && npm run lint && npm run format:check"
+    "check": "npm run typecheck && npm run architecture:check && npm run legacy:check && npm run design-system:check && npm run styling:theme:check && npm run styling:cascade:check && npm run styling:guards:fixtures && npm run styling:guards:production && npm run styling:baseline && npm run lint && npm run format:check"
   },
   "dependencies": {
     "@fontsource-variable/figtree": "^5.3.0",

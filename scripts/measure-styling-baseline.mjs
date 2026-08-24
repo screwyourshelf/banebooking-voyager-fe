@@ -7,6 +7,7 @@ import { format, resolveConfig } from "prettier";
 import { measureProductionBuilds } from "./styling-baseline/production-measurement.mjs";
 import { measureStylingSource } from "./styling-baseline/source-measurement.mjs";
 
+const baselineSchemaVersion = 2;
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 const baselinePath = path.join(projectRoot, "docs/styling-baseline.json");
 const mode = readMode(process.argv.slice(2));
@@ -29,7 +30,7 @@ if (mode === "check") {
 } else {
   const productionBuilds = await measureProductionBuilds(projectRoot);
   const baseline = {
-    schemaVersion: 1,
+    schemaVersion: baselineSchemaVersion,
     source,
     productionBuilds,
   };
@@ -65,13 +66,16 @@ function readMode(arguments_) {
 
 function validateBaseline(baseline) {
   if (
-    baseline?.schemaVersion !== 1 ||
+    baseline?.schemaVersion !== baselineSchemaVersion ||
     !baseline.source?.summary ||
     !Array.isArray(baseline.source?.legacyDebt) ||
+    !Array.isArray(baseline.source?.guardDiagnostics) ||
     !Array.isArray(baseline.productionBuilds) ||
     baseline.productionBuilds.length !== 2
   ) {
-    throw new Error("docs/styling-baseline.json følger ikke stylingbaseline schemaVersion 1.");
+    throw new Error(
+      `docs/styling-baseline.json følger ikke stylingbaseline schemaVersion ${baselineSchemaVersion}.`
+    );
   }
 }
 

@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "analyzerEnforcementPhase": "fixtures-only",
+  "analyzerEnforcementPhase": "active",
   "cascadeContractEnforcementPhase": "active",
   "themeContractEnforcementPhase": "active",
   "productionTreeEnforcementCheckpoint": "SWP-1.3",
@@ -92,6 +92,23 @@
       "src/index.css",
       "src/styles/design-system/tokens.css",
       "src/lib/platform/theme/"
+    ]
+  },
+  "productionTree": {
+    "sourceRoots": ["src/"],
+    "sourceExtensions": [".css", ".svelte"],
+    "excludedFileSuffixes": [".test.svelte"],
+    "legacyBaselinePath": "docs/styling-baseline.json",
+    "enforcedRuleIds": [
+      "STYLING-001-BITS-OWNER",
+      "STYLING-002-FEATURE-STYLING",
+      "STYLING-003-UI-OVERRIDE",
+      "STYLING-004-UTILITY-VOCABULARY",
+      "STYLING-005-THEME-ROLE",
+      "STYLING-006-STATIC-CLASS-SET",
+      "STYLING-007-CSS-APPLICATION",
+      "STYLING-008-CUSTOM-PROPERTY",
+      "STYLING-010-VISUALIZATION-EXCEPTION"
     ]
   },
   "theme": {
