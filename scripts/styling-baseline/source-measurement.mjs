@@ -6,11 +6,7 @@ import { parse } from "svelte/compiler";
 import { analyzeProductionStylingTree } from "../styling-guards/production-tree-contract.mjs";
 import { emptySelectorFacts, ownerForMarkup, ownerForStylesheet } from "./ownership.mjs";
 
-const legacyStylesheets = new Set([
-  "src/styles/design-system/patterns.css",
-  "src/styles/design-system/primitives.css",
-  "src/styles/design-system/responsive.css",
-]);
+const legacyStylesheets = new Set();
 
 const svgGeometryAttributes = new Set([
   "cx",

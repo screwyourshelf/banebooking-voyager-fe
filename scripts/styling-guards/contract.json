@@ -2801,9 +2801,7 @@
     "productionStylesheets": [
       "src/index.css",
       "src/styles/design-system.css",
-      "src/styles/design-system/patterns.css",
-      "src/styles/design-system/primitives.css",
-      "src/styles/design-system/responsive.css",
+      "src/styles/design-system/base.css",
       "src/styles/design-system/tokens.css"
     ],
     "allowedThemeSelectors": [":root", ".dark"],

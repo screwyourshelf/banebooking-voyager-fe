@@ -107,37 +107,12 @@ export function ownerForStylesheet({
     return owner(patternFamily.family, "src/lib/ui/patterns", patternFamily.checkpoint);
   }
 
-  const primitiveName = selectorFacts.primitiveNames.find(Boolean);
-  const primitiveFamily = primitiveFamilies.find(
-    ({ matches }) => primitiveName && matches(primitiveName)
-  );
-
-  if (file.endsWith("/primitives.css")) {
-    if (primitiveFamily) {
-      return owner(primitiveFamily.family, "src/lib/ui/primitives", primitiveFamily.checkpoint);
-    }
-    if (selectorFacts.classes.includes("ProseMirror") || line >= 40) {
-      return owner("primitive-rich-text-editor", "src/lib/ui/primitives", "SWP-2.4");
-    }
-    return owner("global-base", "src/styles", "SWP-1.2");
-  }
-
-  if (file.endsWith("/patterns.css")) {
+  if (file.endsWith("/base.css")) {
     const keyframeFamily = patternKeyframeFamilies.get(keyframeName);
     if (keyframeFamily) {
       return owner(keyframeFamily, "src/lib/ui/patterns", "SWP-5.4");
     }
-    if (primitiveFamily) {
-      return owner("pattern-control-composition", "src/lib/ui/patterns", "SWP-3.3");
-    }
-    return owner("shared-product-patterns", "src/lib/ui/patterns", "SWP-5.4");
-  }
-
-  if (file.endsWith("/responsive.css")) {
-    if (primitiveFamily) {
-      return owner(primitiveFamily.family, "src/lib/ui/primitives", primitiveFamily.checkpoint);
-    }
-    return owner("global-responsive-and-motion", "src/styles", "SWP-5.4");
+    return owner("global-base-and-motion", "src/styles", "SWP-5.4");
   }
 
   return owner("unclassified-global-style", "src/styles", "SWP-5.4");
