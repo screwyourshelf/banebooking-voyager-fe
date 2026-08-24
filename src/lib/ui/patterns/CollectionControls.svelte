@@ -1,14 +1,3 @@
-<script lang="ts" module>
-  export type {
-    CollectionChoiceContext,
-    CollectionChoiceOption,
-    CollectionControlField,
-    CollectionControlGroup,
-    CollectionSearchControl,
-    CollectionSortControl,
-  } from "./collection-controls";
-</script>
-
 <script lang="ts">
   import Button from "../primitives/Button.svelte";
   import Select from "../primitives/Select.svelte";

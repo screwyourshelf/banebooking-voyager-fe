@@ -5,7 +5,7 @@ export type {
   CollectionChoiceContext,
   CollectionControlField,
   CollectionControlGroup,
-} from "./CollectionControls.svelte";
+} from "./collection-controls";
 export { default as CollectionEmpty } from "./CollectionEmpty.svelte";
 export { default as CollectionError } from "./CollectionError.svelte";
 export { default as CollectionGroup } from "./CollectionGroup.svelte";
@@ -13,17 +13,8 @@ export { default as CollectionList } from "./CollectionList.svelte";
 export { default as CollectionLoading } from "./CollectionLoading.svelte";
 export { default as CollectionRow } from "./CollectionRow.svelte";
 export { default as DataTable } from "./DataTable.svelte";
-export type {
-  DataTableAlignment,
-  DataTableCell,
-  DataTableColumn,
-  DataTableDirection,
-  DataTablePresentation,
-  DataTableRow,
-  DataTableVisibility,
-} from "./DataTable.svelte";
+export type { DataTableColumn, DataTableDirection, DataTableRow } from "./DataTable.svelte";
 export { default as DataVisualization } from "./DataVisualization.svelte";
-export type { DataVisualizationKind } from "./DataVisualization.svelte";
 export { default as Dialog } from "./Dialog.svelte";
 export type { DialogActionContext } from "./Dialog.svelte";
 export { default as Document } from "./Document.svelte";
@@ -48,7 +39,6 @@ export { default as NavigationAction } from "./NavigationAction.svelte";
 export { default as NavigationIdentity } from "./NavigationIdentity.svelte";
 export { default as NavigationLink } from "./NavigationLink.svelte";
 export { default as NavigationList } from "./NavigationList.svelte";
-export { default as NavigationLoading } from "./NavigationLoading.svelte";
 export { default as NavigationOverlay } from "./NavigationOverlay.svelte";
 export { default as NavigationSection } from "./NavigationSection.svelte";
 export { default as Page } from "./Page.svelte";
@@ -71,7 +61,5 @@ export { default as SettingsValue } from "./SettingsValue.svelte";
 export { default as Tabs } from "./Tabs.svelte";
 export { default as Weather } from "./Weather.svelte";
 export { default as VisualizationLayout } from "./VisualizationLayout.svelte";
-export type { VisualizationLayoutVariant } from "./VisualizationLayout.svelte";
 export { default as VisualizationLegend } from "./VisualizationLegend.svelte";
-export type { VisualizationLegendItem } from "./VisualizationLegend.svelte";
 export { default as VisualizationLoading } from "./VisualizationLoading.svelte";

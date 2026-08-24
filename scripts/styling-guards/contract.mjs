@@ -8,7 +8,7 @@ export async function loadStylingGuardContract(url = contractUrl) {
   return contract;
 }
 
-export function validateStylingGuardContract(contract) {
+function validateStylingGuardContract(contract) {
   if (contract?.schemaVersion !== 3) {
     throw new Error("Styling guard-kontrakten må ha schemaVersion 3.");
   }
@@ -309,7 +309,7 @@ function customPropertyBelongsToNamespace(name, namespace) {
   );
 }
 
-export function pathMatchesRoot(repositoryPath, root) {
+function pathMatchesRoot(repositoryPath, root) {
   return root.endsWith("/") ? repositoryPath.startsWith(root) : repositoryPath === root;
 }
 

@@ -113,3 +113,40 @@ Grafen avdekket samtidig en annen kategori som ikke skal blandes med plassering:
 brukes privat av `AppShell`, og flere offentlig re-eksporterte hjelpertyper har ingen ekstern
 produksjonskonsument. De vurderes som API-rekkevidde og dødkode i SWP-6.4, ikke som grunnlag for å
 flytte implementasjonen til en feature.
+
+## SWP-6.4 — død kode, API, utilities, tokens og pakker
+
+Sluttauditen kombinerte full Knip-analyse med SvelteKits faktiske innganger, den manifestdrevne
+stylingfixturekatalogen, det dynamisk startede produksjonstretestscriptet, `$lib/ui`-importgrafen og
+en toveis sammenligning mellom registrerte theme-utilities og produksjonsmarkup. Resultatet etter
+opprydding er null ubrukte runtimefiler, verdi-exports, direkte pakker, ulistede pakker, binaries og
+uoppløste importer. Knip rapporterer fortsatt 19 komplette transporttyper under `lib/contracts`;
+disse er bevisst beholdt som frontendens backendkontrakt og er ikke runtimekode.
+
+API-oppryddingen er konkret:
+
+- `NavigationLoading` er ikke lenger eksportert fra pattern- eller `$lib/ui`-barrelen. Komponenten
+  beholdes som privat, faktisk brukt barn av `AppShell`, og navigation-fixturen tester den direkte.
+- De ukonsumerte offentlige typenavnene `SelectOption`, `DataTableAlignment`, `DataTableCell`,
+  `DataTablePresentation`, `DataTableVisibility`, `DataVisualizationKind`,
+  `VisualizationLayoutVariant` og `VisualizationLegendItem` er fjernet fra barrelene. Props og de
+  brukte `DataTableColumn`-/`DataTableDirection`-/`DataTableRow`-kontraktene er uendret.
+- `CollectionChoiceContext`, `CollectionControlField` og `CollectionControlGroup` eksporteres nå
+  direkte fra den interne sannhetskilden gjennom `$lib/ui`. De døde komponentmodulaliasene
+  `CollectionChoiceOption`, `CollectionSearchControl` og `CollectionSortControl` samt den ubrukte
+  eksportmarkøren på `CollectionChoiceOption` er fjernet.
+- `validateStylingGuardContract` og `pathMatchesRoot` er gjort private i guardmodulen; begge brukes
+  internt, men hadde ingen modulimportør.
+
+Theme-rekkevidden fant seks registrerte Tailwind-projeksjoner uten én eneste eksakt utility i
+produksjonsmarkup: `color-control-surface-strong`, `color-border`, `color-foreground`,
+`width-dialog`, `max-width-dialog` og `max-height-dialog`. Bare projeksjonene og de tilsvarende
+guardrollene er fjernet; kildeverdiene beholdes der de fortsatt inngår i base-CSS eller aktive
+sammensatte tokens. Kontrakten går dermed fra 662 til 656 roller og fra 912 til 904 godkjente
+utilities. Ny toveis kontroll fant null ubrukte gjenværende theme-projeksjoner, egendefinerte
+utilities eller varianter, og produksjonskontrollen fant null foreldreløse custom properties.
+
+Ingen produksjonskomponentfil, kilde-token eller npm-pakke var faktisk foreldreløs etter denne
+oppryddingen, så ingen slik implementasjon er slettet på grunnlag av navnelikhet alene. De to
+hostbuildene beholder 60 JS-chunks, 123 363 gzip-byte største lazy chunk og eksakt 28 424/28 443
+CSS gzip-byte; de døde theme-projeksjonene var allerede utelatt av Tailwinds genererte CSS.

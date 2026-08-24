@@ -45,7 +45,6 @@
   --color-app-shell-topbar: var(--app-shell-topbar-surface);
   --color-app-shell-topbar-divider: var(--app-shell-topbar-divider);
   --color-background: var(--background);
-  --color-border: var(--border);
   --color-brand: var(--app-brand);
   --color-brand-soft: var(--app-brand-soft);
   --color-brand-strong: var(--app-brand-strong);
@@ -73,7 +72,6 @@
   --color-data-table-row-even: var(--app-data-table-row-even-surface);
   --color-control-muted: var(--app-control-muted);
   --color-control-surface: var(--app-control-surface);
-  --color-control-surface-strong: var(--app-control-surface-strong);
   --color-control-text: var(--app-control-text);
   --color-dialog-border: var(--app-dialog-border);
   --color-dialog-overlay: var(--app-dialog-overlay);
@@ -106,7 +104,6 @@
   --color-field-focus-ring: var(--app-field-focus-ring);
   --color-field-invalid-ring: var(--app-field-invalid-ring);
   --color-field-surface: var(--app-field-surface);
-  --color-foreground: var(--foreground);
   --color-ink: var(--app-ink);
   --color-ink-faint: var(--app-ink-faint);
   --color-ink-soft: var(--app-ink-soft);
@@ -569,7 +566,6 @@
   --width-control-icon: var(--app-control-icon-size);
   --width-compact-control: var(--app-compact-control-height);
   --width-date-popover: var(--app-date-popover-width);
-  --width-dialog: var(--app-dialog-width);
   --width-dialog-surface: var(--app-dialog-surface-width);
   --width-data-table-four-first: var(--app-data-table-four-first-width);
   --width-data-table-four-second: var(--app-data-table-four-second-width);
@@ -609,7 +605,6 @@
   --max-width-collection-state-description: var(--app-collection-state-description-max-width);
   --max-width-content: var(--app-content-max);
   --max-width-navigation-sidebar: var(--app-navigation-sidebar-max-width);
-  --max-width-dialog: var(--app-dialog-width);
   --max-width-document: var(--app-document-max-width);
   --max-width-form-steps: var(--app-form-steps-max-width);
   --max-width-page: var(--app-page-width);
@@ -677,7 +672,6 @@
   --min-height-select-trigger: var(--app-select-trigger-min-height);
   --min-height-textarea: var(--app-textarea-min-height);
   --min-height-tabs-trigger: var(--app-tabs-trigger-min-height);
-  --max-height-dialog: var(--app-dialog-max-height);
   --max-height-dialog-surface: var(--app-dialog-surface-max-height);
   --max-height-navigation-overlay: var(--app-navigation-overlay-max-height);
   --max-height-navigation-overlay-more: var(--app-navigation-overlay-more-max-height);

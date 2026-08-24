@@ -168,7 +168,6 @@
           "app-shell-topbar": "--app-shell-topbar-surface",
           "app-shell-topbar-divider": "--app-shell-topbar-divider",
           "background": "--background",
-          "border": "--border",
           "brand": "--app-brand",
           "brand-soft": "--app-brand-soft",
           "brand-strong": "--app-brand-strong",
@@ -196,7 +195,6 @@
           "data-table-row-even": "--app-data-table-row-even-surface",
           "control-muted": "--app-control-muted",
           "control-surface": "--app-control-surface",
-          "control-surface-strong": "--app-control-surface-strong",
           "control-text": "--app-control-text",
           "dialog-border": "--app-dialog-border",
           "dialog-overlay": "--app-dialog-overlay",
@@ -224,7 +222,6 @@
           "field-surface": "--app-field-surface",
           "focus": "--app-focus",
           "focus-outline": "--app-focus-outline",
-          "foreground": "--foreground",
           "ink": "--app-ink",
           "ink-faint": "--app-ink-faint",
           "ink-soft": "--app-ink-soft",
@@ -756,7 +753,6 @@
           "control": "--app-control-height",
           "control-icon": "--app-control-icon-size",
           "date-popover": "--app-date-popover-width",
-          "dialog": "--app-dialog-width",
           "dialog-surface": "--app-dialog-surface-width",
           "data-table-four-first": "--app-data-table-four-first-width",
           "data-table-four-second": "--app-data-table-four-second-width",
@@ -805,7 +801,6 @@
           "collection-search": "--app-collection-search-max-width",
           "collection-state-description": "--app-collection-state-description-max-width",
           "content": "--app-content-max",
-          "dialog": "--app-dialog-width",
           "document": "--app-document-max-width",
           "form-steps": "--app-form-steps-max-width",
           "navigation-sidebar": "--app-navigation-sidebar-max-width",
@@ -890,7 +885,6 @@
         "themeVariablePrefix": "--max-height-",
         "roles": {
           "date-popover": "--app-date-popover-max-height",
-          "dialog": "--app-dialog-max-height",
           "dialog-surface": "--app-dialog-surface-max-height",
           "editor-dialog": "--app-editor-dialog-height",
           "navigation-overlay": "--app-navigation-overlay-max-height",
@@ -1783,7 +1777,6 @@
           "choice-selected-surface",
           "choice-surface",
           "control-surface",
-          "control-surface-strong",
           "dialog-overlay",
           "document-intro-surface",
           "feedback-danger-surface",
@@ -1831,7 +1824,6 @@
           "control-text",
           "field-control-text",
           "feedback-description",
-          "foreground",
           "ink",
           "ink-faint",
           "ink-soft",
@@ -1871,7 +1863,6 @@
         "utilityPrefixes": ["border", "border-t", "divide"],
         "themeNamespace": "color",
         "roles": [
-          "border",
           "choice-border",
           "choice-selected-border",
           "dialog-border",
@@ -2295,7 +2286,6 @@
           "control-icon",
           "calendar-day-compact",
           "date-popover",
-          "dialog",
           "dialog-surface",
           "editor-dialog",
           "page-loading-description",
@@ -2326,7 +2316,6 @@
         "roles": [
           "calendar",
           "content",
-          "dialog",
           "document",
           "form-steps",
           "page",
@@ -2381,7 +2370,7 @@
       {
         "utilityPrefixes": ["max-h"],
         "themeNamespace": "maxHeight",
-        "roles": ["date-popover", "dialog", "dialog-surface", "editor-dialog"]
+        "roles": ["date-popover", "dialog-surface", "editor-dialog"]
       },
       {
         "utilityPrefixes": ["animate"],

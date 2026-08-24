@@ -5,9 +5,9 @@
     NavigationIdentity,
     NavigationLink,
     NavigationList,
-    NavigationLoading,
     NavigationSection,
   } from "../index";
+  import NavigationLoading from "./NavigationLoading.svelte";
 
   let {
     onBack,

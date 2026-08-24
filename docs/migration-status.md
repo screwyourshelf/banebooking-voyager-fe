@@ -1,10 +1,10 @@
 # Migreringsstatus
 
-> **Status:** Pågår — rammeverksløftet, SWP-0–SWP-5 og SWP-6.1–SWP-6.3 er fullført
+> **Status:** Pågår — rammeverksløftet og SWP-0–SWP-6 er fullført; SWP-7 venter
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** SWP-6 — checkpoint 3 er levert; neste checkpoint er SWP-6.4
+> **Aktiv arbeidspakke:** Ingen — SWP-6 er fullført; neste `/start` begynner SWP-7
 >
 > **Sist oppdatert:** 2026-08-24
 
@@ -26,7 +26,9 @@ offentlig featureinngang, produktadferd og backend er bevart. SWP-6.2 har kaldm�
 offentlige patternene og delt `CollectionControls` i tre private anatomieiere med uendret offentlig
 type- og komponentkontrakt. SWP-6.3 har avstemt alle smale patterns mot den faktiske
 produksjonsimportgrafen; de enkeltfeaturebrukte kontraktene forblir i `$lib/ui` fordi de eier
-delt produktanatomi og ellers ville flyttet produktstyling inn i featurelaget.
+delt produktanatomi og ellers ville flyttet produktstyling inn i featurelaget. SWP-6.4 har fjernet
+døde UI-exports og seks ubrukte Tailwind-projeksjoner; statisk analyse, full test/check, kritiske
+flyter, visuell matrise og begge produksjonshostene er grønne.
 
 ## Aktiv stylingretning
 
@@ -930,6 +932,21 @@ delt produktanatomi og ellers ville flyttet produktstyling inn i featurelaget.
   Ingen smal produksjonskomponent er flyttet: alternativet ville introdusert featurelokal
   produktstyling eller en ren filflytting uten nytt eierskap. 8 målrettede filer og 47 tester er
   grønne.
+- SWP-6.4 har fjernet `NavigationLoading` fra offentlig API mens den faktisk brukte komponenten
+  forblir privat under `AppShell`. Åtte ukonsumerte offentlige UI-typenavn, tre døde
+  CollectionControls-modulaliaser og to unødvendige guard-exports er fjernet; test-fixtures bruker
+  nå de private filinngangene de faktisk tester.
+- Seks Tailwind-projeksjoner uten produksjonsutility er fjernet. Theme-kontrakten er redusert fra
+  662/912 til 656 roller/904 utilities og har 116 reelle lyst-/mørkt-skift; toveis audit finner null
+  ubrukte gjenværende theme-projeksjoner, custom utilities eller varianter og null foreldreløse
+  kildevariabler.
+- Knip finner null ubrukte runtimefiler, verdi-exports, direkte pakker, ulistede pakker, binaries
+  eller uoppløste importer når manifestfixtures og det dynamiske kontrakttestscriptet er registrert.
+  De 19 rapporterte typene er komplette transportkontrakter som beholdes bevisst under
+  `lib/contracts`; det finnes ingen død produksjonskomponent, kilde-token eller npm-pakke å slette.
+- Hele sluttporten er grønn: 94 filer/345 tester, full `npm run check`, 3 kritiske flyter, 11/11
+  visuelle referanser og 8/8 produksjonsruter. Begge hostene beholder 60 JS-chunks, 123 363 gzip-byte
+  største lazy chunk og eksakt 28 424/28 443 CSS gzip-byte.
 - Den aktive CSS-en har ikke lenger featureeide produktselectors. Tailwind er produkteier for alle
   SWP-2–SWP-4-flater og statistikkpresentasjonen; den varige geometriallowlisten er låst uten
   visuell redesign.
@@ -938,14 +955,14 @@ delt produktanatomi og ellers ville flyttet produktstyling inn i featurelaget.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                              |
-| ------------------------------------- | ----------------------------------------------- |
-| Base branch                           | `main`                                          |
-| Fastslått basecommit                  | `5287c5e`                                       |
-| Siste semantiske checkpoint           | `docs(swp-6): resolve narrow pattern ownership` |
-| Lokale commits foran base             | 68                                              |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                   |
-| Neste planlagte checkpoint            | SWP-6.4 fjern døde exports og avhengigheter     |
+| Felt                                  | Forventet tilstand                            |
+| ------------------------------------- | --------------------------------------------- |
+| Base branch                           | `main`                                        |
+| Fastslått basecommit                  | `5287c5e`                                     |
+| Siste semantiske checkpoint           | `refactor(swp-6): remove dead public surface` |
+| Lokale commits foran base             | 69                                            |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                 |
+| Neste planlagte checkpoint            | SWP-7 uavhengig styling-konformitetsreview    |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -954,35 +971,35 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Fortsett med **SWP-6 checkpoint 4 — fjern død kode og avhengigheter**:
+Start en ny `/start`-sesjon for **SWP-7 — uavhengig styling-konformitetsreview**:
 
-1. Kjør statisk import-/export- og pakkeanalyse mot produksjonstreet og klassifiser alle funn mot
-   SvelteKit-, route-, test- og buildinnganger.
-2. Fjern ubrukte offentlige re-exports, private komponenter, utilities, theme-tokens og direkte
-   pakker uten kompatibilitetsbroer; behold bare dokumenterte build- og testavhengigheter.
-3. Regenerer maskinbaselinen og kjør full test-, check-, E2E-, snapshot- og produksjonsbuildport før
-   SWP-6 lukkes.
+1. Les SWP-0-baselinen, hele stylingdiffen og nåværende kilde uten å anta at migreringssesjonenes
+   grønne porter alene beviser konformitet.
+2. Kaldrevider theme, cascade, offentlig UI-eierskap, featureunntak, visuell paritet, runtime og
+   hostartefakter mot evalueringsmatrisen i stylingplanen.
+3. Klassifiser resultatet som vellykket, delvis eller ikke vellykket med målte bevis og eventuelle
+   nye, avgrensede rettingscheckpoints.
 
 ## Arbeidspakkeregister
 
-| Arbeidspakke                     | Status   | Port/resultat                                                 |
-| -------------------------------- | -------- | ------------------------------------------------------------- |
-| WP-0 Styring og baseline         | Fullført | Dokumentgrunnlag, React-baseline og komplett adferdsinventar  |
-| WP-1 Build og routes             | Fullført | Build, routes, hostingvarianter og arkitekturkontroll grønn   |
-| WP-2 Contracts/domain/platform   | Fullført | Contracts, ren domain, fetch/API, 401 og adapters grønne      |
-| WP-3 Auth/tenant/serverdata      | Fullført | Auth, tenant, Query, guards, 401 og base path grønne          |
-| WP-4 UI-fundament                | Fullført | Alle kartlagte UI-familier og filterkomposisjon er grønne     |
-| WP-5 App-shell                   | Fullført | Shell, navigation, routeaktivitet, konto og Mer grønne        |
-| WP-6 Featuremigrering            | Fullført | Elleve checkpoints og alle Svelte-featureflater er grønne     |
-| WP-7 Paritet og produksjonsbytte | Fullført | Paritet, React-fjerning, CSS, drift og sluttport grønne       |
-| SWP-0 Baseline og guardkontrakt  | Fullført | Baseline, referanse og ti fixturetestede guardregler grønne   |
-| SWP-1 Theme og guards            | Fullført | Theme, cascade, fixtures, produksjonstre og baseline grønne   |
-| SWP-2 UI-primitives              | Fullført | Alle fire primitivecheckpoints og full kvalitetport er grønne |
-| SWP-3 Produktpatterns            | Fullført | Alle fem patterncheckpoints og full kvalitetport er grønne    |
-| SWP-4 App-shell/navigation       | Fullført | Alle fire checkpoints og full kvalitetport er grønne          |
-| SWP-5 Features og legacy-CSS     | Fullført | Null legacygjeld, null guardavvik og 38 låste geometrier      |
-| SWP-6 Komponent-/API-opprydding  | Pågår    | 3/4: smale patternkontrakter er avstemt mot importgrafen      |
-| SWP-7 Uavhengig sluttreview      | Venter   | Kald audit og målt vellykket/delvis/ikke vellykket resultat   |
+| Arbeidspakke                     | Status   | Port/resultat                                                  |
+| -------------------------------- | -------- | -------------------------------------------------------------- |
+| WP-0 Styring og baseline         | Fullført | Dokumentgrunnlag, React-baseline og komplett adferdsinventar   |
+| WP-1 Build og routes             | Fullført | Build, routes, hostingvarianter og arkitekturkontroll grønn    |
+| WP-2 Contracts/domain/platform   | Fullført | Contracts, ren domain, fetch/API, 401 og adapters grønne       |
+| WP-3 Auth/tenant/serverdata      | Fullført | Auth, tenant, Query, guards, 401 og base path grønne           |
+| WP-4 UI-fundament                | Fullført | Alle kartlagte UI-familier og filterkomposisjon er grønne      |
+| WP-5 App-shell                   | Fullført | Shell, navigation, routeaktivitet, konto og Mer grønne         |
+| WP-6 Featuremigrering            | Fullført | Elleve checkpoints og alle Svelte-featureflater er grønne      |
+| WP-7 Paritet og produksjonsbytte | Fullført | Paritet, React-fjerning, CSS, drift og sluttport grønne        |
+| SWP-0 Baseline og guardkontrakt  | Fullført | Baseline, referanse og ti fixturetestede guardregler grønne    |
+| SWP-1 Theme og guards            | Fullført | Theme, cascade, fixtures, produksjonstre og baseline grønne    |
+| SWP-2 UI-primitives              | Fullført | Alle fire primitivecheckpoints og full kvalitetport er grønne  |
+| SWP-3 Produktpatterns            | Fullført | Alle fem patterncheckpoints og full kvalitetport er grønne     |
+| SWP-4 App-shell/navigation       | Fullført | Alle fire checkpoints og full kvalitetport er grønne           |
+| SWP-5 Features og legacy-CSS     | Fullført | Null legacygjeld, null guardavvik og 38 låste geometrier       |
+| SWP-6 Komponent-/API-opprydding  | Fullført | 4/4: eierskap og offentlig API er ryddet; sluttporten er grønn |
+| SWP-7 Uavhengig sluttreview      | Venter   | Kald audit og målt vellykket/delvis/ikke vellykket resultat    |
 
 ## Featureregister
 
@@ -1074,6 +1091,14 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 | Kontroll                             | Resultat                                                                            |
 | ------------------------------------ | ----------------------------------------------------------------------------------- |
+| SWP-6.4 Knip runtime-/pakkeanalyse   | Bestått: 0 filer, verdi-exports, direkte/ulistede pakker, binaries og importer      |
+| SWP-6.4 typeklassifisering           | Bestått: bare 19 komplette, bevisst beholdte transportkontrakter rapporteres        |
+| SWP-6.4 offentlig UI-API             | Bestått: privat loadingeier og kun faktisk konsumerte offentlige komponenter/typer  |
+| SWP-6.4 toveis theme-/utilityaudit   | Bestått: 656 roller, 904 utilities, 116 skift og 0 ubrukte projeksjoner/varianter   |
+| SWP-6 full `npm test`                | Bestått: 94 filer og 345 tester                                                     |
+| SWP-6 full `npm run check`           | Bestått: type, arkitektur, legacy, design, styling, baseline, lint og format        |
+| SWP-6 kritiske/visuelle E2E          | Bestått: 3/3 produktflyter og 11/11 pikselidentiske referanser                      |
+| SWP-6 produksjonsruter/hostbuild     | Bestått: 8/8 ruter; 28 424/28 443 CSS-byte, 60 chunks og 123 363 lazy-byte          |
 | SWP-6.3 produksjonsimportgraf        | Bestått: alle smale patterns telt uten tester, fixtures og barrel-reexports         |
 | SWP-6.3 plasseringsaudit             | Bestått: ingen domenekobling eller ulovlig featurestyling; alle eiere eksplisitte   |
 | SWP-6.3 målrettede tester            | Bestått: 8 filer og 47 tester for form, data, navigation, settings og features      |
@@ -1317,10 +1342,14 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 ## Filer i siste checkpoint
 
-- `swp-6-component-api-audit.md` med produksjonskonsumenter og eksplisitt beholdbeslutning for
-  `Metric`, `MetricGrid`, `FormSteps`, data-, navigation-, settings- og documentfamiliene
-- denne statusen med neste eksakte dødkodesteg; produksjonskode, offentlig API, stylingbaseline,
-  produktadferd og backend-repoet er urørt
+- `$lib/ui`-, pattern- og primitivebarrelene med bare faktisk konsumerte offentlige exports;
+  `NavigationLoading` og testenes `SelectOption`-type bruker private, eksplisitte innganger
+- `CollectionControls.svelte` og `collection-controls.ts` med én direkte typekilde uten døde
+  komponentmodulaliaser
+- `index.css` og stylingguardkontrakten uten seks ubrukte Tailwind-projeksjoner; guardmodulens to
+  internt brukte hjelpefunksjoner er private
+- oppdatert `swp-6-component-api-audit.md`, regenerert maskinbaseline og denne statusen; produktflyt,
+  DOM/stylinguttrykk, endpointkontrakter, pakkefiler og backend-repoet er urørt
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
 pågående arbeid etter checkpointet.

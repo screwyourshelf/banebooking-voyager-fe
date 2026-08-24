@@ -7,7 +7,7 @@ export type CollectionChoiceContext = {
   selected: boolean;
 };
 
-export type CollectionChoiceOption = {
+type CollectionChoiceOption = {
   control?: Snippet<[CollectionChoiceContext]>;
   disabled?: boolean;
   label: string;

@@ -1,10 +1,11 @@
 <script lang="ts">
   import Collection from "./Collection.svelte";
-  import CollectionControls, {
-    type CollectionChoiceContext,
-    type CollectionControlField,
-    type CollectionControlGroup,
-  } from "./CollectionControls.svelte";
+  import CollectionControls from "./CollectionControls.svelte";
+  import type {
+    CollectionChoiceContext,
+    CollectionControlField,
+    CollectionControlGroup,
+  } from "./collection-controls";
   import CollectionEmpty from "./CollectionEmpty.svelte";
   import DatePicker from "../primitives/DatePicker.svelte";
 

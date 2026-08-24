@@ -9,7 +9,7 @@ export {
   Select,
   Textarea,
 } from "./primitives";
-export type { IconData, SelectOption } from "./primitives";
+export type { IconData } from "./primitives";
 export {
   AppShell,
   Collection,
@@ -43,7 +43,6 @@ export {
   NavigationIdentity,
   NavigationLink,
   NavigationList,
-  NavigationLoading,
   NavigationOverlay,
   NavigationSection,
   Page,
@@ -73,17 +72,10 @@ export type {
   CollectionChoiceContext,
   CollectionControlField,
   CollectionControlGroup,
-  DataTableAlignment,
-  DataTableCell,
   DataTableColumn,
   DataTableDirection,
-  DataTablePresentation,
   DataTableRow,
-  DataTableVisibility,
-  DataVisualizationKind,
   DialogActionContext,
   DocumentFact,
   FeedbackTone,
-  VisualizationLayoutVariant,
-  VisualizationLegendItem,
 } from "./patterns";
