@@ -16,6 +16,7 @@
 @theme inline {
   --animate-collection-loading: var(--app-collection-loading-animation);
   --animate-form-submit: var(--app-form-submit-animation);
+  --animate-navigation-loading: var(--app-navigation-loading-animation);
   --animate-page-loading: var(--app-page-loading-animation);
   --background-image-page-loading-sheen: var(--app-page-loading-sheen-background);
   --background-image-collection-control: var(--app-collection-control-background);
@@ -101,8 +102,16 @@
   --color-ink-soft: var(--app-ink-soft);
   --color-line: var(--app-line);
   --color-line-strong: var(--app-line-strong);
+  --color-menu-muted: var(--app-menu-muted);
+  --color-menu-text: var(--app-menu-text);
   --color-nav-active: var(--app-nav-active);
   --color-nav-active-surface: var(--app-nav-active-surface);
+  --color-nav-indicator: var(--app-nav-indicator);
+  --color-navigation-bottom-surface: var(--app-navigation-bottom-surface);
+  --color-navigation-loading-placeholder: var(--app-navigation-loading-placeholder);
+  --color-navigation-loading-shell-placeholder: var(--app-navigation-loading-shell-placeholder);
+  --color-navigation-sidebar-active: var(--app-navigation-sidebar-active-text);
+  --color-navigation-sidebar-active-surface: var(--app-navigation-sidebar-active-surface);
   --color-page-description: var(--app-page-description-text);
   --color-page-heading: var(--app-page-heading-text);
   --color-page-loading-placeholder: var(--app-page-loading-placeholder);
@@ -150,6 +159,7 @@
 
   --blur-dialog-overlay: var(--app-dialog-overlay-blur);
   --blur-editor-dialog-actions: var(--app-editor-dialog-actions-blur);
+  --blur-navigation-bottom: var(--app-navigation-bottom-blur);
 
   --font-body: var(--app-font-body);
   --font-display: var(--app-font-display);
@@ -180,6 +190,11 @@
   --font-weight-form-label: var(--app-form-label-font-weight);
   --font-weight-form-step: var(--app-form-step-font-weight);
   --font-weight-form-step-number: var(--app-form-step-number-font-weight);
+  --font-weight-navigation-badge: var(--app-navigation-badge-font-weight);
+  --font-weight-navigation-identity: var(--app-navigation-identity-font-weight);
+  --font-weight-navigation-item: var(--app-navigation-item-font-weight);
+  --font-weight-navigation-overlay-title: var(--app-navigation-overlay-title-font-weight);
+  --font-weight-navigation-section: var(--app-navigation-section-font-weight);
   --font-weight-page-eyebrow: var(--app-page-eyebrow-font-weight);
   --font-weight-page-status: var(--app-page-status-font-weight);
   --font-weight-page-title: var(--app-page-title-font-weight);
@@ -261,6 +276,7 @@
   --tracking-document-fact-label: var(--app-document-fact-label-letter-spacing);
   --tracking-editor-dialog-eyebrow: var(--app-editor-dialog-eyebrow-letter-spacing);
   --tracking-editor-dialog-title: var(--app-editor-dialog-title-letter-spacing);
+  --tracking-navigation-section: var(--app-navigation-section-letter-spacing);
   --tracking-page-eyebrow: var(--app-page-eyebrow-letter-spacing);
   --tracking-page-title: var(--app-page-title-letter-spacing);
   --tracking-schedule-time-start: var(--app-schedule-time-start-letter-spacing);
@@ -285,6 +301,13 @@
   --radius-document-fact: var(--app-document-fact-radius);
   --radius-document-wide: var(--app-document-wide-radius);
   --radius-form-actions: var(--app-form-actions-radius);
+  --radius-navigation-badge: var(--app-navigation-badge-radius);
+  --radius-navigation-bottom-indicator: var(--app-navigation-bottom-indicator-radius);
+  --radius-navigation-item: var(--app-navigation-item-radius);
+  --radius-navigation-overlay-more: var(--app-navigation-overlay-more-radius);
+  --radius-navigation-section-indicator: var(--app-navigation-section-indicator-radius);
+  --radius-navigation-section-item: var(--app-navigation-section-item-radius);
+  --radius-navigation-sidebar: var(--app-navigation-sidebar-radius);
   --radius-page-loading-surface: var(--app-page-loading-surface-radius);
   --radius-record: var(--app-record-radius);
   --radius-rich-text-editor: var(--app-rich-text-editor-radius);
@@ -299,6 +322,7 @@
   --radius-tabs-trigger: var(--app-tabs-trigger-radius);
   --shadow-record: var(--app-record-shadow);
   --shadow-floating-surface: var(--app-floating-surface-shadow);
+  --shadow-navigation-bottom: var(--app-navigation-bottom-shadow);
   --shadow-switch-thumb: var(--app-switch-thumb-shadow);
   --shadow-surface-lg: var(--app-shadow-lg);
   --shadow-surface-md: var(--app-shadow-md);
@@ -376,6 +400,18 @@
   --spacing-lg: var(--app-space-lg);
   --spacing-md: var(--app-space-md);
   --spacing-metric-grid-wide: var(--app-metric-grid-wide-gap);
+  --spacing-navigation-action-icon: var(--app-navigation-action-icon-size);
+  --spacing-navigation-actions: var(--app-navigation-actions-gap);
+  --spacing-navigation-badge: var(--app-navigation-badge-padding-inline);
+  --spacing-navigation-bottom-badge-left: var(--app-navigation-bottom-badge-left);
+  --spacing-navigation-bottom-badge-top: var(--app-navigation-bottom-badge-top);
+  --spacing-navigation-icon: var(--app-navigation-icon-size);
+  --spacing-navigation-item: var(--app-navigation-item-gap);
+  --spacing-navigation-item-block: var(--app-navigation-item-padding-block);
+  --spacing-navigation-overlay-header: var(--app-navigation-overlay-header-padding-bottom);
+  --spacing-navigation-safe: var(--app-navigation-safe-padding-bottom);
+  --spacing-navigation-section-indicator-bottom: var(--app-navigation-section-indicator-bottom);
+  --spacing-navigation-sidebar: var(--app-navigation-sidebar-gap);
   --spacing-page: var(--app-page-padding);
   --spacing-page-content-desktop-bottom: var(--app-page-content-desktop-padding-bottom);
   --spacing-page-content-desktop-gap: var(--app-page-content-desktop-gap);
@@ -460,6 +496,7 @@
   --width-dialog: var(--app-dialog-width);
   --width-dialog-surface: var(--app-dialog-surface-width);
   --width-editor-dialog: var(--app-editor-dialog-width);
+  --width-navigation-overlay-more: var(--app-navigation-overlay-more-width);
   --width-page-loading-description: var(--app-page-loading-description-width);
   --width-page-loading-eyebrow: var(--app-page-loading-eyebrow-width);
   --width-page-loading-title: var(--app-page-loading-title-width);
@@ -475,6 +512,7 @@
   --min-width-choice: var(--app-choice-control-min-width);
   --min-width-control: var(--app-control-min-width);
   --min-width-form-submit: var(--app-form-submit-min-width);
+  --min-width-navigation-badge: var(--app-navigation-badge-size);
   --min-width-rich-text-table: var(--app-rich-text-table-min-width);
   --min-width-rich-text-table-cell: var(--app-rich-text-table-cell-min-width);
   --min-width-rich-text-content-table: var(--app-rich-text-content-table-min-width);
@@ -484,6 +522,7 @@
   --max-width-collection-search: var(--app-collection-search-max-width);
   --max-width-collection-state-description: var(--app-collection-state-description-max-width);
   --max-width-content: var(--app-content-max);
+  --max-width-navigation-sidebar: var(--app-navigation-sidebar-max-width);
   --max-width-dialog: var(--app-dialog-width);
   --max-width-document: var(--app-document-max-width);
   --max-width-form-steps: var(--app-form-steps-max-width);
@@ -501,6 +540,8 @@
   --height-choice-indicator: var(--app-choice-indicator-height);
   --height-editor-dialog: var(--app-editor-dialog-height);
   --height-form-step-indicator: var(--app-form-step-indicator-height);
+  --height-navigation-bottom-indicator: var(--app-navigation-bottom-indicator-height);
+  --height-navigation-section-indicator: var(--app-navigation-section-indicator-height);
   --height-page-loading-description: var(--app-page-loading-description-height);
   --height-page-loading-eyebrow: var(--app-page-loading-eyebrow-height);
   --height-page-loading-row: var(--app-page-loading-row-height);
@@ -525,6 +566,11 @@
   --min-height-control: var(--app-control-height);
   --min-height-date-trigger: var(--app-date-trigger-min-height);
   --min-height-form-control: var(--app-form-control-min-height);
+  --min-height-navigation-badge: var(--app-navigation-badge-size);
+  --min-height-navigation-bottom-item: var(--app-navigation-bottom-item-min-height);
+  --min-height-navigation-bottom-list: var(--app-navigation-bottom-list-min-height);
+  --min-height-navigation-loading-item: var(--app-navigation-loading-item-min-height);
+  --min-height-navigation-section-item: var(--app-navigation-section-item-min-height);
   --min-height-page-loading: var(--app-page-loading-min-height);
   --min-height-rich-text-editor: var(--app-rich-text-editor-min-height);
   --min-height-settings-choice: var(--app-settings-choice-min-height);
@@ -536,6 +582,8 @@
   --min-height-tabs-trigger: var(--app-tabs-trigger-min-height);
   --max-height-dialog: var(--app-dialog-max-height);
   --max-height-dialog-surface: var(--app-dialog-surface-max-height);
+  --max-height-navigation-overlay: var(--app-navigation-overlay-max-height);
+  --max-height-navigation-overlay-more: var(--app-navigation-overlay-more-max-height);
   --max-height-date-popover: var(--app-date-popover-max-height);
   --max-height-editor-dialog: var(--app-editor-dialog-height);
 
@@ -546,6 +594,8 @@
 
 /* Component-owned responsive behavior, descendant selectors and measured runtime geometry stay registered here. */
 @custom-variant compact-control (@media (width <= 30rem));
+@custom-variant navigation-icon-svg (& > svg);
+@custom-variant navigation-logo-media (& > :is(img, svg));
 @custom-variant collection-booking-choice (
   & > [data-part="content"] > [data-part="group"] > [data-part="choices"]
     > [data-part="custom-control"]

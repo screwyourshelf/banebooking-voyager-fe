@@ -68,6 +68,7 @@ describe("public dialog contracts", () => {
 
     const standard = await openStandardDialog();
     expect(standard.dialog).toHaveAttribute("data-size", "standard");
+    expect(standard.dialog).toHaveAttribute("data-placement", "center");
     expect(standard.dialog).toHaveClass(
       "top-dialog-surface-top",
       "bottom-dialog-surface-bottom",

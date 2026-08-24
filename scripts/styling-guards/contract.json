@@ -120,6 +120,7 @@
         "roles": {
           "collection-loading": "--app-collection-loading-animation",
           "form-submit": "--app-form-submit-animation",
+          "navigation-loading": "--app-navigation-loading-animation",
           "page-loading": "--app-page-loading-animation"
         }
       },
@@ -214,8 +215,16 @@
           "ink-soft": "--app-ink-soft",
           "line": "--app-line",
           "line-strong": "--app-line-strong",
+          "menu-muted": "--app-menu-muted",
+          "menu-text": "--app-menu-text",
           "nav-active": "--app-nav-active",
           "nav-active-surface": "--app-nav-active-surface",
+          "nav-indicator": "--app-nav-indicator",
+          "navigation-bottom-surface": "--app-navigation-bottom-surface",
+          "navigation-loading-placeholder": "--app-navigation-loading-placeholder",
+          "navigation-loading-shell-placeholder": "--app-navigation-loading-shell-placeholder",
+          "navigation-sidebar-active": "--app-navigation-sidebar-active-text",
+          "navigation-sidebar-active-surface": "--app-navigation-sidebar-active-surface",
           "page-description": "--app-page-description-text",
           "page-heading": "--app-page-heading-text",
           "page-loading-placeholder": "--app-page-loading-placeholder",
@@ -271,7 +280,8 @@
         "themeVariablePrefix": "--blur-",
         "roles": {
           "dialog-overlay": "--app-dialog-overlay-blur",
-          "editor-dialog-actions": "--app-editor-dialog-actions-blur"
+          "editor-dialog-actions": "--app-editor-dialog-actions-blur",
+          "navigation-bottom": "--app-navigation-bottom-blur"
         }
       },
       "fontFamily": {
@@ -333,6 +343,11 @@
           "form-label": "--app-form-label-font-weight",
           "form-step": "--app-form-step-font-weight",
           "form-step-number": "--app-form-step-number-font-weight",
+          "navigation-badge": "--app-navigation-badge-font-weight",
+          "navigation-identity": "--app-navigation-identity-font-weight",
+          "navigation-item": "--app-navigation-item-font-weight",
+          "navigation-overlay-title": "--app-navigation-overlay-title-font-weight",
+          "navigation-section": "--app-navigation-section-font-weight",
           "page-eyebrow": "--app-page-eyebrow-font-weight",
           "page-status": "--app-page-status-font-weight",
           "page-title": "--app-page-title-font-weight",
@@ -404,6 +419,7 @@
           "document-fact-label": "--app-document-fact-label-letter-spacing",
           "editor-dialog-eyebrow": "--app-editor-dialog-eyebrow-letter-spacing",
           "editor-dialog-title": "--app-editor-dialog-title-letter-spacing",
+          "navigation-section": "--app-navigation-section-letter-spacing",
           "page-eyebrow": "--app-page-eyebrow-letter-spacing",
           "page-title": "--app-page-title-letter-spacing",
           "schedule-time-start": "--app-schedule-time-start-letter-spacing",
@@ -444,6 +460,13 @@
           "document-fact": "--app-document-fact-radius",
           "document-wide": "--app-document-wide-radius",
           "form-actions": "--app-form-actions-radius",
+          "navigation-badge": "--app-navigation-badge-radius",
+          "navigation-bottom-indicator": "--app-navigation-bottom-indicator-radius",
+          "navigation-item": "--app-navigation-item-radius",
+          "navigation-overlay-more": "--app-navigation-overlay-more-radius",
+          "navigation-section-indicator": "--app-navigation-section-indicator-radius",
+          "navigation-section-item": "--app-navigation-section-item-radius",
+          "navigation-sidebar": "--app-navigation-sidebar-radius",
           "page-loading-surface": "--app-page-loading-surface-radius",
           "record": "--app-record-radius",
           "rich-text-editor": "--app-rich-text-editor-radius",
@@ -462,6 +485,7 @@
         "themeVariablePrefix": "--shadow-",
         "roles": {
           "floating-surface": "--app-floating-surface-shadow",
+          "navigation-bottom": "--app-navigation-bottom-shadow",
           "record": "--app-record-shadow",
           "switch-thumb": "--app-switch-thumb-shadow",
           "surface-lg": "--app-shadow-lg",
@@ -544,6 +568,18 @@
           "lg": "--app-space-lg",
           "md": "--app-space-md",
           "metric-grid-wide": "--app-metric-grid-wide-gap",
+          "navigation-action-icon": "--app-navigation-action-icon-size",
+          "navigation-actions": "--app-navigation-actions-gap",
+          "navigation-badge": "--app-navigation-badge-padding-inline",
+          "navigation-bottom-badge-left": "--app-navigation-bottom-badge-left",
+          "navigation-bottom-badge-top": "--app-navigation-bottom-badge-top",
+          "navigation-icon": "--app-navigation-icon-size",
+          "navigation-item": "--app-navigation-item-gap",
+          "navigation-item-block": "--app-navigation-item-padding-block",
+          "navigation-overlay-header": "--app-navigation-overlay-header-padding-bottom",
+          "navigation-safe": "--app-navigation-safe-padding-bottom",
+          "navigation-section-indicator-bottom": "--app-navigation-section-indicator-bottom",
+          "navigation-sidebar": "--app-navigation-sidebar-gap",
           "page": "--app-page-padding",
           "page-content-desktop-bottom": "--app-page-content-desktop-padding-bottom",
           "page-content-desktop-gap": "--app-page-content-desktop-gap",
@@ -638,6 +674,7 @@
           "dialog": "--app-dialog-width",
           "dialog-surface": "--app-dialog-surface-width",
           "editor-dialog": "--app-editor-dialog-width",
+          "navigation-overlay-more": "--app-navigation-overlay-more-width",
           "page-loading-description": "--app-page-loading-description-width",
           "page-loading-eyebrow": "--app-page-loading-eyebrow-width",
           "page-loading-title": "--app-page-loading-title-width",
@@ -658,6 +695,7 @@
           "choice": "--app-choice-control-min-width",
           "control": "--app-control-min-width",
           "form-submit": "--app-form-submit-min-width",
+          "navigation-badge": "--app-navigation-badge-size",
           "rich-text-content-table": "--app-rich-text-content-table-min-width",
           "rich-text-table": "--app-rich-text-table-min-width",
           "rich-text-table-cell": "--app-rich-text-table-cell-min-width",
@@ -675,6 +713,7 @@
           "dialog": "--app-dialog-width",
           "document": "--app-document-max-width",
           "form-steps": "--app-form-steps-max-width",
+          "navigation-sidebar": "--app-navigation-sidebar-max-width",
           "page": "--app-page-width",
           "page-description": "--app-page-description-max-width",
           "page-intro": "--app-page-intro-max-width",
@@ -694,6 +733,8 @@
           "choice-indicator": "--app-choice-indicator-height",
           "editor-dialog": "--app-editor-dialog-height",
           "form-step-indicator": "--app-form-step-indicator-height",
+          "navigation-bottom-indicator": "--app-navigation-bottom-indicator-height",
+          "navigation-section-indicator": "--app-navigation-section-indicator-height",
           "page-loading-description": "--app-page-loading-description-height",
           "page-loading-eyebrow": "--app-page-loading-eyebrow-height",
           "page-loading-row": "--app-page-loading-row-height",
@@ -723,6 +764,11 @@
           "control": "--app-control-height",
           "date-trigger": "--app-date-trigger-min-height",
           "form-control": "--app-form-control-min-height",
+          "navigation-badge": "--app-navigation-badge-size",
+          "navigation-bottom-item": "--app-navigation-bottom-item-min-height",
+          "navigation-bottom-list": "--app-navigation-bottom-list-min-height",
+          "navigation-loading-item": "--app-navigation-loading-item-min-height",
+          "navigation-section-item": "--app-navigation-section-item-min-height",
           "page-loading": "--app-page-loading-min-height",
           "rich-text-editor": "--app-rich-text-editor-min-height",
           "settings-choice": "--app-settings-choice-min-height",
@@ -740,7 +786,9 @@
           "date-popover": "--app-date-popover-max-height",
           "dialog": "--app-dialog-max-height",
           "dialog-surface": "--app-dialog-surface-max-height",
-          "editor-dialog": "--app-editor-dialog-height"
+          "editor-dialog": "--app-editor-dialog-height",
+          "navigation-overlay": "--app-navigation-overlay-max-height",
+          "navigation-overlay-more": "--app-navigation-overlay-more-max-height"
         }
       },
       "gridTemplateRows": {
@@ -775,6 +823,7 @@
         "2xl",
         "active",
         "after",
+        "before",
         "checked",
         "compact-control",
         "collection-booking-choice",
@@ -838,6 +887,8 @@
         "lg",
         "md",
         "motion-reduce",
+        "navigation-icon-svg",
+        "navigation-logo-media",
         "placeholder",
         "rich-text-bullet-list",
         "rich-text-child",
@@ -886,6 +937,7 @@
         "align-top",
         "animate-none",
         "appearance-none",
+        "auto-cols-fr",
         "basis-auto",
         "block",
         "bg-transparent",
@@ -912,6 +964,7 @@
         "cursor-not-allowed",
         "cursor-pointer",
         "duration-120",
+        "duration-150",
         "duration-160",
         "field-sizing-content",
         "fixed",
@@ -927,6 +980,7 @@
         "flow-root",
         "gap-0",
         "grid",
+        "grid-flow-col",
         "group",
         "grow",
         "grow-0",
@@ -965,10 +1019,12 @@
         "max-h-select-content",
         "max-h-select-viewport",
         "max-w-full",
+        "max-w-none",
         "m-0",
         "mb-0",
         "min-h-0",
         "min-h-full",
+        "min-w-full",
         "min-w-select-content",
         "min-w-0",
         "ml-auto",
@@ -980,6 +1036,7 @@
         "object-cover",
         "opacity-50",
         "opacity-100",
+        "outline-2",
         "outline-3",
         "outline-none",
         "outline-solid",
@@ -1006,6 +1063,7 @@
         "ring-3",
         "rounded-none",
         "rotate-180",
+        "scrollbar-thin",
         "select-none",
         "self-center",
         "shrink",
@@ -1020,13 +1078,17 @@
         "text-center",
         "text-ellipsis",
         "text-left",
+        "top-0",
         "top-1/2",
+        "top-auto",
         "transition",
+        "transition-colors",
         "transition-opacity",
         "transition-transform",
         "translate-x-1/2",
         "translate-x-0",
         "translate-y-1/2",
+        "translate-y-0",
         "translate-y-px",
         "underline",
         "uppercase",
@@ -1036,6 +1098,7 @@
         "w-auto",
         "w-fit",
         "w-full",
+        "w-max",
         "w-px",
         "w-screen",
         "z-1",
@@ -2150,6 +2213,142 @@
         "utilityPrefixes": ["max-h"],
         "themeNamespace": "maxHeight",
         "roles": ["date-popover", "dialog", "dialog-surface", "editor-dialog"]
+      },
+      {
+        "utilityPrefixes": ["animate"],
+        "themeNamespace": "animation",
+        "roles": ["navigation-loading"]
+      },
+      {
+        "utilityPrefixes": ["bg"],
+        "themeNamespace": "color",
+        "roles": [
+          "nav-indicator",
+          "navigation-bottom-surface",
+          "navigation-loading-placeholder",
+          "navigation-loading-shell-placeholder",
+          "navigation-sidebar-active-surface"
+        ]
+      },
+      {
+        "utilityPrefixes": ["text"],
+        "themeNamespace": "color",
+        "roles": ["menu-muted", "menu-text", "navigation-sidebar-active"]
+      },
+      {
+        "utilityPrefixes": ["backdrop-blur"],
+        "themeNamespace": "blur",
+        "roles": ["navigation-bottom"]
+      },
+      {
+        "utilityPrefixes": ["font"],
+        "themeNamespace": "fontWeight",
+        "roles": [
+          "navigation-badge",
+          "navigation-identity",
+          "navigation-item",
+          "navigation-overlay-title",
+          "navigation-section"
+        ]
+      },
+      {
+        "utilityPrefixes": ["tracking"],
+        "themeNamespace": "letterSpacing",
+        "roles": ["navigation-section"]
+      },
+      {
+        "utilityPrefixes": ["rounded"],
+        "themeNamespace": "radius",
+        "roles": [
+          "navigation-badge",
+          "navigation-bottom-indicator",
+          "navigation-item",
+          "navigation-overlay-more",
+          "navigation-section-indicator",
+          "navigation-section-item",
+          "navigation-sidebar"
+        ]
+      },
+      {
+        "utilityPrefixes": ["shadow"],
+        "themeNamespace": "shadow",
+        "roles": ["navigation-bottom"]
+      },
+      {
+        "utilityPrefixes": ["gap"],
+        "themeNamespace": "spacing",
+        "roles": ["navigation-actions", "navigation-item", "navigation-sidebar"]
+      },
+      {
+        "utilityPrefixes": ["px"],
+        "themeNamespace": "spacing",
+        "roles": ["navigation-badge"]
+      },
+      {
+        "utilityPrefixes": ["py"],
+        "themeNamespace": "spacing",
+        "roles": ["navigation-item-block"]
+      },
+      {
+        "utilityPrefixes": ["pb"],
+        "themeNamespace": "spacing",
+        "roles": ["navigation-overlay-header", "navigation-safe"]
+      },
+      {
+        "utilityPrefixes": ["top"],
+        "themeNamespace": "spacing",
+        "roles": ["navigation-bottom-badge-top"]
+      },
+      {
+        "utilityPrefixes": ["bottom"],
+        "themeNamespace": "spacing",
+        "roles": ["navigation-section-indicator-bottom"]
+      },
+      {
+        "utilityPrefixes": ["left"],
+        "themeNamespace": "spacing",
+        "roles": ["md", "navigation-bottom-badge-left"]
+      },
+      {
+        "utilityPrefixes": ["size"],
+        "themeNamespace": "spacing",
+        "roles": ["navigation-action-icon", "navigation-icon"]
+      },
+      {
+        "utilityPrefixes": ["w"],
+        "themeNamespace": "width",
+        "roles": ["navigation-overlay-more"]
+      },
+      {
+        "utilityPrefixes": ["min-w"],
+        "themeNamespace": "minWidth",
+        "roles": ["navigation-badge"]
+      },
+      {
+        "utilityPrefixes": ["max-w"],
+        "themeNamespace": "maxWidth",
+        "roles": ["navigation-sidebar"]
+      },
+      {
+        "utilityPrefixes": ["h"],
+        "themeNamespace": "height",
+        "roles": ["navigation-bottom-indicator", "navigation-section-indicator"]
+      },
+      {
+        "utilityPrefixes": ["min-h"],
+        "themeNamespace": "minHeight",
+        "roles": [
+          "navigation-badge",
+          "navigation-bottom-item",
+          "navigation-bottom-list",
+          "navigation-loading-item",
+          "navigation-section-item"
+        ]
+      },
+      {
+        "utilityPrefixes": ["max-h"],
+        "themeNamespace": "maxHeight",
+        "roles": ["navigation-overlay", "navigation-overlay-more"]
       }
     ],
     "forbiddenRawPalettePattern": "^(?:accent|bg|border|caret|decoration|divide|fill|from|outline|ring|stroke|text|to|via)-(?:amber|blue|cyan|emerald|fuchsia|gray|green|indigo|lime|neutral|orange|pink|purple|red|rose|sky|slate|stone|teal|violet|yellow|zinc)(?:-|$)"

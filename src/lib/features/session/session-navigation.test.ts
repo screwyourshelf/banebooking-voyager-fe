@@ -40,9 +40,14 @@ describe("session navigation composition", () => {
     renderFixture();
     const desktop = screen.getByRole("navigation", { name: "Hovednavigasjon" });
 
+    expect(desktop).toHaveAttribute("data-surface", "shell");
+    expect(desktop).toHaveClass("max-w-none", "flex-1", "bg-transparent", "p-0");
     expect(within(desktop).getByRole("link", { name: /Fjordvik Tennisklubb/ })).toHaveAttribute(
       "href",
       "/fjordvik"
+    );
+    expect(within(desktop).getByRole("link", { name: /Fjordvik Tennisklubb/ })).toHaveClass(
+      "text-sidebar-text"
     );
     expect(within(desktop).getByRole("link", { name: "Baner og grener" })).toHaveAttribute(
       "aria-current",
@@ -94,6 +99,16 @@ describe("session navigation composition", () => {
     const dialog = await screen.findByRole("dialog", { name: "Kari Nordmann" });
     const menu = within(dialog).getByRole("navigation", { name: "Mer" });
 
+    expect(dialog).toHaveAttribute("data-placement", "bottom");
+    expect(dialog).toHaveClass(
+      "bottom-0",
+      "w-navigation-overlay-more",
+      "max-h-navigation-overlay-more",
+      "rounded-navigation-overlay-more",
+      "pb-navigation-safe"
+    );
+    expect(menu).toHaveAttribute("data-surface", "overlay");
+    expect(menu).toHaveClass("max-w-none", "bg-transparent", "text-ink");
     expect(within(menu).getByRole("link", { name: "Min side" })).toBeVisible();
     expect(within(menu).getByRole("link", { name: "Brukere" })).toBeVisible();
     expect(within(menu).queryByRole("link", { name: "Book bane" })).toBeNull();

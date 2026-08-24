@@ -45,7 +45,7 @@
   <Icon icon={Login01Icon} />
 {/snippet}
 
-<Navigation label="Hovednavigasjon" layout="sidebar">
+<Navigation label="Hovednavigasjon" layout="sidebar" surface="shell">
   <NavigationIdentity
     href={navigation.identity.href}
     logo={identityIcon}

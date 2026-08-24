@@ -46,7 +46,7 @@
   title={navigation.account.label}
 >
   {#snippet children({ close })}
-    <Navigation label="Kontomeny" layout="sidebar" busy={signingOut}>
+    <Navigation label="Kontomeny" layout="sidebar" surface="overlay" busy={signingOut}>
       {#if personalSection}
         <NavigationSection title={personalSection.label}>
           <NavigationItems items={personalSection.items} onNavigate={close} />
@@ -75,7 +75,7 @@
   title={navigation.account.label}
 >
   {#snippet children({ close })}
-    <Navigation label="Mer" layout="sidebar" busy={signingOut}>
+    <Navigation label="Mer" layout="sidebar" surface="overlay" busy={signingOut}>
       {#each navigation.mobileSecondary as section (section.id)}
         <NavigationSection title={section.label}>
           <NavigationItems items={section.items} onNavigate={close} />

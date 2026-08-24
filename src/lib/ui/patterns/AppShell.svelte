@@ -41,7 +41,7 @@
       {#if desktopNavigation}
         {@render desktopNavigation()}
       {:else}
-        <NavigationLoading label={loadingLabel} layout="sidebar" items={7} />
+        <NavigationLoading label={loadingLabel} layout="sidebar" items={7} surface="shell" />
       {/if}
     </aside>
 
