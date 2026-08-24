@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { BookingPerTime } from "$lib/contracts";
-  import { Section } from "$lib/ui";
+  import { DataVisualization, Section, VisualizationLegend } from "$lib/ui";
   import { formatHours } from "./model";
 
   let { points, showComparison }: { points: BookingPerTime[]; showComparison: boolean } = $props();
@@ -27,10 +27,12 @@
 
 {#snippet legend()}
   {#if showComparison}
-    <span class="statistics-chart-legend" aria-label="Tegnforklaring">
-      <span data-series="current">Valgt periode</span>
-      <span data-series="previous">Året før</span>
-    </span>
+    <VisualizationLegend
+      items={[
+        { series: "current", label: "Valgt periode" },
+        { series: "previous", label: "Året før" },
+      ]}
+    />
   {/if}
 {/snippet}
 
@@ -39,12 +41,10 @@
   title="Tid på døgnet"
   description="Når på døgnet banene brukes mest."
   actions={legend}
-  data-context="statistics"
-  data-view="hour-chart"
 >
-  <div class="statistics-hour-chart__scroll">
+  <DataVisualization kind="bars">
     <div
-      class="statistics-hour-chart__plot"
+      data-visualization="hour-plot"
       role="img"
       aria-label="Stolpediagram over bookede timer per klokkeslett"
       style={`--statistics-hour-count: ${visiblePoints.length}`}
@@ -53,29 +53,42 @@
         {@const comparison = point.sammenligningBookedeTimer}
         {@const time = `${String(point.time).padStart(2, "0")}:00`}
         <div
-          class="statistics-hour-chart__hour"
+          data-visualization="hour"
           aria-label={comparison === null
             ? `${time}: ${formatHours(point.bookedeTimer)}`
             : `${time}: ${formatHours(point.bookedeTimer)}. Året før: ${formatHours(comparison)}`}
         >
-          <div class="statistics-hour-chart__bars" aria-hidden="true">
+          <div data-visualization="hour-bars" aria-hidden="true">
             <span
+              data-visualization="hour-bar"
               data-series="current"
               style={`--statistics-bar-height: ${(point.bookedeTimer / maximum) * 100}%`}
               title={`${formatHours(point.bookedeTimer)} – valgt periode`}
             ></span>
             {#if showComparison}
               <span
+                data-visualization="hour-bar"
                 data-series="previous"
                 style={`--statistics-bar-height: ${((comparison ?? 0) / maximum) * 100}%`}
                 title={`${formatHours(comparison ?? 0)} – året før`}
               ></span>
             {/if}
           </div>
-          <strong data-stat-role="chart-value">{formatHours(point.bookedeTimer)}</strong>
-          <span data-stat-role="chart-meta">{String(point.time).padStart(2, "0")}</span>
+          <strong>{formatHours(point.bookedeTimer)}</strong>
+          <span data-visualization="hour-label">{String(point.time).padStart(2, "0")}</span>
         </div>
       {/each}
     </div>
-  </div>
+  </DataVisualization>
 </Section>
+
+<style>
+  [data-visualization="hour-plot"] {
+    min-width: max(36rem, calc(var(--statistics-hour-count) * 3.5rem));
+    grid-template-columns: repeat(var(--statistics-hour-count), minmax(2.75rem, 1fr));
+  }
+
+  [data-visualization="hour-bar"] {
+    height: var(--statistics-bar-height);
+  }
+</style>

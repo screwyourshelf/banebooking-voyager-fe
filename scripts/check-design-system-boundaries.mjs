@@ -80,7 +80,6 @@ function validateStylesheetGraph() {
 
 function validateFeatureStyling() {
   const featuresRoot = `${path.join(sourceRoot, "lib", "features")}${path.sep}`;
-  const statisticsRoles = new Set(["key-value", "chart-value", "chart-label", "chart-meta"]);
 
   for (const filePath of componentFiles) {
     if (!filePath.startsWith(featuresRoot) || !filePath.endsWith(".svelte")) continue;
@@ -93,18 +92,11 @@ function validateFeatureStyling() {
 
     for (const match of source.matchAll(/\bclass\s*=\s*["']([^"']+)["']/g)) {
       for (const className of match[1].split(/\s+/).filter(Boolean)) {
-        if (isStatisticsVisualization && className.startsWith("statistics-")) {
-          if (!definesClass(stylesheetSource, className)) {
-            report(relativePath, source, match.index, `${className} mangler en sentral CSS-regel`);
-          }
-          continue;
-        }
-
         report(
           relativePath,
           source,
           match.index,
-          `bruker featurelokal klasse ${className}; bare datadrevet statistikkvisualisering er tillatt`
+          `bruker featurelokal klasse ${className}; presentasjon skal eies av offentlig UI`
         );
       }
     }
@@ -120,8 +112,7 @@ function validateFeatureStyling() {
     }
 
     for (const match of source.matchAll(/data-stat-role\s*=\s*["']([^"']+)["']/g)) {
-      if (statisticsRoles.has(match[1])) continue;
-      report(relativePath, source, match.index, `bruker ukjent statistikkrolle «${match[1]}»`);
+      report(relativePath, source, match.index, `bruker utfaset statistikkrolle «${match[1]}»`);
     }
   }
 }
@@ -334,11 +325,6 @@ function report(relativePath, source, index, message) {
 
 function lineFor(source, index) {
   return source.slice(0, Math.max(index, 0)).split("\n").length;
-}
-
-function definesClass(source, className) {
-  const escaped = escapeRegExp(className);
-  return new RegExp(`\\.${escaped}(?=$|[^A-Za-z0-9_-])`, "m").test(source);
 }
 
 function escapeRegExp(value) {

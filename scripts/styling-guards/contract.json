@@ -142,7 +142,8 @@
           "editor-dialog-header": "--app-editor-dialog-header-background",
           "page-loading-sheen": "--app-page-loading-sheen-background",
           "section-soft": "--app-section-soft-background",
-          "tabs-list": "--app-tabs-list-background"
+          "tabs-list": "--app-tabs-list-background",
+          "visualization-grid": "--app-visualization-grid-background"
         }
       },
       "backgroundSize": {
@@ -192,6 +193,7 @@
           "collection-loading-placeholder": "--app-collection-loading-placeholder",
           "collection-row-muted-surface": "--app-collection-row-muted-surface",
           "collection-toggle-expanded-border": "--app-collection-toggle-expanded-border",
+          "data-table-row-even": "--app-data-table-row-even-surface",
           "control-muted": "--app-control-muted",
           "control-surface": "--app-control-surface",
           "control-surface-strong": "--app-control-surface-strong",
@@ -323,6 +325,7 @@
           "heading-sm": "--app-type-heading-sm",
           "label": "--app-type-label",
           "micro": "--app-type-micro",
+          "metric-unit": "--app-metric-unit-font-size",
           "page-title": "--app-type-page-title",
           "stat-chart-label": "--app-stat-chart-label-size",
           "stat-chart-meta": "--app-stat-chart-meta-size",
@@ -347,6 +350,9 @@
           "collection-status": "--app-collection-status-font-weight",
           "collection-title": "--app-collection-title-font-weight",
           "collection-toggle": "--app-collection-toggle-font-weight",
+          "data-table-detail": "--app-data-table-detail-font-weight",
+          "data-table-heading": "--app-data-table-heading-font-weight",
+          "data-table-row-heading": "--app-data-table-row-heading-font-weight",
           "document-fact-label": "--app-document-fact-label-font-weight",
           "document-fact-value": "--app-document-fact-value-font-weight",
           "document-link": "--app-document-link-font-weight",
@@ -359,6 +365,8 @@
           "form-label": "--app-form-label-font-weight",
           "form-step": "--app-form-step-font-weight",
           "form-step-number": "--app-form-step-number-font-weight",
+          "metric-change": "--app-metric-change-font-weight",
+          "metric-unit": "--app-metric-unit-font-weight",
           "navigation-badge": "--app-navigation-badge-font-weight",
           "navigation-identity": "--app-navigation-identity-font-weight",
           "navigation-item": "--app-navigation-item-font-weight",
@@ -398,6 +406,7 @@
           "collection-status": "--app-collection-status-line-height",
           "collection-title": "--app-collection-title-line-height",
           "control": "--app-control-line-height",
+          "data-table-detail": "--app-data-table-detail-line-height",
           "document-fact-value": "--app-document-fact-value-line-height",
           "document-intro": "--app-document-intro-line-height",
           "document-section-content": "--app-document-section-content-line-height",
@@ -411,6 +420,8 @@
           "feedback-title": "--app-feedback-title-line-height",
           "form-label": "--app-form-label-line-height",
           "form-supporting": "--app-form-supporting-line-height",
+          "metric-label": "--app-metric-label-line-height",
+          "metric-value": "--app-metric-value-line-height",
           "page-description": "--app-page-description-line-height",
           "page-status": "--app-page-status-line-height",
           "page-title": "--app-page-title-line-height",
@@ -426,7 +437,9 @@
           "settings-eyebrow": "--app-settings-eyebrow-line-height",
           "settings-row-description": "--app-settings-row-description-line-height",
           "settings-row-title": "--app-settings-row-title-line-height",
-          "settings-text": "--app-settings-text-line-height"
+          "settings-text": "--app-settings-text-line-height",
+          "visualization-donut": "--app-visualization-donut-line-height",
+          "visualization-hour-value": "--app-visualization-hour-value-line-height"
         }
       },
       "letterSpacing": {
@@ -435,6 +448,8 @@
           "document-fact-label": "--app-document-fact-label-letter-spacing",
           "editor-dialog-eyebrow": "--app-editor-dialog-eyebrow-letter-spacing",
           "editor-dialog-title": "--app-editor-dialog-title-letter-spacing",
+          "metric-unit": "--app-metric-unit-letter-spacing",
+          "metric-value": "--app-metric-value-letter-spacing",
           "navigation-section": "--app-navigation-section-letter-spacing",
           "page-eyebrow": "--app-page-eyebrow-letter-spacing",
           "page-title": "--app-page-title-letter-spacing",
@@ -487,6 +502,7 @@
           "app-shell-loading": "--app-shell-loading-radius",
           "page-loading-surface": "--app-page-loading-surface-radius",
           "record": "--app-record-radius",
+          "metric-icon": "--app-metric-icon-radius",
           "rich-text-editor": "--app-rich-text-editor-radius",
           "section": "--app-section-radius",
           "settings-radio-option": "--app-settings-radio-option-radius",
@@ -496,7 +512,11 @@
           "surface": "--app-surface-radius",
           "tabs-list": "--app-tabs-list-radius",
           "tabs-trigger": "--app-tabs-trigger-radius",
-          "textarea": "--app-textarea-radius"
+          "textarea": "--app-textarea-radius",
+          "visualization-bar": "--app-visualization-bar-radius",
+          "visualization-plot": "--app-visualization-plot-radius",
+          "visualization-summary": "--app-visualization-summary-radius",
+          "visualization-swatch": "--app-visualization-swatch-radius"
         }
       },
       "shadow": {
@@ -564,6 +584,7 @@
           "collection-summary": "--app-collection-header-summary-gap",
           "control-block": "--app-control-padding-block",
           "control-gap": "--app-control-gap",
+          "control-icon": "--app-control-icon-size",
           "control-inline": "--app-control-padding-inline",
           "date-control-inline": "--app-date-control-padding-inline",
           "dialog-actions": "--app-dialog-actions-gap",
@@ -593,7 +614,16 @@
           "form-step-navigation-wide-inline": "--app-form-step-navigation-wide-padding-inline",
           "lg": "--app-space-lg",
           "md": "--app-space-md",
+          "data-table-cell": "--app-data-table-cell-padding-inline",
+          "data-table-detail": "--app-data-table-detail-margin-top",
+          "metric-change-block": "--app-metric-change-padding-block",
+          "metric-change-inline": "--app-metric-change-padding-inline",
+          "metric-content": "--app-metric-content-padding",
+          "metric-content-gap": "--app-metric-content-gap",
+          "metric-grid": "--app-metric-grid-gap",
           "metric-grid-wide": "--app-metric-grid-wide-gap",
+          "metric-icon": "--app-metric-icon-size",
+          "metric-value": "--app-metric-value-gap",
           "navigation-action-icon": "--app-navigation-action-icon-size",
           "navigation-actions": "--app-navigation-actions-gap",
           "navigation-badge": "--app-navigation-badge-padding-inline",
@@ -661,6 +691,22 @@
           "tabs-indicator-inline": "--app-tabs-indicator-inline",
           "tabs-trigger": "--app-tabs-trigger-padding-block",
           "weather-icon": "--app-weather-icon-size",
+          "visualization-description": "--app-visualization-description-gap",
+          "visualization-hour": "--app-visualization-hour-gap",
+          "visualization-hour-bars": "--app-visualization-hour-bars-gap",
+          "visualization-legend-copy": "--app-visualization-legend-copy-gap",
+          "visualization-legend-item": "--app-visualization-legend-item-gap",
+          "visualization-legend-row": "--app-visualization-legend-row-gap",
+          "visualization-list": "--app-visualization-list-gap",
+          "visualization-row": "--app-visualization-row-gap",
+          "visualization-scroll": "--app-visualization-scroll-padding",
+          "visualization-section": "--app-visualization-section-offset",
+          "visualization-section-wide": "--app-visualization-section-wide-offset",
+          "visualization-status": "--app-visualization-status-row-gap",
+          "visualization-summary-block": "--app-visualization-summary-padding-block",
+          "visualization-summary-inline": "--app-visualization-summary-padding-inline",
+          "visualization-swatch": "--app-visualization-swatch-size",
+          "visualization-swatch-top": "--app-visualization-swatch-top",
           "xl": "--app-space-xl"
         }
       },
@@ -678,8 +724,10 @@
           "date-navigation-compact": "--app-date-navigation-compact-columns",
           "document-facts": "--app-document-facts-columns",
           "feedback-wide": "--app-feedback-wide-columns",
+          "metric-content": "--app-metric-content-columns",
           "app-shell": "--app-shell-columns",
-          "settings-row": "--app-settings-row-columns"
+          "settings-row": "--app-settings-row-columns",
+          "visualization-donut": "--app-visualization-donut-columns"
         }
       },
       "opacity": {
@@ -692,7 +740,9 @@
           "date-disabled": "--app-date-disabled-opacity",
           "rich-text-editor-disabled": "--app-rich-text-editor-disabled-opacity",
           "select-disabled": "--app-select-disabled-opacity",
-          "settings-disabled": "--app-settings-disabled-opacity"
+          "settings-disabled": "--app-settings-disabled-opacity",
+          "visualization-comparison": "--app-visualization-comparison-opacity",
+          "visualization-fetching": "--app-visualization-fetching-opacity"
         }
       },
       "width": {
@@ -708,6 +758,13 @@
           "date-popover": "--app-date-popover-width",
           "dialog": "--app-dialog-width",
           "dialog-surface": "--app-dialog-surface-width",
+          "data-table-four-first": "--app-data-table-four-first-width",
+          "data-table-four-second": "--app-data-table-four-second-width",
+          "data-table-four-third": "--app-data-table-four-third-width",
+          "data-table-four-fourth": "--app-data-table-four-fourth-width",
+          "data-table-three-first": "--app-data-table-three-first-width",
+          "data-table-three-second": "--app-data-table-three-second-width",
+          "data-table-three-third": "--app-data-table-three-third-width",
           "editor-dialog": "--app-editor-dialog-width",
           "navigation-overlay-more": "--app-navigation-overlay-more-width",
           "app-shell-loading-action": "--app-shell-loading-action-width",
@@ -717,7 +774,10 @@
           "page-loading-title": "--app-page-loading-title-width",
           "radio": "--app-radio-size",
           "switch": "--app-switch-width",
-          "switch-thumb": "--app-switch-thumb-size"
+          "switch-thumb": "--app-switch-thumb-size",
+          "visualization-donut": "--app-visualization-donut-size",
+          "visualization-hour-bar": "--app-visualization-hour-bar-width",
+          "visualization-loading-title": "--app-visualization-loading-title-width"
         }
       },
       "minWidth": {
@@ -765,6 +825,7 @@
           "collection-toggle": "--app-collection-toggle-min-height",
           "control": "--app-control-height",
           "control-icon": "--app-control-icon-size",
+          "data-table-heading": "--app-data-table-heading-height",
           "choice-indicator": "--app-choice-indicator-height",
           "editor-dialog": "--app-editor-dialog-height",
           "form-step-indicator": "--app-form-step-indicator-height",
@@ -781,7 +842,13 @@
           "search-control": "--app-search-control-height",
           "switch": "--app-switch-height",
           "switch-thumb": "--app-switch-thumb-size",
-          "tabs-indicator": "--app-tabs-indicator-height"
+          "tabs-indicator": "--app-tabs-indicator-height",
+          "visualization-bar": "--app-visualization-bar-height",
+          "visualization-comparison-bar": "--app-visualization-comparison-bar-height",
+          "visualization-hour-plot": "--app-visualization-hour-plot-height",
+          "visualization-hour-plot-wide": "--app-visualization-hour-plot-wide-height",
+          "visualization-loading-metric": "--app-visualization-loading-metric-height",
+          "visualization-loading-title": "--app-visualization-loading-title-height"
         }
       },
       "minHeight": {
@@ -833,7 +900,8 @@
       "gridTemplateRows": {
         "themeVariablePrefix": "--grid-template-rows-",
         "roles": {
-          "collection-row-schedule": "--app-collection-row-schedule-rows"
+          "collection-row-schedule": "--app-collection-row-schedule-rows",
+          "visualization-hour": "--app-visualization-hour-rows"
         }
       },
       "outlineOffset": {
@@ -927,6 +995,7 @@
         "hover",
         "lg",
         "md",
+        "metric-icon-svg",
         "motion-reduce",
         "navigation-icon-svg",
         "navigation-logo-media",
@@ -964,6 +1033,47 @@
         "settings-stack-embedded-section",
         "settings-stack-flow",
         "sm",
+        "visualization-bar",
+        "visualization-bar-previous",
+        "visualization-bars",
+        "visualization-donut-center",
+        "visualization-donut-chart",
+        "visualization-donut-description",
+        "visualization-donut-description-meta",
+        "visualization-donut-description-value",
+        "visualization-donut-legend",
+        "visualization-donut-legend-item",
+        "visualization-donut-meta",
+        "visualization-donut-segment",
+        "visualization-donut-segment-previous",
+        "visualization-donut-svg",
+        "visualization-donut-swatch",
+        "visualization-donut-swatch-previous",
+        "visualization-donut-term",
+        "visualization-donut-track",
+        "visualization-donut-value",
+        "visualization-grid-line",
+        "visualization-grid-text",
+        "visualization-hour",
+        "visualization-hour-bar",
+        "visualization-hour-bar-previous",
+        "visualization-hour-bars",
+        "visualization-hour-label",
+        "visualization-hour-plot",
+        "visualization-hour-value",
+        "visualization-label",
+        "visualization-line",
+        "visualization-line-previous",
+        "visualization-list",
+        "visualization-point",
+        "visualization-point-previous",
+        "visualization-row",
+        "visualization-row-label",
+        "visualization-row-label-meta",
+        "visualization-row-label-title",
+        "visualization-row-label-value",
+        "visualization-summary",
+        "visualization-svg",
         "xl"
       ],
       "patterns": [
@@ -979,6 +1089,7 @@
         "align-top",
         "animate-none",
         "appearance-none",
+        "aspect-square",
         "auto-cols-fr",
         "basis-auto",
         "block",
@@ -1009,6 +1120,7 @@
         "duration-150",
         "duration-160",
         "field-sizing-content",
+        "fill-none",
         "fixed",
         "flex",
         "flex-1",
@@ -1028,6 +1140,7 @@
         "grow-0",
         "h-full",
         "h-dvh",
+        "h-auto",
         "hidden",
         "inline",
         "inline-block",
@@ -1051,9 +1164,11 @@
         "justify-evenly",
         "justify-start",
         "justify-items-start",
+        "justify-self-center",
         "justify-self-end",
         "justify-self-start",
         "justify-self-stretch",
+        "left-0",
         "left-1/2",
         "list-decimal",
         "list-disc",
@@ -1067,6 +1182,7 @@
         "mb-0",
         "min-h-0",
         "min-h-full",
+        "min-h-px",
         "min-w-full",
         "min-w-select-content",
         "min-w-0",
@@ -1098,6 +1214,7 @@
         "pointer-events-none",
         "pointer-events-auto",
         "place-items-center",
+        "place-content-center",
         "p-0",
         "pb-0",
         "pt-0",
@@ -1107,6 +1224,7 @@
         "ring-3",
         "rounded-none",
         "rotate-180",
+        "rotate-90",
         "scrollbar-thin",
         "select-none",
         "self-center",
@@ -1117,11 +1235,17 @@
         "sr-only",
         "static",
         "sticky",
+        "stroke-1",
+        "stroke-3",
+        "stroke-15",
+        "stroke-visualization-comparison",
+        "stroke-visualization-round",
         "table-fixed",
         "tabular-nums",
         "text-center",
         "text-ellipsis",
         "text-left",
+        "text-right",
         "top-0",
         "top-1/2",
         "top-auto",
@@ -1129,6 +1253,7 @@
         "transition-colors",
         "transition-opacity",
         "transition-transform",
+        "transition-visualization-bar",
         "translate-x-1/2",
         "translate-x-0",
         "translate-y-1/2",
@@ -2495,6 +2620,178 @@
         "utilityPrefixes": ["max-h"],
         "themeNamespace": "maxHeight",
         "roles": ["navigation-overlay", "navigation-overlay-more"]
+      },
+      {
+        "utilityPrefixes": ["bg"],
+        "themeNamespace": "backgroundImage",
+        "roles": ["visualization-grid"]
+      },
+      {
+        "utilityPrefixes": ["bg"],
+        "themeNamespace": "color",
+        "roles": ["chart-1", "chart-2", "data-table-row-even"]
+      },
+      {
+        "utilityPrefixes": ["fill"],
+        "themeNamespace": "color",
+        "roles": ["ink-faint", "surface"]
+      },
+      {
+        "utilityPrefixes": ["stroke"],
+        "themeNamespace": "color",
+        "roles": ["line", "surface-subtle"]
+      },
+      {
+        "utilityPrefixes": ["text"],
+        "themeNamespace": "fontSize",
+        "roles": ["metric-unit"]
+      },
+      {
+        "utilityPrefixes": ["font"],
+        "themeNamespace": "fontWeight",
+        "roles": [
+          "data-table-detail",
+          "data-table-heading",
+          "data-table-row-heading",
+          "metric-change",
+          "metric-unit"
+        ]
+      },
+      {
+        "utilityPrefixes": ["leading"],
+        "themeNamespace": "lineHeight",
+        "roles": [
+          "data-table-detail",
+          "metric-label",
+          "metric-value",
+          "visualization-donut",
+          "visualization-hour-value"
+        ]
+      },
+      {
+        "utilityPrefixes": ["tracking"],
+        "themeNamespace": "letterSpacing",
+        "roles": ["metric-unit", "metric-value"]
+      },
+      {
+        "utilityPrefixes": ["rounded"],
+        "themeNamespace": "radius",
+        "roles": [
+          "metric-icon",
+          "visualization-plot",
+          "visualization-summary",
+          "visualization-swatch"
+        ]
+      },
+      {
+        "utilityPrefixes": ["rounded-t"],
+        "themeNamespace": "radius",
+        "roles": ["visualization-bar"]
+      },
+      {
+        "utilityPrefixes": ["gap"],
+        "themeNamespace": "spacing",
+        "roles": [
+          "metric-content-gap",
+          "metric-grid",
+          "metric-value",
+          "visualization-description",
+          "visualization-hour",
+          "visualization-hour-bars",
+          "visualization-legend-copy",
+          "visualization-legend-item",
+          "visualization-list",
+          "visualization-row"
+        ]
+      },
+      {
+        "utilityPrefixes": ["gap-y"],
+        "themeNamespace": "spacing",
+        "roles": ["visualization-legend-row", "visualization-status"]
+      },
+      {
+        "utilityPrefixes": ["gap-x"],
+        "themeNamespace": "spacing",
+        "roles": ["lg"]
+      },
+      {
+        "utilityPrefixes": ["p"],
+        "themeNamespace": "spacing",
+        "roles": ["metric-content"]
+      },
+      {
+        "utilityPrefixes": ["px"],
+        "themeNamespace": "spacing",
+        "roles": ["data-table-cell", "metric-change-inline", "visualization-summary-inline"]
+      },
+      {
+        "utilityPrefixes": ["py"],
+        "themeNamespace": "spacing",
+        "roles": ["metric-change-block", "visualization-summary-block"]
+      },
+      {
+        "utilityPrefixes": ["mt"],
+        "themeNamespace": "spacing",
+        "roles": ["data-table-detail", "visualization-section", "visualization-section-wide"]
+      },
+      {
+        "utilityPrefixes": ["pb"],
+        "themeNamespace": "spacing",
+        "roles": ["visualization-scroll"]
+      },
+      {
+        "utilityPrefixes": ["size"],
+        "themeNamespace": "spacing",
+        "roles": ["control-icon", "metric-icon", "visualization-swatch"]
+      },
+      {
+        "utilityPrefixes": ["top"],
+        "themeNamespace": "spacing",
+        "roles": ["visualization-swatch-top"]
+      },
+      {
+        "utilityPrefixes": ["grid-cols"],
+        "themeNamespace": "gridTemplateColumns",
+        "roles": ["metric-content", "visualization-donut"]
+      },
+      {
+        "utilityPrefixes": ["grid-rows"],
+        "themeNamespace": "gridTemplateRows",
+        "roles": ["visualization-hour"]
+      },
+      {
+        "utilityPrefixes": ["opacity"],
+        "themeNamespace": "opacity",
+        "roles": ["visualization-comparison", "visualization-fetching"]
+      },
+      {
+        "utilityPrefixes": ["w"],
+        "themeNamespace": "width",
+        "roles": [
+          "data-table-four-first",
+          "data-table-four-second",
+          "data-table-four-third",
+          "data-table-four-fourth",
+          "data-table-three-first",
+          "data-table-three-second",
+          "data-table-three-third",
+          "visualization-donut",
+          "visualization-hour-bar",
+          "visualization-loading-title"
+        ]
+      },
+      {
+        "utilityPrefixes": ["h"],
+        "themeNamespace": "height",
+        "roles": [
+          "data-table-heading",
+          "visualization-bar",
+          "visualization-comparison-bar",
+          "visualization-hour-plot",
+          "visualization-hour-plot-wide",
+          "visualization-loading-metric",
+          "visualization-loading-title"
+        ]
       }
     ],
     "forbiddenRawPalettePattern": "^(?:accent|bg|border|caret|decoration|divide|fill|from|outline|ring|stroke|text|to|via)-(?:amber|blue|cyan|emerald|fuchsia|gray|green|indigo|lime|neutral|orange|pink|purple|red|rose|sky|slate|stone|teal|violet|yellow|zinc)(?:-|$)"

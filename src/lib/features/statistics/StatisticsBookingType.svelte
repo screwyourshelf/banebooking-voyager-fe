@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { BookingNøkkeltall } from "$lib/contracts";
-  import { Section } from "$lib/ui";
+  import { DataVisualization, Section } from "$lib/ui";
   import { formatCountWithUnit } from "./model";
 
   let { metrics }: { metrics: BookingNøkkeltall } = $props();
@@ -22,19 +22,22 @@
   variant="surface"
   title="Bookingtype"
   description="Andel personlige bookinger og arrangementsbookinger."
-  data-context="statistics"
-  data-view="booking-types"
 >
-  <div class="statistics-booking-types__content">
-    <div class="statistics-booking-types__chart">
-      <svg viewBox="0 0 128 128" role="img" aria-label="Fordeling mellom bookingtyper">
+  <DataVisualization kind="donut">
+    <div data-visualization="donut-chart">
+      <svg
+        data-visualization="donut-svg"
+        viewBox="0 0 128 128"
+        role="img"
+        aria-label="Fordeling mellom bookingtyper"
+      >
         <title>
           {formatCountWithUnit(personal)} personlige bookinger ({formatShare(personal)}) og
           {formatCountWithUnit(event)} arrangementsbookinger ({formatShare(event)})
         </title>
-        <circle class="statistics-donut__track" cx="64" cy="64" r={radius}></circle>
+        <circle data-visualization="donut-track" cx="64" cy="64" r={radius}></circle>
         <circle
-          class="statistics-donut__segment"
+          data-visualization="donut-segment"
           data-series="current"
           cx="64"
           cy="64"
@@ -42,7 +45,7 @@
           stroke-dasharray={`${personalLength} ${circumference}`}
         ></circle>
         <circle
-          class="statistics-donut__segment"
+          data-visualization="donut-segment"
           data-series="previous"
           cx="64"
           cy="64"
@@ -51,27 +54,31 @@
           stroke-dashoffset={-personalLength}
         ></circle>
       </svg>
-      <span aria-hidden="true">
-        <strong data-stat-role="chart-value">{formatCountWithUnit(total)}</strong>
-        <small data-stat-role="chart-meta">bookinger</small>
+      <span data-visualization="donut-center" aria-hidden="true">
+        <strong data-visualization="donut-value">{formatCountWithUnit(total)}</strong>
+        <small data-visualization="donut-meta">bookinger</small>
       </span>
     </div>
 
-    <dl class="statistics-booking-types__legend">
-      <div data-series="current">
-        <dt data-stat-role="chart-label">Personlige</dt>
-        <dd>
-          <strong data-stat-role="chart-value">{formatCountWithUnit(personal)}</strong>
-          <span data-stat-role="chart-meta">{formatShare(personal)}</span>
+    <dl data-visualization="donut-legend">
+      <div data-visualization="donut-legend-item" data-series="current">
+        <span data-visualization="donut-swatch" data-series="current" aria-hidden="true"></span>
+        <dt data-visualization="donut-term">Personlige</dt>
+        <dd data-visualization="donut-description">
+          <strong data-visualization="donut-description-value"
+            >{formatCountWithUnit(personal)}</strong
+          >
+          <span data-visualization="donut-description-meta">{formatShare(personal)}</span>
         </dd>
       </div>
-      <div data-series="previous">
-        <dt data-stat-role="chart-label">Arrangement</dt>
-        <dd>
-          <strong data-stat-role="chart-value">{formatCountWithUnit(event)}</strong>
-          <span data-stat-role="chart-meta">{formatShare(event)}</span>
+      <div data-visualization="donut-legend-item" data-series="previous">
+        <span data-visualization="donut-swatch" data-series="previous" aria-hidden="true"></span>
+        <dt data-visualization="donut-term">Arrangement</dt>
+        <dd data-visualization="donut-description">
+          <strong data-visualization="donut-description-value">{formatCountWithUnit(event)}</strong>
+          <span data-visualization="donut-description-meta">{formatShare(event)}</span>
         </dd>
       </div>
     </dl>
-  </div>
+  </DataVisualization>
 </Section>

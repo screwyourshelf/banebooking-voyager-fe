@@ -5,7 +5,17 @@
     UserMultiple02Icon,
   } from "@hugeicons/core-free-icons";
   import type { BookingMedlemsstatistikk } from "$lib/contracts";
-  import { CollectionEmpty, Icon, Metric, MetricGrid, Section } from "$lib/ui";
+  import {
+    CollectionEmpty,
+    DataTable,
+    Icon,
+    Metric,
+    MetricGrid,
+    Section,
+    VisualizationLayout,
+    type DataTableColumn,
+    type DataTableRow,
+  } from "$lib/ui";
   import type { Medlemsbookingtype } from "./model";
   import { formatCount, formatCountWithUnit, formatDecimal, formatHours } from "./model";
 
@@ -33,13 +43,43 @@
       },
     }[bookingType]
   );
+  const columns: DataTableColumn[] = [
+    { label: "#", align: "center" },
+    { label: "Bruker" },
+    { label: "Timer", align: "end" },
+    { label: "Bookinger", align: "end" },
+  ];
+  const rows = $derived<DataTableRow[]>(
+    members.toppBrukere.map((user, index) => {
+      const displayName = user.navn.trim() || user.epost;
+      const showEmail =
+        user.epost.trim().toLocaleLowerCase("nb-NO") !== displayName.toLocaleLowerCase("nb-NO");
+      return {
+        id: user.brukerId,
+        cells: [
+          { primary: String(index + 1), align: "center", tone: "rank" },
+          { primary: displayName, secondary: showEmail ? user.epost : undefined, header: true },
+          { primary: formatHours(user.bookedeTimer), align: "end" },
+          {
+            primary: formatCountWithUnit(user.antallBookinger),
+            secondary:
+              bookingType === "alle"
+                ? `P: ${formatCountWithUnit(user.personligeBookinger)} · A: ${formatCountWithUnit(user.arrangementbookinger)}`
+                : undefined,
+            align: "end",
+            emphasized: true,
+          },
+        ],
+      };
+    })
+  );
 </script>
 
 {#snippet usersIcon()}<Icon icon={UserMultiple02Icon} />{/snippet}
 {#snippet bookingsIcon()}<Icon icon={CalendarCheckIn01Icon} />{/snippet}
 {#snippet hoursIcon()}<Icon icon={CalendarSetting01Icon} />{/snippet}
 
-<div class="statistics-dashboard__tab-content">
+<VisualizationLayout variant="tab">
   <MetricGrid label="Medlemsnøkkeltall" variant="members">
     <Metric
       label="Aktive brukere"
@@ -65,51 +105,14 @@
   <Section
     variant="surface"
     padding="small"
+    layout="data-table"
     title="Topp 10 brukere"
     description={descriptions.ranking}
-    data-context="statistics"
-    data-view="top-users"
   >
     {#if members.toppBrukere.length === 0}
       <CollectionEmpty title="Ingen aktive brukere" description={descriptions.empty} />
     {:else}
-      <div class="statistics-comparison-table" data-layout="users">
-        <table>
-          <thead>
-            <tr>
-              <th scope="col" data-align="center">#</th>
-              <th scope="col">Bruker</th>
-              <th scope="col" data-align="end">Timer</th>
-              <th scope="col" data-align="end">Bookinger</th>
-            </tr>
-          </thead>
-          <tbody>
-            {#each members.toppBrukere as user, index (user.brukerId)}
-              {@const displayName = user.navn.trim() || user.epost}
-              {@const showEmail =
-                user.epost.trim().toLocaleLowerCase("nb-NO") !==
-                displayName.toLocaleLowerCase("nb-NO")}
-              <tr>
-                <td data-align="center">{index + 1}</td>
-                <th scope="row">
-                  <strong>{displayName}</strong>
-                  {#if showEmail}<small>{user.epost}</small>{/if}
-                </th>
-                <td data-align="end">{formatHours(user.bookedeTimer)}</td>
-                <td data-align="end">
-                  <strong>{formatCountWithUnit(user.antallBookinger)}</strong>
-                  {#if bookingType === "alle"}
-                    <small>
-                      P: {formatCountWithUnit(user.personligeBookinger)} · A:
-                      {formatCountWithUnit(user.arrangementbookinger)}
-                    </small>
-                  {/if}
-                </td>
-              </tr>
-            {/each}
-          </tbody>
-        </table>
-      </div>
+      <DataTable {columns} {rows} presentation="summary" />
     {/if}
   </Section>
-</div>
+</VisualizationLayout>

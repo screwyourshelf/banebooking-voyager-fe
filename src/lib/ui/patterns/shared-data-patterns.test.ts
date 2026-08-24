@@ -66,7 +66,7 @@ describe("public shared data patterns", () => {
     expect(container.querySelector('[data-ui="weather"]')).not.toBeInTheDocument();
   });
 
-  it("eier responsive MetricGrid-skift uten å overta statistikkens Metric-styling", () => {
+  it("eier Metric- og MetricGrid-presentasjonen med statiske semantiske utilities", () => {
     const { container } = render(SharedDataPatternsFixture);
     const defaultGrid = screen.getByRole("region", { name: "Nøkkeltall" });
     const membersGrid = screen.getByRole("region", { name: "Medlemsnøkkeltall" });
@@ -78,7 +78,9 @@ describe("public shared data patterns", () => {
 
     const metric = within(defaultGrid).getByRole("article");
     expect(metric).toHaveAttribute("data-ui", "metric");
-    expect(metric.querySelector('[data-stat-role="key-value"]')).toHaveTextContent(/44,5\s*t/);
+    expect(metric).toHaveClass("border-line", "rounded-record", "bg-surface", "shadow-surface-sm");
+    expect(metric.querySelector("strong")).toHaveTextContent(/44,5\s*t/);
+    expect(metric.querySelector("[data-stat-role]")).not.toBeInTheDocument();
     expect(metric.querySelector('[data-part="change"]')).toHaveAttribute("data-direction", "down");
     expect(container.querySelectorAll('[data-testid="metric-icon"]')).toHaveLength(2);
   });

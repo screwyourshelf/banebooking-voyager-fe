@@ -2,7 +2,7 @@
   import { createQuery } from "@tanstack/svelte-query";
   import { getApiClient } from "$lib/platform/api";
   import { getTenantContext } from "$lib/platform/tenant";
-  import { Page, Tabs } from "$lib/ui";
+  import { Page, Tabs, VisualizationLayout } from "$lib/ui";
   import {
     applyActivityFilter,
     applyPeriodSelection,
@@ -97,7 +97,7 @@
   title="Statistikk"
   description="Se hvordan klubbens baner brukes og sammenlign bookingaktivitet over tid."
 >
-  <div class="statistics-dashboard">
+  <VisualizationLayout variant="dashboard">
     <Tabs
       label="Statistikkområder"
       bind:value={activeTab}
@@ -107,5 +107,5 @@
         { value: "medlemmer", label: "Medlemmer", content: membersContent },
       ]}
     />
-  </div>
+  </VisualizationLayout>
 </Page>

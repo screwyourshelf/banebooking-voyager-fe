@@ -1,6 +1,12 @@
 <script lang="ts">
   import type { BookingstatistikkFiltre, BookingstatistikkRespons } from "$lib/contracts";
-  import { CollectionEmpty, CollectionError, Section } from "$lib/ui";
+  import {
+    CollectionEmpty,
+    CollectionError,
+    Section,
+    VisualizationLayout,
+    VisualizationLoading,
+  } from "$lib/ui";
   import type { Medlemsbookingtype, Statistikkfane } from "./model";
   import {
     formatGeneratedAt,
@@ -13,7 +19,6 @@
   import StatisticsCourtTable from "./StatisticsCourtTable.svelte";
   import StatisticsDistribution from "./StatisticsDistribution.svelte";
   import StatisticsHourChart from "./StatisticsHourChart.svelte";
-  import StatisticsLoading from "./StatisticsLoading.svelte";
   import StatisticsMembers from "./StatisticsMembers.svelte";
   import StatisticsMetrics from "./StatisticsMetrics.svelte";
   import StatisticsMonthChart from "./StatisticsMonthChart.svelte";
@@ -48,7 +53,7 @@
 </script>
 
 {#if initialLoading && !statistics}
-  <StatisticsLoading />
+  <VisualizationLoading />
 {:else if error && !statistics}
   <Section variant="surface">
     <CollectionError
@@ -59,13 +64,13 @@
     />
   </Section>
 {:else if statistics}
-  <div class="statistics-dashboard__results" data-fetching={fetching} aria-busy={fetching}>
-    <div class="statistics-dashboard__status">
+  <VisualizationLayout variant="results" {fetching}>
+    <VisualizationLayout variant="status">
       <span>{formatIsoDate(statistics.periode.fra)}–{formatIsoDate(statistics.periode.til)}</span>
       <span>
         {fetching ? "Oppdaterer…" : `Beregnet ${formatGeneratedAt(statistics.generertTidspunkt)}`}
       </span>
-    </div>
+    </VisualizationLayout>
 
     {#if statistics.nøkkeltall.antallBookinger === 0}
       <Section variant="surface">
@@ -77,14 +82,14 @@
     {:else if tab === "medlemmer"}
       <StatisticsMembers members={selectMemberStatistics(statistics, bookingType)} {bookingType} />
     {:else}
-      <div class="statistics-dashboard__tab-content">
+      <VisualizationLayout variant="tab">
         <StatisticsMetrics {statistics} />
         <StatisticsMonthChart
           points={statistics.perMåned}
           showComparison={Boolean(statistics.sammenligning)}
         />
 
-        <div class="statistics-dashboard__distributions">
+        <VisualizationLayout variant="distributions">
           <StatisticsBookingType metrics={statistics.nøkkeltall} />
           <StatisticsDistribution
             title="Grener"
@@ -98,7 +103,7 @@
               comparisonHours: activity.sammenligningBookedeTimer,
             }))}
           />
-        </div>
+        </VisualizationLayout>
 
         <StatisticsDistribution
           title="Ukemønster"
@@ -122,7 +127,7 @@
         {#if filters.grenId}
           <StatisticsCourtTable courts={statistics.perBane} />
         {/if}
-      </div>
+      </VisualizationLayout>
     {/if}
-  </div>
+  </VisualizationLayout>
 {/if}

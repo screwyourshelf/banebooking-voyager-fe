@@ -75,16 +75,24 @@ describe("public page and section patterns", () => {
     expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent("Tilgjengelige baner");
   });
 
-  it("leaves the registered statistics gap with its later visualization owner", () => {
+  it("owns the typed data-table inset without a feature selector bridge", () => {
     render(Section, {
-      "data-context": "statistics",
-      "data-view": "month-chart",
-      title: "Utvikling gjennom perioden",
+      layout: "data-table",
+      title: "Baner",
       variant: "surface",
     });
 
-    expect(screen.getByRole("region", { name: "Utvikling gjennom perioden" })).not.toHaveClass(
-      "gap-section"
+    expect(screen.getByRole("region", { name: "Baner" })).toHaveClass(
+      "gap-section",
+      "overflow-hidden",
+      "pt-md",
+      "px-0",
+      "pb-0"
+    );
+    expect(screen.getByRole("heading", { name: "Baner" }).parentElement?.parentElement).toHaveClass(
+      "px-lg",
+      "pt-xs",
+      "pb-lg"
     );
   });
 });

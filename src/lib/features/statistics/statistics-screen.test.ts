@@ -60,7 +60,9 @@ function createRequest(statistics = createStatisticsData()) {
 
 describe("StatisticsScreen", () => {
   it("viser full banebruk med tilgjengelige filtre og visualiseringer", async () => {
-    render(StatisticsFixture, { request: createRequest() as ApiClient["request"] });
+    const { container } = render(StatisticsFixture, {
+      request: createRequest() as ApiClient["request"],
+    });
 
     expect(screen.getByRole("heading", { name: "Statistikk" })).toBeVisible();
     expect(await screen.findByText("44,5 t")).toBeVisible();
@@ -71,6 +73,10 @@ describe("StatisticsScreen", () => {
     expect(
       screen.getByRole("img", { name: "Stolpediagram over bookede timer per klokkeslett" })
     ).toBeVisible();
+    expect(container.querySelectorAll('[data-ui="data-visualization"]')).toHaveLength(5);
+    expect(container.querySelectorAll('[data-ui="data-table"]').length).toBeGreaterThan(0);
+    expect(container.querySelector("[data-stat-role]")).not.toBeInTheDocument();
+    expect(container.querySelector('[class*="statistics-"]')).not.toBeInTheDocument();
     expect(screen.getByRole("button", { name: "Tennis" })).toBeEnabled();
     expect((await axe.run(document.body, axeOptions)).violations).toEqual([]);
   });

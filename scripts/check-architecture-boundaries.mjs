@@ -13,6 +13,11 @@ const targetRoots = [
   path.join(sourceRoot, "lib", "platform"),
   path.join(sourceRoot, "lib", "ui"),
 ];
+const visualizationGeometryOwners = new Set([
+  "src/lib/features/statistics/StatisticsDistribution.svelte",
+  "src/lib/features/statistics/StatisticsHourChart.svelte",
+  "src/lib/features/statistics/StatisticsMonthChart.svelte",
+]);
 const violations = [];
 
 await checkBootstrapTemplate();
@@ -145,7 +150,11 @@ for (const targetRoot of targetRoots) {
         report(relativePath, source, legacyMatch[0], "ny Svelte-kode må bruke runes og snippets");
       }
 
-      if (normalizedPath.startsWith("src/lib/features/") && /<style(?:\s|>)/.test(source)) {
+      if (
+        normalizedPath.startsWith("src/lib/features/") &&
+        !visualizationGeometryOwners.has(normalizedPath) &&
+        /<style(?:\s|>)/.test(source)
+      ) {
         report(relativePath, source, "<style", "features kan ikke definere lokal produktstyling");
       }
 

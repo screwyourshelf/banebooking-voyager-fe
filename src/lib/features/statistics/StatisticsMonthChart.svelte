@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { BookingPerMaaned } from "$lib/contracts";
-  import { Section } from "$lib/ui";
+  import { DataVisualization, Section, VisualizationLegend } from "$lib/ui";
   import { formatHours, formatMonth } from "./model";
 
   let { points, showComparison }: { points: BookingPerMaaned[]; showComparison: boolean } =
@@ -50,10 +50,12 @@
 </script>
 
 {#snippet legend()}
-  <span class="statistics-chart-legend" aria-label="Tegnforklaring">
-    <span data-series="current">Valgt periode</span>
-    {#if showComparison}<span data-series="previous">Året før</span>{/if}
-  </span>
+  <VisualizationLegend
+    items={[
+      { series: "current", label: "Valgt periode" },
+      ...(showComparison ? [{ series: "previous" as const, label: "Året før" }] : []),
+    ]}
+  />
 {/snippet}
 
 <Section
@@ -61,15 +63,11 @@
   title="Utvikling gjennom perioden"
   description="Bookede timer per måned i den valgte perioden."
   actions={legend}
-  data-context="statistics"
-  data-view="month-chart"
 >
-  <div class="statistics-month-chart__scroll" bind:clientWidth={availableWidth}>
-    <div
-      class="statistics-month-chart__plot"
-      style={`--statistics-line-chart-width: ${chartWidth}px`}
-    >
+  <DataVisualization kind="line" bind:clientWidth={availableWidth}>
+    <div data-visualization="line-plot" style={`--statistics-line-chart-width: ${chartWidth}px`}>
       <svg
+        data-visualization="svg"
         width={chartWidth}
         {height}
         viewBox={`0 0 ${chartWidth} ${height}`}
@@ -80,38 +78,26 @@
 
         {#each grid as share (share)}
           {@const y = top + (1 - share) * (height - top - bottom)}
-          <g class="statistics-line-chart__grid">
+          <g data-visualization="grid">
             <line x1={left} x2={chartWidth - right} y1={y} y2={y}></line>
-            <text x={left - 8} y={y + 4} text-anchor="end" data-stat-role="chart-meta">
+            <text x={left - 8} y={y + 4} text-anchor="end">
               {formatHours(Math.round(maximum * share))}
             </text>
           </g>
         {/each}
 
         {#if showComparison && comparison.length > 1}
-          <polyline
-            class="statistics-line-chart__line"
-            data-series="previous"
-            points={polyline(comparison)}
+          <polyline data-visualization="line" data-series="previous" points={polyline(comparison)}
           ></polyline>
         {/if}
         {#if current.length > 1}
-          <polyline
-            class="statistics-line-chart__line"
-            data-series="current"
-            points={polyline(current)}
+          <polyline data-visualization="line" data-series="current" points={polyline(current)}
           ></polyline>
         {/if}
 
         {#if showComparison}
           {#each comparison as item (`previous-${item.point.år}-${item.point.måned}`)}
-            <circle
-              class="statistics-line-chart__point"
-              data-series="previous"
-              cx={item.x}
-              cy={item.y}
-              r="4"
-            >
+            <circle data-visualization="point" data-series="previous" cx={item.x} cy={item.y} r="4">
               <title>{formatMonth(item.point.måned)} året før: {formatHours(item.value)}</title>
             </circle>
           {/each}
@@ -121,7 +107,7 @@
           {@const month = formatMonth(item.point.måned)}
           <g>
             <circle
-              class="statistics-line-chart__point"
+              data-visualization="point"
               data-series="current"
               cx={item.x}
               cy={item.y}
@@ -129,18 +115,22 @@
             >
               <title>{month} {item.point.år}: {formatHours(item.value)}</title>
             </circle>
-            <text
-              class="statistics-line-chart__label"
-              data-stat-role="chart-meta"
-              x={item.x}
-              y={height - 13}
-              text-anchor="middle"
-            >
+            <text data-visualization="label" x={item.x} y={height - 13} text-anchor="middle">
               {hasMultipleYears ? `${month} ${String(item.point.år).slice(-2)}` : month}
             </text>
           </g>
         {/each}
       </svg>
     </div>
-  </div>
+  </DataVisualization>
 </Section>
+
+<style>
+  [data-visualization="line-plot"] {
+    width: var(--statistics-line-chart-width);
+  }
+
+  [data-visualization="line"][data-series="previous"] {
+    stroke-dasharray: 7 6;
+  }
+</style>

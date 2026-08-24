@@ -29,6 +29,7 @@
   --background-image-editor-dialog-header: var(--app-editor-dialog-header-background);
   --background-image-section-soft: var(--app-section-soft-background);
   --background-image-tabs-list: var(--app-tabs-list-background);
+  --background-image-visualization-grid: var(--app-visualization-grid-background);
   --background-size-page-loading-sheen: var(--app-page-loading-sheen-background-size);
   --background-size-collection-loading-sheen: var(--app-collection-loading-sheen-background-size);
 
@@ -69,6 +70,7 @@
   --color-collection-loading-placeholder: var(--app-collection-loading-placeholder);
   --color-collection-row-muted-surface: var(--app-collection-row-muted-surface);
   --color-collection-toggle-expanded-border: var(--app-collection-toggle-expanded-border);
+  --color-data-table-row-even: var(--app-data-table-row-even-surface);
   --color-control-muted: var(--app-control-muted);
   --color-control-surface: var(--app-control-surface);
   --color-control-surface-strong: var(--app-control-surface-strong);
@@ -198,9 +200,14 @@
   --font-weight-collection-status: var(--app-collection-status-font-weight);
   --font-weight-collection-title: var(--app-collection-title-font-weight);
   --font-weight-collection-toggle: var(--app-collection-toggle-font-weight);
+  --font-weight-data-table-detail: var(--app-data-table-detail-font-weight);
+  --font-weight-data-table-heading: var(--app-data-table-heading-font-weight);
+  --font-weight-data-table-row-heading: var(--app-data-table-row-heading-font-weight);
   --font-weight-form-label: var(--app-form-label-font-weight);
   --font-weight-form-step: var(--app-form-step-font-weight);
   --font-weight-form-step-number: var(--app-form-step-number-font-weight);
+  --font-weight-metric-change: var(--app-metric-change-font-weight);
+  --font-weight-metric-unit: var(--app-metric-unit-font-weight);
   --font-weight-navigation-badge: var(--app-navigation-badge-font-weight);
   --font-weight-navigation-identity: var(--app-navigation-identity-font-weight);
   --font-weight-navigation-item: var(--app-navigation-item-font-weight);
@@ -240,6 +247,7 @@
   --text-heading-sm: var(--app-type-heading-sm);
   --text-label: var(--app-type-label);
   --text-micro: var(--app-type-micro);
+  --text-metric-unit: var(--app-metric-unit-font-size);
   --text-page-title: var(--app-type-page-title);
   --text-stat-chart-label: var(--app-stat-chart-label-size);
   --text-stat-chart-meta: var(--app-stat-chart-meta-size);
@@ -264,8 +272,11 @@
   --leading-collection-state-description: var(--app-collection-state-description-line-height);
   --leading-collection-status: var(--app-collection-status-line-height);
   --leading-collection-title: var(--app-collection-title-line-height);
+  --leading-data-table-detail: var(--app-data-table-detail-line-height);
   --leading-form-label: var(--app-form-label-line-height);
   --leading-form-supporting: var(--app-form-supporting-line-height);
+  --leading-metric-label: var(--app-metric-label-line-height);
+  --leading-metric-value: var(--app-metric-value-line-height);
   --leading-page-description: var(--app-page-description-line-height);
   --leading-page-status: var(--app-page-status-line-height);
   --leading-page-title: var(--app-page-title-line-height);
@@ -282,11 +293,15 @@
   --leading-settings-row-description: var(--app-settings-row-description-line-height);
   --leading-settings-row-title: var(--app-settings-row-title-line-height);
   --leading-settings-text: var(--app-settings-text-line-height);
+  --leading-visualization-donut: var(--app-visualization-donut-line-height);
+  --leading-visualization-hour-value: var(--app-visualization-hour-value-line-height);
   --text-underline-offset-document-link: var(--app-document-link-underline-offset);
   --text-underline-offset-rich-text-link: var(--app-rich-text-link-underline-offset);
   --tracking-document-fact-label: var(--app-document-fact-label-letter-spacing);
   --tracking-editor-dialog-eyebrow: var(--app-editor-dialog-eyebrow-letter-spacing);
   --tracking-editor-dialog-title: var(--app-editor-dialog-title-letter-spacing);
+  --tracking-metric-unit: var(--app-metric-unit-letter-spacing);
+  --tracking-metric-value: var(--app-metric-value-letter-spacing);
   --tracking-navigation-section: var(--app-navigation-section-letter-spacing);
   --tracking-page-eyebrow: var(--app-page-eyebrow-letter-spacing);
   --tracking-page-title: var(--app-page-title-letter-spacing);
@@ -323,6 +338,7 @@
   --radius-app-shell-loading: var(--app-shell-loading-radius);
   --radius-page-loading-surface: var(--app-page-loading-surface-radius);
   --radius-record: var(--app-record-radius);
+  --radius-metric-icon: var(--app-metric-icon-radius);
   --radius-rich-text-editor: var(--app-rich-text-editor-radius);
   --radius-section: var(--app-section-radius);
   --radius-settings-radio-option: var(--app-settings-radio-option-radius);
@@ -333,6 +349,10 @@
   --radius-textarea: var(--app-textarea-radius);
   --radius-tabs-list: var(--app-tabs-list-radius);
   --radius-tabs-trigger: var(--app-tabs-trigger-radius);
+  --radius-visualization-bar: var(--app-visualization-bar-radius);
+  --radius-visualization-plot: var(--app-visualization-plot-radius);
+  --radius-visualization-summary: var(--app-visualization-summary-radius);
+  --radius-visualization-swatch: var(--app-visualization-swatch-radius);
   --shadow-record: var(--app-record-shadow);
   --shadow-floating-surface: var(--app-floating-surface-shadow);
   --shadow-navigation-bottom: var(--app-navigation-bottom-shadow);
@@ -386,6 +406,7 @@
   --spacing-collection-summary: var(--app-collection-header-summary-gap);
   --spacing-control-block: var(--app-control-padding-block);
   --spacing-control-gap: var(--app-control-gap);
+  --spacing-control-icon: var(--app-control-icon-size);
   --spacing-control-inline: var(--app-control-padding-inline);
   --spacing-date-control-inline: var(--app-date-control-padding-inline);
   --spacing-dialog-actions: var(--app-dialog-actions-gap);
@@ -415,7 +436,16 @@
   --spacing-editor-dialog-wide-inline: var(--app-editor-dialog-wide-padding-inline);
   --spacing-lg: var(--app-space-lg);
   --spacing-md: var(--app-space-md);
+  --spacing-data-table-cell: var(--app-data-table-cell-padding-inline);
+  --spacing-data-table-detail: var(--app-data-table-detail-margin-top);
+  --spacing-metric-change-block: var(--app-metric-change-padding-block);
+  --spacing-metric-change-inline: var(--app-metric-change-padding-inline);
+  --spacing-metric-content: var(--app-metric-content-padding);
+  --spacing-metric-content-gap: var(--app-metric-content-gap);
+  --spacing-metric-grid: var(--app-metric-grid-gap);
   --spacing-metric-grid-wide: var(--app-metric-grid-wide-gap);
+  --spacing-metric-icon: var(--app-metric-icon-size);
+  --spacing-metric-value: var(--app-metric-value-gap);
   --spacing-navigation-action-icon: var(--app-navigation-action-icon-size);
   --spacing-navigation-actions: var(--app-navigation-actions-gap);
   --spacing-navigation-badge: var(--app-navigation-badge-padding-inline);
@@ -484,6 +514,22 @@
   --spacing-tabs-indicator-inline: var(--app-tabs-indicator-inline);
   --spacing-tabs-trigger: var(--app-tabs-trigger-padding-block);
   --spacing-weather-icon: var(--app-weather-icon-size);
+  --spacing-visualization-description: var(--app-visualization-description-gap);
+  --spacing-visualization-hour: var(--app-visualization-hour-gap);
+  --spacing-visualization-hour-bars: var(--app-visualization-hour-bars-gap);
+  --spacing-visualization-legend-copy: var(--app-visualization-legend-copy-gap);
+  --spacing-visualization-legend-item: var(--app-visualization-legend-item-gap);
+  --spacing-visualization-legend-row: var(--app-visualization-legend-row-gap);
+  --spacing-visualization-list: var(--app-visualization-list-gap);
+  --spacing-visualization-row: var(--app-visualization-row-gap);
+  --spacing-visualization-scroll: var(--app-visualization-scroll-padding);
+  --spacing-visualization-section: var(--app-visualization-section-offset);
+  --spacing-visualization-section-wide: var(--app-visualization-section-wide-offset);
+  --spacing-visualization-status: var(--app-visualization-status-row-gap);
+  --spacing-visualization-summary-block: var(--app-visualization-summary-padding-block);
+  --spacing-visualization-summary-inline: var(--app-visualization-summary-padding-inline);
+  --spacing-visualization-swatch: var(--app-visualization-swatch-size);
+  --spacing-visualization-swatch-top: var(--app-visualization-swatch-top);
 
   --grid-template-columns-calendar-header: var(--app-calendar-header-columns);
   --grid-template-columns-collection-controls-top: var(--app-collection-controls-top-columns);
@@ -497,9 +543,12 @@
   --grid-template-columns-date-navigation-compact: var(--app-date-navigation-compact-columns);
   --grid-template-columns-document-facts: var(--app-document-facts-columns);
   --grid-template-columns-feedback-wide: var(--app-feedback-wide-columns);
+  --grid-template-columns-metric-content: var(--app-metric-content-columns);
   --grid-template-columns-app-shell: var(--app-shell-columns);
   --grid-template-columns-settings-row: var(--app-settings-row-columns);
+  --grid-template-columns-visualization-donut: var(--app-visualization-donut-columns);
   --grid-template-rows-collection-row-schedule: var(--app-collection-row-schedule-rows);
+  --grid-template-rows-visualization-hour: var(--app-visualization-hour-rows);
 
   --opacity-calendar-disabled: var(--app-calendar-disabled-opacity);
   --opacity-collection-busy: var(--app-collection-busy-opacity);
@@ -509,6 +558,8 @@
   --opacity-rich-text-editor-disabled: var(--app-rich-text-editor-disabled-opacity);
   --opacity-select-disabled: var(--app-select-disabled-opacity);
   --opacity-settings-disabled: var(--app-settings-disabled-opacity);
+  --opacity-visualization-comparison: var(--app-visualization-comparison-opacity);
+  --opacity-visualization-fetching: var(--app-visualization-fetching-opacity);
 
   --width-calendar-day-compact: var(--app-calendar-compact-day-width);
   --width-collection-loading-content: var(--app-collection-loading-content-width);
@@ -520,6 +571,13 @@
   --width-date-popover: var(--app-date-popover-width);
   --width-dialog: var(--app-dialog-width);
   --width-dialog-surface: var(--app-dialog-surface-width);
+  --width-data-table-four-first: var(--app-data-table-four-first-width);
+  --width-data-table-four-second: var(--app-data-table-four-second-width);
+  --width-data-table-four-third: var(--app-data-table-four-third-width);
+  --width-data-table-four-fourth: var(--app-data-table-four-fourth-width);
+  --width-data-table-three-first: var(--app-data-table-three-first-width);
+  --width-data-table-three-second: var(--app-data-table-three-second-width);
+  --width-data-table-three-third: var(--app-data-table-three-third-width);
   --width-editor-dialog: var(--app-editor-dialog-width);
   --width-navigation-overlay-more: var(--app-navigation-overlay-more-width);
   --width-app-shell-loading-action: var(--app-shell-loading-action-width);
@@ -530,6 +588,9 @@
   --width-radio: var(--app-radio-size);
   --width-switch: var(--app-switch-width);
   --width-switch-thumb: var(--app-switch-thumb-size);
+  --width-visualization-donut: var(--app-visualization-donut-size);
+  --width-visualization-hour-bar: var(--app-visualization-hour-bar-width);
+  --width-visualization-loading-title: var(--app-visualization-loading-title-width);
   --min-width-calendar: var(--app-calendar-min-width);
   --min-width-collection-control-field: var(--app-collection-control-field-min-width);
   --min-width-collection-toggle-wide: var(--app-collection-toggle-wide-min-width);
@@ -562,6 +623,7 @@
   --height-control: var(--app-control-height);
   --height-compact-control: var(--app-compact-control-height);
   --height-collection-toggle: var(--app-collection-toggle-min-height);
+  --height-data-table-heading: var(--app-data-table-heading-height);
   --height-choice-indicator: var(--app-choice-indicator-height);
   --height-editor-dialog: var(--app-editor-dialog-height);
   --height-form-step-indicator: var(--app-form-step-indicator-height);
@@ -579,6 +641,12 @@
   --height-switch: var(--app-switch-height);
   --height-switch-thumb: var(--app-switch-thumb-size);
   --height-tabs-indicator: var(--app-tabs-indicator-height);
+  --height-visualization-bar: var(--app-visualization-bar-height);
+  --height-visualization-comparison-bar: var(--app-visualization-comparison-bar-height);
+  --height-visualization-hour-plot: var(--app-visualization-hour-plot-height);
+  --height-visualization-hour-plot-wide: var(--app-visualization-hour-plot-wide-height);
+  --height-visualization-loading-metric: var(--app-visualization-loading-metric-height);
+  --height-visualization-loading-title: var(--app-visualization-loading-title-height);
   --min-height-calendar-header: var(--app-calendar-header-min-height);
   --min-height-collection-field-control: var(--app-collection-field-control-min-height);
   --min-height-collection-header: var(--app-collection-header-min-height);
@@ -762,9 +830,84 @@
   & > [data-ui="settings-section"][data-embedded="true"]:not(:first-child)
 );
 @custom-variant settings-stack-flow (& > * + *);
+@custom-variant metric-icon-svg (& > svg);
+@custom-variant visualization-svg (& [data-visualization="svg"]);
+@custom-variant visualization-grid-line (& [data-visualization="grid"] line);
+@custom-variant visualization-grid-text (& [data-visualization="grid"] text);
+@custom-variant visualization-line (& [data-visualization="line"]);
+@custom-variant visualization-line-previous (
+  & [data-visualization="line"][data-series="previous"]
+);
+@custom-variant visualization-point (& [data-visualization="point"]);
+@custom-variant visualization-point-previous (
+  & [data-visualization="point"][data-series="previous"]
+);
+@custom-variant visualization-label (& [data-visualization="label"]);
+@custom-variant visualization-summary (& [data-visualization="summary"]);
+@custom-variant visualization-list (& [data-visualization="list"]);
+@custom-variant visualization-row (& [data-visualization="row"]);
+@custom-variant visualization-row-label (& [data-visualization="row-label"]);
+@custom-variant visualization-row-label-title (& [data-visualization="row-label-title"]);
+@custom-variant visualization-row-label-meta (& [data-visualization="row-label-meta"]);
+@custom-variant visualization-row-label-value (& [data-visualization="row-label-value"]);
+@custom-variant visualization-bars (& [data-visualization="bars"]);
+@custom-variant visualization-bar (& [data-visualization="bar"]);
+@custom-variant visualization-bar-previous (
+  & [data-visualization="bar"][data-series="previous"]
+);
+@custom-variant visualization-donut-chart (& [data-visualization="donut-chart"]);
+@custom-variant visualization-donut-svg (& [data-visualization="donut-svg"]);
+@custom-variant visualization-donut-track (& [data-visualization="donut-track"]);
+@custom-variant visualization-donut-segment (& [data-visualization="donut-segment"]);
+@custom-variant visualization-donut-segment-previous (
+  & [data-visualization="donut-segment"][data-series="previous"]
+);
+@custom-variant visualization-donut-center (& [data-visualization="donut-center"]);
+@custom-variant visualization-donut-value (& [data-visualization="donut-value"]);
+@custom-variant visualization-donut-meta (& [data-visualization="donut-meta"]);
+@custom-variant visualization-donut-legend (& [data-visualization="donut-legend"]);
+@custom-variant visualization-donut-legend-item (
+  & [data-visualization="donut-legend-item"]
+);
+@custom-variant visualization-donut-swatch (& [data-visualization="donut-swatch"]);
+@custom-variant visualization-donut-swatch-previous (
+  & [data-visualization="donut-swatch"][data-series="previous"]
+);
+@custom-variant visualization-donut-term (& [data-visualization="donut-term"]);
+@custom-variant visualization-donut-description (
+  & [data-visualization="donut-description"]
+);
+@custom-variant visualization-donut-description-value (
+  & [data-visualization="donut-description-value"]
+);
+@custom-variant visualization-donut-description-meta (
+  & [data-visualization="donut-description-meta"]
+);
+@custom-variant visualization-hour-plot (& [data-visualization="hour-plot"]);
+@custom-variant visualization-hour (& [data-visualization="hour"]);
+@custom-variant visualization-hour-bars (& [data-visualization="hour-bars"]);
+@custom-variant visualization-hour-bar (& [data-visualization="hour-bar"]);
+@custom-variant visualization-hour-bar-previous (
+  & [data-visualization="hour-bar"][data-series="previous"]
+);
+@custom-variant visualization-hour-value (& [data-visualization="hour"] > strong);
+@custom-variant visualization-hour-label (& [data-visualization="hour-label"]);
 
 @utility bg-size-page-loading-sheen {
   background-size: var(--app-page-loading-sheen-background-size);
+}
+
+@utility stroke-visualization-round {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+@utility stroke-visualization-comparison {
+  stroke-width: var(--app-visualization-comparison-stroke-width);
+}
+
+@utility transition-visualization-bar {
+  transition: height var(--app-visualization-bar-transition-duration) ease;
 }
 
 @utility bg-app-shell-court {
