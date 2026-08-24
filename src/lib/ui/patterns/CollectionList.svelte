@@ -1,9 +1,10 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
   import AccordionListPrimitive from "../primitives/AccordionListPrimitive.svelte";
 
-  type Props = Omit<HTMLAttributes<HTMLDivElement>, "children" | "role"> & {
+  type Props = Omit<PublicHtmlAttributes<HTMLAttributes<HTMLDivElement>>, "children" | "role"> & {
     busy?: boolean;
     children?: Snippet;
     defaultValue?: string;

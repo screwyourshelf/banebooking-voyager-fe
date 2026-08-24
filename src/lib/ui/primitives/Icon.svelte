@@ -19,7 +19,7 @@
   focusable="false"
 >
   {#each icon as [element, attributes] (attributes.key)}
-    {@const { key: _key, ...elementAttributes } = attributes}
+    {@const { key: _key, class: _class, style: _style, ...elementAttributes } = attributes}
     <svelte:element this={element} {...elementAttributes} />
   {/each}
 </svg>

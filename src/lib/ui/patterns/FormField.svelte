@@ -1,13 +1,14 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
   import {
     setFormControlContext,
     type FormControlContext,
   } from "../primitives/form-control-context";
   import { isInsideFormFields } from "./form-fields-context";
 
-  type Props = Omit<HTMLAttributes<HTMLDivElement>, "children"> & {
+  type Props = Omit<PublicHtmlAttributes<HTMLAttributes<HTMLDivElement>>, "children"> & {
     children: Snippet;
     controlId?: string;
     description?: string;

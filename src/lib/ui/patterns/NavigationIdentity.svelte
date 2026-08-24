@@ -1,9 +1,10 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAnchorAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
   import { getOptionalNavigationContext } from "./navigation-context";
 
-  type Props = Omit<HTMLAnchorAttributes, "children"> & {
+  type Props = Omit<PublicHtmlAttributes<HTMLAnchorAttributes>, "children"> & {
     logo?: Snippet;
     meta?: string;
     name: string;

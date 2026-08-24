@@ -1,12 +1,13 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
 
   export type SectionVariant = "soft" | "surface" | "plain";
   export type SectionPadding = "small" | "medium" | "large";
   export type SectionLayout = "default" | "data-table";
 
-  type Props = Omit<HTMLAttributes<HTMLElement>, "children" | "title"> & {
+  type Props = Omit<PublicHtmlAttributes<HTMLAttributes<HTMLElement>>, "children" | "title"> & {
     actions?: Snippet;
     children?: Snippet;
     description?: string;

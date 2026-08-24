@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
   import { setNavigationContext } from "./navigation-context";
   import type {
     NavigationContext,
@@ -8,7 +9,7 @@
     NavigationSurface,
   } from "./navigation-context";
 
-  type Props = Omit<HTMLAttributes<HTMLElement>, "children"> & {
+  type Props = Omit<PublicHtmlAttributes<HTMLAttributes<HTMLElement>>, "children"> & {
     busy?: boolean;
     children?: Snippet;
     label: string;

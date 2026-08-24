@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { HTMLAnchorAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
   import type { ButtonSize, ButtonVariant } from "./Button.svelte";
 
-  type Props = HTMLAnchorAttributes & {
+  type Props = PublicHtmlAttributes<HTMLAnchorAttributes> & {
     variant?: ButtonVariant;
     size?: ButtonSize;
   };
@@ -26,8 +27,8 @@
       : size === "small"
         ? "min-h-compact-control px-control-inline py-action-compact-block text-caption leading-control"
         : size === "icon"
-          ? "w-control min-h-control justify-center p-0 text-label leading-control"
-          : "w-compact-control h-compact-control min-h-compact-control justify-center p-0",
+          ? "w-control min-h-control flex-none justify-center p-0 text-label leading-control"
+          : "w-compact-control h-compact-control min-h-compact-control flex-none justify-center p-0",
   ]}
   data-ui-primitive="button"
   data-variant={variant}

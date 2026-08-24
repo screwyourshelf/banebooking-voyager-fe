@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAnchorAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
   import { requireNavigationContext } from "./navigation-context";
 
   export type NavigationBadge = {
@@ -9,7 +10,7 @@
     tone?: "neutral" | "accent";
   };
 
-  type Props = Omit<HTMLAnchorAttributes, "children"> & {
+  type Props = Omit<PublicHtmlAttributes<HTMLAnchorAttributes>, "children"> & {
     active?: boolean;
     badge?: NavigationBadge;
     icon?: Snippet;

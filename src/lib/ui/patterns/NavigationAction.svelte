@@ -1,12 +1,13 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLButtonAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
   import type { NavigationBadge } from "./NavigationLink.svelte";
   import { requireNavigationContext } from "./navigation-context";
 
   export type NavigationActionPresentation = "item" | "icon" | "back";
 
-  type BaseProps = Omit<HTMLButtonAttributes, "children"> & {
+  type BaseProps = Omit<PublicHtmlAttributes<HTMLButtonAttributes>, "children"> & {
     badge?: NavigationBadge;
     busy?: boolean;
     label: string;

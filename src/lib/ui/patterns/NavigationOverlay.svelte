@@ -64,7 +64,6 @@
         </div>
         <Button
           aria-label="Lukk meny"
-          class="flex-none"
           data-part="close"
           disabled={pending}
           onclick={close}

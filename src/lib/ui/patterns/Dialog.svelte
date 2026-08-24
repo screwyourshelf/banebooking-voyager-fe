@@ -8,12 +8,13 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
   import Button from "../primitives/Button.svelte";
   import DialogDescription from "../primitives/DialogDescription.svelte";
   import DialogPrimitive from "../primitives/DialogPrimitive.svelte";
   import DialogTitle from "../primitives/DialogTitle.svelte";
 
-  type Props = Omit<HTMLAttributes<HTMLDivElement>, "children" | "title"> & {
+  type Props = Omit<PublicHtmlAttributes<HTMLAttributes<HTMLDivElement>>, "children" | "title"> & {
     actions?: Snippet<[DialogActionContext]>;
     children: Snippet;
     description?: string;

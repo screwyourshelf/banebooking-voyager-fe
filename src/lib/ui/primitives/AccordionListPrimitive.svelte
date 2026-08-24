@@ -2,8 +2,9 @@
   import { Accordion } from "bits-ui";
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
 
-  type Props = Omit<HTMLAttributes<HTMLDivElement>, "children" | "class"> & {
+  type Props = Omit<PublicHtmlAttributes<HTMLAttributes<HTMLDivElement>>, "children"> & {
     busy?: boolean;
     children?: Snippet;
     class?: "grid";

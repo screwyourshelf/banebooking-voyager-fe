@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
 
-  type Props = Omit<HTMLAttributes<HTMLDivElement>, "children"> & {
+  type Props = Omit<PublicHtmlAttributes<HTMLAttributes<HTMLDivElement>>, "children"> & {
     children?: Snippet;
   };
 

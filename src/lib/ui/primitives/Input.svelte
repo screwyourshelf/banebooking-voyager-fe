@@ -4,10 +4,11 @@
 
 <script lang="ts">
   import type { HTMLInputAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
   import { getOptionalFormControlContext, mergeAriaIds } from "./form-control-context";
 
   type Props = Omit<
-    HTMLInputAttributes,
+    PublicHtmlAttributes<HTMLInputAttributes>,
     "aria-describedby" | "aria-invalid" | "id" | "required" | "value"
   > & {
     "aria-describedby"?: string | null;

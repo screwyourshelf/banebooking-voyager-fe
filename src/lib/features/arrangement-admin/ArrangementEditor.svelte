@@ -124,7 +124,11 @@
                 : "Prøv igjen."}
             />
           {:else if controller.feedback && mode === "edit"}
-            <Feedback {...controller.feedback} />
+            <Feedback
+              tone={controller.feedback.tone}
+              title={controller.feedback.title}
+              description={controller.feedback.description}
+            />
           {/if}
           <FormSubmit
             pending={controller.metadataMutation.isPending}
@@ -207,7 +211,11 @@
               description={mutationError instanceof Error ? mutationError.message : "Prøv igjen."}
             />
           {:else if controller.feedback}
-            <Feedback {...controller.feedback} />
+            <Feedback
+              tone={controller.feedback.tone}
+              title={controller.feedback.title}
+              description={controller.feedback.description}
+            />
           {/if}
           {#if mode === "create"}
             <FormSubmit

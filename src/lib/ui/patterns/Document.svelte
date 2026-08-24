@@ -1,8 +1,12 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
 
-  type Props = Omit<HTMLAttributes<HTMLElement>, "aria-label" | "children"> & {
+  type Props = Omit<
+    PublicHtmlAttributes<HTMLAttributes<HTMLElement>>,
+    "aria-label" | "children"
+  > & {
     children?: Snippet;
     label?: string;
   };

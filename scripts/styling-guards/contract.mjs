@@ -9,8 +9,8 @@ export async function loadStylingGuardContract(url = contractUrl) {
 }
 
 function validateStylingGuardContract(contract) {
-  if (contract?.schemaVersion !== 3) {
-    throw new Error("Styling guard-kontrakten må ha schemaVersion 3.");
+  if (contract?.schemaVersion !== 4) {
+    throw new Error("Styling guard-kontrakten må ha schemaVersion 4.");
   }
   if (
     contract.analyzerEnforcementPhase !== "final" ||
@@ -59,9 +59,50 @@ function validateStylingGuardContract(contract) {
   }
 
   validateProductionTreeContract(contract, ruleEntries);
+  validateMarkupContract(contract);
   validateThemeVocabulary(contract);
   validateCssCascadeContract(contract);
   validateVisualizationExceptionContract(contract);
+}
+
+function validateMarkupContract(contract) {
+  const markup = contract.markup ?? {};
+  const attributeNodeTypes = markup.attributeNodeTypes ?? {};
+  const expectedGroups = {
+    direct: ["Attribute", "ClassDirective", "StyleDirective"],
+    opaqueStyling: ["AnimateDirective", "AttachTag", "TransitionDirective", "UseDirective"],
+    semantic: ["BindDirective", "LetDirective", "OnDirective"],
+    spread: ["SpreadAttribute"],
+  };
+
+  const classifiedTypes = [];
+  for (const [group, expectedTypes] of Object.entries(expectedGroups)) {
+    assertUniqueStrings(attributeNodeTypes[group], `markup.attributeNodeTypes.${group}`);
+    if (attributeNodeTypes[group].join(",") !== expectedTypes.join(",")) {
+      throw new Error(`Svelte-attributtkanalene i «${group}» er ikke eksplisitt klassifisert.`);
+    }
+    classifiedTypes.push(...attributeNodeTypes[group]);
+  }
+  if (new Set(classifiedTypes).size !== classifiedTypes.length) {
+    throw new Error("En Svelte-attributtkanal kan bare ha én stylingklassifisering.");
+  }
+  if (markup.dynamicNodeTypes?.join(",") !== "SvelteComponent,SvelteElement,SvelteSelf") {
+    throw new Error("Dynamiske Svelte-element- og komponentkanaler må være eksplisitt lukket.");
+  }
+  if (markup.rawHtmlNodeType !== "HtmlTag") {
+    throw new Error("Rå HTML må være eksplisitt klassifisert som Svelte HtmlTag.");
+  }
+
+  const dynamicElementException = markup.dynamicElementException ?? {};
+  if (
+    dynamicElementException.sourcePath !== "src/lib/ui/primitives/Icon.svelte" ||
+    dynamicElementException.tagIdentifier !== "element" ||
+    dynamicElementException.spreadIdentifier !== "elementAttributes" ||
+    dynamicElementException.sourceIdentifier !== "attributes" ||
+    dynamicElementException.omittedAttributeNames?.join(",") !== "class,key,style"
+  ) {
+    throw new Error("Bare Icons eksakte, filtrerte svelte:element-kontrakt er tillatt.");
+  }
 }
 
 function validateProductionTreeContract(contract, ruleEntries) {
@@ -148,12 +189,22 @@ function validateVisualizationExceptionContract(contract) {
 
   const geometryVocabulary = new Set(visualization.svgGeometryAttributeVocabulary ?? []);
   const presentationAttributes = new Set(visualization.svgPresentationAttributes ?? []);
+  const normalizedGeometryVocabulary = new Set(
+    [...geometryVocabulary].map((attribute) => attribute.toLowerCase())
+  );
+  const normalizedPresentationAttributes = new Set(
+    [...presentationAttributes].map((attribute) => attribute.toLowerCase())
+  );
   if (
     geometryVocabulary.size !== visualization.svgGeometryAttributeVocabulary?.length ||
     presentationAttributes.size !== visualization.svgPresentationAttributes?.length ||
+    normalizedGeometryVocabulary.size !== geometryVocabulary.size ||
+    normalizedPresentationAttributes.size !== presentationAttributes.size ||
     geometryVocabulary.size === 0 ||
     presentationAttributes.size === 0 ||
-    [...geometryVocabulary].some((attribute) => presentationAttributes.has(attribute))
+    [...normalizedGeometryVocabulary].some((attribute) =>
+      normalizedPresentationAttributes.has(attribute)
+    )
   ) {
     throw new Error("SVG-geometri og presentasjonsattributter må være unike, lukkede vokabular.");
   }

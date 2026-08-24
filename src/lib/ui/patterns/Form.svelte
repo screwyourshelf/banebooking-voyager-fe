@@ -6,8 +6,9 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLFormAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
 
-  type Props = Omit<HTMLFormAttributes, "children" | "novalidate"> & {
+  type Props = Omit<PublicHtmlAttributes<HTMLFormAttributes>, "children" | "novalidate"> & {
     children?: Snippet;
     density?: FormDensity;
     noValidate?: boolean;

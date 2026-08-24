@@ -12,9 +12,10 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
   import CollectionToggle from "./CollectionToggle.svelte";
 
-  type Props = Omit<HTMLAttributes<HTMLElement>, "children" | "title"> & {
+  type Props = Omit<PublicHtmlAttributes<HTMLAttributes<HTMLElement>>, "children" | "title"> & {
     busy?: boolean;
     children?: Snippet;
     contextAction?: Snippet;

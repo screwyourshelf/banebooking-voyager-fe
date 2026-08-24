@@ -120,6 +120,44 @@ function analyzeSvelteComponent({ contract, source, sourcePath }) {
   }
 
   visitMarkup(ast, false, (node, insideSvg) => {
+    if (node.type === contract.markup.rawHtmlNodeType) {
+      diagnostics.push(
+        markupChannelDiagnostic({
+          contract,
+          isFeatureOrRoute,
+          isVisualization,
+          location: offsetLocation(source, node.start ?? 0),
+          message: "rå {@html}-markup kan inneholde styling som ikke kan analyseres statisk",
+        })
+      );
+      return;
+    }
+
+    if (contract.markup.dynamicNodeTypes.includes(node.type)) {
+      analyzeDynamicMarkupNode({
+        ast,
+        contract,
+        diagnostics,
+        isFeatureOrRoute,
+        isVisualization,
+        node,
+        source,
+        sourcePath,
+      });
+    }
+
+    if (isRawStylesheetElement(node) || isStylesheetLink(node)) {
+      diagnostics.push(
+        markupChannelDiagnostic({
+          contract,
+          isFeatureOrRoute,
+          isVisualization,
+          location: offsetLocation(source, node.start ?? 0),
+          message: "rå style-/stylesheet-markup er forbudt; bruk den registrerte CSS-inngangen",
+        })
+      );
+    }
+
     if (!Array.isArray(node.attributes)) return;
     const publicUiComponent =
       node.type === "Component" && isPublicUiComponent(node.name, publicUiComponents);
@@ -151,25 +189,11 @@ function analyzeSvelteComponent({ contract, source, sourcePath }) {
       }
 
       if (isPublicUiOwner) {
-        if (attribute.type === "Attribute" && attribute.name === "class") {
-          diagnostics.push(...analyzeClassAttribute({ attribute, contract, source }));
-        }
-        if (attribute.type === "ClassDirective") {
-          diagnostics.push(...analyzeClassDirective({ attribute, contract, source }));
-        }
-        if (
-          (attribute.type === "Attribute" && attribute.name === "style") ||
-          attribute.type === "StyleDirective"
-        ) {
-          diagnostics.push(
-            diagnostic(
-              contract.rules.cssApplication.id,
-              "offentlig UI kan ikke bruke inline style; uttrykk varianten med theme og utilities",
-              offsetLocation(source, attribute.start ?? 0)
-            )
-          );
-        }
+        analyzePublicUiAttribute({ attribute, contract, diagnostics, source });
+        continue;
       }
+
+      analyzeNonUiAttribute({ attribute, contract, diagnostics, source });
     }
   });
 
@@ -232,8 +256,54 @@ function analyzeFeatureAttribute({
   sourcePath,
 }) {
   const location = offsetLocation(source, attribute.start ?? 0);
+  const channel = markupAttributeChannel(attribute, contract);
+  const attributeName = normalizedAttributeName(attribute);
 
-  if (attribute.type === "Attribute" && attribute.name === "class") {
+  if (channel === "spread") {
+    diagnostics.push(
+      diagnostic(
+        isVisualization
+          ? contract.rules.visualizationException.id
+          : contract.rules.featureStyling.id,
+        isVisualization
+          ? "visualiseringsunntaket tillater ikke attributtspread; skriv registrert geometri eksplisitt"
+          : "feature-/routekode kan ikke bruke attributtspread; skriv semantiske props eksplisitt",
+        location
+      )
+    );
+    return;
+  }
+
+  if (channel === "opaqueStyling") {
+    diagnostics.push(
+      diagnostic(
+        isVisualization
+          ? contract.rules.visualizationException.id
+          : contract.rules.featureStyling.id,
+        isVisualization
+          ? `visualiseringsunntaket tillater ikke den ugjennomsiktige stylingkanalen ${attribute.type}`
+          : `feature-/routekode kan ikke bruke den ugjennomsiktige stylingkanalen ${attribute.type}`,
+        location
+      )
+    );
+    return;
+  }
+
+  if (channel === "semantic") return;
+  if (!channel) {
+    diagnostics.push(
+      diagnostic(
+        isVisualization
+          ? contract.rules.visualizationException.id
+          : contract.rules.featureStyling.id,
+        `Svelte-attributtkanalen ${attribute.type} er ikke klassifisert i stylingkontrakten`,
+        location
+      )
+    );
+    return;
+  }
+
+  if (attribute.type === "Attribute" && attributeName === "class") {
     diagnostics.push(
       diagnostic(
         isVisualization
@@ -263,7 +333,7 @@ function analyzeFeatureAttribute({
     return;
   }
 
-  if (attribute.type === "Attribute" && attribute.name === "style") {
+  if (attribute.type === "Attribute" && attributeName === "style") {
     if (!isVisualization) {
       diagnostics.push(
         diagnostic(
@@ -316,7 +386,7 @@ function analyzeFeatureAttribute({
     return;
   }
 
-  if (attribute.type === "Attribute" && attribute.name === "data-stat-role") {
+  if (attribute.type === "Attribute" && attributeName === "data-stat-role") {
     diagnostics.push(
       diagnostic(
         isVisualization
@@ -329,7 +399,7 @@ function analyzeFeatureAttribute({
     return;
   }
 
-  if (attribute.type === "Attribute" && attribute.name === "data-visualization") {
+  if (attribute.type === "Attribute" && attributeName === "data-visualization") {
     if (!isVisualization) {
       diagnostics.push(
         diagnostic(
@@ -354,7 +424,7 @@ function analyzeFeatureAttribute({
     return;
   }
 
-  if (attribute.type === "Attribute" && attribute.name === "data-series") {
+  if (attribute.type === "Attribute" && attributeName === "data-series") {
     if (!isVisualization) {
       diagnostics.push(
         diagnostic(
@@ -380,11 +450,15 @@ function analyzeFeatureAttribute({
 
   if (!insideSvg || attribute.type !== "Attribute") return;
 
-  if (contract.visualizationException.svgGeometryAttributeVocabulary.includes(attribute.name)) {
+  const geometryAttribute = canonicalAttributeName(
+    attribute.name,
+    contract.visualizationException.svgGeometryAttributeVocabulary
+  );
+  if (geometryAttribute) {
     const isAllowedGeometry =
       isVisualization &&
       contract.visualizationException.owners[sourcePath].svgGeometryAttributes.includes(
-        attribute.name
+        geometryAttribute
       );
     if (!isAllowedGeometry) {
       diagnostics.push(
@@ -402,7 +476,12 @@ function analyzeFeatureAttribute({
     return;
   }
 
-  if (contract.visualizationException.svgPresentationAttributes.includes(attribute.name)) {
+  if (
+    canonicalAttributeName(
+      attribute.name,
+      contract.visualizationException.svgPresentationAttributes
+    )
+  ) {
     diagnostics.push(
       diagnostic(
         isVisualization
@@ -415,6 +494,318 @@ function analyzeFeatureAttribute({
       )
     );
   }
+}
+
+function analyzePublicUiAttribute({ attribute, contract, diagnostics, source }) {
+  const location = offsetLocation(source, attribute.start ?? 0);
+  const channel = markupAttributeChannel(attribute, contract);
+  const attributeName = normalizedAttributeName(attribute);
+
+  if (channel === "spread") {
+    const stylingNames = staticSpreadStylingNames(attribute.expression);
+    if (stylingNames.length > 0) {
+      diagnostics.push(
+        diagnostic(
+          contract.rules.cssApplication.id,
+          `offentlig UI kan ikke skjule ${stylingNames.join("/")} i attributtspread`,
+          location
+        )
+      );
+    }
+    return;
+  }
+
+  if (channel === "opaqueStyling") {
+    diagnostics.push(
+      diagnostic(
+        contract.rules.cssApplication.id,
+        `offentlig UI kan ikke bruke den ugjennomsiktige stylingkanalen ${attribute.type}`,
+        location
+      )
+    );
+    return;
+  }
+
+  if (channel === "semantic") return;
+  if (!channel) {
+    diagnostics.push(
+      diagnostic(
+        contract.rules.cssApplication.id,
+        `Svelte-attributtkanalen ${attribute.type} er ikke klassifisert i stylingkontrakten`,
+        location
+      )
+    );
+    return;
+  }
+
+  if (attribute.type === "Attribute" && attributeName === "class") {
+    diagnostics.push(...analyzeClassAttribute({ attribute, contract, source }));
+    return;
+  }
+  if (attribute.type === "ClassDirective") {
+    diagnostics.push(...analyzeClassDirective({ attribute, contract, source }));
+    return;
+  }
+  if (
+    (attribute.type === "Attribute" && attributeName === "style") ||
+    attribute.type === "StyleDirective"
+  ) {
+    diagnostics.push(
+      diagnostic(
+        contract.rules.cssApplication.id,
+        "offentlig UI kan ikke bruke inline style; uttrykk varianten med theme og utilities",
+        location
+      )
+    );
+  }
+}
+
+function analyzeNonUiAttribute({ attribute, contract, diagnostics, source }) {
+  const location = offsetLocation(source, attribute.start ?? 0);
+  const channel = markupAttributeChannel(attribute, contract);
+
+  if (channel === "semantic") return;
+  if (channel === "spread") {
+    diagnostics.push(
+      diagnostic(
+        contract.rules.cssApplication.id,
+        "attributtspread utenfor offentlig UI kan skjule uregistrert produktstyling",
+        location
+      )
+    );
+    return;
+  }
+  if (channel === "opaqueStyling") {
+    diagnostics.push(
+      diagnostic(
+        contract.rules.cssApplication.id,
+        `den ugjennomsiktige stylingkanalen ${attribute.type} er bare tillatt gjennom en eksplisitt kontrakt`,
+        location
+      )
+    );
+    return;
+  }
+  if (!channel) {
+    diagnostics.push(
+      diagnostic(
+        contract.rules.cssApplication.id,
+        `Svelte-attributtkanalen ${attribute.type} er ikke klassifisert i stylingkontrakten`,
+        location
+      )
+    );
+    return;
+  }
+
+  const isStylingAttribute =
+    (attribute.type === "Attribute" &&
+      ["class", "style"].includes(normalizedAttributeName(attribute))) ||
+    attribute.type === "ClassDirective" ||
+    attribute.type === "StyleDirective";
+  if (isStylingAttribute) {
+    diagnostics.push(
+      diagnostic(
+        contract.rules.cssApplication.id,
+        "produktstyling utenfor offentlig UI er forbudt",
+        location
+      )
+    );
+  }
+}
+
+function analyzeDynamicMarkupNode({
+  ast,
+  contract,
+  diagnostics,
+  isFeatureOrRoute,
+  isVisualization,
+  node,
+  source,
+  sourcePath,
+}) {
+  if (
+    node.type === "SvelteElement" &&
+    matchesDynamicElementException({ ast, contract, node, sourcePath })
+  ) {
+    return;
+  }
+
+  diagnostics.push(
+    markupChannelDiagnostic({
+      contract,
+      isFeatureOrRoute,
+      isVisualization,
+      location: offsetLocation(source, node.start ?? 0),
+      message: `${node.type} er en dynamisk markupkanal som ikke kan bevise stylingeierskap`,
+    })
+  );
+}
+
+function matchesDynamicElementException({ ast, contract, node, sourcePath }) {
+  const exception = contract.markup.dynamicElementException;
+  if (
+    sourcePath !== exception.sourcePath ||
+    node.tag?.type !== "Identifier" ||
+    node.tag.name !== exception.tagIdentifier ||
+    node.attributes.length !== 1 ||
+    node.attributes[0].type !== "SpreadAttribute" ||
+    node.attributes[0].expression?.type !== "Identifier" ||
+    node.attributes[0].expression.name !== exception.spreadIdentifier
+  ) {
+    return false;
+  }
+
+  const dynamicElements = [];
+  const matchingDestructures = [];
+  walkAst(ast, (candidate) => {
+    if (candidate.type === "SvelteElement") dynamicElements.push(candidate);
+    if (isSanitizedDynamicElementDestructure(candidate, exception)) {
+      matchingDestructures.push(candidate);
+    }
+  });
+  return (
+    dynamicElements.length === 1 &&
+    matchingDestructures.length === 1 &&
+    hasAdjacentSanitizedBinding(ast, node, exception)
+  );
+}
+
+function hasAdjacentSanitizedBinding(ast, dynamicElement, exception) {
+  let isAdjacent = false;
+  walkAst(ast, (candidate) => {
+    for (const child of Object.values(candidate)) {
+      if (!Array.isArray(child)) continue;
+      const elementIndex = child.indexOf(dynamicElement);
+      if (elementIndex < 0) continue;
+      const precedingNode = child
+        .slice(0, elementIndex)
+        .filter((node) => node?.type !== "Text" || node.data.trim() !== "")
+        .at(-1);
+      if (
+        precedingNode?.type === "ConstTag" &&
+        precedingNode.declaration?.kind === "const" &&
+        precedingNode.declaration.declarations?.length === 1 &&
+        isSanitizedDynamicElementDestructure(precedingNode.declaration.declarations[0], exception)
+      ) {
+        isAdjacent = true;
+      }
+    }
+  });
+  return isAdjacent;
+}
+
+function isSanitizedDynamicElementDestructure(node, exception) {
+  if (
+    node.type !== "VariableDeclarator" ||
+    node.id?.type !== "ObjectPattern" ||
+    node.init?.type !== "Identifier" ||
+    node.init.name !== exception.sourceIdentifier
+  ) {
+    return false;
+  }
+
+  const propertyNames = [];
+  const restIdentifiers = [];
+  for (const property of node.id.properties) {
+    if (property.type === "RestElement" && property.argument?.type === "Identifier") {
+      restIdentifiers.push(property.argument.name);
+      continue;
+    }
+    if (property.type !== "Property" || property.computed) return false;
+    const name = staticPropertyName(property.key);
+    if (!name) return false;
+    propertyNames.push(name);
+  }
+
+  return (
+    propertyNames.sort().join(",") === [...exception.omittedAttributeNames].sort().join(",") &&
+    restIdentifiers.join(",") === exception.spreadIdentifier
+  );
+}
+
+function markupAttributeChannel(attribute, contract) {
+  for (const [channel, nodeTypes] of Object.entries(contract.markup.attributeNodeTypes)) {
+    if (nodeTypes.includes(attribute.type)) return channel;
+  }
+  return null;
+}
+
+function markupChannelDiagnostic({
+  contract,
+  isFeatureOrRoute,
+  isVisualization,
+  location,
+  message,
+}) {
+  const ruleId = isVisualization
+    ? contract.rules.visualizationException.id
+    : isFeatureOrRoute
+      ? contract.rules.featureStyling.id
+      : contract.rules.cssApplication.id;
+  return diagnostic(ruleId, message, location);
+}
+
+function isRawStylesheetElement(node) {
+  return node.type === "RegularElement" && node.name.toLowerCase() === "style";
+}
+
+function isStylesheetLink(node) {
+  if (node.type !== "RegularElement" || node.name.toLowerCase() !== "link") return false;
+  const rel = node.attributes.find(
+    (attribute) => attribute.type === "Attribute" && normalizedAttributeName(attribute) === "rel"
+  );
+  const hasSpread = node.attributes.some((attribute) => attribute.type === "SpreadAttribute");
+  if (hasSpread) return true;
+  if (!rel) return false;
+  const staticRel = staticAttributeValue(rel);
+  if (staticRel === null) return true;
+  return staticRel.toLowerCase().split(/\s+/).includes("stylesheet");
+}
+
+function staticSpreadStylingNames(expression) {
+  const names = new Set();
+
+  function visit(candidate) {
+    if (!candidate || typeof candidate !== "object") return;
+    if (
+      ["TSAsExpression", "TSSatisfiesExpression", "TSNonNullExpression"].includes(candidate.type)
+    ) {
+      visit(candidate.expression);
+      return;
+    }
+    if (candidate.type !== "ObjectExpression") return;
+
+    for (const property of candidate.properties) {
+      if (property.type === "SpreadElement") {
+        visit(property.argument);
+        continue;
+      }
+      if (property.type !== "Property" || property.computed) continue;
+      const name = staticPropertyName(property.key);
+      const normalizedName = name?.toLowerCase();
+      if (["class", "style"].includes(normalizedName)) names.add(normalizedName);
+    }
+  }
+
+  visit(expression);
+  return [...names].sort();
+}
+
+function staticPropertyName(key) {
+  if (key?.type === "Identifier") return key.name;
+  if (key?.type === "Literal" && typeof key.value === "string") return key.value;
+  return null;
+}
+
+function normalizedAttributeName(attribute) {
+  return attribute.type === "Attribute" && typeof attribute.name === "string"
+    ? attribute.name.toLowerCase()
+    : null;
+}
+
+function canonicalAttributeName(attributeName, vocabulary) {
+  if (typeof attributeName !== "string") return null;
+  const normalizedName = attributeName.toLowerCase();
+  return vocabulary.find((candidate) => candidate.toLowerCase() === normalizedName) ?? null;
 }
 
 function collectPublicUiComponents(importNodes, contract) {
@@ -445,16 +836,19 @@ function isPublicUiComponent(name, publicUiComponents) {
 
 function isOverrideAttribute(attribute) {
   return (
-    (attribute.type === "Attribute" && ["class", "style"].includes(attribute.name)) ||
+    (attribute.type === "Attribute" &&
+      ["class", "style"].includes(normalizedAttributeName(attribute))) ||
     attribute.type === "ClassDirective" ||
-    attribute.type === "StyleDirective"
+    attribute.type === "StyleDirective" ||
+    attribute.type === "SpreadAttribute"
   );
 }
 
 function overrideName(attribute) {
   if (attribute.type === "ClassDirective") return "class:";
   if (attribute.type === "StyleDirective") return "style:";
-  return attribute.name;
+  if (attribute.type === "SpreadAttribute") return "attributtspread";
+  return normalizedAttributeName(attribute) ?? attribute.name;
 }
 
 function isRegisteredRootStylesheetImport(importer, specifier, contract) {
@@ -488,10 +882,10 @@ function visitMarkup(root, insideSvg, visitor) {
     seen.add(node);
     if (node.type === "StyleSheet") return;
 
-    const isElement = node.type === "RegularElement" || node.type === "Component";
+    const isMarkupChannel = Array.isArray(node.attributes) || node.type === "HtmlTag";
     const childInsideSvg =
       parentInsideSvg || (node.type === "RegularElement" && node.name.toLowerCase() === "svg");
-    if (isElement) visitor(node, childInsideSvg);
+    if (isMarkupChannel) visitor(node, childInsideSvg);
 
     for (const [key, child] of Object.entries(node)) {
       if (["attributes", "loc", "metadata", "parent"].includes(key)) continue;

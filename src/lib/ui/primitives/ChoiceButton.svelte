@@ -1,8 +1,12 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLButtonAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
 
-  type Props = Omit<HTMLButtonAttributes, "aria-pressed" | "children" | "onclick"> & {
+  type Props = Omit<
+    PublicHtmlAttributes<HTMLButtonAttributes>,
+    "aria-pressed" | "children" | "onclick"
+  > & {
     children: Snippet;
     onSelect: () => void;
     selected: boolean;

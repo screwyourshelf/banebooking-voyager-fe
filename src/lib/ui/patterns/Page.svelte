@@ -1,9 +1,10 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
   import { getOptionalAppShellContext } from "./app-shell-context";
 
-  type Props = Omit<HTMLAttributes<HTMLElement>, "children" | "title"> & {
+  type Props = Omit<PublicHtmlAttributes<HTMLAttributes<HTMLElement>>, "children" | "title"> & {
     actions?: Snippet;
     children?: Snippet;
     description?: string;

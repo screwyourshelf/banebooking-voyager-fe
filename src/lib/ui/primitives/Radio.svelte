@@ -1,7 +1,11 @@
 <script lang="ts">
   import type { HTMLInputAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
 
-  type Props = Omit<HTMLInputAttributes, "checked" | "onchange" | "type" | "value"> & {
+  type Props = Omit<
+    PublicHtmlAttributes<HTMLInputAttributes>,
+    "checked" | "onchange" | "type" | "value"
+  > & {
     checked: boolean;
     onSelect: (value: string) => void;
     value: string;

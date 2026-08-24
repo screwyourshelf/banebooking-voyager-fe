@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 3,
+  "schemaVersion": 4,
   "analyzerEnforcementPhase": "final",
   "cascadeContractEnforcementPhase": "active",
   "themeContractEnforcementPhase": "active",
@@ -93,6 +93,23 @@
       "src/styles/design-system/tokens.css",
       "src/lib/platform/theme/"
     ]
+  },
+  "markup": {
+    "attributeNodeTypes": {
+      "direct": ["Attribute", "ClassDirective", "StyleDirective"],
+      "opaqueStyling": ["AnimateDirective", "AttachTag", "TransitionDirective", "UseDirective"],
+      "semantic": ["BindDirective", "LetDirective", "OnDirective"],
+      "spread": ["SpreadAttribute"]
+    },
+    "dynamicNodeTypes": ["SvelteComponent", "SvelteElement", "SvelteSelf"],
+    "rawHtmlNodeType": "HtmlTag",
+    "dynamicElementException": {
+      "sourcePath": "src/lib/ui/primitives/Icon.svelte",
+      "tagIdentifier": "element",
+      "spreadIdentifier": "elementAttributes",
+      "sourceIdentifier": "attributes",
+      "omittedAttributeNames": ["class", "key", "style"]
+    }
   },
   "productionTree": {
     "sourceRoots": ["src/"],

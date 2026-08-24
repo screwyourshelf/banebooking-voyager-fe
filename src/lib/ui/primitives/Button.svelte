@@ -1,10 +1,11 @@
 <script lang="ts">
   import type { HTMLButtonAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
 
   export type ButtonVariant = "primary" | "secondary" | "destructive" | "ghost";
   export type ButtonSize = "small" | "default" | "icon" | "compact-icon";
 
-  type Props = HTMLButtonAttributes & {
+  type Props = PublicHtmlAttributes<HTMLButtonAttributes> & {
     fullWidth?: boolean;
     variant?: ButtonVariant;
     size?: ButtonSize;
@@ -42,8 +43,8 @@
       : size === "small"
         ? "min-h-compact-control px-control-inline py-action-compact-block text-caption leading-control"
         : size === "icon"
-          ? "w-control min-h-control justify-center p-0 text-label leading-control"
-          : "w-compact-control h-compact-control min-h-compact-control justify-center p-0",
+          ? "w-control min-h-control flex-none justify-center p-0 text-label leading-control"
+          : "w-compact-control h-compact-control min-h-compact-control flex-none justify-center p-0",
   ]}
   {type}
   data-ui-primitive="button"

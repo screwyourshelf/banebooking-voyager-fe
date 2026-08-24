@@ -1,9 +1,13 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLButtonAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
   import Button, { type ButtonSize, type ButtonVariant } from "../primitives/Button.svelte";
 
-  type Props = Omit<HTMLButtonAttributes, "children" | "disabled" | "type"> & {
+  type Props = Omit<
+    PublicHtmlAttributes<HTMLButtonAttributes>,
+    "children" | "disabled" | "type"
+  > & {
     children: Snippet;
     disabled?: boolean;
     fullWidth?: boolean;

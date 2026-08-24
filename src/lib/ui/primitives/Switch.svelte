@@ -1,7 +1,11 @@
 <script lang="ts">
   import type { HTMLButtonAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
 
-  type Props = Omit<HTMLButtonAttributes, "aria-checked" | "children" | "onclick" | "role"> & {
+  type Props = Omit<
+    PublicHtmlAttributes<HTMLButtonAttributes>,
+    "aria-checked" | "children" | "onclick" | "role"
+  > & {
     checked?: boolean;
     onCheckedChange?: (checked: boolean) => void;
   };

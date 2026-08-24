@@ -182,7 +182,7 @@
       {/if}
 
       {#if feedback}
-        <Feedback {...feedback} />
+        <Feedback tone={feedback.tone} title={feedback.title} description={feedback.description} />
       {/if}
 
       {#if step === "email"}

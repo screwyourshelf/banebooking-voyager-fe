@@ -1,8 +1,9 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLInputAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
 
-  type Props = Omit<HTMLInputAttributes, "children" | "type"> & {
+  type Props = Omit<PublicHtmlAttributes<HTMLInputAttributes>, "children" | "type"> & {
     labels?: Snippet;
   };
 

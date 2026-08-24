@@ -1,11 +1,12 @@
 # Migreringsstatus
 
-> **Status:** Pågår — rammeverksløftet og SWP-0–SWP-6 er fullført; første SWP-7-audit er ikke
-> vellykket
+> **Status:** Pågår — rammeverksløftet og SWP-0–SWP-6 er fullført; SWP-7.1 har lukket guard- og
+> API-funnene fra første SWP-7-audit
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** SWP-7 — første kaldreview er fullført; SWP-7.1 guard-/API-lukking er neste
+> **Aktiv arbeidspakke:** SWP-7 — SWP-7.1 er fullført; SWP-7.2 reproduserbar Knip-audit og
+> dokumentavstemming er neste
 >
 > **Sist oppdatert:** 2026-08-24
 
@@ -32,12 +33,13 @@ døde UI-exports og seks ubrukte Tailwind-projeksjoner; statisk analyse, full te
 flyter, visuell matrise og begge produksjonshostene er grønne.
 
 Første uavhengige SWP-7-review er dokumentert i
-[`styling-conformance-evidence.md`](./styling-conformance-evidence.md). Dagens produktkode,
-visuelle referanser, theme, cascade, legacyport og hostbuild er grønne, men reviewet er **ikke
-vellykket** etter planens eksplisitte klassifisering: vanlige Svelte-spreads, `svelte:element` og
-`{@html}` kan omgå stylingguardene, og 31 offentlige UI-exports typeaksepterer fortsatt `class`
-og/eller `style` gjennom brede HTML-attributter. SWP-7 forblir aktiv med SWP-7.1–7.3 som avgrensede
-rettings- og reauditcheckpoints.
+[`styling-conformance-evidence.md`](./styling-conformance-evidence.md) og ble klassifisert som
+**ikke vellykket**. SWP-7.1 har nå lukket de målte guard- og API-funnene uten produkt- eller
+DOM-endring: 31 offentlige UI-exports utelater `class` og `style`, feature-/route-spreads er fjernet,
+og schema 4 klassifiserer spreads, dynamiske elementer, `{@html}`, stylesheet-markup og øvrige
+Svelte-attributtkanaler fail-closed. Bare Icons eksakt filtrerte dynamiske element er tillatt.
+SWP-7 forblir aktiv med SWP-7.2 for reproduserbar Knip-audit og dokumentavstemming før SWP-7.3
+gjentar den kalde sluttreviewen.
 
 ## Aktiv stylingretning
 
@@ -953,13 +955,15 @@ rettings- og reauditcheckpoints.
   eller uoppløste importer når manifestfixtures og det dynamiske kontrakttestscriptet er registrert.
   De 19 rapporterte typene er komplette transportkontrakter som beholdes bevisst under
   `lib/contracts`; det finnes ingen død produksjonskomponent, kilde-token eller npm-pakke å slette.
-- Hele sluttporten er grønn: 94 filer/345 tester, full `npm run check`, 3 kritiske flyter, 11/11
-  visuelle referanser og 8/8 produksjonsruter. Begge hostene beholder 60 JS-chunks, 123 363 gzip-byte
-  største lazy chunk og eksakt 28 424/28 443 CSS gzip-byte.
-- Første SWP-7-kaldreview er ikke vellykket. Aktiv kilde og runtime er grønne, men guardene dekker
-  ikke `SvelteElement`, `SpreadAttribute` eller `HtmlTag`, og offentlig UI utelater ikke konsekvent
-  `class`/`style` fra HTML-propkontraktene. Bevis, kontrollprober og rettingskart ligger i
-  `docs/styling-conformance-evidence.md`.
+- Hele sluttporten etter SWP-7.1 er grønn: 95 filer/346 tester, full `npm run check`, 3 kritiske
+  flyter, 11/11 visuelle referanser og 8/8 produksjonsruter. Begge hostene beholder 60 JS-chunks,
+  123 363 gzip-byte største lazy chunk og 28 475/28 496 CSS gzip-byte.
+- Første SWP-7-kaldreview var ikke vellykket; bevis, kontrollprober og rettingskart ligger i
+  `docs/styling-conformance-evidence.md`. SWP-7.1 har lukket begge funngruppene med én delt
+  `PublicHtmlAttributes`-kontrakt for 31 offentlige og fem private native forwardere, eksplisitte
+  featureprops og en schema 4-markupkontrakt. Guardene håndhever nå alle klassifiserte
+  attributtkanaler, rå HTML, dynamiske elementer/komponenter og stylesheet-markup mot både
+  fixtures, mutasjonsprober og 184 produksjonskilder.
 - Den aktive CSS-en har ikke lenger featureeide produktselectors. Tailwind er produkteier for alle
   SWP-2–SWP-4-flater og statistikkpresentasjonen; den varige geometriallowlisten er låst uten
   visuell redesign.
@@ -968,14 +972,14 @@ rettings- og reauditcheckpoints.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                                  |
-| ------------------------------------- | --------------------------------------------------- |
-| Base branch                           | `main`                                              |
-| Fastslått basecommit                  | `5287c5e`                                           |
-| Siste semantiske checkpoint           | `docs(swp-7): record independent conformance audit` |
-| Lokale commits foran base             | 70                                                  |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                       |
-| Neste planlagte checkpoint            | SWP-7.1 lukk markup- og offentlig UI-stylinggrense  |
+| Felt                                  | Forventet tilstand                                     |
+| ------------------------------------- | ------------------------------------------------------ |
+| Base branch                           | `main`                                                 |
+| Fastslått basecommit                  | `5287c5e`                                              |
+| Siste semantiske checkpoint           | `fix(swp-7): close styling ownership boundary`         |
+| Lokale commits foran base             | 71                                                     |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                          |
+| Neste planlagte checkpoint            | SWP-7.2 reproduserbar Knip-audit og dokumentavstemming |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -984,37 +988,36 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Start en ny `/start`-sesjon for **SWP-7.1 — lukk markup- og offentlig UI-stylinggrense**:
+Start en ny `/start`-sesjon for **SWP-7.2 — reproduserbar statisk audit og dokumentavstemming**:
 
-1. Opprett én delt HTML-proptype som utelater `class` og `style`, og bruk den på de 31 berørte
-   exports i `$lib/ui` uten å endre DOM, produktadferd eller visuell presentasjon.
-2. Utvid Svelte-AST-analysen til `SvelteElement`, `SpreadAttribute` og `HtmlTag`; klassifiser
-   actions, attachments og andre parserkanaler eksplisitt, og behold bare et eksakt Icon-unntak.
-3. Legg til negative og positive fixtures, mutasjonsprober og typekontrakttester som beviser at
-   literal-, expression-, spread- og dynamiske elementkanaler ikke kan omgå reglene.
-4. Kjør full relevant port og opprett ett grønt checkpoint. Fortsett deretter med SWP-7.2 for
-   pinnet Knip-audit og dokumentavstemming; SWP-7.3 er en ny kald sluttreview.
+1. Pin Knip, sjekk inn config og et navngitt repo-script, registrer guardfixtures og det dynamiske
+   kontrakttestscriptet, og dokumenter de 19 bevisst beholdte transporttypene.
+2. Avstem `scripts/styling-guards/README.md`, `docs/development-and-operations.md`,
+   `docs/product-design-rules.md` og `src/styles/design-system/PRINCIPLES.md` mot faktisk kilde.
+3. Kjør død-kode-, eksport-, utility-, token- og direkte avhengighetskontroll fra bare repoets
+   deklarerte kommandoer, etterfulgt av full relevant port og ett grønt checkpoint.
+4. Fortsett deretter med SWP-7.3 som en ny kald sluttreview over hele den ferdige diffen.
 
 ## Arbeidspakkeregister
 
-| Arbeidspakke                     | Status   | Port/resultat                                                    |
-| -------------------------------- | -------- | ---------------------------------------------------------------- |
-| WP-0 Styring og baseline         | Fullført | Dokumentgrunnlag, React-baseline og komplett adferdsinventar     |
-| WP-1 Build og routes             | Fullført | Build, routes, hostingvarianter og arkitekturkontroll grønn      |
-| WP-2 Contracts/domain/platform   | Fullført | Contracts, ren domain, fetch/API, 401 og adapters grønne         |
-| WP-3 Auth/tenant/serverdata      | Fullført | Auth, tenant, Query, guards, 401 og base path grønne             |
-| WP-4 UI-fundament                | Fullført | Alle kartlagte UI-familier og filterkomposisjon er grønne        |
-| WP-5 App-shell                   | Fullført | Shell, navigation, routeaktivitet, konto og Mer grønne           |
-| WP-6 Featuremigrering            | Fullført | Elleve checkpoints og alle Svelte-featureflater er grønne        |
-| WP-7 Paritet og produksjonsbytte | Fullført | Paritet, React-fjerning, CSS, drift og sluttport grønne          |
-| SWP-0 Baseline og guardkontrakt  | Fullført | Baseline, referanse og ti fixturetestede guardregler grønne      |
-| SWP-1 Theme og guards            | Fullført | Theme, cascade, fixtures, produksjonstre og baseline grønne      |
-| SWP-2 UI-primitives              | Fullført | Alle fire primitivecheckpoints og full kvalitetport er grønne    |
-| SWP-3 Produktpatterns            | Fullført | Alle fem patterncheckpoints og full kvalitetport er grønne       |
-| SWP-4 App-shell/navigation       | Fullført | Alle fire checkpoints og full kvalitetport er grønne             |
-| SWP-5 Features og legacy-CSS     | Fullført | Null legacygjeld, null guardavvik og 38 låste geometrier         |
-| SWP-6 Komponent-/API-opprydding  | Fullført | 4/4: eierskap og offentlig API er ryddet; sluttporten er grønn   |
-| SWP-7 Uavhengig sluttreview      | Pågår    | Første audit ikke vellykket; SWP-7.1 guard-/API-lukking er neste |
+| Arbeidspakke                     | Status   | Port/resultat                                                  |
+| -------------------------------- | -------- | -------------------------------------------------------------- |
+| WP-0 Styring og baseline         | Fullført | Dokumentgrunnlag, React-baseline og komplett adferdsinventar   |
+| WP-1 Build og routes             | Fullført | Build, routes, hostingvarianter og arkitekturkontroll grønn    |
+| WP-2 Contracts/domain/platform   | Fullført | Contracts, ren domain, fetch/API, 401 og adapters grønne       |
+| WP-3 Auth/tenant/serverdata      | Fullført | Auth, tenant, Query, guards, 401 og base path grønne           |
+| WP-4 UI-fundament                | Fullført | Alle kartlagte UI-familier og filterkomposisjon er grønne      |
+| WP-5 App-shell                   | Fullført | Shell, navigation, routeaktivitet, konto og Mer grønne         |
+| WP-6 Featuremigrering            | Fullført | Elleve checkpoints og alle Svelte-featureflater er grønne      |
+| WP-7 Paritet og produksjonsbytte | Fullført | Paritet, React-fjerning, CSS, drift og sluttport grønne        |
+| SWP-0 Baseline og guardkontrakt  | Fullført | Baseline, referanse og ti fixturetestede guardregler grønne    |
+| SWP-1 Theme og guards            | Fullført | Theme, cascade, fixtures, produksjonstre og baseline grønne    |
+| SWP-2 UI-primitives              | Fullført | Alle fire primitivecheckpoints og full kvalitetport er grønne  |
+| SWP-3 Produktpatterns            | Fullført | Alle fem patterncheckpoints og full kvalitetport er grønne     |
+| SWP-4 App-shell/navigation       | Fullført | Alle fire checkpoints og full kvalitetport er grønne           |
+| SWP-5 Features og legacy-CSS     | Fullført | Null legacygjeld, null guardavvik og 38 låste geometrier       |
+| SWP-6 Komponent-/API-opprydding  | Fullført | 4/4: eierskap og offentlig API er ryddet; sluttporten er grønn |
+| SWP-7 Uavhengig sluttreview      | Pågår    | SWP-7.1 er grønn; SWP-7.2 Knip-/dokumentlukking er neste       |
 
 ## Featureregister
 
@@ -1048,11 +1051,12 @@ samt valg av målhost og produksjonskonfigurasjon.
   lokale backendharnessen; vanlig utviklings- og produksjonsdata er upåvirket.
 - Stylingguardanalysatoren kjører de ni ikke-cascade-reglene håndhevende mot 184 produksjonskilder
   og krever null diagnostics. Project-wide custom-property-koblinger valideres på tvers av filer;
-  schema 3 har ingen legacy-baselinepassering eller lagrede guarddiagnostics. Cascade-regelen
-  validerer separat alle fire stilark, mens de 23 isolerte fixturene fortsatt beviser positiv og
-  negativ atferd for alle ti stabile regel-ID-er.
+  schema 4 klassifiserer direkte, semantiske, opaque og spread-baserte markupkanaler og har ingen
+  legacy-baselinepassering eller lagrede guarddiagnostics. Cascade-regelen validerer separat alle
+  fire stilark, mens de 28 isolerte fixturene beviser positiv og negativ atferd for alle ti stabile
+  regel-ID-er.
 - Ingen midlertidige rammeverksadapters, React-legacy eller globale produktselector-filer gjenstår.
-  Stylingbaselinen måler fire aktive CSS-filer og 2044 linjer. `index.css` er Tailwind-inngang,
+  Stylingbaselinen måler fire aktive CSS-filer og 2045 linjer. `index.css` er Tailwind-inngang,
   `tokens.css` eier theme, og `base.css` eier bare dokumentdefaults, tilgjengelighetsfallbacks og
   keyframes. De ti selectorreglene ligger i registrerte lag: tre i `theme` og sju i `base`;
   `components` og `utilities` har ingen app-eide selectorregler.
@@ -1092,12 +1096,11 @@ samt valg av målhost og produksjonskonfigurasjon.
   inline custom-property-verdier og 32 SVG-geometriattributter; featureklasser og semantiske
   statistikkroller er null. Fire eksakte filer eier geometrien; nye navn, eiere, selectorankre eller
   SVG-presentasjonsattributter avvises.
-- Første SWP-7-review har bevist at stylinganalysatoren kan omgås med `svelte:element`, element-/
-  komponentspread og `{@html}`. Produksjonskilden bruker ikke disse kanalene til produktstyling,
-  men fixture- og produksjonsporten er ikke lukket før SWP-7.1 dekker dem eksplisitt.
-- 31 exports i den offentlige `$lib/ui`-barrelen arver fortsatt `class` og/eller `style` fra brede
-  HTML-attributtyper. Direkte eierklasse vinner i de fleste komponentene, men en spreadet `style`
-  er typegyldig, blir sendt til DOM og passerer dagens guard. Dette rettes i SWP-7.1.
+- SWP-7.1 har fjernet `class` og `style` fra alle de 31 berørte offentlige UI-propkontraktene og
+  lukket spreads, `svelte:element`, `svelte:component`, `{@html}`, stylesheet-markup, actions,
+  attachments, transitions og ukjente attributtkanaler fail-closed. Det eneste dynamiske
+  elementunntaket er den eksakte Icon-AST-en, som filtrerer `key`, `class` og `style` før forwarding;
+  både positiv fixture og negativ mutasjonsprobe låser formen.
 - Knip-auditen fra SWP-6 kan gjenskapes med en eksplisitt, midlertidig config, men repoet mangler
   pinnet avhengighet, config og script. Guard-README, driftshåndbok, produktregler og
   design-systemprinsipper har også målte dokumentasjonsavvik. SWP-7.2 eier begge rettingene.
@@ -1108,24 +1111,27 @@ samt valg av målhost og produksjonskonfigurasjon.
   i produksjonsgrafen eller byggartefaktene og er ikke React-/ReactDOM-runtime.
 - Statisk død-kodeanalyse rapporterer bare komplette DTO-typer som ennå ikke har en UI-konsument.
   De beholdes som transportkontrakt i `lib/contracts`; det finnes ingen tilsvarende ubrukt runtimekode.
-- SWP-5.5-buildens initial CSS er 27,8/27,8 KiB gzip for Cloudflare Pages/GitHub Pages av et uendret
-  50 KiB-budsjett; eksakt er målingen 28 424 og 28 443 gzip-byte etter at siste statiske SVG-
-  presentasjon er flyttet til offentlig UI/theme. Initial JS er 38 151/38 191 gzip-byte, 60 chunks,
-  og største lazy JS-chunk er fortsatt 123 363 byte (120,5 KiB) av 130 KiB.
+- SWP-7.1-buildens initial CSS er 27,8/27,8 KiB gzip for Cloudflare Pages/GitHub Pages av et uendret
+  50 KiB-budsjett; eksakt er den regenererte målingen 28 475 og 28 496 gzip-byte. Initial JS er
+  38 147/38 184 gzip-byte, begge hostene har 60 chunks, og største lazy JS-chunk er fortsatt
+  123 363 byte (120,5 KiB) av 130 KiB.
 
 ## Siste verifikasjon
 
 | Kontroll                             | Resultat                                                                            |
 | ------------------------------------ | ----------------------------------------------------------------------------------- |
-| SWP-7 resultatklassifisering         | Ikke vellykket: ordinær Svelte-syntaks kan omgå stylingguardene                     |
-| SWP-7 aktiv kilde/runtime            | Grønn: null produksjonsdiagnostics, uendret funksjon og 11/11 visuelle referanser   |
-| SWP-7 guardmutasjonsprober           | Funn: `SvelteElement`, spreads og `HtmlTag` gir 0 diagnostics for forbudt styling   |
-| SWP-7 full `npm test`                | Bestått: 94 filer og 345 tester                                                     |
-| SWP-7 full `npm run check`           | Bestått: type, arkitektur, legacy, design, styling, baseline, lint og format        |
-| SWP-7 kritiske/visuelle E2E          | Bestått: 3/3 produktflyter og 11/11 pikselidentiske referanser                      |
-| SWP-7 produksjonsruter/hostbuild     | Bestått: 8/8 ruter; 28 424/28 443 CSS-byte, 60 chunks og 123 363 lazy-byte          |
-| SWP-7 statisk Knip-audit             | Bestått med midlertidig config; permanent repoinngang mangler og eies av SWP-7.2    |
-| SWP-7 dependencyaudit                | Bestått terskel: 6 lave og 0 moderate, høye eller kritiske funn                     |
+| SWP-7.1 offentlig UI-propkontrakt    | Bestått: 31/31 exports utelater `class`/`style`; fem private forwardere deler typen |
+| SWP-7.1 markupkontrakt               | Bestått: schema 4 klassifiserer alle parserkanaler og låser ett eksakt Icon-unntak  |
+| SWP-7.1 fixture-/mutasjonsport       | Bestått: 28 fixtures, 10 stabile regler og alle registrerte bypassprober grønne     |
+| SWP-7.1 produksjonstre               | Bestått: 184 kilder, 9 håndhevede regel-ID-er og 0 diagnostics                      |
+| SWP-7.1 full `npm test`              | Bestått: 95 filer og 346 tester                                                     |
+| SWP-7.1 full `npm run check`         | Bestått: type, arkitektur, legacy, design, styling, baseline, lint og format        |
+| SWP-7.1 kritiske/visuelle E2E        | Bestått: 3/3 produktflyter og 11/11 pikselidentiske referanser                      |
+| SWP-7.1 produksjonsruter             | Bestått: 8/8 ruter for Cloudflare Pages- og GitHub Pages-artefaktene                |
+| SWP-7.1 hostbuild                    | Bestått: 28 475/28 496 CSS-byte, 60 chunks og 123 363 lazy-byte                     |
+| Første SWP-7-auditklassifisering     | Ikke vellykket; de målte guard-/API-funnene er nå lukket av SWP-7.1                 |
+| Første SWP-7 statiske Knip-audit     | Bestått midlertidig; permanent repoinngang mangler og eies av SWP-7.2               |
+| Første SWP-7 dependencyaudit         | Bestått terskel: 6 lave og 0 moderate, høye eller kritiske funn                     |
 | SWP-6.4 Knip runtime-/pakkeanalyse   | Bestått: 0 filer, verdi-exports, direkte/ulistede pakker, binaries og importer      |
 | SWP-6.4 typeklassifisering           | Bestått: bare 19 komplette, bevisst beholdte transportkontrakter rapporteres        |
 | SWP-6.4 offentlig UI-API             | Bestått: privat loadingeier og kun faktisk konsumerte offentlige komponenter/typer  |
@@ -1377,11 +1383,17 @@ samt valg av målhost og produksjonskonfigurasjon.
 
 ## Filer i siste checkpoint
 
-- `docs/styling-conformance-evidence.md` med kald SWP-7-målematrise, guardprober, bundlebevis,
-  resultatklassifisering og SWP-7.1–7.3-rettingskart
-- `docs/migration-status.md` med autoritativt resultat, oppdaterte nåtidsmål og neste eksakte steg
-- `docs/README.md` med inngang til konformitetsbeviset
-- Produktkilde, stylingimplementasjon, endpointkontrakter, pakkefiler og backend-repoet er urørt
+- `src/lib/ui/public-html-attributes.ts`, typekontrakttesten og de 31 offentlige/fem private native
+  forwarderne med lukket `class`-/`style`-API
+- `src/lib/features/{auth,arrangement-admin}` med eksplisitte Feedback-props og UI-eide
+  kontrollstørrelser uten visuell eller semantisk DOM-endring
+- `scripts/styling-guards/{contract.json,contract.mjs,analyze.mjs}`, 28 fixtureinnganger og den
+  utvidede produksjonstremutasjonsporten med schema 4-markupklassifisering
+- `src/lib/ui/primitives/Icon.svelte` med eksakt filtrert dynamisk element og `src/index.css` med
+  guardtestscriptet eksplisitt utelatt fra Tailwinds produksjonskilder
+- `docs/styling-baseline.json` og `docs/migration-status.md` med regenerert bevis, autoritativt
+  SWP-7.1-resultat og SWP-7.2 som neste eksakte steg
+- Backend-repoet er urørt
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
 pågående arbeid etter checkpointet.

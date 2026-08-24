@@ -1,9 +1,10 @@
 <script lang="ts">
   import type { HTMLAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
   import Switch from "../primitives/Switch.svelte";
   import SettingsRowFrame from "./SettingsRowFrame.svelte";
 
-  type Props = Omit<HTMLAttributes<HTMLDivElement>, "children" | "title"> & {
+  type Props = Omit<PublicHtmlAttributes<HTMLAttributes<HTMLDivElement>>, "children" | "title"> & {
     checked?: boolean;
     description?: string;
     disabled?: boolean;

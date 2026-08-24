@@ -1,12 +1,16 @@
 <script lang="ts">
   import type { HTMLAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
 
   export type DocumentFact = {
     label: string;
     value: string;
   };
 
-  type Props = Omit<HTMLAttributes<HTMLDListElement>, "aria-label" | "children"> & {
+  type Props = Omit<
+    PublicHtmlAttributes<HTMLAttributes<HTMLDListElement>>,
+    "aria-label" | "children"
+  > & {
     items: readonly DocumentFact[];
     label?: string;
   };
