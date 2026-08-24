@@ -34,6 +34,9 @@
   --color-action-primary-text: var(--app-action-primary-text);
   --color-action-secondary: var(--app-action-secondary);
   --color-activity-accent: var(--activity-accent);
+  --color-app-shell-loading-placeholder: var(--app-shell-loading-placeholder);
+  --color-app-shell-topbar: var(--app-shell-topbar-surface);
+  --color-app-shell-topbar-divider: var(--app-shell-topbar-divider);
   --color-background: var(--background);
   --color-backdrop-scrim: var(--app-backdrop-scrim);
   --color-border: var(--border);
@@ -160,6 +163,7 @@
   --blur-dialog-overlay: var(--app-dialog-overlay-blur);
   --blur-editor-dialog-actions: var(--app-editor-dialog-actions-blur);
   --blur-navigation-bottom: var(--app-navigation-bottom-blur);
+  --blur-app-shell-topbar: var(--app-shell-topbar-blur);
 
   --font-body: var(--app-font-body);
   --font-display: var(--app-font-display);
@@ -288,6 +292,7 @@
   --border-width-radio-selected: var(--app-radio-selected-border-width);
   --border-width-rich-text-content-quote: var(--app-rich-text-content-quote-border-width);
   --border-width-rich-text-quote: var(--app-rich-text-quote-border-width);
+  --border-width-sidebar-divider-width: var(--app-sidebar-divider-width);
   --radius-calendar-day: var(--app-calendar-day-radius);
   --radius-calendar-surface: var(--app-calendar-surface-radius);
   --radius-collection: var(--app-collection-radius);
@@ -308,6 +313,7 @@
   --radius-navigation-section-indicator: var(--app-navigation-section-indicator-radius);
   --radius-navigation-section-item: var(--app-navigation-section-item-radius);
   --radius-navigation-sidebar: var(--app-navigation-sidebar-radius);
+  --radius-app-shell-loading: var(--app-shell-loading-radius);
   --radius-page-loading-surface: var(--app-page-loading-surface-radius);
   --radius-record: var(--app-record-radius);
   --radius-rich-text-editor: var(--app-rich-text-editor-radius);
@@ -412,6 +418,14 @@
   --spacing-navigation-safe: var(--app-navigation-safe-padding-bottom);
   --spacing-navigation-section-indicator-bottom: var(--app-navigation-section-indicator-bottom);
   --spacing-navigation-sidebar: var(--app-navigation-sidebar-gap);
+  --spacing-app-shell-loading: var(--app-shell-loading-gap);
+  --spacing-app-shell-main-safe: var(--app-shell-main-safe-padding-bottom);
+  --spacing-app-shell-sidebar: var(--app-shell-sidebar-gap);
+  --spacing-app-shell-sidebar-block: var(--app-shell-sidebar-padding-block);
+  --spacing-app-shell-sidebar-inline: var(--app-shell-sidebar-padding-inline);
+  --spacing-app-shell-topbar-inline: var(--app-shell-topbar-padding-inline);
+  --spacing-app-shell-topbar-safe: var(--app-shell-topbar-safe-padding-top);
+  --spacing-app-shell-workspace-safe: var(--app-shell-workspace-safe-padding-bottom);
   --spacing-page: var(--app-page-padding);
   --spacing-page-content-desktop-bottom: var(--app-page-content-desktop-padding-bottom);
   --spacing-page-content-desktop-gap: var(--app-page-content-desktop-gap);
@@ -473,6 +487,7 @@
   --grid-template-columns-date-navigation-compact: var(--app-date-navigation-compact-columns);
   --grid-template-columns-document-facts: var(--app-document-facts-columns);
   --grid-template-columns-feedback-wide: var(--app-feedback-wide-columns);
+  --grid-template-columns-app-shell: var(--app-shell-columns);
   --grid-template-columns-settings-row: var(--app-settings-row-columns);
   --grid-template-rows-collection-row-schedule: var(--app-collection-row-schedule-rows);
 
@@ -497,6 +512,8 @@
   --width-dialog-surface: var(--app-dialog-surface-width);
   --width-editor-dialog: var(--app-editor-dialog-width);
   --width-navigation-overlay-more: var(--app-navigation-overlay-more-width);
+  --width-app-shell-loading-action: var(--app-shell-loading-action-width);
+  --width-app-shell-loading-identity: var(--app-shell-loading-identity-width);
   --width-page-loading-description: var(--app-page-loading-description-width);
   --width-page-loading-eyebrow: var(--app-page-loading-eyebrow-width);
   --width-page-loading-title: var(--app-page-loading-title-width);
@@ -542,6 +559,8 @@
   --height-form-step-indicator: var(--app-form-step-indicator-height);
   --height-navigation-bottom-indicator: var(--app-navigation-bottom-indicator-height);
   --height-navigation-section-indicator: var(--app-navigation-section-indicator-height);
+  --height-app-shell: var(--app-shell-min-height);
+  --height-app-shell-loading: var(--app-shell-loading-placeholder-height);
   --height-page-loading-description: var(--app-page-loading-description-height);
   --height-page-loading-eyebrow: var(--app-page-loading-eyebrow-height);
   --height-page-loading-row: var(--app-page-loading-row-height);
@@ -571,6 +590,8 @@
   --min-height-navigation-bottom-list: var(--app-navigation-bottom-list-min-height);
   --min-height-navigation-loading-item: var(--app-navigation-loading-item-min-height);
   --min-height-navigation-section-item: var(--app-navigation-section-item-min-height);
+  --min-height-app-shell: var(--app-shell-min-height);
+  --min-height-app-shell-topbar: var(--app-shell-topbar-min-height);
   --min-height-page-loading: var(--app-page-loading-min-height);
   --min-height-rich-text-editor: var(--app-rich-text-editor-min-height);
   --min-height-settings-choice: var(--app-settings-choice-min-height);
@@ -594,6 +615,8 @@
 
 /* Component-owned responsive behavior, descendant selectors and measured runtime geometry stay registered here. */
 @custom-variant compact-control (@media (width <= 30rem));
+@custom-variant app-shell-topbar-actions (& > [data-ui="navigation"][data-layout="actions"]);
+@custom-variant app-shell-topbar-identity (& > [data-ui="navigation-identity"]);
 @custom-variant navigation-icon-svg (& > svg);
 @custom-variant navigation-logo-media (& > :is(img, svg));
 @custom-variant collection-booking-choice (

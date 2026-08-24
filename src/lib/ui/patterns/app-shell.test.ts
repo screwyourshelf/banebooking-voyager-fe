@@ -25,6 +25,46 @@ describe("public app shell pattern", () => {
     expect(container.querySelector('[data-part="bottom-navigation"]')).toBeInTheDocument();
   });
 
+  it("owns responsive frame, sidebar, mobile surface and safe-area geometry", () => {
+    const { container } = render(AppShellFixture, { onTheme: () => undefined });
+    const shell = container.querySelector('[data-ui="app-shell"]');
+    const frame = container.querySelector('[data-part="frame"]');
+    const sidebar = container.querySelector('[data-part="sidebar"]');
+    const workspace = container.querySelector('[data-part="workspace"]');
+    const topbar = container.querySelector('[data-part="topbar"]');
+    const main = screen.getByRole("main");
+    const bottom = container.querySelector('[data-part="bottom-navigation"]');
+
+    expect(shell).toHaveClass("min-h-app-shell");
+    expect(frame).toHaveClass("md:grid", "md:grid-cols-app-shell", "md:isolate");
+    expect(sidebar).toHaveClass(
+      "hidden",
+      "md:flex",
+      "md:h-app-shell",
+      "md:border-r-sidebar-divider-width",
+      "md:py-app-shell-sidebar-block",
+      "lg:block"
+    );
+    expect(workspace).toHaveClass(
+      "flex",
+      "min-h-app-shell",
+      "pb-app-shell-workspace-safe",
+      "md:pb-0",
+      "lg:isolate"
+    );
+    expect(topbar).toHaveClass(
+      "sticky",
+      "min-h-app-shell-topbar",
+      "pt-app-shell-topbar-safe",
+      "backdrop-blur-app-shell-topbar",
+      "md:hidden",
+      "app-shell-topbar-identity:flex-1",
+      "app-shell-topbar-actions:flex-none"
+    );
+    expect(main).toHaveClass("max-w-content", "pb-app-shell-main-safe", "md:pb-0", "lg:relative");
+    expect(bottom).toHaveClass("fixed", "z-40", "inset-x-0", "bottom-0", "md:hidden");
+  });
+
   it("keeps navigation and workspace controls in predictable document order", async () => {
     const onTheme = vi.fn();
     const { container } = render(AppShellFixture, { onTheme });
@@ -59,6 +99,21 @@ describe("public app shell pattern", () => {
     );
     expect(screen.getAllByRole("status", { name: "Laster navigasjon …" })).toHaveLength(2);
     expect(container.querySelectorAll('[data-part="topbar-loading"] > span')).toHaveLength(3);
+    expect(container.querySelector('[data-part="topbar-loading"]')).toHaveClass(
+      "gap-app-shell-loading"
+    );
+    expect(
+      container.querySelector('[data-part="topbar-loading"] > [data-part="identity"]')
+    ).toHaveClass(
+      "h-app-shell-loading",
+      "w-app-shell-loading-identity",
+      "rounded-app-shell-loading",
+      "bg-app-shell-loading-placeholder",
+      "animate-navigation-loading"
+    );
+    expect(
+      container.querySelector('[data-part="topbar-loading"] > [data-part="action"]')
+    ).toHaveClass("w-app-shell-loading-action", "flex-none");
     expect(screen.getByRole("main")).toBeEmptyDOMElement();
   });
 

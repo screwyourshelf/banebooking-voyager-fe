@@ -53,6 +53,9 @@
       rgb(4 21 15 / 0.78) 100%
     );
     --app-desktop-backdrop-vertical: linear-gradient(rgb(3 16 10 / 0.18), rgb(3 16 10 / 0.5));
+    --app-shell-loading-placeholder: var(--app-navigation-loading-placeholder);
+    --app-shell-topbar-divider: color-mix(in srgb, var(--app-line) 82%, transparent);
+    --app-shell-topbar-surface: color-mix(in srgb, var(--app-surface) 92%, transparent);
     --app-sidebar: #0b3021;
     --app-sidebar-divider-width: 2px;
     --app-sidebar-divider: color-mix(in srgb, var(--app-control-muted) 38%, transparent);
@@ -287,6 +290,7 @@
     --app-dialog-overlay-blur: 3px;
     --app-editor-dialog-actions-blur: 12px;
     --app-navigation-bottom-blur: 18px;
+    --app-shell-topbar-blur: 18px;
 
     /* Semantic product geometry. Values mirror the verified pre-Tailwind component baseline. */
     --app-content-max: 112rem;
@@ -297,6 +301,11 @@
     --app-page-title-max-width: 18ch;
     --app-section-description-max-width: 65ch;
     --app-settings-description-max-width: 42rem;
+    --app-shell-loading-action-width: 2.5rem;
+    --app-shell-loading-identity-width: min(13rem, 56vw);
+    --app-shell-loading-placeholder-height: 2.5rem;
+    --app-shell-min-height: 100svh;
+    --app-shell-topbar-min-height: calc(4rem + env(safe-area-inset-top));
     --app-sidebar-width: 15.5rem;
     --app-sidebar-rail-width: 4.5rem;
     --app-control-height: 2.25rem;
@@ -383,6 +392,7 @@
     --app-calendar-header-columns: 2.25rem minmax(0, 1fr) 2.25rem;
     --app-document-facts-columns: repeat(auto-fit, minmax(9rem, 1fr));
     --app-feedback-wide-columns: minmax(0, 1fr) auto;
+    --app-shell-columns: var(--app-sidebar-width) minmax(0, 1fr);
     --app-settings-row-columns: minmax(12rem, 0.65fr) minmax(15rem, 1fr);
     --app-collection-controls-top-columns: minmax(0, 1fr) auto;
     --app-collection-loading-entity-columns: 5.5rem minmax(0, 1fr) 4.5rem;
@@ -445,6 +455,14 @@
     --app-navigation-safe-padding-bottom: env(safe-area-inset-bottom);
     --app-navigation-section-indicator-bottom: 1px;
     --app-navigation-sidebar-gap: 1.25rem;
+    --app-shell-loading-gap: 0.5rem;
+    --app-shell-main-safe-padding-bottom: calc(4.25rem + env(safe-area-inset-bottom));
+    --app-shell-sidebar-gap: 1.25rem;
+    --app-shell-sidebar-padding-block: 1.25rem;
+    --app-shell-sidebar-padding-inline: 1rem;
+    --app-shell-topbar-padding-inline: 1rem;
+    --app-shell-topbar-safe-padding-top: env(safe-area-inset-top);
+    --app-shell-workspace-safe-padding-bottom: calc(4.75rem + env(safe-area-inset-bottom));
     --app-schedule-time-gap: 0.15rem;
     --app-schedule-time-range-gap: 0.05rem;
     --app-weather-icon-size: 1rem;
@@ -544,6 +562,7 @@
     --app-navigation-section-indicator-radius: 999px 999px 0 0;
     --app-navigation-section-item-radius: 0.625rem 0.625rem 0 0;
     --app-navigation-sidebar-radius: 1rem;
+    --app-shell-loading-radius: 0.75rem;
     --app-collection-control-item-radius: 0.75rem;
     --app-collection-radius: 1.25rem;
     --app-collection-state-indicator-radius: 1rem;

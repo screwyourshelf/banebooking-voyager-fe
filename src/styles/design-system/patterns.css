@@ -25,118 +25,11 @@
 
   /* App frame */
   [data-ui="app-shell"] {
-    min-height: 100svh;
     background: var(--app-canvas);
-  }
-
-  [data-ui="app-shell"] > [data-part="frame"] {
-    min-height: 100svh;
-  }
-
-  [data-ui="app-shell"] > [data-part="frame"] > [data-part="sidebar"] {
-    display: none;
-  }
-
-  [data-ui="app-shell"] > [data-part="workspace"],
-  [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] {
-    display: flex;
-    min-width: 0;
-    min-height: 100svh;
-    flex-direction: column;
-    padding-bottom: calc(4.75rem + env(safe-area-inset-bottom));
-  }
-
-  [data-ui="app-shell"] > [data-part="workspace"] > [data-part="topbar"],
-  [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] > [data-part="topbar"] {
-    position: sticky;
-    z-index: 30;
-    top: 0;
-    display: flex;
-    min-height: calc(4rem + env(safe-area-inset-top));
-    align-items: center;
-    border-bottom: 1px solid color-mix(in srgb, var(--app-line) 82%, transparent);
-    background: color-mix(in srgb, var(--app-surface) 92%, transparent);
-    padding: env(safe-area-inset-top) 1rem 0;
-    backdrop-filter: blur(18px);
-  }
-
-  :is(
-      [data-ui="app-shell"] > [data-part="workspace"] > [data-part="topbar"],
-      [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] > [data-part="topbar"]
-    )
-    > [data-ui="navigation-identity"] {
-    min-width: 0;
-    flex: 1;
-  }
-
-  :is(
-      [data-ui="app-shell"] > [data-part="workspace"] > [data-part="topbar"],
-      [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] > [data-part="topbar"]
-    )
-    > [data-ui="navigation"][data-layout="actions"] {
-    flex: 0 0 auto;
-  }
-
-  :is(
-      [data-ui="app-shell"] > [data-part="workspace"] > [data-part="topbar"],
-      [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] > [data-part="topbar"]
-    )
-    > [data-part="topbar-loading"] {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    gap: 0.5rem;
-  }
-
-  :is(
-      [data-ui="app-shell"] > [data-part="workspace"] > [data-part="topbar"],
-      [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] > [data-part="topbar"]
-    )
-    > [data-part="topbar-loading"]
-    > [data-part] {
-    display: block;
-    height: 2.5rem;
-    border-radius: 0.75rem;
-    background: color-mix(in srgb, var(--app-line-strong) 64%, var(--app-surface));
-    animation: navigation-loading 1.8s ease-in-out infinite;
-  }
-
-  :is(
-      [data-ui="app-shell"] > [data-part="workspace"] > [data-part="topbar"],
-      [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] > [data-part="topbar"]
-    )
-    > [data-part="topbar-loading"]
-    > [data-part="identity"] {
-    width: min(13rem, 56vw);
-    margin-right: auto;
-  }
-
-  :is(
-      [data-ui="app-shell"] > [data-part="workspace"] > [data-part="topbar"],
-      [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] > [data-part="topbar"]
-    )
-    > [data-part="topbar-loading"]
-    > [data-part="action"] {
-    width: 2.5rem;
-    flex: 0 0 auto;
   }
 
   [data-ui="app-shell"] > [data-part="workspace"] > [data-part="main"],
   [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] > [data-part="main"] {
-    width: 100%;
-    min-height: 0;
-    max-width: var(--app-content-max);
-    flex: 1;
-    margin-inline: auto;
     background: color-mix(in srgb, var(--muted) 20%, transparent);
-    padding-bottom: calc(4.25rem + env(safe-area-inset-bottom));
-  }
-
-  [data-ui="app-shell"] > [data-part="bottom-navigation"] {
-    position: fixed;
-    z-index: 40;
-    right: 0;
-    bottom: 0;
-    left: 0;
   }
 }

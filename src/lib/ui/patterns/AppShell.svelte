@@ -35,9 +35,20 @@
   const loadingLabel = $derived(navigationLoadingLabel ?? "Laster navigasjon …");
 </script>
 
-<div data-ui="app-shell" data-background={background} data-navigation-state={navigationState}>
-  <div data-part="frame">
-    <aside data-part="sidebar">
+<div
+  class="min-h-app-shell"
+  data-ui="app-shell"
+  data-background={background}
+  data-navigation-state={navigationState}
+>
+  <div
+    class="min-h-app-shell md:relative md:grid md:grid-cols-app-shell md:isolate"
+    data-part="frame"
+  >
+    <aside
+      class="hidden md:sticky md:top-0 md:flex md:h-app-shell md:flex-col md:gap-app-shell-sidebar md:overflow-hidden md:border-r-sidebar-divider-width md:border-sidebar-divider md:px-app-shell-sidebar-inline md:py-app-shell-sidebar-block lg:block lg:m-0 lg:border-0 lg:border-r-sidebar-divider-width lg:rounded-none"
+      data-part="sidebar"
+    >
       {#if desktopNavigation}
         {@render desktopNavigation()}
       {:else}
@@ -45,26 +56,48 @@
       {/if}
     </aside>
 
-    <div data-part="workspace">
-      <header data-part="topbar">
+    <div
+      class="flex min-w-0 min-h-app-shell flex-col pb-app-shell-workspace-safe md:pb-0 lg:relative lg:isolate"
+      data-part="workspace"
+    >
+      <header
+        class="sticky z-30 top-0 flex min-h-app-shell-topbar items-center border-b border-app-shell-topbar-divider bg-app-shell-topbar px-app-shell-topbar-inline pt-app-shell-topbar-safe pb-0 backdrop-blur-app-shell-topbar md:hidden app-shell-topbar-identity:min-w-0 app-shell-topbar-identity:flex-1 app-shell-topbar-actions:flex-none"
+        data-part="topbar"
+      >
         {#if mobileHeader}
           {@render mobileHeader()}
         {:else}
-          <div data-part="topbar-loading" aria-hidden="true">
-            <span data-part="identity"></span>
-            <span data-part="action"></span>
-            <span data-part="action"></span>
+          <div
+            class="flex w-full items-center gap-app-shell-loading"
+            data-part="topbar-loading"
+            aria-hidden="true"
+          >
+            <span
+              class="block h-app-shell-loading w-app-shell-loading-identity mr-auto rounded-app-shell-loading bg-app-shell-loading-placeholder animate-navigation-loading"
+              data-part="identity"
+            ></span>
+            <span
+              class="block h-app-shell-loading w-app-shell-loading-action flex-none rounded-app-shell-loading bg-app-shell-loading-placeholder animate-navigation-loading"
+              data-part="action"
+            ></span>
+            <span
+              class="block h-app-shell-loading w-app-shell-loading-action flex-none rounded-app-shell-loading bg-app-shell-loading-placeholder animate-navigation-loading"
+              data-part="action"
+            ></span>
           </div>
         {/if}
       </header>
 
-      <main data-part="main">
+      <main
+        class="w-full min-h-0 max-w-content flex-1 mx-auto pb-app-shell-main-safe md:pb-0 lg:relative lg:z-1"
+        data-part="main"
+      >
         {@render children?.()}
       </main>
     </div>
   </div>
 
-  <div data-part="bottom-navigation">
+  <div class="fixed z-40 inset-x-0 bottom-0 md:hidden" data-part="bottom-navigation">
     {#if mobileNavigation}
       {@render mobileNavigation()}
     {:else}

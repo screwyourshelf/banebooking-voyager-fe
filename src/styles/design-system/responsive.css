@@ -18,15 +18,7 @@
     }
 
     [data-ui="app-shell"] > [data-part="frame"] {
-      position: relative;
-      display: grid;
-      grid-template-columns: var(--app-sidebar-rail-width) minmax(0, 1fr);
-      isolation: isolate;
       background: var(--app-sidebar);
-    }
-
-    [data-ui="app-shell"][data-navigation-state] > [data-part="frame"] {
-      grid-template-columns: var(--app-sidebar-width) minmax(0, 1fr);
     }
 
     [data-ui="app-shell"] > [data-part="frame"]::before {
@@ -42,25 +34,12 @@
     }
 
     [data-ui="app-shell"] > [data-part="frame"] > [data-part="sidebar"] {
-      position: sticky;
-      top: 0;
-      display: flex;
-      height: 100svh;
-      flex-direction: column;
-      gap: 1.25rem;
-      overflow: hidden;
-      border-right: var(--app-sidebar-divider-width) solid var(--app-sidebar-divider);
       background: linear-gradient(90deg, rgb(7 31 19 / 0.92), rgb(10 43 27 / 0.66));
       box-shadow: 1rem 0 3rem rgb(2 18 10 / 0.18);
     }
 
-    [data-ui="app-shell"][data-navigation-state] > [data-part="frame"] > [data-part="sidebar"] {
-      padding: 1.25rem 1rem;
-    }
-
     [data-ui="app-shell"] > [data-part="workspace"],
     [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] {
-      padding-bottom: 0;
       background: transparent !important;
       box-shadow: none !important;
     }
@@ -68,7 +47,6 @@
     [data-ui="app-shell"] > [data-part="workspace"] > [data-part="main"],
     [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] > [data-part="main"] {
       background: transparent;
-      padding-bottom: 0;
     }
 
     /* SWP-4 flytter den responsive Page-/shell-komposisjonen til sin endelige eier. */
@@ -76,40 +54,16 @@
       --app-page-description-text: var(--app-control-muted);
       --app-page-heading-text: var(--app-control-text);
     }
-
-    [data-ui="app-shell"] > [data-part="bottom-navigation"] {
-      display: none;
-    }
-
-    :is(
-      [data-ui="app-shell"] > [data-part="workspace"] > [data-part="topbar"],
-      [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] > [data-part="topbar"]
-    ) {
-      display: none;
-    }
   }
 }
 
 @media (min-width: 64rem) {
   @layer components {
     [data-ui="app-shell"] > [data-part="frame"] {
-      position: relative;
-      display: grid;
-      grid-template-columns: var(--app-sidebar-width) minmax(0, 1fr);
-      isolation: isolate;
       background: transparent;
     }
 
     [data-ui="app-shell"] > [data-part="frame"] > [data-part="sidebar"] {
-      position: sticky;
-      top: 0;
-      display: block;
-      height: 100svh;
-      margin: 0;
-      overflow: hidden;
-      border: 0;
-      border-right: var(--app-sidebar-divider-width) solid var(--app-sidebar-divider);
-      border-radius: 0;
       background: linear-gradient(90deg, rgb(5 27 17 / 0.93), rgb(8 39 24 / 0.7));
       box-shadow: 1.25rem 0 4rem rgb(2 18 10 / 0.2);
       backdrop-filter: none;
@@ -117,17 +71,7 @@
 
     [data-ui="app-shell"] > [data-part="workspace"],
     [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] {
-      position: relative;
-      min-height: 100svh;
-      isolation: isolate;
-      padding-bottom: 0;
       background: transparent;
-    }
-
-    [data-ui="app-shell"] > [data-part="workspace"] > [data-part="main"],
-    [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] > [data-part="main"] {
-      position: relative;
-      z-index: 1;
     }
 
     [data-ui="app-shell"]

@@ -152,6 +152,9 @@
           "action-primary-text": "--app-action-primary-text",
           "action-secondary": "--app-action-secondary",
           "activity-accent": "--activity-accent",
+          "app-shell-loading-placeholder": "--app-shell-loading-placeholder",
+          "app-shell-topbar": "--app-shell-topbar-surface",
+          "app-shell-topbar-divider": "--app-shell-topbar-divider",
           "background": "--background",
           "backdrop-scrim": "--app-backdrop-scrim",
           "border": "--border",
@@ -281,7 +284,8 @@
         "roles": {
           "dialog-overlay": "--app-dialog-overlay-blur",
           "editor-dialog-actions": "--app-editor-dialog-actions-blur",
-          "navigation-bottom": "--app-navigation-bottom-blur"
+          "navigation-bottom": "--app-navigation-bottom-blur",
+          "app-shell-topbar": "--app-shell-topbar-blur"
         }
       },
       "fontFamily": {
@@ -441,7 +445,8 @@
           "form-submit-spinner": "--app-form-submit-spinner-border-width",
           "radio-selected": "--app-radio-selected-border-width",
           "rich-text-content-quote": "--app-rich-text-content-quote-border-width",
-          "rich-text-quote": "--app-rich-text-quote-border-width"
+          "rich-text-quote": "--app-rich-text-quote-border-width",
+          "sidebar-divider-width": "--app-sidebar-divider-width"
         }
       },
       "radius": {
@@ -467,6 +472,7 @@
           "navigation-section-indicator": "--app-navigation-section-indicator-radius",
           "navigation-section-item": "--app-navigation-section-item-radius",
           "navigation-sidebar": "--app-navigation-sidebar-radius",
+          "app-shell-loading": "--app-shell-loading-radius",
           "page-loading-surface": "--app-page-loading-surface-radius",
           "record": "--app-record-radius",
           "rich-text-editor": "--app-rich-text-editor-radius",
@@ -580,6 +586,14 @@
           "navigation-safe": "--app-navigation-safe-padding-bottom",
           "navigation-section-indicator-bottom": "--app-navigation-section-indicator-bottom",
           "navigation-sidebar": "--app-navigation-sidebar-gap",
+          "app-shell-loading": "--app-shell-loading-gap",
+          "app-shell-main-safe": "--app-shell-main-safe-padding-bottom",
+          "app-shell-sidebar": "--app-shell-sidebar-gap",
+          "app-shell-sidebar-block": "--app-shell-sidebar-padding-block",
+          "app-shell-sidebar-inline": "--app-shell-sidebar-padding-inline",
+          "app-shell-topbar-inline": "--app-shell-topbar-padding-inline",
+          "app-shell-topbar-safe": "--app-shell-topbar-safe-padding-top",
+          "app-shell-workspace-safe": "--app-shell-workspace-safe-padding-bottom",
           "page": "--app-page-padding",
           "page-content-desktop-bottom": "--app-page-content-desktop-padding-bottom",
           "page-content-desktop-gap": "--app-page-content-desktop-gap",
@@ -644,6 +658,7 @@
           "date-navigation-compact": "--app-date-navigation-compact-columns",
           "document-facts": "--app-document-facts-columns",
           "feedback-wide": "--app-feedback-wide-columns",
+          "app-shell": "--app-shell-columns",
           "settings-row": "--app-settings-row-columns"
         }
       },
@@ -675,6 +690,8 @@
           "dialog-surface": "--app-dialog-surface-width",
           "editor-dialog": "--app-editor-dialog-width",
           "navigation-overlay-more": "--app-navigation-overlay-more-width",
+          "app-shell-loading-action": "--app-shell-loading-action-width",
+          "app-shell-loading-identity": "--app-shell-loading-identity-width",
           "page-loading-description": "--app-page-loading-description-width",
           "page-loading-eyebrow": "--app-page-loading-eyebrow-width",
           "page-loading-title": "--app-page-loading-title-width",
@@ -735,6 +752,8 @@
           "form-step-indicator": "--app-form-step-indicator-height",
           "navigation-bottom-indicator": "--app-navigation-bottom-indicator-height",
           "navigation-section-indicator": "--app-navigation-section-indicator-height",
+          "app-shell": "--app-shell-min-height",
+          "app-shell-loading": "--app-shell-loading-placeholder-height",
           "page-loading-description": "--app-page-loading-description-height",
           "page-loading-eyebrow": "--app-page-loading-eyebrow-height",
           "page-loading-row": "--app-page-loading-row-height",
@@ -769,6 +788,8 @@
           "navigation-bottom-list": "--app-navigation-bottom-list-min-height",
           "navigation-loading-item": "--app-navigation-loading-item-min-height",
           "navigation-section-item": "--app-navigation-section-item-min-height",
+          "app-shell": "--app-shell-min-height",
+          "app-shell-topbar": "--app-shell-topbar-min-height",
           "page-loading": "--app-page-loading-min-height",
           "rich-text-editor": "--app-rich-text-editor-min-height",
           "settings-choice": "--app-settings-choice-min-height",
@@ -822,6 +843,8 @@
       "exact": [
         "2xl",
         "active",
+        "app-shell-topbar-actions",
+        "app-shell-topbar-identity",
         "after",
         "before",
         "checked",
@@ -993,6 +1016,7 @@
         "inline-grid",
         "inset-0",
         "inset-auto",
+        "inset-x-0",
         "invisible",
         "isolate",
         "italic",
@@ -1031,6 +1055,7 @@
         "mt-auto",
         "mt-0",
         "mx-auto",
+        "mr-auto",
         "no-underline",
         "object-contain",
         "object-cover",
@@ -2213,6 +2238,76 @@
         "utilityPrefixes": ["max-h"],
         "themeNamespace": "maxHeight",
         "roles": ["date-popover", "dialog", "dialog-surface", "editor-dialog"]
+      },
+      {
+        "utilityPrefixes": ["bg"],
+        "themeNamespace": "color",
+        "roles": ["app-shell-loading-placeholder", "app-shell-topbar"]
+      },
+      {
+        "utilityPrefixes": ["border"],
+        "themeNamespace": "color",
+        "roles": ["app-shell-topbar-divider"]
+      },
+      {
+        "utilityPrefixes": ["backdrop-blur"],
+        "themeNamespace": "blur",
+        "roles": ["app-shell-topbar"]
+      },
+      {
+        "utilityPrefixes": ["border-r"],
+        "themeNamespace": "borderWidth",
+        "roles": ["sidebar-divider-width"]
+      },
+      {
+        "utilityPrefixes": ["rounded"],
+        "themeNamespace": "radius",
+        "roles": ["app-shell-loading"]
+      },
+      {
+        "utilityPrefixes": ["gap"],
+        "themeNamespace": "spacing",
+        "roles": ["app-shell-loading", "app-shell-sidebar"]
+      },
+      {
+        "utilityPrefixes": ["px"],
+        "themeNamespace": "spacing",
+        "roles": ["app-shell-sidebar-inline", "app-shell-topbar-inline"]
+      },
+      {
+        "utilityPrefixes": ["py"],
+        "themeNamespace": "spacing",
+        "roles": ["app-shell-sidebar-block"]
+      },
+      {
+        "utilityPrefixes": ["pb"],
+        "themeNamespace": "spacing",
+        "roles": ["app-shell-main-safe", "app-shell-workspace-safe"]
+      },
+      {
+        "utilityPrefixes": ["pt"],
+        "themeNamespace": "spacing",
+        "roles": ["app-shell-topbar-safe"]
+      },
+      {
+        "utilityPrefixes": ["grid-cols"],
+        "themeNamespace": "gridTemplateColumns",
+        "roles": ["app-shell"]
+      },
+      {
+        "utilityPrefixes": ["w"],
+        "themeNamespace": "width",
+        "roles": ["app-shell-loading-action", "app-shell-loading-identity"]
+      },
+      {
+        "utilityPrefixes": ["h"],
+        "themeNamespace": "height",
+        "roles": ["app-shell", "app-shell-loading"]
+      },
+      {
+        "utilityPrefixes": ["min-h"],
+        "themeNamespace": "minHeight",
+        "roles": ["app-shell", "app-shell-topbar"]
       },
       {
         "utilityPrefixes": ["animate"],
