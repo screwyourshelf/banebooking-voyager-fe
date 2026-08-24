@@ -53,3 +53,37 @@ feature-til-featurekobling er nødvendig.
 Den observerbare kontrakten er bevart gjennom de eksisterende arrangementadmin- og
 bane-/grenadministrasjonstestene: editorsteg, staging, oppretting, filter, reorder, ulagret utkast,
 validering og bookingoverstyring går gjennom de samme offentlige komponentene og endpointene.
+
+## SWP-6.2 — store offentlige patterns
+
+Kaldmålingen omfattet alle 20 produksjonspatterns med minst 70 linjer. Importgrafen går bare mot
+primitives, andre navngitte UI-byggesteiner og interne typed context-/controllerkontrakter; ingen
+pattern kjenner features, API, auth eller routes.
+
+| Pattern/familie                                                           |                      Kald størrelse | Vurdering                                                                                                                                                               |
+| ------------------------------------------------------------------------- | ----------------------------------: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `CollectionControls`                                                      | 362 linjer, 130 script / 232 markup | Del intern implementasjon. Én fil eide offentlig kontrakt og disclosurestate, men også tre selvstendige anatomier for søk/header, choice-grupper og diskriminerte felt. |
+| `CollectionRow`                                                           |                                 263 | Behold. Den diskriminerte interaction-kontrakten og den lokale `summary`-snippeten samler én radsemantikk; et barn ville videresendt opptil tolv radprops.              |
+| `RichTextEditorToolbar`                                                   |                                 214 | Behold. Eksplisitte, statiske kommandoer gjør tastaturnavn, pressed-state, ikoner og tabellkontekst lesbare; et kontrollbarn ville bare wrappe `Button` og `Icon`.      |
+| `Collection`, `RichTextEditor`, `NavigationLink`, `AppShell`, `DataTable` |                             113–130 | Behold. Hver fil eier én offentlig anatomi eller lifecycle; `CollectionToggle`, editor-toolbar/-primitive og `DataTableCell` er allerede navngitte barn.                |
+| `FormField`, `SettingsRadioGroup`, `NavigationAction`, `Page`             |                             100–107 | Behold. Context-, felt-, radio-, lenke-/knapp- eller sidekontrakten må leses sammen med egen markup.                                                                    |
+| `Dialog`, `Section`, `SettingsSection`, `FormSteps`, `NavigationOverlay`  |                               82–91 | Behold. Typede varianter/snippets og semantisk anatomi er ett sammenhengende patternansvar.                                                                             |
+| `DataTableCell`, `EditorDialog`, `Metric`                                 |                               72–79 | Behold. Dette er allerede de smale, navngitte barna til en større offentlig familie.                                                                                    |
+
+`CollectionControls` har åtte reelle featurekonsumenter og må derfor beholde én stabil offentlig
+grense. Den valgte interne oppdelingen er:
+
+- `CollectionControls.svelte` eier fortsatt alle offentlige props, bindbar disclosurestate,
+  selected-count/resetregler, responsive contentlayout og roten `data-ui="collection-controls"`.
+- `CollectionControlsHeader.svelte` eier søk/clear eller filteretikett samt den navngitte
+  disclosureknappen og tellingen.
+- `CollectionControlGroup.svelte` eier fieldset/legend, choice-state og det eksisterende typed
+  custom-control-snippetet.
+- `CollectionControlField.svelte` eier den diskriminerte `select`-/`date`-/`switch`-anatomien,
+  kontroll-ID, pending og bredde.
+- `collection-controls.ts` er én intern sannhetskilde for typekontraktene. Hovedkomponenten
+  re-eksporterer de samme typene, og `$lib/ui`-inngangen er uendret.
+
+De tre barna har hvert sitt semantiske ansvar, er ikke eksportert fra pattern- eller UI-indeksen og
+bevarer eksakt DOM-anatomi og Tailwind-klasser. Sortering og reset forblir hos hovedkomponenten fordi
+de er korte deler av den samlede content-/filterregelen, ikke nye selvstendige patterns.

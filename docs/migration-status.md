@@ -1,10 +1,10 @@
 # Migreringsstatus
 
-> **Status:** Pågår — rammeverksløftet, SWP-0–SWP-5 og SWP-6.1 er fullført
+> **Status:** Pågår — rammeverksløftet, SWP-0–SWP-5 og SWP-6.1–SWP-6.2 er fullført
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** SWP-6 — checkpoint 1 er levert; neste checkpoint er SWP-6.2
+> **Aktiv arbeidspakke:** SWP-6 — checkpoint 2 er levert; neste checkpoint er SWP-6.3
 >
 > **Sist oppdatert:** 2026-08-24
 
@@ -22,7 +22,9 @@ transition-baselinen. Produksjonstreet krever nå null diagnostics, legacygjeld 
 varige allowlisten er låst til 38 faktisk datadrevne geometrier hos fire eksakte statistikkeiere.
 SWP-6.1 har kaldmålt alle store featureorkestratorer og flyttet den flertrinns editorflyten og det
 sammensatte banearbeidsområdet til to private, navngitte featurecontrollere. Presentasjonskomponent,
-offentlig featureinngang, produktadferd og backend er bevart.
+offentlig featureinngang, produktadferd og backend er bevart. SWP-6.2 har kaldmålt de store
+offentlige patternene og delt `CollectionControls` i tre private anatomieiere med uendret offentlig
+type- og komponentkontrakt.
 
 ## Aktiv stylingretning
 
@@ -904,6 +906,18 @@ offentlig featureinngang, produktadferd og backend er bevart.
   ansvar og eksplisitt behold-/uttrekksbeslutning. De åtte berørte arrangement- og
   bane-/grenadministrasjonstestene samt full `npm run check` er grønne; begge hostbuildene beholder
   eksakt 28 424/28 443 CSS gzip-byte og 38 geometrier.
+- SWP-6.2 har kaldmålt alle 20 produksjonspatterns med minst 70 linjer. `CollectionControls` var
+  eneste fil som blandet flere selvstendige interne anatomier; `CollectionRow` beholder sin lokale
+  summary-snippet, og de øvrige store patternene er eksplisitt beholdt fordi de allerede eier én
+  offentlig semantikk, lifecycle eller navngitt delkomponent.
+- `CollectionControls.svelte` eier fortsatt hele den offentlige prop-, type-, bindable-, reset- og
+  disclosurekontrakten, men er redusert fra 362 til 156 linjer. Private
+  `CollectionControlsHeader`, `CollectionControlGroup` og `CollectionControlField` eier nå søk/
+  disclosure, choices og den diskriminerte select-/date-/switchanatomien. Den interne typefilen er
+  én sannhetskilde, mens `$lib/ui` re-eksporterer nøyaktig samme kontrakt som før.
+- 60 pattern-/featuretester, inkludert alle 18 Collection-kontrakttester, og 11/11 pikselidentiske
+  visuelle referanser er grønne. Hostbuildene beholder eksakt 28 424/28 443 CSS gzip-byte, 60
+  JS-chunks og 120,5 KiB største lazy chunk; ingen intern delkomponent er offentlig eksportert.
 - Den aktive CSS-en har ikke lenger featureeide produktselectors. Tailwind er produkteier for alle
   SWP-2–SWP-4-flater og statistikkpresentasjonen; den varige geometriallowlisten er låst uten
   visuell redesign.
@@ -916,10 +930,10 @@ offentlig featureinngang, produktadferd og backend er bevart.
 | ------------------------------------- | -------------------------------------------- |
 | Base branch                           | `main`                                       |
 | Fastslått basecommit                  | `5287c5e`                                    |
-| Siste semantiske checkpoint           | `refactor(swp-6): extract feature workflows` |
-| Lokale commits foran base             | 66                                           |
+| Siste semantiske checkpoint           | `refactor(swp-6): split collection controls` |
+| Lokale commits foran base             | 67                                           |
 | Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                |
-| Neste planlagte checkpoint            | SWP-6.2 review store offentlige patterns     |
+| Neste planlagte checkpoint            | SWP-6.3 avstem smale offentlige patterns     |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -928,13 +942,13 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Fortsett med **SWP-6 checkpoint 2 — review store offentlige patterns**:
+Fortsett med **SWP-6 checkpoint 3 — avstem smale offentlige patterns**:
 
-1. Kaldmål `CollectionControls` og andre store offentlige patterns mot typed props, intern anatomi,
-   state og faktiske konsumenter.
-2. Del bare intern implementasjon når hvert nytt barn får ett navngitt ansvar; behold `$lib/ui`- og
-   patternkontrakten uendret og unngå prop-forwardingkomponenter.
-3. Verifiser pattern-, tastatur-, axe-, feature- og stylingportene før checkpoint.
+1. Kartlegg alle faktiske produksjonskonsumenter av `Metric`, `MetricGrid`, `FormSteps` og øvrige
+   smale offentlige patterns.
+2. Behold offentlig UI bare ved reelt flerfeatureeierskap eller en stabil produktkontrakt; flytt
+   ellers implementasjonen til den ene naturlige eieren uten kompatibilitetsbro.
+3. Verifiser berørte feature-, pattern-, arkitektur- og stylingporter før checkpoint.
 
 ## Arbeidspakkeregister
 
@@ -954,7 +968,7 @@ Fortsett med **SWP-6 checkpoint 2 — review store offentlige patterns**:
 | SWP-3 Produktpatterns            | Fullført | Alle fem patterncheckpoints og full kvalitetport er grønne    |
 | SWP-4 App-shell/navigation       | Fullført | Alle fire checkpoints og full kvalitetport er grønne          |
 | SWP-5 Features og legacy-CSS     | Fullført | Null legacygjeld, null guardavvik og 38 låste geometrier      |
-| SWP-6 Komponent-/API-opprydding  | Pågår    | 1/4: store featureorkestratorer har private typed controllere |
+| SWP-6 Komponent-/API-opprydding  | Pågår    | 2/4: store features/patterns har eksplisitte private eiere    |
 | SWP-7 Uavhengig sluttreview      | Venter   | Kald audit og målt vellykket/delvis/ikke vellykket resultat   |
 
 ## Featureregister
@@ -1047,6 +1061,10 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 | Kontroll                             | Resultat                                                                            |
 | ------------------------------------ | ----------------------------------------------------------------------------------- |
+| SWP-6.2 offentlig patternaudit       | Bestått: 20 store patterns; 1 intern oppdeling og 19 beholdbeslutninger             |
+| SWP-6.2 Collection-/featuretester    | Bestått: 9 filer og 60 tester for controls, felt, features, tastatur og axe         |
+| SWP-6.2 visuell matrise              | Bestått: 11/11 pikselidentiske referanser over mobil/desktop og lyst/mørkt theme    |
+| SWP-6.2 produksjons-/baselineport    | Bestått: 4 CSS-filer, 0 legacyavvik, 38 geometrier og 28 424/28 443 CSS-byte        |
 | SWP-6.1 featureorkestratoraudit      | Bestått: 14 store komponenter; 2 uttrekk og 12 eksplisitte beholdbeslutninger       |
 | SWP-6.1 målrettede featuretester     | Bestått: 2 filer og 8 tester for editor, staging, utkast, validering og reorder     |
 | SWP-6.1 full check                   | Bestått: type, arkitektur, legacy, design, styling, lint og format                  |
@@ -1283,12 +1301,13 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 ## Filer i siste checkpoint
 
-- `ArrangementEditor.svelte` og privat `arrangement-editor-controller.svelte.ts` med eksplisitt
-  presentasjons-/arbeidsflyteierskap
-- `CourtsSection.svelte` og privat `courts-section-controller.svelte.ts` med eksplisitt
-  presentasjons-/utkast-/mutationeierskap
-- `swp-6-component-api-audit.md`, dokumentindeks, regenerert maskinbaseline og denne statusen;
-  offentlig feature-API, styling, produktflyt, endpointkontrakter og backend-repoet er urørt
+- `CollectionControls.svelte` med uendret offentlig API og private
+  `CollectionControlsHeader.svelte`, `CollectionControlGroup.svelte` og
+  `CollectionControlField.svelte` for tre navngitte anatomiansvar
+- intern `collection-controls.ts` som typekilde med uendrede re-exports fra hovedpatternet og
+  `$lib/ui`
+- oppdatert `swp-6-component-api-audit.md`, maskinbaseline og denne statusen; DOM-kontrakt,
+  Tailwind-klasser, featurekonsumenter, produktadferd og backend-repoet er urørt
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
 pågående arbeid etter checkpointet.
