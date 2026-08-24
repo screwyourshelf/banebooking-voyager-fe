@@ -23,10 +23,24 @@
   const isDisabled = $derived(disabled || pending);
 </script>
 
-<label data-ui="collection-toggle" aria-busy={pending || undefined}>
-  <span data-part="content">
-    <strong data-part="title">{title}</strong>
-    {#if description}<small id={descriptionId} data-part="description">{description}</small>{/if}
+<label
+  class={[
+    "flex min-w-0 min-h-collection-toggle items-center justify-between gap-collection-control-item rounded-collection-control-item bg-collection-control-item-surface px-collection-control-item-inline py-sm cursor-pointer collection-wide:min-w-collection-toggle-wide",
+    isDisabled && "cursor-not-allowed opacity-collection-disabled",
+  ]}
+  data-ui="collection-toggle"
+  aria-busy={pending || undefined}
+>
+  <span class="flex min-w-0 flex-col" data-part="content">
+    <strong
+      class="text-control-text text-label font-collection-toggle whitespace-nowrap"
+      data-part="title">{title}</strong
+    >
+    {#if description}
+      <small class="text-control-muted text-caption" id={descriptionId} data-part="description"
+        >{description}</small
+      >
+    {/if}
   </span>
   <Switch
     {checked}

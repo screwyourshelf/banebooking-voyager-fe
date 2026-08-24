@@ -131,8 +131,11 @@
 </script>
 
 <section
+  class={[
+    "bg-collection-control px-collection-controls-inline pt-collection-controls-top pb-collection-controls-bottom text-control-text collection-controls-following:border-t collection-controls-following:border-collection-control-divider collection-booking-choice:text-control-muted collection-booking-choice-selected:border-collection-choice-selected-border collection-booking-choice-selected:bg-collection-control-item-hover collection-booking-choice-selected:text-control-text collection-choice-control:border-collection-control-divider collection-choice-control:bg-collection-control-item-surface collection-choice-control:text-control-muted collection-choice-control:enabled:hover:bg-collection-control-item-hover collection-choice-control:enabled:hover:text-control-text collection-choice-selected:border-collection-choice-selected-border collection-choice-selected:bg-collection-control-item-hover collection-choice-selected:text-control-text collection-field-control:w-full collection-field-control:min-h-collection-field-control collection-field-control:border-collection-field-border collection-field-control:bg-collection-control-item-surface collection-field-control:text-control-text collection-field-control:text-body-sm collection-toggle-control:h-collection-toggle collection-toggle-control:border-collection-field-border collection-toggle-control:bg-collection-control-item-surface collection-toggle-control:text-control-muted collection-toggle-control:enabled:hover:bg-collection-control-item-surface collection-toggle-expanded:border-collection-toggle-expanded-border collection-toggle-expanded:bg-collection-control-item-hover collection-toggle-expanded:text-control-text collection-toggle-expanded:enabled:hover:bg-collection-control-item-hover collection-reset-control:text-control-text collection-wide:px-xl collection-wide:pt-md collection-wide:pb-collection-controls-wide-bottom collection-wide:collection-toggle-control:hidden collection-wide:collection-reset-control:self-center collection-wide:collection-reset-control:ml-auto",
+    indicator === "activity" && "collection-choice-selected-indicator:bg-activity-accent",
+  ]}
   data-ui="collection-controls"
-  data-surface="control"
   data-mode={mode}
   data-indicator={indicator}
   data-collapsible={isCollapsible}
@@ -142,11 +145,23 @@
   aria-busy={pending || undefined}
 >
   {#if isCollapsible}
-    <div data-part="top">
+    <div
+      class={[
+        "grid min-h-collection-toggle grid-cols-collection-controls-top items-center gap-sm",
+        !search && "collection-wide:hidden",
+      ]}
+      data-part="top"
+    >
       {#if search}
-        <div data-part="search">
-          <label data-ui="visually-hidden" for={searchId}>{search.label}</label>
-          <span data-part="search-icon"><Icon icon={Search01Icon} /></span>
+        <div
+          class="relative min-w-0 collection-native-search-cancel:hidden collection-wide:max-w-collection-search"
+          data-part="search"
+        >
+          <label class="sr-only" data-ui="visually-hidden" for={searchId}>{search.label}</label>
+          <span
+            class="absolute z-10 top-1/2 left-collection-search-icon grid w-control-icon h-control-icon -translate-y-1/2 text-ink-faint pointer-events-none collection-icon:size-collection-control-icon"
+            data-part="search-icon"><Icon icon={Search01Icon} /></span
+          >
           <Input
             id={searchId}
             type="search"
@@ -159,6 +174,7 @@
           />
           {#if search.value}
             <button
+              class="absolute z-20 top-1/2 right-sm grid w-compact-control h-compact-control -translate-y-1/2 place-items-center border-0 rounded-control bg-transparent text-ink-faint enabled:hover:bg-surface-subtle enabled:hover:text-ink focus-visible:outline-3 focus-visible:outline-focus-outline focus-visible:outline-offset-1 disabled:cursor-not-allowed disabled:opacity-50 collection-icon:size-collection-control-icon"
               type="button"
               data-part="clear-search"
               aria-label="Tøm søket"
@@ -170,7 +186,10 @@
           {/if}
         </div>
       {:else}
-        <span data-part="label"><Icon icon={FilterHorizontalIcon} /> {label}</span>
+        <span
+          class="inline-flex items-center gap-collection-control-detail text-control-muted text-caption font-collection-control-label collection-icon:size-collection-control-icon"
+          data-part="label"><Icon icon={FilterHorizontalIcon} /> {label}</span
+        >
       {/if}
 
       <Button
@@ -183,21 +202,50 @@
         onclick={() => setOpen(!contentVisible)}
       >
         Filtre
-        {#if selectedCount > 0}<span data-part="count">{selectedCount}</span>{/if}
+        {#if selectedCount > 0}
+          <span
+            class="grid size-collection-control-count min-w-collection-control-count place-items-center rounded-control bg-control-text text-control-surface text-micro leading-collection-count"
+            data-part="count">{selectedCount}</span
+          >
+        {/if}
       </Button>
     </div>
   {/if}
 
-  <div id={contentId} data-part="content">
+  <div
+    class={[
+      "grid min-w-0 gap-md collection-wide:flex collection-wide:flex-wrap collection-wide:items-end collection-wide:gap-lg",
+      isCollapsible &&
+        "mt-collection-controls-content border-t border-collection-control-divider pt-md",
+      !contentVisible && "hidden collection-wide:flex",
+      search
+        ? "collection-wide:mt-md collection-wide:border-t collection-wide:border-collection-control-divider collection-wide:pt-md"
+        : "collection-wide:mt-0 collection-wide:border-0 collection-wide:pt-0",
+    ]}
+    id={contentId}
+    data-part="content"
+  >
     {#each groups as group (group.label)}
-      <fieldset data-part="group">
-        <legend>{group.label}</legend>
-        <div data-part="choices">
+      <fieldset
+        class={[
+          "grid min-w-0 gap-collection-control-detail border-0 m-0 p-0",
+          mode === "filter" &&
+            !search &&
+            "collection-wide:flex collection-wide:flex-1 collection-wide:items-center collection-wide:gap-md",
+          mode === "selection" &&
+            "collection-wide:flex collection-wide:flex-initial collection-wide:items-center collection-wide:gap-md",
+        ]}
+        data-part="group"
+      >
+        <legend class="text-control-muted text-caption font-collection-control-label"
+          >{group.label}</legend
+        >
+        <div class="flex min-w-0 flex-wrap gap-collection-control-detail" data-part="choices">
           {#each group.options as option (option.value)}
             {@const selected = group.selectedValues.includes(option.value)}
             {@const optionDisabled = isDisabled || Boolean(option.disabled)}
             {#if option.control}
-              <span data-part="custom-control">
+              <span class="contents" data-part="custom-control">
                 {@render option.control({
                   disabled: optionDisabled,
                   onSelect: () => group.onSelect(option.value),
@@ -220,16 +268,25 @@
 
     {#each fields as field (field.id)}
       <div
+        class={[
+          "grid min-w-collection-control-field gap-collection-control-detail collection-wide:grow-0 collection-wide:shrink collection-wide:basis-collection-control-field-wide",
+          field.width === "wide" &&
+            "collection-wide:grow collection-wide:basis-collection-control-field-expanded",
+        ]}
         data-part="field"
         data-control={field.type}
         data-width={field.width ?? "default"}
         aria-busy={field.pending || undefined}
       >
         {#if field.type === "switch"}
-          <label>
-            <span data-part="field-content">
-              <strong>{field.title}</strong>
-              {#if field.description}<small>{field.description}</small>{/if}
+          <label
+            class="flex min-h-collection-toggle items-center justify-between gap-md rounded-collection-control-item bg-collection-control-item-surface px-collection-control-item-inline py-sm font-collection-control-label"
+          >
+            <span class="grid min-w-0" data-part="field-content">
+              <strong class="text-control-text text-label">{field.title}</strong>
+              {#if field.description}
+                <small class="text-control-muted text-caption">{field.description}</small>
+              {/if}
             </span>
             <Switch
               checked={field.checked}
@@ -239,7 +296,10 @@
             />
           </label>
         {:else}
-          <label for={`${generatedId}-${field.id}`}>{field.label}</label>
+          <label
+            class="text-control-muted text-caption font-collection-control-label"
+            for={`${generatedId}-${field.id}`}>{field.label}</label
+          >
           {#if field.type === "date"}
             <DatePicker
               id={`${generatedId}-${field.id}`}
@@ -268,8 +328,14 @@
     {/each}
 
     {#if sort}
-      <div data-part="sort">
-        <label for={`${generatedId}-sort`}>{sort.label}</label>
+      <div
+        class="grid min-w-collection-control-field gap-collection-control-detail collection-wide:grow-0 collection-wide:shrink collection-wide:basis-collection-control-field-wide"
+        data-part="sort"
+      >
+        <label
+          class="text-control-muted text-caption font-collection-control-label"
+          for={`${generatedId}-sort`}>{sort.label}</label
+        >
         <Select
           id={`${generatedId}-sort`}
           aria-label={sort.label}

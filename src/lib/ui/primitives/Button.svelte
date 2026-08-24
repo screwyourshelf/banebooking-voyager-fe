@@ -21,11 +21,8 @@
 
   const dataPart = $derived(attributes["data-part"]);
   // De resterende kontekstbroene eies av senere SWP-3-checkpoints.
-  const patternOwnsVariant = $derived(dataPart === "toggle");
   const patternOwnsGhostText = $derived(
-    dataPart === "back" ||
-      dataPart === "reset" ||
-      (dataPart === "control" && Boolean(attributes["data-tone"]))
+    dataPart === "back" || (dataPart === "control" && Boolean(attributes["data-tone"]))
   );
 </script>
 
@@ -36,13 +33,13 @@
     "min-w-0",
     fullWidth && "w-full",
     "rounded-control",
-    !patternOwnsVariant && variant === "primary"
+    variant === "primary"
       ? "border-transparent bg-brand text-action-primary-text enabled:hover:bg-action-primary-hover"
-      : !patternOwnsVariant && variant === "secondary"
+      : variant === "secondary"
         ? "border-line-strong bg-action-secondary text-ink enabled:hover:bg-surface-subtle"
-        : !patternOwnsVariant && variant === "destructive"
+        : variant === "destructive"
           ? "border-transparent bg-status-danger-bg text-status-danger-text enabled:hover:bg-action-destructive-hover"
-          : !patternOwnsVariant && variant === "ghost"
+          : variant === "ghost"
             ? "border-transparent bg-transparent enabled:hover:bg-surface-subtle"
             : "",
     variant === "ghost" && !patternOwnsGhostText && "text-ink",

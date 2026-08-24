@@ -140,28 +140,6 @@
       min-width: 24rem;
     }
 
-    [data-ui="collection-row"][data-variant="ordered"] {
-      min-height: 5.25rem;
-    }
-
-    [data-ui="collection-row"][data-variant="ordered"] > [data-part="select"] {
-      gap: 1rem;
-      padding: 0.75rem 1.5rem;
-    }
-
-    [data-ui="collection-row"][data-variant="actions"] > [data-part="actions"] {
-      display: flex;
-      align-items: center;
-      border-top: 0;
-      padding: 0.75rem 1.5rem 0.75rem 0;
-    }
-
-    [data-ui="collection-row"][data-variant="actions"] {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      align-items: stretch;
-    }
-
     [data-ui="editor-dialog"] {
       inset: auto !important;
       top: 50% !important;

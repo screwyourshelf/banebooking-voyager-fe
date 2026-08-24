@@ -14,7 +14,7 @@
 </script>
 
 <Accordion.Item
-  class="min-w-0"
+  class="group min-w-0"
   {value}
   {disabled}
   data-ui-primitive="accordion-row"
@@ -24,8 +24,16 @@
     <Accordion.Header level={3} data-part="trigger-header">
       <Accordion.Trigger data-part="trigger">
         {@render summary()}
-        <span data-part="indicator" aria-hidden="true">
-          <svg viewBox="0 0 20 20"><path d="m6.5 8 3.5 3.5L13.5 8" /></svg>
+        <span class="group-data-[state=open]:rotate-180" data-part="indicator" aria-hidden="true">
+          <svg
+            class="size-full"
+            viewBox="0 0 20 20"
+            fill="none"
+            stroke="currentColor"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.75"><path d="m6.5 8 3.5 3.5L13.5 8" /></svg
+          >
         </span>
       </Accordion.Trigger>
     </Accordion.Header>

@@ -118,6 +118,7 @@
       "animation": {
         "themeVariablePrefix": "--animate-",
         "roles": {
+          "collection-loading": "--app-collection-loading-animation",
           "form-submit": "--app-form-submit-animation",
           "page-loading": "--app-page-loading-animation"
         }
@@ -125,6 +126,8 @@
       "backgroundImage": {
         "themeVariablePrefix": "--background-image-",
         "roles": {
+          "collection-control": "--app-collection-control-background",
+          "collection-loading-sheen": "--app-collection-loading-sheen-background",
           "page-loading-sheen": "--app-page-loading-sheen-background",
           "section-soft": "--app-section-soft-background"
         }
@@ -132,6 +135,7 @@
       "backgroundSize": {
         "themeVariablePrefix": "--background-size-",
         "roles": {
+          "collection-loading-sheen": "--app-collection-loading-sheen-background-size",
           "page-loading-sheen": "--app-page-loading-sheen-background-size"
         }
       },
@@ -163,6 +167,15 @@
           "choice-selected-text": "--app-choice-control-selected-text",
           "choice-surface": "--app-choice-control-bg",
           "choice-text": "--app-choice-control-text",
+          "collection-choice-selected-border": "--app-collection-choice-selected-border",
+          "collection-control-divider": "--app-collection-control-divider",
+          "collection-control-item-hover": "--app-collection-control-item-hover-surface",
+          "collection-control-item-surface": "--app-collection-control-item-surface",
+          "collection-field-border": "--app-collection-field-border",
+          "collection-icon-surface": "--app-collection-icon-surface",
+          "collection-loading-placeholder": "--app-collection-loading-placeholder",
+          "collection-row-muted-surface": "--app-collection-row-muted-surface",
+          "collection-toggle-expanded-border": "--app-collection-toggle-expanded-border",
           "control-muted": "--app-control-muted",
           "control-surface": "--app-control-surface",
           "control-surface-strong": "--app-control-surface-strong",
@@ -260,6 +273,7 @@
           "body-lg": "--app-type-body-lg",
           "body-sm": "--app-type-body-sm",
           "caption": "--app-type-caption",
+          "collection-row-indicator": "--app-collection-row-indicator-size",
           "heading-md": "--app-type-heading-md",
           "heading-sm": "--app-type-heading-sm",
           "label": "--app-type-label",
@@ -278,6 +292,16 @@
           "calendar-heading": "--app-calendar-heading-font-weight",
           "calendar-selected": "--app-calendar-selected-font-weight",
           "choice": "--app-choice-font-weight",
+          "collection-control-label": "--app-collection-control-label-font-weight",
+          "collection-group": "--app-collection-group-font-weight",
+          "collection-group-relative": "--app-collection-group-relative-font-weight",
+          "collection-row-description": "--app-collection-row-description-font-weight",
+          "collection-row-meta": "--app-collection-row-meta-font-weight",
+          "collection-row-title": "--app-collection-row-title-font-weight",
+          "collection-state-title": "--app-collection-state-title-font-weight",
+          "collection-status": "--app-collection-status-font-weight",
+          "collection-title": "--app-collection-title-font-weight",
+          "collection-toggle": "--app-collection-toggle-font-weight",
           "document-fact-label": "--app-document-fact-label-font-weight",
           "document-fact-value": "--app-document-fact-value-font-weight",
           "document-link": "--app-document-link-font-weight",
@@ -310,6 +334,12 @@
         "themeVariablePrefix": "--leading-",
         "roles": {
           "choice": "--app-choice-line-height",
+          "collection-count": "--app-collection-count-line-height",
+          "collection-group": "--app-collection-group-line-height",
+          "collection-row-copy": "--app-collection-row-copy-line-height",
+          "collection-state-description": "--app-collection-state-description-line-height",
+          "collection-status": "--app-collection-status-line-height",
+          "collection-title": "--app-collection-title-line-height",
           "control": "--app-control-line-height",
           "document-fact-value": "--app-document-fact-value-line-height",
           "document-intro": "--app-document-intro-line-height",
@@ -368,6 +398,9 @@
           "calendar-day": "--app-calendar-day-radius",
           "calendar-surface": "--app-calendar-surface-radius",
           "choice": "--app-choice-radius",
+          "collection": "--app-collection-radius",
+          "collection-control-item": "--app-collection-control-item-radius",
+          "collection-state-indicator": "--app-collection-state-indicator-radius",
           "control": "--app-control-radius",
           "dialog": "--app-dialog-radius",
           "dialog-surface": "--app-dialog-surface-radius",
@@ -407,6 +440,39 @@
           "choice-indicator-offset": "--app-choice-indicator-offset",
           "choice-inline": "--app-choice-padding-inline",
           "calendar-cell": "--app-calendar-cell-padding",
+          "collection-control-count": "--app-collection-control-count-size",
+          "collection-control-detail": "--app-collection-control-detail-gap",
+          "collection-control-field-expanded": "--app-collection-control-field-expanded-basis",
+          "collection-control-field-wide": "--app-collection-control-field-basis",
+          "collection-control-icon": "--app-collection-control-icon-size",
+          "collection-control-item": "--app-collection-control-item-gap",
+          "collection-control-item-inline": "--app-collection-control-item-padding-inline",
+          "collection-controls-bottom": "--app-collection-controls-padding-bottom",
+          "collection-controls-content": "--app-collection-controls-content-margin-top",
+          "collection-controls-inline": "--app-collection-controls-padding-inline",
+          "collection-controls-top": "--app-collection-controls-padding-top",
+          "collection-controls-wide-bottom": "--app-collection-controls-wide-padding-bottom",
+          "collection-header-glyph": "--app-collection-header-icon-glyph-size",
+          "collection-header-icon": "--app-collection-header-icon-size",
+          "collection-header-inline": "--app-collection-header-padding-inline",
+          "collection-header-wide-block": "--app-collection-header-wide-padding-block",
+          "collection-row-block": "--app-collection-row-padding-block",
+          "collection-row-copy": "--app-collection-row-copy-gap",
+          "collection-row-description": "--app-collection-row-description-margin-top",
+          "collection-row-details": "--app-collection-row-details-padding",
+          "collection-row-meta": "--app-collection-row-meta-margin-top",
+          "collection-row-summary-wide": "--app-collection-row-summary-wide-gap",
+          "collection-row-trigger-indicator": "--app-collection-row-trigger-indicator-size",
+          "collection-search-icon": "--app-collection-search-icon-inset",
+          "collection-state": "--app-collection-state-padding-block",
+          "collection-state-action": "--app-collection-state-action-margin-top",
+          "collection-state-description": "--app-collection-state-description-margin-top",
+          "collection-state-icon": "--app-collection-state-icon-size",
+          "collection-state-indicator": "--app-collection-state-indicator-size",
+          "collection-state-indicator-margin": "--app-collection-state-indicator-margin-bottom",
+          "collection-state-mark": "--app-collection-state-mark-size",
+          "collection-status-block": "--app-collection-status-padding-block",
+          "collection-summary": "--app-collection-header-summary-gap",
           "control-block": "--app-control-padding-block",
           "control-gap": "--app-control-gap",
           "control-inline": "--app-control-padding-inline",
@@ -473,6 +539,12 @@
         "themeVariablePrefix": "--grid-template-columns-",
         "roles": {
           "calendar-header": "--app-calendar-header-columns",
+          "collection-controls-top": "--app-collection-controls-top-columns",
+          "collection-loading-entity": "--app-collection-loading-entity-columns",
+          "collection-loading-schedule": "--app-collection-loading-schedule-columns",
+          "collection-loading-wide": "--app-collection-loading-wide-columns",
+          "collection-row-leading": "--app-collection-row-leading-columns",
+          "collection-row-schedule": "--app-collection-row-schedule-columns",
           "date-navigation": "--app-date-navigation-columns",
           "date-navigation-compact": "--app-date-navigation-compact-columns",
           "document-facts": "--app-document-facts-columns",
@@ -484,6 +556,9 @@
         "themeVariablePrefix": "--opacity-",
         "roles": {
           "calendar-disabled": "--app-calendar-disabled-opacity",
+          "collection-busy": "--app-collection-busy-opacity",
+          "collection-disabled": "--app-collection-disabled-opacity",
+          "collection-row-disabled": "--app-collection-row-disabled-opacity",
           "date-disabled": "--app-date-disabled-opacity",
           "select-disabled": "--app-select-disabled-opacity",
           "settings-disabled": "--app-settings-disabled-opacity"
@@ -493,6 +568,9 @@
         "themeVariablePrefix": "--width-",
         "roles": {
           "calendar-day-compact": "--app-calendar-compact-day-width",
+          "collection-loading-content": "--app-collection-loading-content-width",
+          "collection-loading-leading": "--app-collection-loading-leading-width",
+          "collection-loading-leading-wide": "--app-collection-loading-leading-wide-width",
           "compact-control": "--app-compact-control-height",
           "control": "--app-control-height",
           "control-icon": "--app-control-icon-size",
@@ -514,6 +592,8 @@
         "themeVariablePrefix": "--min-width-",
         "roles": {
           "calendar": "--app-calendar-min-width",
+          "collection-control-field": "--app-collection-control-field-min-width",
+          "collection-toggle-wide": "--app-collection-toggle-wide-min-width",
           "calendar-compact": "--app-calendar-compact-min-width",
           "choice": "--app-choice-control-min-width",
           "control": "--app-control-min-width",
@@ -527,6 +607,8 @@
         "themeVariablePrefix": "--max-width-",
         "roles": {
           "calendar": "--app-calendar-max-width",
+          "collection-search": "--app-collection-search-max-width",
+          "collection-state-description": "--app-collection-state-description-max-width",
           "content": "--app-content-max",
           "dialog": "--app-dialog-width",
           "document": "--app-document-max-width",
@@ -544,6 +626,7 @@
         "themeVariablePrefix": "--height-",
         "roles": {
           "compact-control": "--app-compact-control-height",
+          "collection-toggle": "--app-collection-toggle-min-height",
           "control": "--app-control-height",
           "control-icon": "--app-control-icon-size",
           "choice-indicator": "--app-choice-indicator-height",
@@ -563,6 +646,14 @@
         "themeVariablePrefix": "--min-height-",
         "roles": {
           "calendar-header": "--app-calendar-header-min-height",
+          "collection-field-control": "--app-collection-field-control-min-height",
+          "collection-header": "--app-collection-header-min-height",
+          "collection-header-wide": "--app-collection-header-wide-min-height",
+          "collection-row": "--app-collection-row-min-height",
+          "collection-row-trigger": "--app-collection-row-trigger-min-height",
+          "collection-row-wide": "--app-collection-row-wide-min-height",
+          "collection-state": "--app-collection-state-min-height",
+          "collection-toggle": "--app-collection-toggle-min-height",
           "choice": "--app-choice-control-min-height",
           "compact-control": "--app-compact-control-height",
           "control": "--app-control-height",
@@ -586,6 +677,30 @@
           "dialog-surface": "--app-dialog-surface-max-height",
           "editor-dialog": "--app-editor-dialog-height"
         }
+      },
+      "gridTemplateRows": {
+        "themeVariablePrefix": "--grid-template-rows-",
+        "roles": {
+          "collection-row-schedule": "--app-collection-row-schedule-rows"
+        }
+      },
+      "outlineOffset": {
+        "themeVariablePrefix": "--outline-offset-",
+        "roles": {
+          "collection-inset": "--app-collection-focus-inset"
+        }
+      },
+      "transitionDuration": {
+        "themeVariablePrefix": "--transition-duration-",
+        "roles": {
+          "collection-busy": "--app-collection-busy-transition-duration"
+        }
+      },
+      "transitionTimingFunction": {
+        "themeVariablePrefix": "--ease-",
+        "roles": {
+          "collection": "--app-collection-transition-easing"
+        }
       }
     }
   },
@@ -596,6 +711,34 @@
         "active",
         "checked",
         "compact-control",
+        "collection-booking-choice",
+        "collection-booking-choice-selected",
+        "collection-choice-control",
+        "collection-choice-selected",
+        "collection-choice-selected-indicator",
+        "collection-controls-following",
+        "collection-feedback",
+        "collection-field-control",
+        "collection-group-following",
+        "collection-icon",
+        "collection-icon-svg",
+        "collection-list-last-surface",
+        "collection-native-search-cancel",
+        "collection-reorder-control",
+        "collection-reset-control",
+        "collection-row-button-surface",
+        "collection-row-details",
+        "collection-row-schedule-status",
+        "collection-row-summary-action",
+        "collection-row-summary-row",
+        "collection-row-surface",
+        "collection-row-trigger",
+        "collection-row-trigger-header",
+        "collection-row-trigger-indicator",
+        "collection-state-icon",
+        "collection-toggle-control",
+        "collection-toggle-expanded",
+        "collection-wide",
         "disabled",
         "document-intro-child",
         "document-intro-flow",
@@ -649,6 +792,7 @@
     },
     "identityNeutralStructure": {
       "exact": [
+        "@container",
         "absolute",
         "align-top",
         "animate-none",
@@ -658,14 +802,19 @@
         "border",
         "border-0",
         "border-b",
+        "border-b-0",
         "border-collapse",
         "border-current",
+        "border-l",
         "border-r-transparent",
         "border-t",
+        "border-t-0",
         "border-transparent",
         "border-x",
+        "border-x-0",
         "bottom-0",
         "contents",
+        "content-center",
         "capitalize",
         "content-start",
         "cursor-default",
@@ -685,6 +834,7 @@
         "flex-row",
         "flex-wrap",
         "flow-root",
+        "gap-0",
         "grid",
         "group",
         "grow",
@@ -713,6 +863,7 @@
         "justify-evenly",
         "justify-start",
         "justify-self-end",
+        "justify-self-start",
         "justify-self-stretch",
         "left-1/2",
         "list-decimal",
@@ -723,10 +874,12 @@
         "max-h-select-viewport",
         "max-w-full",
         "m-0",
+        "mb-0",
         "min-h-0",
         "min-h-full",
         "min-w-select-content",
         "min-w-0",
+        "ml-auto",
         "mt-0",
         "mx-auto",
         "no-underline",
@@ -752,12 +905,15 @@
         "place-items-center",
         "p-0",
         "pb-0",
+        "pt-0",
         "px-0",
         "relative",
         "resize-none",
         "ring-3",
         "rounded-none",
+        "rotate-180",
         "select-none",
+        "self-center",
         "shrink",
         "shrink-0",
         "shadow-none",
@@ -772,6 +928,8 @@
         "text-left",
         "top-1/2",
         "transition",
+        "transition-opacity",
+        "transition-transform",
         "translate-x-1/2",
         "translate-x-0",
         "translate-y-1/2",
@@ -790,15 +948,290 @@
         "z-90"
       ],
       "patterns": [
+        "^col-start-(?:1|2|3|4|5|6)$",
         "^col-span-(?:1|2|3|4|5|6|full)$",
         "^grid-cols-(?:1|2|3|4|5|6|none|subgrid)$",
         "^grid-rows-(?:1|2|3|4|5|6|none|subgrid)$",
         "^order-(?:first|last|none|[1-9]|1[0-2])$",
+        "^row-start-(?:1|2|3|4|5|6)$",
         "^row-span-(?:1|2|3|4|5|6|full)$",
         "^z-(?:0|10|20|30|40|50|auto)$"
       ]
     },
     "semanticVisualFamilies": [
+      {
+        "utilityPrefixes": ["animate"],
+        "themeNamespace": "animation",
+        "roles": ["collection-loading"]
+      },
+      {
+        "utilityPrefixes": ["bg"],
+        "themeNamespace": "backgroundImage",
+        "roles": ["collection-control", "collection-loading-sheen"]
+      },
+      {
+        "utilityPrefixes": ["bg-size"],
+        "themeNamespace": "backgroundSize",
+        "roles": ["collection-loading-sheen"]
+      },
+      {
+        "utilityPrefixes": ["bg"],
+        "themeNamespace": "color",
+        "roles": [
+          "activity-accent",
+          "brand-strong",
+          "collection-control-item-hover",
+          "collection-control-item-surface",
+          "collection-icon-surface",
+          "collection-loading-placeholder",
+          "collection-row-muted-surface",
+          "control-text",
+          "status-danger-text"
+        ]
+      },
+      {
+        "utilityPrefixes": ["text"],
+        "themeNamespace": "color",
+        "roles": ["activity-accent", "control-surface"]
+      },
+      {
+        "utilityPrefixes": ["border"],
+        "themeNamespace": "color",
+        "roles": [
+          "collection-choice-selected-border",
+          "collection-control-divider",
+          "collection-field-border",
+          "collection-toggle-expanded-border"
+        ]
+      },
+      {
+        "utilityPrefixes": ["text"],
+        "themeNamespace": "fontSize",
+        "roles": ["collection-row-indicator"]
+      },
+      {
+        "utilityPrefixes": ["rounded"],
+        "themeNamespace": "radius",
+        "roles": ["collection", "collection-control-item", "collection-state-indicator"]
+      },
+      {
+        "utilityPrefixes": ["font"],
+        "themeNamespace": "fontWeight",
+        "roles": [
+          "collection-control-label",
+          "collection-group",
+          "collection-group-relative",
+          "collection-row-description",
+          "collection-row-meta",
+          "collection-row-title",
+          "collection-state-title",
+          "collection-status",
+          "collection-title",
+          "collection-toggle"
+        ]
+      },
+      {
+        "utilityPrefixes": ["leading"],
+        "themeNamespace": "lineHeight",
+        "roles": [
+          "collection-count",
+          "collection-group",
+          "collection-row-copy",
+          "collection-state-description",
+          "collection-status",
+          "collection-title"
+        ]
+      },
+      {
+        "utilityPrefixes": ["gap"],
+        "themeNamespace": "spacing",
+        "roles": [
+          "collection-control-detail",
+          "collection-control-item",
+          "collection-row-copy",
+          "collection-row-summary-wide",
+          "collection-summary"
+        ]
+      },
+      {
+        "utilityPrefixes": ["gap-x"],
+        "themeNamespace": "spacing",
+        "roles": ["md"]
+      },
+      {
+        "utilityPrefixes": ["gap-y"],
+        "themeNamespace": "spacing",
+        "roles": ["collection-row-copy"]
+      },
+      {
+        "utilityPrefixes": ["p"],
+        "themeNamespace": "spacing",
+        "roles": ["collection-row-details", "record-inline"]
+      },
+      {
+        "utilityPrefixes": ["mx"],
+        "themeNamespace": "spacing",
+        "roles": ["record-inline"]
+      },
+      {
+        "utilityPrefixes": ["px"],
+        "themeNamespace": "spacing",
+        "roles": [
+          "collection-control-item-inline",
+          "collection-controls-inline",
+          "collection-header-inline"
+        ]
+      },
+      {
+        "utilityPrefixes": ["py"],
+        "themeNamespace": "spacing",
+        "roles": [
+          "collection-header-wide-block",
+          "collection-row-block",
+          "collection-state",
+          "collection-status-block"
+        ]
+      },
+      {
+        "utilityPrefixes": ["pt"],
+        "themeNamespace": "spacing",
+        "roles": ["collection-controls-top"]
+      },
+      {
+        "utilityPrefixes": ["pb"],
+        "themeNamespace": "spacing",
+        "roles": ["collection-controls-bottom", "collection-controls-wide-bottom"]
+      },
+      {
+        "utilityPrefixes": ["mt"],
+        "themeNamespace": "spacing",
+        "roles": [
+          "collection-controls-content",
+          "collection-row-description",
+          "collection-row-meta",
+          "collection-state-action",
+          "collection-state-description"
+        ]
+      },
+      {
+        "utilityPrefixes": ["mb"],
+        "themeNamespace": "spacing",
+        "roles": ["collection-state-indicator-margin"]
+      },
+      {
+        "utilityPrefixes": ["left"],
+        "themeNamespace": "spacing",
+        "roles": ["collection-search-icon"]
+      },
+      {
+        "utilityPrefixes": ["right"],
+        "themeNamespace": "spacing",
+        "roles": ["sm"]
+      },
+      {
+        "utilityPrefixes": ["size"],
+        "themeNamespace": "spacing",
+        "roles": [
+          "collection-control-count",
+          "collection-control-icon",
+          "collection-header-glyph",
+          "collection-header-icon",
+          "collection-row-trigger-indicator",
+          "collection-state-icon",
+          "collection-state-indicator",
+          "collection-state-mark"
+        ]
+      },
+      {
+        "utilityPrefixes": ["min-w"],
+        "themeNamespace": "spacing",
+        "roles": ["collection-control-count"]
+      },
+      {
+        "utilityPrefixes": ["h"],
+        "themeNamespace": "spacing",
+        "roles": ["md"]
+      },
+      {
+        "utilityPrefixes": ["grid-cols"],
+        "themeNamespace": "gridTemplateColumns",
+        "roles": [
+          "collection-controls-top",
+          "collection-loading-entity",
+          "collection-loading-schedule",
+          "collection-loading-wide",
+          "collection-row-leading",
+          "collection-row-schedule"
+        ]
+      },
+      {
+        "utilityPrefixes": ["grid-rows"],
+        "themeNamespace": "gridTemplateRows",
+        "roles": ["collection-row-schedule"]
+      },
+      {
+        "utilityPrefixes": ["opacity"],
+        "themeNamespace": "opacity",
+        "roles": ["collection-busy", "collection-disabled", "collection-row-disabled"]
+      },
+      {
+        "utilityPrefixes": ["w"],
+        "themeNamespace": "width",
+        "roles": [
+          "collection-loading-content",
+          "collection-loading-leading",
+          "collection-loading-leading-wide"
+        ]
+      },
+      {
+        "utilityPrefixes": ["min-w"],
+        "themeNamespace": "minWidth",
+        "roles": ["collection-control-field", "collection-toggle-wide"]
+      },
+      {
+        "utilityPrefixes": ["max-w"],
+        "themeNamespace": "maxWidth",
+        "roles": ["collection-search", "collection-state-description"]
+      },
+      {
+        "utilityPrefixes": ["h"],
+        "themeNamespace": "height",
+        "roles": ["collection-toggle"]
+      },
+      {
+        "utilityPrefixes": ["min-h"],
+        "themeNamespace": "minHeight",
+        "roles": [
+          "collection-field-control",
+          "collection-header",
+          "collection-header-wide",
+          "collection-row",
+          "collection-row-trigger",
+          "collection-row-wide",
+          "collection-state",
+          "collection-toggle"
+        ]
+      },
+      {
+        "utilityPrefixes": ["basis"],
+        "themeNamespace": "spacing",
+        "roles": ["collection-control-field-expanded", "collection-control-field-wide"]
+      },
+      {
+        "utilityPrefixes": ["outline-offset"],
+        "themeNamespace": "outlineOffset",
+        "roles": ["collection-inset"]
+      },
+      {
+        "utilityPrefixes": ["duration"],
+        "themeNamespace": "transitionDuration",
+        "roles": ["collection-busy"]
+      },
+      {
+        "utilityPrefixes": ["ease"],
+        "themeNamespace": "transitionTimingFunction",
+        "roles": ["collection"]
+      },
       {
         "utilityPrefixes": ["animate"],
         "themeNamespace": "animation",
@@ -1515,6 +1948,7 @@
           "--color-",
           "--font-",
           "--grid-template-columns-",
+          "--grid-template-rows-",
           "--height-",
           "--leading-",
           "--max-height-",
@@ -1522,12 +1956,15 @@
           "--min-height-",
           "--min-width-",
           "--opacity-",
+          "--outline-offset-",
           "--radius-",
           "--shadow-",
           "--spacing-",
           "--text-underline-offset-",
           "--text-",
           "--tracking-",
+          "--transition-duration-",
+          "--ease-",
           "--width-"
         ],
         "exact": [],

@@ -89,6 +89,39 @@
     --app-choice-control-selected-bg: var(--app-nav-active-surface);
     --app-choice-control-selected-text: var(--app-nav-active);
     --app-choice-control-indicator: var(--app-choice-indicator);
+    --app-collection-choice-selected-border: color-mix(
+      in srgb,
+      var(--app-control-text) 28%,
+      transparent
+    );
+    --app-collection-control-divider: color-mix(in srgb, var(--app-control-text) 14%, transparent);
+    --app-collection-control-item-hover-surface: color-mix(
+      in srgb,
+      var(--app-control-text) 14%,
+      transparent
+    );
+    --app-collection-control-item-surface: color-mix(
+      in srgb,
+      var(--app-control-text) 8%,
+      transparent
+    );
+    --app-collection-field-border: color-mix(in srgb, var(--app-control-text) 18%, transparent);
+    --app-collection-icon-surface: color-mix(in srgb, var(--app-control-text) 10%, transparent);
+    --app-collection-loading-placeholder: color-mix(
+      in srgb,
+      var(--app-line-strong) 64%,
+      var(--app-surface)
+    );
+    --app-collection-row-muted-surface: color-mix(
+      in srgb,
+      var(--app-surface-subtle) 70%,
+      var(--app-surface)
+    );
+    --app-collection-toggle-expanded-border: color-mix(
+      in srgb,
+      var(--app-control-text) 30%,
+      transparent
+    );
     --app-switch-track: var(--app-line-strong);
     --app-dialog-border: color-mix(in srgb, var(--app-line) 76%, transparent);
     --app-dialog-overlay: rgb(0 0 0 / 0.8);
@@ -143,6 +176,18 @@
       transparent 70%
     );
     --app-page-loading-sheen-background-size: 220% 100%;
+    --app-collection-control-background: linear-gradient(
+      120deg,
+      var(--app-control-surface),
+      var(--app-control-surface-strong)
+    );
+    --app-collection-loading-sheen-background: linear-gradient(
+      100deg,
+      transparent 20%,
+      color-mix(in srgb, var(--app-surface) 72%, transparent) 45%,
+      transparent 70%
+    );
+    --app-collection-loading-sheen-background-size: 220% 100%;
     --app-section-soft-background: linear-gradient(
       180deg,
       color-mix(in srgb, var(--app-surface-subtle) 72%, transparent),
@@ -259,6 +304,14 @@
     --app-page-loading-title-height: 2rem;
     --app-page-loading-description-height: 1rem;
     --app-page-loading-row-height: 2.75rem;
+    --app-collection-header-min-height: 4.75rem;
+    --app-collection-header-wide-min-height: 5rem;
+    --app-collection-field-control-min-height: 2.5rem;
+    --app-collection-row-min-height: 4.75rem;
+    --app-collection-row-trigger-min-height: 4.625rem;
+    --app-collection-row-wide-min-height: 4.25rem;
+    --app-collection-state-min-height: 18rem;
+    --app-collection-toggle-min-height: 2.75rem;
     --app-form-step-indicator-height: 0.1875rem;
     --app-settings-choice-min-height: 2.5rem;
     --app-settings-radio-option-min-height: 2.75rem;
@@ -278,8 +331,18 @@
     --app-document-facts-columns: repeat(auto-fit, minmax(9rem, 1fr));
     --app-feedback-wide-columns: minmax(0, 1fr) auto;
     --app-settings-row-columns: minmax(12rem, 0.65fr) minmax(15rem, 1fr);
+    --app-collection-controls-top-columns: minmax(0, 1fr) auto;
+    --app-collection-loading-entity-columns: 5.5rem minmax(0, 1fr) 4.5rem;
+    --app-collection-loading-schedule-columns: 5.75rem minmax(0, 1fr) 4.5rem;
+    --app-collection-loading-wide-columns: 7rem minmax(0, 1fr) 4.5rem;
+    --app-collection-row-leading-columns: auto minmax(0, 1fr);
+    --app-collection-row-schedule-columns: max-content minmax(0, 1fr);
+    --app-collection-row-schedule-rows: auto auto;
     --app-select-disabled-opacity: 0.45;
     --app-settings-disabled-opacity: 0.55;
+    --app-collection-busy-opacity: 0.72;
+    --app-collection-disabled-opacity: 0.6;
+    --app-collection-row-disabled-opacity: 0.55;
     --app-date-disabled-opacity: 0.55;
     --app-calendar-disabled-opacity: 0.35;
     --app-space-2xs: 0.125rem;
@@ -330,6 +393,37 @@
     --app-form-field-wide-padding-inline: 1.25rem;
     --app-form-step-navigation-padding-inline: 0.875rem;
     --app-form-step-navigation-wide-padding-inline: 1.25rem;
+    --app-collection-control-count-size: 1.2rem;
+    --app-collection-control-detail-gap: 0.4rem;
+    --app-collection-control-icon-size: 0.9rem;
+    --app-collection-control-item-gap: 0.625rem;
+    --app-collection-control-item-padding-inline: 0.625rem;
+    --app-collection-controls-content-margin-top: 0.625rem;
+    --app-collection-controls-padding-bottom: 0.75rem;
+    --app-collection-controls-padding-inline: 0.875rem;
+    --app-collection-controls-padding-top: 0.625rem;
+    --app-collection-controls-wide-padding-bottom: 0.875rem;
+    --app-collection-header-icon-size: 2.35rem;
+    --app-collection-header-icon-glyph-size: 1.15rem;
+    --app-collection-header-padding-inline: 0.875rem;
+    --app-collection-header-summary-gap: 0.625rem;
+    --app-collection-header-wide-padding-block: 0.875rem;
+    --app-collection-row-copy-gap: 0.15rem;
+    --app-collection-row-description-margin-top: 0.15rem;
+    --app-collection-row-details-padding: 0.875rem;
+    --app-collection-row-meta-margin-top: 0.12rem;
+    --app-collection-row-padding-block: 0.625rem;
+    --app-collection-row-summary-wide-gap: 1.25rem;
+    --app-collection-row-trigger-indicator-size: 1.25rem;
+    --app-collection-search-icon-inset: 0.875rem;
+    --app-collection-state-action-margin-top: 1.125rem;
+    --app-collection-state-description-margin-top: 0.35rem;
+    --app-collection-state-icon-size: 1.35rem;
+    --app-collection-state-indicator-margin-bottom: 0.875rem;
+    --app-collection-state-indicator-size: 3rem;
+    --app-collection-state-mark-size: 0.75rem;
+    --app-collection-state-padding-block: 3rem;
+    --app-collection-status-padding-block: 0.28rem;
     --app-settings-radio-indicator-bottom: 0.15rem;
     --app-settings-radio-option-padding-block: 0.625rem;
     --app-settings-section-description-margin-top: 0.2rem;
@@ -350,7 +444,19 @@
     --app-status-inline-padding: 0.55rem;
     --app-record-gap: 0.5rem;
     --app-record-padding-inline: 0.5rem;
+    --app-collection-control-field-basis: 15rem;
+    --app-collection-control-field-expanded-basis: 18rem;
+    --app-collection-control-field-min-width: min(100%, 13rem);
+    --app-collection-loading-content-width: min(12rem, 80%);
+    --app-collection-loading-leading-width: 5rem;
+    --app-collection-loading-leading-wide-width: 6rem;
+    --app-collection-search-max-width: 34rem;
+    --app-collection-state-description-max-width: 30rem;
+    --app-collection-toggle-wide-min-width: 11rem;
     --app-control-radius: 999px;
+    --app-collection-control-item-radius: 0.75rem;
+    --app-collection-radius: 1.25rem;
+    --app-collection-state-indicator-radius: 1rem;
     --app-calendar-day-radius: 50%;
     --app-choice-radius: 0.675rem;
     --app-select-content-radius: 0.875rem;
@@ -391,6 +497,16 @@
     --app-document-section-title-font-weight: 740;
     --app-document-strong-font-weight: 700;
     --app-feedback-title-font-weight: 720;
+    --app-collection-control-label-font-weight: 730;
+    --app-collection-group-font-weight: 680;
+    --app-collection-group-relative-font-weight: 760;
+    --app-collection-row-description-font-weight: 580;
+    --app-collection-row-meta-font-weight: 560;
+    --app-collection-row-title-font-weight: 720;
+    --app-collection-state-title-font-weight: 740;
+    --app-collection-status-font-weight: 720;
+    --app-collection-title-font-weight: 740;
+    --app-collection-toggle-font-weight: 680;
     --app-form-label-font-weight: 690;
     --app-form-step-font-weight: 650;
     --app-form-step-number-font-weight: 750;
@@ -416,6 +532,12 @@
     --app-document-section-title-line-height: 1.3;
     --app-feedback-description-line-height: 1.5;
     --app-feedback-title-line-height: 1.35;
+    --app-collection-count-line-height: 1;
+    --app-collection-group-line-height: 1.3;
+    --app-collection-row-copy-line-height: 1.35;
+    --app-collection-state-description-line-height: 1.5;
+    --app-collection-status-line-height: 1;
+    --app-collection-title-line-height: 1.25;
     --app-form-label-line-height: 1.3;
     --app-form-supporting-line-height: 1.4;
     --app-page-description-line-height: 1.4;
@@ -440,6 +562,11 @@
     --app-settings-eyebrow-letter-spacing: 0.08em;
     --app-form-submit-animation: form-submit-spin 700ms linear infinite;
     --app-page-loading-animation: page-loading-sheen 1.5s ease-in-out infinite;
+    --app-collection-loading-animation: collection-loading 1.5s ease-in-out infinite;
+    --app-collection-busy-transition-duration: 140ms;
+    --app-collection-transition-easing: ease;
+    --app-collection-focus-inset: -3px;
+    --app-collection-row-indicator-size: 1.5rem;
     --app-type-micro-compact: 0.75rem;
     --app-type-micro-comfortable: 0.8125rem;
     --app-type-caption-compact: 0.8125rem;

@@ -40,6 +40,34 @@ describe("public collection anatomy", () => {
     );
   });
 
+  it("keeps the collection surface and rows on the component-owned utility contract", () => {
+    const { container } = render(CollectionFixture, {
+      busy: true,
+      onAction: () => undefined,
+      onOpen: () => undefined,
+    });
+
+    expect(screen.getByRole("region", { name: "3 arrangementer" })).toHaveClass(
+      "@container",
+      "rounded-collection",
+      "bg-surface-raised"
+    );
+    expect(container.querySelector('[data-part="header"]')).toHaveClass(
+      "min-h-collection-header",
+      "bg-collection-control",
+      "collection-wide:min-h-collection-header-wide"
+    );
+    expect(screen.getByRole("list", { name: "Arrangementer" })).toHaveClass(
+      "gap-record-gap",
+      "opacity-collection-busy",
+      "collection-wide:gap-0"
+    );
+    expect(container.querySelector('[data-ui="collection-row"]')).toHaveClass(
+      "collection-row-surface:min-h-collection-row",
+      "collection-wide:collection-row-surface:min-h-collection-row-wide"
+    );
+  });
+
   it("keeps each row in exactly one typed interaction mode", async () => {
     const onOpen = vi.fn();
     const onAction = vi.fn();
@@ -88,6 +116,11 @@ describe("public collection states", () => {
       "schedule"
     );
     expect(container.querySelectorAll('[data-part="row"]')).toHaveLength(4);
+    expect(container.querySelector('[data-part="sheen"]')).toHaveClass(
+      "bg-collection-loading-sheen",
+      "animate-collection-loading",
+      "motion-reduce:animate-none"
+    );
   });
 
   it("uses polite empty feedback and assertive retryable errors", async () => {
@@ -264,6 +297,22 @@ describe("public collection controls", () => {
     expect(toggle).toHaveAttribute("aria-expanded", "true");
     expect(filters).toHaveAttribute("data-open", "true");
     expect(result.container.querySelectorAll('[data-ui="collection-controls"]')).toHaveLength(2);
+  });
+
+  it("keeps control surfaces and responsive shifts on static semantic utilities", () => {
+    const { result } = renderControls();
+    const filters = screen.getByRole("region", { name: "Filtrer brukere" });
+
+    expect(filters).toHaveClass(
+      "bg-collection-control",
+      "collection-booking-choice:text-control-muted",
+      "collection-choice-control:bg-collection-control-item-surface",
+      "collection-wide:px-xl"
+    );
+    expect(result.container.querySelector('[data-part="search"]')).toHaveClass(
+      "collection-native-search-cancel:hidden",
+      "collection-wide:max-w-collection-search"
+    );
   });
 
   it("reports toggle, search, choice and reset through semantic callbacks", async () => {

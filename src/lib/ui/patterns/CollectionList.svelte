@@ -25,6 +25,9 @@
 
 <AccordionListPrimitive
   {...attributes}
+  class="grid"
+  {busy}
+  presentation="collection"
   data-ui="collection-list"
   role="list"
   aria-label={label}
