@@ -87,4 +87,19 @@
   });
 </script>
 
-<div bind:this={mount} data-ui-primitive="rich-text-editor-content"></div>
+<div
+  class={[
+    "min-w-0 rich-text-root:min-w-0 rich-text-root:min-h-rich-text-editor rich-text-root:p-md rich-text-root:text-ink rich-text-root:outline-none rich-text-root:leading-rich-text-content",
+    "rich-text-child:min-w-0 rich-text-flow:mt-rich-text-flow",
+    "rich-text-heading-2:text-heading-md rich-text-heading-2:font-rich-text-heading-2 rich-text-heading-2:leading-rich-text-heading-2",
+    "rich-text-heading-3:text-heading-sm rich-text-heading-3:font-rich-text-heading-3 rich-text-heading-3:leading-rich-text-heading-3",
+    "rich-text-bullet-list:pl-rich-text-list rich-text-bullet-list:list-disc rich-text-ordered-list:pl-rich-text-list rich-text-ordered-list:list-decimal rich-text-list-item-flow:mt-rich-text-list-item",
+    "rich-text-quote:border-l-rich-text-quote rich-text-quote:border-line-strong rich-text-quote:pl-rich-text-quote rich-text-quote:text-ink-soft rich-text-quote:italic",
+    "rich-text-link:text-brand rich-text-link:underline rich-text-link:underline-offset-rich-text-link rich-text-strong:font-rich-text-strong rich-text-emphasis:italic",
+    "rich-text-table:w-full rich-text-table:min-w-rich-text-table rich-text-table:my-sm rich-text-table:border-collapse rich-text-table:text-label",
+    "rich-text-table-cell:min-w-rich-text-table-cell rich-text-table-cell:border rich-text-table-cell:border-line rich-text-table-cell:px-md rich-text-table-cell:py-sm rich-text-table-cell:text-left rich-text-table-cell:align-top",
+    "rich-text-table-heading:bg-surface-subtle rich-text-table-heading:font-rich-text-table-heading rich-text-selected-cell:bg-accent-soft",
+  ]}
+  bind:this={mount}
+  data-ui-primitive="rich-text-editor-content"
+></div>

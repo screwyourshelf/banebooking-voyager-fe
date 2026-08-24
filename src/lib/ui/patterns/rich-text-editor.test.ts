@@ -43,6 +43,13 @@ describe("RichTextEditor", () => {
       "Formater teksten som skal publiseres. Presentasjonen er ikke gyldig."
     );
     expect(editor).toHaveAttribute("aria-required", "true");
+    expect(editor.parentElement).toHaveClass(
+      "min-w-0",
+      "rich-text-root:min-h-rich-text-editor",
+      "rich-text-heading-2:text-heading-md",
+      "rich-text-table:min-w-rich-text-table",
+      "rich-text-selected-cell:bg-accent-soft"
+    );
 
     const form = screen.getByRole("form", { name: "Arrangementpresentasjon" }) as HTMLFormElement;
     const storedValue = new FormData(form).get("nettsideBeskrivelse");

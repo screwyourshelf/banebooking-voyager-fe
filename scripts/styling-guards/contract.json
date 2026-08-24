@@ -232,6 +232,10 @@
           "calendar-heading": "--app-calendar-heading-font-weight",
           "calendar-selected": "--app-calendar-selected-font-weight",
           "choice": "--app-choice-font-weight",
+          "rich-text-heading-2": "--app-rich-text-heading-2-font-weight",
+          "rich-text-heading-3": "--app-rich-text-heading-3-font-weight",
+          "rich-text-strong": "--app-rich-text-strong-font-weight",
+          "rich-text-table-heading": "--app-rich-text-table-heading-font-weight",
           "stat-chart-label": "--app-stat-chart-label-weight",
           "stat-chart-meta": "--app-stat-chart-meta-weight",
           "stat-chart-value": "--app-stat-chart-value-weight",
@@ -243,14 +247,24 @@
         "roles": {
           "choice": "--app-choice-line-height",
           "control": "--app-control-line-height",
+          "rich-text-content": "--app-rich-text-content-line-height",
+          "rich-text-heading-2": "--app-rich-text-heading-2-line-height",
+          "rich-text-heading-3": "--app-rich-text-heading-3-line-height",
           "select-option": "--app-select-option-line-height"
+        }
+      },
+      "textUnderlineOffset": {
+        "themeVariablePrefix": "--text-underline-offset-",
+        "roles": {
+          "rich-text-link": "--app-rich-text-link-underline-offset"
         }
       },
       "borderWidth": {
         "themeVariablePrefix": "--border-width-",
         "roles": {
           "dialog-surface": "--app-dialog-surface-border-bottom-width",
-          "radio-selected": "--app-radio-selected-border-width"
+          "radio-selected": "--app-radio-selected-border-width",
+          "rich-text-quote": "--app-rich-text-quote-border-width"
         }
       },
       "radius": {
@@ -303,6 +317,10 @@
           "page": "--app-page-padding",
           "record-gap": "--app-record-gap",
           "record-inline": "--app-record-padding-inline",
+          "rich-text-flow": "--app-rich-text-flow-gap",
+          "rich-text-list": "--app-rich-text-list-padding-inline",
+          "rich-text-list-item": "--app-rich-text-list-item-gap",
+          "rich-text-quote": "--app-rich-text-quote-padding-inline",
           "search-control-inline": "--app-search-control-padding-inline",
           "select-option-block": "--app-select-option-padding-block",
           "select-option-indicator": "--app-select-option-indicator-padding",
@@ -355,7 +373,9 @@
           "calendar": "--app-calendar-min-width",
           "calendar-compact": "--app-calendar-compact-min-width",
           "choice": "--app-choice-control-min-width",
-          "control": "--app-control-min-width"
+          "control": "--app-control-min-width",
+          "rich-text-table": "--app-rich-text-table-min-width",
+          "rich-text-table-cell": "--app-rich-text-table-cell-min-width"
         }
       },
       "maxWidth": {
@@ -391,6 +411,7 @@
           "control": "--app-control-height",
           "date-trigger": "--app-date-trigger-min-height",
           "form-control": "--app-form-control-min-height",
+          "rich-text-editor": "--app-rich-text-editor-min-height",
           "select-option": "--app-select-option-min-height",
           "select-scroll": "--app-select-scroll-button-min-height",
           "select-trigger": "--app-select-trigger-min-height",
@@ -424,6 +445,22 @@
         "md",
         "motion-reduce",
         "placeholder",
+        "rich-text-bullet-list",
+        "rich-text-child",
+        "rich-text-emphasis",
+        "rich-text-flow",
+        "rich-text-heading-2",
+        "rich-text-heading-3",
+        "rich-text-link",
+        "rich-text-list-item-flow",
+        "rich-text-ordered-list",
+        "rich-text-quote",
+        "rich-text-root",
+        "rich-text-selected-cell",
+        "rich-text-strong",
+        "rich-text-table",
+        "rich-text-table-cell",
+        "rich-text-table-heading",
         "sm",
         "xl"
       ],
@@ -435,6 +472,7 @@
     "identityNeutralStructure": {
       "exact": [
         "absolute",
+        "align-top",
         "appearance-none",
         "block",
         "bg-transparent",
@@ -478,6 +516,7 @@
         "inset-auto",
         "invisible",
         "isolate",
+        "italic",
         "items-baseline",
         "items-center",
         "items-end",
@@ -490,6 +529,8 @@
         "justify-evenly",
         "justify-start",
         "left-1/2",
+        "list-decimal",
+        "list-disc",
         "max-h-none",
         "max-h-select-content",
         "max-h-select-viewport",
@@ -542,6 +583,7 @@
         "translate-x-0",
         "translate-y-1/2",
         "translate-y-px",
+        "underline",
         "whitespace-nowrap",
         "w-fit",
         "w-full",
@@ -670,6 +712,11 @@
         "roles": ["dialog-surface"]
       },
       {
+        "utilityPrefixes": ["border-l"],
+        "themeNamespace": "borderWidth",
+        "roles": ["rich-text-quote"]
+      },
+      {
         "utilityPrefixes": ["border"],
         "themeNamespace": "borderWidth",
         "roles": ["radio-selected"]
@@ -739,6 +786,10 @@
           "calendar-heading",
           "calendar-selected",
           "choice",
+          "rich-text-heading-2",
+          "rich-text-heading-3",
+          "rich-text-strong",
+          "rich-text-table-heading",
           "stat-chart-label",
           "stat-chart-meta",
           "stat-chart-value",
@@ -748,7 +799,19 @@
       {
         "utilityPrefixes": ["leading"],
         "themeNamespace": "lineHeight",
-        "roles": ["choice", "control", "select-option"]
+        "roles": [
+          "choice",
+          "control",
+          "rich-text-content",
+          "rich-text-heading-2",
+          "rich-text-heading-3",
+          "select-option"
+        ]
+      },
+      {
+        "utilityPrefixes": ["underline-offset"],
+        "themeNamespace": "textUnderlineOffset",
+        "roles": ["rich-text-link"]
       },
       {
         "utilityPrefixes": ["gap", "space-x", "space-y"],
@@ -784,6 +847,16 @@
         ],
         "themeNamespace": "spacing",
         "roles": ["2xs", "lg", "md", "page", "section", "sm", "xs"]
+      },
+      {
+        "utilityPrefixes": ["mt"],
+        "themeNamespace": "spacing",
+        "roles": ["rich-text-flow", "rich-text-list-item"]
+      },
+      {
+        "utilityPrefixes": ["pl"],
+        "themeNamespace": "spacing",
+        "roles": ["rich-text-list", "rich-text-quote"]
       },
       {
         "utilityPrefixes": ["p"],
@@ -898,7 +971,14 @@
       {
         "utilityPrefixes": ["min-w"],
         "themeNamespace": "minWidth",
-        "roles": ["calendar", "calendar-compact", "choice", "control"]
+        "roles": [
+          "calendar",
+          "calendar-compact",
+          "choice",
+          "control",
+          "rich-text-table",
+          "rich-text-table-cell"
+        ]
       },
       {
         "utilityPrefixes": ["max-w"],
@@ -930,6 +1010,7 @@
           "control",
           "date-trigger",
           "form-control",
+          "rich-text-editor",
           "select-option",
           "select-scroll",
           "select-trigger",
@@ -1030,6 +1111,7 @@
           "--radius-",
           "--shadow-",
           "--spacing-",
+          "--text-underline-offset-",
           "--text-",
           "--width-"
         ],
