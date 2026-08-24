@@ -18,6 +18,11 @@
   --animate-form-submit: var(--app-form-submit-animation);
   --animate-navigation-loading: var(--app-navigation-loading-animation);
   --animate-page-loading: var(--app-page-loading-animation);
+  --animate-page-shell-enter: var(--app-page-shell-enter-animation);
+  --background-app-shell-court: var(--app-shell-court-background);
+  --background-app-shell-desktop-backdrop: var(--app-shell-desktop-backdrop-background);
+  --background-app-shell-sidebar: var(--app-shell-sidebar-background);
+  --background-app-shell-sidebar-desktop: var(--app-shell-sidebar-desktop-background);
   --background-image-page-loading-sheen: var(--app-page-loading-sheen-background);
   --background-image-collection-control: var(--app-collection-control-background);
   --background-image-collection-loading-sheen: var(--app-collection-loading-sheen-background);
@@ -35,6 +40,7 @@
   --color-action-secondary: var(--app-action-secondary);
   --color-activity-accent: var(--activity-accent);
   --color-app-shell-loading-placeholder: var(--app-shell-loading-placeholder);
+  --color-app-shell-main: var(--app-shell-main-surface);
   --color-app-shell-topbar: var(--app-shell-topbar-surface);
   --color-app-shell-topbar-divider: var(--app-shell-topbar-divider);
   --color-background: var(--background);
@@ -118,6 +124,8 @@
   --color-page-description: var(--app-page-description-text);
   --color-page-heading: var(--app-page-heading-text);
   --color-page-loading-placeholder: var(--app-page-loading-placeholder);
+  --color-page-shell-description: var(--app-page-shell-description-text);
+  --color-page-shell-heading: var(--app-page-shell-heading-text);
   --color-ring: var(--ring);
   --color-rich-text-editor-focus: var(--app-rich-text-editor-focus-ring);
   --color-selection-indicator: var(--app-choice-indicator);
@@ -329,10 +337,13 @@
   --shadow-record: var(--app-record-shadow);
   --shadow-floating-surface: var(--app-floating-surface-shadow);
   --shadow-navigation-bottom: var(--app-navigation-bottom-shadow);
+  --shadow-app-shell-sidebar: var(--app-shell-sidebar-shadow);
+  --shadow-app-shell-sidebar-desktop: var(--app-shell-sidebar-desktop-shadow);
   --shadow-switch-thumb: var(--app-switch-thumb-shadow);
   --shadow-surface-lg: var(--app-shadow-lg);
   --shadow-surface-md: var(--app-shadow-md);
   --shadow-surface-sm: var(--app-shadow-sm);
+  --text-shadow-page-shell: var(--app-page-shell-title-shadow);
 
   --spacing-2xs: var(--app-space-2xs);
   --spacing-action-compact-block: var(--app-action-compact-padding-block);
@@ -757,6 +768,22 @@
 
 @utility bg-size-page-loading-sheen {
   background-size: var(--app-page-loading-sheen-background-size);
+}
+
+@utility bg-app-shell-court {
+  background: var(--app-shell-court-background);
+}
+
+@utility bg-app-shell-desktop-backdrop {
+  background: var(--app-shell-desktop-backdrop-background);
+}
+
+@utility bg-app-shell-sidebar {
+  background: var(--app-shell-sidebar-background);
+}
+
+@utility bg-app-shell-sidebar-desktop {
+  background: var(--app-shell-sidebar-desktop-background);
 }
 
 @utility bg-size-collection-loading-sheen {

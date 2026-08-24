@@ -7,14 +7,15 @@
     NavigationIdentity,
     NavigationLink,
     NavigationList,
+    Page,
   } from "../index";
 
   let { onTheme }: { onTheme: () => void } = $props();
 </script>
 
 {#snippet desktopNavigation()}
-  <NavigationIdentity href="/fjordvik" name="Fjordvik Tennisklubb" meta="Banebooking" />
-  <Navigation label="Hovednavigasjon" layout="sidebar">
+  <Navigation label="Hovednavigasjon" layout="sidebar" surface="shell">
+    <NavigationIdentity href="/fjordvik" name="Fjordvik Tennisklubb" meta="Banebooking" />
     <NavigationList>
       <NavigationLink href="/fjordvik" label="Book bane" active />
     </NavigationList>
@@ -40,5 +41,7 @@
 {/snippet}
 
 <AppShell {desktopNavigation} {mobileHeader} {mobileNavigation}>
-  <a href={resolve("/fjordvik/nyheter")}>Siste nytt</a>
+  <Page title="Klubboversikt" description="Velkommen til Fjordvik Tennisklubb.">
+    <a href={resolve("/fjordvik/nyheter")}>Siste nytt</a>
+  </Page>
 </AppShell>

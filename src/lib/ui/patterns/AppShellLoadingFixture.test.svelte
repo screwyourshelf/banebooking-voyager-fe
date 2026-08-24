@@ -1,5 +1,7 @@
 <script lang="ts">
   import { AppShell } from "../index";
+
+  let { background = "court" }: { background?: "canvas" | "court" } = $props();
 </script>
 
-<AppShell navigationLoadingLabel="Laster navigasjon …"></AppShell>
+<AppShell {background} navigationLoadingLabel="Laster navigasjon …"></AppShell>

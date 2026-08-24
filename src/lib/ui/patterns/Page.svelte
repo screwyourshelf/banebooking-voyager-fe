@@ -1,6 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
+  import { getOptionalAppShellContext } from "./app-shell-context";
 
   type Props = Omit<HTMLAttributes<HTMLElement>, "children" | "title"> & {
     actions?: Snippet;
@@ -22,6 +23,7 @@
   }: Props = $props();
 
   const hasHeader = $derived(Boolean(eyebrow || title || description || actions));
+  const appShell = getOptionalAppShellContext();
 </script>
 
 {#snippet content()}
@@ -45,7 +47,10 @@
           {/if}
           {#if title}
             <h1
-              class="max-w-page-title text-page-heading font-display text-page-title font-page-title tracking-page-title leading-page-title"
+              class={[
+                "max-w-page-title text-page-heading font-display text-page-title font-page-title tracking-page-title leading-page-title",
+                appShell && "md:text-page-shell-heading lg:text-shadow-page-shell",
+              ]}
               data-part="title"
             >
               {title}
@@ -53,7 +58,10 @@
           {/if}
           {#if description}
             <p
-              class="max-w-page-description text-page-description text-body leading-page-description md:text-body-lg"
+              class={[
+                "max-w-page-description text-page-description text-body leading-page-description md:text-body-lg",
+                appShell && "md:text-page-shell-description",
+              ]}
               data-part="description"
             >
               {description}
@@ -76,7 +84,7 @@
 {#if standalone}
   <main
     {...attributes}
-    class="w-full min-w-0 max-w-page mx-auto p-page md:px-page-wide-inline md:pt-page-wide-top md:pb-page-wide-bottom lg:pt-page-desktop-top lg:pr-page-desktop-inline-end lg:pb-page-desktop-bottom lg:pl-page-desktop-inline-start"
+    class="w-full min-w-0 max-w-page mx-auto p-page md:px-page-wide-inline md:pt-page-wide-top md:pb-page-wide-bottom lg:animate-page-shell-enter lg:pt-page-desktop-top lg:pr-page-desktop-inline-end lg:pb-page-desktop-bottom lg:pl-page-desktop-inline-start lg:motion-reduce:animate-none"
     data-ui="page"
   >
     {@render content()}
@@ -84,7 +92,7 @@
 {:else}
   <div
     {...attributes}
-    class="w-full min-w-0 max-w-page mx-auto p-page md:px-page-wide-inline md:pt-page-wide-top md:pb-page-wide-bottom lg:pt-page-desktop-top lg:pr-page-desktop-inline-end lg:pb-page-desktop-bottom lg:pl-page-desktop-inline-start"
+    class="w-full min-w-0 max-w-page mx-auto p-page md:px-page-wide-inline md:pt-page-wide-top md:pb-page-wide-bottom lg:animate-page-shell-enter lg:pt-page-desktop-top lg:pr-page-desktop-inline-end lg:pb-page-desktop-bottom lg:pl-page-desktop-inline-start lg:motion-reduce:animate-none"
     data-ui="page"
   >
     {@render content()}

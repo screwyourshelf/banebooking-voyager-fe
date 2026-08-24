@@ -1,5 +1,7 @@
 <script lang="ts">
   import type { Snippet } from "svelte";
+  import { setAppShellContext } from "./app-shell-context";
+  import type { AppShellBackground, AppShellContext } from "./app-shell-context";
   import NavigationLoading from "./NavigationLoading.svelte";
 
   type ReadyNavigation = {
@@ -19,7 +21,7 @@
   };
 
   type Props = {
-    background?: "canvas" | "court";
+    background?: AppShellBackground;
   } & (ReadyNavigation | LoadingNavigation);
 
   let {
@@ -33,20 +35,27 @@
 
   const navigationState = $derived(navigationLoadingLabel === undefined ? "ready" : "loading");
   const loadingLabel = $derived(navigationLoadingLabel ?? "Laster navigasjon …");
+
+  const appShellContext: AppShellContext = {
+    get background() {
+      return background;
+    },
+  };
+  setAppShellContext(appShellContext);
 </script>
 
 <div
-  class="min-h-app-shell"
+  class={["min-h-app-shell bg-canvas", background === "court" && "md:bg-app-shell-court"]}
   data-ui="app-shell"
   data-background={background}
   data-navigation-state={navigationState}
 >
   <div
-    class="min-h-app-shell md:relative md:grid md:grid-cols-app-shell md:isolate"
+    class="min-h-app-shell md:relative md:grid md:grid-cols-app-shell md:isolate md:bg-sidebar md:before:fixed md:before:-z-1 md:before:inset-0 md:before:bg-app-shell-desktop-backdrop md:before:content-empty md:before:pointer-events-none lg:bg-transparent"
     data-part="frame"
   >
     <aside
-      class="hidden md:sticky md:top-0 md:flex md:h-app-shell md:flex-col md:gap-app-shell-sidebar md:overflow-hidden md:border-r-sidebar-divider-width md:border-sidebar-divider md:px-app-shell-sidebar-inline md:py-app-shell-sidebar-block lg:block lg:m-0 lg:border-0 lg:border-r-sidebar-divider-width lg:rounded-none"
+      class="hidden md:sticky md:top-0 md:flex md:h-app-shell md:flex-col md:gap-app-shell-sidebar md:overflow-hidden md:border-r-sidebar-divider-width md:border-sidebar-divider md:bg-app-shell-sidebar md:px-app-shell-sidebar-inline md:py-app-shell-sidebar-block md:shadow-app-shell-sidebar lg:block lg:m-0 lg:border-0 lg:border-r-sidebar-divider-width lg:rounded-none lg:bg-app-shell-sidebar-desktop lg:shadow-app-shell-sidebar-desktop"
       data-part="sidebar"
     >
       {#if desktopNavigation}
@@ -57,7 +66,7 @@
     </aside>
 
     <div
-      class="flex min-w-0 min-h-app-shell flex-col pb-app-shell-workspace-safe md:pb-0 lg:relative lg:isolate"
+      class="flex min-w-0 min-h-app-shell flex-col pb-app-shell-workspace-safe md:bg-transparent md:pb-0 md:shadow-none lg:relative lg:isolate"
       data-part="workspace"
     >
       <header
@@ -89,7 +98,7 @@
       </header>
 
       <main
-        class="w-full min-h-0 max-w-content flex-1 mx-auto pb-app-shell-main-safe md:pb-0 lg:relative lg:z-1"
+        class="w-full min-h-0 max-w-content flex-1 mx-auto bg-app-shell-main pb-app-shell-main-safe md:bg-transparent md:pb-0 lg:relative lg:z-1"
         data-part="main"
       >
         {@render children?.()}

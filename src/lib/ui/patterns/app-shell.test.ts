@@ -35,21 +35,34 @@ describe("public app shell pattern", () => {
     const main = screen.getByRole("main");
     const bottom = container.querySelector('[data-part="bottom-navigation"]');
 
-    expect(shell).toHaveClass("min-h-app-shell");
-    expect(frame).toHaveClass("md:grid", "md:grid-cols-app-shell", "md:isolate");
+    expect(shell).toHaveClass("min-h-app-shell", "bg-canvas", "md:bg-app-shell-court");
+    expect(frame).toHaveClass(
+      "md:grid",
+      "md:grid-cols-app-shell",
+      "md:isolate",
+      "md:bg-sidebar",
+      "md:before:bg-app-shell-desktop-backdrop",
+      "lg:bg-transparent"
+    );
     expect(sidebar).toHaveClass(
       "hidden",
       "md:flex",
       "md:h-app-shell",
       "md:border-r-sidebar-divider-width",
+      "md:bg-app-shell-sidebar",
       "md:py-app-shell-sidebar-block",
-      "lg:block"
+      "md:shadow-app-shell-sidebar",
+      "lg:block",
+      "lg:bg-app-shell-sidebar-desktop",
+      "lg:shadow-app-shell-sidebar-desktop"
     );
     expect(workspace).toHaveClass(
       "flex",
       "min-h-app-shell",
       "pb-app-shell-workspace-safe",
+      "md:bg-transparent",
       "md:pb-0",
+      "md:shadow-none",
       "lg:isolate"
     );
     expect(topbar).toHaveClass(
@@ -61,8 +74,43 @@ describe("public app shell pattern", () => {
       "app-shell-topbar-identity:flex-1",
       "app-shell-topbar-actions:flex-none"
     );
-    expect(main).toHaveClass("max-w-content", "pb-app-shell-main-safe", "md:pb-0", "lg:relative");
+    expect(main).toHaveClass(
+      "max-w-content",
+      "bg-app-shell-main",
+      "pb-app-shell-main-safe",
+      "md:bg-transparent",
+      "md:pb-0",
+      "lg:relative"
+    );
     expect(bottom).toHaveClass("fixed", "z-40", "inset-x-0", "bottom-0", "md:hidden");
+  });
+
+  it("provides Page and tenant identity with their responsive shell theme", () => {
+    render(AppShellFixture, { onTheme: () => undefined });
+    const desktop = screen.getByRole("navigation", { name: "Hovednavigasjon" });
+    const identity = within(desktop).getByRole("link", { name: /Fjordvik Tennisklubb/ });
+    const title = screen.getByRole("heading", { level: 1, name: "Klubboversikt" });
+
+    expect(identity).toHaveClass("text-sidebar-text");
+    expect(within(identity).getByText("Banebooking")).toHaveClass("text-control-muted");
+    expect(title).toHaveClass(
+      "text-page-heading",
+      "md:text-page-shell-heading",
+      "lg:text-shadow-page-shell"
+    );
+    expect(screen.getByText("Velkommen til Fjordvik Tennisklubb.")).toHaveClass(
+      "text-page-description",
+      "md:text-page-shell-description"
+    );
+  });
+
+  it("keeps the canvas background free of the optional desktop court image", () => {
+    const { container } = render(AppShellLoadingFixture, { background: "canvas" });
+    const shell = container.querySelector('[data-ui="app-shell"]');
+
+    expect(shell).toHaveAttribute("data-background", "canvas");
+    expect(shell).toHaveClass("bg-canvas");
+    expect(shell).not.toHaveClass("md:bg-app-shell-court");
   });
 
   it("keeps navigation and workspace controls in predictable document order", async () => {

@@ -30,12 +30,18 @@ describe("public page and section patterns", () => {
       "max-w-page",
       "p-page",
       "md:px-page-wide-inline",
-      "lg:pb-page-desktop-bottom"
+      "lg:animate-page-shell-enter",
+      "lg:pb-page-desktop-bottom",
+      "lg:motion-reduce:animate-none"
     );
     expect(screen.getByRole("heading", { level: 1, name: "Baner" })).toHaveClass(
       "text-page-heading",
       "font-page-title",
       "tracking-page-title"
+    );
+    expect(screen.getByRole("heading", { level: 1, name: "Baner" })).not.toHaveClass(
+      "md:text-page-shell-heading",
+      "lg:text-shadow-page-shell"
     );
     expect(screen.getByText("Administrer klubbens baner.")).toHaveAttribute(
       "data-part",

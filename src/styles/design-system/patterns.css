@@ -23,13 +23,15 @@
     }
   }
 
-  /* App frame */
-  [data-ui="app-shell"] {
-    background: var(--app-canvas);
-  }
+  @keyframes app-desktop-content-enter {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
 
-  [data-ui="app-shell"] > [data-part="workspace"] > [data-part="main"],
-  [data-ui="app-shell"] > [data-part="frame"] > [data-part="workspace"] > [data-part="main"] {
-    background: color-mix(in srgb, var(--muted) 20%, transparent);
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }

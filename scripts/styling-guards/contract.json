@@ -121,7 +121,17 @@
           "collection-loading": "--app-collection-loading-animation",
           "form-submit": "--app-form-submit-animation",
           "navigation-loading": "--app-navigation-loading-animation",
-          "page-loading": "--app-page-loading-animation"
+          "page-loading": "--app-page-loading-animation",
+          "page-shell-enter": "--app-page-shell-enter-animation"
+        }
+      },
+      "background": {
+        "themeVariablePrefix": "--background-",
+        "roles": {
+          "app-shell-court": "--app-shell-court-background",
+          "app-shell-desktop-backdrop": "--app-shell-desktop-backdrop-background",
+          "app-shell-sidebar": "--app-shell-sidebar-background",
+          "app-shell-sidebar-desktop": "--app-shell-sidebar-desktop-background"
         }
       },
       "backgroundImage": {
@@ -153,6 +163,7 @@
           "action-secondary": "--app-action-secondary",
           "activity-accent": "--activity-accent",
           "app-shell-loading-placeholder": "--app-shell-loading-placeholder",
+          "app-shell-main": "--app-shell-main-surface",
           "app-shell-topbar": "--app-shell-topbar-surface",
           "app-shell-topbar-divider": "--app-shell-topbar-divider",
           "background": "--background",
@@ -231,6 +242,8 @@
           "page-description": "--app-page-description-text",
           "page-heading": "--app-page-heading-text",
           "page-loading-placeholder": "--app-page-loading-placeholder",
+          "page-shell-description": "--app-page-shell-description-text",
+          "page-shell-heading": "--app-page-shell-heading-text",
           "ring": "--ring",
           "rich-text-content-quote-border": "--app-rich-text-content-quote-border",
           "rich-text-editor-focus": "--app-rich-text-editor-focus-ring",
@@ -492,11 +505,19 @@
         "roles": {
           "floating-surface": "--app-floating-surface-shadow",
           "navigation-bottom": "--app-navigation-bottom-shadow",
+          "app-shell-sidebar": "--app-shell-sidebar-shadow",
+          "app-shell-sidebar-desktop": "--app-shell-sidebar-desktop-shadow",
           "record": "--app-record-shadow",
           "switch-thumb": "--app-switch-thumb-shadow",
           "surface-lg": "--app-shadow-lg",
           "surface-md": "--app-shadow-md",
           "surface-sm": "--app-shadow-sm"
+        }
+      },
+      "textShadow": {
+        "themeVariablePrefix": "--text-shadow-",
+        "roles": {
+          "page-shell": "--app-page-shell-title-shadow"
         }
       },
       "spacing": {
@@ -956,6 +977,7 @@
     "identityNeutralStructure": {
       "exact": [
         "@container",
+        "-z-1",
         "absolute",
         "align-top",
         "animate-none",
@@ -2240,6 +2262,41 @@
         "roles": ["date-popover", "dialog", "dialog-surface", "editor-dialog"]
       },
       {
+        "utilityPrefixes": ["animate"],
+        "themeNamespace": "animation",
+        "roles": ["page-shell-enter"]
+      },
+      {
+        "utilityPrefixes": ["bg"],
+        "themeNamespace": "background",
+        "roles": [
+          "app-shell-court",
+          "app-shell-desktop-backdrop",
+          "app-shell-sidebar",
+          "app-shell-sidebar-desktop"
+        ]
+      },
+      {
+        "utilityPrefixes": ["bg"],
+        "themeNamespace": "color",
+        "roles": ["app-shell-main"]
+      },
+      {
+        "utilityPrefixes": ["text"],
+        "themeNamespace": "color",
+        "roles": ["page-shell-description", "page-shell-heading"]
+      },
+      {
+        "utilityPrefixes": ["shadow"],
+        "themeNamespace": "shadow",
+        "roles": ["app-shell-sidebar", "app-shell-sidebar-desktop"]
+      },
+      {
+        "utilityPrefixes": ["text-shadow"],
+        "themeNamespace": "textShadow",
+        "roles": ["page-shell"]
+      },
+      {
         "utilityPrefixes": ["bg"],
         "themeNamespace": "color",
         "roles": ["app-shell-loading-placeholder", "app-shell-topbar"]
@@ -2506,7 +2563,6 @@
           "--chart-1",
           "--chart-2",
           "--foreground",
-          "--muted",
           "--radius",
           "--ring"
         ],
