@@ -1,6 +1,6 @@
 # Migreringsstatus
 
-> **Status:** Pågår — rammeverksløftet og SWP-0–SWP-4 er fullført; SWP-5.1–SWP-5.2 er fullført
+> **Status:** Pågår — rammeverksløftet og SWP-0–SWP-4 er fullført; SWP-5.1–SWP-5.3 er fullført
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
@@ -15,9 +15,10 @@ alle SWP-2-primitivecheckpointene, SWP-3-produktpatterncheckpointene og hele SWP
 statisk analyserbare Tailwind-utilities. SWP-5.1 kaldavstemte alle routes/features, og SWP-5.2 har
 flyttet statistikkens statiske presentasjon til typed offentlig UI. De 106 overgangskandidatene er
 redusert til 38 faktiske geometrier etter eierkartet i
-[`swp-5-route-feature-audit.md`](./swp-5-route-feature-audit.md). Fortsett med SWP-5.3 og slett den
-nå tomme featurekomposisjonsfilen. Bevar produktadferd og backend; bare faktisk datadrevet geometri
-kan bli et varig featureunntak.
+[`swp-5-route-feature-audit.md`](./swp-5-route-feature-audit.md). SWP-5.3 har slettet den tomme
+featurekomposisjonsfilen; fortsett med SWP-5.4 og fjern de tre siste legacy-stilarkene etter at deres
+base-/keyframeeiere er flyttet. Bevar produktadferd og backend; bare faktisk datadrevet geometri kan
+bli et varig featureunntak.
 
 ## Aktiv stylingretning
 
@@ -864,7 +865,11 @@ kan bli et varig featureunntak.
 - 125 komponentregler og 132 selectors er erstattet og slettet fra
   `feature-compositions.css`/`responsive.css`. Kildebaselinen er redusert fra 2588 til 2038
   CSS-linjer, 135 til 10 regler, 144 til 12 selectors, 363 til 36 legacyavvik og 106 til 38
-  visualiseringskandidater. Den tomme komposisjonsfilen beholdes bare til SWP-5.3.
+  visualiseringskandidater.
+- SWP-5.3 har bevist at `feature-compositions.css` var tom, fjernet importen, slettet filen og
+  fjernet den fra CSS-/baselinekontrakten. Baseline har nå seks CSS-filer og 2033 linjer; bygget CSS,
+  regler, selectors, legacyavvik, kandidater og begge produksjonsassettene er byteidentiske med
+  SWP-5.2.
 - Hele SWP-5.2-porten er grønn med 345 tester, elleve pikselidentiske visuelle referanser, full
   check og begge hostbuildene. Initial CSS er 28 350/28 370 gzip-byte innenfor 50 KiB-budsjettet;
   backend, API-er og produktadferd er uendret.
@@ -880,10 +885,10 @@ kan bli et varig featureunntak.
 | ------------------------------------- | ----------------------------------------------------- |
 | Base branch                           | `main`                                                |
 | Fastslått basecommit                  | `5287c5e`                                             |
-| Siste semantiske checkpoint           | `refactor(styling): migrate statistics visualization` |
-| Lokale commits foran base             | 62                                                    |
+| Siste semantiske checkpoint           | `refactor(styling): remove feature composition sheet` |
+| Lokale commits foran base             | 63                                                    |
 | Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                         |
-| Neste planlagte checkpoint            | SWP-5.3 slett tom featurekomposisjonsfil              |
+| Neste planlagte checkpoint            | SWP-5.4 slett siste legacy-stilark                    |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -892,12 +897,16 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Start **SWP-5 checkpoint 3 — slett tom featurekomposisjonsfil**:
+Start **SWP-5 checkpoint 4 — slett siste legacy-stilark**:
 
-1. Bekreft kaldt at `feature-compositions.css` er tom for regler og ikke lenger har en aktiv eier.
-2. Fjern importen fra `design-system.css`, slett filen og fjern den fra den lukkede CSS-kontrakten.
-3. Oppdater den avtakende baselinen og kjør styling-, dokument- og full check-port uten
-   produktkode-, API- eller backendendringer.
+1. Flytt de fem aktive keyframes fra `patterns.css` til den registrerte Tailwind-inngangen uten å
+   endre animation-rollene eller bygget CSS.
+2. Flytt den globale reduced-motion-basen fra `responsive.css` og dokumentbasen fra
+   `primitives.css` til eksplisitt dokumentert base/theme/global CSS.
+3. Fjern de tre importene, slett `patterns.css`, `responsive.css` og `primitives.css`, og stram CSS-/
+   baselinekontrakten til de gjenstående autoritative stilarkene.
+4. Oppdater baselinen og kjør full check samt visuell/produksjonsverifikasjon uten produkt-, API-
+   eller backendendringer.
 
 ## Arbeidspakkeregister
 
@@ -916,7 +925,7 @@ Start **SWP-5 checkpoint 3 — slett tom featurekomposisjonsfil**:
 | SWP-2 UI-primitives              | Fullført | Alle fire primitivecheckpoints og full kvalitetport er grønne |
 | SWP-3 Produktpatterns            | Fullført | Alle fem patterncheckpoints og full kvalitetport er grønne    |
 | SWP-4 App-shell/navigation       | Fullført | Alle fire checkpoints og full kvalitetport er grønne          |
-| SWP-5 Features og legacy-CSS     | Aktiv    | SWP-5.1–5.2 fullført; neste er tom filsletting i SWP-5.3      |
+| SWP-5 Features og legacy-CSS     | Aktiv    | SWP-5.1–5.3 fullført; neste er siste filsletting i SWP-5.4    |
 | SWP-6 Komponent-/API-opprydding  | Venter   | Utføres etter at stylingeierskap er synlig                    |
 | SWP-7 Uavhengig sluttreview      | Venter   | Kald audit og målt vellykket/delvis/ikke vellykket resultat   |
 
@@ -954,12 +963,11 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
   fjernede funn krever eksplisitt avstemming, slik at slettet gjeld ikke senere kan gjeninnføres.
   Cascade-regelen validerer separat alle sju stilark, mens de 23 isolerte fixturene fortsatt beviser
   positiv og negativ atferd for alle ti stabile regel-ID-er.
-- Ingen midlertidige rammeverksadapters eller React-legacy gjenstår. Stylingbaselinen måler sju
-  aktive CSS-filer, 2038 linjer, ti regler og tolv selektorer. Samtlige regler ligger i registrerte
+- Ingen midlertidige rammeverksadapters eller React-legacy gjenstår. Stylingbaselinen måler seks
+  aktive CSS-filer, 2033 linjer, ti regler og tolv selektorer. Samtlige regler ligger i registrerte
   lag: tre i `theme` og sju i `base`; `components` og `utilities` har ingen app-eide
   selectorregler. De siste overgangsfilene er `patterns.css` med 37 linjer, `responsive.css` med
-  tolv linjer, den tomme `feature-compositions.css` med tre linjer og `primitives.css` med 40
-  linjer og seks base-regler.
+  tolv linjer og `primitives.css` med 40 linjer og seks base-regler.
 - De 91 tidligere ulagrede reglene har nå eksplisitt eier. Den gamle gjeldstypen for ulagrede
   legacyregler er redusert fra 88 til null; de tre theme-reglene var ikke legacygjeld.
 - Baseline fører 36 overgangsavvik: ni globale produktselektorer, 14 rå visuelle deklarasjoner,
@@ -1014,6 +1022,8 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 | Relative dokumentlenker              | Bestått 2026-08-24                                                                  |
 | `git diff --check`                   | Bestått 2026-08-24                                                                  |
 | AI-first lesbarhetskontroll          | Bestått: eksplisitte eiere, typer, statiske klasser og samlokaliserte tester        |
+| SWP-5.3 filsletting                  | Bestått: featurekomposisjonsfil/import/kontrakt fjernet; build byteidentisk         |
+| SWP-5.3 produksjons-/baselineport    | Bestått: 6 CSS-filer, 2033 linjer, 10 regler, 36 legacyavvik og 38 kandidater       |
 | SWP-5.2 featuregrense                | Bestått: 0 klasser/roller; 6 inline- og 32 SVG-geometrier = 38 kandidater           |
 | SWP-5.2 theme-/cascadeport           | Bestått: 662 roller, 912 utilities, 118 skift; 10 lagrede regler                    |
 | SWP-5.2 produksjons-/baselineport    | Bestått: 184 filer, 619 diagnostics, 36 legacyavvik og 38 kandidater                |
@@ -1230,14 +1240,10 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 ## Filer i siste checkpoint
 
-- offentlig `Metric`/`MetricGrid`, typed `DataVisualization`, `DataTable`,
-  `VisualizationLayout`, `VisualizationLegend` og `VisualizationLoading` med lukkede exports,
-  semantiske roller og statisk analyserbare variants
-- statistikkfeaturet uten klasser, statistikkroller eller selectorbroer; bare datadrevet geometri
-  består i seks inlineverdier, tre skoperte styleblokker og 32 SVG-attributter
-- tom `feature-compositions.css`, redusert `responsive.css`, oppdatert guard-/theme-/
-  arkitekturkontrakt, relevante tester og den reduserte maskinbaselinen
-- denne statusen med SWP-5.2 fullført og SWP-5.3 som neste eksakte checkpoint; API og
+- slettet `feature-compositions.css` og fjernet importen fra `design-system.css`
+- stylingguardens produksjonsliste og baselineklassifisering uten den døde filen
+- redusert maskinbaseline med seks CSS-filer og byteidentiske produksjonsassets
+- denne statusen med SWP-5.3 fullført og SWP-5.4 som neste eksakte checkpoint; produktkode, API og
   backend-repoet er urørt
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for

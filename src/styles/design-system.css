@@ -4,12 +4,10 @@
  * Tailwind registers theme, base, components and utilities in src/index.css;
  * Preflight owns the reset portion of base. Import order is deliberate: product
  * theme roles first, then Banebooking's document/primitive base extensions,
- * reusable semantic patterns, feature-level compositions and finally the
- * responsive adaptations that preserve the established cascade.
+ * reusable semantic patterns and finally the responsive base adaptations.
  */
 
 @import "./design-system/tokens.css";
 @import "./design-system/primitives.css";
 @import "./design-system/patterns.css";
-@import "./design-system/feature-compositions.css";
 @import "./design-system/responsive.css";

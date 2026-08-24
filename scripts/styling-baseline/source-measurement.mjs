@@ -7,7 +7,6 @@ import { analyzeProductionStylingTree } from "../styling-guards/production-tree-
 import { emptySelectorFacts, ownerForMarkup, ownerForStylesheet } from "./ownership.mjs";
 
 const legacyStylesheets = new Set([
-  "src/styles/design-system/feature-compositions.css",
   "src/styles/design-system/patterns.css",
   "src/styles/design-system/primitives.css",
   "src/styles/design-system/responsive.css",

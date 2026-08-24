@@ -5,7 +5,6 @@
       "css": "All versioned src/**/*.css files.",
       "guardDiagnostics": "Exact rule ID, file, line, column and message for the nine production-tree guards; *.test.svelte is excluded explicitly.",
       "legacyStylesheets": [
-        "src/styles/design-system/feature-compositions.css",
         "src/styles/design-system/patterns.css",
         "src/styles/design-system/primitives.css",
         "src/styles/design-system/responsive.css"
@@ -18,8 +17,8 @@
       "applyUtilityTokenCount": 0,
       "cssCustomPropertyDefinitionCount": 1416,
       "cssCustomPropertyReferenceCount": 914,
-      "cssFileCount": 7,
-      "cssLineCount": 2038,
+      "cssFileCount": 6,
+      "cssLineCount": 2033,
       "cssRuleCount": 10,
       "featureClassOccurrenceCount": 0,
       "guardDiagnosticCount": 619,
@@ -51,23 +50,12 @@
           "unlayeredRuleCount": 0
         },
         {
-          "atRuleCount": 5,
+          "atRuleCount": 4,
           "declarationCount": 0,
           "file": "src/styles/design-system.css",
           "keyframeStepCount": 0,
           "layeredRuleCount": 0,
-          "lineCount": 15,
-          "ruleCount": 0,
-          "selectorCount": 0,
-          "unlayeredRuleCount": 0
-        },
-        {
-          "atRuleCount": 1,
-          "declarationCount": 0,
-          "file": "src/styles/design-system/feature-compositions.css",
-          "keyframeStepCount": 0,
-          "layeredRuleCount": 0,
-          "lineCount": 3,
+          "lineCount": 13,
           "ruleCount": 0,
           "selectorCount": 0,
           "unlayeredRuleCount": 0
@@ -83863,18 +83851,18 @@
       ],
       "initialCssGzipBytes": 28350,
       "initialJavaScriptAssets": [
-        { "asset": "_app/immutable/chunks/B-5xqXfB.js", "gzipBytes": 11218, "rawBytes": 29269 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/BxCIeGOe.js", "gzipBytes": 725, "rawBytes": 1401 },
+        { "asset": "_app/immutable/chunks/CFTvE3Dr.js", "gzipBytes": 11220, "rawBytes": 29273 },
         { "asset": "_app/immutable/chunks/Cpi0lLfN.js", "gzipBytes": 530, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/Dpzkwr9j.js", "gzipBytes": 612, "rawBytes": 1143 },
         { "asset": "_app/immutable/chunks/j1LAjlpn.js", "gzipBytes": 20600, "rawBytes": 54865 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.BGwmSM8C.js", "gzipBytes": 2514, "rawBytes": 9050 },
-        { "asset": "_app/immutable/entry/start.CMOJ7JCg.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/entry/app.CCVEy2lm.js", "gzipBytes": 2502, "rawBytes": 9050 },
+        { "asset": "_app/immutable/entry/start.BHQJTuG1.js", "gzipBytes": 92, "rawBytes": 82 },
         { "asset": "_app/immutable/nodes/0.DdgSKg59.js", "gzipBytes": 427, "rawBytes": 806 }
       ],
-      "initialJavaScriptGzipBytes": 38157,
+      "initialJavaScriptGzipBytes": 38147,
       "javaScriptChunkCount": 60,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",
@@ -83914,18 +83902,18 @@
       ],
       "initialCssGzipBytes": 28370,
       "initialJavaScriptAssets": [
-        { "asset": "_app/immutable/chunks/Bcm0YeRk.js", "gzipBytes": 11228, "rawBytes": 29281 },
+        { "asset": "_app/immutable/chunks/BjPXO4fb.js", "gzipBytes": 11231, "rawBytes": 29285 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/BxCIeGOe.js", "gzipBytes": 725, "rawBytes": 1401 },
         { "asset": "_app/immutable/chunks/Cpi0lLfN.js", "gzipBytes": 530, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/Dpzkwr9j.js", "gzipBytes": 621, "rawBytes": 1179 },
         { "asset": "_app/immutable/chunks/j1LAjlpn.js", "gzipBytes": 20600, "rawBytes": 54865 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.CaHMKE_S.js", "gzipBytes": 2522, "rawBytes": 9614 },
-        { "asset": "_app/immutable/entry/start.BfynONe5.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/entry/app.BeI06le_.js", "gzipBytes": 2514, "rawBytes": 9614 },
+        { "asset": "_app/immutable/entry/start.BXqEC8yX.js", "gzipBytes": 92, "rawBytes": 82 },
         { "asset": "_app/immutable/nodes/0.Dq3qvTq1.js", "gzipBytes": 437, "rawBytes": 866 }
       ],
-      "initialJavaScriptGzipBytes": 38194,
+      "initialJavaScriptGzipBytes": 38189,
       "javaScriptChunkCount": 60,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",
