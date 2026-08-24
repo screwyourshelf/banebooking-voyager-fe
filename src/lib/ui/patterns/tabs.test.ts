@@ -13,10 +13,33 @@ const axeOptions: axe.RunOptions = {
 describe("public Tabs pattern", () => {
   it("eier lokal visningsstate og automatisk piltastnavigasjon", async () => {
     const result = render(TabsFixture);
-    expect(result.container.querySelector('[data-ui-primitive="tabs"]')).toHaveClass("min-w-0");
+    expect(result.container.querySelector('[data-ui-primitive="tabs"]')).toHaveClass(
+      "min-w-0",
+      "grid",
+      "gap-lg",
+      "md:gap-xl",
+      "lg:gap-md"
+    );
+    expect(screen.getByRole("tablist")).toHaveClass(
+      "grid-cols-2",
+      "border-tabs-list-border",
+      "bg-tabs-list",
+      "md:min-w-tabs-list"
+    );
     const profile = screen.getByRole("tab", { name: "Klubbprofil" });
     const membership = screen.getByRole("tab", { name: "Medlemskap" });
 
+    expect(profile).toHaveClass(
+      "min-h-tabs-trigger",
+      "font-tabs-trigger",
+      "after:h-tabs-indicator",
+      "data-[state=active]:bg-tabs-active-surface"
+    );
+    expect(screen.getByText("Klubbprofilinnhold").parentElement).toHaveClass(
+      "min-w-0",
+      "lg:relative",
+      "lg:z-1"
+    );
     expect(profile).toHaveAttribute("aria-selected", "true");
     expect(screen.getByText("Klubbprofilinnhold")).toBeVisible();
 

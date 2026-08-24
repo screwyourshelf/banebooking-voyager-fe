@@ -80,7 +80,17 @@ describe("public dialog contracts", () => {
       "bg-dialog-overlay",
       "backdrop-blur-dialog-overlay"
     );
-    expect(standard.dialog.querySelector('[data-ui="dialog"]')).toBeInTheDocument();
+    expect(standard.dialog.querySelector('[data-ui="dialog"]')).toHaveClass(
+      "rounded-dialog",
+      "bg-surface",
+      "p-0"
+    );
+    expect(standard.dialog.querySelector('[data-part="header"]')).toHaveClass(
+      "gap-lg",
+      "px-dialog-inline",
+      "pt-dialog-inline",
+      "dialog-close:text-dialog-close"
+    );
     expect(screen.getByRole("heading", { name: "Bookingregler", level: 2 })).toBeVisible();
     expect(screen.getByText(/Grenser, tider og varighet/)).toBeVisible();
     expect(within(standard.dialog).queryByRole("banner")).toBeNull();
@@ -97,7 +107,22 @@ describe("public dialog contracts", () => {
       "md:h-editor-dialog",
       "md:rounded-dialog"
     );
-    expect(editor.dialog.querySelector('[data-ui="editor-dialog"]')).toBeInTheDocument();
+    expect(editor.dialog.querySelector('[data-ui="editor-dialog"]')).toHaveClass(
+      "h-full",
+      "rounded-none",
+      "bg-surface-subtle",
+      "md:rounded-dialog"
+    );
+    expect(editor.dialog.querySelector('[data-part="header"]')).toHaveClass(
+      "bg-editor-dialog-header",
+      "pt-editor-dialog-safe",
+      "editor-dialog-back:text-control-muted"
+    );
+    expect(editor.dialog.querySelector('[data-part="content"]')).toHaveClass(
+      "overscroll-contain",
+      "editor-dialog-tabs:p-md",
+      "editor-dialog-actions:sticky"
+    );
     expect(screen.getByText("Bruker")).toBeVisible();
     expect(screen.getByRole("button", { name: "Alle brukere" })).toBeVisible();
     expect(within(editor.dialog).queryByRole("banner")).toBeNull();

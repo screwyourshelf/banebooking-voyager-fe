@@ -18,12 +18,6 @@
     size = "default",
     ...attributes
   }: Props = $props();
-
-  const dataPart = $derived(attributes["data-part"]);
-  // De resterende kontekstbroene eies av senere SWP-3-checkpoints.
-  const patternOwnsGhostText = $derived(
-    dataPart === "back" || (dataPart === "control" && Boolean(attributes["data-tone"]))
-  );
 </script>
 
 <button
@@ -42,7 +36,7 @@
           : variant === "ghost"
             ? "border-transparent bg-transparent enabled:hover:bg-surface-subtle"
             : "",
-    variant === "ghost" && !patternOwnsGhostText && "text-ink",
+    variant === "ghost" && "text-ink",
     size === "default"
       ? "min-h-control px-action-inline py-control-block text-label leading-control"
       : size === "small"

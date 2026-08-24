@@ -37,12 +37,26 @@
 
 <DialogPrimitive bind:open {onClose} {pending} size="standard">
   {#snippet children({ close })}
-    <div {...attributes} data-ui="dialog" data-state={pending ? "pending" : "ready"}>
-      <div data-part="header">
-        <div data-part="intro">
-          <DialogTitle data-part="title">{title}</DialogTitle>
+    <div
+      {...attributes}
+      class="flex w-full max-h-none flex-col gap-0 overflow-hidden rounded-dialog bg-surface p-0"
+      data-ui="dialog"
+      data-state={pending ? "pending" : "ready"}
+    >
+      <div
+        class="flex items-start justify-between gap-lg px-dialog-inline pt-dialog-inline pb-md dialog-close:flex-none dialog-close:-mt-dialog-close-offset dialog-close:-mr-dialog-close-offset dialog-close:text-dialog-close dialog-close:leading-dialog-close"
+        data-part="header"
+      >
+        <div class="grid min-w-0 gap-dialog-intro" data-part="intro">
+          <DialogTitle
+            class="text-ink font-display text-heading-sm font-dialog-title leading-dialog-title"
+            data-part="title">{title}</DialogTitle
+          >
           {#if description}
-            <DialogDescription data-part="description">{description}</DialogDescription>
+            <DialogDescription
+              class="text-ink-soft text-body-sm leading-dialog-description"
+              data-part="description">{description}</DialogDescription
+            >
           {/if}
         </div>
         <Button
@@ -57,10 +71,20 @@
         </Button>
       </div>
 
-      <div data-part="content">{@render content()}</div>
+      <div
+        class="flex min-h-0 flex-col gap-lg overflow-y-auto px-dialog-inline pt-md pb-dialog-inline"
+        data-part="content"
+      >
+        {@render content()}
+      </div>
 
       {#if actions}
-        <div data-part="actions">{@render actions({ close, pending })}</div>
+        <div
+          class="flex flex-wrap justify-end gap-dialog-actions border-t border-line px-dialog-inline py-lg"
+          data-part="actions"
+        >
+          {@render actions({ close, pending })}
+        </div>
       {/if}
     </div>
   {/snippet}

@@ -72,15 +72,32 @@
   }
 </script>
 
-<div data-ui="editor" data-state={editorState} aria-busy={pending || status === "loading"}>
+<div
+  class="min-w-0 overflow-hidden border border-line rounded-rich-text-editor bg-surface focus-within:border-focus focus-within:ring-3 focus-within:ring-rich-text-editor-focus data-[state=disabled]:opacity-rich-text-editor-disabled"
+  data-ui="editor"
+  data-state={editorState}
+  aria-busy={pending || status === "loading"}
+>
   <RichTextEditorToolbar {controller} disabled={locked} onCommand={run} revision={editorRevision} />
 
   {#if status === "loading"}
-    <div data-part="loading" role="status">Laster teksteditor…</div>
+    <div
+      class="grid min-h-rich-text-editor place-items-center p-lg text-ink-faint text-body-sm"
+      data-part="loading"
+      role="status"
+    >
+      Laster teksteditor…
+    </div>
   {:else if status === "error"}
-    <div data-part="error" role="alert">
+    <div
+      class="grid min-h-rich-text-editor content-center justify-items-start gap-sm p-lg text-status-danger-text"
+      data-part="error"
+      role="alert"
+    >
       <strong>Teksteditoren kunne ikke åpnes</strong>
-      <span>{error?.message ?? "Prøv å laste editoren på nytt."}</span>
+      <span class="text-ink-soft text-body-sm"
+        >{error?.message ?? "Prøv å laste editoren på nytt."}</span
+      >
       {#if retryable}
         <Button variant="secondary" size="small" onclick={retry}>Prøv igjen</Button>
       {/if}
@@ -88,7 +105,7 @@
   {/if}
 
   {#key attempt}
-    <div data-part="content" hidden={status !== "ready"}>
+    <div class="min-w-0 overflow-x-auto" data-part="content" hidden={status !== "ready"}>
       <RichTextEditorPrimitive
         {disabled}
         {label}

@@ -38,7 +38,12 @@
   }
 </script>
 
-<div data-part="toolbar" role="toolbar" aria-label="Formatering">
+<div
+  class="flex min-w-0 flex-wrap items-center gap-2xs border-b border-line bg-surface-subtle p-rich-text-toolbar editor-toolbar-column:text-rich-text-toolbar-column editor-toolbar-row:text-rich-text-toolbar-row editor-toolbar-danger:text-rich-text-toolbar-danger"
+  data-part="toolbar"
+  role="toolbar"
+  aria-label="Formatering"
+>
   <Button
     variant={active("bold") ? "secondary" : "ghost"}
     size="compact-icon"
@@ -62,7 +67,11 @@
     <Icon icon={TextItalicIcon} size="button" />
   </Button>
 
-  <span data-part="separator" role="separator"></span>
+  <span
+    class="w-px h-rich-text-toolbar-separator mx-2xs bg-rich-text-toolbar-divider"
+    data-part="separator"
+    role="separator"
+  ></span>
 
   <Button
     variant={active("heading-2") ? "secondary" : "ghost"}
@@ -87,7 +96,11 @@
     <Icon icon={Heading03Icon} size="button" />
   </Button>
 
-  <span data-part="separator" role="separator"></span>
+  <span
+    class="w-px h-rich-text-toolbar-separator mx-2xs bg-rich-text-toolbar-divider"
+    data-part="separator"
+    role="separator"
+  ></span>
 
   <Button
     variant={active("bullet-list") ? "secondary" : "ghost"}
@@ -123,7 +136,11 @@
     <Icon icon={QuoteUpIcon} size="button" />
   </Button>
 
-  <span data-part="separator" role="separator"></span>
+  <span
+    class="w-px h-rich-text-toolbar-separator mx-2xs bg-rich-text-toolbar-divider"
+    data-part="separator"
+    role="separator"
+  ></span>
 
   <Button
     variant={active("table") ? "secondary" : "ghost"}

@@ -32,21 +32,43 @@
 
 <DialogPrimitive bind:open {onClose} {pending} size="editor">
   {#snippet children({ close })}
-    <div {...attributes} data-ui="editor-dialog" data-state={pending ? "pending" : "ready"}>
-      <div data-part="header" data-surface="control">
+    <div
+      {...attributes}
+      class="flex w-full h-full flex-col gap-0 overflow-hidden rounded-none bg-surface-subtle p-0 md:rounded-dialog"
+      data-ui="editor-dialog"
+      data-state={pending ? "pending" : "ready"}
+    >
+      <div
+        class="flex-none border-b border-editor-dialog-divider bg-editor-dialog-header px-editor-dialog-padding pb-editor-dialog-padding pt-editor-dialog-safe text-control-text md:px-editor-dialog-wide-inline md:py-lg editor-dialog-back:w-fit editor-dialog-back:-ml-sm editor-dialog-back:text-control-muted editor-dialog-back-hover:bg-editor-dialog-back-hover editor-dialog-back-hover:text-control-text"
+        data-part="header"
+        data-surface="control"
+      >
         <Button data-part="back" disabled={pending} onclick={close} size="small" variant="ghost">
           <span data-part="back-icon" aria-hidden="true">←</span>
           {backLabel}
         </Button>
 
-        <div data-part="intro">
-          <span data-part="eyebrow">{eyebrow}</span>
-          <DialogTitle data-part="title">{title}</DialogTitle>
-          <DialogDescription data-part="description">{description}</DialogDescription>
+        <div class="grid gap-editor-dialog-intro" data-part="intro">
+          <span
+            class="text-editor-dialog-eyebrow text-label font-editor-dialog-eyebrow tracking-editor-dialog-eyebrow uppercase"
+            data-part="eyebrow">{eyebrow}</span
+          >
+          <DialogTitle
+            class="text-control-text font-display text-editor-dialog-title font-editor-dialog-title tracking-editor-dialog-title leading-editor-dialog-title md:text-editor-dialog-title-wide"
+            data-part="title">{title}</DialogTitle
+          >
+          <DialogDescription class="text-control-muted text-body-sm" data-part="description"
+            >{description}</DialogDescription
+          >
         </div>
       </div>
 
-      <div data-part="content">{@render content()}</div>
+      <div
+        class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain editor-dialog-tabs:p-md md:editor-dialog-tabs:px-editor-dialog-wide-inline md:editor-dialog-tabs:pt-lg md:editor-dialog-tabs:pb-editor-dialog-wide-inline editor-dialog-fill:min-h-full editor-dialog-fill:grow editor-dialog-fill:shrink-0 editor-dialog-fill:basis-auto editor-dialog-form:flex editor-dialog-form:flex-col editor-dialog-settings:flex editor-dialog-settings:flex-col editor-dialog-settings-child:shrink-0 editor-dialog-actions:sticky editor-dialog-actions:z-2 editor-dialog-actions:bottom-0 editor-dialog-actions:mt-auto editor-dialog-actions:bg-editor-dialog-actions-surface editor-dialog-actions:pb-editor-dialog-actions editor-dialog-actions:backdrop-blur-editor-dialog-actions"
+        data-part="content"
+      >
+        {@render content()}
+      </div>
     </div>
   {/snippet}
 </DialogPrimitive>

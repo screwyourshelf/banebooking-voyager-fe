@@ -37,6 +37,7 @@
     {items}
     {controls}
     {label}
+    presentation="section"
     value={resolvedValue}
     onValueChange={selectValue}
     data-ui="tabs"

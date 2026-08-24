@@ -43,6 +43,20 @@ describe("RichTextEditor", () => {
       "Formater teksten som skal publiseres. Presentasjonen er ikke gyldig."
     );
     expect(editor).toHaveAttribute("aria-required", "true");
+    expect(editor.closest('[data-ui="editor"]')).toHaveClass(
+      "rounded-rich-text-editor",
+      "focus-within:ring-rich-text-editor-focus",
+      "data-[state=disabled]:opacity-rich-text-editor-disabled"
+    );
+    expect(screen.getByRole("toolbar", { name: "Formatering" })).toHaveClass(
+      "gap-2xs",
+      "p-rich-text-toolbar",
+      "editor-toolbar-danger:text-rich-text-toolbar-danger"
+    );
+    expect(screen.getAllByRole("separator")[0]).toHaveClass(
+      "h-rich-text-toolbar-separator",
+      "bg-rich-text-toolbar-divider"
+    );
     expect(editor.parentElement).toHaveClass(
       "min-w-0",
       "rich-text-root:min-h-rich-text-editor",

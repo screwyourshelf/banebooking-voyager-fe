@@ -130,45 +130,6 @@
     ) {
       display: none;
     }
-
-    [data-ui="tabs"][data-variant="section"] {
-      gap: 1.5rem;
-    }
-
-    [data-ui="tabs"][data-variant="section"] [data-slot="tabs-list"] {
-      width: fit-content !important;
-      min-width: 24rem;
-    }
-
-    [data-ui="editor-dialog"] {
-      inset: auto !important;
-      top: 50% !important;
-      left: 50% !important;
-      width: min(52rem, calc(100% - 2rem)) !important;
-      max-width: none !important;
-      height: auto;
-      max-height: min(48rem, calc(100dvh - 2rem));
-      transform: none !important;
-      border-radius: 1.5rem !important;
-    }
-
-    [data-ui-primitive="dialog-surface"] > [data-ui="editor-dialog"] {
-      width: 100% !important;
-      height: 100%;
-      max-height: inherit;
-    }
-
-    [data-ui="editor-dialog"] > [data-part="content"] > [data-ui="tabs"][data-variant="section"] {
-      padding: 1rem 1.25rem 1.25rem;
-    }
-
-    [data-ui="editor-dialog"] > [data-part="header"] {
-      padding: 1rem 1.25rem;
-    }
-
-    [data-ui="editor-dialog"] > [data-part="header"] > [data-part="intro"] > [data-part="title"] {
-      font-size: 2rem !important;
-    }
   }
 }
 
@@ -235,16 +196,6 @@
       > [data-part="intro"]
       > [data-part="title"] {
       text-shadow: 0 3px 24px rgb(0 0 0 / 0.28);
-    }
-
-    [data-ui="tabs"][data-variant="section"] {
-      gap: 0.75rem;
-    }
-
-    [data-ui="tabs"][data-variant="section"]
-      :is([data-slot="tabs-content"], [data-part="content"]) {
-      position: relative;
-      z-index: 1;
     }
 
     [data-ui="page"] {
