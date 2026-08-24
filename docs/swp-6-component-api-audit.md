@@ -87,3 +87,29 @@ grense. Den valgte interne oppdelingen er:
 De tre barna har hvert sitt semantiske ansvar, er ikke eksportert fra pattern- eller UI-indeksen og
 bevarer eksakt DOM-anatomi og Tailwind-klasser. Sortering og reset forblir hos hovedkomponenten fordi
 de er korte deler av den samlede content-/filterregelen, ikke nye selvstendige patterns.
+
+## SWP-6.3 — smale offentlige patterns
+
+Importgrafen er lest på nytt fra produksjonsfiler under `src/`; tester, fixtures og barrel-filer er
+utelatt. Tellingen skiller mellom importerende komponenter og featureeierskap, slik at mange
+forekomster i én arbeidsflyt ikke feilaktig blir presentert som flerfeaturebruk.
+
+| Pattern/familie                                                 | Faktiske produksjonskonsumenter                                                                                     | Plasseringsbeslutning                                                                                                                                                            |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `Metric` og `MetricGrid`                                        | To navngitte statistikkkomponenter; to grids og minst fire metricforekomster                                        | Behold i offentlig UI. Typografi, flate, statusfarge og responsivt grid er en stabil produktkontrakt; statistikkfeaturet leverer bare data, tekst, ikon og datadrevet geometri.  |
+| `DataTable`, `DataVisualization` og `Visualization*`            | Henholdsvis 2, 4, 3, 2 og 1 importerende statistikkkomponenter                                                      | Behold som én offentlig presentasjonsfamilie. Flere uavhengige statistikkflater deler tabell-, diagram-, legend- og layoutreglene, mens featurelaget eier beregnet SVG-geometri. |
+| `FormSteps`                                                     | Én arrangementeditor                                                                                                | Behold i `Form`-familien. Patternet eier typed stegvalg, `aria-current`, nummerering, navigasjonsanatomi og innholdsgeometri; flytting ville gjort produktstyling featurelokal.  |
+| `AppShell` og `NavigationAction`/`Identity`/`Overlay`/`Section` | Én session-feature, fordelt på desktop-, mobil- og overlaykomponenter; overlayet rendres to ganger                  | Behold. Dette er den dokumenterte app-shellkontrakten og samme navigasjonsanatomi brukes på flere responsive flater.                                                             |
+| `SettingsChoiceGroup` og `SettingsRange`                        | Én importerende featurekomponent hver, men henholdsvis tre og seks reelle feltforekomster                           | Behold i `Settings`-familien. Begge er domenenøytrale, typede feltanatomier med repeterte konsumenter, ikke arbeidsflytkomponenter.                                              |
+| `DocumentSection`                                               | Én policykomponent med seks dokumentseksjoner                                                                       | Behold i `Document`-familien. Semantisk seksjonsstruktur, overskrift og produktspacing er stabil og gjentatt.                                                                    |
+| Øvrige smale offentlige patterns                                | To til fjorten importerende komponenter på tvers av to til ni features, eller navngitte barn i en offentlig familie | Behold. Importgrafen viser reelt delt eierskap; ingen fil inneholder domene-, API-, route- eller featureavhengigheter.                                                           |
+
+Ingen produksjonskomponent flyttes i dette checkpointet. En flytting av de enkeltfeaturebrukte
+patternene ville enten gjort offentlig produktstyling featurelokal eller bare endret filplassering
+uten å endre eier eller kontrakt. De beholder derfor den eneste lovlige avhengighetsretningen:
+features importerer `$lib/ui`, mens UI-laget ikke kjenner features.
+
+Grafen avdekket samtidig en annen kategori som ikke skal blandes med plassering: `NavigationLoading`
+brukes privat av `AppShell`, og flere offentlig re-eksporterte hjelpertyper har ingen ekstern
+produksjonskonsument. De vurderes som API-rekkevidde og dødkode i SWP-6.4, ikke som grunnlag for å
+flytte implementasjonen til en feature.

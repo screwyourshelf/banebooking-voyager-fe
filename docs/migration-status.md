@@ -1,10 +1,10 @@
 # Migreringsstatus
 
-> **Status:** Pågår — rammeverksløftet, SWP-0–SWP-5 og SWP-6.1–SWP-6.2 er fullført
+> **Status:** Pågår — rammeverksløftet, SWP-0–SWP-5 og SWP-6.1–SWP-6.3 er fullført
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** SWP-6 — checkpoint 2 er levert; neste checkpoint er SWP-6.3
+> **Aktiv arbeidspakke:** SWP-6 — checkpoint 3 er levert; neste checkpoint er SWP-6.4
 >
 > **Sist oppdatert:** 2026-08-24
 
@@ -24,7 +24,9 @@ SWP-6.1 har kaldmålt alle store featureorkestratorer og flyttet den flertrinns 
 sammensatte banearbeidsområdet til to private, navngitte featurecontrollere. Presentasjonskomponent,
 offentlig featureinngang, produktadferd og backend er bevart. SWP-6.2 har kaldmålt de store
 offentlige patternene og delt `CollectionControls` i tre private anatomieiere med uendret offentlig
-type- og komponentkontrakt.
+type- og komponentkontrakt. SWP-6.3 har avstemt alle smale patterns mot den faktiske
+produksjonsimportgrafen; de enkeltfeaturebrukte kontraktene forblir i `$lib/ui` fordi de eier
+delt produktanatomi og ellers ville flyttet produktstyling inn i featurelaget.
 
 ## Aktiv stylingretning
 
@@ -918,6 +920,16 @@ type- og komponentkontrakt.
 - 60 pattern-/featuretester, inkludert alle 18 Collection-kontrakttester, og 11/11 pikselidentiske
   visuelle referanser er grønne. Hostbuildene beholder eksakt 28 424/28 443 CSS gzip-byte, 60
   JS-chunks og 120,5 KiB største lazy chunk; ingen intern delkomponent er offentlig eksportert.
+- SWP-6.3 har telt produksjonskonsumenter uten tester, fixtures og barrel-reexports. `Metric`/
+  `MetricGrid` har to navngitte statistikkkonsumenter; visualiseringsfamilien fordeles over flere
+  uavhengige statistikkflater; navigasjonsfamilien eies av flere responsive shellflater; og
+  `SettingsChoiceGroup`, `SettingsRange` og `DocumentSection` har henholdsvis tre, seks og seks
+  reelle forekomster.
+- `FormSteps` har én nåværende featurekonsument, men beholder offentlig `Form`-eierskap fordi typed
+  stegvalg, `aria-current`, navigasjonsanatomi og produktgeometri er én stabil UI-kontrakt.
+  Ingen smal produksjonskomponent er flyttet: alternativet ville introdusert featurelokal
+  produktstyling eller en ren filflytting uten nytt eierskap. 8 målrettede filer og 47 tester er
+  grønne.
 - Den aktive CSS-en har ikke lenger featureeide produktselectors. Tailwind er produkteier for alle
   SWP-2–SWP-4-flater og statistikkpresentasjonen; den varige geometriallowlisten er låst uten
   visuell redesign.
@@ -926,14 +938,14 @@ type- og komponentkontrakt.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                           |
-| ------------------------------------- | -------------------------------------------- |
-| Base branch                           | `main`                                       |
-| Fastslått basecommit                  | `5287c5e`                                    |
-| Siste semantiske checkpoint           | `refactor(swp-6): split collection controls` |
-| Lokale commits foran base             | 67                                           |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                |
-| Neste planlagte checkpoint            | SWP-6.3 avstem smale offentlige patterns     |
+| Felt                                  | Forventet tilstand                              |
+| ------------------------------------- | ----------------------------------------------- |
+| Base branch                           | `main`                                          |
+| Fastslått basecommit                  | `5287c5e`                                       |
+| Siste semantiske checkpoint           | `docs(swp-6): resolve narrow pattern ownership` |
+| Lokale commits foran base             | 68                                              |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                   |
+| Neste planlagte checkpoint            | SWP-6.4 fjern døde exports og avhengigheter     |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -942,13 +954,14 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Fortsett med **SWP-6 checkpoint 3 — avstem smale offentlige patterns**:
+Fortsett med **SWP-6 checkpoint 4 — fjern død kode og avhengigheter**:
 
-1. Kartlegg alle faktiske produksjonskonsumenter av `Metric`, `MetricGrid`, `FormSteps` og øvrige
-   smale offentlige patterns.
-2. Behold offentlig UI bare ved reelt flerfeatureeierskap eller en stabil produktkontrakt; flytt
-   ellers implementasjonen til den ene naturlige eieren uten kompatibilitetsbro.
-3. Verifiser berørte feature-, pattern-, arkitektur- og stylingporter før checkpoint.
+1. Kjør statisk import-/export- og pakkeanalyse mot produksjonstreet og klassifiser alle funn mot
+   SvelteKit-, route-, test- og buildinnganger.
+2. Fjern ubrukte offentlige re-exports, private komponenter, utilities, theme-tokens og direkte
+   pakker uten kompatibilitetsbroer; behold bare dokumenterte build- og testavhengigheter.
+3. Regenerer maskinbaselinen og kjør full test-, check-, E2E-, snapshot- og produksjonsbuildport før
+   SWP-6 lukkes.
 
 ## Arbeidspakkeregister
 
@@ -968,7 +981,7 @@ Fortsett med **SWP-6 checkpoint 3 — avstem smale offentlige patterns**:
 | SWP-3 Produktpatterns            | Fullført | Alle fem patterncheckpoints og full kvalitetport er grønne    |
 | SWP-4 App-shell/navigation       | Fullført | Alle fire checkpoints og full kvalitetport er grønne          |
 | SWP-5 Features og legacy-CSS     | Fullført | Null legacygjeld, null guardavvik og 38 låste geometrier      |
-| SWP-6 Komponent-/API-opprydding  | Pågår    | 2/4: store features/patterns har eksplisitte private eiere    |
+| SWP-6 Komponent-/API-opprydding  | Pågår    | 3/4: smale patternkontrakter er avstemt mot importgrafen      |
 | SWP-7 Uavhengig sluttreview      | Venter   | Kald audit og målt vellykket/delvis/ikke vellykket resultat   |
 
 ## Featureregister
@@ -1061,6 +1074,9 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 | Kontroll                             | Resultat                                                                            |
 | ------------------------------------ | ----------------------------------------------------------------------------------- |
+| SWP-6.3 produksjonsimportgraf        | Bestått: alle smale patterns telt uten tester, fixtures og barrel-reexports         |
+| SWP-6.3 plasseringsaudit             | Bestått: ingen domenekobling eller ulovlig featurestyling; alle eiere eksplisitte   |
+| SWP-6.3 målrettede tester            | Bestått: 8 filer og 47 tester for form, data, navigation, settings og features      |
 | SWP-6.2 offentlig patternaudit       | Bestått: 20 store patterns; 1 intern oppdeling og 19 beholdbeslutninger             |
 | SWP-6.2 Collection-/featuretester    | Bestått: 9 filer og 60 tester for controls, felt, features, tastatur og axe         |
 | SWP-6.2 visuell matrise              | Bestått: 11/11 pikselidentiske referanser over mobil/desktop og lyst/mørkt theme    |
@@ -1301,13 +1317,10 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 ## Filer i siste checkpoint
 
-- `CollectionControls.svelte` med uendret offentlig API og private
-  `CollectionControlsHeader.svelte`, `CollectionControlGroup.svelte` og
-  `CollectionControlField.svelte` for tre navngitte anatomiansvar
-- intern `collection-controls.ts` som typekilde med uendrede re-exports fra hovedpatternet og
-  `$lib/ui`
-- oppdatert `swp-6-component-api-audit.md`, maskinbaseline og denne statusen; DOM-kontrakt,
-  Tailwind-klasser, featurekonsumenter, produktadferd og backend-repoet er urørt
+- `swp-6-component-api-audit.md` med produksjonskonsumenter og eksplisitt beholdbeslutning for
+  `Metric`, `MetricGrid`, `FormSteps`, data-, navigation-, settings- og documentfamiliene
+- denne statusen med neste eksakte dødkodesteg; produksjonskode, offentlig API, stylingbaseline,
+  produktadferd og backend-repoet er urørt
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
 pågående arbeid etter checkpointet.
