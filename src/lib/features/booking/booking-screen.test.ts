@@ -3,7 +3,7 @@
 import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import axe from "axe-core";
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { BookingBootstrapRespons } from "$lib/contracts";
 import { Kapabiliteter } from "$lib/domain";
 import { ApiError, type ApiClient } from "$lib/platform/api";
@@ -14,7 +14,13 @@ const axeOptions: axe.RunOptions = {
   rules: { "color-contrast": { enabled: false } },
 };
 
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date("2026-08-23T12:00:00+02:00"));
+});
+
 afterEach(() => {
+  vi.useRealTimers();
   vi.restoreAllMocks();
 });
 

@@ -14,6 +14,7 @@ export function validateStylingGuardContract(contract) {
   }
   if (
     contract.analyzerEnforcementPhase !== "fixtures-only" ||
+    contract.cascadeContractEnforcementPhase !== "active" ||
     contract.themeContractEnforcementPhase !== "active" ||
     contract.productionTreeEnforcementCheckpoint !== "SWP-1.3"
   ) {
@@ -58,6 +59,37 @@ export function validateStylingGuardContract(contract) {
   }
 
   validateThemeVocabulary(contract);
+  validateCssCascadeContract(contract);
+}
+
+function validateCssCascadeContract(contract) {
+  if (contract.css?.allowedLayers?.join(",") !== "theme,base,components,utilities") {
+    throw new Error(
+      "Cascade-kontrakten må bruke Tailwinds theme-, base-, components- og utilities-lag."
+    );
+  }
+
+  const stylesheets = contract.css?.productionStylesheets ?? [];
+  const sortedStylesheets = [...stylesheets].sort((left, right) => left.localeCompare(right));
+  if (
+    stylesheets.length === 0 ||
+    new Set(stylesheets).size !== stylesheets.length ||
+    stylesheets.some((stylesheet) => !/^src\/.+\.css$/.test(stylesheet)) ||
+    stylesheets.some((stylesheet, index) => stylesheet !== sortedStylesheets[index])
+  ) {
+    throw new Error(
+      "Cascade-kontraktens produksjons-CSS må være en unik, sortert src/**/*.css-liste."
+    );
+  }
+
+  for (const requiredStylesheet of [
+    contract.theme.entryStylesheet,
+    contract.theme.tokenStylesheet,
+  ]) {
+    if (!stylesheets.includes(requiredStylesheet)) {
+      throw new Error(`Cascade-kontrakten mangler ${requiredStylesheet}.`);
+    }
+  }
 }
 
 function validateThemeVocabulary(contract) {

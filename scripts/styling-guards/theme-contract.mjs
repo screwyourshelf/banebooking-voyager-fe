@@ -111,16 +111,26 @@ function validateThemeDeclarations(themeRule, expectedDeclarations, failures) {
 
 function readProductThemeValues(source, sourcePath, failures) {
   const root = postcss.parse(source, { from: sourcePath });
-  const light = declarationsForTopLevelSelector(root, ":root");
-  const darkOverrides = declarationsForTopLevelSelector(root, ".dark");
-  if (light.size === 0) failures.push(`${sourcePath} mangler top-level :root theme.`);
-  if (darkOverrides.size === 0) failures.push(`${sourcePath} mangler top-level .dark theme.`);
+  const themeLayers = (root.nodes ?? []).filter(
+    (node) => node.type === "atrule" && node.name === "layer" && node.params.trim() === "theme"
+  );
+  if (themeLayers.length !== 1) {
+    failures.push(
+      `${sourcePath} skal inneholde nøyaktig ett top-level @layer theme; fant ${themeLayers.length}.`
+    );
+  }
+
+  const themeLayer = themeLayers[0];
+  const light = declarationsForDirectSelector(themeLayer, ":root");
+  const darkOverrides = declarationsForDirectSelector(themeLayer, ".dark");
+  if (light.size === 0) failures.push(`${sourcePath} mangler :root i @layer theme.`);
+  if (darkOverrides.size === 0) failures.push(`${sourcePath} mangler .dark i @layer theme.`);
   return { dark: new Map([...light, ...darkOverrides]), light };
 }
 
-function declarationsForTopLevelSelector(root, selector) {
+function declarationsForDirectSelector(container, selector) {
   const declarations = new Map();
-  for (const node of root.nodes) {
+  for (const node of container?.nodes ?? []) {
     if (node.type !== "rule" || node.selector.trim() !== selector) continue;
     for (const child of node.nodes ?? []) {
       if (child.type === "decl" && child.prop.startsWith("--")) {

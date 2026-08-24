@@ -7,6 +7,10 @@ export function analyzeCssSource({ contract, css, scope, sourcePath }) {
   const diagnostics = [];
   const customProperties = { definitions: [], references: [] };
 
+  if (scope === "global") {
+    diagnostics.push(...analyzeCascadeLayerRoot({ contract, root }).diagnostics);
+  }
+
   root.walkAtRules("import", (atRule) => {
     if (scope !== "global") return;
     const specifier = importSpecifier(atRule.params);
@@ -33,9 +37,7 @@ export function analyzeCssSource({ contract, css, scope, sourcePath }) {
   root.walkRules((rule) => {
     if (hasKeyframesAncestor(rule)) return;
 
-    if (scope === "global") {
-      validateGlobalRule({ contract, diagnostics, rule, sourcePath });
-    }
+    if (scope === "global") validateGlobalSelectors({ contract, diagnostics, rule, sourcePath });
     if (scope === "visualization" && rule.selector.includes(":global")) {
       diagnostics.push(
         cssDiagnostic(
@@ -79,6 +81,11 @@ export function analyzeCssSource({ contract, css, scope, sourcePath }) {
   });
 
   return { customProperties, diagnostics };
+}
+
+export function analyzeCssCascadeLayers({ contract, css, sourcePath }) {
+  const root = postcss.parse(css, { from: sourcePath });
+  return analyzeCascadeLayerRoot({ contract, root });
 }
 
 export function validateCustomPropertyFacts({
@@ -165,8 +172,27 @@ export function inlineCustomPropertyFacts(attributeSource, location) {
   return { definitions, references };
 }
 
-function validateGlobalRule({ contract, diagnostics, rule, sourcePath }) {
-  const layer = enclosingLayer(rule);
+function analyzeCascadeLayerRoot({ contract, root }) {
+  const diagnostics = [];
+  const ruleCounts = Object.fromEntries(contract.css.allowedLayers.map((layer) => [layer, 0]));
+  let ruleCount = 0;
+
+  root.walkRules((rule) => {
+    if (hasKeyframesAncestor(rule)) return;
+    ruleCount += 1;
+
+    const layer = enclosingLayer(rule);
+    if (layer !== null && Object.hasOwn(ruleCounts, layer)) {
+      ruleCounts[layer] += 1;
+    }
+
+    validateCascadeLayer({ contract, diagnostics, layer, rule });
+  });
+
+  return { diagnostics, ruleCount, ruleCounts };
+}
+
+function validateCascadeLayer({ contract, diagnostics, layer, rule }) {
   const layerRuleId = contract.rules.cascadeLayer.id;
 
   if (layer === null) {
@@ -186,6 +212,10 @@ function validateGlobalRule({ contract, diagnostics, rule, sourcePath }) {
       )
     );
   }
+}
+
+function validateGlobalSelectors({ contract, diagnostics, rule, sourcePath }) {
+  const layer = enclosingLayer(rule);
 
   for (const selector of parseSelectors(rule)) {
     if (isAllowedGlobalSelector({ contract, layer, selector, sourcePath })) continue;

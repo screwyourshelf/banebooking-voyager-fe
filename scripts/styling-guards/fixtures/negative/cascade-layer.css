@@ -1,3 +1,9 @@
 body {
   color: var(--app-ink);
 }
+
+@layer overrides {
+  .ProseMirror {
+    color: var(--app-ink);
+  }
+}

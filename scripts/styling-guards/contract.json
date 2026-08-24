@@ -1,6 +1,7 @@
 {
   "schemaVersion": 2,
   "analyzerEnforcementPhase": "fixtures-only",
+  "cascadeContractEnforcementPhase": "active",
   "themeContractEnforcementPhase": "active",
   "productionTreeEnforcementCheckpoint": "SWP-1.3",
   "rules": {
@@ -538,6 +539,15 @@
   },
   "css": {
     "allowedLayers": ["theme", "base", "components", "utilities"],
+    "productionStylesheets": [
+      "src/index.css",
+      "src/styles/design-system.css",
+      "src/styles/design-system/feature-compositions.css",
+      "src/styles/design-system/patterns.css",
+      "src/styles/design-system/primitives.css",
+      "src/styles/design-system/responsive.css",
+      "src/styles/design-system/tokens.css"
+    ],
     "allowedThemeSelectors": [":root", ".dark"],
     "allowedBaseSelectors": [
       "*",

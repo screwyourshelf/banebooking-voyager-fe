@@ -84,7 +84,7 @@
     {
       "id": "positive-cascade-layer",
       "fixture": "positive/cascade-layer.css",
-      "sourcePath": "src/styles/base.css",
+      "sourcePath": "src/styles/design-system/tokens.css",
       "outcome": "allowed",
       "coversRules": ["STYLING-009-CASCADE-LAYER"],
       "diagnostics": []
@@ -259,6 +259,10 @@
         {
           "ruleId": "STYLING-009-CASCADE-LAYER",
           "message": "CSS-regelen «body» ligger utenfor et registrert cascade layer"
+        },
+        {
+          "ruleId": "STYLING-009-CASCADE-LAYER",
+          "message": "cascade layer «overrides» er ikke registrert for «.ProseMirror»"
         }
       ]
     },

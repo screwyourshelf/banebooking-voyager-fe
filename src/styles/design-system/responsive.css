@@ -216,7 +216,6 @@
       grid-template-columns: minmax(12rem, 0.65fr) minmax(15rem, 1fr);
       align-items: start;
       gap: 1.5rem;
-      padding: 1rem 1.25rem;
     }
 
     [data-ui="settings-row"]:not([data-kind="switch"]) > div:last-child {
@@ -229,10 +228,6 @@
 
     [data-ui="form-steps"] > [data-part="navigation"] {
       padding: 0.75rem 1.25rem 0;
-    }
-
-    [data-ui="settings-row"][data-kind="switch"] {
-      padding: 1rem 1.25rem;
     }
 
     [data-ui="settings-radio-group"] {
@@ -431,15 +426,17 @@
   }
 }
 
-@keyframes app-desktop-content-enter {
-  from {
-    opacity: 0;
-    transform: translateY(0.5rem);
-  }
+@layer components {
+  @keyframes app-desktop-content-enter {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
 
-  to {
-    opacity: 1;
-    transform: translateY(0);
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }
 
@@ -491,13 +488,15 @@
   }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    scroll-behavior: auto !important;
-    transition-duration: 0.01ms !important;
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
+@layer base {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
   }
 }

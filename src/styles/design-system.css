@@ -1,7 +1,9 @@
 /*
  * Banebooking design system entry point.
  *
- * Import order is deliberate: global roles first, then the technical base,
+ * Tailwind registers theme, base, components and utilities in src/index.css;
+ * Preflight owns the reset portion of base. Import order is deliberate: product
+ * theme roles first, then Banebooking's document/primitive base extensions,
  * reusable semantic patterns, feature-level compositions and finally the
  * responsive adaptations that preserve the established cascade.
  */

@@ -5,265 +5,267 @@
  * semantic classes, so the product can be retuned without editing pages.
  */
 
-:root {
-  color-scheme: light;
-  --radius: 0.625rem;
+@layer theme {
+  :root {
+    color-scheme: light;
+    --radius: 0.625rem;
 
-  /* Raw club identity. Components and Tailwind utilities never consume this palette directly. */
-  --aas-green-500: #4c911f;
-  --aas-orange-500: #f28d3b;
-  --aas-blue-500: #1c4f99;
-  --aas-cream-500: #f4f0e1;
-  --aas-green-50: color-mix(in oklab, var(--aas-green-500) 7%, white);
-  --aas-green-100: color-mix(in oklab, var(--aas-green-500) 18%, white);
-  --aas-green-300: color-mix(in oklab, var(--aas-green-500) 55%, white);
-  --aas-green-700: color-mix(in oklab, var(--aas-green-500) 76%, black);
-  --aas-green-900: color-mix(in oklab, var(--aas-green-500) 48%, black);
-  --aas-orange-100: color-mix(in oklab, var(--aas-orange-500) 18%, white);
-  --aas-orange-700: color-mix(in oklab, var(--aas-orange-500) 74%, black);
-  --aas-orange-900: color-mix(in oklab, var(--aas-orange-500) 48%, black);
-  --aas-blue-100: color-mix(in oklab, var(--aas-blue-500) 16%, white);
-  --aas-blue-300: color-mix(in oklab, var(--aas-blue-500) 48%, white);
-  --aas-blue-900: color-mix(in oklab, var(--aas-blue-500) 52%, black);
+    /* Raw club identity. Components and Tailwind utilities never consume this palette directly. */
+    --aas-green-500: #4c911f;
+    --aas-orange-500: #f28d3b;
+    --aas-blue-500: #1c4f99;
+    --aas-cream-500: #f4f0e1;
+    --aas-green-50: color-mix(in oklab, var(--aas-green-500) 7%, white);
+    --aas-green-100: color-mix(in oklab, var(--aas-green-500) 18%, white);
+    --aas-green-300: color-mix(in oklab, var(--aas-green-500) 55%, white);
+    --aas-green-700: color-mix(in oklab, var(--aas-green-500) 76%, black);
+    --aas-green-900: color-mix(in oklab, var(--aas-green-500) 48%, black);
+    --aas-orange-100: color-mix(in oklab, var(--aas-orange-500) 18%, white);
+    --aas-orange-700: color-mix(in oklab, var(--aas-orange-500) 74%, black);
+    --aas-orange-900: color-mix(in oklab, var(--aas-orange-500) 48%, black);
+    --aas-blue-100: color-mix(in oklab, var(--aas-blue-500) 16%, white);
+    --aas-blue-300: color-mix(in oklab, var(--aas-blue-500) 48%, white);
+    --aas-blue-900: color-mix(in oklab, var(--aas-blue-500) 52%, black);
 
-  /* Semantic product color roles. Light and dark themes override these, not component markup. */
-  --app-canvas: color-mix(in oklab, var(--aas-cream-500) 72%, var(--aas-green-50));
-  --app-surface: #ffffff;
-  --app-surface-subtle: #f7f8f3;
-  --app-surface-raised: #ffffff;
-  --app-ink: #172019;
-  --app-ink-soft: #536057;
-  --app-ink-faint: #768078;
-  --app-line: #dfe3dc;
-  --app-line-strong: #cbd2c9;
-  --app-brand: var(--aas-green-700);
-  --app-brand-strong: var(--aas-green-900);
-  --app-brand-soft: var(--aas-green-100);
-  --app-accent: var(--aas-orange-700);
-  --app-accent-soft: var(--aas-orange-100);
-  --app-choice-indicator: var(--app-accent);
-  --app-focus: var(--aas-blue-500);
-  --app-backdrop-scrim: rgb(3 17 10 / 0.5);
-  --app-desktop-backdrop-horizontal: linear-gradient(
-    90deg,
-    rgb(3 20 13 / 0.94) 0,
-    rgb(4 23 15 / 0.84) 28%,
-    rgb(6 26 18 / 0.72) 62%,
-    rgb(4 21 15 / 0.78) 100%
-  );
-  --app-desktop-backdrop-vertical: linear-gradient(rgb(3 16 10 / 0.18), rgb(3 16 10 / 0.5));
-  --app-sidebar: #0b3021;
-  --app-sidebar-divider-width: 2px;
-  --app-sidebar-divider: color-mix(in srgb, var(--app-control-muted) 38%, transparent);
-  --app-sidebar-text: #f7fbf6;
-  --app-nav-active: var(--aas-green-700);
-  --app-nav-active-surface: var(--aas-green-50);
-  --app-nav-indicator: var(--aas-green-500);
-  --app-nav-indicator-on-dark: var(--aas-green-300);
-  --app-control-surface: #194d32;
-  --app-control-surface-strong: #225c3b;
-  --app-control-text: #ffffff;
-  --app-control-muted: #c7dacd;
-  --activity-accent: var(--aas-green-300);
-  --app-shadow-sm: 0 1px 2px rgb(18 36 23 / 0.05);
-  --app-shadow-md: 0 12px 32px rgb(18 36 23 / 0.08);
-  --app-shadow-lg: 0 24px 70px rgb(18 36 23 / 0.12);
+    /* Semantic product color roles. Light and dark themes override these, not component markup. */
+    --app-canvas: color-mix(in oklab, var(--aas-cream-500) 72%, var(--aas-green-50));
+    --app-surface: #ffffff;
+    --app-surface-subtle: #f7f8f3;
+    --app-surface-raised: #ffffff;
+    --app-ink: #172019;
+    --app-ink-soft: #536057;
+    --app-ink-faint: #768078;
+    --app-line: #dfe3dc;
+    --app-line-strong: #cbd2c9;
+    --app-brand: var(--aas-green-700);
+    --app-brand-strong: var(--aas-green-900);
+    --app-brand-soft: var(--aas-green-100);
+    --app-accent: var(--aas-orange-700);
+    --app-accent-soft: var(--aas-orange-100);
+    --app-choice-indicator: var(--app-accent);
+    --app-focus: var(--aas-blue-500);
+    --app-backdrop-scrim: rgb(3 17 10 / 0.5);
+    --app-desktop-backdrop-horizontal: linear-gradient(
+      90deg,
+      rgb(3 20 13 / 0.94) 0,
+      rgb(4 23 15 / 0.84) 28%,
+      rgb(6 26 18 / 0.72) 62%,
+      rgb(4 21 15 / 0.78) 100%
+    );
+    --app-desktop-backdrop-vertical: linear-gradient(rgb(3 16 10 / 0.18), rgb(3 16 10 / 0.5));
+    --app-sidebar: #0b3021;
+    --app-sidebar-divider-width: 2px;
+    --app-sidebar-divider: color-mix(in srgb, var(--app-control-muted) 38%, transparent);
+    --app-sidebar-text: #f7fbf6;
+    --app-nav-active: var(--aas-green-700);
+    --app-nav-active-surface: var(--aas-green-50);
+    --app-nav-indicator: var(--aas-green-500);
+    --app-nav-indicator-on-dark: var(--aas-green-300);
+    --app-control-surface: #194d32;
+    --app-control-surface-strong: #225c3b;
+    --app-control-text: #ffffff;
+    --app-control-muted: #c7dacd;
+    --activity-accent: var(--aas-green-300);
+    --app-shadow-sm: 0 1px 2px rgb(18 36 23 / 0.05);
+    --app-shadow-md: 0 12px 32px rgb(18 36 23 / 0.08);
+    --app-shadow-lg: 0 24px 70px rgb(18 36 23 / 0.12);
 
-  /* Semantic product geometry. Values mirror the verified pre-Tailwind component baseline. */
-  --app-content-max: 112rem;
-  --app-page-width: 96rem;
-  --app-sidebar-width: 15.5rem;
-  --app-sidebar-rail-width: 4.5rem;
-  --app-control-height: 2.25rem;
-  --app-control-min-width: 10rem;
-  --app-dialog-width: 34rem;
-  --app-dialog-max-height: calc(100dvh - 2rem);
-  --app-space-2xs: 0.125rem;
-  --app-space-xs: 0.25rem;
-  --app-space-sm: 0.5rem;
-  --app-space-md: 0.75rem;
-  --app-space-lg: 1rem;
-  --app-control-gap: var(--app-space-sm);
-  --app-control-padding-block: var(--app-space-sm);
-  --app-control-padding-inline: var(--app-space-md);
-  --app-page-padding: var(--app-space-lg);
-  --app-section-gap: var(--app-space-lg);
-  --app-status-inline-padding: 0.55rem;
-  --app-record-gap: 0.5rem;
-  --app-record-padding-inline: 0.5rem;
-  --app-control-radius: 999px;
-  --app-dialog-radius: 1.5rem;
-  --app-record-radius: 0.875rem;
-  --app-surface-radius: 1.25rem;
-  --app-record-shadow: 0 4px 16px rgb(18 36 23 / 0.07);
-  --app-radius-sm: calc(var(--radius) * 0.6);
+    /* Semantic product geometry. Values mirror the verified pre-Tailwind component baseline. */
+    --app-content-max: 112rem;
+    --app-page-width: 96rem;
+    --app-sidebar-width: 15.5rem;
+    --app-sidebar-rail-width: 4.5rem;
+    --app-control-height: 2.25rem;
+    --app-control-min-width: 10rem;
+    --app-dialog-width: 34rem;
+    --app-dialog-max-height: calc(100dvh - 2rem);
+    --app-space-2xs: 0.125rem;
+    --app-space-xs: 0.25rem;
+    --app-space-sm: 0.5rem;
+    --app-space-md: 0.75rem;
+    --app-space-lg: 1rem;
+    --app-control-gap: var(--app-space-sm);
+    --app-control-padding-block: var(--app-space-sm);
+    --app-control-padding-inline: var(--app-space-md);
+    --app-page-padding: var(--app-space-lg);
+    --app-section-gap: var(--app-space-lg);
+    --app-status-inline-padding: 0.55rem;
+    --app-record-gap: 0.5rem;
+    --app-record-padding-inline: 0.5rem;
+    --app-control-radius: 999px;
+    --app-dialog-radius: 1.5rem;
+    --app-record-radius: 0.875rem;
+    --app-surface-radius: 1.25rem;
+    --app-record-shadow: 0 4px 16px rgb(18 36 23 / 0.07);
+    --app-radius-sm: calc(var(--radius) * 0.6);
 
-  /* Typography
+    /* Typography
    *
    * One family keeps the product calm and recognisable. The role-based scale
    * separates display text, reading text and compact UI labels without letting
    * individual pages invent their own sizes.
    */
-  --app-font-body: "Figtree Variable", Figtree, ui-sans-serif, system-ui, sans-serif;
-  --app-font-sans: var(--app-font-body);
-  --app-font-display: var(--app-font-body);
-  --app-type-micro-compact: 0.75rem;
-  --app-type-micro-comfortable: 0.8125rem;
-  --app-type-caption-compact: 0.8125rem;
-  --app-type-label-compact: 0.875rem;
-  --app-type-body-sm-compact: 0.9375rem;
-  --app-type-body-compact: 1rem;
-  --app-type-body-lg-compact: 1.0625rem;
-  --app-type-heading-sm-compact: 1.25rem;
-  --app-type-heading-md-compact: 1.375rem;
-  --app-type-caption-comfortable: 0.875rem;
-  --app-type-label-comfortable: 0.9375rem;
-  --app-type-body-sm-comfortable: 1rem;
-  --app-type-body-comfortable: 1.0625rem;
-  --app-type-body-lg-comfortable: 1.125rem;
-  --app-type-heading-sm-comfortable: 1.375rem;
-  --app-type-heading-md-comfortable: 1.5rem;
-  --app-type-micro: var(--app-type-micro-compact);
-  --app-type-caption: var(--app-type-caption-compact);
-  --app-type-label: var(--app-type-label-compact);
-  --app-type-body-sm: var(--app-type-body-sm-compact);
-  --app-type-body: var(--app-type-body-compact);
-  --app-type-body-lg: var(--app-type-body-lg-compact);
-  --app-type-heading-sm: var(--app-type-heading-sm-compact);
-  --app-type-heading-md: var(--app-type-heading-md-compact);
-  --app-type-page-title-compact: clamp(2rem, calc(1.7rem + 1vw), 2.625rem);
-  --app-type-page-title-comfortable: clamp(2.125rem, calc(1.8rem + 1vw), 2.875rem);
-  --app-type-page-title: var(--app-type-page-title-compact);
+    --app-font-body: "Figtree Variable", Figtree, ui-sans-serif, system-ui, sans-serif;
+    --app-font-sans: var(--app-font-body);
+    --app-font-display: var(--app-font-body);
+    --app-type-micro-compact: 0.75rem;
+    --app-type-micro-comfortable: 0.8125rem;
+    --app-type-caption-compact: 0.8125rem;
+    --app-type-label-compact: 0.875rem;
+    --app-type-body-sm-compact: 0.9375rem;
+    --app-type-body-compact: 1rem;
+    --app-type-body-lg-compact: 1.0625rem;
+    --app-type-heading-sm-compact: 1.25rem;
+    --app-type-heading-md-compact: 1.375rem;
+    --app-type-caption-comfortable: 0.875rem;
+    --app-type-label-comfortable: 0.9375rem;
+    --app-type-body-sm-comfortable: 1rem;
+    --app-type-body-comfortable: 1.0625rem;
+    --app-type-body-lg-comfortable: 1.125rem;
+    --app-type-heading-sm-comfortable: 1.375rem;
+    --app-type-heading-md-comfortable: 1.5rem;
+    --app-type-micro: var(--app-type-micro-compact);
+    --app-type-caption: var(--app-type-caption-compact);
+    --app-type-label: var(--app-type-label-compact);
+    --app-type-body-sm: var(--app-type-body-sm-compact);
+    --app-type-body: var(--app-type-body-compact);
+    --app-type-body-lg: var(--app-type-body-lg-compact);
+    --app-type-heading-sm: var(--app-type-heading-sm-compact);
+    --app-type-heading-md: var(--app-type-heading-md-compact);
+    --app-type-page-title-compact: clamp(2rem, calc(1.7rem + 1vw), 2.625rem);
+    --app-type-page-title-comfortable: clamp(2.125rem, calc(1.8rem + 1vw), 2.875rem);
+    --app-type-page-title: var(--app-type-page-title-compact);
 
-  /* Statistics typography
+    /* Statistics typography
    *
    * Charts and metric cards use meaning-based roles instead of selecting
    * arbitrary steps from the general type scale in each component.
    */
-  --app-stat-key-value-size: var(--app-type-heading-md);
-  --app-stat-chart-value-size: var(--app-type-body-sm);
-  --app-stat-chart-label-size: var(--app-type-label);
-  --app-stat-chart-meta-size: var(--app-type-caption);
-  --app-stat-key-value-weight: 720;
-  --app-stat-chart-value-weight: 690;
-  --app-stat-chart-label-weight: 680;
-  --app-stat-chart-meta-weight: 620;
+    --app-stat-key-value-size: var(--app-type-heading-md);
+    --app-stat-chart-value-size: var(--app-type-body-sm);
+    --app-stat-chart-label-size: var(--app-type-label);
+    --app-stat-chart-meta-size: var(--app-type-caption);
+    --app-stat-key-value-weight: 720;
+    --app-stat-chart-value-weight: 690;
+    --app-stat-chart-label-weight: 680;
+    --app-stat-chart-meta-weight: 620;
 
-  /* Navigation roles
+    /* Navigation roles
    *
    * Navigation components share these roles across sidebars and overlays.
    * Layout remains component-specific; typography and surface text hierarchy do not.
    */
-  --app-menu-text: var(--app-ink);
-  --app-menu-muted: var(--app-ink-soft);
+    --app-menu-text: var(--app-ink);
+    --app-menu-muted: var(--app-ink-soft);
 
-  /* Status */
-  --status-available-bg: var(--aas-green-100);
-  --status-available-text: var(--aas-green-900);
-  --status-available-indicator: var(--aas-green-500);
-  --status-own-bg: var(--aas-blue-100);
-  --status-own-text: var(--aas-blue-900);
-  --status-event-bg: var(--aas-orange-100);
-  --status-event-text: var(--aas-orange-900);
-  --status-busy-bg: #eceeeb;
-  --status-busy-text: #596159;
-  --status-past-bg: #f1f1ee;
-  --status-past-text: #7b807b;
-  --status-warning-bg: #fff3d8;
-  --status-warning-text: #765114;
-  --status-warning-indicator: #d89b2b;
-  --status-danger-bg: #fbe8e6;
-  --status-danger-text: #9b312d;
-  --status-danger-indicator: #c9534c;
+    /* Status */
+    --status-available-bg: var(--aas-green-100);
+    --status-available-text: var(--aas-green-900);
+    --status-available-indicator: var(--aas-green-500);
+    --status-own-bg: var(--aas-blue-100);
+    --status-own-text: var(--aas-blue-900);
+    --status-event-bg: var(--aas-orange-100);
+    --status-event-text: var(--aas-orange-900);
+    --status-busy-bg: #eceeeb;
+    --status-busy-text: #596159;
+    --status-past-bg: #f1f1ee;
+    --status-past-text: #7b807b;
+    --status-warning-bg: #fff3d8;
+    --status-warning-text: #765114;
+    --status-warning-indicator: #d89b2b;
+    --status-danger-bg: #fbe8e6;
+    --status-danger-text: #9b312d;
+    --status-danger-indicator: #c9534c;
 
-  /*
+    /*
    * Compatibility roles consumed by the current base CSS. New public UI uses the semantic
    * --app-* roles exposed from src/index.css instead of adding more generic aliases here.
    */
-  --background: var(--app-surface);
-  --foreground: var(--app-ink);
-  --primary: var(--aas-green-700);
-  --primary-foreground: #ffffff;
-  --muted: var(--app-surface-subtle);
-  --muted-foreground: var(--app-ink-soft);
-  --border: var(--app-line);
-  --input: var(--app-line-strong);
-  --ring: var(--app-focus);
-  --chart-1: var(--aas-green-500);
-  --chart-2: var(--aas-orange-500);
-}
+    --background: var(--app-surface);
+    --foreground: var(--app-ink);
+    --primary: var(--aas-green-700);
+    --primary-foreground: #ffffff;
+    --muted: var(--app-surface-subtle);
+    --muted-foreground: var(--app-ink-soft);
+    --border: var(--app-line);
+    --input: var(--app-line-strong);
+    --ring: var(--app-focus);
+    --chart-1: var(--aas-green-500);
+    --chart-2: var(--aas-orange-500);
+  }
 
-.dark {
-  color-scheme: dark;
-  --app-canvas: #0f1611;
-  --app-surface: #151e17;
-  --app-surface-subtle: #1a251d;
-  --app-surface-raised: #1d2920;
-  --app-ink: #eff5ef;
-  --app-ink-soft: #b3bfb5;
-  --app-ink-faint: #89958b;
-  --app-line: #304035;
-  --app-line-strong: #425447;
-  --app-brand: var(--aas-green-300);
-  --app-brand-strong: var(--aas-green-100);
-  --app-brand-soft: color-mix(in oklab, var(--aas-green-500) 28%, var(--app-surface));
-  --app-accent: var(--aas-orange-500);
-  --app-accent-soft: color-mix(in oklab, var(--aas-orange-500) 28%, var(--app-surface));
-  --app-choice-indicator: var(--app-accent);
-  --app-focus: var(--aas-blue-300);
-  --app-sidebar: #0b3021;
-  --app-nav-active: var(--aas-green-100);
-  --app-nav-active-surface: color-mix(in oklab, var(--aas-green-500) 24%, var(--app-surface));
-  --app-nav-indicator: var(--aas-green-300);
-  --app-nav-indicator-on-dark: var(--aas-green-300);
-  --app-control-surface: #194d32;
-  --app-control-surface-strong: #225c3b;
-  --app-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.25);
-  --app-shadow-md: 0 12px 32px rgb(0 0 0 / 0.24);
-  --app-shadow-lg: 0 24px 70px rgb(0 0 0 / 0.34);
-  --app-record-shadow: 0 4px 16px rgb(0 0 0 / 0.22);
+  .dark {
+    color-scheme: dark;
+    --app-canvas: #0f1611;
+    --app-surface: #151e17;
+    --app-surface-subtle: #1a251d;
+    --app-surface-raised: #1d2920;
+    --app-ink: #eff5ef;
+    --app-ink-soft: #b3bfb5;
+    --app-ink-faint: #89958b;
+    --app-line: #304035;
+    --app-line-strong: #425447;
+    --app-brand: var(--aas-green-300);
+    --app-brand-strong: var(--aas-green-100);
+    --app-brand-soft: color-mix(in oklab, var(--aas-green-500) 28%, var(--app-surface));
+    --app-accent: var(--aas-orange-500);
+    --app-accent-soft: color-mix(in oklab, var(--aas-orange-500) 28%, var(--app-surface));
+    --app-choice-indicator: var(--app-accent);
+    --app-focus: var(--aas-blue-300);
+    --app-sidebar: #0b3021;
+    --app-nav-active: var(--aas-green-100);
+    --app-nav-active-surface: color-mix(in oklab, var(--aas-green-500) 24%, var(--app-surface));
+    --app-nav-indicator: var(--aas-green-300);
+    --app-nav-indicator-on-dark: var(--aas-green-300);
+    --app-control-surface: #194d32;
+    --app-control-surface-strong: #225c3b;
+    --app-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.25);
+    --app-shadow-md: 0 12px 32px rgb(0 0 0 / 0.24);
+    --app-shadow-lg: 0 24px 70px rgb(0 0 0 / 0.34);
+    --app-record-shadow: 0 4px 16px rgb(0 0 0 / 0.22);
 
-  --status-available-bg: #203d25;
-  --status-available-text: #afe0ae;
-  --status-available-indicator: #79ca7e;
-  --status-own-bg: #20364c;
-  --status-own-text: #b9d7f4;
-  --status-event-bg: #462d1e;
-  --status-event-text: #ffc28f;
-  --status-busy-bg: #2c352e;
-  --status-busy-text: #c1c8c1;
-  --status-past-bg: #252c27;
-  --status-past-text: #929b94;
-  --status-warning-bg: #44361d;
-  --status-warning-text: #f3ce7a;
-  --status-warning-indicator: #e0ac42;
-  --status-danger-bg: #472523;
-  --status-danger-text: #ffaaa3;
-  --status-danger-indicator: #ef756d;
+    --status-available-bg: #203d25;
+    --status-available-text: #afe0ae;
+    --status-available-indicator: #79ca7e;
+    --status-own-bg: #20364c;
+    --status-own-text: #b9d7f4;
+    --status-event-bg: #462d1e;
+    --status-event-text: #ffc28f;
+    --status-busy-bg: #2c352e;
+    --status-busy-text: #c1c8c1;
+    --status-past-bg: #252c27;
+    --status-past-text: #929b94;
+    --status-warning-bg: #44361d;
+    --status-warning-text: #f3ce7a;
+    --status-warning-indicator: #e0ac42;
+    --status-danger-bg: #472523;
+    --status-danger-text: #ffaaa3;
+    --status-danger-indicator: #ef756d;
 
-  --background: var(--app-canvas);
-  --foreground: var(--app-ink);
-  --primary: var(--aas-green-300);
-  --primary-foreground: #102115;
-  --muted: var(--app-surface-subtle);
-  --muted-foreground: var(--app-ink-soft);
-  --border: var(--app-line);
-  --input: var(--app-line-strong);
-  --ring: var(--app-focus);
-  --chart-1: var(--aas-green-300);
-  --chart-2: var(--aas-orange-500);
-}
+    --background: var(--app-canvas);
+    --foreground: var(--app-ink);
+    --primary: var(--aas-green-300);
+    --primary-foreground: #102115;
+    --muted: var(--app-surface-subtle);
+    --muted-foreground: var(--app-ink-soft);
+    --border: var(--app-line);
+    --input: var(--app-line-strong);
+    --ring: var(--app-focus);
+    --chart-1: var(--aas-green-300);
+    --chart-2: var(--aas-orange-500);
+  }
 
-@media (min-width: 48rem) {
-  :root {
-    --app-type-micro: var(--app-type-micro-comfortable);
-    --app-type-caption: var(--app-type-caption-comfortable);
-    --app-type-label: var(--app-type-label-comfortable);
-    --app-type-body-sm: var(--app-type-body-sm-comfortable);
-    --app-type-body: var(--app-type-body-comfortable);
-    --app-type-body-lg: var(--app-type-body-lg-comfortable);
-    --app-type-heading-sm: var(--app-type-heading-sm-comfortable);
-    --app-type-heading-md: var(--app-type-heading-md-comfortable);
-    --app-type-page-title: var(--app-type-page-title-comfortable);
+  @media (min-width: 48rem) {
+    :root {
+      --app-type-micro: var(--app-type-micro-comfortable);
+      --app-type-caption: var(--app-type-caption-comfortable);
+      --app-type-label: var(--app-type-label-comfortable);
+      --app-type-body-sm: var(--app-type-body-sm-comfortable);
+      --app-type-body: var(--app-type-body-comfortable);
+      --app-type-body-lg: var(--app-type-body-lg-comfortable);
+      --app-type-heading-sm: var(--app-type-heading-sm-comfortable);
+      --app-type-heading-md: var(--app-type-heading-md-comfortable);
+      --app-type-page-title: var(--app-type-page-title-comfortable);
+    }
   }
 }
