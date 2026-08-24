@@ -74,6 +74,9 @@
       var(--status-danger-text)
     );
     --app-field-surface: color-mix(in srgb, var(--app-line-strong) 30%, transparent);
+    --app-field-control-border: var(--app-line-strong);
+    --app-field-control-surface: var(--app-field-surface);
+    --app-field-control-text: var(--app-ink);
     --app-focus-outline: color-mix(in srgb, var(--app-focus) 45%, transparent);
     --app-field-focus-ring: color-mix(in srgb, var(--app-focus) 32%, transparent);
     --app-field-invalid-ring: color-mix(in srgb, var(--status-danger-indicator) 20%, transparent);
@@ -87,11 +90,16 @@
     --app-choice-control-selected-text: var(--app-nav-active);
     --app-choice-control-indicator: var(--app-choice-indicator);
     --app-switch-track: var(--app-line-strong);
+    --app-dialog-border: color-mix(in srgb, var(--app-line) 76%, transparent);
+    --app-dialog-overlay: rgb(0 0 0 / 0.8);
     --activity-accent: var(--aas-green-300);
     --app-shadow-sm: 0 1px 2px rgb(18 36 23 / 0.05);
     --app-shadow-md: 0 12px 32px rgb(18 36 23 / 0.08);
     --app-shadow-lg: 0 24px 70px rgb(18 36 23 / 0.12);
+    --app-floating-surface-shadow: 0 18px 48px
+      color-mix(in srgb, var(--foreground) 18%, transparent);
     --app-switch-thumb-shadow: 0 1px 2px color-mix(in srgb, var(--app-ink) 22%, transparent);
+    --app-dialog-overlay-blur: 3px;
 
     /* Semantic product geometry. Values mirror the verified pre-Tailwind component baseline. */
     --app-content-max: 112rem;
@@ -103,6 +111,7 @@
     --app-form-control-min-height: 2.625rem;
     --app-search-control-height: 2.75rem;
     --app-textarea-min-height: 4rem;
+    --app-control-icon-size: 1rem;
     --app-choice-control-min-height: var(--app-control-height);
     --app-choice-control-min-width: 0rem;
     --app-choice-indicator-height: 2px;
@@ -112,8 +121,33 @@
     --app-switch-height: 1.15rem;
     --app-switch-thumb-size: 0.9rem;
     --app-control-min-width: 10rem;
+    --app-select-trigger-min-height: var(--app-control-height);
+    --app-select-content-max-width: calc(100vw - 1rem);
+    --app-select-content-max-height: 20rem;
+    --app-select-viewport-max-height: 18rem;
+    --app-select-option-min-height: 2.5rem;
+    --app-select-scroll-button-min-height: 1.75rem;
+    --app-date-trigger-min-height: 2.75rem;
+    --app-date-popover-width: min(20rem, calc(100vw - 1rem));
+    --app-date-popover-max-height: calc(100dvh - 1rem);
+    --app-calendar-max-width: 20rem;
+    --app-calendar-min-width: 17.5rem;
+    --app-calendar-compact-min-width: 13rem;
+    --app-calendar-header-min-height: 2.5rem;
+    --app-calendar-compact-day-width: 1.85rem;
     --app-dialog-width: 34rem;
     --app-dialog-max-height: calc(100dvh - 2rem);
+    --app-dialog-surface-width: min(var(--app-dialog-width), calc(100vw - 2rem));
+    --app-dialog-surface-max-height: var(--app-dialog-max-height);
+    --app-dialog-surface-border-bottom-width: 1px;
+    --app-editor-dialog-width: min(52rem, calc(100vw - 2rem));
+    --app-editor-dialog-height: min(48rem, calc(100dvh - 2rem));
+    --app-date-navigation-columns: 2.75rem minmax(0, 1fr) 2.75rem;
+    --app-date-navigation-compact-columns: 2.5rem minmax(0, 1fr) 2.5rem;
+    --app-calendar-header-columns: 2.25rem minmax(0, 1fr) 2.25rem;
+    --app-select-disabled-opacity: 0.45;
+    --app-date-disabled-opacity: 0.55;
+    --app-calendar-disabled-opacity: 0.35;
     --app-space-2xs: 0.125rem;
     --app-space-xs: 0.25rem;
     --app-space-sm: 0.5rem;
@@ -127,6 +161,16 @@
     --app-choice-padding-block: 0.35rem;
     --app-choice-padding-inline: 0.625rem;
     --app-choice-indicator-offset: 0.15rem;
+    --app-select-trigger-gap: 0.625rem;
+    --app-select-option-padding-block: 0.55rem;
+    --app-select-option-indicator-padding: 2.25rem;
+    --app-date-control-padding-inline: 0.875rem;
+    --app-calendar-cell-padding: 0.1rem;
+    --app-dialog-surface-top: 50%;
+    --app-dialog-surface-bottom: auto;
+    --app-dialog-surface-translate-x: -50%;
+    --app-dialog-surface-translate-y: -50%;
+    --app-dialog-surface-padding-bottom: 0rem;
     --app-search-control-padding-inline: 2.5rem;
     --app-switch-padding: 1px;
     --app-switch-thumb-shift: 0.85rem;
@@ -136,9 +180,13 @@
     --app-record-gap: 0.5rem;
     --app-record-padding-inline: 0.5rem;
     --app-control-radius: 999px;
+    --app-calendar-day-radius: 50%;
     --app-choice-radius: 0.675rem;
+    --app-select-content-radius: 0.875rem;
+    --app-calendar-surface-radius: 1rem;
     --app-textarea-radius: 0.75rem;
     --app-dialog-radius: 1.5rem;
+    --app-dialog-surface-radius: var(--app-dialog-radius);
     --app-record-radius: 0.875rem;
     --app-surface-radius: 1.25rem;
     --app-record-shadow: 0 4px 16px rgb(18 36 23 / 0.07);
@@ -155,8 +203,11 @@
     --app-font-display: var(--app-font-body);
     --app-action-font-weight: 650;
     --app-choice-font-weight: 680;
+    --app-calendar-heading-font-weight: 700;
+    --app-calendar-selected-font-weight: 750;
     --app-control-line-height: 1.2;
     --app-choice-line-height: 1.15;
+    --app-select-option-line-height: 1.3;
     --app-type-micro-compact: 0.75rem;
     --app-type-micro-comfortable: 0.8125rem;
     --app-type-caption-compact: 0.8125rem;
@@ -232,11 +283,9 @@
    */
     --background: var(--app-surface);
     --foreground: var(--app-ink);
-    --primary-foreground: var(--app-action-primary-text);
     --muted: var(--app-surface-subtle);
     --muted-foreground: var(--app-ink-soft);
     --border: var(--app-line);
-    --input: var(--app-line-strong);
     --ring: var(--app-focus);
     --chart-1: var(--aas-green-500);
     --chart-2: var(--aas-orange-500);
@@ -296,7 +345,6 @@
     --muted: var(--app-surface-subtle);
     --muted-foreground: var(--app-ink-soft);
     --border: var(--app-line);
-    --input: var(--app-line-strong);
     --ring: var(--app-focus);
     --chart-1: var(--aas-green-300);
     --chart-2: var(--aas-orange-500);

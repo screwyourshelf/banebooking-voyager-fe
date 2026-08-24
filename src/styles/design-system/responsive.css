@@ -298,18 +298,6 @@
       border-radius: 1.5rem !important;
     }
 
-    [data-ui-primitive="dialog-surface"][data-size="editor"] {
-      inset: auto;
-      top: 50%;
-      left: 50%;
-      width: min(52rem, calc(100vw - 2rem));
-      height: min(48rem, calc(100dvh - 2rem));
-      max-height: min(48rem, calc(100dvh - 2rem));
-      transform: translate(-50%, -50%);
-      border: 1px solid color-mix(in srgb, var(--app-line) 76%, transparent);
-      border-radius: 1.5rem;
-    }
-
     [data-ui-primitive="dialog-surface"] > [data-ui="editor-dialog"] {
       width: 100% !important;
       height: 100%;

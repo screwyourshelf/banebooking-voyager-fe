@@ -30,6 +30,18 @@ describe("Select", () => {
 
     const trigger = screen.getByRole("combobox", { name: "Bane" });
     expect(trigger).toHaveTextContent("Velg bane…");
+    expect(trigger).toHaveClass(
+      "group",
+      "min-w-control",
+      "min-h-form-control",
+      "border-field-control-border",
+      "bg-field-control-surface",
+      "focus-visible:ring-field-focus-ring"
+    );
+    expect(trigger.querySelector('[data-part="icon"]')).toHaveClass(
+      "w-control-icon",
+      "h-control-icon"
+    );
     expect(trigger).toHaveAttribute("aria-invalid", "true");
     expect(document.querySelector('input[name="court"]')).toBeRequired();
     expect(trigger).toHaveAttribute("aria-required", "true");
@@ -39,7 +51,22 @@ describe("Select", () => {
 
     await fireEvent.keyDown(trigger, { key: "ArrowDown" });
     const listbox = await screen.findByRole("listbox", { hidden: true });
+    expect(listbox).toHaveClass(
+      "min-w-select-content",
+      "max-w-select-content",
+      "max-h-select-content",
+      "rounded-select-content",
+      "shadow-floating-surface"
+    );
+    expect(listbox.querySelector('[data-part="viewport"]')).toHaveClass(
+      "max-h-select-viewport",
+      "overflow-y-auto"
+    );
     expect(within(listbox).getAllByRole("option", { hidden: true })).toHaveLength(3);
+    expect(within(listbox).getByRole("option", { name: "Bane C" })).toHaveClass(
+      "min-h-select-option",
+      "data-[disabled]:opacity-select-disabled"
+    );
     expect(within(listbox).getByRole("option", { name: "Bane C" })).toHaveAttribute(
       "aria-disabled",
       "true"

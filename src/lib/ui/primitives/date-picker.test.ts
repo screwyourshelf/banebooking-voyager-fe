@@ -28,6 +28,16 @@ describe("DatePicker and MultiDatePicker", () => {
 
     const trigger = getStartDateTrigger();
     expect(trigger).toHaveTextContent("Lør. 22. august");
+    expect(trigger).toHaveClass(
+      "min-h-date-trigger",
+      "border-field-control-border",
+      "bg-field-control-surface",
+      "text-field-control-text"
+    );
+    expect(trigger.closest('[data-ui-primitive="date-picker"]')).toHaveClass(
+      "grid-cols-date-navigation",
+      "compact-control:grid-cols-date-navigation-compact"
+    );
     expect(trigger).toHaveAttribute("aria-invalid", "true");
     expect(trigger).toHaveAccessibleDescription(
       "Velg en dato i august. Datoen er ikke gyldig. Obligatorisk felt."
@@ -42,6 +52,18 @@ describe("DatePicker and MultiDatePicker", () => {
     const bookingTrigger = screen.getByRole("button", { name: "Bookingdato" });
     expect(bookingTrigger).toHaveTextContent("25. aug.");
     expect(bookingTrigger).toHaveAttribute("data-selected", "true");
+    expect(bookingTrigger).toHaveClass(
+      "min-h-control",
+      "rounded-choice",
+      "border-choice-selected-border",
+      "bg-choice-selected-surface",
+      "text-choice-selected-text"
+    );
+    expect(screen.getByRole("group", { name: "Bookingdatoer" })).toHaveClass(
+      "max-w-calendar",
+      "rounded-calendar-surface",
+      "compact-control:p-sm"
+    );
     expect(screen.getByRole("button", { name: "Statistikk fra" })).toHaveTextContent(
       "1. jan. 2026"
     );
@@ -52,6 +74,17 @@ describe("DatePicker and MultiDatePicker", () => {
     await fireEvent.click(getStartDateTrigger());
 
     const calendar = await screen.findByLabelText(/Velg startdato/i);
+    expect(document.querySelector('[data-ui-primitive="date-popover"]')).toHaveClass(
+      "w-date-popover",
+      "max-h-date-popover",
+      "shadow-floating-surface"
+    );
+    expect(calendar).toHaveClass("min-w-calendar", "compact-control:min-w-calendar-compact");
+    expect(within(calendar).getByRole("button", { name: "Forrige måned" })).toHaveClass(
+      "w-control",
+      "h-control",
+      "disabled:opacity-calendar-disabled"
+    );
     expect(
       within(calendar).getByRole("heading", { name: /Velg startdato august 2026/i })
     ).toBeInTheDocument();
@@ -62,6 +95,10 @@ describe("DatePicker and MultiDatePicker", () => {
     expect(
       within(calendar).getByRole("button", { name: /torsdag 20. august 2026/i })
     ).toHaveAttribute("aria-disabled", "false");
+    expect(within(calendar).getByRole("button", { name: /lørdag 22. august 2026/i })).toHaveClass(
+      "bg-choice-indicator",
+      "font-calendar-selected"
+    );
 
     await fireEvent.click(within(calendar).getByRole("button", { name: "Neste måned" }));
     await waitFor(() =>

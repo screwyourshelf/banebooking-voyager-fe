@@ -147,6 +147,11 @@
           "control-surface": "--app-control-surface",
           "control-surface-strong": "--app-control-surface-strong",
           "control-text": "--app-control-text",
+          "dialog-border": "--app-dialog-border",
+          "dialog-overlay": "--app-dialog-overlay",
+          "field-control-border": "--app-field-control-border",
+          "field-control-surface": "--app-field-control-surface",
+          "field-control-text": "--app-field-control-text",
           "field-focus-ring": "--app-field-focus-ring",
           "field-invalid-ring": "--app-field-invalid-ring",
           "field-surface": "--app-field-surface",
@@ -188,6 +193,12 @@
           "switch-track": "--app-switch-track"
         }
       },
+      "blur": {
+        "themeVariablePrefix": "--blur-",
+        "roles": {
+          "dialog-overlay": "--app-dialog-overlay-blur"
+        }
+      },
       "fontFamily": {
         "themeVariablePrefix": "--font-",
         "roles": {
@@ -218,6 +229,8 @@
         "themeVariablePrefix": "--font-weight-",
         "roles": {
           "action": "--app-action-font-weight",
+          "calendar-heading": "--app-calendar-heading-font-weight",
+          "calendar-selected": "--app-calendar-selected-font-weight",
           "choice": "--app-choice-font-weight",
           "stat-chart-label": "--app-stat-chart-label-weight",
           "stat-chart-meta": "--app-stat-chart-meta-weight",
@@ -229,22 +242,28 @@
         "themeVariablePrefix": "--leading-",
         "roles": {
           "choice": "--app-choice-line-height",
-          "control": "--app-control-line-height"
+          "control": "--app-control-line-height",
+          "select-option": "--app-select-option-line-height"
         }
       },
       "borderWidth": {
         "themeVariablePrefix": "--border-width-",
         "roles": {
+          "dialog-surface": "--app-dialog-surface-border-bottom-width",
           "radio-selected": "--app-radio-selected-border-width"
         }
       },
       "radius": {
         "themeVariablePrefix": "--radius-",
         "roles": {
+          "calendar-day": "--app-calendar-day-radius",
+          "calendar-surface": "--app-calendar-surface-radius",
           "choice": "--app-choice-radius",
           "control": "--app-control-radius",
           "dialog": "--app-dialog-radius",
+          "dialog-surface": "--app-dialog-surface-radius",
           "record": "--app-record-radius",
+          "select-content": "--app-select-content-radius",
           "surface": "--app-surface-radius",
           "textarea": "--app-textarea-radius"
         }
@@ -252,6 +271,7 @@
       "shadow": {
         "themeVariablePrefix": "--shadow-",
         "roles": {
+          "floating-surface": "--app-floating-surface-shadow",
           "record": "--app-record-shadow",
           "switch-thumb": "--app-switch-thumb-shadow",
           "surface-lg": "--app-shadow-lg",
@@ -268,15 +288,25 @@
           "choice-block": "--app-choice-padding-block",
           "choice-indicator-offset": "--app-choice-indicator-offset",
           "choice-inline": "--app-choice-padding-inline",
+          "calendar-cell": "--app-calendar-cell-padding",
           "control-block": "--app-control-padding-block",
           "control-gap": "--app-control-gap",
           "control-inline": "--app-control-padding-inline",
+          "date-control-inline": "--app-date-control-padding-inline",
+          "dialog-surface-bottom": "--app-dialog-surface-bottom",
+          "dialog-surface-padding-bottom": "--app-dialog-surface-padding-bottom",
+          "dialog-surface-top": "--app-dialog-surface-top",
+          "dialog-surface-translate-x": "--app-dialog-surface-translate-x",
+          "dialog-surface-translate-y": "--app-dialog-surface-translate-y",
           "lg": "--app-space-lg",
           "md": "--app-space-md",
           "page": "--app-page-padding",
           "record-gap": "--app-record-gap",
           "record-inline": "--app-record-padding-inline",
           "search-control-inline": "--app-search-control-padding-inline",
+          "select-option-block": "--app-select-option-padding-block",
+          "select-option-indicator": "--app-select-option-indicator-padding",
+          "select-trigger-gap": "--app-select-trigger-gap",
           "section": "--app-section-gap",
           "sm": "--app-space-sm",
           "status-inline": "--app-status-inline-padding",
@@ -285,12 +315,33 @@
           "xs": "--app-space-xs"
         }
       },
+      "gridTemplateColumns": {
+        "themeVariablePrefix": "--grid-template-columns-",
+        "roles": {
+          "calendar-header": "--app-calendar-header-columns",
+          "date-navigation": "--app-date-navigation-columns",
+          "date-navigation-compact": "--app-date-navigation-compact-columns"
+        }
+      },
+      "opacity": {
+        "themeVariablePrefix": "--opacity-",
+        "roles": {
+          "calendar-disabled": "--app-calendar-disabled-opacity",
+          "date-disabled": "--app-date-disabled-opacity",
+          "select-disabled": "--app-select-disabled-opacity"
+        }
+      },
       "width": {
         "themeVariablePrefix": "--width-",
         "roles": {
+          "calendar-day-compact": "--app-calendar-compact-day-width",
           "compact-control": "--app-compact-control-height",
           "control": "--app-control-height",
+          "control-icon": "--app-control-icon-size",
+          "date-popover": "--app-date-popover-width",
           "dialog": "--app-dialog-width",
+          "dialog-surface": "--app-dialog-surface-width",
+          "editor-dialog": "--app-editor-dialog-width",
           "radio": "--app-radio-size",
           "sidebar": "--app-sidebar-width",
           "sidebar-rail": "--app-sidebar-rail-width",
@@ -301,6 +352,8 @@
       "minWidth": {
         "themeVariablePrefix": "--min-width-",
         "roles": {
+          "calendar": "--app-calendar-min-width",
+          "calendar-compact": "--app-calendar-compact-min-width",
           "choice": "--app-choice-control-min-width",
           "control": "--app-control-min-width"
         }
@@ -308,9 +361,11 @@
       "maxWidth": {
         "themeVariablePrefix": "--max-width-",
         "roles": {
+          "calendar": "--app-calendar-max-width",
           "content": "--app-content-max",
           "dialog": "--app-dialog-width",
-          "page": "--app-page-width"
+          "page": "--app-page-width",
+          "select-content": "--app-select-content-max-width"
         }
       },
       "height": {
@@ -318,7 +373,9 @@
         "roles": {
           "compact-control": "--app-compact-control-height",
           "control": "--app-control-height",
+          "control-icon": "--app-control-icon-size",
           "choice-indicator": "--app-choice-indicator-height",
+          "editor-dialog": "--app-editor-dialog-height",
           "radio": "--app-radio-size",
           "search-control": "--app-search-control-height",
           "switch": "--app-switch-height",
@@ -328,17 +385,25 @@
       "minHeight": {
         "themeVariablePrefix": "--min-height-",
         "roles": {
+          "calendar-header": "--app-calendar-header-min-height",
           "choice": "--app-choice-control-min-height",
           "compact-control": "--app-compact-control-height",
           "control": "--app-control-height",
+          "date-trigger": "--app-date-trigger-min-height",
           "form-control": "--app-form-control-min-height",
+          "select-option": "--app-select-option-min-height",
+          "select-scroll": "--app-select-scroll-button-min-height",
+          "select-trigger": "--app-select-trigger-min-height",
           "textarea": "--app-textarea-min-height"
         }
       },
       "maxHeight": {
         "themeVariablePrefix": "--max-height-",
         "roles": {
-          "dialog": "--app-dialog-max-height"
+          "date-popover": "--app-date-popover-max-height",
+          "dialog": "--app-dialog-max-height",
+          "dialog-surface": "--app-dialog-surface-max-height",
+          "editor-dialog": "--app-editor-dialog-height"
         }
       }
     }
@@ -349,6 +414,7 @@
         "2xl",
         "active",
         "checked",
+        "compact-control",
         "disabled",
         "enabled",
         "focus",
@@ -373,8 +439,14 @@
         "block",
         "bg-transparent",
         "border",
+        "border-0",
+        "border-collapse",
+        "border-t",
         "border-transparent",
+        "border-x",
         "contents",
+        "capitalize",
+        "cursor-default",
         "cursor-not-allowed",
         "cursor-pointer",
         "duration-120",
@@ -392,14 +464,19 @@
         "flex-wrap",
         "flow-root",
         "grid",
+        "group",
         "grow",
         "grow-0",
         "h-full",
+        "h-dvh",
         "hidden",
         "inline",
         "inline-block",
         "inline-flex",
         "inline-grid",
+        "inset-0",
+        "inset-auto",
+        "invisible",
         "isolate",
         "items-baseline",
         "items-center",
@@ -412,8 +489,14 @@
         "justify-end",
         "justify-evenly",
         "justify-start",
+        "left-1/2",
+        "max-h-none",
+        "max-h-select-content",
+        "max-h-select-viewport",
         "min-h-0",
+        "min-w-select-content",
         "min-w-0",
+        "mx-auto",
         "no-underline",
         "object-contain",
         "object-cover",
@@ -421,6 +504,8 @@
         "opacity-100",
         "outline-3",
         "outline-none",
+        "outline-solid",
+        "outline-offset-1",
         "outline-offset-2",
         "overflow-auto",
         "overflow-hidden",
@@ -432,23 +517,38 @@
         "overflow-y-hidden",
         "pointer-events-none",
         "pointer-events-auto",
+        "place-items-center",
         "p-0",
+        "px-0",
         "relative",
         "resize-none",
         "ring-3",
         "rounded-none",
+        "select-none",
         "shrink",
         "shrink-0",
         "size-full",
         "sr-only",
         "static",
         "sticky",
+        "table-fixed",
+        "tabular-nums",
         "text-center",
+        "text-ellipsis",
+        "text-left",
+        "top-1/2",
         "transition",
+        "translate-x-1/2",
         "translate-x-0",
+        "translate-y-1/2",
         "translate-y-px",
         "whitespace-nowrap",
-        "w-full"
+        "w-fit",
+        "w-full",
+        "w-screen",
+        "z-80",
+        "z-81",
+        "z-90"
       ],
       "patterns": [
         "^col-span-(?:1|2|3|4|5|6|full)$",
@@ -479,6 +579,8 @@
           "choice-surface",
           "control-surface",
           "control-surface-strong",
+          "dialog-overlay",
+          "field-control-surface",
           "field-surface",
           "nav-active-surface",
           "selection-indicator",
@@ -504,11 +606,13 @@
           "action-primary-text",
           "brand",
           "brand-strong",
+          "choice-indicator",
           "choice-hover-text",
           "choice-selected-text",
           "choice-text",
           "control-muted",
           "control-text",
+          "field-control-text",
           "foreground",
           "ink",
           "ink-faint",
@@ -550,6 +654,8 @@
           "border",
           "choice-border",
           "choice-selected-border",
+          "dialog-border",
+          "field-control-border",
           "focus",
           "line",
           "line-strong",
@@ -557,6 +663,11 @@
           "sidebar-divider",
           "status-danger-indicator"
         ]
+      },
+      {
+        "utilityPrefixes": ["border-b"],
+        "themeNamespace": "borderWidth",
+        "roles": ["dialog-surface"]
       },
       {
         "utilityPrefixes": ["border"],
@@ -567,6 +678,11 @@
         "utilityPrefixes": ["outline", "ring"],
         "themeNamespace": "color",
         "roles": ["field-focus-ring", "field-invalid-ring", "focus", "focus-outline", "ring"]
+      },
+      {
+        "utilityPrefixes": ["backdrop-blur"],
+        "themeNamespace": "blur",
+        "roles": ["dialog-overlay"]
       },
       {
         "utilityPrefixes": ["fill", "stroke"],
@@ -585,12 +701,30 @@
       {
         "utilityPrefixes": ["rounded"],
         "themeNamespace": "radius",
-        "roles": ["choice", "control", "dialog", "record", "surface", "textarea"]
+        "roles": [
+          "calendar-day",
+          "calendar-surface",
+          "choice",
+          "control",
+          "dialog",
+          "dialog-surface",
+          "record",
+          "select-content",
+          "surface",
+          "textarea"
+        ]
       },
       {
         "utilityPrefixes": ["shadow"],
         "themeNamespace": "shadow",
-        "roles": ["record", "surface-lg", "surface-md", "surface-sm", "switch-thumb"]
+        "roles": [
+          "floating-surface",
+          "record",
+          "surface-lg",
+          "surface-md",
+          "surface-sm",
+          "switch-thumb"
+        ]
       },
       {
         "utilityPrefixes": ["font"],
@@ -602,6 +736,8 @@
         "themeNamespace": "fontWeight",
         "roles": [
           "action",
+          "calendar-heading",
+          "calendar-selected",
           "choice",
           "stat-chart-label",
           "stat-chart-meta",
@@ -612,12 +748,22 @@
       {
         "utilityPrefixes": ["leading"],
         "themeNamespace": "lineHeight",
-        "roles": ["choice", "control"]
+        "roles": ["choice", "control", "select-option"]
       },
       {
         "utilityPrefixes": ["gap", "space-x", "space-y"],
         "themeNamespace": "spacing",
-        "roles": ["2xs", "control-gap", "lg", "md", "record-gap", "section", "sm", "xs"]
+        "roles": [
+          "2xs",
+          "control-gap",
+          "lg",
+          "md",
+          "record-gap",
+          "section",
+          "select-trigger-gap",
+          "sm",
+          "xs"
+        ]
       },
       {
         "utilityPrefixes": [
@@ -640,9 +786,19 @@
         "roles": ["2xs", "lg", "md", "page", "section", "sm", "xs"]
       },
       {
+        "utilityPrefixes": ["p"],
+        "themeNamespace": "spacing",
+        "roles": ["calendar-cell"]
+      },
+      {
         "utilityPrefixes": ["pb", "pt", "py"],
         "themeNamespace": "spacing",
         "roles": ["action-compact-block", "control-block"]
+      },
+      {
+        "utilityPrefixes": ["pb"],
+        "themeNamespace": "spacing",
+        "roles": ["dialog-surface-padding-bottom"]
       },
       {
         "utilityPrefixes": ["pl", "pr", "px"],
@@ -656,9 +812,14 @@
         ]
       },
       {
+        "utilityPrefixes": ["px"],
+        "themeNamespace": "spacing",
+        "roles": ["date-control-inline"]
+      },
+      {
         "utilityPrefixes": ["py"],
         "themeNamespace": "spacing",
-        "roles": ["choice-block"]
+        "roles": ["choice-block", "select-option-block"]
       },
       {
         "utilityPrefixes": ["px"],
@@ -666,9 +827,24 @@
         "roles": ["choice-inline"]
       },
       {
+        "utilityPrefixes": ["pr"],
+        "themeNamespace": "spacing",
+        "roles": ["select-option-indicator"]
+      },
+      {
         "utilityPrefixes": ["bottom"],
         "themeNamespace": "spacing",
-        "roles": ["choice-indicator-offset"]
+        "roles": ["choice-indicator-offset", "dialog-surface-bottom"]
+      },
+      {
+        "utilityPrefixes": ["top"],
+        "themeNamespace": "spacing",
+        "roles": ["dialog-surface-top"]
+      },
+      {
+        "utilityPrefixes": ["right"],
+        "themeNamespace": "spacing",
+        "roles": ["md"]
       },
       {
         "utilityPrefixes": ["inset-x"],
@@ -683,7 +859,22 @@
       {
         "utilityPrefixes": ["translate-x"],
         "themeNamespace": "spacing",
-        "roles": ["switch-thumb-shift"]
+        "roles": ["dialog-surface-translate-x", "switch-thumb-shift"]
+      },
+      {
+        "utilityPrefixes": ["translate-y"],
+        "themeNamespace": "spacing",
+        "roles": ["dialog-surface-translate-y"]
+      },
+      {
+        "utilityPrefixes": ["grid-cols"],
+        "themeNamespace": "gridTemplateColumns",
+        "roles": ["calendar-header", "date-navigation", "date-navigation-compact"]
+      },
+      {
+        "utilityPrefixes": ["opacity"],
+        "themeNamespace": "opacity",
+        "roles": ["calendar-disabled", "date-disabled", "select-disabled"]
       },
       {
         "utilityPrefixes": ["w"],
@@ -691,7 +882,12 @@
         "roles": [
           "compact-control",
           "control",
+          "control-icon",
+          "calendar-day-compact",
+          "date-popover",
           "dialog",
+          "dialog-surface",
+          "editor-dialog",
           "radio",
           "sidebar",
           "sidebar-rail",
@@ -702,12 +898,12 @@
       {
         "utilityPrefixes": ["min-w"],
         "themeNamespace": "minWidth",
-        "roles": ["choice", "control"]
+        "roles": ["calendar", "calendar-compact", "choice", "control"]
       },
       {
         "utilityPrefixes": ["max-w"],
         "themeNamespace": "maxWidth",
-        "roles": ["content", "dialog", "page"]
+        "roles": ["calendar", "content", "dialog", "page", "select-content"]
       },
       {
         "utilityPrefixes": ["h"],
@@ -716,6 +912,8 @@
           "choice-indicator",
           "compact-control",
           "control",
+          "control-icon",
+          "editor-dialog",
           "radio",
           "search-control",
           "switch",
@@ -725,12 +923,23 @@
       {
         "utilityPrefixes": ["min-h"],
         "themeNamespace": "minHeight",
-        "roles": ["choice", "compact-control", "control", "form-control", "textarea"]
+        "roles": [
+          "calendar-header",
+          "choice",
+          "compact-control",
+          "control",
+          "date-trigger",
+          "form-control",
+          "select-option",
+          "select-scroll",
+          "select-trigger",
+          "textarea"
+        ]
       },
       {
         "utilityPrefixes": ["max-h"],
         "themeNamespace": "maxHeight",
-        "roles": ["dialog"]
+        "roles": ["date-popover", "dialog", "dialog-surface", "editor-dialog"]
       }
     ],
     "forbiddenRawPalettePattern": "^(?:accent|bg|border|caret|decoration|divide|fill|from|outline|ring|stroke|text|to|via)-(?:amber|blue|cyan|emerald|fuchsia|gray|green|indigo|lime|neutral|orange|pink|purple|red|rose|sky|slate|stone|teal|violet|yellow|zinc)(?:-|$)"
@@ -793,10 +1002,8 @@
           "--chart-1",
           "--chart-2",
           "--foreground",
-          "--input",
           "--muted",
           "--muted-foreground",
-          "--primary-foreground",
           "--radius",
           "--ring"
         ],
@@ -809,14 +1016,17 @@
         "prefixes": [
           "--animate-",
           "--border-width-",
+          "--blur-",
           "--color-",
           "--font-",
+          "--grid-template-columns-",
           "--height-",
           "--leading-",
           "--max-height-",
           "--max-width-",
           "--min-height-",
           "--min-width-",
+          "--opacity-",
           "--radius-",
           "--shadow-",
           "--spacing-",
@@ -826,6 +1036,13 @@
         "exact": [],
         "definitionRoots": ["src/index.css", "src/lib/platform/theme/"],
         "usageRoots": ["src/"]
+      },
+      {
+        "name": "bits-ui-runtime",
+        "prefixes": ["--bits-"],
+        "exact": [],
+        "definitionRoots": ["node_modules/bits-ui/"],
+        "usageRoots": ["src/index.css"]
       },
       {
         "name": "statistics-geometry",

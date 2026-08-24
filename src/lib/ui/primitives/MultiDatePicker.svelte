@@ -53,6 +53,7 @@
 </script>
 
 <div
+  class="w-full max-w-calendar overflow-x-auto border border-line rounded-calendar-surface bg-surface p-md compact-control:p-sm data-[invalid=true]:border-status-danger-indicator data-[invalid=true]:ring-3 data-[invalid=true]:ring-field-invalid-ring aria-[disabled=true]:opacity-date-disabled"
   data-ui-primitive="multi-date-picker"
   role="group"
   aria-label={ariaLabel}
@@ -82,6 +83,8 @@
     {/if}
   {/if}
   {#if requiredDescriptionId}
-    <span id={requiredDescriptionId} data-part="required-description">Obligatorisk felt.</span>
+    <span class="sr-only" id={requiredDescriptionId} data-part="required-description"
+      >Obligatorisk felt.</span
+    >
   {/if}
 </div>

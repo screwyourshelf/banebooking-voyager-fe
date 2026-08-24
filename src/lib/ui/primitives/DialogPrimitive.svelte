@@ -43,8 +43,17 @@
 
 <Dialog.Root bind:open onOpenChange={handleOpenChange}>
   <Dialog.Portal>
-    <Dialog.Overlay data-ui-primitive="dialog-overlay" />
+    <Dialog.Overlay
+      class="fixed z-80 inset-0 bg-dialog-overlay backdrop-blur-dialog-overlay"
+      data-ui-primitive="dialog-overlay"
+    />
     <Dialog.Content
+      class={[
+        "fixed z-81 flex min-w-0 overflow-hidden bg-surface shadow-surface-lg outline-none",
+        size === "standard"
+          ? "top-dialog-surface-top bottom-dialog-surface-bottom left-1/2 w-dialog-surface max-h-dialog-surface translate-x-dialog-surface-translate-x translate-y-dialog-surface-translate-y border-x border-t border-b-dialog-surface border-dialog-border rounded-dialog-surface pb-dialog-surface-padding-bottom"
+          : "inset-0 w-screen h-dvh max-h-none border-0 rounded-none md:inset-auto md:top-1/2 md:left-1/2 md:w-editor-dialog md:h-editor-dialog md:max-h-editor-dialog md:-translate-x-1/2 md:-translate-y-1/2 md:border md:border-dialog-border md:rounded-dialog",
+      ]}
       data-ui-primitive="dialog-surface"
       data-size={size}
       aria-busy={pending || undefined}

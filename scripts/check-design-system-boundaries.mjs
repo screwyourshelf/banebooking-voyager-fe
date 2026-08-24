@@ -241,6 +241,9 @@ function validateCssVariables() {
 
   for (const match of stylesheetSource.matchAll(/var\((--[A-Za-z0-9_-]+)/g)) {
     const variable = match[1];
+    // Bits UI injects these measured floating-layer values at runtime. The styling guard
+    // contract restricts their only source-level consumer to the Tailwind entry boundary.
+    if (variable.startsWith("--bits-")) continue;
     if (definedCssVariables.has(variable) || runtimeCssVariables.has(variable)) continue;
     violations.push(`CSS bruker ${variable}, men variabelen er ikke definert`);
   }

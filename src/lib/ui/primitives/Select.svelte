@@ -81,6 +81,10 @@
   loop
 >
   <BitsSelect.Trigger
+    class={[
+      "group inline-flex min-w-control items-center justify-between gap-select-trigger-gap border border-field-control-border rounded-control bg-field-control-surface px-control-inline py-control-block font-body text-body-sm leading-control text-left cursor-pointer outline-none transition duration-120 focus-visible:border-focus focus-visible:ring-3 focus-visible:ring-field-focus-ring aria-[invalid=true]:border-status-danger-indicator aria-[invalid=true]:ring-3 aria-[invalid=true]:ring-field-invalid-ring aria-[invalid=true]:focus-visible:border-status-danger-indicator aria-[invalid=true]:focus-visible:ring-field-invalid-ring disabled:cursor-not-allowed disabled:opacity-50",
+      formControl ? "min-h-form-control" : "min-h-select-trigger",
+    ]}
     id={resolvedId ?? undefined}
     role="combobox"
     disabled={isDisabled}
@@ -93,14 +97,28 @@
     aria-required={resolvedRequired || undefined}
     data-ui-primitive="select-trigger"
   >
-    <BitsSelect.Value {placeholder} />
-    <svg data-part="icon" aria-hidden="true" viewBox="0 0 20 20">
+    <BitsSelect.Value
+      class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap group-data-[placeholder]:text-ink-faint"
+      {placeholder}
+    />
+    <svg
+      class="w-control-icon h-control-icon flex-none"
+      data-part="icon"
+      aria-hidden="true"
+      viewBox="0 0 20 20"
+      fill="none"
+      stroke="currentColor"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+      stroke-width="1.8"
+    >
       <path d="m6.5 8 3.5 3.5L13.5 8" />
     </svg>
   </BitsSelect.Trigger>
 
   <BitsSelect.Portal>
     <BitsSelect.Content
+      class="z-90 min-w-select-content max-w-select-content max-h-select-content overflow-hidden border border-line rounded-select-content bg-surface text-ink shadow-floating-surface"
       data-ui-primitive="select-content"
       id={contentId}
       aria-label={ariaLabel}
@@ -108,15 +126,29 @@
       sideOffset={6}
       collisionPadding={8}
     >
-      <BitsSelect.ScrollUpButton data-part="scroll-button" aria-label="Rull opp">
-        <svg aria-hidden="true" viewBox="0 0 20 20"><path d="m6.5 12 3.5-3.5 3.5 3.5" /></svg>
+      <BitsSelect.ScrollUpButton
+        class="flex w-full min-h-select-scroll items-center justify-center border-0 bg-surface text-ink-faint"
+        data-part="scroll-button"
+        aria-label="Rull opp"
+      >
+        <svg
+          class="w-control-icon h-control-icon"
+          aria-hidden="true"
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"><path d="m6.5 12 3.5-3.5 3.5 3.5" /></svg
+        >
       </BitsSelect.ScrollUpButton>
-      <BitsSelect.Viewport data-part="viewport">
+      <BitsSelect.Viewport class="max-h-select-viewport overflow-y-auto p-xs" data-part="viewport">
         {#if options.length === 0}
-          <div data-part="empty">{emptyLabel}</div>
+          <div class="p-md text-ink-faint text-body-sm" data-part="empty">{emptyLabel}</div>
         {:else}
           {#each options as option (option.value)}
             <BitsSelect.Item
+              class="relative flex min-h-select-option items-center gap-select-trigger-gap rounded-choice py-select-option-block pr-select-option-indicator pl-control-inline font-body text-body-sm leading-select-option cursor-default outline-none select-none data-[highlighted]:bg-nav-active-surface data-[highlighted]:text-nav-active data-[disabled]:opacity-select-disabled"
               value={option.value}
               label={option.label}
               disabled={option.disabled}
@@ -124,14 +156,23 @@
               data-part="item"
             >
               {#snippet children({ selected })}
-                <span data-part="label">{option.label}</span>
+                <span class="min-w-0" data-part="label">{option.label}</span>
                 <span
+                  class="absolute right-md grid w-control-icon h-control-icon place-items-center text-choice-indicator"
                   data-part="indicator"
                   aria-hidden="true"
                   data-selected={selected || undefined}
                 >
                   {#if selected}
-                    <svg viewBox="0 0 20 20"><path d="m4.5 10 3.25 3.25L15.5 5.5" /></svg>
+                    <svg
+                      class="w-control-icon h-control-icon"
+                      viewBox="0 0 20 20"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"><path d="m4.5 10 3.25 3.25L15.5 5.5" /></svg
+                    >
                   {/if}
                 </span>
               {/snippet}
@@ -139,8 +180,21 @@
           {/each}
         {/if}
       </BitsSelect.Viewport>
-      <BitsSelect.ScrollDownButton data-part="scroll-button" aria-label="Rull ned">
-        <svg aria-hidden="true" viewBox="0 0 20 20"><path d="m6.5 8 3.5 3.5L13.5 8" /></svg>
+      <BitsSelect.ScrollDownButton
+        class="flex w-full min-h-select-scroll items-center justify-center border-0 bg-surface text-ink-faint"
+        data-part="scroll-button"
+        aria-label="Rull ned"
+      >
+        <svg
+          class="w-control-icon h-control-icon"
+          aria-hidden="true"
+          viewBox="0 0 20 20"
+          fill="none"
+          stroke="currentColor"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"><path d="m6.5 8 3.5 3.5L13.5 8" /></svg
+        >
       </BitsSelect.ScrollDownButton>
     </BitsSelect.Content>
   </BitsSelect.Portal>

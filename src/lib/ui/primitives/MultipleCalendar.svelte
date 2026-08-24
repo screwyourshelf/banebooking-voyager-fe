@@ -39,6 +39,7 @@
 </script>
 
 <BitsCalendar.Root
+  class="w-full min-w-calendar compact-control:min-w-calendar-compact"
   type="multiple"
   value={selectedDates}
   onValueChange={handleValueChange}

@@ -34,6 +34,7 @@
 </script>
 
 <Tabs.Root
+  class="min-w-0"
   {value}
   {onValueChange}
   activationMode="automatic"

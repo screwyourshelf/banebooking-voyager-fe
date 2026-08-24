@@ -68,6 +68,18 @@ describe("public dialog contracts", () => {
 
     const standard = await openStandardDialog();
     expect(standard.dialog).toHaveAttribute("data-size", "standard");
+    expect(standard.dialog).toHaveClass(
+      "top-dialog-surface-top",
+      "bottom-dialog-surface-bottom",
+      "w-dialog-surface",
+      "max-h-dialog-surface",
+      "border-b-dialog-surface",
+      "rounded-dialog-surface"
+    );
+    expect(document.querySelector('[data-ui-primitive="dialog-overlay"]')).toHaveClass(
+      "bg-dialog-overlay",
+      "backdrop-blur-dialog-overlay"
+    );
     expect(standard.dialog.querySelector('[data-ui="dialog"]')).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Bookingregler", level: 2 })).toBeVisible();
     expect(screen.getByText(/Grenser, tider og varighet/)).toBeVisible();
@@ -77,6 +89,14 @@ describe("public dialog contracts", () => {
 
     const editor = await openEditorDialog();
     expect(editor.dialog).toHaveAttribute("data-size", "editor");
+    expect(editor.dialog).toHaveClass(
+      "inset-0",
+      "w-screen",
+      "h-dvh",
+      "md:w-editor-dialog",
+      "md:h-editor-dialog",
+      "md:rounded-dialog"
+    );
     expect(editor.dialog.querySelector('[data-ui="editor-dialog"]')).toBeInTheDocument();
     expect(screen.getByText("Bruker")).toBeVisible();
     expect(screen.getByRole("button", { name: "Alle brukere" })).toBeVisible();

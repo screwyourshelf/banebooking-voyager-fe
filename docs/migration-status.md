@@ -12,10 +12,11 @@
 
 Theme-, cascade-, fixture-, produksjonstre- og baselineportene er håndhevende i `npm run check`.
 Base, Icon, Button/ButtonLink, Input, Textarea, ChoiceButton, Switch, Radio og accordionfamilien er
-nå migrert til statisk analyserbare Tailwind-utilities. Flytt neste bare Select, Dialog, Tabs,
-Calendar, DatePicker og MultiDatePicker, med uendret offentlig API, Bits-state, portal, fokus,
-tastatur, formkobling, observerbart uttrykk og backend, og slett familiens erstattede primitive-CSS
-i samme checkpoint.
+nå migrert til statisk analyserbare Tailwind-utilities sammen med Select, Dialog, Tabs, Calendar,
+DatePicker og MultiDatePicker. Flytt neste bare RichTextEditor-primitiven og nødvendige
+tredjeparts-/portalregler, med uendret offentlig API, Tiptap-state, lazy klientgrense, fokus,
+tastatur, JSON-/feltkobling, observerbart uttrykk og backend, og slett bare de eksakt erstattede
+primitive-reglene i samme checkpoint.
 
 ## Aktiv stylingretning
 
@@ -658,24 +659,41 @@ i samme checkpoint.
 - SWP-2.2-baselinen er redusert fra 5998 til 5939 CSS-linjer, 756 til 742 regler, 821 til 802
   selectors og 2076 til 2025 legacyavvik. Alle elleve fryste referanser er pikselidentiske, 329
   tester, tre kritiske flyter, åtte produksjonsruter og begge hostbuildene er grønne.
+- SWP-2.3 har flyttet Select, DialogPrimitive, TabsPrimitive, CalendarBody, SingleCalendar,
+  MultipleCalendar, DatePicker og MultiDatePicker til statiske Tailwind-klasser i
+  primitiveeierne. Typed props, native formdata, Bits UI-verdi/state, typeahead, roving fokus,
+  fokusfelle/-retur, Escape/utenfor-klikk, portal, norsk kalender, min-/maksgrenser og enkelt-/
+  flervalg er bevart uten ny offentlig klasse-/stylegrense.
+- Select-/date-/calendar-/dialog-/tabsfamilien har fått semantiske roller for kontrollflater,
+  flytende flater, overlay, geometri, radius, skygge og state. Tre registrerte strukturelle
+  `@utility`-regler kapsler Bits UI sine runtime-mål under Tailwind-inngangen; theme-kontrakten
+  eksponerer totalt 201 roller og 363 godkjente utilities med 68 verifiserte light/dark-skift.
+- 66 erstattede globale CSS-regler og 69 selectors er slettet. `primitives.css` inneholder nå bare
+  RichTextEditorens 23 primitive-/tredjepartsregler, og den primitiveide responsive
+  editor-dialogregelen er fjernet. CollectionControls og Navigationens Mer-bunnflate bevarer
+  uttrykket gjennom navngitte felt-/dialogroller frem til sine SWP-3-/SWP-4-checkpoints.
+- SWP-2.3-baselinen er redusert fra 5939 til 5499 CSS-linjer, 742 til 676 regler, 802 til 733
+  selectors og 2025 til 1836 legacyavvik. Alle elleve fryste referanser er pikselidentiske, 329
+  tester, tre kritiske flyter, åtte produksjonsruter og begge hostbuildene er grønne.
 - E2E-fixturen venter nå på aktive API-route-handlers før testdata ryddes. Booking-/avbestillings-
   flyten blir dermed deterministisk uten endring i produkttrafikk eller backend.
 - Den aktive CSS-en er funksjonelt ryddet, men resten er fortsatt overgangsarkitektur: bare
-  SWP-2.1- og SWP-2.2-familiene bruker Tailwind som produkteier, mens øvrige produktregler migreres
-  familievis fra globale selectorfiler etter SWP-planen uten visuell redesign.
+  SWP-2.1–2.3-familiene bruker Tailwind som produkteier, mens RichTextEditor-primitiven og øvrige
+  produktpatterns migreres familievis fra globale selectorfiler etter SWP-planen uten visuell
+  redesign.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                                           |
-| ------------------------------------- | ------------------------------------------------------------ |
-| Base branch                           | `main`                                                       |
-| Fastslått basecommit                  | `5287c5e`                                                    |
-| Siste semantiske checkpoint           | `refactor(styling): migrate SWP-2.2 choice controls`         |
-| Lokale commits foran base             | 49                                                           |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                                |
-| Neste planlagte checkpoint            | SWP-2.3 Select, Dialog, Tabs og Calendar-familien i Tailwind |
+| Felt                                  | Forventet tilstand                                                |
+| ------------------------------------- | ----------------------------------------------------------------- |
+| Base branch                           | `main`                                                            |
+| Fastslått basecommit                  | `5287c5e`                                                         |
+| Siste semantiske checkpoint           | `refactor(styling): migrate SWP-2.3 compound controls`            |
+| Lokale commits foran base             | 50                                                                |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                                     |
+| Neste planlagte checkpoint            | SWP-2.4 RichTextEditor-primitiven og nødvendige tredjepartsregler |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -684,26 +702,27 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Start bare **SWP-2 checkpoint 3 — Select, Dialog, Tabs og Calendar-/DatePicker-familien**:
+Start bare **SWP-2 checkpoint 4 — RichTextEditor-primitiven og nødvendige
+tredjeparts-/portalregler**:
 
-1. Les hele SWP-2 og ADR-006 på nytt. Les deretter de interne Select-, Dialog-, Tabs-, Calendar-,
-   DatePicker- og MultiDatePicker-primitivene, deres offentlige patterns/eksporter og tester samt
-   alle tilhørende regler i `primitives.css`, `patterns.css` og `responsive.css`; skill
-   primitiveeide portal-/Bits-regler fra patternkomposisjon som skal bli stående til SWP-3.
-2. Kaldkartlegg åpne/lukkede og aktive/inaktive states, disabled, pending, invalid, fokusfelle og
-   fokusretur, Escape/utenfor-klikk, typeahead, roving tabfokus, norsk kalender, min-/maksgrenser,
-   enkelt-/flervalg og native formdata. Avstem hver visuell rolle, portalgrense og geometri mot den
-   autoritative theme-/utilitykontrakten før markup endres.
-3. Flytt bare SWP-2.3-familiens styling til statiske, analyserbare Tailwind-klasser i
-   primitiveeierne. Behold typed props, native/Bits-state, portalatferd og
-   `data-ui-primitive`-/`data-slot`-anatomi, innfør ingen offentlig `class`/`style`-grense, og la
-   offentlige patterns eie sin eksisterende komposisjon.
-4. Slett de eksakt erstattede Select-/Dialog-/Tabs-/Calendar-/DatePicker-reglene i samme checkpoint
-   og regenerer den avtakende stylingbaselinen. Ikke start RichTextEditor-primitiven,
-   patternmigrering, featureendringer eller backendarbeid.
-5. Kjør select-, dialog-, tabs-, date-, form-, axe-, fokus- og tastaturtester, alle stylingporter,
+1. Les hele SWP-2 og ADR-006 på nytt. Les deretter `RichTextEditorPrimitive.svelte`, controlleren,
+   den lazy klientfabrikken, offentlige RichTextEditor-/toolbar-patterns og testene samt alle
+   RichTextEditor-/ProseMirror-regler i `primitives.css`; skill primitive- og tredjepartseide regler
+   fra patternkomposisjonen som skal bli stående til SWP-3.4.
+2. Kaldkartlegg lazy klientopprettelse/cleanup, bindbar JSON-verdi, tomverdi, oppdateringer,
+   read-only/disabled, fokus, tastatur, headings, lister, sitat, lenker og tabell-/selectedCell-state.
+   Avstem hver direkte kontrollerbar klasse og hver nødvendig generert ProseMirror-selector mot den
+   autoritative theme-/utility- og tredjepartskontrakten før markup endres.
+3. Flytt bare SWP-2.4-primitivens direkte styling til statiske, analyserbare Tailwind-klasser i
+   primitiveeieren. Behold typed controller-/Tiptap-API, dynamisk import, lifecycle,
+   `data-ui-primitive`-anatomi og generert editor-DOM; innfør ingen offentlig `class`/`style`-grense,
+   og behold bare dokumenterte selectors som ikke kan eies statisk på genererte tredjepartsnoder.
+4. Slett bare de eksakt erstattede RichTextEditor-reglene og regenerer den avtakende
+   stylingbaselinen. Ikke start RichTextEditor-patternet, SWP-3, featureendringer eller
+   backendarbeid.
+5. Kjør rich-text-, form-, axe-, fokus-, tastatur- og lifecycle-testene, alle stylingporter,
    `npm test`, `npm run check`, baseline, relevante og komplette visuelle referanser samt begge
-   produksjonsbuildene. Pek statusen på SWP-2.4, opprett én lokal grønn commit og stopp.
+   produksjonsbuildene. Pek statusen på SWP-3.1, opprett én lokal grønn commit og stopp.
 
 ## Arbeidspakkeregister
 
@@ -719,7 +738,7 @@ Start bare **SWP-2 checkpoint 3 — Select, Dialog, Tabs og Calendar-/DatePicker
 | WP-7 Paritet og produksjonsbytte | Fullført | Paritet, React-fjerning, CSS, drift og sluttport grønne      |
 | SWP-0 Baseline og guardkontrakt  | Fullført | Baseline, referanse og ti fixturetestede guardregler grønne  |
 | SWP-1 Theme og guards            | Fullført | Theme, cascade, fixtures, produksjonstre og baseline grønne  |
-| SWP-2 UI-primitives              | Aktiv    | SWP-2.1–2.2 grønne; neste er sammensatte primitives i 2.3    |
+| SWP-2 UI-primitives              | Aktiv    | SWP-2.1–2.3 grønne; neste er RichTextEditor-primitiven i 2.4 |
 | SWP-3 Produktpatterns            | Venter   | Semantiske familier migreres i avhengighetsrekkefølge        |
 | SWP-4 App-shell/navigation       | Venter   | Responsiv shell og navigation etter stabile patterns         |
 | SWP-5 Features og legacy-CSS     | Venter   | Visualiseringsunntak og siste globale selectors              |
@@ -755,39 +774,43 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
   fryser nettleserklokken til 2026-08-23. Utviklingsinnloggingen bruker fortsatt den eksisterende
   lokale backendharnessen; vanlig utviklings- og produksjonsdata er upåvirket.
 - Stylingguardanalysatoren kjører de ni ikke-cascade-reglene håndhevende mot 179 produksjonskilder
-  og fører 1094 eksakte baselinefunn: 867 CSS-application-, 175 custom-property- og 52
+  og fører 1093 eksakte baselinefunn: 798 CSS-application-, 243 custom-property- og 52
   visualiseringsfunn. Bare allerede registrerte diagnostics passerer; både nye og
   fjernede funn krever eksplisitt avstemming, slik at slettet gjeld ikke senere kan gjeninnføres.
   Cascade-regelen validerer separat alle sju stilark, mens de 23 isolerte fixturene fortsatt beviser
   positiv og negativ atferd for alle ti stabile regel-ID-er.
 - Ingen midlertidige rammeverksadapters eller React-legacy gjenstår. Stylingbaselinen måler sju
-  aktive CSS-filer, 5939 linjer, 742 regler og 802 selektorer. Samtlige regler ligger nå i
-  registrerte lag: tre i `theme`, sju i `base` og 732 i `components`; `utilities` har ingen app-eide
-  regler. De brede overgangsfilene er fortsatt `patterns.css` med 3509 linjer, `responsive.css` med
-  502 linjer og `feature-compositions.css` med 731 linjer.
+  aktive CSS-filer, 5499 linjer, 676 regler og 733 selektorer. Samtlige regler ligger nå i
+  registrerte lag: tre i `theme`, sju i `base` og 666 i `components`; `utilities` har ingen
+  app-eide selectorregler. De brede overgangsfilene er fortsatt `patterns.css` med 3511 linjer,
+  `responsive.css` med 490 linjer og `feature-compositions.css` med 731 linjer;
+  `primitives.css` er redusert til RichTextEditorens 136 linjer.
 - De 91 tidligere ulagrede reglene har nå eksplisitt eier. Den gamle gjeldstypen for ulagrede
   legacyregler er redusert fra 88 til null; de tre theme-reglene var ikke legacygjeld.
-- Baseline fører 2025 overgangsavvik: 799 globale produktselektorer, 1043 rå visuelle
-  deklarasjoner, 75 `!important`, 50 komponentlokale custom-property-definisjoner, 52
-  featureklasseforekomster og seks inline styles. `@apply` er nå null. SWP-2.2 reduserte totalen
-  med 51 gjennom 19 selectors og 34 rå deklarasjoner; to navngitte choice-minimumsroller erstatter
-  Settings-familiens direkte dimensjonsdeklarasjoner frem til SWP-3.
-- SWP-2.1- og SWP-2.2-komponentene bruker statiske Tailwind-utilities; øvrige primitive- og
-  patternfamilier står fortsatt på sin registrerte CSS-baseline til eget checkpoint. `Button` har
+- Baseline fører 1836 overgangsavvik: 730 globale produktselektorer, 912 rå visuelle deklarasjoner,
+  75 `!important`, 61 komponentlokale custom-property-definisjoner, 52 featureklasseforekomster og
+  seks inline styles. `@apply` er null. SWP-2.3 reduserte totalen med 189 gjennom 69 selectors og
+  131 rå deklarasjoner, samtidig som navngitte komposisjonsroller bevarer eksisterende
+  patternuttrykk frem til sine eiercheckpoints.
+- SWP-2.1–2.3-komponentene bruker statiske Tailwind-utilities; RichTextEditor-primitiven og
+  patternfamiliene står fortsatt på sin registrerte CSS-baseline til eget checkpoint. `Button` har
   en smal, midlertidig komposisjonsbro over eksisterende `data-ui`/`data-part`: FormSubmit beholder
   responsiv minimumsbredde, Collection-toggle beholder variant, FormSteps beholder
   typografi/geometri og navngitte patternkontroller beholder ghost-tekstfarge. ChoiceButton bruker
-  tilsvarende navngitte `--app-choice-control-*`-roller for Settings-, Collection- og mørk
-  kontrollflatekomposisjon; DatePickerens bookingpresentasjon leser samme roller frem til SWP-2.3.
-  Broene fjernes når de aktuelle patternene migreres i SWP-3; de er ikke offentlige variant-API-er.
-- 454 CSS custom-property-definisjoner og 969 referanser er registrert. SWP-2.1–2.2 har lagt til
-  semantiske action-, field-, fokus-, choice-, switch-, radio-, kontrollgeometri- og
-  typografiroller i den autoritative theme-filen og eksponerer dem gjennom den lukkede
-  utilitykontrakten. Statistikk er fortsatt eneste
-  featurestylingflate; dens
-  106 unntakskandidater er 52 klasseforekomster, seks inline custom-property-verdier, 32 SVG-
-  geometriattributter og 16 semantiske visualiseringsroller. Den varige allowlisten avgjøres først
-  i SWP-5.2.
+  navngitte `--app-choice-control-*`-roller for Settings-, Collection- og mørk
+  kontrollflatekomposisjon; DatePickerens bookingpresentasjon leser de samme rollene.
+  CollectionControls setter navngitte `--app-field-control-*`- og minimumshøyderoller for
+  Select/DatePicker, mens Navigationens Mer-flate setter `--app-dialog-surface-*`-roller for den
+  eksisterende mobile bunnflaten. Broene fjernes når de aktuelle patternene migreres i SWP-3/SWP-4;
+  de er ikke offentlige variant-API-er.
+- 562 CSS custom-property-definisjoner og 963 referanser er registrert. SWP-2.1–2.3 har lagt til
+  semantiske action-, field-, fokus-, choice-, switch-, radio-, select-, calendar-, dialog-,
+  kontrollgeometri- og typografiroller i den autoritative theme-filen og eksponerer dem gjennom
+  den lukkede utilitykontrakten. Bits UI sine målte `--bits-*`-verdier kan bare konsumeres av tre
+  registrerte strukturelle utilities i `src/index.css`. Statistikk er fortsatt eneste
+  featurestylingflate; dens 106 unntakskandidater er 52 klasseforekomster, seks inline
+  custom-property-verdier, 32 SVG-geometriattributter og 16 semantiske visualiseringsroller. Den
+  varige allowlisten avgjøres først i SWP-5.2.
 - `npm audit` rapporterer seks lave transitive funn i den aktive SvelteKit-/Bits UI-kjeden og ingen
   moderate, høye eller kritiske funn. Audit tilbyr ikke en kompatibel oppgradering som fjerner de
   lave funnene; foreslåtte majorendringer er derfor ikke brukt som del av lift-and-shift-en.
@@ -795,11 +818,11 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
   i produksjonsgrafen eller byggartefaktene og er ikke React-/ReactDOM-runtime.
 - Statisk død-kodeanalyse rapporterer bare komplette DTO-typer som ennå ikke har en UI-konsument.
   De beholdes som transportkontrakt i `lib/contracts`; det finnes ingen tilsvarende ubrukt runtimekode.
-- SWP-2.2-buildens initial CSS er 22,5 KiB gzip for både Cloudflare Pages og GitHub Pages av et
-  uendret 50 KiB-budsjett; eksakt er målingen 23 053 og 23 060 gzip-byte, 295/294 byte over SWP-2.1
-  når utilityvariantene kompileres ved siden av ennå umigrerte familier. Kilde-CSS er samtidig
-  redusert med ytterligere 59 linjer og 14 regler. Initial JS er 37,3 KiB, og største lazy JS-chunk
-  er fortsatt 120,5 KiB av 130 KiB.
+- SWP-2.3-buildens initial CSS er 23,1/23,2 KiB gzip for Cloudflare Pages/GitHub Pages av et uendret
+  50 KiB-budsjett; eksakt er målingen 23 702 og 23 710 gzip-byte, 649/650 byte over SWP-2.2 når de
+  statiske utilityvariantene kompileres ved siden av ennå umigrerte patterns. Kilde-CSS er samtidig
+  redusert med 440 linjer og 66 regler. Initial JS er 37,3 KiB, og største lazy JS-chunk er fortsatt
+  120,5 KiB av 130 KiB.
 
 ## Siste verifikasjon
 
@@ -810,6 +833,16 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 | `git diff --check`                   | Bestått 2026-08-24                                                                  |
 | `npm test`                           | Bestått 2026-08-24: 93 filer, 329 tester                                            |
 | `npm run check`                      | Bestått: type, arkitektur, legacy, design, stylingporter, lint og format            |
+| SWP-2.3 målrettede UI-tester         | Bestått: 4 filer, 23 tester for Select, dato, Dialog, Tabs, states, fokus og axe    |
+| SWP-2.3 theme-kontrakt               | Bestått: 201 roller, 363 utilities og 68 light/dark-skift via Tailwind-kompilering  |
+| SWP-2.3 cascade-kontrakt             | Bestått: 7 stilark, 676 regler; theme 3, base 7, components 666, utilities 0        |
+| SWP-2.3 guardfixtures                | Bestått: 23 fixtures, 10 stabile regler og lukket semantisk utilityvokabular        |
+| SWP-2.3 produksjonstre               | Bestått: 179 filer, 1093 eksakte baselinefunn over 3 aktive regel-ID-er             |
+| SWP-2.3 kildebaseline                | Bestått: 5499 linjer, 676 regler, 733 selectors, 1836 avvik og 106 kandidater       |
+| SWP-2.3 kritiske E2E-flyter          | Bestått: 3/3 login-, booking-/avbestillings- og administratorflyter                 |
+| SWP-2.3 visuell/interaktiv matrise   | Bestått: 11/11 pikselidentiske snapshots med fokus, overflow og tom konsoll         |
+| SWP-2.3 produksjonsroutematrise      | Bestått: 8/8 public, protected, admin og callback over root/base path               |
+| SWP-2.3 produksjonsbuild             | Bestått: 23 702/23 710 CSS-byte, 61 JS-chunks og 120,5 KiB største lazy chunk       |
 | SWP-2.2 målrettede UI-tester         | Bestått: 4 filer, 32 tester for choice, Settings, form, axe og accordion-tastatur   |
 | SWP-2.2 theme-kontrakt               | Bestått: 151 roller, 307 utilities og 63 light/dark-skift via Tailwind-kompilering  |
 | SWP-2.2 cascade-kontrakt             | Bestått: 7 stilark, 742 regler; theme 3, base 7, components 732, utilities 0        |
@@ -904,23 +937,25 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 ## Filer i siste checkpoint
 
-- `tokens.css`, `src/index.css` og `scripts/styling-guards/contract.json` med semantiske choice-,
-  selection-, switch-, radio-, kontrollgeometri-, typografi- og utilityroller for SWP-2.2-familien
-- `ChoiceButton.svelte`, `Switch.svelte` og `Radio.svelte` med statiske Tailwind-komposisjoner og
-  uendret typed/native API, valgt/checked state, disabled, fokus og formkobling
-- `AccordionListPrimitive.svelte` og `AccordionRowPrimitive.svelte` med komponent-eid `min-w-0`
-  og uendret Bits UI-verdi-, tastatur-, disabled- og detaljkontrakt
-- `primitives.css` uten de 14 erstattede choice-/switch-/radio-/accordionreglene;
-  `patterns.css` og `responsive.css` beholder Settings-/Collection-/kontrollflatekomposisjonen
-  gjennom de navngitte `--app-choice-control-*`-rollene
-- `scripts/check-design-system-boundaries.mjs` med eksplisitt støtte for at primitiveanatomi kan
-  eies av validert Tailwind-markup uten en foreldreløs sentral selector
-- `ChoiceControlsFixture.test.svelte` og `choice-controls.test.ts` med state-, disabled-, formdata-,
-  fokus-, accordion-tastatur-, utility- og axe-kontrakt for SWP-2.2-familien
-- regenerert `docs/styling-baseline.json` schemaVersion 2 med 1094 guarddiagnostics, 2025
+- `tokens.css`, `src/index.css` og `scripts/styling-guards/contract.json` med semantiske field-,
+  select-, calendar-, dialog-, overlay-, kontrollgeometri-, typografi- og utilityroller for
+  SWP-2.3-familien, en lukket kompakt kontrollvariant og tre registrerte Bits-geometriutilities
+- `Select.svelte`, `DatePicker.svelte`, `MultiDatePicker.svelte`, `CalendarBody.svelte`,
+  `SingleCalendar.svelte` og `MultipleCalendar.svelte` med statiske Tailwind-komposisjoner og
+  uendret typed/native/Bits-API, formdata, state, fokus, tastatur og portalatferd
+- `DialogPrimitive.svelte` og `TabsPrimitive.svelte` med statiske Tailwind-komposisjoner og uendret
+  overlay/surface-, fokusfelle/-retur-, dismiss-, roving tab- og panelkontrakt
+- `primitives.css` uten de 66 erstattede Select-/date-/calendar-/dialog-/tabsreglene;
+  `patterns.css` og `responsive.css` beholder CollectionControls-/Navigation-/editor-komposisjon
+  gjennom navngitte `--app-field-control-*`- og `--app-dialog-surface-*`-roller
+- `scripts/check-design-system-boundaries.mjs` med eksplisitt avgrensing av Bits UI sine målte
+  runtime-custom-properties til de registrerte Tailwind-utilities i `src/index.css`
+- Select-, date-, Dialog- og Tabs-testene med statiske utility-, state-, invalid-, disabled-,
+  fokus-, tastatur-, portal- og axe-kontrakter for SWP-2.3-familien
+- regenerert `docs/styling-baseline.json` schemaVersion 2 med 1093 guarddiagnostics, 1836
   legacyavvik, 106 separate visualiseringskandidater og ferske mål for begge produksjonsbygg
-- denne statusen med SWP-2.2 fullført, full grønn port, dokumentert SWP-3-komposisjonsbro og
-  SWP-2.3 som neste eksakte checkpoint; backend-repoet er urørt
+- denne statusen med SWP-2.3 fullført, full grønn port, dokumenterte SWP-3-/SWP-4-
+  komposisjonsbroer og SWP-2.4 som neste eksakte checkpoint; backend-repoet er urørt
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
 pågående arbeid etter checkpointet.

@@ -114,24 +114,49 @@
 </script>
 
 <div
+  class={[
+    "grid min-w-0 gap-sm",
+    presentation === "booking" ? "w-fit" : "w-full",
+    showDayNavigation
+      ? "grid-cols-date-navigation compact-control:grid-cols-date-navigation-compact"
+      : "grid-cols-1",
+  ]}
   data-ui-primitive="date-picker"
   data-presentation={presentation}
   data-navigation={showDayNavigation || undefined}
 >
   {#if showDayNavigation}
     <button
+      class="inline-flex min-w-0 min-h-date-trigger items-center justify-center border border-field-control-border rounded-control bg-field-control-surface p-0 font-body text-field-control-text cursor-pointer outline-none transition duration-120 enabled:hover:bg-surface-subtle focus-visible:border-focus focus-visible:ring-3 focus-visible:ring-field-focus-ring disabled:cursor-not-allowed disabled:opacity-50"
       type="button"
       data-part="day-button"
       aria-label="Forrige dag"
       disabled={previousDisabled}
       onclick={selectPreviousDay}
     >
-      <svg aria-hidden="true" viewBox="0 0 20 20"><path d="m12.5 4.5-5 5.5 5 5.5" /></svg>
+      <svg
+        class="w-control-icon h-control-icon flex-none"
+        aria-hidden="true"
+        viewBox="0 0 20 20"
+        fill="none"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.8"><path d="m12.5 4.5-5 5.5 5 5.5" /></svg
+      >
     </button>
   {/if}
 
   <Popover.Root bind:open onOpenChangeComplete={restoreTriggerFocus}>
     <Popover.Trigger
+      class={[
+        "inline-flex min-w-0 items-center justify-start gap-sm overflow-hidden border font-body text-body-sm text-left cursor-pointer outline-none transition duration-120 focus-visible:ring-3 focus-visible:ring-field-focus-ring aria-[invalid=true]:ring-3 aria-[invalid=true]:ring-field-invalid-ring aria-[invalid=true]:focus-visible:ring-field-invalid-ring disabled:cursor-not-allowed disabled:opacity-50",
+        presentation === "booking"
+          ? selected
+            ? "min-h-control border-choice-selected-border rounded-choice bg-choice-selected-surface px-choice-inline py-choice-block font-choice text-choice-selected-text"
+            : "min-h-control border-field-control-border rounded-choice bg-field-control-surface px-choice-inline py-choice-block font-choice text-choice-text enabled:hover:bg-surface-subtle focus-visible:border-focus aria-[invalid=true]:border-status-danger-indicator aria-[invalid=true]:focus-visible:border-status-danger-indicator"
+          : "min-h-date-trigger border-field-control-border rounded-control bg-field-control-surface px-date-control-inline py-control-block font-action text-field-control-text enabled:hover:bg-surface-subtle focus-visible:border-focus data-[placeholder]:text-ink-faint aria-[invalid=true]:border-status-danger-indicator aria-[invalid=true]:focus-visible:border-status-danger-indicator",
+      ]}
       bind:ref={triggerElement}
       type="button"
       id={resolvedId ?? undefined}
@@ -147,16 +172,30 @@
       aria-pressed={presentation === "booking" ? selected : undefined}
       data-required={resolvedRequired || undefined}
     >
-      <svg data-part="calendar-icon" aria-hidden="true" viewBox="0 0 20 20">
+      <svg
+        class={[
+          "w-control-icon h-control-icon flex-none",
+          showDayNavigation && "compact-control:hidden",
+        ]}
+        data-part="calendar-icon"
+        aria-hidden="true"
+        viewBox="0 0 20 20"
+        fill="none"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.8"
+      >
         <path
           d="M5 3v2M15 3v2M3.5 7.5h13M5 4h10a1.5 1.5 0 0 1 1.5 1.5v10A1.5 1.5 0 0 1 15 17H5a1.5 1.5 0 0 1-1.5-1.5v-10A1.5 1.5 0 0 1 5 4Z"
         />
       </svg>
-      <span>{displayValue}</span>
+      <span class="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">{displayValue}</span>
     </Popover.Trigger>
 
     <Popover.Portal>
       <Popover.Content
+        class="z-90 w-date-popover max-h-date-popover overflow-auto border border-line rounded-calendar-surface bg-surface p-md text-ink shadow-floating-surface outline-none"
         bind:ref={popoverContent}
         data-ui-primitive="date-popover"
         align="start"
@@ -179,13 +218,23 @@
 
   {#if showDayNavigation}
     <button
+      class="inline-flex min-w-0 min-h-date-trigger items-center justify-center border border-field-control-border rounded-control bg-field-control-surface p-0 font-body text-field-control-text cursor-pointer outline-none transition duration-120 enabled:hover:bg-surface-subtle focus-visible:border-focus focus-visible:ring-3 focus-visible:ring-field-focus-ring disabled:cursor-not-allowed disabled:opacity-50"
       type="button"
       data-part="day-button"
       aria-label="Neste dag"
       disabled={nextDisabled}
       onclick={selectNextDay}
     >
-      <svg aria-hidden="true" viewBox="0 0 20 20"><path d="m7.5 4.5 5 5.5-5 5.5" /></svg>
+      <svg
+        class="w-control-icon h-control-icon flex-none"
+        aria-hidden="true"
+        viewBox="0 0 20 20"
+        fill="none"
+        stroke="currentColor"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="1.8"><path d="m7.5 4.5 5 5.5-5 5.5" /></svg
+      >
     </button>
   {/if}
 
@@ -199,6 +248,8 @@
     />
   {/if}
   {#if requiredDescriptionId}
-    <span id={requiredDescriptionId} data-part="required-description">Obligatorisk felt.</span>
+    <span class="sr-only" id={requiredDescriptionId} data-part="required-description"
+      >Obligatorisk felt.</span
+    >
   {/if}
 </div>

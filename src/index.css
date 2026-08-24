@@ -43,6 +43,11 @@
   --color-control-surface: var(--app-control-surface);
   --color-control-surface-strong: var(--app-control-surface-strong);
   --color-control-text: var(--app-control-text);
+  --color-dialog-border: var(--app-dialog-border);
+  --color-dialog-overlay: var(--app-dialog-overlay);
+  --color-field-control-border: var(--app-field-control-border);
+  --color-field-control-surface: var(--app-field-control-surface);
+  --color-field-control-text: var(--app-field-control-text);
   --color-focus: var(--app-focus);
   --color-focus-outline: var(--app-focus-outline);
   --color-field-focus-ring: var(--app-field-focus-ring);
@@ -83,10 +88,14 @@
   --color-surface-subtle: var(--app-surface-subtle);
   --color-switch-track: var(--app-switch-track);
 
+  --blur-dialog-overlay: var(--app-dialog-overlay-blur);
+
   --font-body: var(--app-font-body);
   --font-display: var(--app-font-display);
   --font-sans: var(--app-font-sans);
   --font-weight-action: var(--app-action-font-weight);
+  --font-weight-calendar-heading: var(--app-calendar-heading-font-weight);
+  --font-weight-calendar-selected: var(--app-calendar-selected-font-weight);
   --font-weight-choice: var(--app-choice-font-weight);
   --font-weight-stat-chart-label: var(--app-stat-chart-label-weight);
   --font-weight-stat-chart-meta: var(--app-stat-chart-meta-weight);
@@ -108,15 +117,22 @@
   --text-stat-key-value: var(--app-stat-key-value-size);
   --leading-choice: var(--app-choice-line-height);
   --leading-control: var(--app-control-line-height);
+  --leading-select-option: var(--app-select-option-line-height);
 
+  --border-width-dialog-surface: var(--app-dialog-surface-border-bottom-width);
   --border-width-radio-selected: var(--app-radio-selected-border-width);
+  --radius-calendar-day: var(--app-calendar-day-radius);
+  --radius-calendar-surface: var(--app-calendar-surface-radius);
   --radius-choice: var(--app-choice-radius);
   --radius-control: var(--app-control-radius);
   --radius-dialog: var(--app-dialog-radius);
+  --radius-dialog-surface: var(--app-dialog-surface-radius);
   --radius-record: var(--app-record-radius);
+  --radius-select-content: var(--app-select-content-radius);
   --radius-surface: var(--app-surface-radius);
   --radius-textarea: var(--app-textarea-radius);
   --shadow-record: var(--app-record-shadow);
+  --shadow-floating-surface: var(--app-floating-surface-shadow);
   --shadow-switch-thumb: var(--app-switch-thumb-shadow);
   --shadow-surface-lg: var(--app-shadow-lg);
   --shadow-surface-md: var(--app-shadow-md);
@@ -128,15 +144,25 @@
   --spacing-choice-block: var(--app-choice-padding-block);
   --spacing-choice-indicator-offset: var(--app-choice-indicator-offset);
   --spacing-choice-inline: var(--app-choice-padding-inline);
+  --spacing-calendar-cell: var(--app-calendar-cell-padding);
   --spacing-control-block: var(--app-control-padding-block);
   --spacing-control-gap: var(--app-control-gap);
   --spacing-control-inline: var(--app-control-padding-inline);
+  --spacing-date-control-inline: var(--app-date-control-padding-inline);
+  --spacing-dialog-surface-bottom: var(--app-dialog-surface-bottom);
+  --spacing-dialog-surface-padding-bottom: var(--app-dialog-surface-padding-bottom);
+  --spacing-dialog-surface-top: var(--app-dialog-surface-top);
+  --spacing-dialog-surface-translate-x: var(--app-dialog-surface-translate-x);
+  --spacing-dialog-surface-translate-y: var(--app-dialog-surface-translate-y);
   --spacing-lg: var(--app-space-lg);
   --spacing-md: var(--app-space-md);
   --spacing-page: var(--app-page-padding);
   --spacing-record-gap: var(--app-record-gap);
   --spacing-record-inline: var(--app-record-padding-inline);
   --spacing-search-control-inline: var(--app-search-control-padding-inline);
+  --spacing-select-option-block: var(--app-select-option-padding-block);
+  --spacing-select-option-indicator: var(--app-select-option-indicator-padding);
+  --spacing-select-trigger-gap: var(--app-select-trigger-gap);
   --spacing-section: var(--app-section-gap);
   --spacing-sm: var(--app-space-sm);
   --spacing-status-inline: var(--app-status-inline-padding);
@@ -144,30 +170,81 @@
   --spacing-switch-thumb-shift: var(--app-switch-thumb-shift);
   --spacing-xs: var(--app-space-xs);
 
+  --grid-template-columns-calendar-header: var(--app-calendar-header-columns);
+  --grid-template-columns-date-navigation: var(--app-date-navigation-columns);
+  --grid-template-columns-date-navigation-compact: var(--app-date-navigation-compact-columns);
+
+  --opacity-calendar-disabled: var(--app-calendar-disabled-opacity);
+  --opacity-date-disabled: var(--app-date-disabled-opacity);
+  --opacity-select-disabled: var(--app-select-disabled-opacity);
+
+  --width-calendar-day-compact: var(--app-calendar-compact-day-width);
   --width-control: var(--app-control-height);
+  --width-control-icon: var(--app-control-icon-size);
   --width-compact-control: var(--app-compact-control-height);
+  --width-date-popover: var(--app-date-popover-width);
   --width-dialog: var(--app-dialog-width);
+  --width-dialog-surface: var(--app-dialog-surface-width);
+  --width-editor-dialog: var(--app-editor-dialog-width);
   --width-sidebar: var(--app-sidebar-width);
   --width-sidebar-rail: var(--app-sidebar-rail-width);
   --width-radio: var(--app-radio-size);
   --width-switch: var(--app-switch-width);
   --width-switch-thumb: var(--app-switch-thumb-size);
+  --min-width-calendar: var(--app-calendar-min-width);
+  --min-width-calendar-compact: var(--app-calendar-compact-min-width);
   --min-width-choice: var(--app-choice-control-min-width);
   --min-width-control: var(--app-control-min-width);
+  --max-width-calendar: var(--app-calendar-max-width);
   --max-width-content: var(--app-content-max);
   --max-width-dialog: var(--app-dialog-width);
   --max-width-page: var(--app-page-width);
+  --max-width-select-content: var(--app-select-content-max-width);
+  --height-control-icon: var(--app-control-icon-size);
   --height-control: var(--app-control-height);
   --height-compact-control: var(--app-compact-control-height);
   --height-choice-indicator: var(--app-choice-indicator-height);
+  --height-editor-dialog: var(--app-editor-dialog-height);
   --height-radio: var(--app-radio-size);
   --height-search-control: var(--app-search-control-height);
   --height-switch: var(--app-switch-height);
   --height-switch-thumb: var(--app-switch-thumb-size);
+  --min-height-calendar-header: var(--app-calendar-header-min-height);
   --min-height-choice: var(--app-choice-control-min-height);
   --min-height-compact-control: var(--app-compact-control-height);
   --min-height-control: var(--app-control-height);
+  --min-height-date-trigger: var(--app-date-trigger-min-height);
   --min-height-form-control: var(--app-form-control-min-height);
+  --min-height-select-option: var(--app-select-option-min-height);
+  --min-height-select-scroll: var(--app-select-scroll-button-min-height);
+  --min-height-select-trigger: var(--app-select-trigger-min-height);
   --min-height-textarea: var(--app-textarea-min-height);
   --max-height-dialog: var(--app-dialog-max-height);
+  --max-height-dialog-surface: var(--app-dialog-surface-max-height);
+  --max-height-date-popover: var(--app-date-popover-max-height);
+  --max-height-editor-dialog: var(--app-editor-dialog-height);
+}
+
+/* Primitive-owned responsive and Bits UI geometry remains static and machine-registered. */
+@custom-variant compact-control (@media (width <= 30rem));
+
+@utility min-w-select-content {
+  min-width: max(
+    var(--app-control-min-width),
+    var(--bits-select-anchor-width, var(--app-control-min-width))
+  );
+}
+
+@utility max-h-select-content {
+  max-height: min(
+    var(--app-select-content-max-height),
+    var(--bits-select-content-available-height, var(--app-select-content-max-height))
+  );
+}
+
+@utility max-h-select-viewport {
+  max-height: min(
+    var(--app-select-viewport-max-height),
+    var(--bits-select-content-available-height, var(--app-select-viewport-max-height))
+  );
 }

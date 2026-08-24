@@ -1661,11 +1661,13 @@
     > [data-part="content"]
     > [data-part="sort"]
     > [data-ui-primitive="select-trigger"] {
+    --app-field-control-border: color-mix(in srgb, var(--app-control-text) 18%, transparent);
+    --app-field-control-surface: color-mix(in srgb, var(--app-control-text) 8%, transparent);
+    --app-field-control-text: var(--app-control-text);
+    --app-select-trigger-min-height: 2.5rem;
+    --app-date-trigger-min-height: 2.5rem;
+
     width: 100%;
-    min-height: 2.5rem;
-    border-color: color-mix(in srgb, var(--app-control-text) 18%, transparent);
-    background: color-mix(in srgb, var(--app-control-text) 8%, transparent);
-    color: var(--app-control-text);
     font-size: var(--app-type-body-sm);
   }
 
@@ -3409,14 +3411,14 @@
   [data-ui-primitive="dialog-surface"]:has(
     > [data-ui="navigation-overlay"][data-presentation="more"]
   ) {
-    top: auto;
-    bottom: 0;
-    width: min(40rem, 100vw);
-    max-height: min(80dvh, 44rem);
-    transform: translateX(-50%);
-    border-bottom: 0;
-    border-radius: 1.5rem 1.5rem 0 0;
-    padding-bottom: env(safe-area-inset-bottom);
+    --app-dialog-surface-top: auto;
+    --app-dialog-surface-bottom: 0rem;
+    --app-dialog-surface-width: min(40rem, 100vw);
+    --app-dialog-surface-max-height: min(80dvh, 44rem);
+    --app-dialog-surface-translate-y: 0%;
+    --app-dialog-surface-border-bottom-width: 0px;
+    --app-dialog-surface-radius: 1.5rem 1.5rem 0 0;
+    --app-dialog-surface-padding-bottom: env(safe-area-inset-bottom);
   }
 
   @keyframes navigation-loading {

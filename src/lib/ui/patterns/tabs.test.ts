@@ -13,6 +13,7 @@ const axeOptions: axe.RunOptions = {
 describe("public Tabs pattern", () => {
   it("eier lokal visningsstate og automatisk piltastnavigasjon", async () => {
     const result = render(TabsFixture);
+    expect(result.container.querySelector('[data-ui-primitive="tabs"]')).toHaveClass("min-w-0");
     const profile = screen.getByRole("tab", { name: "Klubbprofil" });
     const membership = screen.getByRole("tab", { name: "Medlemskap" });
 
