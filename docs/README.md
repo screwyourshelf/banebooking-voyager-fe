@@ -6,6 +6,7 @@
 | -------------------------------------------------------------------------------- | ----------------------------------------------- |
 | [`migration-status.md`](./migration-status.md)                                   | Nåtilstand og neste eksakte steg                |
 | [`styling-lift-and-shift-plan.md`](./styling-lift-and-shift-plan.md)             | Aktiv Tailwind-/themeplan og kvalitetsporter    |
+| [`styling-conformance-evidence.md`](./styling-conformance-evidence.md)           | SWP-7-resultat, målematrise og rettingskart     |
 | [`migration-plan.md`](./migration-plan.md)                                       | Arbeidsrekkefølge, metode og kvalitetsporter    |
 | [`behavior-inventory.md`](./behavior-inventory.md)                               | Observerbar React-baseline og routekontrakt     |
 | [`wp-7-parity-and-cleanup-inventory.md`](./wp-7-parity-and-cleanup-inventory.md) | Bevist paritet og fjerningskart for WP-7        |
