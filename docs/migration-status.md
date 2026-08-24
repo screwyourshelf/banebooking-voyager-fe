@@ -1,6 +1,6 @@
 # Migreringsstatus
 
-> **Status:** Pågår — rammeverksløftet og SWP-0–SWP-4 er fullført; SWP-5 er neste
+> **Status:** Pågår — rammeverksløftet og SWP-0–SWP-4 er fullført; SWP-5.1 er fullført
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
@@ -12,10 +12,11 @@
 
 Theme-, cascade-, fixture-, produksjonstre- og baselineportene er håndhevende i `npm run check`, og
 alle SWP-2-primitivecheckpointene, SWP-3-produktpatterncheckpointene og hele SWP-4 er migrert til
-statisk analyserbare Tailwind-utilities.
-Fortsett bare med SWP-5.1 kald gjennomgang av routes/features for styling- og klasseoverstyringer.
-Bevar offentlige UI-kontrakter, produktadferd og backend, og klassifiser statistikkens unike
-visualiseringsgeometri for SWP-5.2 før noen featurestyling flyttes.
+statisk analyserbare Tailwind-utilities. SWP-5.1 har kaldavstemt alle routes/features mot de 106
+registrerte visualiseringskandidatene og bevist at bare statistikk har aktiv overgangsstyling.
+Fortsett med SWP-5.2 etter det eksakte eierkartet i
+[`swp-5-route-feature-audit.md`](./swp-5-route-feature-audit.md). Bevar produktadferd og backend;
+bare faktisk datadrevet geometri kan bli et varig featureunntak.
 
 ## Aktiv stylingretning
 
@@ -841,6 +842,15 @@ visualiseringsgeometri for SWP-5.2 før noen featurestyling flyttes.
 - Hele SWP-4-kvalitetsporten er grønn: menyutvalg, rekkefølge, kapabilitetsskjuling, aktiv route,
   fokusrekkefølge, landmarks, mobil/desktop og light/dark er uendret i 345 tester, tre kritiske
   flyter, elleve pikselidentiske snapshots, åtte produksjonsruter og begge hostbuildene.
+- SWP-5.1 har kaldsøkt 23 route- og 65 featurekomponenter i produksjon. Den registrerte
+  root-CSS-importen er eneste routefunn, og ingen feature utenom statistikk har `class`, `style`,
+  `<style>`, CSS-import eller offentlig UI-overstyring.
+- De 106 statistikkandidatene er avstemt eksakt til 52 overgangsklasser, seks datadrevne inline
+  geometry-verdier, 32 SVG-geometriattributter og 16 produktidentitetsroller. Bare de 38
+  geometrifunnene kan bestå etter SWP-5.2; klasse- og rollefunnene skal flyttes til offentlig UI.
+- [`swp-5-route-feature-audit.md`](./swp-5-route-feature-audit.md) dokumenterer filvis eier,
+  slettesteg og den lukkede SWP-5.2-kontrakten. Auditcheckpointet endrer ikke produktkode, styling,
+  theme, API eller backend.
 - Den aktive CSS-en er funksjonelt ryddet, men featurelaget er fortsatt overgangsarkitektur:
   Tailwind er produkteier for alle SWP-2-, SWP-3- og SWP-4-checkpointene, mens route-/featureaudit og
   statistikkvisualiseringen følger SWP-5 uten visuell redesign.
@@ -849,14 +859,14 @@ visualiseringsgeometri for SWP-5.2 før noen featurestyling flyttes.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                                  |
-| ------------------------------------- | --------------------------------------------------- |
-| Base branch                           | `main`                                              |
-| Fastslått basecommit                  | `5287c5e`                                           |
-| Siste semantiske checkpoint           | `refactor(styling): complete SWP-4 shell migration` |
-| Lokale commits foran base             | 60                                                  |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                       |
-| Neste planlagte checkpoint            | SWP-5.1 kald route-/featureaudit                    |
+| Felt                                  | Forventet tilstand                                       |
+| ------------------------------------- | -------------------------------------------------------- |
+| Base branch                           | `main`                                                   |
+| Fastslått basecommit                  | `5287c5e`                                                |
+| Siste semantiske checkpoint           | `docs(styling): audit SWP-5 route and feature ownership` |
+| Lokale commits foran base             | 61                                                       |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                            |
+| Neste planlagte checkpoint            | SWP-5.2 statistikkvisualisering                          |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -865,19 +875,19 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Start bare **SWP-5 checkpoint 1 — kald gjennomgang av routes/features**:
+Start **SWP-5 checkpoint 2 — statistikkvisualisering** etter det kalde eierkartet:
 
-1. Les hele SWP-5 og ADR-006 på nytt. Kaldsøk alle routes og features etter `class`, `style`,
-   `<style>`, CSS-importer, selectoravhengigheter og overstyringer av offentlig UI.
-2. Klassifiser hvert funn som offentlig produkteierskap, død/erstattet gjeld eller faktisk unik,
-   datadrevet statistikkvisualisering. Verifiser funnene mot de 106 registrerte kandidatene og
-   eksisterende guarddiagnostics i stedet for å utvide omfanget.
-3. Dokumenter den eksakte eieren og neste slettesteg for hvert aktivt funn. Ikke flytt
-   statistikkgeometri før SWP-5.2, og gjør ingen feature-, API-, adferds-, theme-redesign- eller
-   backendendring som del av auditcheckpointet.
-4. Kjør målrettede arkitektur-/designsystem-/stylingporter og baselinekontroll, og behold full
-   test-, E2E-, snapshot- og produksjonsbaseline grønn dersom koden endres.
-5. Oppdater statusen med den beviste SWP-5.2-grensen og opprett ett lokalt grønt checkpoint.
+1. Migrer eksisterende `Metric`/`MetricGrid`, resultatlayout, legends, sammenligningstabeller og
+   loadinggeometri til offentlige UI-eiere med typed props og statiske semantiske utilities.
+2. Flytt statistikkens statiske presentasjon til offentlig visualiserings-UI. Behold bare de fire
+   navngitte custom properties og SVG-koordinatene som datadrevet featuregeometri i skoperte,
+   lukkede unntak.
+3. Fjern alle 52 featureklasser, alle 16 featureeide `data-stat-role`-broer og selectorankrene
+   `data-context`, `data-view` og `data-slot` når de ikke lenger uttrykker en reell kontrakt.
+4. Slett de erstattede statistikkreglene fra `feature-compositions.css` og `responsive.css`, men
+   behold filene til deres planlagte SWP-5.3-/SWP-5.4-slettesteg.
+5. Kjør berørte UI-/statistikktester, guard- og themeportene samt hele visuell matrise før et grønt
+   SWP-5.2-checkpoint.
 
 ## Arbeidspakkeregister
 
@@ -896,7 +906,7 @@ Start bare **SWP-5 checkpoint 1 — kald gjennomgang av routes/features**:
 | SWP-2 UI-primitives              | Fullført | Alle fire primitivecheckpoints og full kvalitetport er grønne |
 | SWP-3 Produktpatterns            | Fullført | Alle fem patterncheckpoints og full kvalitetport er grønne    |
 | SWP-4 App-shell/navigation       | Fullført | Alle fire checkpoints og full kvalitetport er grønne          |
-| SWP-5 Features og legacy-CSS     | Aktiv    | Neste er kald route-/featureaudit i SWP-5.1                   |
+| SWP-5 Features og legacy-CSS     | Aktiv    | SWP-5.1 auditert; neste er statistikkvisualisering i SWP-5.2  |
 | SWP-6 Komponent-/API-opprydding  | Venter   | Utføres etter at stylingeierskap er synlig                    |
 | SWP-7 Uavhengig sluttreview      | Venter   | Kald audit og målt vellykket/delvis/ikke vellykket resultat   |
 
@@ -978,7 +988,9 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
   Statistikk er fortsatt eneste
   featurestylingflate; dens 106 unntakskandidater er 52 klasseforekomster, seks inline
   custom-property-verdier, 32 SVG-geometriattributter og 16 semantiske visualiseringsroller. Den
-  varige allowlisten avgjøres først i SWP-5.2.
+  kalde SWP-5.1-auditten klassifiserer bare de seks inlineverdiene og 32 SVG-attributtene som
+  mulig varig geometri. Klasseforekomstene og visualiseringsrollene er overgangsbroer som skal
+  fjernes i SWP-5.2; den endelige allowlisten låses først i SWP-5.5.
 - `npm audit` rapporterer seks lave transitive funn i den aktive SvelteKit-/Bits UI-kjeden og ingen
   moderate, høye eller kritiske funn. Audit tilbyr ikke en kompatibel oppgradering som fjerner de
   lave funnene; foreslåtte majorendringer er derfor ikke brukt som del av lift-and-shift-en.
@@ -1000,6 +1012,10 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 | Relative dokumentlenker              | Bestått 2026-08-24                                                                  |
 | `git diff --check`                   | Bestått 2026-08-24                                                                  |
 | AI-first lesbarhetskontroll          | Bestått: eksplisitte eiere, typer, statiske klasser og samlokaliserte tester        |
+| SWP-5.1 kald route-/featureaudit     | Bestått: 23 routes, 65 features; bare statistikk har overgangsstyling               |
+| SWP-5.1 kandidatavstemming           | Bestått: 52 klasser, 6 inlinegeometrier, 32 SVG-geometrier og 16 roller = 106       |
+| SWP-5.1 arkitektur-/designport       | Bestått: begge målrettede kontroller er grønne                                      |
+| SWP-5.1 produksjons-/baselineport    | Bestått: 179 filer, 755 diagnostics, 363 legacyavvik og 106 kandidater              |
 | `npm test`                           | Bestått 2026-08-24: 94 filer, 345 tester                                            |
 | `npm run check`                      | Bestått: type, arkitektur, legacy, design, stylingporter, lint og format            |
 | SWP-4.4 kald selector-/rolleaudit    | Bestått: aktive eiere bevist, døde roller slettet og statistikk utsatt til SWP-5.2  |
@@ -1207,19 +1223,11 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 ## Filer i siste checkpoint
 
-- `tokens.css` uten den foreldreløse railbredden og `src/index.css` uten de tre ubrukte offentlige
-  `backdrop-scrim`-/sidebarbreddeprojeksjonene
-- stylingguardkontrakten strammet i samme atomiske endring til 594 theme-roller og 837 godkjente
-  utilities, uten å åpne vokabularet eller endre light/dark-kontrakten
-- baselineeierskapet med navngitt patternkeyframeklassifisering og korrigerte SWP-5.2-/SWP-5.4-
-  milepæler for de aktive restene i `patterns.css` og `responsive.css`
-- kald auditbevis for at Navigation-, AppShell-, Page- og tenantidentityeierskapet er lokalt, at
-  ingen dyp global shellselector gjenstår, og at alle rester i `responsive.css` tilhører SWP-5.2
-  eller global reduced motion
-- regenerert `docs/styling-baseline.json` schemaVersion 2 med 755 guarddiagnostics, 363
-  legacyavvik, 106 separate visualiseringskandidater og ferske mål for begge produksjonsbygg
-- denne statusen med hele SWP-4 fullført, full grønn kvalitetport og SWP-5.1 som neste eksakte
-  checkpoint; AppShell-/Page-/Navigation-API, featurekode og backend-repoet er urørt
+- [`swp-5-route-feature-audit.md`](./swp-5-route-feature-audit.md) med komplett kaldsøk,
+  kandidatklassifisering, filvis eierkart og bindende SWP-5.2-grense
+- dokumentindeksen med auditbeviset som aktivt styringsdokument
+- denne statusen med SWP-5.1 fullført, uendret maskinbaseline og SWP-5.2 som neste eksakte
+  checkpoint; produktkode, styling, theme, API og backend-repoet er urørt
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
 pågående arbeid etter checkpointet.
