@@ -41,6 +41,14 @@ const patternFamilies = [
   },
 ];
 
+const patternKeyframeFamilies = new Map([
+  ["page-loading-sheen", "page-section-feedback-and-document"],
+  ["collection-loading", "collection"],
+  ["form-submit-spin", "form-and-settings"],
+  ["navigation-loading", "navigation"],
+  ["app-desktop-content-enter", "app-shell"],
+]);
+
 const primitiveFamilies = [
   {
     checkpoint: "SWP-2.1",
@@ -69,7 +77,12 @@ const primitiveFamilies = [
   },
 ];
 
-export function ownerForStylesheet({ file, line, selectorFacts = emptySelectorFacts() }) {
+export function ownerForStylesheet({
+  file,
+  line,
+  selectorFacts = emptySelectorFacts(),
+  keyframeName = null,
+}) {
   if (file === "src/index.css" || file.endsWith("/tokens.css")) {
     return owner("theme-and-tokens", "src/lib/platform/theme", "SWP-1.1");
   }
@@ -110,18 +123,21 @@ export function ownerForStylesheet({ file, line, selectorFacts = emptySelectorFa
   }
 
   if (file.endsWith("/patterns.css")) {
-    if (line <= 132) return owner("app-shell", "src/lib/ui/patterns", "SWP-4.2");
+    const keyframeFamily = patternKeyframeFamilies.get(keyframeName);
+    if (keyframeFamily) {
+      return owner(keyframeFamily, "src/lib/ui/patterns", "SWP-5.4");
+    }
     if (primitiveFamily) {
       return owner("pattern-control-composition", "src/lib/ui/patterns", "SWP-3.3");
     }
-    return owner("shared-product-patterns", "src/lib/ui/patterns", "SWP-3");
+    return owner("shared-product-patterns", "src/lib/ui/patterns", "SWP-5.4");
   }
 
   if (file.endsWith("/responsive.css")) {
     if (primitiveFamily) {
       return owner(primitiveFamily.family, "src/lib/ui/primitives", primitiveFamily.checkpoint);
     }
-    return owner("global-responsive-and-motion", "src/styles", "SWP-1.2");
+    return owner("global-responsive-and-motion", "src/styles", "SWP-5.4");
   }
 
   return owner("unclassified-global-style", "src/styles", "SWP-5.4");

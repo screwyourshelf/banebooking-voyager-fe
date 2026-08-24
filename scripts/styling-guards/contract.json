@@ -167,7 +167,6 @@
           "app-shell-topbar": "--app-shell-topbar-surface",
           "app-shell-topbar-divider": "--app-shell-topbar-divider",
           "background": "--background",
-          "backdrop-scrim": "--app-backdrop-scrim",
           "border": "--border",
           "brand": "--app-brand",
           "brand-soft": "--app-brand-soft",
@@ -717,8 +716,6 @@
           "page-loading-eyebrow": "--app-page-loading-eyebrow-width",
           "page-loading-title": "--app-page-loading-title-width",
           "radio": "--app-radio-size",
-          "sidebar": "--app-sidebar-width",
-          "sidebar-rail": "--app-sidebar-rail-width",
           "switch": "--app-switch-width",
           "switch-thumb": "--app-switch-thumb-size"
         }
@@ -1650,7 +1647,6 @@
           "action-primary-hover",
           "action-secondary",
           "background",
-          "backdrop-scrim",
           "brand",
           "brand-soft",
           "canvas",
@@ -2178,8 +2174,6 @@
           "page-loading-eyebrow",
           "page-loading-title",
           "radio",
-          "sidebar",
-          "sidebar-rail",
           "switch",
           "switch-thumb"
         ]

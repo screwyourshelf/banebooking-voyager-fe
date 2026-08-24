@@ -44,7 +44,6 @@
   --color-app-shell-topbar: var(--app-shell-topbar-surface);
   --color-app-shell-topbar-divider: var(--app-shell-topbar-divider);
   --color-background: var(--background);
-  --color-backdrop-scrim: var(--app-backdrop-scrim);
   --color-border: var(--border);
   --color-brand: var(--app-brand);
   --color-brand-soft: var(--app-brand-soft);
@@ -528,8 +527,6 @@
   --width-page-loading-description: var(--app-page-loading-description-width);
   --width-page-loading-eyebrow: var(--app-page-loading-eyebrow-width);
   --width-page-loading-title: var(--app-page-loading-title-width);
-  --width-sidebar: var(--app-sidebar-width);
-  --width-sidebar-rail: var(--app-sidebar-rail-width);
   --width-radio: var(--app-radio-size);
   --width-switch: var(--app-switch-width);
   --width-switch-thumb: var(--app-switch-thumb-size);

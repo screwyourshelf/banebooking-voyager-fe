@@ -690,13 +690,27 @@ function ownerForDeclaration(file, node, line) {
   const selectorFacts = rule
     ? mergeSelectorFacts(parseSelectors(rule.selector, file, line).map(({ facts }) => facts))
     : emptySelectorFacts();
-  return ownerForStylesheet({ file, line, selectorFacts });
+  return ownerForStylesheet({
+    file,
+    keyframeName: nearestKeyframes(node)?.params.trim() ?? null,
+    line,
+    selectorFacts,
+  });
 }
 
 function nearestRule(node) {
   let parent = node.parent;
   while (parent) {
     if (parent.type === "rule" && !hasKeyframesAncestor(parent)) return parent;
+    parent = parent.parent;
+  }
+  return null;
+}
+
+function nearestKeyframes(node) {
+  let parent = node.parent;
+  while (parent) {
+    if (parent.type === "atrule" && /keyframes$/i.test(parent.name)) return parent;
     parent = parent.parent;
   }
   return null;

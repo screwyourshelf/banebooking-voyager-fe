@@ -339,7 +339,6 @@
     --app-shell-min-height: 100svh;
     --app-shell-topbar-min-height: calc(4rem + env(safe-area-inset-top));
     --app-sidebar-width: 15.5rem;
-    --app-sidebar-rail-width: 4.5rem;
     --app-control-height: 2.25rem;
     --app-compact-control-height: 2rem;
     --app-form-control-min-height: 2.625rem;
