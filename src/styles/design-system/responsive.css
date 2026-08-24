@@ -241,14 +241,8 @@
       justify-content: flex-end;
     }
 
-    [data-ui="metric-grid"],
     .statistics-loading__metrics {
       grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 0.875rem;
-    }
-
-    [data-ui="metric-grid"][data-variant="members"] {
-      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 0.875rem;
     }
 

@@ -148,63 +148,6 @@
     backdrop-filter: blur(18px);
   }
 
-  [data-ui="schedule-time"] {
-    display: flex;
-    min-width: 0;
-    align-items: flex-start;
-    flex-direction: column;
-    gap: 0.15rem;
-    color: var(--app-ink-faint);
-    font-size: var(--app-type-body-sm);
-    font-weight: 620;
-    font-variant-numeric: tabular-nums;
-  }
-
-  [data-ui="schedule-time"] > [data-part="range"] {
-    display: grid;
-    gap: 0.05rem;
-    white-space: nowrap;
-  }
-
-  [data-ui="schedule-time"] > [data-part="range"] > [data-part="start"] {
-    color: var(--app-choice-indicator);
-    font-size: var(--app-type-body-lg);
-    font-weight: 760;
-    letter-spacing: -0.02em;
-    line-height: 1.2;
-  }
-
-  [data-ui="schedule-time"] > [data-part="range"] > [data-part="end"] {
-    font-size: var(--app-type-caption);
-    line-height: 1.2;
-  }
-
-  [data-ui="schedule-time"] > [data-part="accessory"] {
-    display: inline-flex;
-  }
-
-  /* Shared layout primitives */
-
-  [data-ui="weather"] {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.25rem;
-    color: var(--muted-foreground);
-  }
-
-  [data-ui="weather"][data-variant="compact"] {
-    font-size: var(--app-type-caption);
-  }
-  [data-ui="weather"][data-variant="default"] {
-    font-size: var(--app-type-body-sm);
-  }
-
-  [data-ui="weather"] > [data-part="icon"] {
-    width: 1rem;
-    height: 1rem;
-    user-select: none;
-  }
-
   /* Public navigation patterns. Route and capability selection remain consumer-owned. */
   [data-ui="navigation"] {
     min-width: 0;

@@ -21,9 +21,24 @@
 </script>
 
 {#if symbolPath || hasTemperature || (!compact && hasWind)}
-  <span data-ui="weather" data-variant={compact ? "compact" : "default"}>
+  <span
+    class={[
+      "inline-flex items-center gap-xs text-ink-soft",
+      compact ? "text-caption" : "text-body-sm",
+    ]}
+    data-ui="weather"
+    data-variant={compact ? "compact" : "default"}
+  >
     {#if symbolPath}
-      <img src={symbolPath} alt="" width="16" height="16" data-part="icon" draggable="false" />
+      <img
+        class="size-weather-icon select-none"
+        src={symbolPath}
+        alt=""
+        width="16"
+        height="16"
+        data-part="icon"
+        draggable="false"
+      />
     {/if}
     {#if hasTemperature}<span>{Math.round(temperature ?? 0)}°</span>{/if}
     {#if !compact && hasTemperature && hasWind}<span aria-hidden="true">·</span>{/if}

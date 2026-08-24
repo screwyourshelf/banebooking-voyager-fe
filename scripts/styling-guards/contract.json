@@ -336,6 +336,8 @@
           "page-eyebrow": "--app-page-eyebrow-font-weight",
           "page-status": "--app-page-status-font-weight",
           "page-title": "--app-page-title-font-weight",
+          "schedule-time": "--app-schedule-time-font-weight",
+          "schedule-time-start": "--app-schedule-time-start-font-weight",
           "rich-text-content-heading": "--app-rich-text-content-heading-font-weight",
           "rich-text-heading-2": "--app-rich-text-heading-2-font-weight",
           "rich-text-heading-3": "--app-rich-text-heading-3-font-weight",
@@ -381,6 +383,7 @@
           "page-description": "--app-page-description-line-height",
           "page-status": "--app-page-status-line-height",
           "page-title": "--app-page-title-line-height",
+          "schedule-time": "--app-schedule-time-line-height",
           "rich-text-content": "--app-rich-text-content-line-height",
           "rich-text-content-heading": "--app-rich-text-content-heading-line-height",
           "rich-text-heading-2": "--app-rich-text-heading-2-line-height",
@@ -403,6 +406,7 @@
           "editor-dialog-title": "--app-editor-dialog-title-letter-spacing",
           "page-eyebrow": "--app-page-eyebrow-letter-spacing",
           "page-title": "--app-page-title-letter-spacing",
+          "schedule-time-start": "--app-schedule-time-start-letter-spacing",
           "settings-eyebrow": "--app-settings-eyebrow-letter-spacing"
         }
       },
@@ -539,6 +543,7 @@
           "form-step-navigation-wide-inline": "--app-form-step-navigation-wide-padding-inline",
           "lg": "--app-space-lg",
           "md": "--app-space-md",
+          "metric-grid-wide": "--app-metric-grid-wide-gap",
           "page": "--app-page-padding",
           "page-content-desktop-bottom": "--app-page-content-desktop-padding-bottom",
           "page-content-desktop-gap": "--app-page-content-desktop-gap",
@@ -556,6 +561,8 @@
           "page-wide-top": "--app-page-wide-padding-block-start",
           "record-gap": "--app-record-gap",
           "record-inline": "--app-record-padding-inline",
+          "schedule-time": "--app-schedule-time-gap",
+          "schedule-time-range": "--app-schedule-time-range-gap",
           "rich-text-content-list": "--app-rich-text-content-list-gap",
           "rich-text-content-list-inline": "--app-rich-text-content-list-padding-inline",
           "rich-text-content-quote": "--app-rich-text-content-quote-padding-inline",
@@ -583,6 +590,7 @@
           "tabs-indicator-bottom": "--app-tabs-indicator-bottom",
           "tabs-indicator-inline": "--app-tabs-indicator-inline",
           "tabs-trigger": "--app-tabs-trigger-padding-block",
+          "weather-icon": "--app-weather-icon-size",
           "xl": "--app-space-xl"
         }
       },
@@ -1048,6 +1056,31 @@
       ]
     },
     "semanticVisualFamilies": [
+      {
+        "utilityPrefixes": ["font"],
+        "themeNamespace": "fontWeight",
+        "roles": ["schedule-time", "schedule-time-start"]
+      },
+      {
+        "utilityPrefixes": ["leading"],
+        "themeNamespace": "lineHeight",
+        "roles": ["schedule-time"]
+      },
+      {
+        "utilityPrefixes": ["tracking"],
+        "themeNamespace": "letterSpacing",
+        "roles": ["schedule-time-start"]
+      },
+      {
+        "utilityPrefixes": ["gap"],
+        "themeNamespace": "spacing",
+        "roles": ["metric-grid-wide", "schedule-time", "schedule-time-range"]
+      },
+      {
+        "utilityPrefixes": ["size"],
+        "themeNamespace": "spacing",
+        "roles": ["weather-icon"]
+      },
       {
         "utilityPrefixes": ["bg"],
         "themeNamespace": "backgroundImage",
@@ -2180,7 +2213,6 @@
           "--chart-2",
           "--foreground",
           "--muted",
-          "--muted-foreground",
           "--radius",
           "--ring"
         ],

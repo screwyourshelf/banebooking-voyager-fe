@@ -406,6 +406,10 @@
     --app-page-wide-padding-block-end: 2.5rem;
     --app-page-wide-padding-block-start: 1.75rem;
     --app-page-wide-padding-inline: 2rem;
+    --app-metric-grid-wide-gap: 0.875rem;
+    --app-schedule-time-gap: 0.15rem;
+    --app-schedule-time-range-gap: 0.05rem;
+    --app-weather-icon-size: 1rem;
     --app-rich-text-flow-gap: 0.6rem;
     --app-rich-text-content-list-gap: 0.35rem;
     --app-rich-text-content-list-padding-inline: 1.35rem;
@@ -564,6 +568,8 @@
     --app-page-eyebrow-font-weight: 750;
     --app-page-status-font-weight: 720;
     --app-page-title-font-weight: 720;
+    --app-schedule-time-font-weight: 620;
+    --app-schedule-time-start-font-weight: 760;
     --app-rich-text-content-heading-font-weight: 750;
     --app-rich-text-heading-2-font-weight: 700;
     --app-rich-text-heading-3-font-weight: 650;
@@ -600,6 +606,7 @@
     --app-page-description-line-height: 1.4;
     --app-page-status-line-height: 1;
     --app-page-title-line-height: 1.05;
+    --app-schedule-time-line-height: 1.2;
     --app-rich-text-content-heading-line-height: 1.25;
     --app-select-option-line-height: 1.3;
     --app-rich-text-content-line-height: 1.6;
@@ -619,6 +626,7 @@
     --app-editor-dialog-title-letter-spacing: -0.035em;
     --app-page-eyebrow-letter-spacing: 0.11em;
     --app-page-title-letter-spacing: -0.035em;
+    --app-schedule-time-start-letter-spacing: -0.02em;
     --app-settings-eyebrow-letter-spacing: 0.08em;
     --app-form-submit-animation: form-submit-spin 700ms linear infinite;
     --app-page-loading-animation: page-loading-sheen 1.5s ease-in-out infinite;
@@ -706,7 +714,6 @@
     --background: var(--app-surface);
     --foreground: var(--app-ink);
     --muted: var(--app-surface-subtle);
-    --muted-foreground: var(--app-ink-soft);
     --border: var(--app-line);
     --ring: var(--app-focus);
     --chart-1: var(--aas-green-500);
@@ -765,7 +772,6 @@
     --background: var(--app-canvas);
     --foreground: var(--app-ink);
     --muted: var(--app-surface-subtle);
-    --muted-foreground: var(--app-ink-soft);
     --border: var(--app-line);
     --ring: var(--app-focus);
     --chart-1: var(--aas-green-300);

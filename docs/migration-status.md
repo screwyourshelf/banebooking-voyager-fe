@@ -1,20 +1,21 @@
 # Migreringsstatus
 
-> **Status:** Pågår — rammeverksløftet og SWP-0–SWP-2 er fullført; SWP-3 er aktiv
+> **Status:** Pågår — rammeverksløftet og SWP-0–SWP-3 er fullført; SWP-4 er aktiv
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** SWP-3 — offentlige produktpatterns
+> **Aktiv arbeidspakke:** SWP-4 — app-shell, navigation og responsive arbeidsflater
 >
 > **Sist oppdatert:** 2026-08-24
 
 ## Mål for arbeidspakken
 
 Theme-, cascade-, fixture-, produksjonstre- og baselineportene er håndhevende i `npm run check`, og
-alle primitivefamiliene samt de fire første patterncheckpointene er migrert til statisk analyserbare
-Tailwind-utilities. Fortsett bare med SWP-3.5 ScheduleTime-, Weather-, Metric- og øvrige små delte
-patterns. Bevar typed offentlig API, produktanatomi, interaksjoner, states, responsive uttrykk og
-backend, og slett bare de eksakt erstattede patternreglene i samme checkpoint.
+alle SWP-2-primitivecheckpointene og SWP-3-produktpatterncheckpointene er migrert til statisk
+analyserbare Tailwind-utilities.
+Fortsett bare med SWP-4.1 Navigation-familien samt loading- og overlaystates. Bevar typed offentlig
+API, route-/kapabilitetseierskap, fokus, tastatur, landmarks, responsive uttrykk og backend, og la
+AppShell-plassering og shell-/Page-samspill stå urørt til sine egne checkpoints.
 
 ## Aktiv stylingretning
 
@@ -760,23 +761,41 @@ backend, og slett bare de eksakt erstattede patternreglene i samme checkpoint.
   352 til 264 selectors og 932 til 653 legacyavvik; `!important` er redusert fra 68 til 14.
 - Alle 336 tester, tre kritiske flyter, elleve pikselidentiske visuelle referanser, åtte
   produksjonsruter, full check og begge hostbuildene er grønne uten feature- eller backendendringer.
+- SWP-3.5 har flyttet `ScheduleTime` og `Weather` til statiske Tailwind-klasser hos de offentlige
+  patterneierne. Typed props/snippets, tidsformat, tabular numbers, accessory, symbol-URL,
+  temperatur-/vindenheter, kompakt/full presentasjon og tom værstate er bevart uten ny offentlig
+  `class`/`style`-grense.
+- `MetricGrid` eier nå bare sitt delte responsive fire-/trekolonneskift gjennom statiske klasser.
+  Basegridet, hele `Metric`-kortet, statistikkrollene og loading-/diagramgeometrien forblir eksakt
+  registrert til SWP-5.2; den tidligere kombinerte responsive regelen er splittet langs denne
+  eiergrensen uten featureendring.
+- Åtte semantiske ScheduleTime-, Weather- og MetricGrid-roller eier nå spacing, ikonstørrelse,
+  typografivekt, linjehøyde og bokstavavstand. Den foreldreløse kompatibilitetsrollen
+  `--muted-foreground` er fjernet etter at Weather tok i bruk den autoritative `ink-soft`-rollen;
+  theme-kontrakten eksponerer totalt 517 roller og 759 godkjente utilities med 107 verifiserte
+  light/dark-skift.
+- Ti erstattede globale CSS-regler og elleve selectors er slettet fra `patterns.css` og
+  `responsive.css`. SWP-3.5-baselinen er redusert fra 3235 til 3186 CSS-linjer, 244 til 234 regler,
+  264 til 253 selectors og 653 til 630 legacyavvik.
+- Alle 341 tester, tre kritiske flyter, elleve pikselidentiske visuelle referanser, åtte
+  produksjonsruter, full check og begge hostbuildene er grønne uten feature- eller backendendringer.
 - Den aktive CSS-en er funksjonelt ryddet, men pattern- og featurelaget er fortsatt
-  overgangsarkitektur: Tailwind er produkteier for alle primitivefamiliene og de fire første
-  patterncheckpointene, mens de resterende produktpatternene migreres familievis fra globale
-  selectorfiler etter SWP-planen uten visuell redesign.
+  overgangsarkitektur: Tailwind er produkteier for alle SWP-2- og SWP-3-checkpointene, mens
+  app-shell/navigation og statistikkvisualiseringen migreres fra sine registrerte selectorflater
+  etter SWP-planen uten visuell redesign.
 - Dokumentgrunnlaget og den observerbare React-baselinen er komplett.
 - Backend-repoet er urørt.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                                              |
-| ------------------------------------- | --------------------------------------------------------------- |
-| Base branch                           | `main`                                                          |
-| Fastslått basecommit                  | `5287c5e`                                                       |
-| Siste semantiske checkpoint           | `refactor(styling): migrate SWP-3.4 dialog and editor patterns` |
-| Lokale commits foran base             | 55                                                              |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                                   |
-| Neste planlagte checkpoint            | SWP-3.5 ScheduleTime, Weather, Metric og små delte patterns     |
+| Felt                                  | Forventet tilstand                                         |
+| ------------------------------------- | ---------------------------------------------------------- |
+| Base branch                           | `main`                                                     |
+| Fastslått basecommit                  | `5287c5e`                                                  |
+| Siste semantiske checkpoint           | `refactor(styling): complete SWP-3 shared data patterns`   |
+| Lokale commits foran base             | 56                                                         |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                              |
+| Neste planlagte checkpoint            | SWP-4.1 Navigation-familien samt loading- og overlaystates |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -785,23 +804,27 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Start bare **SWP-3 checkpoint 5 — ScheduleTime, Weather, Metric og små delte patterns**:
+Start bare **SWP-4 checkpoint 1 — Navigation-familien samt loading- og overlaystates**:
 
-1. Les hele SWP-3 og ADR-006 på nytt. Les deretter `ScheduleTime`, `Weather`, `Metric`,
-   `MetricGrid` og øvrige små offentlige patterns med tester samt deres registrerte regler i
-   `patterns.css`, `responsive.css` og `feature-compositions.css` før markup endres.
-2. Kaldkartlegg typed props, dataformat, ikon-/enhetsanatomi, states og mobil/desktop-skift mot de
-   fryste referansene. Avklar Metric-grensen eksplisitt: ScheduleTime-/Weather-reglene og den delte
-   responsive MetricGrid-grenen er registrert for SWP-3.5, mens statistikkvisualiseringens
-   Metric-regler fortsatt er registrert for SWP-5.2.
-3. Flytt bare bekreftet SWP-3.5-eid styling til statiske, analyserbare Tailwind-klasser hos hver
-   patterneier. Bruk semantiske theme-roller, behold offentlig API og `data-ui`/`data-part`-anatomi,
-   og ikke trekk featureeid diagram-/statistikkgeometri inn i patterncheckpointet.
-4. Slett bare de eksakt erstattede småpattern- og responsive reglene, regenerer den avtakende
-   baselinen og la app-shell, navigation, featurevisualisering og backend stå urørt.
-5. Kjør småpattern-/statistikk-, axe- og responsive tester, alle stylingporter, `npm test`,
-   `npm run check`, relevante og komplette visuelle referanser samt begge produksjonsbuildene.
-   Pek statusen på SWP-4.1, opprett én lokal grønn commit og stopp.
+1. Les hele SWP-4 og ADR-006 på nytt. Les deretter `Navigation`, `NavigationSection`,
+   `NavigationList`, `NavigationLink`, `NavigationAction`, `NavigationIdentity`,
+   `NavigationLoading` og `NavigationOverlay` med primitivegrenser, tester og alle registrerte
+   regler i `patterns.css` og `responsive.css` før markup endres.
+2. Kaldkartlegg sidebar-, bottom-, section- og actions-layout, identity, badges, aktiv/disabled/
+   pending state, loadinggeometri, konto-/Mer-overlay, fokusfelle/-retur, mobil/desktop og lyst/
+   mørkt theme mot de fryste referansene. Route-, auth- og kapabilitetsutvalg forblir hos
+   sessionkonsumenten; AppShell-plassering og safe areas forblir SWP-4.2.
+3. Flytt bare bekreftet SWP-4.1-eid styling til statiske, analyserbare Tailwind-klasser hos
+   Navigation-eierne. Bruk semantiske theme-roller og smale skoperte variants eller en typed
+   primitivepresentasjon bare der DialogPrimitive faktisk eier roten; behold offentlig API,
+   `data-ui`/`data-part`, ARIA og semantiske callbacks.
+4. Slett bare de eksakt erstattede Navigation-, loading- og overlayreglene, inkludert den
+   registrerte mobile Mer-komposisjonen når den har ny eier. Regenerer den avtakende baselinen og
+   la AppShell-, Page-/shell-, featurevisualiserings- og backendgrensene stå urørt.
+5. Kjør navigation-/session-, dialog-, tastatur-, fokus-, axe- og responsive tester, alle
+   stylingporter, `npm test`, `npm run check`, komplett visuell matrise, kritiske flyter,
+   produksjonsruter og begge hostbuildene. Pek statusen på SWP-4.2, opprett én lokal grønn commit
+   og stopp.
 
 ## Arbeidspakkeregister
 
@@ -818,8 +841,8 @@ Start bare **SWP-3 checkpoint 5 — ScheduleTime, Weather, Metric og små delte 
 | SWP-0 Baseline og guardkontrakt  | Fullført | Baseline, referanse og ti fixturetestede guardregler grønne   |
 | SWP-1 Theme og guards            | Fullført | Theme, cascade, fixtures, produksjonstre og baseline grønne   |
 | SWP-2 UI-primitives              | Fullført | Alle fire primitivecheckpoints og full kvalitetport er grønne |
-| SWP-3 Produktpatterns            | Aktiv    | SWP-3.1–3.4 er grønne; neste er små delte patterns i 3.5      |
-| SWP-4 App-shell/navigation       | Venter   | Responsiv shell og navigation etter stabile patterns          |
+| SWP-3 Produktpatterns            | Fullført | Alle fem patterncheckpoints og full kvalitetport er grønne    |
+| SWP-4 App-shell/navigation       | Aktiv    | Neste er Navigation-familien, loading og overlay i SWP-4.1    |
 | SWP-5 Features og legacy-CSS     | Venter   | Visualiseringsunntak og siste globale selectors               |
 | SWP-6 Komponent-/API-opprydding  | Venter   | Utføres etter at stylingeierskap er synlig                    |
 | SWP-7 Uavhengig sluttreview      | Venter   | Kald audit og målt vellykket/delvis/ikke vellykket resultat   |
@@ -853,28 +876,29 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
   fryser nettleserklokken til 2026-08-23. Utviklingsinnloggingen bruker fortsatt den eksisterende
   lokale backendharnessen; vanlig utviklings- og produksjonsdata er upåvirket.
 - Stylingguardanalysatoren kjører de ni ikke-cascade-reglene håndhevende mot 179 produksjonskilder
-  og fører 821 eksakte baselinefunn: 268 CSS-application-, 501 custom-property- og 52
+  og fører 817 eksakte baselinefunn: 257 CSS-application-, 508 custom-property- og 52
   visualiseringsfunn. Bare allerede registrerte diagnostics passerer; både nye og
   fjernede funn krever eksplisitt avstemming, slik at slettet gjeld ikke senere kan gjeninnføres.
   Cascade-regelen validerer separat alle sju stilark, mens de 23 isolerte fixturene fortsatt beviser
   positiv og negativ atferd for alle ti stabile regel-ID-er.
 - Ingen midlertidige rammeverksadapters eller React-legacy gjenstår. Stylingbaselinen måler sju
-  aktive CSS-filer, 3235 linjer, 244 regler og 264 selektorer. Samtlige regler ligger nå i
-  registrerte lag: tre i `theme`, sju i `base` og 234 i `components`; `utilities` har ingen
-  app-eide selectorregler. De brede overgangsfilene er fortsatt `patterns.css` med 664 linjer,
-  `responsive.css` med 288 linjer og `feature-compositions.css` med 731 linjer;
+  aktive CSS-filer, 3186 linjer, 234 regler og 253 selektorer. Samtlige regler ligger nå i
+  registrerte lag: tre i `theme`, sju i `base` og 224 i `components`; `utilities` har ingen
+  app-eide selectorregler. De brede overgangsfilene er fortsatt `patterns.css` med 607 linjer,
+  `responsive.css` med 282 linjer og `feature-compositions.css` med 731 linjer;
   `primitives.css` er redusert til 40 linjer med seks base-regler og ingen primitive-selectors.
 - De 91 tidligere ulagrede reglene har nå eksplisitt eier. Den gamle gjeldstypen for ulagrede
   legacyregler er redusert fra 88 til null; de tre theme-reglene var ikke legacygjeld.
-- Baseline fører 653 overgangsavvik: 261 globale produktselektorer, 310 rå visuelle deklarasjoner,
+- Baseline fører 630 overgangsavvik: 250 globale produktselektorer, 298 rå visuelle deklarasjoner,
   14 `!important`, ti komponentlokale custom-property-definisjoner, 52 featureklasseforekomster og
-  seks inline styles. `@apply` er null. SWP-3.4 reduserte totalen med 279 gjennom 88 selectors, 123
-  rå deklarasjoner, 54 `!important` og 14 komponentlokale custom-property-definisjoner.
-- Alle SWP-2-komponentene og SWP-3.1–3.4-patternene bruker statiske Tailwind-utilities; de resterende
-  patternfamiliene står fortsatt på sin registrerte CSS-baseline til eget checkpoint. `Button` har
-  ingen patternspesifikk `data-part`-bro; Dialog-, EditorDialog- og editor-toolbar-komposisjonen
-  eies av patterneiernes eksplisitt bundne variants. Form-, FormSteps-, Collection-toggle- og
-  Collection-reset-broene er også fjernet.
+  seks inline styles. `@apply` er null. SWP-3.5 reduserte totalen med 23 gjennom elleve selectors
+  og tolv rå deklarasjoner.
+- Alle SWP-2-komponentene og SWP-3-patternene med generell produktstyling bruker statiske
+  Tailwind-utilities. `Metric`-kortet og MetricGrid-basegridet forblir registrert hos den unike
+  statistikkvisualiseringen til SWP-5.2, mens det delte responsive MetricGrid-skiftet nå eies av
+  patternet. `Button` har ingen patternspesifikk `data-part`-bro; Dialog-, EditorDialog- og
+  editor-toolbar-komposisjonen eies av patterneiernes eksplisitt bundne variants. Form-,
+  FormSteps-, Collection-toggle- og Collection-reset-broene er også fjernet.
 - ChoiceButton bruker fortsatt navngitte `--app-choice-control-*`-roller, mens Settings og
   Collection eier sine respektive valgte states gjennom skoperte utilities. DatePickerens
   bookingpresentasjon og Select-/DatePicker-feltene får Collection-komposisjonen gjennom eksplisitt
@@ -882,14 +906,15 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
   Mer-flate setter fortsatt `--app-dialog-surface-*`-roller for den eksisterende mobile bunnflaten.
 - Page har en smal, responsiv app-shell-bro for heading-/beskrivelsesfarge frem til SWP-4.
   Section utelater standardgapet for de fire registrerte statistikkflatene som fortsatt eier
-  datadrevet gap i `feature-compositions.css` til SWP-5.2. Den kombinerte responsive
-  MetricGrid-/statistics-loading-regelen må deles langs sin registrerte SWP-3.5/SWP-5.2-eiergrense.
-- 1128 CSS custom-property-definisjoner og 922 referanser er registrert. SWP-2.1–SWP-3.4 har lagt til
+  datadrevet gap i `feature-compositions.css` til SWP-5.2. MetricGrid eier nå sitt responsive
+  kolonne-/gap-skift, mens `statistics-loading__metrics` beholder sin separate SWP-5.2-regel.
+- 1142 CSS custom-property-definisjoner og 920 referanser er registrert. SWP-2.1–SWP-3.5 har lagt til
   semantiske action-, field-, fokus-, choice-, switch-, radio-, select-, calendar-, dialog-,
   riktekst-, Page-, Section-, feedback-, Document-, kontrollgeometri-, motion- og typografiroller i
   den autoritative theme-filen, inkludert Collection-, Dialog-, Tabs- og riktekstoverflater, rader,
-  states og kontrolluttrykk. Den lukkede kontrakten eksponerer 509 roller, 751 utilities og 107
-  light/dark-skift. Bits UI sine målte `--bits-*`-verdier kan bare konsumeres av tre registrerte
+  states og kontrolluttrykk samt småpatternenes tid, værikon og responsive metric-gap. Den lukkede
+  kontrakten eksponerer 517 roller, 759 utilities og 107 light/dark-skift. Bits UI sine målte
+  `--bits-*`-verdier kan bare konsumeres av tre registrerte
   strukturelle utilities i `src/index.css`; samme inngang registrerer en semantisk
   loading-sheen-utility, seks SWP-3.1-varianter, tolv SWP-3.2-varianter, 28 SWP-3.3-varianter, 22
   SWP-3.4-varianter og de seksten skoperte ProseMirror-variantene.
@@ -904,10 +929,10 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
   i produksjonsgrafen eller byggartefaktene og er ikke React-/ReactDOM-runtime.
 - Statisk død-kodeanalyse rapporterer bare komplette DTO-typer som ennå ikke har en UI-konsument.
   De beholdes som transportkontrakt i `lib/contracts`; det finnes ingen tilsvarende ubrukt runtimekode.
-- SWP-3.4-buildens initial CSS er 26,5/26,5 KiB gzip for Cloudflare Pages/GitHub Pages av et uendret
-  50 KiB-budsjett; eksakt er målingen 27 109 og 27 120 gzip-byte når statiske patternutilities
-  kompileres ved siden av resterende legacy-CSS. Kilde-CSS er samtidig redusert med 400 linjer og
-  74 regler siden SWP-3.3. Initial JS er 38 150/38 193 gzip-byte, og største lazy JS-chunk er
+- SWP-3.5-buildens initial CSS er 26,5/26,5 KiB gzip for Cloudflare Pages/GitHub Pages av et uendret
+  50 KiB-budsjett; eksakt er målingen 27 093 og 27 104 gzip-byte når statiske småpatternutilities
+  kompileres ved siden av resterende legacy-CSS. Kilde-CSS er samtidig redusert med 49 linjer og ti
+  regler siden SWP-3.4. Initial JS er 38 157/38 187 gzip-byte, og største lazy JS-chunk er
   fortsatt 123 363 byte (120,5 KiB) av 130 KiB.
 
 ## Siste verifikasjon
@@ -918,8 +943,18 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 | Relative dokumentlenker              | Bestått 2026-08-24                                                                  |
 | `git diff --check`                   | Bestått 2026-08-24                                                                  |
 | AI-first lesbarhetskontroll          | Bestått: eksplisitte eiere, typer, statiske klasser og samlokaliserte tester        |
-| `npm test`                           | Bestått 2026-08-24: 93 filer, 336 tester                                            |
+| `npm test`                           | Bestått 2026-08-24: 94 filer, 341 tester                                            |
 | `npm run check`                      | Bestått: type, arkitektur, legacy, design, stylingporter, lint og format            |
+| SWP-3.5 målrettede UI-/featuretester | Bestått: 4 filer, 24 tester for tid, vær, metrics, states, enheter og axe           |
+| SWP-3.5 theme-kontrakt               | Bestått: 517 roller, 759 utilities og 107 light/dark-skift via Tailwind-kompilering |
+| SWP-3.5 cascade-kontrakt             | Bestått: 7 stilark, 234 regler; theme 3, base 7, components 224, utilities 0        |
+| SWP-3.5 guardfixtures                | Bestått: 23 fixtures, 10 stabile regler og lukket semantisk utilityvokabular        |
+| SWP-3.5 produksjonstre               | Bestått: 179 filer, 817 eksakte baselinefunn over 3 aktive regel-ID-er              |
+| SWP-3.5 kildebaseline                | Bestått: 3186 linjer, 234 regler, 253 selectors, 630 avvik og 106 kandidater        |
+| SWP-3.5 kritiske E2E-flyter          | Bestått: 3/3 login-, booking-/avbestillings- og administratorflyter                 |
+| SWP-3.5 visuell/interaktiv matrise   | Bestått: 11/11 pikselidentiske snapshots med fokus, overflow og tom konsoll         |
+| SWP-3.5 produksjonsroutematrise      | Bestått: 8/8 public, protected, admin og callback over root/base path               |
+| SWP-3.5 produksjonsbuild             | Bestått: 27 093/27 104 CSS-byte, 61 JS-chunks og 120,5 KiB største lazy chunk       |
 | SWP-3.4 målrettede UI-tester         | Bestått: 4 filer, 19 tester for dialog, tabs, riktekst, fokus, tastatur og axe      |
 | SWP-3.4 theme-kontrakt               | Bestått: 509 roller, 751 utilities og 107 light/dark-skift via Tailwind-kompilering |
 | SWP-3.4 cascade-kontrakt             | Bestått: 7 stilark, 244 regler; theme 3, base 7, components 234, utilities 0        |
@@ -1074,20 +1109,19 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 ## Filer i siste checkpoint
 
-- `Dialog`, `EditorDialog`, `Tabs`, `RichTextEditor`, `RichTextEditorToolbar` og
-  `RichTextContent` med statisk Tailwind-komposisjon hos patterneierne; typed API, anatomi, ARIA,
-  fokus/tastatur, states, riktekstkontrakt og responsive uttrykk er uendret
-- `TabsPrimitive` med smal typed section-presentasjon på Bits-nodene og `Button` uten de siste
-  Dialog-/editorbroene; dialog-, Form-/Settings-, toolbar- og riktekstbarn skopes fra patterneierne
-- `tokens.css`, `src/index.css` og stylingguardkontrakten med semantiske Dialog-, Tabs- og
-  riktekstroller, 22 nye skoperte variants og en statisk pseudo-content-utility
-- `patterns.css` og `responsive.css` uten de 74 erstattede reglene og 88 selectorene; småpatterns,
-  app-shell, navigation, featurevisualisering og backend beholder sitt registrerte eierskap
-- dialog-, tabs-, rikteksteditor- og riktekstinnholdstestene med statiske utilitykontrakter i tillegg
-  til eksisterende API-, ARIA-, state-, tastatur-, fokus-, callback- og axe-kontrakter
-- regenerert `docs/styling-baseline.json` schemaVersion 2 med 821 guarddiagnostics, 653
+- `ScheduleTime` og `Weather` med statisk Tailwind-komposisjon hos patterneierne; typed API,
+  tids-/enhetsformat, accessory, symbolsti, kompakt/full og tom state er uendret
+- `MetricGrid` med bare det delte responsive fire-/trekolonneskiftet; `Metric`, basegrid,
+  statistikkroller, loading og diagramgeometri beholder sitt registrerte SWP-5.2-eierskap
+- `tokens.css`, `src/index.css` og stylingguardkontrakten med åtte semantiske tid-, værikon- og
+  metric-gaproller samt uten den nå foreldreløse kompatibilitetsrollen `--muted-foreground`
+- `patterns.css` og `responsive.css` uten ti erstattede regler og elleve selectors; app-shell,
+  navigation, featurevisualisering og backend beholder sitt registrerte eierskap
+- samlokalisert shared-data-patternfixture og fem kontrakt-/axe-tester for statiske utilities,
+  anatomi, formater, enheter, tom state, Metric-roller og responsive MetricGrid-varianter
+- regenerert `docs/styling-baseline.json` schemaVersion 2 med 817 guarddiagnostics, 630
   legacyavvik, 106 separate visualiseringskandidater og ferske mål for begge produksjonsbygg
-- denne statusen med SWP-3.4 fullført, full grønn port og SWP-3.5 som neste eksakte checkpoint;
+- denne statusen med SWP-3 fullført, full grønn port og SWP-4.1 som neste eksakte checkpoint;
   backend-repoet er urørt
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for

@@ -183,6 +183,8 @@
   --font-weight-page-eyebrow: var(--app-page-eyebrow-font-weight);
   --font-weight-page-status: var(--app-page-status-font-weight);
   --font-weight-page-title: var(--app-page-title-font-weight);
+  --font-weight-schedule-time: var(--app-schedule-time-font-weight);
+  --font-weight-schedule-time-start: var(--app-schedule-time-start-font-weight);
   --font-weight-rich-text-content-heading: var(--app-rich-text-content-heading-font-weight);
   --font-weight-rich-text-heading-2: var(--app-rich-text-heading-2-font-weight);
   --font-weight-rich-text-heading-3: var(--app-rich-text-heading-3-font-weight);
@@ -241,6 +243,7 @@
   --leading-page-description: var(--app-page-description-line-height);
   --leading-page-status: var(--app-page-status-line-height);
   --leading-page-title: var(--app-page-title-line-height);
+  --leading-schedule-time: var(--app-schedule-time-line-height);
   --leading-rich-text-content-heading: var(--app-rich-text-content-heading-line-height);
   --leading-rich-text-content: var(--app-rich-text-content-line-height);
   --leading-rich-text-heading-2: var(--app-rich-text-heading-2-line-height);
@@ -260,6 +263,7 @@
   --tracking-editor-dialog-title: var(--app-editor-dialog-title-letter-spacing);
   --tracking-page-eyebrow: var(--app-page-eyebrow-letter-spacing);
   --tracking-page-title: var(--app-page-title-letter-spacing);
+  --tracking-schedule-time-start: var(--app-schedule-time-start-letter-spacing);
   --tracking-settings-eyebrow: var(--app-settings-eyebrow-letter-spacing);
 
   --border-width-dialog-surface: var(--app-dialog-surface-border-bottom-width);
@@ -371,6 +375,7 @@
   --spacing-editor-dialog-wide-inline: var(--app-editor-dialog-wide-padding-inline);
   --spacing-lg: var(--app-space-lg);
   --spacing-md: var(--app-space-md);
+  --spacing-metric-grid-wide: var(--app-metric-grid-wide-gap);
   --spacing-page: var(--app-page-padding);
   --spacing-page-content-desktop-bottom: var(--app-page-content-desktop-padding-bottom);
   --spacing-page-content-desktop-gap: var(--app-page-content-desktop-gap);
@@ -388,6 +393,8 @@
   --spacing-page-wide-top: var(--app-page-wide-padding-block-start);
   --spacing-record-gap: var(--app-record-gap);
   --spacing-record-inline: var(--app-record-padding-inline);
+  --spacing-schedule-time: var(--app-schedule-time-gap);
+  --spacing-schedule-time-range: var(--app-schedule-time-range-gap);
   --spacing-rich-text-content-list: var(--app-rich-text-content-list-gap);
   --spacing-rich-text-content-quote: var(--app-rich-text-content-quote-padding-inline);
   --spacing-rich-text-content-list-inline: var(--app-rich-text-content-list-padding-inline);
@@ -416,6 +423,7 @@
   --spacing-tabs-indicator-bottom: var(--app-tabs-indicator-bottom);
   --spacing-tabs-indicator-inline: var(--app-tabs-indicator-inline);
   --spacing-tabs-trigger: var(--app-tabs-trigger-padding-block);
+  --spacing-weather-icon: var(--app-weather-icon-size);
 
   --grid-template-columns-calendar-header: var(--app-calendar-header-columns);
   --grid-template-columns-collection-controls-top: var(--app-collection-controls-top-columns);
