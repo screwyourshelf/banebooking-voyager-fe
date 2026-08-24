@@ -1,10 +1,10 @@
 # Migreringsstatus
 
-> **Status:** Pågår — rammeverksløftet og SWP-0–SWP-5 er fullført
+> **Status:** Pågår — rammeverksløftet, SWP-0–SWP-5 og SWP-6.1 er fullført
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
-> **Aktiv arbeidspakke:** Ingen — SWP-5 er levert; neste pakke er SWP-6
+> **Aktiv arbeidspakke:** SWP-6 — checkpoint 1 er levert; neste checkpoint er SWP-6.2
 >
 > **Sist oppdatert:** 2026-08-24
 
@@ -20,7 +20,9 @@ featurekomposisjonsfilen, SWP-5.4 samlet dokumentbase, motion og keyframes i den
 `base.css`-flaten før de tre siste legacy-stilarkene ble slettet, og SWP-5.5 har fjernet
 transition-baselinen. Produksjonstreet krever nå null diagnostics, legacygjeld er null, og den
 varige allowlisten er låst til 38 faktisk datadrevne geometrier hos fire eksakte statistikkeiere.
-Produktadferd og backend er bevart.
+SWP-6.1 har kaldmålt alle store featureorkestratorer og flyttet den flertrinns editorflyten og det
+sammensatte banearbeidsområdet til to private, navngitte featurecontrollere. Presentasjonskomponent,
+offentlig featureinngang, produktadferd og backend er bevart.
 
 ## Aktiv stylingretning
 
@@ -890,6 +892,18 @@ Produktadferd og backend er bevart.
 - Hele SWP-5-porten er grønn med null legacygjeld, 38 datadrevne geometrier, 345 tester, elleve
   pikselidentiske visuelle referanser, full check og begge hostbuildene. Initial CSS er
   28 424/28 443 gzip-byte innenfor 50 KiB-budsjettet; backend, API-er og produktadferd er uendret.
+- SWP-6.1 har kaldmålt alle 14 produksjonskomponenter i features med minst 180 linjer. Bare
+  `ArrangementEditor` og `CourtsSection` blandet flere selvstendige query-, mutation-, utkast- og
+  arbeidsflytansvar med presentasjonen; de øvrige beholder én sammenhengende form-, liste- eller
+  kontrollflyt og er bevisst ikke delt i prop-forwardingkomponenter.
+- To private, feature-spesifikke `.svelte.ts`-controllere eier nå arrangementeditorens totrinns-,
+  staging- og konfliktforløp samt baneområdets query-, utkast-, create/edit- og reorderforløp.
+  `ArrangementEditor.svelte` er redusert fra 535 til 273 linjer og `CourtsSection.svelte` fra 362
+  til 177, uten ny offentlig eksport eller generell state-/serviceabstraksjon.
+- [`swp-6-component-api-audit.md`](./swp-6-component-api-audit.md) fører kaldmåling, importgraf,
+  ansvar og eksplisitt behold-/uttrekksbeslutning. De åtte berørte arrangement- og
+  bane-/grenadministrasjonstestene samt full `npm run check` er grønne; begge hostbuildene beholder
+  eksakt 28 424/28 443 CSS gzip-byte og 38 geometrier.
 - Den aktive CSS-en har ikke lenger featureeide produktselectors. Tailwind er produkteier for alle
   SWP-2–SWP-4-flater og statistikkpresentasjonen; den varige geometriallowlisten er låst uten
   visuell redesign.
@@ -898,14 +912,14 @@ Produktadferd og backend er bevart.
 
 ## Git-checkpoint
 
-| Felt                                  | Forventet tilstand                            |
-| ------------------------------------- | --------------------------------------------- |
-| Base branch                           | `main`                                        |
-| Fastslått basecommit                  | `5287c5e`                                     |
-| Siste semantiske checkpoint           | `refactor(styling): finalize SWP-5 ownership` |
-| Lokale commits foran base             | 65                                            |
-| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                 |
-| Neste planlagte checkpoint            | SWP-6.1 review store featureorkestratorer     |
+| Felt                                  | Forventet tilstand                           |
+| ------------------------------------- | -------------------------------------------- |
+| Base branch                           | `main`                                       |
+| Fastslått basecommit                  | `5287c5e`                                    |
+| Siste semantiske checkpoint           | `refactor(swp-6): extract feature workflows` |
+| Lokale commits foran base             | 66                                           |
+| Forventede ucommitterte frontendfiler | Ingen etter checkpoint-commit                |
+| Neste planlagte checkpoint            | SWP-6.2 review store offentlige patterns     |
 
 `/start` beregner gjeldende `HEAD`, merge-base og commit-rekke direkte fra git. `HEAD`-hashen
 lagres ikke her fordi committen som inneholder statusfilen ellers ville gjort feltet
@@ -914,14 +928,13 @@ autoritativt bevis; statusfilen korrigeres før arbeidet fortsetter.
 
 ## Neste eksakte steg
 
-Start **SWP-6 checkpoint 1 — review store featureorkestratorer** i en ny `/start`:
+Fortsett med **SWP-6 checkpoint 2 — review store offentlige patterns**:
 
-1. Kaldmål ansvar, størrelse, importgraf, state og arbeidsflyt i `ArrangementEditor`,
-   `CourtsSection` og andre store featureorkestratorer.
-2. Trekk bare ut state/controller eller arbeidsflyt når eierbildet blir tydeligere uten generisk
-   abstraksjon eller prop-forwarding.
-3. Bevar offentlig featureinngang, produktadferd, URL-er, API-er og backend; verifiser berørte
-   flyter før checkpoint.
+1. Kaldmål `CollectionControls` og andre store offentlige patterns mot typed props, intern anatomi,
+   state og faktiske konsumenter.
+2. Del bare intern implementasjon når hvert nytt barn får ett navngitt ansvar; behold `$lib/ui`- og
+   patternkontrakten uendret og unngå prop-forwardingkomponenter.
+3. Verifiser pattern-, tastatur-, axe-, feature- og stylingportene før checkpoint.
 
 ## Arbeidspakkeregister
 
@@ -941,7 +954,7 @@ Start **SWP-6 checkpoint 1 — review store featureorkestratorer** i en ny `/sta
 | SWP-3 Produktpatterns            | Fullført | Alle fem patterncheckpoints og full kvalitetport er grønne    |
 | SWP-4 App-shell/navigation       | Fullført | Alle fire checkpoints og full kvalitetport er grønne          |
 | SWP-5 Features og legacy-CSS     | Fullført | Null legacygjeld, null guardavvik og 38 låste geometrier      |
-| SWP-6 Komponent-/API-opprydding  | Venter   | Utføres etter at stylingeierskap er synlig                    |
+| SWP-6 Komponent-/API-opprydding  | Pågår    | 1/4: store featureorkestratorer har private typed controllere |
 | SWP-7 Uavhengig sluttreview      | Venter   | Kald audit og målt vellykket/delvis/ikke vellykket resultat   |
 
 ## Featureregister
@@ -1034,6 +1047,10 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 | Kontroll                             | Resultat                                                                            |
 | ------------------------------------ | ----------------------------------------------------------------------------------- |
+| SWP-6.1 featureorkestratoraudit      | Bestått: 14 store komponenter; 2 uttrekk og 12 eksplisitte beholdbeslutninger       |
+| SWP-6.1 målrettede featuretester     | Bestått: 2 filer og 8 tester for editor, staging, utkast, validering og reorder     |
+| SWP-6.1 full check                   | Bestått: type, arkitektur, legacy, design, styling, lint og format                  |
+| SWP-6.1 produksjons-/baselineport    | Bestått: 4 CSS-filer, 0 legacyavvik, 38 geometrier og 28 424/28 443 CSS-byte        |
 | Prettier på aktiv kode og dokumenter | Bestått 2026-08-24                                                                  |
 | Relative dokumentlenker              | Bestått 2026-08-24                                                                  |
 | `git diff --check`                   | Bestått 2026-08-24                                                                  |
@@ -1266,14 +1283,12 @@ oppgave som krever eksplisitt godkjenning samt valg av målhost og produksjonsko
 
 ## Filer i siste checkpoint
 
-- schema 3-guardkontrakt og produksjonsanalyse uten transition-baseline, med project-wide
-  custom-property-validering og null tillatte diagnostics
-- permanent visualiseringsallowlist per eksakt eierfil, geometri, skopert egenskap, selectoranker
-  og serieverdi samt styrkede positive/negative fixtures og kontrakttest
-- statisk SVG-tekstjustering og sammenligningsdash flyttet fra featuremarkup/CSS til offentlig
-  `DataVisualization`, Tailwind-utilities og theme
-- maskinbaseline med fire CSS-filer, null legacygjeld og 38 varige geometrier samt oppdatert ADR,
-  audit og denne statusen; API, produktflyt og backend-repoet er urørt
+- `ArrangementEditor.svelte` og privat `arrangement-editor-controller.svelte.ts` med eksplisitt
+  presentasjons-/arbeidsflyteierskap
+- `CourtsSection.svelte` og privat `courts-section-controller.svelte.ts` med eksplisitt
+  presentasjons-/utkast-/mutationeierskap
+- `swp-6-component-api-audit.md`, dokumentindeks, regenerert maskinbaseline og denne statusen;
+  offentlig feature-API, styling, produktflyt, endpointkontrakter og backend-repoet er urørt
 
 `/start` bruker commit-diffen som autoritativ kilde for nøyaktig innhold og `git status` for
 pågående arbeid etter checkpointet.

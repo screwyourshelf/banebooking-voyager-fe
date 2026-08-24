@@ -13,6 +13,7 @@
 | [`e2e-harness.md`](./e2e-harness.md)                                             | Lokal Playwright-auth, prosesser og testdata    |
 | [`styling-reference-matrix.md`](./styling-reference-matrix.md)                   | Frosset SWP-0 styling- og interaksjonsreferanse |
 | [`swp-5-route-feature-audit.md`](./swp-5-route-feature-audit.md)                 | Kaldt eierkart for siste feature-/CSS-migrering |
+| [`swp-6-component-api-audit.md`](./swp-6-component-api-audit.md)                 | Komponent-, eier- og offentlig API-audit        |
 | [`development-and-operations.md`](./development-and-operations.md)               | Lokal utvikling, bygg og hostingkontrakt        |
 | [`sveltekit-architecture.md`](./sveltekit-architecture.md)                       | Målarkitektur for SvelteKit-migreringen         |
 | [`architecture-conformance-review.md`](./architecture-conformance-review.md)     | Etterreview av Svelte-/SvelteKit-konformitet    |
