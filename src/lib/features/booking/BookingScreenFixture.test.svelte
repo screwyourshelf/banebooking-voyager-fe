@@ -35,7 +35,6 @@
           }
         : { status: "anonymous", user: null };
     },
-    getAccessToken: async () => null,
     sendEmailOtp: async () => undefined,
     signInAsDevelopmentProfile: async () => undefined,
     signInWithOAuth: async () => undefined,

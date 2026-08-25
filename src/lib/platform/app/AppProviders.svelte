@@ -40,9 +40,6 @@
     get state() {
       return authState;
     },
-    async getAccessToken() {
-      return (await controllerReady)?.getAccessToken() ?? null;
-    },
     async signOut() {
       queryClient.clear();
       await (await requireController()).signOut();

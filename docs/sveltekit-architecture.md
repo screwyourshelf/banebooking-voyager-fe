@@ -264,7 +264,10 @@ Axios erstattes med en liten klient rundt native `fetch`:
 type ApiClientOptions = {
   fetch: typeof globalThis.fetch;
   baseUrl: string;
-  getAccessToken: () => Promise<string | null>;
+  getAuthorization: () => Promise<{
+    scheme: "Bearer" | "DevelopmentBearer";
+    token: string;
+  } | null>;
   onUnauthorized: () => Promise<void>;
 };
 
@@ -288,17 +291,17 @@ eller UI. Komponenter gjør aldri direkte HTTP-kall.
 Auth eksponeres som et lite, rammeverksnøytralt grensesnitt og en typed context-instans:
 
 ```ts
-type AuthState = {
-  status: "initializing" | "anonymous" | "authenticated";
-  user: AuthUser | null;
-  getAccessToken(): Promise<string | null>;
+type AuthController = {
+  readonly state: AuthState;
+  getAuthorization(): Promise<ApiAuthorization | null>;
   signOut(): Promise<void>;
 };
 ```
 
 Supabase-adapteren og utviklingsadapteren implementerer samme kontrakt. Features skal ikke kjenne
-sesjonskilden. Route guards gir riktig navigasjon og oppstartstilstand, men backend er alltid den
-faktiske autorisasjonsgrensen.
+sesjonskilden eller authscheme. Supabase-adapteren leverer `Bearer`; utviklingsadapteren leverer
+`DevelopmentBearer`. Route guards gir riktig navigasjon og oppstartstilstand, men backend er alltid
+den faktiske autorisasjonsgrensen.
 
 ## UI-arkitektur
 

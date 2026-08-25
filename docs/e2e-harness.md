@@ -15,10 +15,11 @@ utviklingsbackenden. Harnessen endrer ikke produksjonsauth eller backendkode.
 ## Authkontrakt
 
 Utviklingsinnloggingen returnerer de eksisterende profilene `admin`, `utvidet` og `medlem`.
-Produksjonsklienten sender fortsatt `Authorization: Bearer <token>`. Bare Playwright-konteksten
-intersepterer egne `/api/**`-kall og skriver dette om til backendens utviklingsscheme
-`DevelopmentBearer`. Dermed er den tidligere manuelle rewrite-proxyen ikke en skjult forutsetning,
-og vanlig dev-, preview- og produksjonstrafikk er uendret.
+Authadapteren leverer både token og eksplisitt scheme til API-klienten: Supabase bruker
+`Authorization: Bearer <token>`, mens lokal utviklingsinnlogging bruker backendens
+`Authorization: DevelopmentBearer <token>`. Vanlig lokal testing er dermed uavhengig av Supabase i
+produksjon. Playwright-konteksten bruker samme klientkontrakt og omskriver ikke authheadere; routen
+registrerer bare test-eide booking-ID-er for avgrenset opprydding.
 
 ## Eide testdata og opprydding
 
@@ -37,10 +38,12 @@ Kjør porten med:
 npm run test:e2e
 ```
 
-Denne porten inkluderer tre kritiske mutasjonsflyter og elleve fryste visuelle referanser. De
-visuelle testene bruker stabile, test-eide svar og den samme authharnessen, men utfører ingen
-mutasjoner. Den navngitte route-, rolle-, state-, viewport-, theme- og interaksjonskontrakten ligger
-i [`styling-reference-matrix.md`](./styling-reference-matrix.md).
+Denne porten inkluderer tre kritiske flyter og elleve fryste visuelle referanser. Authflyten logger
+inn og ut med alle tre utviklingsprofiler; de to andre kritiske flytene verifiserer medlemmenes
+booking/avbestilling og administratorens klubbendring. De visuelle testene bruker stabile,
+test-eide svar og den samme authharnessen, men utfører ingen mutasjoner. Den navngitte route-,
+rolle-, state-, viewport-, theme- og interaksjonskontrakten ligger i
+[`styling-reference-matrix.md`](./styling-reference-matrix.md).
 
 ## Produksjonsartefakter og routes
 

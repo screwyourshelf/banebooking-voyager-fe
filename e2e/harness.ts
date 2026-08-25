@@ -33,7 +33,7 @@ type ClubUpdateRequest = {
 
 type TrackedBooking = {
   bookingId: string;
-  bearerToken: string;
+  developmentToken: string;
 };
 
 type ClubCleanup = {
@@ -61,23 +61,21 @@ export const test = base.extend<{ e2e: E2EHarness }>({
     await context.route("**/api/**", async (route) => {
       const interceptedRequest = route.request();
       const headers = interceptedRequest.headers();
-      const bearerToken = readBearerToken(headers.authorization);
-
-      if (bearerToken) headers.authorization = `DevelopmentBearer ${bearerToken}`;
+      const developmentToken = readDevelopmentToken(headers.authorization);
 
       if (!isTrackedBookingMutation(interceptedRequest.method(), interceptedRequest.url())) {
-        await route.continue({ headers });
+        await route.continue();
         return;
       }
 
-      const response = await route.fetch({ headers });
-      if (response.ok() && bearerToken) {
+      const response = await route.fetch();
+      if (response.ok() && developmentToken) {
         if (interceptedRequest.method() === "POST") {
           const payload = (await response.json()) as BookingMutationResponse;
           if (payload.bookingId) {
             trackedBookings.set(payload.bookingId, {
               bookingId: payload.bookingId,
-              bearerToken,
+              developmentToken,
             });
           }
         } else {
@@ -119,7 +117,7 @@ export const test = base.extend<{ e2e: E2EHarness }>({
     for (const tracked of trackedBookings.values()) {
       const response = await request.delete(
         `${E2E_BACKEND_ORIGIN}/api/klubb/${encodeURIComponent(E2E_TENANT_SLUG)}/bookinger/${encodeURIComponent(tracked.bookingId)}`,
-        { headers: developmentAuthorization(tracked.bearerToken) }
+        { headers: developmentAuthorization(tracked.developmentToken) }
       );
       expect(
         response.ok() || response.status() === 404,
@@ -155,8 +153,8 @@ function developmentAuthorization(token: string) {
   return { Authorization: `DevelopmentBearer ${token}` };
 }
 
-function readBearerToken(authorization: string | undefined) {
-  const match = authorization?.match(/^Bearer\s+(.+)$/i);
+function readDevelopmentToken(authorization: string | undefined) {
+  const match = authorization?.match(/^DevelopmentBearer\s+(.+)$/i);
   return match?.[1] ?? null;
 }
 

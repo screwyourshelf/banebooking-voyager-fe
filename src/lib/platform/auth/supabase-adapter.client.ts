@@ -57,9 +57,9 @@ export function createSupabaseAuthAdapter(): AuthAdapter {
   return {
     getSession: recoverSession,
 
-    async getAccessToken() {
-      if (session?.access_token) return session.access_token;
-      return (await recoverSession())?.accessToken ?? null;
+    async getAuthorization() {
+      const token = session?.access_token ?? (await recoverSession())?.accessToken;
+      return token ? { scheme: "Bearer", token } : null;
     },
 
     subscribe(listener) {

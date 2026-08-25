@@ -3,7 +3,6 @@ import type { AuthController } from "./types";
 
 export type AuthContextValue = Pick<
   AuthController,
-  | "getAccessToken"
   | "sendEmailOtp"
   | "signInAsDevelopmentProfile"
   | "signInWithOAuth"

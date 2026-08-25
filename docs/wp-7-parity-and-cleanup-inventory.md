@@ -97,11 +97,12 @@ hostingfallbackene. Den inaktive React-roten og dens parallelle recoverykode er 
 
 ### 3. Innlogget lokal E2E har en autoritativ utviklingsauthvei — lukket
 
-Dette gapet er lukket av en frontend-/testeid Playwright-harness. Svelteklienten sender fortsatt
-standard `Authorization: Bearer`; bare Playwright-konteksten skriver egne `/api/**`-kall om til den
-isolerte utviklingsbackendens `DevelopmentBearer`. Login, booking, avbestilling og en klubbendring
-kjører nå reproduserbart under `/banebooking`, og booking-ID samt komplett klubbprofil har
-deterministisk ettertestopprydding. Den tidligere manuelle header-proxyen er ikke en forutsetning.
+Dette gapet er lukket av en frontend-eid authkontrakt og Playwright-harness. Svelteklientens
+utviklingsadapter sender den lokale backendens `DevelopmentBearer`, mens Supabase-adapteren beholder
+produksjonens `Bearer`. Playwright omskriver ikke lenger authheadere. Login, booking, avbestilling og
+en klubbendring kjører reproduserbart under `/banebooking`, og booking-ID samt komplett klubbprofil
+har deterministisk ettertestopprydding. Den tidligere manuelle header-proxyen er ikke en
+forutsetning.
 
 Eier: WP-7-testharnessen over eksisterende auth-/API-kontrakter. Løsningen må ikke endre
 produksjonens authscheme eller backend uten en separat godkjenning.

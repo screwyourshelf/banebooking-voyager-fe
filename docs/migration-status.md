@@ -28,6 +28,9 @@
 - Håndskrevne transporttyper beskriver bare kontrakter frontenden faktisk konsumerer. Sammensatte
   DTO-deler er private i kontraktmodulen; ubrukt endpointflate beholdes ikke som manuell kopi.
 - Knip-porten tillater ingen død fil-, pakke-, import-, eksport- eller typeflate.
+- Lokal utviklingsinnlogging sender backendens eksplisitte `DevelopmentBearer`-scheme. Medlem,
+  utvidet bruker og klubbadministrator kan derfor testes mot lokal backend uten Supabase i
+  produksjon eller Playwright-spesifikk headeromskriving.
 
 ## Avsluttende opprydding
 
@@ -52,6 +55,16 @@ Desktopmenyens produksjonsrekkefølge er tilbakeført uten å gjeninnføre React
   og pending-lås er beholdt
 - fire desktopreferanser er oppdatert etter den godkjente kontraktendringen; alle fem
   mobilreferanser er uendret
+
+Lokal utviklingsauth er rettet uten backend- eller produksjonsauthendringer:
+
+- API-klienten mottar nå en typed kombinasjon av authscheme og token fra authadapteren i stedet for
+  å anta `Bearer` for alle sesjoner
+- Supabase beholder `Bearer`, mens alle tre lokale profiler bruker `DevelopmentBearer` direkte
+- E2E-harnessen registrerer fortsatt egne testdata for opprydding, men omskriver ikke lenger
+  headere og kan derfor ikke maskere forskjellen mellom manuell testing og Playwright
+- tom `204`-respons fra det anonyme brukerendepunktet normaliseres til `null`, slik at Query-cachen
+  aldri mottar ugyldig `undefined`
 
 ## Permanente arkitektur- og produktkontrakter
 
@@ -119,10 +132,12 @@ og vente på en konkret produkt- eller vedlikeholdsoppgave; den skal ikke oppret
 | Kontroll                           | Resultat                                                                   |
 | ---------------------------------- | -------------------------------------------------------------------------- |
 | Målrettet navigasjons-/shelltest   | 4 testfiler, 30 tester                                                     |
-| `npm test`                         | 95 testfiler, 348 tester                                                   |
+| Målrettet auth-/API-regresjon      | 5 testfiler, 15 tester                                                     |
+| Manuell lokal rolleflyt            | Medlem, utvidet bruker og klubbadministrator mot lokal backend             |
+| `npm test`                         | 96 testfiler, 350 tester                                                   |
 | `npm run check`                    | Type, arkitektur, legacy, statisk analyse, design, styling, lint og format |
 | Knip                               | 0 døde filer, pakker, importer, eksporter eller typer                      |
-| Kritiske Playwright-flyter         | 3/3 bestått; egne lokale testdata gjenopprettet                            |
+| Kritiske Playwright-flyter         | 3/3; authflyten dekker alle tre profiler, lokale testdata gjenopprettet    |
 | Visuelle Playwright-referanser     | 11/11 bestått; 4 desktop oppdatert, 5 mobil uendret                        |
 | `npm run test:e2e:production`      | 8/8 ruter for begge hostartefakter                                         |
 | Produksjonsbudsjett                | 37,4 KiB initial JS gzip, 27,9 KiB CSS gzip, 120,5 KiB største lazy JS     |

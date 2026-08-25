@@ -1,14 +1,26 @@
 import { expect, test } from "./harness";
 
-test("development login preserves tenant and base path", async ({ page, e2e }) => {
-  await page.goto(e2e.tenantPath("login"));
+test("all development profiles load user data with tenant and base path", async ({ page, e2e }) => {
+  const profiles = [
+    { accountName: "Utvikling Medlem · Medlem", profile: "medlem" },
+    { accountName: "Utvikling Utvidet · Utvidet bruker", profile: "utvidet" },
+    {
+      accountName: "Utvikling Administrator · Klubbadministrator",
+      profile: "admin",
+    },
+  ] as const;
 
-  await expect(page.getByRole("heading", { level: 1, name: "Logg inn" })).toBeVisible();
-  await page.getByText("Testinnlogging").click();
-  await page.getByRole("button", { name: "Medlem", exact: true }).click();
+  for (const profile of profiles) {
+    await e2e.signIn(page, profile.profile);
+    await expect(page).toHaveURL(/\/banebooking\/aas-tennisklubb\/?$/);
+    await expect(
+      page.getByRole("button", { name: profile.accountName, exact: true })
+    ).toBeVisible();
 
-  await expect(page).toHaveURL(/\/banebooking\/aas-tennisklubb\/?$/);
-  await expect(page.getByRole("heading", { level: 1, name: "Book bane" })).toBeVisible();
+    await page.getByRole("button", { name: profile.accountName, exact: true }).click();
+    await page.getByRole("button", { name: "Logg ut", exact: true }).click();
+    await expect(page.getByRole("link", { name: "Logg inn", exact: true })).toBeVisible();
+  }
 });
 
 test("member books and cancels the same slot", async ({ page, e2e }) => {

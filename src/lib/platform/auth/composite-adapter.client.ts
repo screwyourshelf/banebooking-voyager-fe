@@ -41,8 +41,8 @@ export function createCompositeAuthAdapter(
       return supabaseSession;
     },
 
-    async getAccessToken() {
-      return (await development.getAccessToken()) ?? supabase.getAccessToken();
+    async getAuthorization() {
+      return (await development.getAuthorization()) ?? supabase.getAuthorization();
     },
 
     subscribe(listener) {

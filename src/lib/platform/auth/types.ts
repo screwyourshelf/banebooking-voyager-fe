@@ -1,3 +1,5 @@
+import type { ApiAuthorization } from "$lib/platform/api";
+
 export type DevelopmentProfile = "admin" | "utvidet" | "medlem";
 
 export const SIGN_IN_STORAGE_REQUIRED_MESSAGE =
@@ -39,7 +41,7 @@ export type Unsubscribe = () => void;
 
 export type AuthAdapter = {
   getSession(): Promise<AuthSession | null>;
-  getAccessToken(): Promise<string | null>;
+  getAuthorization(): Promise<ApiAuthorization | null>;
   subscribe(listener: AuthSessionListener): Unsubscribe;
   signOut(): Promise<void>;
   signInAsDevelopmentProfile?(profile: DevelopmentProfile): Promise<AuthSession>;
@@ -52,7 +54,7 @@ export type AuthAdapter = {
 export type AuthController = {
   readonly state: AuthState;
   initialize(): Promise<void>;
-  getAccessToken(): Promise<string | null>;
+  getAuthorization(): Promise<ApiAuthorization | null>;
   subscribe(listener: AuthStateListener): Unsubscribe;
   signOut(): Promise<void>;
   signInAsDevelopmentProfile(profile: DevelopmentProfile): Promise<void>;

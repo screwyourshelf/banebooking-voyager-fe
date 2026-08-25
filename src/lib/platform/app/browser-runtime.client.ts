@@ -36,7 +36,7 @@ export function createBrowserAppRuntime({
   const api = createApiClient({
     fetch: browserFetch,
     baseUrl: apiBaseUrl,
-    getAccessToken: () => auth.getAccessToken(),
+    getAuthorization: () => auth.getAuthorization(),
     onUnauthorized: async () => {
       queryClient.clear();
       await auth.signOut().catch(() => undefined);

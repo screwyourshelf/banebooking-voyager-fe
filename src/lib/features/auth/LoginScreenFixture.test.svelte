@@ -21,7 +21,6 @@
   } = $props();
 
   setAuthContext({
-    getAccessToken: async () => null,
     sendEmailOtp: (...args) => onSendOtp(...args),
     signInAsDevelopmentProfile: (...args) => onDevelopmentLogin(...args),
     signInWithOAuth: (...args) => onOAuth(...args),

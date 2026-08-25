@@ -6,9 +6,30 @@ function createClient(fetchImplementation: typeof fetch, overrides = {}) {
   return createApiClient({
     fetch: fetchImplementation,
     baseUrl: "https://api.example.test/api/",
-    getAccessToken: async () => "access-token",
+    getAuthorization: async () => ({ scheme: "Bearer", token: "access-token" }),
     onUnauthorized: async () => {},
     ...overrides,
+  });
+
+  it("bevarer utviklingsbackenden sitt eksplisitte authscheme", async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(
+      new Response(null, {
+        status: 204,
+      })
+    );
+    const client = createClient(fetchMock, {
+      getAuthorization: async () => ({
+        scheme: "DevelopmentBearer" as const,
+        token: "development-token",
+      }),
+    });
+
+    await expect(client.request("bruker")).resolves.toBeUndefined();
+
+    const [, init] = fetchMock.mock.calls[0];
+    expect(new Headers(init?.headers).get("Authorization")).toBe(
+      "DevelopmentBearer development-token"
+    );
   });
 }
 

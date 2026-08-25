@@ -43,4 +43,12 @@ describe("session endpoints", () => {
     });
     expect(request).toHaveBeenCalledTimes(3);
   });
+
+  it("normaliserer tom anonym respons til null for query-cachen", async () => {
+    const request = vi.fn().mockResolvedValue(undefined);
+    const api = { request } as unknown as ApiClient;
+
+    await expect(getBrukerWithCurrentTermsAcceptance(api, "askim-tennis")).resolves.toBeNull();
+    expect(request).toHaveBeenCalledOnce();
+  });
 });

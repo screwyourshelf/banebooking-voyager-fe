@@ -23,7 +23,16 @@ function createAdapter(initialSession: AuthSession | null) {
   const listeners = new Set<AuthSessionListener>();
   const adapter: AuthAdapter = {
     getSession: vi.fn(async () => session),
-    getAccessToken: vi.fn(async () => session?.accessToken ?? null),
+    getAuthorization: vi.fn(async () => {
+      if (!session) return null;
+      return {
+        scheme:
+          session.user.source === "development"
+            ? ("DevelopmentBearer" as const)
+            : ("Bearer" as const),
+        token: session.accessToken,
+      };
+    }),
     subscribe(listener) {
       listeners.add(listener);
       return () => listeners.delete(listener);
@@ -52,10 +61,18 @@ describe("composite auth adapter", () => {
     composite.subscribe(listener);
 
     await expect(composite.getSession()).resolves.toBe(developmentSession);
+    await expect(composite.getAuthorization()).resolves.toEqual({
+      scheme: "DevelopmentBearer",
+      token: "development-token",
+    });
     expect(supabase.adapter.getSession).not.toHaveBeenCalled();
 
     development.emit(null);
     await vi.waitFor(() => expect(listener).toHaveBeenLastCalledWith(supabaseSession));
+    await expect(composite.getAuthorization()).resolves.toEqual({
+      scheme: "Bearer",
+      token: "supabase-token",
+    });
   });
 
   it("logger ut begge adapters og publiserer anonym session", async () => {

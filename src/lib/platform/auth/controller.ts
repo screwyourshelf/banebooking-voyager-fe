@@ -73,8 +73,8 @@ export function createAuthController(adapter: AuthAdapter): AuthController {
       return initializePromise;
     },
 
-    getAccessToken() {
-      return adapter.getAccessToken();
+    getAuthorization() {
+      return adapter.getAuthorization();
     },
 
     subscribe(listener) {

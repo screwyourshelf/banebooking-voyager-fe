@@ -48,9 +48,9 @@ export function createDevelopmentAuthAdapter({
       return currentSession();
     },
 
-    async getAccessToken() {
+    async getAuthorization() {
       session = enabled ? hentUtviklingssession() : null;
-      return session?.accessToken ?? null;
+      return session ? { scheme: "DevelopmentBearer", token: session.accessToken } : null;
     },
 
     subscribe(listener) {

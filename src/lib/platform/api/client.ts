@@ -4,9 +4,14 @@ import { createUnauthorizedHandler } from "./unauthorized";
 export type ApiClientOptions = {
   fetch: typeof globalThis.fetch;
   baseUrl: string;
-  getAccessToken: () => Promise<string | null>;
+  getAuthorization: () => Promise<ApiAuthorization | null>;
   onUnauthorized: () => Promise<void>;
   timeoutMs?: number;
+};
+
+export type ApiAuthorization = {
+  scheme: "Bearer" | "DevelopmentBearer";
+  token: string;
 };
 
 export type ApiRequestOptions<TBody = unknown> = {
@@ -41,8 +46,10 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
 
       try {
         const headers = new Headers(requestOptions.headers);
-        const token = await options.getAccessToken();
-        if (token) headers.set("Authorization", `Bearer ${token}`);
+        const authorization = await options.getAuthorization();
+        if (authorization) {
+          headers.set("Authorization", `${authorization.scheme} ${authorization.token}`);
+        }
 
         let body = requestOptions.body;
         if (requestOptions.json !== undefined) {

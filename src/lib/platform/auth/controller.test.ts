@@ -19,7 +19,7 @@ function createAdapter(getSession: AuthAdapter["getSession"]) {
   let listener: AuthSessionListener = () => {};
   const adapter: AuthAdapter = {
     getSession,
-    getAccessToken: async () => session.accessToken,
+    getAuthorization: async () => ({ scheme: "Bearer", token: session.accessToken }),
     subscribe(nextListener) {
       listener = nextListener;
       return () => {};

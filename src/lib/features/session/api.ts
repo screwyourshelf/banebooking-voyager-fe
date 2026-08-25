@@ -12,14 +12,14 @@ export function getKlubb(api: ApiClient, slug: string) {
  */
 export async function getBrukerWithCurrentTermsAcceptance(api: ApiClient, slug: string) {
   const path = `klubb/${encodeURIComponent(slug)}/bruker`;
-  let bruker = await api.request<BrukerRespons | null>(path);
+  let bruker = (await api.request<BrukerRespons | null | undefined>(path)) ?? null;
 
   if (bruker && !bruker.vilkårAkseptertDato) {
     await api.request<void, AksepterVilkårForespørsel>(`${path}/vilkaar`, {
       method: "POST",
       json: { versjon: AKTIV_VILKAAR.versjon },
     });
-    bruker = await api.request<BrukerRespons | null>(path);
+    bruker = (await api.request<BrukerRespons | null | undefined>(path)) ?? null;
   }
 
   return bruker;
