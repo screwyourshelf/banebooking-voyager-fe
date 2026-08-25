@@ -104,6 +104,11 @@ Ingen backendblokkeringer eller åpne produktbeslutninger. Tenantlogoene er eksp
 varig navigasjonsidentitet. Desktoprekkefølgen og det faste bunnområdet er eksplisitt godkjent som
 produksjonsparitet, mens mobilstrukturen og Sveltes tilgjengelighetsforbedringer skal beholdes.
 
+En første API-/fullstackytelsesgjennomgang er bevart i
+[`api-performance-follow-up.md`](./api-performance-follow-up.md). Den er parkert som en separat
+oppfølging etter at migreringsbranchen er ferdig behandlet, er ikke en backendblokkering og skal
+ikke aktiveres uten en eksplisitt brukerbeslutning.
+
 ## Neste eksakte steg
 
 Ingen migreringspakke eller oppryddingsleveranse står åpen. `/start` skal bekrefte denne tilstanden
@@ -122,4 +127,5 @@ og vente på en konkret produkt- eller vedlikeholdsoppgave; den skal ikke oppret
 | `npm run test:e2e:production`      | 8/8 ruter for begge hostartefakter                                         |
 | Produksjonsbudsjett                | 37,4 KiB initial JS gzip, 27,9 KiB CSS gzip, 120,5 KiB største lazy JS     |
 | `npm audit --audit-level=moderate` | 6 lave; 0 moderate, høye eller kritiske                                    |
+| Parkert API-oppfølgingsnotat       | Prettier for tre dokumenter; ingen runtime- eller backendendring           |
 | `git diff --check`                 | Bestått                                                                    |

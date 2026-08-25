@@ -21,3 +21,12 @@ generert kontrollartefakt som leses av `npm run check`, ikke en håndskrevet sty
 
 Vedlikeholds- og handoverprotokollen ligger i [`../AGENTS.md`](../AGENTS.md). Git bevarer den
 detaljerte migreringshistorikken; `migration-status.md` skal bare beskrive sann nåtilstand.
+
+## Parkerte oppfølgingsnotater
+
+| Dokument                                                         | Formål                                                                  |
+| ---------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| [`api-performance-follow-up.md`](./api-performance-follow-up.md) | Førstegjennomgang av API-/fullstackytelse etter migreringen; ikke aktiv |
+
+Parkerte notater er ikke en arbeidskø og startes ikke automatisk av `/start`. De aktiveres bare
+etter en eksplisitt brukerbeslutning og må valideres mot gjeldende kode før de brukes som plan.
