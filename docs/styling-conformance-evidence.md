@@ -1,249 +1,255 @@
-# SWP-7 uavhengig styling-konformitetsreview
+# SWP-7.3 uavhengig styling-konformitetsreview
 
 > **Resultat:** Ikke vellykket
 >
-> **Rettelsesstatus:** SWP-7.1 og SWP-7.2 er fullført; en ny kald SWP-7.3-review gjenstår
+> **Reviewstatus:** Fullført; SWP-7 forblir aktiv
 >
-> **Revidert kildecheckpoint:** `e60c8f7` (`refactor(swp-6): remove dead public surface`)
+> **Revidert kildecheckpoint:** `6772f1f` (`test(swp-7): make static audit reproducible`)
 >
 > **SWP-0 guard-/målebaseline:** `700cd2b` / `85cc31f`
 >
-> **Dato:** 2026-08-24; rettelsesstatus avstemt 2026-08-25
+> **Dato:** 2026-08-25
 
 ## Konklusjon
 
-Den ferdige frontendkilden, den kjørbare applikasjonen og begge produksjonsmålene er grønne. Full
-testport passerer, alle elleve visuelle referanser er uendret, de kritiske flytene og alle åtte
-produksjonsrutene passerer, legacygjeld er null, og theme-/cascade-kontraktene beskriver den aktive
-kilden uten diagnostics.
+Den ferdige frontendkilden og begge produksjonsmålene er funksjonelt og visuelt grønne. Alle 346
+tester, de tre kritiske flytene, elleve uendrede visuelle referanser og åtte produksjonsruter
+passerer. Registrert CSS har null legacygjeld og null ulagrede regler, og produksjonstreet
+rapporterer null diagnostics over 184 kilder.
 
-Reviewet klassifiseres likevel som **ikke vellykket** etter den bindende definisjonen i
-[`styling-lift-and-shift-plan.md`](./styling-lift-and-shift-plan.md): stylingguardene kan omgås med
-vanlig Svelte-syntaks. `svelte:element`, element- og komponentspreads samt `{@html ...}` blir ikke
-analysert som stylingkanaler. Samtidig lar 31 komponenter i den offentlige `$lib/ui`-barrelen
-fortsatt `class` og/eller `style` inngå i propkontrakten gjennom brede HTML-attributtyper. En
-feature kan dermed typegyldig sende en stylingoverride gjennom en spread uten at guarden
-rapporterer den.
+Den kalde SWP-7.3-reviewen klassifiseres likevel som **ikke vellykket** etter den bindende
+definisjonen i [`styling-lift-and-shift-plan.md`](./styling-lift-and-shift-plan.md). Fire uavhengige
+kontrollprober passerer guardene uten diagnostic:
 
-Dette er et håndhevings- og API-funn, ikke et påvist visuelt avvik i dagens produktkode. Ingen
-produktkode eller backend er endret i audit-checkpointet. Funnene skal rettes i separate,
-avgrensede checkpoints før en ny kald sluttport kan klassifisere migreringen på nytt.
+1. En ny offentlig UI-komponent kan forwarde en bred native attributtype og eksponere `class` og
+   `style` uten å bli oppdaget av den manuelt registrerte typekontrollen.
+2. En identifier-spread i offentlig UI kan skjule `class` og `style`; bare inline
+   object-expression-spreads inspiseres.
+3. En gyldig CSS-referanse med whitespace, `var( --navn)`, går utenom
+   custom-property-kontrakten.
+4. Feature- eller routekode kan sette styling imperativt gjennom DOM-API-er i `<script>`; bare
+   markup- og CSS-kanaler analyseres.
+
+I tillegg inneholder `src/app.html` en permanent oppstartsflate med rå produktfarger, font og
+radius. Baselineverktøyet måler flaten som `startup-document-contract`, men stylingguardene
+oppdager ikke `.html`, og ADR-/produkt-/guarddokumentasjonen navngir verken kontrakten eller dette
+ekstra permanente unntaket. Produktidentiteten kan derfor ikke endres bare gjennom
+theme-kontrakten.
+
+Ingen av hullene brukes til skjult styling i dagens routes, features eller offentlige UI. Dette er
+et håndhevings-, eierskaps- og dokumentasjonsfunn, ikke et påvist produktavvik. Planen sier likevel
+eksplisitt at en guard som kan omgås i vanlig Svelte-kode gjør resultatet «ikke vellykket».
+Produktkode og backend er ikke endret i audit-checkpointet.
 
 ## Scope og metode
 
-Reviewet ble utført fra en ren arbeidskopi på `feature/sveltekit-lift-and-shift`, 69 commits foran
-merge-base `5287c5e` mot `main`. Følgende bevis ble avstemt uten å legge tidligere
-migreringskonklusjoner til grunn:
+Reviewet startet fra en ren arbeidskopi på `feature/sveltekit-lift-and-shift`, 72 commits foran
+merge-base `5287c5e` mot `main`. Følgende ble lest og kontrollert på nytt uten å gjenbruke
+konklusjonen fra den første SWP-7-auditen:
 
-- SWP-0-baselinen og den samlede stylingdiffen frem til `e60c8f7`
-- alle aktive `.svelte`- og `.css`-kilder, UI-barreler, guardkode, fixtures og kontrakter
-- theme-projeksjon, custom-property-graf, cascade layers og visualiseringsallowlist
-- komponent-, axe-, arkitektur-, legacy-, design- og stylingkontroller
-- kritiske og visuelle Playwright-flyter
-- Cloudflare Pages- og GitHub Pages-produksjonsbuild med rutematrise og bundlemåling
-- `npm audit` og en separat Knip-kjøring med eksplisitt registrerte fixtures og dynamisk testscript
+- hele SWP-0-baselinen, stylingdiffen `85cc31f..6772f1f` og den ferdige produksjonskilden
+- alle stylingguardregler, parserkanaler, fixtures, mutasjonsprober og produksjonstrekontrakter
+- offentlig UI-barrel, native prop-forwardere, theme-projeksjon, custom-property-graf og cascade
+- `src/app.html`, oppstarts-/asset-recovery-kontrakten og dokumentert stylingeierskap
+- komponent-, axe-, arkitektur-, legacy-, statisk analyse-, design- og stylingkontroller
+- kritiske og visuelle Playwright-flyter samt begge hostbuildene og produksjonsrutematrisen
 - ADR-er, arkitektur, produktregler, guarddokumentasjon, driftshåndbok og migreringsstatus
 
-Backend-repoet ble ikke endret. Playwright brukte bare den eksisterende lokale testharnessen og
-ryddet egne mutasjoner.
+Backend-repoet ble ikke endret. Playwright brukte den eksisterende lokale testharnessen og ryddet
+egne mutasjoner.
 
 ## Målematrise
 
-| Område               | Resultat     | Målt bevis                                                                                                                                           |
-| -------------------- | ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Funksjonell paritet  | Bestått      | 94 testfiler/345 tester, 3/3 kritiske flyter og 8/8 produksjonsruter passerer                                                                        |
-| Visuell paritet      | Bestått      | 11/11 referansesnapshots passerer uten oppdatering eller godkjent avvik                                                                              |
-| Theme-sentralisering | Bestått      | 656 roller, 904 semantiske utilities og 116 reelle lyst-/mørkt-skift; toveis audit har null foreldreløse eller ubrukte projeksjoner                  |
-| Featuregrenser       | Ikke bestått | Aktiv kilde har null diagnostics, men spreads, `svelte:element` og `{@html}` kan omgå style-/class-reglene                                           |
-| Tailwind-vokabular   | Ikke bestått | Aktiv offentlig UI er statisk analyserbar, men guarden undersøker ikke alle ordinære Svelte-kanaler og kan derfor ikke bevise den lukkede kontrakten |
-| Bits UI              | Bestått      | Bits UI-importer finnes bare under `src/lib/ui/primitives`; features kjenner ikke intern state eller interne variabler                               |
-| CSS-kaskade          | Bestått      | Fire registrerte CSS-filer, ti lagrede regler, null ulagrede regler og bare fire eksakt godkjente reduced-motion-`!important`                        |
-| Legacy               | Bestått      | Null transition-baseline, null featureklasser, null `@apply` og ingen globale produktselector-filer                                                  |
-| Vedlikeholdbarhet    | Ikke bestått | Offentlig UI lekker en alternativ stylingkanal, og den komplette Knip-auditen er ikke reproduserbar fra et pinnet repo-script                        |
-| Størrelse            | Bestått      | CSS har vokst omtrent 30 % fra SWP-0, er dokumentert her og holder 50 KiB-budsjettet på begge hostmål                                                |
-| Dokumentasjon        | Ikke bestått | Flere aktive dokumenter beskriver tidligere filantall, fase eller en interaction som koden ikke tilbyr                                               |
+| Område               | Resultat     | Målt bevis                                                                                       |
+| -------------------- | ------------ | ------------------------------------------------------------------------------------------------ |
+| Funksjonell paritet  | Bestått      | 95 testfiler/346 tester, 3/3 kritiske flyter og 8/8 produksjonsruter passerer                    |
+| Visuell paritet      | Bestått      | 11/11 referansesnapshots passerer uten oppdatering eller godkjent avvik                          |
+| Theme-sentralisering | Ikke bestått | Oppstartsflaten dupliserer rå produktidentitet utenfor theme-kontrakten                          |
+| Featuregrenser       | Ikke bestått | Direkte DOM-styling i script og nye brede UI-forwardere kan introduseres uten diagnostic         |
+| Tailwind-vokabular   | Ikke bestått | Identifier-spreads kan skjule ikke-analyserte `class`-/`style`-verdier i offentlig UI            |
+| Bits UI              | Bestått      | Bits UI-importer finnes bare under `src/lib/ui/primitives`; intern state er innkapslet           |
+| CSS-kaskade          | Bestått      | Fire registrerte stilark, ti lagrede regler, null ulagrede regler og fire godkjente `!important` |
+| Legacy               | Bestått      | Null transition-baseline, featureklasser, `@apply` og globale produktselector-filer              |
+| Vedlikeholdbarhet    | Ikke bestått | API-oppdagelse og stylingkanaler er ikke komplette; oppstartsidentitet har ingen besluttet eier  |
+| Størrelse            | Bestått      | CSS-regresjonen fra SWP-0 er målt og begge hostene holder 50 KiB-budsjettet                      |
+| Dokumentasjon        | Ikke bestått | Fail-closed- og eneste-unntakspåstandene beskriver ikke guardhullene eller oppstartsflaten       |
 
-Fire matriserader er ikke bestått selv om dagens produkt er grønt. Guardomgåelsen utløser alene
-planens eksplisitte kriterium for «ikke vellykket».
+Fem rader er ikke bestått. Guardomgåelsene utløser alene planens eksplisitte kriterium for «ikke
+vellykket».
 
 ## Kvantitativ avstemming mot SWP-0
 
-| Måling                               | SWP-0 | SWP-7 audit | Endring |
-| ------------------------------------ | ----: | ----------: | ------: |
-| Aktive CSS-filer                     |     7 |           4 |      -3 |
-| CSS-linjer                           | 5 974 |       2 044 |  -3 930 |
-| CSS-regler                           |   780 |          10 |    -770 |
-| Selectors                            |   846 |          12 |    -834 |
-| Ulagrede regler                      |    91 |           0 |     -91 |
-| `@apply`-direktiver                  |     3 |           0 |      -3 |
-| `!important`-deklarasjoner           |    75 |           4 |     -71 |
-| Registrerte legacyavvik              | 2 233 |           0 |  -2 233 |
-| Featureklasseforekomster             |    52 |           0 |     -52 |
-| Visualiseringskandidater/-unntak     |   106 |          38 |     -68 |
-| Tailwind-utilityforekomster i Svelte |     0 |       1 272 |  +1 272 |
+| Måling                               | SWP-0 | SWP-7.3 | Endring |
+| ------------------------------------ | ----: | ------: | ------: |
+| Aktive CSS-filer                     |     7 |       4 |      -3 |
+| CSS-linjer                           | 5 973 |   2 045 |  -3 928 |
+| CSS-regler                           |   780 |      10 |    -770 |
+| Selectors                            |   846 |      12 |    -834 |
+| Ulagrede regler                      |    91 |       0 |     -91 |
+| `@apply`-direktiver                  |     3 |       0 |      -3 |
+| `!important`-deklarasjoner           |    75 |       4 |     -71 |
+| Registrerte legacyavvik              | 2 233 |       0 |  -2 233 |
+| Featureklasseforekomster             |    52 |       0 |     -52 |
+| Visualiseringskandidater/-unntak     |   106 |      38 |     -68 |
+| Tailwind-utilityforekomster i Svelte |     0 |   1 271 |  +1 271 |
 
 De fire gjenværende `!important`-deklarasjonene er den eksakt registrerte globale
 reduced-motion-fallbacken. De 38 visualiseringsunntakene er seks inline custom-property-verdier og
 32 SVG-geometriattributter hos fire navngitte statistikkeiere. De uttrykker geometri, ikke
 produktidentitet.
 
-Den nåværende produksjonstrekontrollen oppdager 184 kilder, kjører ni ikke-cascade-regler og
-rapporterer null diagnostics. Theme-kontrakten finner 1 411 custom-property-definisjoner og 909
-referanser. Cascade-kontrakten finner tre regler i `theme`, sju i `base` og ingen app-eide regler i
-`components` eller `utilities`.
+Baselinen måler også fire styleblokker og sju styleattributter i markup. Tre blokker og seks
+attributter er de registrerte statistikkgeometriene. Den siste 62-linjers blokken og det siste
+attributtet ligger i `src/app.html` og er merket `startup-document-contract` uten planlagt
+fjerningscheckpoint. Denne oppstartsflaten inngår ikke i de 38 visualiseringsunntakene.
+
+Den registrerte produksjonskilden har 1 411 custom-property-definisjoner, 909 referanser og 1 271
+Tailwind-utilityforekomster. Theme-kontrakten finner 656 roller, 904 semantiske utilities og 116
+reelle lyst-/mørkt-skift. Cascade-kontrakten finner tre regler i `theme`, sju i `base` og ingen
+app-eide regler i `components` eller `utilities`.
 
 ## Produksjonsstørrelse
 
-| Artefakt                        |        SWP-0 |  SWP-7 audit |                 Delta |
-| ------------------------------- | -----------: | -----------: | --------------------: |
-| Cloudflare CSS, gzip            |  21 862 byte |  28 424 byte | +6 562 byte / +30,0 % |
-| GitHub Pages CSS, gzip          |  21 871 byte |  28 443 byte | +6 572 byte / +30,0 % |
-| Cloudflare initial JavaScript   |  38 140 byte |  38 157 byte |              +17 byte |
-| GitHub Pages initial JavaScript |  38 181 byte |  38 193 byte |              +12 byte |
-| JavaScript-chunks               |           61 |           60 |                    -1 |
-| Største lazy chunk, gzip        | 123 363 byte | 123 363 byte |                     0 |
+| Artefakt                        |        SWP-0 | Fersk SWP-7.3 |                 Delta |
+| ------------------------------- | -----------: | ------------: | --------------------: |
+| Cloudflare CSS, gzip            |  21 862 byte |   28 475 byte | +6 613 byte / +30,2 % |
+| GitHub Pages CSS, gzip          |  21 871 byte |   28 496 byte | +6 625 byte / +30,3 % |
+| Cloudflare initial JavaScript   |  38 135 byte |   38 156 byte |              +21 byte |
+| GitHub Pages initial JavaScript |  38 184 byte |   38 194 byte |              +10 byte |
+| JavaScript-chunks               |           61 |            60 |                    -1 |
+| Største lazy chunk, gzip        | 123 363 byte |  123 363 byte |                     0 |
 
-CSS-økningen er forventet etter at Tailwind-utilities overtok presentasjonen, er eksplisitt målt
-og er godt under produksjonsbudsjettet på 50 KiB gzip. Den er derfor ikke en størrelsesfeil.
+CSS-økningen er forventet etter at Tailwind-utilities overtok presentasjonen, er dokumentert her
+og er under produksjonsbudsjettet på 50 KiB gzip. Initial JavaScript varierer 9/10 byte fra den
+innsjekkede SWP-7.2-målingen på grunn av regenererte buildartefakter, men holder 50 KiB-budsjettet.
 
-## Kritisk funn: guardene kan omgås
+## Kontrollprober som passerer feilaktig
 
-Kontrollprober ble kjørt direkte gjennom samme `analyzeStylingSource` som fixture- og
-produksjonstre-portene bruker. Kontrolltilfellene beviser at reglene er aktive; variantene beviser
-at syntaktiske kanaler mangler.
+Probene ble kjørt direkte gjennom samme `analyzeStylingSource` og schema 4-kontrakt som fixture- og
+produksjonstre-portene bruker.
 
-| Virtuell featurekilde                                          | Forventet              |                              Målt |
-| -------------------------------------------------------------- | ---------------------- | --------------------------------: |
-| `<div class="bg-red-500">`                                     | Rå palett avvises      | 1 × `STYLING-002-FEATURE-STYLING` |
-| `<svelte:element this="div" class={"bg-red-500"}>`             | Rå palett avvises      |                     0 diagnostics |
-| `<div {...{ class: "bg-red-500", style: "color:red" }}>`       | Featurestyling avvises |                     0 diagnostics |
-| `{@html \`<div class="bg-red-500" style="color:red"></div>\`}` | Featurestyling avvises |                     0 diagnostics |
-| `<Page class="bg-red-500">`                                    | UI-override avvises    |     1 × `STYLING-003-UI-OVERRIDE` |
-| `<svelte:element this={Page} class="bg-red-500">`              | UI-override avvises    |                     0 diagnostics |
-| `<Page {...{ class: "bg-red-500", style: "color:red" }}>`      | UI-override avvises    |                     0 diagnostics |
+| Kanal og virtuell kilde                                                                         | Forventet guardutfall                        | Målt          |
+| ----------------------------------------------------------------------------------------------- | -------------------------------------------- | ------------- |
+| Offentlig UI: bred `HTMLAttributes` i `$props()` forwardes som `{...attributes}`                | `class`/`style` må være utelatt eller avvist | 0 diagnostics |
+| Offentlig UI: `const styling = { class: "bg-red-500", style: "color:red" }; <div {...styling}>` | Spreadens styling må avvises                 | 0 diagnostics |
+| Registrert CSS: `color: var( --unregistered-product-color)`                                     | Uregistrert custom property må avvises       | 0 diagnostics |
+| Feature: `$effect(() => element.style.setProperty("color", "red"))`                             | Featureeid imperativ styling må avvises      | 0 diagnostics |
 
-Årsaken ligger i [`analyze.mjs`](../scripts/styling-guards/analyze.mjs): markupbesøket sender bare
-`RegularElement` og `Component` til stylingreglene, hopper eksplisitt over `attributes` under
-rekursjon og behandler ikke `SpreadAttribute` eller `HtmlTag`. Den supplerende featurekontrollen
-søker bare etter literal `class="..."`; expression-, spread- og HTML-variantene blir derfor heller
-ikke fanget der.
+### Offentlig UI er ikke automatisk lukket
 
-Produksjonskilden bruker ikke disse omgåelsene til produktstyling. Det eneste aktive
-`svelte:element`-tilfellet er `Icon.svelte`, som oppretter en privat Hugeicons-node med kontrollerte
-attributter. Det finnes ingen aktiv `HtmlTag`, action-, attachment- eller spreadbasert
-featurestyling. Funnets alvor ligger i at `npm run check` tillater at dette introduseres senere.
+`src/lib/ui/public-html-attributes.test.ts` beviser at de 31 manuelt navngitte forwarderne bruker
+en propkontrakt uten `class` og `style`. Testen oppdager ikke en ny komponent som ikke legges til i
+den samme håndskrevne listen. Stylinganalysatoren undersøker markup, ikke prop-typene i scriptet,
+så en ny `$lib/ui`-eier med `HTMLAttributes<HTMLElement>` og `{...attributes}` passerer både guard
+og typekontroll.
 
-## Offentlig UI tillater fortsatt stylingprops
+For eksisterende public-UI-spreads inspiserer `staticSpreadStylingNames` bare
+`ObjectExpression`. Et identifier-uttrykk returnerer en tom navneliste og godtas. Den andre proben
+kan derfor skjule både rå palettutility og inline style bak et vanlig lokalt objekt.
 
-Den offentlige kontrakten sier at typed produktprops og variants er eneste tilpasningsgrense, og
-at konsumenter ikke kan bruke `class` eller `style`. Likevel arver følgende 31 exports brede
-Svelte HTML-attributtyper uten å utelate begge stylingprops:
+Alle 31 registrerte offentlige og fem private forwardere i dagens kilde bruker
+`PublicHtmlAttributes`, og ingen aktiv identifier-spread skjuler styling. Funnet gjelder at den
+erklærte kontrakten ikke forblir lukket når vanlig ny UI-kode legges til.
 
-- primitives: `Button`, `ButtonLink`, `Input` og `Textarea`
-- patterns: `Collection`, `CollectionList`, `Dialog`, `Document`, `DocumentFacts`, `DocumentIntro`,
-  `DocumentSection`, `EditorDialog`, `Form`, `FormActions`, `FormField`, `FormFields`, `FormSubmit`,
-  `Navigation`, `NavigationAction`, `NavigationIdentity`, `NavigationLink`, `NavigationList`,
-  `NavigationSection`, `Page`, `Section`, `SettingsPanel`, `SettingsRange`, `SettingsRow`,
-  `SettingsSection`, `SettingsStack` og `SettingsSwitchRow`
+### CSS-parseren overser gyldig whitespace
 
-De fleste eierklassene skrives etter spreaden og vinner derfor over en direkte `class` ved
-rendering, men dette gjør ikke propen til en lukket eller maskinelt bevist kontrakt. `style` blir
-stående på DOM-noden og kan overstyre theme- og geometriverdier. For eksempel er
-`<Page {...{ style: "color:red" }}>` typegyldig og passerer dagens guard.
+Både CSS-policyen og project-wide custom-property-innsamlingen bruker et mønster som krever at
+custom-property-navnet følger direkte etter `var(`. CSS tillater whitespace der, og Chromium
+aksepterer og løser `var( --navn)`. Proben kan dermed referere til en uregistrert produktrolle uten
+at CSS- eller project-wide-kontrakten ser referansen.
 
-Dagens features utnytter ikke åpningen. De tre aktive komponentspreadene i featurelaget går til
-`Feedback` og inneholder bare typed, semantiske feedbackprops. Funnet skal derfor lukkes uten å
-endre eksisterende produktmarkup eller introdusere en ny variant.
+Dagens fire registrerte stilark bruker ikke formen. Funnet gjelder en vanlig, gyldig CSS-skrivemåte
+som `npm run check` feilaktig godtar.
 
-## Eier-, theme- og legacybevis
+### Scriptstyling er utenfor analysen
 
-- `src/styles/design-system/tokens.css` eier rå identitet, semantiske produktroller og lyst/mørkt
-  theme; `src/index.css` eier den eksplisitte `@theme inline`-projeksjonen til Tailwind.
-- `src/styles/design-system/base.css` eier bare dokumentdefaults, tilgjengelighetsfallback og
-  keyframes. `src/styles/design-system.css` er den registrerte importinngangen.
-- Offentlig UI eier all statisk produktpresentasjon som semantiske Tailwind-utilities.
-- Routes og features har ingen uregistrert CSS-import, `<style>` eller inline-styling.
-- Statistikk er eneste visualiseringsunntak, med fire eksakte eiere og bare datadrevet geometri.
-- Bits UI-importer og interne statekanaler er innkapslet under primitives.
-- Det finnes ingen React-kilde, transition-baseline, app-eid `@apply`, global
-  produktselectorfil eller parallell stylingbane.
+Markupbesøket klassifiserer Svelte-attributtkanaler, og CSS-policyen analyserer PostCSS-treet.
+Script-AST-en undersøkes ikke for direkte DOM-stylingsinks som `element.style`, `cssText`,
+`classList` eller styling gjennom `setAttribute`. Den fjerde proben introduserer derfor featureeid
+produktstyling uten markupattributt, `<style>` eller CSS-import og passerer alle stylingreglene.
 
-En ny agent kan finne de tilsiktede eierne gjennom ADR-006, produktreglene, UI-barrelen,
-`tokens.css`, `index.css` og guardkontrakten. API- og guardhullene betyr likevel at eiergrensen ikke
-er fullstendig håndhevet.
+Det finnes ingen slik direkte DOM-styling i dagens routes eller features. Funnet krever en smal
+scriptkontrakt som avviser stylingoperasjoner uten å forby legitime semantiske DOM-attributter.
 
-## Dokumentasjons- og reproduserbarhetsfunn
+## Oppstartsdokumentet mangler besluttet stylingeierskap
 
-Migreringsstatusens aktive måltall ble korrigert i dette audit-checkpointet. Følgende avvik står
-igjen og gjør dokumentasjonsraden ikke bestått:
+`src/app.html` må kunne vise boot- og asset-recovery-UI før SvelteKit-modulen er lastet. Den reelle
+tekniske begrunnelsen gjør ikke presentasjonsflaten til legacykode, men eierskapet må være
+eksplisitt. I dag inneholder dokumentet blant annet:
 
-1. [`scripts/styling-guards/README.md`](../scripts/styling-guards/README.md) sier at cascade-porten
-   analyserer sju stilark og at visualiseringsinventaret er midlertidig frem til SWP-5.2. Faktisk
-   kontrakt har fire stilark og en permanent allowlist.
-2. [`development-and-operations.md`](./development-and-operations.md) omtaler stylingløftet som
-   uferdig og SWP-1-guardene i fremtid.
-3. [`product-design-rules.md`](./product-design-rules.md) navngir `actions` som en egen
-   `CollectionRow`-interaction. Typen tilbyr `static`, `open`, `action`, `expand` og `reorder`;
-   `actions` er bare en snippet inni `expand`.
-4. [`PRINCIPLES.md`](../src/styles/design-system/PRINCIPLES.md) sier at den globale CSS-flaten er to
-   filer og at `tokens.css` eier Tailwind-theme. Den registrerte flaten er fire filer, og
-   `@theme inline` ligger i `src/index.css`.
+- rå `theme-color`, lys/mørk bakgrunn og produkttekst-/knappefarger
+- literal systemfont, borderfarge og radius
+- en 62-linjers ulagret styleblokk og `style="display: contents"` på app-roten
 
-SWP-6-statusen beskriver en full Knip-audit med registrerte fixtures og kontrakttestscript. Repoet
-har imidlertid ingen pinnet Knip-avhengighet, config eller script som gjenskaper akkurat denne
-analysen. En kald standardkjøring av Knip 6.32.2 rapporterer 24 fixtures, tre bevisst dynamiske
-produksjonstre-exports og 19 beholdte transporttyper. En midlertidig, eksplisitt config som
-registrerte fixtureglobben og `scripts/test-styling-production-tree-contract.mjs`, og ignorerte
-bare typediagnostics under `src/lib/contracts`, ga null øvrige funn. Configen ble slettet etter
-reviewet; SWP-7.2 må gjøre kontrollen permanent og reproduserbar.
+Kildebaselinen finner og fryser disse som `startup-document-contract`. Produksjonstrekontrollen
+oppdager derimot bare `.svelte` og `.css`, og ADR-006, produktreglene og guarddokumentasjonen sier
+at theme-identitet er sentral og at statistikkgeometri er det eneste permanente stylingunntaket.
+Oppstartsidentiteten må redigeres separat fra `tokens.css`, og en ny agent kan ikke finne en
+besluttet synkroniserings- eller guardkontrakt i dokumentasjonen.
+
+Å gjøre dette til et nytt permanent guardunntak utover datadrevet geometri utløser planens
+stoppregel. Før SWP-7 kan fullføres må brukeren velge om den eksakte pre-module-flaten skal være en
+navngitt, maskinelt låst oppstartskontrakt, eller om identiteten skal genereres/sentraliseres på en
+annen måte. Reviewet tar ikke produkt-/arkitekturbeslutningen på brukerens vegne.
+
+## Eier-, theme- og legacybevis som er grønne
+
+- `src/styles/design-system/tokens.css` eier rå identitet og semantiske produktroller for den
+  modulinnlastede appen; `src/index.css` eier den eksplisitte Tailwind-projeksjonen.
+- `src/styles/design-system/base.css` eier dokumentdefaults, tilgjengelighetsfallback og keyframes;
+  `src/styles/design-system.css` er den registrerte importinngangen.
+- Offentlig UI eier dagens statiske produktpresentasjon som semantiske Tailwind-utilities.
+- Routes og features har ingen CSS-import, `<style>`, skjult class-spread eller imperativ styling.
+- Statistikk er eneste besluttede visualiseringsunntak, med fire eksakte geometri-eiere.
+- Bits UI-importer og intern state er innkapslet under primitives.
+- Det finnes ingen React-kilde, transition-baseline, app-eid `@apply`, global produktselectorfil
+  eller parallell stylingbane i den modulinnlastede appen.
+
+## Dokumentasjonsfunn
+
+`scripts/styling-guards/README.md`, ADR-006, produktreglene og migreringsstatusen beskriver schema 4
+som fail-closed og statistikkgeometri som eneste permanente stylingunntak. Kontrollprobene og
+oppstartsflaten viser at begge påstandene er for sterke. Baselinefilen kjenner riktignok etiketten
+`startup-document-contract`, men etiketten er ikke en dokumentert arkitektur- eller guardbeslutning.
+
+`docs/wp-7-production-evidence.md` er korrekt datert historisk WP-7-bevis, men
+`development-and-operations.md` omtaler det som gjeldende bundlebevis selv om dagens CSS-/chunktall
+er dokumentert i stylingbaselinen. Denne lenketeksten bør avstemmes når dokumentasjonen oppdateres
+etter den besluttede oppstartskontrakten.
 
 ## Verifikasjon
 
-| Kontroll                               | Resultat                                                                                                                                                   |
-| -------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `npm test`                             | Bestått: 94 filer og 345 tester                                                                                                                            |
-| `npm run check`                        | Bestått: Svelte-typekontroll uten feil/advarsler; arkitektur, legacy, design, theme, cascade, fixtures, produksjonstre, baseline, lint og format er grønne |
-| Styling-fixtures                       | Bestått som implementert: 23 fixtures, 10 regler og positive/negative tilfeller; auditprobene over viser manglende kanaldekning                            |
-| Styling-produksjonstre                 | Bestått: 184 kilder, 9 regler og 0 diagnostics                                                                                                             |
-| `npm run test:e2e`                     | Bestått: 3 kritiske flyter og 11 visuelle referanser                                                                                                       |
-| `npm run test:e2e:production`          | Bestått: begge hostbuild og 8/8 root-/base-path-ruter                                                                                                      |
-| Bundleport                             | Bestått: 37,3 KiB initial JavaScript, 27,8 KiB CSS, 120,5 KiB største lazy chunk og 60 chunks                                                              |
-| `npm audit --audit-level=moderate`     | Bestått ved terskelen: 6 lave, 0 moderate/høye/kritiske; ingen kompatibel automatisk retting                                                               |
-| Knip 6.32.2 med eksplisitt auditconfig | Bestått: bare de 19 dokumenterte transporttypene er ignorert                                                                                               |
-| `git diff --check` før dokumentasjon   | Bestått                                                                                                                                                    |
+| Kontroll                           | Resultat                                                                                         |
+| ---------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `npm test`                         | Bestått: 95 filer og 346 tester                                                                  |
+| `npm run check`                    | Bestått: type, arkitektur, legacy, Knip, design, styling, baseline, lint og format               |
+| Theme-/cascadekontrakt             | Bestått som implementert: 656 roller, 904 utilities, 116 skift; fire stilark og ti regler        |
+| Styling-fixtures                   | Bestått som implementert: 28 fixtures og 10 stabile regler; probene over viser manglende dekning |
+| Styling-produksjonstre             | Bestått som implementert: 184 kilder, ni ikke-cascade-regler og null diagnostics                 |
+| `npm run test:e2e`                 | Bestått: 3 kritiske flyter og 11 uendrede visuelle referanser                                    |
+| `npm run test:e2e:production`      | Bestått: begge hostbuildene og 8/8 root-/base-path-ruter                                         |
+| Fersk bundlemåling                 | Bestått: 28 475/28 496 CSS-byte, 38 156/38 194 initial JS-byte, 60 chunks og 123 363 lazy-byte   |
+| `npm audit --audit-level=moderate` | Bestått ved terskelen: 6 lave og 0 moderate, høye eller kritiske funn                            |
+| Kald kontrollprobematrise          | Ikke bestått: fire ordinære stylingkanaler gir null diagnostics                                  |
+| `git diff --check`                 | Bestått etter auditdokumentasjonen                                                               |
 
-## Avgrensede rettingscheckpoints
+## Avgrensede neste checkpoints
 
-### SWP-7.1 — lukk markup- og offentlig UI-grense — fullført
+### SWP-7.4 — lukk resterende guard- og API-kanaler
 
-1. Etabler én delt typekontrakt som utelater `class` og `style` fra offentlige HTML-attributter,
-   og bruk den på de 31 berørte `$lib/ui`-exports uten produkt- eller DOM-endring.
-2. Utvid AST-analysen til `SvelteElement`, `SpreadAttribute` og `HtmlTag`; ta en eksplisitt
-   beslutning for actions, attachments og andre DOM-stylingsinks som parseren tilbyr.
-3. Behold bare et smalt, eksakt bevist unntak for Icons kontrollerte dynamiske element.
-4. Legg til positive og negative fixtures, mutasjonsprober og typekontrakttester som beviser at
-   hver kanal både avvises og tillater legitim semantisk bruk.
+1. Gjør oppdagelsen av native attributt-forwardere kilde-/barreldekketøyende, slik at en ny
+   offentlig UI-eier ikke kan passere uten `PublicHtmlAttributes` eller tilsvarende bevist
+   kontrakt.
+2. Avvis eller bevis identifier-spreads hos offentlige UI-eiere; legg til negative fixtures og
+   mutasjonsprober for brede props, skjult `class` og skjult `style`.
+3. Parse custom-property-referanser etter CSS-grammatikken, inkludert whitespace og fallback, og
+   lås kontrollproben som negativ fixture.
+4. Innfør en smal script-AST-kontroll for direkte DOM-stylingsinks i routes, features og offentlig
+   UI, med positive tester for legitime semantiske DOM-operasjoner.
+5. Kjør hele test-, check-, E2E-, hostbuild-, bundle- og produksjonsruteporten uten produktendring.
 
-Checkpointet er fullført uten produkt- eller DOM-endring. Schema 4 klassifiserer kanalene
-fail-closed, det eksakte Icon-unntaket er fixture- og mutasjonsbevist, og alle 31 offentlige
-UI-exports utelater `class` og `style`.
+### SWP-7.5 — beslutt og håndhev oppstartsdokumentets stylingkontrakt
 
-### SWP-7.2 — reproduserbar statisk audit og dokumentavstemming — fullført
-
-1. Pin Knip, sjekk inn config og et navngitt script, registrer fixture- og dynamiske innganger og
-   dokumenter de 19 bevisst beholdte transporttypene.
-2. Avstem guard-README, driftshåndbok, produktregler og design-systemprinsipper mot faktisk kilde.
-3. Kjør statisk død-kode-, eksport-, utility-, token- og direkte avhengighetskontroll fra bare
-   repoets deklarerte kommandoer.
-
-Knip 6.32.2, `knip.json` og `npm run static-analysis:check` er nå repoeide. Fixturene og det
-dynamiske kontrakttestscriptet er eksplisitte innganger, og kontrollen krever nøyaktig de 19
-dokumenterte type-only transportfunnene samtidig som alle runtime-, eksport-, import- og
-pakkefunn avvises. Guard-README, driftshåndbok, produktregler og designsystemprinsipper beskriver
-den faktiske kilden. Full test-, check-, kritisk/visuell E2E- og produksjonsruteport er grønn.
-
-### SWP-7.3 — ny uavhengig sluttport — neste
-
-Start en ny kald `/start` etter SWP-7.1 og SWP-7.2. Les baseline, samlet diff og ferdig kilde på
-nytt; kjør hele test-, check-, E2E-, snapshot-, hostbuild-, bundle- og statisk analyseport. SWP-7
-kan bare klassifiseres som vellykket når alle elleve matriserader er bestått.
+Stopp for brukerbeslutning før implementasjon. Beslutningen må gjøre pre-module-behovet,
+theme-synkronisering, tillatte verdier, guarddekning og dokumentasjon eksplisitt. Deretter kjøres en
+ny kald elleveraders SWP-7-review. SWP-7 kan bare markeres fullført når alle radene er bestått.
