@@ -6,8 +6,8 @@
 >
 > **Omfang:** Svelte 5, SvelteKit, frontendlag, dependency-/legacyopprydding og produksjonsbuild
 
-> **Etterfølgende beslutning:** Stylingens CSS-eierskap ble vurdert separat etter dette reviewet.
-> Tailwind-/theme-målarkitekturen og den aktive oppfølgingen ligger i
+> **Etterfølgende beslutning:** Stylingens CSS-eierskap ble vurdert og fullført etter dette reviewet.
+> Tailwind-/theme-målarkitekturen og den historiske utførelsen ligger i
 > [ADR-006](./adr/006-tailwind-styling-and-theme-ownership.md) og
 > [stylingplanen](./styling-lift-and-shift-plan.md). Dette reviewets konklusjon om rammeverks- og
 > lagarkitektur står fast, men er ikke sluttbevis for den nye stylingretningen.
@@ -49,8 +49,8 @@ storage-avviket i å komme tilbake.
   ikke et aktivt, endret utkast.
 - Pre-module bootstrap er vanlig JavaScript fordi den må håndtere chunkfeil før SvelteKit starter.
   Unntaket er smalt og maskinelt kontrollert.
-- De komplette backend-DTO-typene beholdes selv om ikke alle kontrakter har en aktiv UI-konsument;
-  de dokumenterer den autoritative transportflaten og er ikke runtimekode.
+- Håndskrevne backend-DTO-typer holdes til transportflaten en frontendfeature faktisk konsumerer.
+  Dette unngår at en ubrukt manuell kontraktkopi driver fra backendens autoritative implementasjon.
 
 ## Permanente porter
 

@@ -53,9 +53,6 @@ const config = {
       precompress: false,
       strict: true,
     }),
-    alias: {
-      "@": "./src",
-    },
     paths: {
       base: normalizeBasePath(env.VITE_BASE_PATH),
       relative: false,

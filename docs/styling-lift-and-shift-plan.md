@@ -1,6 +1,6 @@
 # Styling lift-and-shift: Tailwind, themes og komponenteierskap
 
-> **Status:** Aktiv utførelsesplan
+> **Status:** Fullført historisk utførelsesplan for SWP-0–SWP-7
 >
 > **Branch:** `feature/sveltekit-lift-and-shift`
 >
@@ -21,6 +21,9 @@ Den bindende målbeslutningen ligger i
 [`ADR-006`](./adr/006-tailwind-styling-and-theme-ownership.md).
 
 ## Utførelsesregel for `/start`
+
+Denne regelen beskriver hvordan SWP-checkpointene ble gjennomført. Alle pakkene er fullført; en ny
+`/start` skal lese vedlikeholdsstatusen og skal ikke velge en ny SWP-pakke fra dette dokumentet.
 
 `/start` leser [`migration-status.md`](./migration-status.md), velger første ufullførte checkpoint i
 den aktive `SWP-*`-pakken og gjennomfører bare dette checkpointet. Hver sesjon skal:

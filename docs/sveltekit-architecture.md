@@ -139,10 +139,10 @@ routes/
 ├── auth/callback/+page.svelte
 └── [[slug=tenant]]/
     ├── +layout.ts                 tenantoppløsning
-    ├── +layout.svelte             tenant-context og app-shell
+    ├── +layout.svelte             tenant-context, session gate og app-shell
     ├── (public)/+page.svelte      booking
     ├── (public)/login/+page.svelte
-    ├── (protected)/+layout.ts     innloggingsguard
+    ├── (protected)/+layout.svelte innloggingsguard gjennom AccessGuard
     ├── (protected)/minside/+page.svelte
     ├── (protected)/bookinger/+page.svelte
     └── (admin)/admin/...          kapabilitetsguard

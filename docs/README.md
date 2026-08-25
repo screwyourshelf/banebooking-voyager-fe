@@ -1,31 +1,23 @@
 # Frontenddokumentasjon
 
-## Gjeldende dokumenter
+## Normative dokumenter
 
-| Dokument                                                                         | Formål                                          |
-| -------------------------------------------------------------------------------- | ----------------------------------------------- |
-| [`migration-status.md`](./migration-status.md)                                   | Nåtilstand og neste eksakte steg                |
-| [`styling-lift-and-shift-plan.md`](./styling-lift-and-shift-plan.md)             | Aktiv Tailwind-/themeplan og kvalitetsporter    |
-| [`styling-conformance-evidence.md`](./styling-conformance-evidence.md)           | SWP-7-resultat, målematrise og rettingskart     |
-| [`migration-plan.md`](./migration-plan.md)                                       | Arbeidsrekkefølge, metode og kvalitetsporter    |
-| [`behavior-inventory.md`](./behavior-inventory.md)                               | Observerbar React-baseline og routekontrakt     |
-| [`wp-7-parity-and-cleanup-inventory.md`](./wp-7-parity-and-cleanup-inventory.md) | Bevist paritet og fjerningskart for WP-7        |
-| [`wp-7-production-evidence.md`](./wp-7-production-evidence.md)                   | Route-, skjermbilde- og bundlebevis for WP-7    |
-| [`e2e-harness.md`](./e2e-harness.md)                                             | Lokal Playwright-auth, prosesser og testdata    |
-| [`styling-reference-matrix.md`](./styling-reference-matrix.md)                   | Frosset SWP-0 styling- og interaksjonsreferanse |
-| [`swp-5-route-feature-audit.md`](./swp-5-route-feature-audit.md)                 | Kaldt eierkart for siste feature-/CSS-migrering |
-| [`swp-6-component-api-audit.md`](./swp-6-component-api-audit.md)                 | Komponent-, eier- og offentlig API-audit        |
-| [`development-and-operations.md`](./development-and-operations.md)               | Lokal utvikling, bygg og hostingkontrakt        |
-| [`sveltekit-architecture.md`](./sveltekit-architecture.md)                       | Målarkitektur for SvelteKit-migreringen         |
-| [`architecture-conformance-review.md`](./architecture-conformance-review.md)     | Etterreview av Svelte-/SvelteKit-konformitet    |
-| [`product-design-rules.md`](./product-design-rules.md)                           | Produktets visuelle og semantiske UI-regler     |
-| [`adr/`](./adr/README.md)                                                        | Bindende arkitekturbeslutninger                 |
+| Dokument                                                           | Formål                                                            |
+| ------------------------------------------------------------------ | ----------------------------------------------------------------- |
+| [`migration-status.md`](./migration-status.md)                     | Kort nåtilstand, verifikasjon og eventuelt neste vedlikeholdssteg |
+| [`development-and-operations.md`](./development-and-operations.md) | Lokal utvikling, kvalitetsporter, bygg og hosting                 |
+| [`sveltekit-architecture.md`](./sveltekit-architecture.md)         | Aktiv SvelteKit-arkitektur og laggrenser                          |
+| [`product-design-rules.md`](./product-design-rules.md)             | Produktets visuelle, semantiske og responsive regler              |
+| [`behavior-inventory.md`](./behavior-inventory.md)                 | Observerbar route-, rolle- og produktkontrakt                     |
+| [`e2e-harness.md`](./e2e-harness.md)                               | Lokal Playwright-auth, prosesser og testdata                      |
+| [`adr/`](./adr/README.md)                                          | Bindende arkitekturbeslutninger                                   |
 
-Disse dokumentene er den komplette aktive instruksjonsflaten. Den opprinnelige
-rammeverksmigreringen er fullført; stylingplanen eier den aktive Tailwind-/theme-lift-and-shift-en.
-Historiske React-planer og PR-handover er fjernet fra arbeidskopien; nødvendig sporbarhet finnes i
-git-historikken.
+## Historisk migreringsbevis
 
-Codex fortsetter arbeidet gjennom start- og handoverprotokollen i [`../AGENTS.md`](../AGENTS.md).
-Protokollen og migreringsplanen gjør AI-first lesbarhet og avgrensede sesjonshandoffs til bindende
-kvalitetskrav for hele lift-and-shift-en.
+`migration-plan.md`, `styling-lift-and-shift-plan.md`, `architecture-conformance-review.md`,
+`wp-7-*`, `styling-*-evidence/matrix` og `swp-*-audit` dokumenterer fullførte checkpoints. De er
+referansemateriale, ikke aktive planer eller instruksjonskilder. `styling-baseline.json` er et
+generert kontrollartefakt som leses av `npm run check`, ikke en håndskrevet styringsfil.
+
+Vedlikeholds- og handoverprotokollen ligger i [`../AGENTS.md`](../AGENTS.md). Git bevarer den
+detaljerte migreringshistorikken; `migration-status.md` skal bare beskrive sann nåtilstand.

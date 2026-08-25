@@ -19,7 +19,7 @@
       "importantDeclarationCount": 4,
       "layeredCssRuleCount": 10,
       "legacyDebtCount": 0,
-      "markupFileCount": 181,
+      "markupFileCount": 182,
       "rawVisualDeclarationCount": 663,
       "selectorCount": 12,
       "styleAttributeCount": 7,
@@ -48971,7 +48971,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/session/DesktopNavigation.svelte",
-          "lineCount": 80,
+          "lineCount": 75,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -48991,7 +48991,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/session/MobileHeaderNavigation.svelte",
-          "lineCount": 55,
+          "lineCount": 56,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -49042,6 +49042,16 @@
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/session/SessionNavigationShell.svelte",
           "lineCount": 80,
+          "styleAttributeCount": 0,
+          "styleBlockCount": 0,
+          "styleDirectiveCount": 0
+        },
+        {
+          "classTokenCount": 0,
+          "cssImportCount": 0,
+          "dynamicClassAttributeCount": 0,
+          "file": "src/lib/features/session/TenantLogo.svelte",
+          "lineCount": 20,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -79216,18 +79226,18 @@
       ],
       "initialCssGzipBytes": 28568,
       "initialJavaScriptAssets": [
+        { "asset": "_app/immutable/chunks/BG4X2aRC.js", "gzipBytes": 20699, "rawBytes": 55233 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
-        { "asset": "_app/immutable/chunks/Btj8er9s.js", "gzipBytes": 11219, "rawBytes": 29273 },
-        { "asset": "_app/immutable/chunks/BxCIeGOe.js", "gzipBytes": 725, "rawBytes": 1401 },
-        { "asset": "_app/immutable/chunks/Cpi0lLfN.js", "gzipBytes": 530, "rawBytes": 1334 },
-        { "asset": "_app/immutable/chunks/Dpzkwr9j.js", "gzipBytes": 612, "rawBytes": 1143 },
-        { "asset": "_app/immutable/chunks/j1LAjlpn.js", "gzipBytes": 20600, "rawBytes": 54865 },
+        { "asset": "_app/immutable/chunks/CB3145jA.js", "gzipBytes": 536, "rawBytes": 1334 },
+        { "asset": "_app/immutable/chunks/CIT7X3lM.js", "gzipBytes": 615, "rawBytes": 1148 },
+        { "asset": "_app/immutable/chunks/DeNejD04.js", "gzipBytes": 731, "rawBytes": 1401 },
+        { "asset": "_app/immutable/chunks/Hym3JWuR.js", "gzipBytes": 11227, "rawBytes": 29273 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.DmOeHROu.js", "gzipBytes": 2509, "rawBytes": 9050 },
-        { "asset": "_app/immutable/entry/start.C8HOANZ6.js", "gzipBytes": 92, "rawBytes": 82 },
-        { "asset": "_app/immutable/nodes/0.DabLXOXG.js", "gzipBytes": 427, "rawBytes": 806 }
+        { "asset": "_app/immutable/entry/app.CBsSFXvC.js", "gzipBytes": 2518, "rawBytes": 9051 },
+        { "asset": "_app/immutable/entry/start.Ddb2exHi.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/nodes/0.CoEpNJhb.js", "gzipBytes": 430, "rawBytes": 806 }
       ],
-      "initialJavaScriptGzipBytes": 38153,
+      "initialJavaScriptGzipBytes": 38287,
       "javaScriptChunkCount": 60,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",
@@ -79237,7 +79247,7 @@
       "relevantLazyChunks": [
         {
           "assets": [
-            { "asset": "_app/immutable/chunks/BHRsBdD1.js", "gzipBytes": 28894, "rawBytes": 86077 }
+            { "asset": "_app/immutable/chunks/D74FS0an.js", "gzipBytes": 28894, "rawBytes": 86077 }
           ],
           "label": "Sentry"
         },
@@ -79267,18 +79277,18 @@
       ],
       "initialCssGzipBytes": 28585,
       "initialJavaScriptAssets": [
-        { "asset": "_app/immutable/chunks/4KTU_CiV.js", "gzipBytes": 11229, "rawBytes": 29281 },
+        { "asset": "_app/immutable/chunks/BG4X2aRC.js", "gzipBytes": 20699, "rawBytes": 55233 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
-        { "asset": "_app/immutable/chunks/BxCIeGOe.js", "gzipBytes": 725, "rawBytes": 1401 },
-        { "asset": "_app/immutable/chunks/Cpi0lLfN.js", "gzipBytes": 530, "rawBytes": 1334 },
-        { "asset": "_app/immutable/chunks/Dpzkwr9j.js", "gzipBytes": 621, "rawBytes": 1179 },
-        { "asset": "_app/immutable/chunks/j1LAjlpn.js", "gzipBytes": 20600, "rawBytes": 54865 },
+        { "asset": "_app/immutable/chunks/CB3145jA.js", "gzipBytes": 536, "rawBytes": 1334 },
+        { "asset": "_app/immutable/chunks/CIT7X3lM.js", "gzipBytes": 624, "rawBytes": 1184 },
+        { "asset": "_app/immutable/chunks/DeNejD04.js", "gzipBytes": 731, "rawBytes": 1401 },
+        { "asset": "_app/immutable/chunks/DkQaTYi8.js", "gzipBytes": 11236, "rawBytes": 29285 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.uCMByhm1.js", "gzipBytes": 2519, "rawBytes": 9614 },
-        { "asset": "_app/immutable/entry/start.BSw7JxmL.js", "gzipBytes": 92, "rawBytes": 82 },
-        { "asset": "_app/immutable/nodes/0.DxJjGeIe.js", "gzipBytes": 437, "rawBytes": 866 }
+        { "asset": "_app/immutable/entry/app.DS1FBZ69.js", "gzipBytes": 2524, "rawBytes": 9615 },
+        { "asset": "_app/immutable/entry/start.Dxfn_jt9.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/nodes/0.DS_aUloz.js", "gzipBytes": 440, "rawBytes": 866 }
       ],
-      "initialJavaScriptGzipBytes": 38192,
+      "initialJavaScriptGzipBytes": 38321,
       "javaScriptChunkCount": 60,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",
@@ -79288,7 +79298,7 @@
       "relevantLazyChunks": [
         {
           "assets": [
-            { "asset": "_app/immutable/chunks/BHRsBdD1.js", "gzipBytes": 28894, "rawBytes": 86077 }
+            { "asset": "_app/immutable/chunks/D74FS0an.js", "gzipBytes": 28894, "rawBytes": 86077 }
           ],
           "label": "Sentry"
         },

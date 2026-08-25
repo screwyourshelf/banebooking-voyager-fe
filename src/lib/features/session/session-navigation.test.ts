@@ -58,6 +58,19 @@ describe("session navigation composition", () => {
     expect(within(desktop).queryByRole("link", { name: "Statistikk" })).toBeNull();
   });
 
+  it("uses tenant logos with the legacy webp and default fallbacks", async () => {
+    renderFixture();
+    const desktop = screen.getByRole("navigation", { name: "Hovednavigasjon" });
+    const identity = within(desktop).getByRole("link", { name: /Fjordvik Tennisklubb/ });
+    const logo = identity.querySelector("img");
+
+    expect(logo).toHaveAttribute("src", "/klubber/fjordvik/img/logo.svg");
+    await fireEvent.error(logo!);
+    expect(logo).toHaveAttribute("src", "/klubber/fjordvik/img/logo.webp");
+    await fireEvent.error(logo!);
+    expect(logo).toHaveAttribute("src", "/klubber/default/img/logo.svg");
+  });
+
   it("toggles the shared theme action without replacing its focus target", async () => {
     const { callbacks } = renderFixture();
     const desktop = screen.getByRole("navigation", { name: "Hovednavigasjon" });

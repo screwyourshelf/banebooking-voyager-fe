@@ -1,6 +1,6 @@
 import type { DayOfWeek } from "./arrangement";
 
-export type StatistikkPeriode = {
+type StatistikkPeriode = {
   fra: string;
   til: string;
   sammenligningFra: string | null;
@@ -14,7 +14,7 @@ export type BookingNøkkeltall = {
   arrangementbookinger: number;
 };
 
-export type SammenlignbarBookingstatistikk = {
+type SammenlignbarBookingstatistikk = {
   antallBookinger: number;
   bookedeTimer: number;
   sammenligningAntallBookinger: number | null;
@@ -29,7 +29,7 @@ export type BookingPerMaaned = SammenlignbarBookingstatistikk & {
   arrangementbookinger: number;
 };
 
-export type BookingPerGren = SammenlignbarBookingstatistikk & {
+type BookingPerGren = SammenlignbarBookingstatistikk & {
   grenId: string;
   grenNavn: string;
   personligeBookinger: number;
@@ -45,7 +45,7 @@ export type BookingPerBane = SammenlignbarBookingstatistikk & {
   arrangementbookinger: number;
 };
 
-export type BookingPerUkedag = SammenlignbarBookingstatistikk & {
+type BookingPerUkedag = SammenlignbarBookingstatistikk & {
   ukedag: DayOfWeek;
 };
 
@@ -55,7 +55,7 @@ export type BookingPerTime = {
   sammenligningBookedeTimer: number | null;
 };
 
-export type BookingToppBruker = {
+type BookingToppBruker = {
   brukerId: string;
   navn: string;
   epost: string;
@@ -72,7 +72,7 @@ export type BookingMedlemsstatistikk = {
   toppBrukere: BookingToppBruker[];
 };
 
-export type BookingMedlemsstatistikkPerBookingtype = {
+type BookingMedlemsstatistikkPerBookingtype = {
   vanlige: BookingMedlemsstatistikk;
   arrangement: BookingMedlemsstatistikk;
 };

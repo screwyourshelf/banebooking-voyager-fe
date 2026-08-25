@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Moon02Icon, News01Icon, Sun02Icon, TennisBallIcon } from "@hugeicons/core-free-icons";
+  import { Moon02Icon, News01Icon, Sun02Icon } from "@hugeicons/core-free-icons";
   import {
     Icon,
     Navigation,
@@ -10,6 +10,7 @@
   } from "$lib/ui";
   import type { Theme } from "$lib/platform/theme";
   import type { ReadyAppNavigationState } from "./navigation-model";
+  import TenantLogo from "./TenantLogo.svelte";
 
   let {
     navigation,
@@ -23,7 +24,7 @@
 </script>
 
 {#snippet identityIcon()}
-  <Icon icon={TennisBallIcon} />
+  <TenantLogo sources={navigation.identity.logoSources} />
 {/snippet}
 {#snippet themeIcon()}
   <Icon icon={theme === "dark" ? Sun02Icon : Moon02Icon} />

@@ -120,8 +120,9 @@ Sluttauditen kombinerte full Knip-analyse med SvelteKits faktiske innganger, den
 stylingfixturekatalogen, det dynamisk startede produksjonstretestscriptet, `$lib/ui`-importgrafen og
 en toveis sammenligning mellom registrerte theme-utilities og produksjonsmarkup. Resultatet etter
 opprydding er null ubrukte runtimefiler, verdi-exports, direkte pakker, ulistede pakker, binaries og
-uoppløste importer. Knip rapporterer fortsatt 19 komplette transporttyper under `lib/contracts`;
-disse er bevisst beholdt som frontendens backendkontrakt og er ikke runtimekode.
+uoppløste importer. På dette checkpointet rapporterte Knip 19 type-only transporteksporter. Den
+senere avslutningsoppryddingen gjorde sammensatte DTO-deler private, fjernet ukonsumerte manuelle
+endpointkopier og strammet den permanente Knip-porten til null funn.
 
 API-oppryddingen er konkret:
 

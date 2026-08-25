@@ -48,8 +48,8 @@ Svelte-anatomi, CSS-klasser, `data-ui`, primitives, slots, utilities og tokens t
 separate permanente visualiseringskontrakten bare tillater registrert datadrevet geometri.
 Produksjonstreet inkluderer også `src/app.html` og håndhever ADR-007-flatens eksakte inline-CSS,
 eneste styleattributt og synkronisering mot de elleve `--app-startup-*`-rollene.
-Sluttkravene er definert i
-[`styling-lift-and-shift-plan.md`](./styling-lift-and-shift-plan.md).
+De bindende stylingkravene ligger i ADR-006, ADR-007 og de kjørbare kontrollene. Den fullførte
+utførelsesrekkefølgen finnes i [`styling-lift-and-shift-plan.md`](./styling-lift-and-shift-plan.md).
 
 ### Reproduserbar statisk analyse
 
@@ -59,24 +59,15 @@ Kjør den repoeide død-kode-, eksport-, import- og direkte avhengighetskontroll
 npm run static-analysis:check
 ```
 
-Knip 6.32.2 er eksakt pinnet i `devDependencies`. [`knip.json`](../knip.json) registrerer de 34
-isolerte stylingfixturene og `scripts/test-styling-production-tree-contract.mjs` som eksplisitte
-innganger. Den navngitte kontrollen avviser alle runtimefiler, verdi-exports, pakke-, binary-,
-ulistet- og uoppløst-importfunn. Den godtar bare disse 19 eksakt registrerte, type-only
-transportkontraktene:
+Knip 6.32.2 er eksakt pinnet i `devDependencies`. [`knip.json`](../knip.json) registrerer isolerte
+stylingfixtures og det dynamiske produksjonstretestscriptet som eksplisitte innganger. Den navngitte
+kontrollen avviser alle døde runtimefiler, typer og verdi-exports samt pakke-, binary-, ulistet- og
+uoppløst-importfunn; det finnes ingen allowlist.
 
-| Fil                                 | Beholdte type-exports                                                                                                                                                                                                                                                           |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `src/lib/contracts/arrangement.ts`  | `BaneGruppeForespørsel`, `SlettArrangementForespørsel`, `ArrangementPresentasjonType`, `ArrangementPresentasjon`, `ArrangementSlotRespons`, `ArrangementKonfliktRespons`, `BaneGruppeRespons`, `OffentligArrangementRespons`, `BatchBookingFeilet`, `ErstattArrangementRespons` |
-| `src/lib/contracts/booking-slot.ts` | `BookingSlotRespons`                                                                                                                                                                                                                                                            |
-| `src/lib/contracts/bruker.ts`       | `AksepterVilkårForespørsel`                                                                                                                                                                                                                                                     |
-| `src/lib/contracts/kunngjoring.ts`  | `KunngjøringBekreftelseRespons`                                                                                                                                                                                                                                                 |
-| `src/lib/contracts/statistikk.ts`   | `StatistikkPeriode`, `SammenlignbarBookingstatistikk`, `BookingPerGren`, `BookingPerUkedag`, `BookingToppBruker`, `BookingMedlemsstatistikkPerBookingtype`                                                                                                                      |
-
-Typene bevarer den komplette .NET-transportflaten og brukes enten som deler av andre DTO-er eller
-som foreløpig ukonsumerte endpointkontrakter. De er ikke runtimekode. Allowlisten i
-`scripts/check-static-analysis.mjs` krever nøyaktig samme fil-/navnesett: et nytt funn, en type som
-blir brukt, eller en slettet type krever en eksplisitt avstemming av kontrakt og dokumentasjon.
+Håndskrevne filer i `src/lib/contracts` beskriver bare transportflaten som frontenden faktisk
+konsumerer. DTO-deler som bare inngår i en eksportert respons er private typer i samme modul. Nye
+endpointkontrakter legges til når en frontendkonsument implementeres, eller genereres samlet fra en
+autoritativ API-spesifikasjon; en manuell, ubrukt kopi av hele backendgrafen skal ikke vedlikeholdes.
 
 De kritiske innloggede flytene og de fryste visuelle referansene krever lokal database/backend:
 

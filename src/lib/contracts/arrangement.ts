@@ -24,7 +24,7 @@ export type DayOfWeek =
 
 // ─────────── Requests ───────────
 
-export type BaneGruppeForespørsel = {
+type BaneGruppeForespørsel = {
   baneIder: string[];
   tidspunkter: string[];
 };
@@ -52,19 +52,15 @@ export type EksplisittArrangementSlot = {
   sluttTid: string;
 };
 
-export type SlettArrangementForespørsel = {
-  arrangementId: string;
-};
-
 // ─────────── Responses ───────────
 
-export type ArrangementPresentasjonType =
+type ArrangementPresentasjonType =
   | "EnkeltDato"
   | "DatoIntervallAlleDager"
   | "DatoIntervallUkedager"
   | "Uregelmessig";
 
-export type ArrangementPresentasjon = {
+type ArrangementPresentasjon = {
   type: ArrangementPresentasjonType;
   startDato: string;
   sluttDato: string;
@@ -73,7 +69,7 @@ export type ArrangementPresentasjon = {
   baneNavn: string[];
 };
 
-export type ArrangementSlotRespons = {
+type ArrangementSlotRespons = {
   dato: string;
   startTid: string;
   sluttTid: string;
@@ -86,7 +82,7 @@ export type ArrangementForhåndsvisningRespons = {
   konflikter: ArrangementSlotRespons[];
 };
 
-export type ArrangementKonfliktRespons = {
+type ArrangementKonfliktRespons = {
   dato: string;
   baneId: string;
   startTid: string;
@@ -105,24 +101,11 @@ export type SlettArrangementRespons = {
   antallBookingerSlettet: number;
 };
 
-export type BaneGruppeRespons = {
+type BaneGruppeRespons = {
   baneIder: string[];
   baneNavn: string[];
   tidspunkter: string[];
   slotLengdeMinutter: number;
-};
-
-export type OffentligArrangementRespons = {
-  id: string;
-  tittel: string;
-  /** Innholdet fra nettsideBeskrivelse – kan være HTML eller Markdown */
-  beskrivelse?: string;
-  kategori: ArrangementKategori;
-  startDato: string;
-  sluttDato: string;
-  baneGrupper: BaneGruppeRespons[];
-  ukedager: DayOfWeek[];
-  presentasjon: ArrangementPresentasjon;
 };
 
 export type DagMedSlotsRespons = {
@@ -203,7 +186,7 @@ export type BatchLeggTilArrangementBookingerForespørsel = {
   bookinger: LeggTilArrangementBookingForespørsel[];
 };
 
-export type BatchBookingFeilet = {
+type BatchBookingFeilet = {
   baneId: string;
   dato: string;
   startTid: string;
@@ -223,10 +206,4 @@ export type OppdaterArrangementMetadataRespons = {
   nettsideTittel?: string;
   nettsideBeskrivelse?: string;
   publisertPåNettsiden: boolean;
-};
-
-export type ErstattArrangementRespons = {
-  arrangementId: string;
-  antallOpprettet: number;
-  konflikter: ArrangementKonfliktRespons[];
 };

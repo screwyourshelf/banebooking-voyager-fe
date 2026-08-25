@@ -44,6 +44,7 @@ export type ReadyAppNavigationState = {
   desktopSections: AppNavigationSection[];
   identity: {
     href: AppPath;
+    logoSources: readonly [tenantSvg: string, tenantWebp: string, defaultSvg: string];
     meta: string;
     name: string;
   };
@@ -229,6 +230,7 @@ export function buildAppNavigationState({
     status: "ready",
     identity: {
       href: buildTenantPath(tenant, "", basePath),
+      logoSources: buildTenantLogoSources(tenant, basePath),
       name: klubb.data?.navn || "Banebooking",
       meta: "Banebooking",
     },
@@ -246,6 +248,21 @@ export function buildAppNavigationState({
     loginHref: buildTenantPath(tenant, "login", basePath),
     newsHref: buildTenantPath(tenant, "nyheter", basePath),
   };
+}
+
+function buildTenantLogoSources(
+  tenant: TenantContext,
+  basePath: string
+): ReadyAppNavigationState["identity"]["logoSources"] {
+  const normalizedBasePath = basePath.replace(/\/+$/, "");
+  const assetRoot = `${normalizedBasePath}/klubber`;
+  const tenantAssetRoot = `${assetRoot}/${encodeURIComponent(tenant.slug)}/img`;
+
+  return [
+    `${tenantAssetRoot}/logo.svg`,
+    `${tenantAssetRoot}/logo.webp`,
+    `${assetRoot}/default/img/logo.svg`,
+  ];
 }
 
 function buildNavigationItem(

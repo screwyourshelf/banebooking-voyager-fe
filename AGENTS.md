@@ -2,9 +2,9 @@
 
 ## Oppdrag
 
-Gjennomfør en samlet lift-and-shift fra React/Vite til idiomatisk Svelte 5 og SvelteKit på
-`feature/sveltekit-lift-and-shift`. Bevar produktadferd, URL-er og API-kontrakter, men ikke kopier
-React-komponenttre, hooks, providers, guards eller filstruktur.
+Vedlikehold den fullførte React/Vite-til-Svelte 5/SvelteKit-lift-and-shift-en på
+`feature/sveltekit-lift-and-shift`. Bevar produktadferd, URL-er og API-kontrakter. React finnes bare
+i git-historikken som migreringsreferanse og skal ikke gjeninnføres som runtime eller strukturmal.
 
 Koden skal i første hånd kunne overtas, forstås og videreutvikles av nye AI-agenter uten skjult
 sesjonskontekst. AI-first lesbarhet er en del av leveransen, ikke et dokumentasjonsarbeid som
@@ -15,50 +15,39 @@ utsettes til slutt.
 Les i denne rekkefølgen:
 
 1. [`docs/migration-status.md`](./docs/migration-status.md)
-2. relevant arbeidspakke i den aktive utførelsesplanen:
-   [`docs/styling-lift-and-shift-plan.md`](./docs/styling-lift-and-shift-plan.md) for `SWP-*`, ellers
-   [`docs/migration-plan.md`](./docs/migration-plan.md)
-3. [`docs/sveltekit-architecture.md`](./docs/sveltekit-architecture.md)
-4. [`docs/product-design-rules.md`](./docs/product-design-rules.md)
+2. [`docs/sveltekit-architecture.md`](./docs/sveltekit-architecture.md)
+3. [`docs/product-design-rules.md`](./docs/product-design-rules.md)
+4. [`docs/development-and-operations.md`](./docs/development-and-operations.md)
 5. relevante ADR-er i [`docs/adr/`](./docs/adr/README.md)
+
+De fullførte `migration-plan.md`- og `styling-lift-and-shift-plan.md`-filene leses bare når en feil
+eller regresjon krever historisk checkpointkontekst.
 
 Dokumentrollene er faste:
 
 - arkitektur og ADR-er beskriver hvordan systemet skal bygges
 - produktreglene beskriver hvordan produktet skal opptre og se ut
-- migreringsplanen beskriver rekkefølge, arbeidsmetode og kvalitetsporter
-- stylingplanen beskriver den aktive Tailwind-/theme-migreringen etter fullført rammeverksløft
-- migreringsstatus beskriver sann nåsituasjon og neste eksakte steg
+- utviklings- og driftsinstruksen beskriver kommandoer, bygg og permanente kvalitetsporter
+- de historiske migreringsplanene beskriver fullført rekkefølge og checkpointmetode
+- migreringsstatus beskriver sann nåsituasjon og bare et reelt neste steg dersom noe står åpent
 - git er historikk; statusfilen er ikke en sesjonslogg
 
-## `/start` — fortsettelsesprotokoll
+## `/start` — vedlikeholdsprotokoll
 
-Når brukeren skriver `/start`, `fortsett lift-and-shift` eller tilsvarende:
+Når brukeren skriver `/start`, `fortsett` eller tilsvarende:
 
-1. Bekreft at arbeidsmappen er frontend-repoet og les dokumentene over.
-2. Bekreft aktiv branch med `git branch --show-current`, og finn migreringsbranchens faktiske base
-   med `git merge-base HEAD main`.
-3. Les lokale migreringscommits foran basen med
-   `git log --oneline --decorate "$(git merge-base HEAD main)"..HEAD`. Inspiser også den samlede
-   committede endringen med `git diff --stat "$(git merge-base HEAD main)"..HEAD` og relevante
-   detaljdiffer. Commit-rekken er den eksakte historikken over fullførte checkpoints.
-4. Inspiser ucommittert arbeid med `git status --short`, `git diff` og `git diff --cached`.
-   Ucommitterte endringer kan være en pågående, ufullstendig leveranse og må ikke overses eller
-   overskrives.
-5. Sammenlign branch, commits og arbeidskopi med `migration-status.md`. Stol ikke blindt på noen
-   enkeltkilde dersom de avviker; avklar sann tilstand ved å lese kode og differ, og oppdater
-   statusfilen. Gjeldende `HEAD` beregnes alltid fra git og lagres ikke som en selvrefererende hash i
-   statusfilen.
-6. Kontroller siste verifikasjonsresultat. Kjør nødvendige, billige kontroller på nytt dersom kode
-   eller avhengigheter har endret seg siden resultatet ble registrert.
-7. Velg ett avgrenset, verifiserbart checkpoint fra `Neste eksakte steg`, les hele den aktive
-   arbeidspakken og opprett en konkret arbeidsplan for denne sesjonen. Aktiv arbeidspakke kan gå
-   over flere AI-sesjoner.
-8. Fortsett autonomt bare innenfor checkpointet og den aktive arbeidspakken. `/start` betyr aldri
-   at hele migreringen eller alle gjenværende arbeidspakker skal utføres i ett sveip.
-9. Når aktiv arbeidspakke eller avtalt checkpoint er fullført, gjennomfør handover og avslutt
-   sesjonen. Statusfilen kan peke på neste arbeidspakke, men samme AI-sesjon starter den ikke
-   automatisk.
+1. Bekreft at arbeidsmappen er frontend-repoet og les de autoritative dokumentene over.
+2. Bekreft branch, merge-base og arbeidskopi med `git branch --show-current`, `git merge-base HEAD
+main`, `git status --short`, `git diff` og `git diff --cached`. Ucommittert arbeid må ikke
+   overses eller overskrives.
+3. Sammenlign git og arbeidskopi med `migration-status.md`; kode og kjørbare porter veier tyngst ved
+   avvik. Gjeldende `HEAD` beregnes fra git og lagres ikke i statusfilen.
+4. Kjør nødvendige billige kontroller på nytt dersom kode eller avhengigheter har endret seg siden
+   siste registrerte verifikasjon.
+5. Hvis statusen har et reelt neste vedlikeholdssteg, avgrens ett verifiserbart checkpoint og
+   fortsett innenfor det. Hvis ingen oppgave står åpen, rapporter at migreringen er fullført og be
+   om neste produkt- eller vedlikeholdsoppgave; ikke finn opp en ny WP-/SWP-pakke.
+6. Gjennomfør handover når den avtalte leveransen er fullført.
 
 Ikke be brukeren gjenta arkitektur, ønsket arbeidsform eller tidligere fremdrift når repoet kan gi
 svaret.
@@ -102,7 +91,7 @@ For hver arbeidsflate:
    ansvaret krever.
 5. Verifiser funksjonell, visuell, responsiv og tilgjengelighetsmessig paritet.
 6. Fjern erstattet React-kode; ikke behold permanente broer eller parallelle implementasjoner.
-7. Oppdater `migration-status.md` umiddelbart når arbeidspakkens sannhet endres.
+7. Oppdater `migration-status.md` når nåtilstand, verifikasjon, blokkering eller neste steg endres.
 8. Gjennomfør en AI-first lesbarhetskontroll før checkpoint: fjern skjult kobling, utydelige navn og
    unødvendig kompleksitet, og sørg for at tester og typer forklarer kontrakten.
 
@@ -126,11 +115,11 @@ For hver arbeidsflate:
 
 Før siste svar i en arbeidsøkt:
 
-1. Kjør kontrollene som står i aktiv arbeidspakke og noter eksakt resultat.
+1. Kjør kontrollene som står i utviklingsinstruksen og som er proporsjonale med endringsrisikoen.
 2. Oppdater `docs/migration-status.md` med:
-   - aktiv arbeidspakke og status
+   - nåtilstand og eventuell vedlikeholdsleveranse
    - hva som faktisk ble fullført
-   - neste eksakte, utførbare steg
+   - neste eksakte, utførbare steg bare dersom arbeid faktisk gjenstår
    - blokkeringer eller beslutninger som gjenstår
    - midlertidig kode eller kjent avvik
    - siste beståtte tester, check og build

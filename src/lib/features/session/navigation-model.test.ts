@@ -166,6 +166,11 @@ describe("app navigation model", () => {
     });
 
     expect(routed.identity.href).toBe("/banebooking/fjordvik");
+    expect(routed.identity.logoSources).toEqual([
+      "/banebooking/klubber/fjordvik/img/logo.svg",
+      "/banebooking/klubber/fjordvik/img/logo.webp",
+      "/banebooking/klubber/default/img/logo.svg",
+    ]);
     expect(routed.mobilePrimary[0]).toMatchObject({ href: "/banebooking/fjordvik", active: true });
     expect(dedicated.identity.href).toBe("/banebooking");
     expect(dedicated.mobilePrimary.find((item) => item.id === "arrangementer")).toMatchObject({

@@ -1,4 +1,4 @@
-import type { BrukerRespons, KlubbRespons } from "$lib/contracts";
+import type { AksepterVilkårForespørsel, BrukerRespons, KlubbRespons } from "$lib/contracts";
 import { AKTIV_VILKAAR } from "$lib/domain";
 import type { ApiClient } from "$lib/platform/api";
 
@@ -15,7 +15,7 @@ export async function getBrukerWithCurrentTermsAcceptance(api: ApiClient, slug: 
   let bruker = await api.request<BrukerRespons | null>(path);
 
   if (bruker && !bruker.vilkårAkseptertDato) {
-    await api.request<void, { versjon: string }>(`${path}/vilkaar`, {
+    await api.request<void, AksepterVilkårForespørsel>(`${path}/vilkaar`, {
       method: "POST",
       json: { versjon: AKTIV_VILKAAR.versjon },
     });

@@ -2,7 +2,6 @@ export * from "./arrangement";
 export * from "./bane";
 export * from "./booking";
 export * from "./booking-bootstrap";
-export * from "./booking-slot";
 export * from "./bruker";
 export * from "./feed-item";
 export * from "./gren";

@@ -1,4 +1,4 @@
-export type KunngjøringBekreftelseRespons = {
+type KunngjøringBekreftelseRespons = {
   visningsnavn: string;
   epost: string;
   bekreftetTidspunkt: string;

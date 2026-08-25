@@ -32,6 +32,17 @@ for (const targetRoot of targetRoots) {
     );
 
     for (const specifier of imports) {
+      const target = resolveInternalTarget(normalizedPath, specifier);
+
+      if (specifier === "@" || specifier.startsWith("@/")) {
+        report(
+          relativePath,
+          source,
+          specifier,
+          "det fjernede @-aliaset kan ikke brukes til å omgå laggrensene"
+        );
+      }
+
       if (specifier === "bits-ui" && !normalizedPath.startsWith("src/lib/ui/primitives/")) {
         report(relativePath, source, specifier, "bits-ui kan bare importeres fra ui/primitives");
       }
@@ -48,33 +59,7 @@ for (const targetRoot of targetRoots) {
         );
       }
 
-      if (
-        normalizedPath.startsWith("src/lib/features/") &&
-        specifier.startsWith("$lib/features/")
-      ) {
-        const ownFeature = normalizedPath.split("/")[3];
-        const importedFeature = specifier.split("/")[2];
-        if (ownFeature && importedFeature && ownFeature !== importedFeature) {
-          report(relativePath, source, specifier, "features kan ikke importere andre features");
-        }
-      }
-
-      if (normalizedPath.startsWith("src/lib/features/") && specifier.startsWith("$lib/ui/")) {
-        report(
-          relativePath,
-          source,
-          specifier,
-          "features må bruke det offentlige UI-API-et fra $lib/ui"
-        );
-      }
-
-      if (
-        normalizedPath.startsWith("src/routes/") &&
-        /^\$lib\/features\/[^/]+\/.+/.test(specifier) &&
-        !specifier.endsWith("/index")
-      ) {
-        report(relativePath, source, specifier, "routes må bruke featurets offentlige inngang");
-      }
+      checkInternalLayerBoundary(relativePath, normalizedPath, source, specifier, target);
 
       if (
         !normalizedPath.endsWith(".client.ts") &&
@@ -193,6 +178,101 @@ for (const targetRoot of targetRoots) {
       }
     }
   }
+}
+
+function checkInternalLayerBoundary(relativePath, importer, source, specifier, target) {
+  if (!target) return;
+
+  if (importer.startsWith("src/routes/") && target.startsWith("src/lib/features/")) {
+    const targetSegments = target.split("/");
+    const usesPublicFeatureEntry =
+      targetSegments.length === 4 ||
+      (targetSegments.length === 5 && targetSegments.at(-1) === "index");
+    if (!usesPublicFeatureEntry) {
+      report(relativePath, source, specifier, "routes må bruke featurets offentlige inngang");
+    }
+  }
+
+  if (importer.startsWith("src/lib/features/")) {
+    const importerSegments = importer.split("/");
+    const ownFeature = importerSegments.length > 4 ? importerSegments[3] : undefined;
+    const importedFeature = target.startsWith("src/lib/features/")
+      ? target.split("/")[3]
+      : undefined;
+
+    if (ownFeature && importedFeature && ownFeature !== importedFeature) {
+      report(relativePath, source, specifier, "features kan ikke importere andre features");
+    }
+    if (target.startsWith("src/lib/ui/") && !isPublicUiEntry(target)) {
+      report(
+        relativePath,
+        source,
+        specifier,
+        "features må bruke det offentlige UI-API-et fra $lib/ui"
+      );
+    }
+    if (target.startsWith("src/routes/")) {
+      report(relativePath, source, specifier, "features kan ikke importere routes");
+    }
+  }
+
+  if (importer.startsWith("src/lib/ui/")) {
+    if (isProductLayer(target) && !isWithin(target, "src/lib/ui")) {
+      report(
+        relativePath,
+        source,
+        specifier,
+        "UI-laget kan ikke importere produkt- eller platformlag"
+      );
+    }
+    if (
+      importer.startsWith("src/lib/ui/primitives/") &&
+      target.startsWith("src/lib/ui/patterns/")
+    ) {
+      report(relativePath, source, specifier, "UI-primitives kan ikke avhenge av patterns");
+    }
+  }
+
+  if (importer.startsWith("src/lib/domain/") && !isWithin(target, "src/lib/domain")) {
+    if (!isWithin(target, "src/lib/contracts")) {
+      report(relativePath, source, specifier, "domain kan bare importere domain og contracts");
+    }
+  }
+
+  if (importer.startsWith("src/lib/platform/") && isProductLayer(target)) {
+    if (!isWithin(target, "src/lib/platform")) {
+      report(relativePath, source, specifier, "platform kan bare importere andre platformmoduler");
+    }
+  }
+
+  if (importer.startsWith("src/lib/contracts/") && !isWithin(target, "src/lib/contracts")) {
+    report(relativePath, source, specifier, "contracts kan bare importere andre contracts");
+  }
+}
+
+function resolveInternalTarget(importer, specifier) {
+  if (specifier === "$lib") return "src/lib";
+  if (specifier.startsWith("$lib/")) return `src/lib/${specifier.slice("$lib/".length)}`;
+  if (specifier === "@") return "src";
+  if (specifier.startsWith("@/")) return `src/${specifier.slice(2)}`;
+  if (specifier.startsWith("./") || specifier.startsWith("../")) {
+    return path.posix.normalize(path.posix.join(path.posix.dirname(importer), specifier));
+  }
+  return null;
+}
+
+function isPublicUiEntry(target) {
+  return target === "src/lib/ui" || target === "src/lib/ui/index";
+}
+
+function isProductLayer(target) {
+  return /^(?:src\/routes|src\/lib\/(?:contracts|domain|features|platform|ui))(?:\/|$)/.test(
+    target
+  );
+}
+
+function isWithin(target, directory) {
+  return target === directory || target.startsWith(`${directory}/`);
 }
 
 if (violations.length > 0) {
