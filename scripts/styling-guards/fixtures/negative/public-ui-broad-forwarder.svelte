@@ -2,11 +2,12 @@
   import type { HTMLAttributes } from "svelte/elements";
   import type { PublicHtmlAttributes } from "../../../../src/lib/ui/public-html-attributes";
 
-  type Props = Omit<PublicHtmlAttributes<HTMLAttributes<HTMLDivElement>>, "children"> & {
+  type UnsafeProps = PublicHtmlAttributes<HTMLAttributes<HTMLDivElement>> & {
+    class?: string;
     label: string;
   };
 
-  let { label, ...attributes }: Props = $props();
+  let { label, ...attributes }: UnsafeProps = $props();
 </script>
 
 <div {...attributes} aria-label={label}></div>

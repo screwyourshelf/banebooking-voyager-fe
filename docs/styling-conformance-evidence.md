@@ -1,10 +1,12 @@
 # SWP-7.3 uavhengig styling-konformitetsreview
 
-> **Resultat:** Ikke vellykket
+> **Resultat:** Ikke vellykket — SWP-7.4 har lukket de fire guardfunnene, men oppstartsvalget står
 >
-> **Reviewstatus:** Fullført; SWP-7 forblir aktiv
+> **Reviewstatus:** SWP-7.3-auditen og SWP-7.4-rettingen er fullført; SWP-7 forblir aktiv
 >
 > **Revidert kildecheckpoint:** `6772f1f` (`test(swp-7): make static audit reproducible`)
+>
+> **Rettelsescheckpoint:** SWP-7.4 (`fix(swp-7): close remaining styling guard channels`)
 >
 > **SWP-0 guard-/målebaseline:** `700cd2b` / `85cc31f`
 >
@@ -41,6 +43,48 @@ et håndhevings-, eierskaps- og dokumentasjonsfunn, ikke et påvist produktavvik
 eksplisitt at en guard som kan omgås i vanlig Svelte-kode gjør resultatet «ikke vellykket».
 Produktkode og backend er ikke endret i audit-checkpointet.
 
+SWP-7.4 har etter denne kalde auditen lukket alle de fire reproduksjonsprobene under uten å endre
+produktadferd eller oppstartsdokumentet. Den overordnede klassifiseringen forblir likevel «ikke
+vellykket» frem til brukeren har besluttet oppstartskontrakten og en ny kald review har bestått alle
+elleve rader.
+
+## SWP-7.4 rettingsbevis
+
+- Den manuelle listen over 31 forwardere er fjernet. Typeporten avleder nå alle runtimekomponenter
+  direkte fra `$lib/ui`-barrelen, beviser at barrelen faktisk bare eksponerer komponenter, og avviser
+  `class`/`style` på enhver nåværende eller senere offentlig eksport. En isolert bred-forwarderprobe
+  beviser den negative typekontrakten.
+- Native spreads hos offentlig UI må komme fra `PublicHtmlAttributes`, en eksplisitt runtime-
+  destrukturering som fjerner både `class` og `style`, eller en fullstendig statisk object-expression.
+  Typebeviset avviser unioner, intersections og brede indekser som kan gjeninnføre feltene. Lokale
+  identifier-bindinger følges for å finne skjult `class`/`style`; ukjente eller muterte bindinger
+  feiler lukket. Calendar-primitiven filtrerer de tre Bits UI-attributtsettene eksplisitt før de
+  når native DOM.
+- Én felles CSS-tokenizer finner custom-property-referanser med whitespace, kommentarer, escapes og
+  nestede fallbacks. Stylingpolicyen, den project-wide baselinen og designsystemets token-/
+  rekkeviddekontroll bruker samme parser.
+- Svelte instance-/module-script analyseres for `style`, `cssText`, `className`, `classList`,
+  CSSStyleDeclaration-mutasjoner, stylingattributter og dynamiske attributtnavn. Alias av `style` og
+  `classList` følges. Fokus samt statiske ARIA-/semantiske attributtoperasjoner er eksplisitt bevist
+  tillatt.
+- Guardkontrakten er bumpet til schema 5 og registrerer offentlig forwarding og scriptkanalene
+  maskinelt. Fixturematrisen er utvidet fra 28 til 34 filer med positive og negative bevis for alle
+  nye grener.
+
+| Tidligere passerende kontrollprobe                      | SWP-7.4-resultat                         |
+| ------------------------------------------------------- | ---------------------------------------- |
+| Ny bred offentlig UI-forwarder                          | Avvist med `STYLING-007-CSS-APPLICATION` |
+| Identifier-spread med skjult `class` og `style`         | Avvist med `STYLING-007-CSS-APPLICATION` |
+| `var( --unregistered-product-color)` og nestet fallback | Avvist med `STYLING-008-CUSTOM-PROPERTY` |
+| `$effect(() => element.style.setProperty(...))`         | Avvist med `STYLING-002-FEATURE-STYLING` |
+| Fokus og statiske `aria-*`-/semantiske DOM-operasjoner  | Tillatt uten diagnostic                  |
+
+SWP-7.4-porten er grønn: 95 testfiler/346 tester, full `npm run check`, 3/3 kritiske flyter,
+11/11 uendrede visuelle referanser og 8/8 produksjonsruter. Begge hostene har 60 JS-chunks,
+123 363 gzip-byte største lazy chunk, 28 475/28 496 initiale CSS-byte og 38 151/38 190 initiale
+JavaScript-byte. `npm audit --audit-level=moderate` rapporterer fortsatt bare de seks kjente lave
+transitive funnene. `src/app.html` og backend er urørt.
+
 ## Scope og metode
 
 Reviewet startet fra en ren arbeidskopi på `feature/sveltekit-lift-and-shift`, 72 commits foran
@@ -58,7 +102,11 @@ konklusjonen fra den første SWP-7-auditen:
 Backend-repoet ble ikke endret. Playwright brukte den eksisterende lokale testharnessen og ryddet
 egne mutasjoner.
 
-## Målematrise
+## SWP-7.3-målematrise
+
+Tabellen fryser utfallet fra den kalde SWP-7.3-auditen. SWP-7.4-rettingen over lukker de fire
+guard-/API-radene, men matrisen omskrives ikke som en ny kald review før oppstartskontrakten er
+besluttet i SWP-7.5.
 
 | Område               | Resultat     | Målt bevis                                                                                       |
 | -------------------- | ------------ | ------------------------------------------------------------------------------------------------ |
@@ -123,7 +171,7 @@ CSS-økningen er forventet etter at Tailwind-utilities overtok presentasjonen, e
 og er under produksjonsbudsjettet på 50 KiB gzip. Initial JavaScript varierer 9/10 byte fra den
 innsjekkede SWP-7.2-målingen på grunn av regenererte buildartefakter, men holder 50 KiB-budsjettet.
 
-## Kontrollprober som passerer feilaktig
+## Kontrollprober som passerte feilaktig i SWP-7.3
 
 Probene ble kjørt direkte gjennom samme `analyzeStylingSource` og schema 4-kontrakt som fixture- og
 produksjonstre-portene bruker.
@@ -207,10 +255,12 @@ annen måte. Reviewet tar ikke produkt-/arkitekturbeslutningen på brukerens veg
 
 ## Dokumentasjonsfunn
 
-`scripts/styling-guards/README.md`, ADR-006, produktreglene og migreringsstatusen beskriver schema 4
-som fail-closed og statistikkgeometri som eneste permanente stylingunntak. Kontrollprobene og
-oppstartsflaten viser at begge påstandene er for sterke. Baselinefilen kjenner riktignok etiketten
-`startup-document-contract`, men etiketten er ikke en dokumentert arkitektur- eller guardbeslutning.
+Ved SWP-7.3 beskrev `scripts/styling-guards/README.md`, ADR-006, produktreglene og
+migreringsstatusen schema 4 som fail-closed og statistikkgeometri som eneste permanente
+stylingunntak. Kontrollprobene og oppstartsflaten viste at begge påstandene var for sterke. SWP-7.4
+har avstemt guarddokumentasjonen mot schema 5 og lukket de fire Svelte-/CSS-kanalene. Baselinefilen
+kjenner fortsatt etiketten `startup-document-contract`, men etiketten er ikke en dokumentert
+arkitektur- eller guardbeslutning.
 
 `docs/wp-7-production-evidence.md` er korrekt datert historisk WP-7-bevis, men
 `development-and-operations.md` omtaler det som gjeldende bundlebevis selv om dagens CSS-/chunktall
@@ -219,34 +269,35 @@ etter den besluttede oppstartskontrakten.
 
 ## Verifikasjon
 
-| Kontroll                           | Resultat                                                                                         |
-| ---------------------------------- | ------------------------------------------------------------------------------------------------ |
-| `npm test`                         | Bestått: 95 filer og 346 tester                                                                  |
-| `npm run check`                    | Bestått: type, arkitektur, legacy, Knip, design, styling, baseline, lint og format               |
-| Theme-/cascadekontrakt             | Bestått som implementert: 656 roller, 904 utilities, 116 skift; fire stilark og ti regler        |
-| Styling-fixtures                   | Bestått som implementert: 28 fixtures og 10 stabile regler; probene over viser manglende dekning |
-| Styling-produksjonstre             | Bestått som implementert: 184 kilder, ni ikke-cascade-regler og null diagnostics                 |
-| `npm run test:e2e`                 | Bestått: 3 kritiske flyter og 11 uendrede visuelle referanser                                    |
-| `npm run test:e2e:production`      | Bestått: begge hostbuildene og 8/8 root-/base-path-ruter                                         |
-| Fersk bundlemåling                 | Bestått: 28 475/28 496 CSS-byte, 38 156/38 194 initial JS-byte, 60 chunks og 123 363 lazy-byte   |
-| `npm audit --audit-level=moderate` | Bestått ved terskelen: 6 lave og 0 moderate, høye eller kritiske funn                            |
-| Kald kontrollprobematrise          | Ikke bestått: fire ordinære stylingkanaler gir null diagnostics                                  |
-| `git diff --check`                 | Bestått etter auditdokumentasjonen                                                               |
+| Kontroll                           | Resultat                                                                                       |
+| ---------------------------------- | ---------------------------------------------------------------------------------------------- |
+| SWP-7.4 kontrollprober             | Bestått: fire tidligere bypasser avvises; semantiske DOM-operasjoner tillates                  |
+| SWP-7.4 styling-fixtures           | Bestått: schema 5, 34 fixtures, 10 stabile regler og eksakte diagnostics                       |
+| SWP-7.4 offentlig UI-API           | Bestått: alle barrel-eksporterte runtimekomponenter utelater `class`/`style` automatisk        |
+| SWP-7.4 produksjonstre             | Bestått: 184 kilder, ni ikke-cascade-regler og null diagnostics                                |
+| SWP-7.4 `npm test` / full check    | Bestått: 95 filer/346 tester og alle deklarerte kvalitetporter                                 |
+| SWP-7.4 kritisk/visuell E2E        | Bestått: 3/3 kritiske flyter og 11/11 uendrede referanser                                      |
+| SWP-7.4 produksjonsruter/build     | Bestått: 8/8 ruter; 28 475/28 496 CSS-byte og 38 151/38 190 initiale JS-byte                   |
+| SWP-7.3 `npm test`                 | Bestått: 95 filer og 346 tester                                                                |
+| SWP-7.3 `npm run check`            | Bestått som implementert: deklarerte kvalitetporter var grønne                                 |
+| Theme-/cascadekontrakt             | Bestått som implementert: 656 roller, 904 utilities, 116 skift; fire stilark og ti regler      |
+| SWP-7.3 styling-fixtures           | Historisk: 28 fixtures var grønne, men de fire nye probene manglet dekning                     |
+| SWP-7.3 styling-produksjonstre     | Historisk: 184 kilder og null diagnostics under schema 4                                       |
+| SWP-7.3 `npm run test:e2e`         | Bestått: 3 kritiske flyter og 11 uendrede visuelle referanser                                  |
+| SWP-7.3 produksjons-E2E            | Bestått: begge hostbuildene og 8/8 root-/base-path-ruter                                       |
+| SWP-7.3 fersk bundlemåling         | Bestått: 28 475/28 496 CSS-byte, 38 156/38 194 initial JS-byte, 60 chunks og 123 363 lazy-byte |
+| `npm audit --audit-level=moderate` | Bestått ved terskelen: 6 lave og 0 moderate, høye eller kritiske funn                          |
+| SWP-7.3 kald kontrollprobematrise  | Historisk ikke bestått: fire ordinære stylingkanaler ga null diagnostics                       |
+| `git diff --check`                 | Bestått etter SWP-7.4-rettingen                                                                |
 
 ## Avgrensede neste checkpoints
 
-### SWP-7.4 — lukk resterende guard- og API-kanaler
+### SWP-7.4 — fullført
 
-1. Gjør oppdagelsen av native attributt-forwardere kilde-/barreldekketøyende, slik at en ny
-   offentlig UI-eier ikke kan passere uten `PublicHtmlAttributes` eller tilsvarende bevist
-   kontrakt.
-2. Avvis eller bevis identifier-spreads hos offentlige UI-eiere; legg til negative fixtures og
-   mutasjonsprober for brede props, skjult `class` og skjult `style`.
-3. Parse custom-property-referanser etter CSS-grammatikken, inkludert whitespace og fallback, og
-   lås kontrollproben som negativ fixture.
-4. Innfør en smal script-AST-kontroll for direkte DOM-stylingsinks i routes, features og offentlig
-   UI, med positive tester for legitime semantiske DOM-operasjoner.
-5. Kjør hele test-, check-, E2E-, hostbuild-, bundle- og produksjonsruteporten uten produktendring.
+Alle fire guard-/API-kanalene er lukket i schema 5 med kilde-/barreldekkende offentlig API,
+bevisbare native spreads, grammatikkbevisst custom-property-parsing og en smal Svelte-scriptport.
+Hele test-, check-, E2E-, hostbuild-, bundle- og produksjonsruteporten er grønn uten produkt-,
+oppstarts- eller backendendring.
 
 ### SWP-7.5 — beslutt og håndhev oppstartsdokumentets stylingkontrakt
 

@@ -1,0 +1,7 @@
+@layer base {
+  body {
+    /* prettier-ignore */
+    color: var( --missing-whitespace, var(/**/ --missing-fallback, red));
+    background: v\61 r(--missing-escaped-function);
+  }
+}

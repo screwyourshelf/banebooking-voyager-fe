@@ -50,6 +50,22 @@
       "diagnostics": []
     },
     {
+      "id": "positive-public-ui-sanitized-spread",
+      "fixture": "positive/public-ui-sanitized-spread.svelte",
+      "sourcePath": "src/lib/ui/patterns/SanitizedAttributes.svelte",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-007-CSS-APPLICATION"],
+      "diagnostics": []
+    },
+    {
+      "id": "positive-semantic-dom-operations",
+      "fixture": "positive/semantic-dom-operations.svelte",
+      "sourcePath": "src/lib/features/example/SemanticDom.svelte",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-002-FEATURE-STYLING"],
+      "diagnostics": []
+    },
+    {
       "id": "positive-utility-vocabulary",
       "fixture": "positive/utility-vocabulary.svelte",
       "sourcePath": "src/lib/ui/patterns/GuardSection.svelte",
@@ -160,6 +176,51 @@
         {
           "ruleId": "STYLING-002-FEATURE-STYLING",
           "message": "data-series kan bare brukes av en eksakt registrert visualiseringseier; fant src/lib/features/example/StyledScreen.svelte"
+        }
+      ]
+    },
+    {
+      "id": "negative-imperative-dom-styling",
+      "fixture": "negative/imperative-dom-styling.svelte",
+      "sourcePath": "src/lib/features/example/ImperativeStyling.svelte",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-002-FEATURE-STYLING"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom setProperty er forbudt; bruk offentlig UI, theme og statiske utilities"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom classList.add er forbudt; bruk offentlig UI, theme og statiske utilities"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom color er forbudt; bruk offentlig UI, theme og statiske utilities"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom classList.toggle er forbudt; bruk offentlig UI, theme og statiske utilities"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom className er forbudt; bruk offentlig UI, theme og statiske utilities"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom setAttribute(\"style\") er forbudt; bruk offentlig UI, theme og statiske utilities"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom removeAttributeNS(\"class\") er forbudt; bruk offentlig UI, theme og statiske utilities"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom setAttribute(dynamisk attributt) er forbudt; bruk offentlig UI, theme og statiske utilities"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom Object.assign(style) er forbudt; bruk offentlig UI, theme og statiske utilities"
         }
       ]
     },
@@ -275,6 +336,32 @@
       ]
     },
     {
+      "id": "negative-public-ui-broad-forwarder",
+      "fixture": "negative/public-ui-broad-forwarder.svelte",
+      "sourcePath": "src/lib/ui/patterns/BroadForwarder.svelte",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-007-CSS-APPLICATION"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-007-CSS-APPLICATION",
+          "message": "offentlig UI må bevise at attributtspread på native element utelater class og style"
+        }
+      ]
+    },
+    {
+      "id": "negative-public-ui-identifier-spread",
+      "fixture": "negative/public-ui-identifier-spread.svelte",
+      "sourcePath": "src/lib/ui/patterns/HiddenStyling.svelte",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-007-CSS-APPLICATION"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-007-CSS-APPLICATION",
+          "message": "offentlig UI kan ikke skjule class/style i attributtspread"
+        }
+      ]
+    },
+    {
       "id": "negative-icon-dynamic-element",
       "fixture": "negative/icon-dynamic-element.svelte",
       "sourcePath": "src/lib/ui/primitives/Icon.svelte",
@@ -377,6 +464,27 @@
         {
           "ruleId": "STYLING-008-CUSTOM-PROPERTY",
           "message": "--missing-role brukes uten registrert definisjon eller eier"
+        }
+      ]
+    },
+    {
+      "id": "negative-custom-property-syntax",
+      "fixture": "negative/custom-property-syntax.css",
+      "sourcePath": "src/styles/design-system/base.css",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-008-CUSTOM-PROPERTY"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-008-CUSTOM-PROPERTY",
+          "message": "--missing-fallback brukes uten registrert definisjon eller eier"
+        },
+        {
+          "ruleId": "STYLING-008-CUSTOM-PROPERTY",
+          "message": "--missing-escaped-function brukes uten registrert definisjon eller eier"
+        },
+        {
+          "ruleId": "STYLING-008-CUSTOM-PROPERTY",
+          "message": "--missing-whitespace brukes uten registrert definisjon eller eier"
         }
       ]
     },

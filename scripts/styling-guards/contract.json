@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 4,
+  "schemaVersion": 5,
   "analyzerEnforcementPhase": "final",
   "cascadeContractEnforcementPhase": "active",
   "themeContractEnforcementPhase": "active",
@@ -110,6 +110,31 @@
       "sourceIdentifier": "attributes",
       "omittedAttributeNames": ["class", "key", "style"]
     }
+  },
+  "publicUiForwarding": {
+    "publicBarrel": "src/lib/ui/index.ts",
+    "attributeType": "PublicHtmlAttributes",
+    "forbiddenPropNames": ["class", "style"],
+    "typePreservingWrappers": ["Omit", "Partial", "Pick", "Readonly", "Required"],
+    "proofStrategies": ["barrel-component-props", "typed-native-rest", "explicit-runtime-omission"]
+  },
+  "svelteScript": {
+    "styleObjectMembers": ["style", "classList"],
+    "styleAssignmentMembers": ["className", "cssText"],
+    "cssStyleMutationMethods": ["setProperty", "removeProperty"],
+    "classListMutationMethods": ["add", "remove", "replace", "toggle"],
+    "attributeMutationMethods": [
+      "setAttribute",
+      "setAttributeNS",
+      "removeAttribute",
+      "removeAttributeNS",
+      "toggleAttribute"
+    ],
+    "opaqueAttributeMutationMethods": [
+      "setAttributeNode",
+      "setAttributeNodeNS",
+      "removeAttributeNode"
+    ]
   },
   "productionTree": {
     "sourceRoots": ["src/"],

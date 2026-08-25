@@ -9,8 +9,8 @@ export async function loadStylingGuardContract(url = contractUrl) {
 }
 
 function validateStylingGuardContract(contract) {
-  if (contract?.schemaVersion !== 4) {
-    throw new Error("Styling guard-kontrakten må ha schemaVersion 4.");
+  if (contract?.schemaVersion !== 5) {
+    throw new Error("Styling guard-kontrakten må ha schemaVersion 5.");
   }
   if (
     contract.analyzerEnforcementPhase !== "final" ||
@@ -60,9 +60,55 @@ function validateStylingGuardContract(contract) {
 
   validateProductionTreeContract(contract, ruleEntries);
   validateMarkupContract(contract);
+  validatePublicUiForwardingContract(contract);
+  validateSvelteScriptContract(contract);
   validateThemeVocabulary(contract);
   validateCssCascadeContract(contract);
   validateVisualizationExceptionContract(contract);
+}
+
+function validatePublicUiForwardingContract(contract) {
+  const forwarding = contract.publicUiForwarding ?? {};
+  if (
+    forwarding.publicBarrel !== "src/lib/ui/index.ts" ||
+    forwarding.attributeType !== "PublicHtmlAttributes" ||
+    forwarding.forbiddenPropNames?.join(",") !== "class,style" ||
+    forwarding.typePreservingWrappers?.join(",") !== "Omit,Partial,Pick,Readonly,Required" ||
+    forwarding.proofStrategies?.join(",") !==
+      "barrel-component-props,typed-native-rest,explicit-runtime-omission"
+  ) {
+    throw new Error(
+      "Offentlig UI-forwarding må være barrel-dekkende og bevise at class/style er utelatt."
+    );
+  }
+}
+
+function validateSvelteScriptContract(contract) {
+  const script = contract.svelteScript ?? {};
+  const expectedLists = {
+    attributeMutationMethods: [
+      "setAttribute",
+      "setAttributeNS",
+      "removeAttribute",
+      "removeAttributeNS",
+      "toggleAttribute",
+    ],
+    classListMutationMethods: ["add", "remove", "replace", "toggle"],
+    cssStyleMutationMethods: ["setProperty", "removeProperty"],
+    opaqueAttributeMutationMethods: [
+      "setAttributeNode",
+      "setAttributeNodeNS",
+      "removeAttributeNode",
+    ],
+    styleAssignmentMembers: ["className", "cssText"],
+    styleObjectMembers: ["style", "classList"],
+  };
+
+  for (const [name, expected] of Object.entries(expectedLists)) {
+    if (script[name]?.join(",") !== expected.join(",")) {
+      throw new Error(`Svelte-scriptkontrakten mangler eksakt ${name}-klassifisering.`);
+    }
+  }
 }
 
 function validateMarkupContract(contract) {

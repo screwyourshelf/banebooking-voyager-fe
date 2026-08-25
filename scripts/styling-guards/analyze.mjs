@@ -10,6 +10,12 @@ import {
   analyzeClassDirective,
   staticAttributeValue,
 } from "./utility-policy.mjs";
+import {
+  collectPublicUiSpreadProof,
+  resolvePublicUiSpreadStyling,
+} from "./public-ui-spread-policy.mjs";
+import { offsetLocation, staticPropertyName, walkAst } from "./svelte-ast.mjs";
+import { analyzeImperativeDomStyling } from "./svelte-script-policy.mjs";
 
 export function analyzeStylingSource({ contract, source, sourcePath }) {
   return analyzeStylingSourceDetails({ contract, source, sourcePath }).diagnostics;
@@ -65,6 +71,21 @@ function analyzeSvelteComponent({ contract, source, sourcePath }) {
   const isFeatureOrRoute = pathMatchesAnyRoot(sourcePath, contract.ownership.featureAndRouteRoots);
   const isPublicUiOwner = pathMatchesAnyRoot(sourcePath, contract.ownership.publicUiOwnerRoots);
   const isVisualization = Object.hasOwn(contract.visualizationException.owners, sourcePath);
+  const publicUiSpreadProof = isPublicUiOwner
+    ? collectPublicUiSpreadProof(ast, importNodes, contract)
+    : null;
+
+  if (isFeatureOrRoute || isPublicUiOwner) {
+    diagnostics.push(
+      ...analyzeImperativeDomStyling({
+        ast,
+        contract,
+        isFeatureOrRoute,
+        isVisualization,
+        source,
+      })
+    );
+  }
 
   for (const importNode of importNodes) {
     analyzeImport({ contract, diagnostics, importNode, isFeatureOrRoute, source, sourcePath });
@@ -189,7 +210,14 @@ function analyzeSvelteComponent({ contract, source, sourcePath }) {
       }
 
       if (isPublicUiOwner) {
-        analyzePublicUiAttribute({ attribute, contract, diagnostics, source });
+        analyzePublicUiAttribute({
+          attribute,
+          contract,
+          diagnostics,
+          node,
+          source,
+          spreadProof: publicUiSpreadProof,
+        });
         continue;
       }
 
@@ -496,18 +524,26 @@ function analyzeFeatureAttribute({
   }
 }
 
-function analyzePublicUiAttribute({ attribute, contract, diagnostics, source }) {
+function analyzePublicUiAttribute({ attribute, contract, diagnostics, node, source, spreadProof }) {
   const location = offsetLocation(source, attribute.start ?? 0);
   const channel = markupAttributeChannel(attribute, contract);
   const attributeName = normalizedAttributeName(attribute);
 
   if (channel === "spread") {
-    const stylingNames = staticSpreadStylingNames(attribute.expression);
-    if (stylingNames.length > 0) {
+    const proof = resolvePublicUiSpreadStyling(attribute.expression, spreadProof);
+    if (proof.stylingNames.length > 0) {
       diagnostics.push(
         diagnostic(
           contract.rules.cssApplication.id,
-          `offentlig UI kan ikke skjule ${stylingNames.join("/")} i attributtspread`,
+          `offentlig UI kan ikke skjule ${proof.stylingNames.join("/")} i attributtspread`,
+          location
+        )
+      );
+    } else if (node.type === "RegularElement" && !proof.resolved) {
+      diagnostics.push(
+        diagnostic(
+          contract.rules.cssApplication.id,
+          "offentlig UI må bevise at attributtspread på native element utelater class og style",
           location
         )
       );
@@ -761,41 +797,6 @@ function isStylesheetLink(node) {
   return staticRel.toLowerCase().split(/\s+/).includes("stylesheet");
 }
 
-function staticSpreadStylingNames(expression) {
-  const names = new Set();
-
-  function visit(candidate) {
-    if (!candidate || typeof candidate !== "object") return;
-    if (
-      ["TSAsExpression", "TSSatisfiesExpression", "TSNonNullExpression"].includes(candidate.type)
-    ) {
-      visit(candidate.expression);
-      return;
-    }
-    if (candidate.type !== "ObjectExpression") return;
-
-    for (const property of candidate.properties) {
-      if (property.type === "SpreadElement") {
-        visit(property.argument);
-        continue;
-      }
-      if (property.type !== "Property" || property.computed) continue;
-      const name = staticPropertyName(property.key);
-      const normalizedName = name?.toLowerCase();
-      if (["class", "style"].includes(normalizedName)) names.add(normalizedName);
-    }
-  }
-
-  visit(expression);
-  return [...names].sort();
-}
-
-function staticPropertyName(key) {
-  if (key?.type === "Identifier") return key.name;
-  if (key?.type === "Literal" && typeof key.value === "string") return key.value;
-  return null;
-}
-
 function normalizedAttributeName(attribute) {
   return attribute.type === "Attribute" && typeof attribute.name === "string"
     ? attribute.name.toLowerCase()
@@ -857,23 +858,6 @@ function isRegisteredRootStylesheetImport(importer, specifier, contract) {
   );
 }
 
-function walkAst(root, visitor) {
-  const seen = new Set();
-
-  function visit(node) {
-    if (!node || typeof node !== "object" || seen.has(node)) return;
-    seen.add(node);
-    visitor(node);
-    for (const [key, child] of Object.entries(node)) {
-      if (["loc", "metadata", "parent"].includes(key)) continue;
-      if (Array.isArray(child)) child.forEach(visit);
-      else visit(child);
-    }
-  }
-
-  visit(root);
-}
-
 function visitMarkup(root, insideSvg, visitor) {
   const seen = new Set();
 
@@ -929,15 +913,6 @@ function reconstructInlineStyle(attribute) {
 
 function diagnostic(ruleId, message, location) {
   return { ...location, message, ruleId };
-}
-
-function offsetLocation(source, offset) {
-  const before = source.slice(0, Math.max(offset, 0));
-  const lastNewline = before.lastIndexOf("\n");
-  return {
-    column: before.length - lastNewline,
-    line: (before.match(/\n/g)?.length ?? 0) + 1,
-  };
 }
 
 function compareDiagnostics(left, right) {

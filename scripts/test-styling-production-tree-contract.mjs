@@ -23,6 +23,7 @@ await proveProductionDiscoveryIsNarrowAndExplicit();
 await proveCustomPropertyReferencesResolveAcrossTheProject();
 await proveEveryProductionRuleRejectsANewOccurrence();
 proveMarkupMutationChannelsCannotBypass();
+proveCustomPropertySyntaxCannotBypass();
 
 console.log(
   `Styling-produksjonstreets kontrakt er bevist for ${contract.productionTree.enforcedRuleIds.length} regler.`
@@ -229,6 +230,66 @@ function proveMarkupMutationChannelsCannotBypass() {
       ruleId: contract.rules.cssApplication.id,
       message: /class\/style/,
     },
+    {
+      label: "public UI identifier spread styling",
+      source:
+        '<script>const styling = { class: "bg-red-500", style: "color:red" };</script><div {...styling}></div>',
+      sourcePath: uiPath,
+      ruleId: contract.rules.cssApplication.id,
+      message: /class\/style/,
+    },
+    {
+      label: "public UI broad native forwarder",
+      source: [
+        '<script lang="ts">',
+        'import type { HTMLAttributes } from "svelte/elements";',
+        "let { ...attributes }: HTMLAttributes<HTMLDivElement> = $props();",
+        "</script>",
+        "<div {...attributes}></div>",
+      ].join("\n"),
+      sourcePath: uiPath,
+      ruleId: contract.rules.cssApplication.id,
+      message: /må bevise.*utelater class og style/,
+    },
+    {
+      label: "public UI shadowed safe spread",
+      source: [
+        '<script lang="ts">',
+        'import type { HTMLAttributes } from "svelte/elements";',
+        'import type { PublicHtmlAttributes } from "$lib/ui/public-html-attributes";',
+        "let { ...attributes }: PublicHtmlAttributes<HTMLAttributes<HTMLDivElement>> = $props();",
+        "</script>",
+        "{#snippet content()}",
+        '  {@const attributes = { class: "bg-red-500" }}',
+        "  <div {...attributes}></div>",
+        "{/snippet}",
+      ].join("\n"),
+      sourcePath: uiPath,
+      ruleId: contract.rules.cssApplication.id,
+      message: /kan ikke skjule class/,
+    },
+    {
+      label: "public UI escaped sanitized spread",
+      source: [
+        '<script lang="ts">',
+        "let sourceAttributes: Record<string, unknown> = $props();",
+        "const { class: _class, style: _style, ...attributes } = sourceAttributes;",
+        'Object.defineProperty(attributes, "class", { value: "bg-red-500" });',
+        "</script>",
+        "<div {...attributes}></div>",
+      ].join("\n"),
+      sourcePath: uiPath,
+      ruleId: contract.rules.cssApplication.id,
+      message: /må bevise.*utelater class og style/,
+    },
+    {
+      label: "feature imperative DOM styling",
+      source:
+        '<script>let element; $effect(() => element.style.setProperty("color", "red"));</script>',
+      sourcePath: featurePath,
+      ruleId: contract.rules.featureStyling.id,
+      message: /imperativ DOM-styling gjennom setProperty/,
+    },
   ];
 
   for (const mutation of cases) {
@@ -294,4 +355,42 @@ function proveMarkupMutationChannelsCannotBypass() {
     ),
     "Icon-unntaket godtok et shadowed attributtspread uten direkte sanitiseringsbinding."
   );
+
+  const semanticDomSource = [
+    '<script lang="ts">',
+    "let element: HTMLElement;",
+    "element.focus();",
+    'element.setAttribute("aria-busy", "true");',
+    'element.removeAttribute("hidden");',
+    "</script>",
+  ].join("\n");
+  assert.deepEqual(
+    analyzeStylingSource({ contract, source: semanticDomSource, sourcePath: featurePath }),
+    [],
+    "Legitime semantiske DOM-operasjoner ble feilklassifisert som styling."
+  );
+}
+
+function proveCustomPropertySyntaxCannotBypass() {
+  const sourcePath = "src/styles/design-system/base.css";
+  const diagnostics = analyzeStylingSource({
+    contract,
+    source: [
+      "@layer base {",
+      "  body {",
+      "    color: var( --guard-whitespace, var(/**/--guard-fallback, red));",
+      "  }",
+      "}",
+    ].join("\n"),
+    sourcePath,
+  });
+
+  for (const name of ["--guard-whitespace", "--guard-fallback"]) {
+    assert.ok(
+      diagnostics.some(
+        (entry) => entry.ruleId === contract.rules.customProperty.id && entry.message.includes(name)
+      ),
+      `${name} passerte custom-property-kontrakten gjennom gyldig var()-syntaks.`
+    );
+  }
 }

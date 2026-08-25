@@ -45078,7 +45078,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "bg-transparent",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45087,7 +45087,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "border-0",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45096,7 +45096,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "cursor-pointer",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45105,7 +45105,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "disabled:cursor-not-allowed",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45114,7 +45114,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "disabled:opacity-calendar-disabled",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45123,7 +45123,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "enabled:hover:bg-surface-subtle",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45132,7 +45132,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "enabled:hover:text-ink",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45141,7 +45141,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "focus-visible:outline-3",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45150,7 +45150,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "focus-visible:outline-focus-outline",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45159,7 +45159,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "focus-visible:outline-offset-1",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45168,7 +45168,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "focus-visible:outline-solid",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45177,7 +45177,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "h-control",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45186,7 +45186,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "inline-grid",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45195,7 +45195,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "outline-none",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45204,7 +45204,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "place-items-center",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45213,7 +45213,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "rounded-control",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45222,7 +45222,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "text-ink-soft",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45231,7 +45231,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "w-control",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45240,7 +45240,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 28,
+          "line": 29,
           "className": "flex-none",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45249,7 +45249,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 28,
+          "line": 29,
           "className": "h-control-icon",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45258,7 +45258,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 28,
+          "line": 29,
           "className": "w-control-icon",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45267,7 +45267,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 41,
+          "line": 42,
           "className": "capitalize",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45276,7 +45276,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 41,
+          "line": 42,
           "className": "font-body",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45285,7 +45285,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 41,
+          "line": 42,
           "className": "font-calendar-heading",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45294,7 +45294,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 41,
+          "line": 42,
           "className": "overflow-hidden",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45303,7 +45303,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 41,
+          "line": 42,
           "className": "text-center",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45312,7 +45312,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 41,
+          "line": 42,
           "className": "text-ellipsis",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45321,7 +45321,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 41,
+          "line": 42,
           "className": "text-label",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45330,7 +45330,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 41,
+          "line": 42,
           "className": "whitespace-nowrap",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45339,7 +45339,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "bg-transparent",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45348,7 +45348,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "border-0",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45357,7 +45357,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "cursor-pointer",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45366,7 +45366,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "disabled:cursor-not-allowed",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45375,7 +45375,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "disabled:opacity-calendar-disabled",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45384,7 +45384,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "enabled:hover:bg-surface-subtle",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45393,7 +45393,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "enabled:hover:text-ink",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45402,7 +45402,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "focus-visible:outline-3",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45411,7 +45411,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "focus-visible:outline-focus-outline",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45420,7 +45420,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "focus-visible:outline-offset-1",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45429,7 +45429,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "focus-visible:outline-solid",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45438,7 +45438,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "h-control",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45447,7 +45447,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "inline-grid",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45456,7 +45456,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "outline-none",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45465,7 +45465,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "place-items-center",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45474,7 +45474,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "rounded-control",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45483,7 +45483,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "text-ink-soft",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45492,7 +45492,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "w-control",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45501,7 +45501,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 55,
+          "line": 57,
           "className": "flex-none",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45510,7 +45510,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 55,
+          "line": 57,
           "className": "h-control-icon",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45519,7 +45519,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 55,
+          "line": 57,
           "className": "w-control-icon",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45528,7 +45528,7 @@
         {
           "column": 22,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 70,
+          "line": 72,
           "className": "border-collapse",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45537,7 +45537,7 @@
         {
           "column": 22,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 70,
+          "line": 72,
           "className": "table-fixed",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45546,7 +45546,7 @@
         {
           "column": 22,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 70,
+          "line": 72,
           "className": "w-full",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45555,7 +45555,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 75,
+          "line": 77,
           "className": "capitalize",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45564,7 +45564,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 75,
+          "line": 77,
           "className": "font-action",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45573,7 +45573,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 75,
+          "line": 77,
           "className": "font-body",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45582,7 +45582,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 75,
+          "line": 77,
           "className": "h-compact-control",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45591,7 +45591,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 75,
+          "line": 77,
           "className": "text-caption",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45600,7 +45600,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 75,
+          "line": 77,
           "className": "text-center",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45609,7 +45609,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 75,
+          "line": 77,
           "className": "text-ink-faint",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45618,7 +45618,7 @@
         {
           "column": 15,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 86,
+          "line": 88,
           "className": "compact-control:px-0",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45627,7 +45627,7 @@
         {
           "column": 15,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 86,
+          "line": 88,
           "className": "p-calendar-cell",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45636,7 +45636,7 @@
         {
           "column": 15,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 86,
+          "line": 88,
           "className": "text-center",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -48170,7 +48170,7 @@
         {
           "column": 21,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 95,
+          "line": 98,
           "expression": "class={[\n                      \"grid w-control h-control compact-control:w-calendar-day-compact place-items-center mx-auto rounded-calendar-day font-body text-body-sm tabular-nums outline-none data-[focused]:outline-3 data-[focused]:outline-solid data-[focused]:outline-focus-outline data-[focused]:outline-offset-1 data-[outside-month]:invisible\",\n                      selected\n                        ? disabled\n                          ? \"bg-choice-indicator text-ink-faint font-calendar-selected cursor-not-allowed opacity-calendar-disabled\"\n                          : \"bg-choice-indicator text-action-primary-text font-calendar-selected cursor-pointer\"\n                        : disabled\n                          ? \"text-ink-faint font-body cursor-not-allowed opacity-calendar-disabled data-[today]:bg-brand-soft data-[today]:font-calendar-selected\"\n                          : \"text-ink-soft cursor-pointer hover:bg-surface-subtle hover:text-ink data-[today]:bg-brand-soft data-[today]:text-brand-strong data-[today]:font-calendar-selected\",\n                    ]}",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -49729,7 +49729,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 1,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "lineCount": 116,
+          "lineCount": 119,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -61662,7 +61662,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "bg-transparent",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61673,7 +61673,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "border-0",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61684,7 +61684,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "cursor-pointer",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61695,7 +61695,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "disabled:cursor-not-allowed",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61706,7 +61706,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "disabled:opacity-calendar-disabled",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61717,7 +61717,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "enabled:hover:bg-surface-subtle",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61728,7 +61728,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "enabled:hover:text-ink",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61739,7 +61739,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "focus-visible:outline-3",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61750,7 +61750,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "focus-visible:outline-focus-outline",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61761,7 +61761,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "focus-visible:outline-offset-1",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61772,7 +61772,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "focus-visible:outline-solid",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61783,7 +61783,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "h-control",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61794,7 +61794,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "inline-grid",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61805,7 +61805,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "outline-none",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61816,7 +61816,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "place-items-center",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61827,7 +61827,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "rounded-control",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61838,7 +61838,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "text-ink-soft",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61849,7 +61849,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 23,
+          "line": 24,
           "className": "w-control",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61860,7 +61860,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 28,
+          "line": 29,
           "className": "flex-none",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61871,7 +61871,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 28,
+          "line": 29,
           "className": "h-control-icon",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61882,7 +61882,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 28,
+          "line": 29,
           "className": "w-control-icon",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61893,7 +61893,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 41,
+          "line": 42,
           "className": "font-body",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61904,7 +61904,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 41,
+          "line": 42,
           "className": "font-calendar-heading",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61915,7 +61915,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 41,
+          "line": 42,
           "className": "overflow-hidden",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61926,7 +61926,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 41,
+          "line": 42,
           "className": "text-center",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61937,7 +61937,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 41,
+          "line": 42,
           "className": "text-ellipsis",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61948,7 +61948,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 41,
+          "line": 42,
           "className": "text-label",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61959,7 +61959,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 41,
+          "line": 42,
           "className": "whitespace-nowrap",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61970,7 +61970,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "bg-transparent",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61981,7 +61981,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "border-0",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -61992,7 +61992,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "cursor-pointer",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62003,7 +62003,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "disabled:cursor-not-allowed",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62014,7 +62014,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "disabled:opacity-calendar-disabled",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62025,7 +62025,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "enabled:hover:bg-surface-subtle",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62036,7 +62036,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "enabled:hover:text-ink",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62047,7 +62047,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "focus-visible:outline-3",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62058,7 +62058,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "focus-visible:outline-focus-outline",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62069,7 +62069,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "focus-visible:outline-offset-1",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62080,7 +62080,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "focus-visible:outline-solid",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62091,7 +62091,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "h-control",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62102,7 +62102,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "inline-grid",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62113,7 +62113,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "outline-none",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62124,7 +62124,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "place-items-center",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62135,7 +62135,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "rounded-control",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62146,7 +62146,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "text-ink-soft",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62157,7 +62157,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 50,
+          "line": 52,
           "className": "w-control",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62168,7 +62168,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 55,
+          "line": 57,
           "className": "flex-none",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62179,7 +62179,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 55,
+          "line": 57,
           "className": "h-control-icon",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62190,7 +62190,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 55,
+          "line": 57,
           "className": "w-control-icon",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62201,7 +62201,7 @@
         {
           "column": 22,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 70,
+          "line": 72,
           "className": "border-collapse",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62212,7 +62212,7 @@
         {
           "column": 22,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 70,
+          "line": 72,
           "className": "table-fixed",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62223,7 +62223,7 @@
         {
           "column": 22,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 70,
+          "line": 72,
           "className": "w-full",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62234,7 +62234,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 75,
+          "line": 77,
           "className": "font-action",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62245,7 +62245,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 75,
+          "line": 77,
           "className": "font-body",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62256,7 +62256,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 75,
+          "line": 77,
           "className": "h-compact-control",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62267,7 +62267,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 75,
+          "line": 77,
           "className": "text-caption",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62278,7 +62278,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 75,
+          "line": 77,
           "className": "text-center",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62289,7 +62289,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 75,
+          "line": 77,
           "className": "text-ink-faint",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62300,7 +62300,7 @@
         {
           "column": 15,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 86,
+          "line": 88,
           "className": "p-calendar-cell",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62311,7 +62311,7 @@
         {
           "column": 15,
           "file": "src/lib/ui/primitives/CalendarBody.svelte",
-          "line": 86,
+          "line": 88,
           "className": "text-center",
           "ownerFamily": "primitive-overlays-and-date-controls",
           "ownerPackage": "src/lib/ui/primitives",
@@ -75646,7 +75646,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "bg-transparent",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75657,7 +75657,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "border-0",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75668,7 +75668,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "cursor-pointer",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75679,7 +75679,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "disabled:cursor-not-allowed",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75690,7 +75690,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "disabled:opacity-calendar-disabled",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75701,7 +75701,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "enabled:hover:bg-surface-subtle",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75712,7 +75712,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "enabled:hover:text-ink",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75723,7 +75723,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "focus-visible:outline-3",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75734,7 +75734,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "focus-visible:outline-focus-outline",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75745,7 +75745,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "focus-visible:outline-offset-1",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75756,7 +75756,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "focus-visible:outline-solid",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75767,7 +75767,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "h-control",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75778,7 +75778,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "inline-grid",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75789,7 +75789,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "outline-none",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75800,7 +75800,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "place-items-center",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75811,7 +75811,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "rounded-control",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75822,7 +75822,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "text-ink-soft",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75833,7 +75833,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 23,
+        "line": 24,
         "className": "w-control",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75844,7 +75844,7 @@
       {
         "column": 11,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 28,
+        "line": 29,
         "className": "flex-none",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75855,7 +75855,7 @@
       {
         "column": 11,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 28,
+        "line": 29,
         "className": "h-control-icon",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75866,7 +75866,7 @@
       {
         "column": 11,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 28,
+        "line": 29,
         "className": "w-control-icon",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75877,7 +75877,7 @@
       {
         "column": 5,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 41,
+        "line": 42,
         "className": "font-body",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75888,7 +75888,7 @@
       {
         "column": 5,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 41,
+        "line": 42,
         "className": "font-calendar-heading",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75899,7 +75899,7 @@
       {
         "column": 5,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 41,
+        "line": 42,
         "className": "overflow-hidden",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75910,7 +75910,7 @@
       {
         "column": 5,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 41,
+        "line": 42,
         "className": "text-center",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75921,7 +75921,7 @@
       {
         "column": 5,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 41,
+        "line": 42,
         "className": "text-ellipsis",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75932,7 +75932,7 @@
       {
         "column": 5,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 41,
+        "line": 42,
         "className": "text-label",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75943,7 +75943,7 @@
       {
         "column": 5,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 41,
+        "line": 42,
         "className": "whitespace-nowrap",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75954,7 +75954,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "bg-transparent",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75965,7 +75965,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "border-0",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75976,7 +75976,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "cursor-pointer",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75987,7 +75987,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "disabled:cursor-not-allowed",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -75998,7 +75998,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "disabled:opacity-calendar-disabled",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76009,7 +76009,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "enabled:hover:bg-surface-subtle",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76020,7 +76020,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "enabled:hover:text-ink",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76031,7 +76031,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "focus-visible:outline-3",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76042,7 +76042,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "focus-visible:outline-focus-outline",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76053,7 +76053,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "focus-visible:outline-offset-1",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76064,7 +76064,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "focus-visible:outline-solid",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76075,7 +76075,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "h-control",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76086,7 +76086,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "inline-grid",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76097,7 +76097,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "outline-none",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76108,7 +76108,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "place-items-center",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76119,7 +76119,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "rounded-control",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76130,7 +76130,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "text-ink-soft",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76141,7 +76141,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 50,
+        "line": 52,
         "className": "w-control",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76152,7 +76152,7 @@
       {
         "column": 11,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 55,
+        "line": 57,
         "className": "flex-none",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76163,7 +76163,7 @@
       {
         "column": 11,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 55,
+        "line": 57,
         "className": "h-control-icon",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76174,7 +76174,7 @@
       {
         "column": 11,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 55,
+        "line": 57,
         "className": "w-control-icon",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76185,7 +76185,7 @@
       {
         "column": 22,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 70,
+        "line": 72,
         "className": "border-collapse",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76196,7 +76196,7 @@
       {
         "column": 22,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 70,
+        "line": 72,
         "className": "table-fixed",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76207,7 +76207,7 @@
       {
         "column": 22,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 70,
+        "line": 72,
         "className": "w-full",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76218,7 +76218,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 75,
+        "line": 77,
         "className": "font-action",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76229,7 +76229,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 75,
+        "line": 77,
         "className": "font-body",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76240,7 +76240,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 75,
+        "line": 77,
         "className": "h-compact-control",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76251,7 +76251,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 75,
+        "line": 77,
         "className": "text-caption",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76262,7 +76262,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 75,
+        "line": 77,
         "className": "text-center",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76273,7 +76273,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 75,
+        "line": 77,
         "className": "text-ink-faint",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76284,7 +76284,7 @@
       {
         "column": 15,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 86,
+        "line": 88,
         "className": "p-calendar-cell",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76295,7 +76295,7 @@
       {
         "column": 15,
         "file": "src/lib/ui/primitives/CalendarBody.svelte",
-        "line": 86,
+        "line": 88,
         "className": "text-center",
         "ownerFamily": "primitive-overlays-and-date-controls",
         "ownerPackage": "src/lib/ui/primitives",
@@ -78975,17 +78975,17 @@
       "initialCssGzipBytes": 28475,
       "initialJavaScriptAssets": [
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
+        { "asset": "_app/immutable/chunks/BtmXmn-H.js", "gzipBytes": 11219, "rawBytes": 29273 },
         { "asset": "_app/immutable/chunks/BxCIeGOe.js", "gzipBytes": 725, "rawBytes": 1401 },
-        { "asset": "_app/immutable/chunks/ChyweSoR.js", "gzipBytes": 11218, "rawBytes": 29273 },
         { "asset": "_app/immutable/chunks/Cpi0lLfN.js", "gzipBytes": 530, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/Dpzkwr9j.js", "gzipBytes": 612, "rawBytes": 1143 },
         { "asset": "_app/immutable/chunks/j1LAjlpn.js", "gzipBytes": 20600, "rawBytes": 54865 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.D106EDEs.js", "gzipBytes": 2504, "rawBytes": 9050 },
-        { "asset": "_app/immutable/entry/start.DlKL6l2c.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/entry/app.CN1TypYL.js", "gzipBytes": 2507, "rawBytes": 9050 },
+        { "asset": "_app/immutable/entry/start.B13M8jY8.js", "gzipBytes": 92, "rawBytes": 82 },
         { "asset": "_app/immutable/nodes/0.DD6Pq7DV.js", "gzipBytes": 427, "rawBytes": 806 }
       ],
-      "initialJavaScriptGzipBytes": 38147,
+      "initialJavaScriptGzipBytes": 38151,
       "javaScriptChunkCount": 60,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",
@@ -79025,18 +79025,18 @@
       ],
       "initialCssGzipBytes": 28496,
       "initialJavaScriptAssets": [
+        { "asset": "_app/immutable/chunks/BVmI2CjL.js", "gzipBytes": 11229, "rawBytes": 29285 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/BxCIeGOe.js", "gzipBytes": 725, "rawBytes": 1401 },
-        { "asset": "_app/immutable/chunks/CLLxofkX.js", "gzipBytes": 11229, "rawBytes": 29285 },
         { "asset": "_app/immutable/chunks/Cpi0lLfN.js", "gzipBytes": 530, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/Dpzkwr9j.js", "gzipBytes": 621, "rawBytes": 1179 },
         { "asset": "_app/immutable/chunks/j1LAjlpn.js", "gzipBytes": 20600, "rawBytes": 54865 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.CW3XPIfE.js", "gzipBytes": 2511, "rawBytes": 9614 },
-        { "asset": "_app/immutable/entry/start.NBRfZAat.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/entry/app.ephWE4X_.js", "gzipBytes": 2517, "rawBytes": 9614 },
+        { "asset": "_app/immutable/entry/start.DXkA_wO7.js", "gzipBytes": 92, "rawBytes": 82 },
         { "asset": "_app/immutable/nodes/0.DVWJp2e5.js", "gzipBytes": 437, "rawBytes": 866 }
       ],
-      "initialJavaScriptGzipBytes": 38184,
+      "initialJavaScriptGzipBytes": 38190,
       "javaScriptChunkCount": 60,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",

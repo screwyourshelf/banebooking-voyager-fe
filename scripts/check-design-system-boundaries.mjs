@@ -1,6 +1,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import { customPropertyReferences } from "./styling-guards/custom-property-references.mjs";
 
 const projectRoot = process.cwd();
 const sourceRoot = path.join(projectRoot, "src");
@@ -234,8 +235,7 @@ function validateCssVariables() {
     [...componentSource.matchAll(/(--[A-Za-z0-9_-]+)\s*:/g)].map((match) => match[1])
   );
 
-  for (const match of stylesheetSource.matchAll(/var\((--[A-Za-z0-9_-]+)/g)) {
-    const variable = match[1];
+  for (const variable of customPropertyReferences(stylesheetSource)) {
     // Bits UI injects these measured floating-layer values at runtime. The styling guard
     // contract restricts their only source-level consumer to the Tailwind entry boundary.
     if (variable.startsWith("--bits-")) continue;
@@ -247,8 +247,8 @@ function validateCssVariables() {
   const tokenDependencies = new Map();
   for (const match of tokensSource.matchAll(/(--[A-Za-z0-9_-]+)\s*:\s*([^;]+);/g)) {
     const dependencies = tokenDependencies.get(match[1]) ?? new Set();
-    for (const dependency of match[2].matchAll(/var\((--[A-Za-z0-9_-]+)/g)) {
-      dependencies.add(dependency[1]);
+    for (const dependency of customPropertyReferences(match[2])) {
+      dependencies.add(dependency);
     }
     tokenDependencies.set(match[1], dependencies);
   }
@@ -259,9 +259,7 @@ function validateCssVariables() {
       .map((filePath) => sourceByPath.get(filePath) ?? ""),
     componentSource,
   ].join("\n");
-  const reachableTokens = new Set(
-    [...nonTokenSource.matchAll(/var\((--[A-Za-z0-9_-]+)/g)].map((match) => match[1])
-  );
+  const reachableTokens = new Set(customPropertyReferences(nonTokenSource));
   const pendingTokens = [...reachableTokens];
   while (pendingTokens.length > 0) {
     const token = pendingTokens.pop();

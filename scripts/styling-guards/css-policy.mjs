@@ -1,6 +1,7 @@
 import postcss from "postcss";
 import selectorParser from "postcss-selector-parser";
 import { pathMatchesAnyRoot } from "./contract.mjs";
+import { customPropertyReferences } from "./custom-property-references.mjs";
 
 export function analyzeCssSource({ contract, css, scope, sourcePath }) {
   const root = postcss.parse(css, { from: sourcePath });
@@ -44,9 +45,7 @@ export function analyzeCssSource({ contract, css, scope, sourcePath }) {
   });
 
   root.walkDecls((declaration) => {
-    const valueCustomProperties = [...declaration.value.matchAll(/var\((--[A-Za-z0-9_-]+)/g)].map(
-      (match) => match[1]
-    );
+    const valueCustomProperties = customPropertyReferences(declaration.value);
 
     if (
       declaration.important &&
@@ -215,9 +214,9 @@ export function inlineCustomPropertyFacts(styleSource, location) {
     .filter(({ prop }) => prop.startsWith("--"))
     .map(({ prop }) => ({ ...location, name: prop }));
   const references = declarations.flatMap((declaration) =>
-    [...declaration.value.matchAll(/var\((--[A-Za-z0-9_-]+)/g)].map((match) => ({
+    customPropertyReferences(declaration.value).map((name) => ({
       ...location,
-      name: match[1],
+      name,
     }))
   );
   return { definitions, isCustomPropertyDeclarationList, references };

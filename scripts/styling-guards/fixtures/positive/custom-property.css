@@ -1,12 +1,14 @@
 @layer theme {
   :root {
     --app-surface: #fff;
-    --app-surface-raised: var(--app-surface);
+    --app-ink: #111;
+    --app-surface-raised: var(--app-surface, var(/**/ --app-ink));
   }
 }
 
 @layer base {
   body {
     background: var(--app-surface-raised);
+    color: v\61 r(--app-ink);
   }
 }

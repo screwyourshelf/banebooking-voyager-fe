@@ -57,7 +57,7 @@ Kjør den repoeide død-kode-, eksport-, import- og direkte avhengighetskontroll
 npm run static-analysis:check
 ```
 
-Knip 6.32.2 er eksakt pinnet i `devDependencies`. [`knip.json`](../knip.json) registrerer de 28
+Knip 6.32.2 er eksakt pinnet i `devDependencies`. [`knip.json`](../knip.json) registrerer de 34
 isolerte stylingfixturene og `scripts/test-styling-production-tree-contract.mjs` som eksplisitte
 innganger. Den navngitte kontrollen avviser alle runtimefiler, verdi-exports, pakke-, binary-,
 ulistet- og uoppløst-importfunn. Den godtar bare disse 19 eksakt registrerte, type-only

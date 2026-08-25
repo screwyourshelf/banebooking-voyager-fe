@@ -4,6 +4,7 @@ import postcss from "postcss";
 import selectorParser from "postcss-selector-parser";
 import { parse } from "svelte/compiler";
 import { loadStylingGuardContract } from "../styling-guards/contract.mjs";
+import { customPropertyReferences as extractCustomPropertyReferences } from "../styling-guards/custom-property-references.mjs";
 import { checkStylingProductionTree } from "../styling-guards/production-tree-contract.mjs";
 import { emptySelectorFacts, ownerForMarkup, ownerForStylesheet } from "./ownership.mjs";
 
@@ -314,10 +315,10 @@ async function measureStylesheets(projectRoot, absoluteFiles) {
       }
 
       let referenceIndex = 0;
-      for (const match of declaration.value.matchAll(/var\((--[A-Za-z0-9_-]+)/g)) {
+      for (const name of extractCustomPropertyReferences(declaration.value)) {
         customPropertyReferences.push({
           ...location,
-          name: match[1],
+          name,
           property: declaration.prop,
           referenceIndex,
           ...owner,

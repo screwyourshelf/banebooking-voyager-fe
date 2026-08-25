@@ -18,8 +18,9 @@
 >
   <BitsCalendar.PrevButton>
     {#snippet child({ props })}
+      {@const { class: _class, style: _style, ...previousButtonAttributes } = props}
       <button
-        {...props}
+        {...previousButtonAttributes}
         class="inline-grid w-control h-control place-items-center border-0 rounded-control bg-transparent text-ink-soft cursor-pointer outline-none enabled:hover:bg-surface-subtle enabled:hover:text-ink focus-visible:outline-3 focus-visible:outline-solid focus-visible:outline-focus-outline focus-visible:outline-offset-1 disabled:cursor-not-allowed disabled:opacity-calendar-disabled"
         data-part="month-button"
         aria-label="Forrige måned"
@@ -45,8 +46,9 @@
   </BitsCalendar.Heading>
   <BitsCalendar.NextButton>
     {#snippet child({ props })}
+      {@const { class: _class, style: _style, ...nextButtonAttributes } = props}
       <button
-        {...props}
+        {...nextButtonAttributes}
         class="inline-grid w-control h-control place-items-center border-0 rounded-control bg-transparent text-ink-soft cursor-pointer outline-none enabled:hover:bg-surface-subtle enabled:hover:text-ink focus-visible:outline-3 focus-visible:outline-solid focus-visible:outline-focus-outline focus-visible:outline-offset-1 disabled:cursor-not-allowed disabled:opacity-calendar-disabled"
         data-part="month-button"
         aria-label="Neste måned"
@@ -90,8 +92,9 @@
             >
               <BitsCalendar.Day data-part="day">
                 {#snippet child({ props, day, selected, disabled })}
+                  {@const { class: _class, style: _style, ...dayAttributes } = props}
                   <div
-                    {...props}
+                    {...dayAttributes}
                     class={[
                       "grid w-control h-control compact-control:w-calendar-day-compact place-items-center mx-auto rounded-calendar-day font-body text-body-sm tabular-nums outline-none data-[focused]:outline-3 data-[focused]:outline-solid data-[focused]:outline-focus-outline data-[focused]:outline-offset-1 data-[outside-month]:invisible",
                       selected
