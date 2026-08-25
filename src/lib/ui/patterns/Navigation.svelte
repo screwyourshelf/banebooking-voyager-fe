@@ -12,6 +12,8 @@
   type Props = Omit<PublicHtmlAttributes<HTMLAttributes<HTMLElement>>, "children"> & {
     busy?: boolean;
     children?: Snippet;
+    footer?: Snippet;
+    header?: Snippet;
     label: string;
     layout: NavigationLayout;
     surface?: NavigationSurface;
@@ -20,11 +22,17 @@
   let {
     busy = false,
     children,
+    footer,
+    header,
     label,
     layout,
     surface = "control",
     ...attributes
   }: Props = $props();
+
+  const hasShellRegions = $derived(
+    layout === "sidebar" && surface === "shell" && (header !== undefined || footer !== undefined)
+  );
 
   const navigationContext = {
     get layout() {
@@ -42,7 +50,8 @@
   {...attributes}
   class={[
     "min-w-0",
-    layout === "sidebar" && "grid gap-navigation-sidebar",
+    layout === "sidebar" && !hasShellRegions && "grid gap-navigation-sidebar",
+    hasShellRegions && "flex min-h-0 flex-col gap-navigation-sidebar",
     layout === "sidebar" &&
       surface === "control" &&
       "w-full max-w-navigation-sidebar rounded-navigation-sidebar bg-control-surface p-lg text-control-text",
@@ -61,5 +70,20 @@
   aria-label={label}
   aria-busy={busy || undefined}
 >
-  {@render children?.()}
+  {#if hasShellRegions}
+    {#if header}
+      <div class="min-w-0 shrink-0" data-part="header">{@render header()}</div>
+    {/if}
+    <div
+      class="grid min-h-0 flex-1 content-start gap-navigation-sidebar overflow-y-auto"
+      data-part="content"
+    >
+      {@render children?.()}
+    </div>
+    {#if footer}
+      <div class="min-w-0 shrink-0" data-part="footer">{@render footer()}</div>
+    {/if}
+  {:else}
+    {@render children?.()}
+  {/if}
 </nav>

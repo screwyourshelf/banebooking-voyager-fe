@@ -25,8 +25,8 @@
       "styleAttributeCount": 7,
       "styleBlockCount": 4,
       "styleDirectiveCount": 0,
-      "svelteTailwindUtilityOccurrenceCount": 1271,
-      "tailwindUtilityOccurrenceCount": 1271,
+      "svelteTailwindUtilityOccurrenceCount": 1280,
+      "tailwindUtilityOccurrenceCount": 1280,
       "unlayeredCssRuleCount": 0,
       "visualizationExceptionCount": 38
     },
@@ -35214,15 +35214,6 @@
           "column": 7,
           "file": "src/lib/ui/patterns/AppShell.svelte",
           "line": 58,
-          "className": "lg:block",
-          "ownerFamily": "shared-product-patterns",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3"
-        },
-        {
-          "column": 7,
-          "file": "src/lib/ui/patterns/AppShell.svelte",
-          "line": 58,
           "className": "lg:border-0",
           "ownerFamily": "shared-product-patterns",
           "ownerPackage": "src/lib/ui/patterns",
@@ -41599,6 +41590,96 @@
           "ownerFamily": "shared-data-patterns",
           "ownerPackage": "src/lib/ui/patterns",
           "plannedRemovalCheckpoint": "SWP-3.5"
+        },
+        {
+          "column": 12,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 75,
+          "className": "min-w-0",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1"
+        },
+        {
+          "column": 12,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 75,
+          "className": "shrink-0",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1"
+        },
+        {
+          "column": 7,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 78,
+          "className": "content-start",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1"
+        },
+        {
+          "column": 7,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 78,
+          "className": "flex-1",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1"
+        },
+        {
+          "column": 7,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 78,
+          "className": "gap-navigation-sidebar",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1"
+        },
+        {
+          "column": 7,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 78,
+          "className": "grid",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1"
+        },
+        {
+          "column": 7,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 78,
+          "className": "min-h-0",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1"
+        },
+        {
+          "column": 7,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 78,
+          "className": "overflow-y-auto",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1"
+        },
+        {
+          "column": 12,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 84,
+          "className": "min-w-0",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1"
+        },
+        {
+          "column": 12,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 84,
+          "className": "shrink-0",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1"
         },
         {
           "column": 3,
@@ -48097,8 +48178,8 @@
         {
           "column": 3,
           "file": "src/lib/ui/patterns/Navigation.svelte",
-          "line": 43,
-          "expression": "class={[\n    \"min-w-0\",\n    layout === \"sidebar\" && \"grid gap-navigation-sidebar\",\n    layout === \"sidebar\" &&\n      surface === \"control\" &&\n      \"w-full max-w-navigation-sidebar rounded-navigation-sidebar bg-control-surface p-lg text-control-text\",\n    layout === \"sidebar\" &&\n      surface === \"shell\" &&\n      \"w-full max-w-none flex-1 rounded-none bg-transparent p-0 text-control-text\",\n    layout === \"sidebar\" &&\n      surface === \"overlay\" &&\n      \"w-full max-w-none rounded-none bg-transparent p-0 text-ink\",\n    layout === \"bottom\" && \"w-full\",\n    layout === \"section\" && \"overflow-x-auto border-b border-line scrollbar-thin\",\n  ]}",
+          "line": 51,
+          "expression": "class={[\n    \"min-w-0\",\n    layout === \"sidebar\" && !hasShellRegions && \"grid gap-navigation-sidebar\",\n    hasShellRegions && \"flex min-h-0 flex-col gap-navigation-sidebar\",\n    layout === \"sidebar\" &&\n      surface === \"control\" &&\n      \"w-full max-w-navigation-sidebar rounded-navigation-sidebar bg-control-surface p-lg text-control-text\",\n    layout === \"sidebar\" &&\n      surface === \"shell\" &&\n      \"w-full max-w-none flex-1 rounded-none bg-transparent p-0 text-control-text\",\n    layout === \"sidebar\" &&\n      surface === \"overlay\" &&\n      \"w-full max-w-none rounded-none bg-transparent p-0 text-ink\",\n    layout === \"bottom\" && \"w-full\",\n    layout === \"section\" && \"overflow-x-auto border-b border-line scrollbar-thin\",\n  ]}",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
           "plannedRemovalCheckpoint": "SWP-4.1"
@@ -48971,7 +49052,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/session/DesktopNavigation.svelte",
-          "lineCount": 75,
+          "lineCount": 79,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -49247,7 +49328,7 @@
           "styleDirectiveCount": 0
         },
         {
-          "classTokenCount": 102,
+          "classTokenCount": 101,
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 1,
           "file": "src/lib/ui/patterns/AppShell.svelte",
@@ -49587,11 +49668,11 @@
           "styleDirectiveCount": 0
         },
         {
-          "classTokenCount": 0,
+          "classTokenCount": 10,
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 1,
           "file": "src/lib/ui/patterns/Navigation.svelte",
-          "lineCount": 65,
+          "lineCount": 89,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -50987,17 +51068,6 @@
           "plannedRemovalCheckpoint": "SWP-3",
           "origin": "class",
           "utility": "lg:bg-app-shell-sidebar-desktop"
-        },
-        {
-          "column": 7,
-          "file": "src/lib/ui/patterns/AppShell.svelte",
-          "line": 58,
-          "className": "lg:block",
-          "ownerFamily": "shared-product-patterns",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3",
-          "origin": "class",
-          "utility": "lg:block"
         },
         {
           "column": 7,
@@ -57829,6 +57899,116 @@
           "plannedRemovalCheckpoint": "SWP-3.5",
           "origin": "class",
           "utility": "whitespace-nowrap"
+        },
+        {
+          "column": 12,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 75,
+          "className": "min-w-0",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1",
+          "origin": "class",
+          "utility": "min-w-0"
+        },
+        {
+          "column": 12,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 75,
+          "className": "shrink-0",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1",
+          "origin": "class",
+          "utility": "shrink-0"
+        },
+        {
+          "column": 7,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 78,
+          "className": "content-start",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1",
+          "origin": "class",
+          "utility": "content-start"
+        },
+        {
+          "column": 7,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 78,
+          "className": "flex-1",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1",
+          "origin": "class",
+          "utility": "flex-1"
+        },
+        {
+          "column": 7,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 78,
+          "className": "gap-navigation-sidebar",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1",
+          "origin": "class",
+          "utility": "gap-navigation-sidebar"
+        },
+        {
+          "column": 7,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 78,
+          "className": "grid",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1",
+          "origin": "class",
+          "utility": "grid"
+        },
+        {
+          "column": 7,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 78,
+          "className": "min-h-0",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1",
+          "origin": "class",
+          "utility": "min-h-0"
+        },
+        {
+          "column": 7,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 78,
+          "className": "overflow-y-auto",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1",
+          "origin": "class",
+          "utility": "overflow-y-auto"
+        },
+        {
+          "column": 12,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 84,
+          "className": "min-w-0",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1",
+          "origin": "class",
+          "utility": "min-w-0"
+        },
+        {
+          "column": 12,
+          "file": "src/lib/ui/patterns/Navigation.svelte",
+          "line": 84,
+          "className": "shrink-0",
+          "ownerFamily": "navigation",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-4.1",
+          "origin": "class",
+          "utility": "shrink-0"
         },
         {
           "column": 3,
@@ -64976,17 +65156,6 @@
         "column": 7,
         "file": "src/lib/ui/patterns/AppShell.svelte",
         "line": 58,
-        "className": "lg:block",
-        "ownerFamily": "shared-product-patterns",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3",
-        "origin": "class",
-        "utility": "lg:block"
-      },
-      {
-        "column": 7,
-        "file": "src/lib/ui/patterns/AppShell.svelte",
-        "line": 58,
         "className": "lg:border-0",
         "ownerFamily": "shared-product-patterns",
         "ownerPackage": "src/lib/ui/patterns",
@@ -71813,6 +71982,116 @@
         "plannedRemovalCheckpoint": "SWP-3.5",
         "origin": "class",
         "utility": "whitespace-nowrap"
+      },
+      {
+        "column": 12,
+        "file": "src/lib/ui/patterns/Navigation.svelte",
+        "line": 75,
+        "className": "min-w-0",
+        "ownerFamily": "navigation",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-4.1",
+        "origin": "class",
+        "utility": "min-w-0"
+      },
+      {
+        "column": 12,
+        "file": "src/lib/ui/patterns/Navigation.svelte",
+        "line": 75,
+        "className": "shrink-0",
+        "ownerFamily": "navigation",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-4.1",
+        "origin": "class",
+        "utility": "shrink-0"
+      },
+      {
+        "column": 7,
+        "file": "src/lib/ui/patterns/Navigation.svelte",
+        "line": 78,
+        "className": "content-start",
+        "ownerFamily": "navigation",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-4.1",
+        "origin": "class",
+        "utility": "content-start"
+      },
+      {
+        "column": 7,
+        "file": "src/lib/ui/patterns/Navigation.svelte",
+        "line": 78,
+        "className": "flex-1",
+        "ownerFamily": "navigation",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-4.1",
+        "origin": "class",
+        "utility": "flex-1"
+      },
+      {
+        "column": 7,
+        "file": "src/lib/ui/patterns/Navigation.svelte",
+        "line": 78,
+        "className": "gap-navigation-sidebar",
+        "ownerFamily": "navigation",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-4.1",
+        "origin": "class",
+        "utility": "gap-navigation-sidebar"
+      },
+      {
+        "column": 7,
+        "file": "src/lib/ui/patterns/Navigation.svelte",
+        "line": 78,
+        "className": "grid",
+        "ownerFamily": "navigation",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-4.1",
+        "origin": "class",
+        "utility": "grid"
+      },
+      {
+        "column": 7,
+        "file": "src/lib/ui/patterns/Navigation.svelte",
+        "line": 78,
+        "className": "min-h-0",
+        "ownerFamily": "navigation",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-4.1",
+        "origin": "class",
+        "utility": "min-h-0"
+      },
+      {
+        "column": 7,
+        "file": "src/lib/ui/patterns/Navigation.svelte",
+        "line": 78,
+        "className": "overflow-y-auto",
+        "ownerFamily": "navigation",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-4.1",
+        "origin": "class",
+        "utility": "overflow-y-auto"
+      },
+      {
+        "column": 12,
+        "file": "src/lib/ui/patterns/Navigation.svelte",
+        "line": 84,
+        "className": "min-w-0",
+        "ownerFamily": "navigation",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-4.1",
+        "origin": "class",
+        "utility": "min-w-0"
+      },
+      {
+        "column": 12,
+        "file": "src/lib/ui/patterns/Navigation.svelte",
+        "line": 84,
+        "className": "shrink-0",
+        "ownerFamily": "navigation",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-4.1",
+        "origin": "class",
+        "utility": "shrink-0"
       },
       {
         "column": 3,
@@ -79222,22 +79501,22 @@
       "basePath": "/",
       "host": "Cloudflare Pages",
       "initialCssAssets": [
-        { "asset": "_app/immutable/assets/0.BPvaPNiD.css", "gzipBytes": 28568, "rawBytes": 190112 }
+        { "asset": "_app/immutable/assets/0.VtG0yRHS.css", "gzipBytes": 28581, "rawBytes": 190136 }
       ],
-      "initialCssGzipBytes": 28568,
+      "initialCssGzipBytes": 28581,
       "initialJavaScriptAssets": [
         { "asset": "_app/immutable/chunks/BG4X2aRC.js", "gzipBytes": 20699, "rawBytes": 55233 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/CB3145jA.js", "gzipBytes": 536, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/CIT7X3lM.js", "gzipBytes": 615, "rawBytes": 1148 },
+        { "asset": "_app/immutable/chunks/CNVPeJFb.js", "gzipBytes": 11227, "rawBytes": 29273 },
         { "asset": "_app/immutable/chunks/DeNejD04.js", "gzipBytes": 731, "rawBytes": 1401 },
-        { "asset": "_app/immutable/chunks/Hym3JWuR.js", "gzipBytes": 11227, "rawBytes": 29273 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.CBsSFXvC.js", "gzipBytes": 2518, "rawBytes": 9051 },
-        { "asset": "_app/immutable/entry/start.Ddb2exHi.js", "gzipBytes": 92, "rawBytes": 82 },
-        { "asset": "_app/immutable/nodes/0.CoEpNJhb.js", "gzipBytes": 430, "rawBytes": 806 }
+        { "asset": "_app/immutable/entry/app.pwRuYw5R.js", "gzipBytes": 2519, "rawBytes": 9051 },
+        { "asset": "_app/immutable/entry/start.Dibf9Lg6.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/nodes/0.CxHEDeHX.js", "gzipBytes": 430, "rawBytes": 806 }
       ],
-      "initialJavaScriptGzipBytes": 38287,
+      "initialJavaScriptGzipBytes": 38288,
       "javaScriptChunkCount": 60,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",
@@ -79273,22 +79552,22 @@
       "basePath": "/banebooking",
       "host": "GitHub Pages",
       "initialCssAssets": [
-        { "asset": "_app/immutable/assets/0.DMM4eUJi.css", "gzipBytes": 28585, "rawBytes": 190172 }
+        { "asset": "_app/immutable/assets/0.46Lad0yI.css", "gzipBytes": 28596, "rawBytes": 190196 }
       ],
-      "initialCssGzipBytes": 28585,
+      "initialCssGzipBytes": 28596,
       "initialJavaScriptAssets": [
         { "asset": "_app/immutable/chunks/BG4X2aRC.js", "gzipBytes": 20699, "rawBytes": 55233 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/CB3145jA.js", "gzipBytes": 536, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/CIT7X3lM.js", "gzipBytes": 624, "rawBytes": 1184 },
+        { "asset": "_app/immutable/chunks/CgmcFJDi.js", "gzipBytes": 11237, "rawBytes": 29281 },
         { "asset": "_app/immutable/chunks/DeNejD04.js", "gzipBytes": 731, "rawBytes": 1401 },
-        { "asset": "_app/immutable/chunks/DkQaTYi8.js", "gzipBytes": 11236, "rawBytes": 29285 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.DS1FBZ69.js", "gzipBytes": 2524, "rawBytes": 9615 },
-        { "asset": "_app/immutable/entry/start.Dxfn_jt9.js", "gzipBytes": 92, "rawBytes": 82 },
-        { "asset": "_app/immutable/nodes/0.DS_aUloz.js", "gzipBytes": 440, "rawBytes": 866 }
+        { "asset": "_app/immutable/entry/app.CVsCYtln.js", "gzipBytes": 2521, "rawBytes": 9615 },
+        { "asset": "_app/immutable/entry/start.3l3wPtZJ.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/nodes/0.CmPkLapC.js", "gzipBytes": 440, "rawBytes": 866 }
       ],
-      "initialJavaScriptGzipBytes": 38321,
+      "initialJavaScriptGzipBytes": 38319,
       "javaScriptChunkCount": 60,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",

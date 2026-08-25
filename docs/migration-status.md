@@ -21,6 +21,10 @@
   oppstartsdokumentkontraktene inngår i `npm run check`.
 - Tenantlogoer er del av navigasjonskontrakten. Navigasjonen prøver tenantens SVG, deretter WebP og
   til slutt standardlogoen, også under en konfigurert base path.
+- Desktopnavigasjonen følger produksjonens informasjonsarkitektur: tenantidentitet, hovedlenker,
+  person-/adminseksjoner og til slutt et fast bunnområde med tema før konto eller innlogging.
+  «Hovedmeny» og «Konto og visning» rendres ikke som synlige seksjonsoverskrifter. Mobilstrukturen
+  er uendret.
 - Håndskrevne transporttyper beskriver bare kontrakter frontenden faktisk konsumerer. Sammensatte
   DTO-deler er private i kontraktmodulen; ubrukt endpointflate beholdes ikke som manuell kopi.
 - Knip-porten tillater ingen død fil-, pakke-, import-, eksport- eller typeflate.
@@ -35,6 +39,19 @@ Den avsluttende vedlikeholdsleveransen er fullført og verifisert:
 - fjerning av det ubrukte `@`-aliaset og path-resolverte arkitekturgrenser
 - konsolidering av migreringsdokumentasjonen til fullført vedlikeholdsmodus
 - fjerning av tomme lokale fixture-/previewmapper og regenererbare test-/buildartefakter
+
+## Godkjent paritetsvedlikehold
+
+Desktopmenyens produksjonsrekkefølge er tilbakeført uten å gjeninnføre React-struktur:
+
+- det offentlige `Navigation`-patternet eier nå fast identitet, rullbart lenkeområde og fast
+  bunnområde; `AppShell` beholder flexgeometrien på alle desktopbreakpoints
+- hoved-, person- og adminlenker kommer før tema og konto/innlogging, og tema kommer først i
+  bunnområdet for både anonym og innlogget tilstand
+- Svelte-forbedringene for `nav`, `aria-current`, native kontroller, fokusretur, eksplisitt lukking
+  og pending-lås er beholdt
+- fire desktopreferanser er oppdatert etter den godkjente kontraktendringen; alle fem
+  mobilreferanser er uendret
 
 ## Permanente arkitektur- og produktkontrakter
 
@@ -84,7 +101,8 @@ Den avsluttende vedlikeholdsleveransen er fullført og verifisert:
 ## Blokkeringer og beslutninger
 
 Ingen backendblokkeringer eller åpne produktbeslutninger. Tenantlogoene er eksplisitt godkjent som
-varig navigasjonsidentitet.
+varig navigasjonsidentitet. Desktoprekkefølgen og det faste bunnområdet er eksplisitt godkjent som
+produksjonsparitet, mens mobilstrukturen og Sveltes tilgjengelighetsforbedringer skal beholdes.
 
 ## Neste eksakte steg
 
@@ -95,12 +113,12 @@ og vente på en konkret produkt- eller vedlikeholdsoppgave; den skal ikke oppret
 
 | Kontroll                           | Resultat                                                                   |
 | ---------------------------------- | -------------------------------------------------------------------------- |
-| Målrettet session-/logo-/API-test  | 3 testfiler, 16 tester                                                     |
-| `npm test`                         | 95 testfiler, 347 tester                                                   |
+| Målrettet navigasjons-/shelltest   | 4 testfiler, 30 tester                                                     |
+| `npm test`                         | 95 testfiler, 348 tester                                                   |
 | `npm run check`                    | Type, arkitektur, legacy, statisk analyse, design, styling, lint og format |
 | Knip                               | 0 døde filer, pakker, importer, eksporter eller typer                      |
 | Kritiske Playwright-flyter         | 3/3 bestått; egne lokale testdata gjenopprettet                            |
-| Visuelle Playwright-referanser     | 11/11 bestått med godkjente tenantlogoer                                   |
+| Visuelle Playwright-referanser     | 11/11 bestått; 4 desktop oppdatert, 5 mobil uendret                        |
 | `npm run test:e2e:production`      | 8/8 ruter for begge hostartefakter                                         |
 | Produksjonsbudsjett                | 37,4 KiB initial JS gzip, 27,9 KiB CSS gzip, 120,5 KiB største lazy JS     |
 | `npm audit --audit-level=moderate` | 6 lave; 0 moderate, høye eller kritiske                                    |

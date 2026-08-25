@@ -26,9 +26,9 @@ const axeOptions: axe.RunOptions = {
   rules: { "color-contrast": { enabled: false } },
 };
 
-function renderFixture() {
+function renderFixture(options: { authenticated?: boolean } = {}) {
   const callbacks = { onSignOut: vi.fn(), onTheme: vi.fn() };
-  return { callbacks, result: render(SessionNavigationFixture, callbacks) };
+  return { callbacks, result: render(SessionNavigationFixture, { ...callbacks, ...options }) };
 }
 
 afterEach(() => {
@@ -39,23 +39,73 @@ describe("session navigation composition", () => {
   it("composes tenant identity, capability links and compound route activity", () => {
     renderFixture();
     const desktop = screen.getByRole("navigation", { name: "Hovednavigasjon" });
+    const header = desktop.querySelector<HTMLElement>('[data-part="header"]');
+    const content = desktop.querySelector<HTMLElement>('[data-part="content"]');
+    const footer = desktop.querySelector<HTMLElement>('[data-part="footer"]');
 
     expect(desktop).toHaveAttribute("data-surface", "shell");
-    expect(desktop).toHaveClass("max-w-none", "flex-1", "bg-transparent", "p-0");
-    expect(within(desktop).getByRole("link", { name: /Fjordvik Tennisklubb/ })).toHaveAttribute(
+    expect(desktop).toHaveClass("max-w-none", "flex-1", "min-h-0", "bg-transparent", "p-0");
+    expect(header).toHaveClass("shrink-0");
+    expect(content).toHaveClass("min-h-0", "flex-1", "content-start", "overflow-y-auto");
+    expect(footer).toHaveClass("shrink-0");
+    expect(within(header!).getByRole("link", { name: /Fjordvik Tennisklubb/ })).toHaveAttribute(
       "href",
       "/fjordvik"
     );
-    expect(within(desktop).getByRole("link", { name: /Fjordvik Tennisklubb/ })).toHaveClass(
+    expect(within(header!).getByRole("link", { name: /Fjordvik Tennisklubb/ })).toHaveClass(
       "text-sidebar-text"
     );
-    expect(within(desktop).getByRole("link", { name: "Baner og grener" })).toHaveAttribute(
+    expect(within(content!).getByRole("link", { name: "Baner og grener" })).toHaveAttribute(
       "aria-current",
       "page"
     );
-    expect(within(desktop).getByRole("link", { name: "Book bane" })).toBeVisible();
-    expect(within(desktop).getByRole("link", { name: "Brukere" })).toBeVisible();
+    expect(
+      within(content!)
+        .getAllByRole("link")
+        .map((link) => link.getAttribute("href"))
+    ).toEqual([
+      "/fjordvik",
+      "/fjordvik/arrangementer",
+      "/fjordvik/nyheter",
+      "/fjordvik/bookinger",
+      "/fjordvik/minside",
+      "/fjordvik/admin/brukere",
+      "/fjordvik/admin/baner",
+    ]);
+    expect(
+      within(content!)
+        .getAllByRole("heading", { level: 2 })
+        .map((heading) => heading.textContent)
+    ).toEqual(["Min konto", "Administrasjon"]);
+    expect(within(desktop).queryByRole("heading", { name: "Hovedmeny" })).toBeNull();
+    expect(within(desktop).queryByRole("heading", { name: "Konto og visning" })).toBeNull();
     expect(within(desktop).queryByRole("link", { name: "Statistikk" })).toBeNull();
+    expect(
+      within(footer!)
+        .getAllByRole("button")
+        .map((button) => button.textContent?.trim())
+    ).toEqual(["Bruk mørkt tema", "Kari Nordmann · Klubbadministrator"]);
+  });
+
+  it("keeps the anonymous desktop footer and mobile priorities in production order", () => {
+    renderFixture({ authenticated: false });
+    const desktop = screen.getByRole("navigation", { name: "Hovednavigasjon" });
+    const mobile = screen.getByRole("navigation", { name: "Mobilnavigasjon" });
+    const content = desktop.querySelector<HTMLElement>('[data-part="content"]');
+    const footer = desktop.querySelector<HTMLElement>('[data-part="footer"]');
+
+    expect(
+      within(content!)
+        .getAllByRole("link")
+        .map((link) => link.getAttribute("href"))
+    ).toEqual(["/fjordvik", "/fjordvik/arrangementer", "/fjordvik/nyheter"]);
+    expect(within(content!).queryByRole("heading")).toBeNull();
+    expect(
+      Array.from(footer!.querySelectorAll("button, a")).map((item) => item.textContent?.trim())
+    ).toEqual(["Bruk mørkt tema", "Logg inn"]);
+    expect(
+      Array.from(mobile.querySelectorAll("a, button")).map((item) => item.textContent?.trim())
+    ).toEqual(["Book", "Arrangementer", "Mer"]);
   });
 
   it("uses tenant logos with the legacy webp and default fallbacks", async () => {
@@ -107,6 +157,10 @@ describe("session navigation composition", () => {
     const { callbacks } = renderFixture();
     const bottom = screen.getByRole("navigation", { name: "Mobilnavigasjon" });
     const more = within(bottom).getByRole("button", { name: "Mer" });
+
+    expect(
+      Array.from(bottom.querySelectorAll("a, button")).map((item) => item.textContent?.trim())
+    ).toEqual(["Book", "Mine tider", "Arrangementer", "Mer"]);
 
     await fireEvent.click(more);
     const dialog = await screen.findByRole("dialog", { name: "Kari Nordmann" });

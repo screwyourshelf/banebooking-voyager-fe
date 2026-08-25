@@ -47,15 +47,16 @@ describe("public app shell pattern", () => {
     expect(sidebar).toHaveClass(
       "hidden",
       "md:flex",
+      "md:flex-col",
       "md:h-app-shell",
       "md:border-r-sidebar-divider-width",
       "md:bg-app-shell-sidebar",
       "md:py-app-shell-sidebar-block",
       "md:shadow-app-shell-sidebar",
-      "lg:block",
       "lg:bg-app-shell-sidebar-desktop",
       "lg:shadow-app-shell-sidebar-desktop"
     );
+    expect(sidebar).not.toHaveClass("lg:block");
     expect(workspace).toHaveClass(
       "flex",
       "min-h-app-shell",

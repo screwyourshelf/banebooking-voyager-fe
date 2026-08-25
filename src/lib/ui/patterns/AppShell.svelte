@@ -55,7 +55,7 @@
     data-part="frame"
   >
     <aside
-      class="hidden md:sticky md:top-0 md:flex md:h-app-shell md:flex-col md:gap-app-shell-sidebar md:overflow-hidden md:border-r-sidebar-divider-width md:border-sidebar-divider md:bg-app-shell-sidebar md:px-app-shell-sidebar-inline md:py-app-shell-sidebar-block md:shadow-app-shell-sidebar lg:block lg:m-0 lg:border-0 lg:border-r-sidebar-divider-width lg:rounded-none lg:bg-app-shell-sidebar-desktop lg:shadow-app-shell-sidebar-desktop"
+      class="hidden md:sticky md:top-0 md:flex md:h-app-shell md:flex-col md:gap-app-shell-sidebar md:overflow-hidden md:border-r-sidebar-divider-width md:border-sidebar-divider md:bg-app-shell-sidebar md:px-app-shell-sidebar-inline md:py-app-shell-sidebar-block md:shadow-app-shell-sidebar lg:m-0 lg:border-0 lg:border-r-sidebar-divider-width lg:rounded-none lg:bg-app-shell-sidebar-desktop lg:shadow-app-shell-sidebar-desktop"
       data-part="sidebar"
     >
       {#if desktopNavigation}

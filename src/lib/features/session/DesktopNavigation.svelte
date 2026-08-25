@@ -39,37 +39,41 @@
 {#snippet loginIcon()}
   <Icon icon={Login01Icon} />
 {/snippet}
-
-<Navigation label="Hovednavigasjon" layout="sidebar" surface="shell">
+{#snippet header()}
   <NavigationIdentity
     href={navigation.identity.href}
     logo={identityIcon}
     meta={navigation.identity.meta}
     name={navigation.identity.name}
   />
-
-  <NavigationSection title="Konto og visning">
-    <NavigationList>
-      {#if navigation.account.authenticated}
-        <NavigationAction
-          icon={accountIcon}
-          label={`${navigation.account.label} · ${navigation.account.roleLabel}`}
-          onclick={onOpenAccount}
-        />
-      {:else}
-        <NavigationLink href={navigation.loginHref} icon={loginIcon} label="Logg inn" />
-      {/if}
+{/snippet}
+{#snippet footer()}
+  <NavigationList>
+    <NavigationAction
+      icon={themeIcon}
+      label={theme === "dark" ? "Bruk lyst tema" : "Bruk mørkt tema"}
+      onclick={onToggleTheme}
+    />
+    {#if navigation.account.authenticated}
       <NavigationAction
-        icon={themeIcon}
-        label={theme === "dark" ? "Bruk lyst tema" : "Bruk mørkt tema"}
-        onclick={onToggleTheme}
+        icon={accountIcon}
+        label={`${navigation.account.label} · ${navigation.account.roleLabel}`}
+        onclick={onOpenAccount}
       />
-    </NavigationList>
-  </NavigationSection>
+    {:else}
+      <NavigationLink href={navigation.loginHref} icon={loginIcon} label="Logg inn" />
+    {/if}
+  </NavigationList>
+{/snippet}
 
+<Navigation {footer} {header} label="Hovednavigasjon" layout="sidebar" surface="shell">
   {#each navigation.desktopSections as section (section.id)}
-    <NavigationSection title={section.label}>
+    {#if section.id === "overview"}
       <NavigationItems items={section.items} />
-    </NavigationSection>
+    {:else}
+      <NavigationSection title={section.label}>
+        <NavigationItems items={section.items} />
+      </NavigationSection>
+    {/if}
   {/each}
 </Navigation>

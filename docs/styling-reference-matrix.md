@@ -38,15 +38,15 @@ plattformendelse og ligger ved `e2e/visual-regressions.spec.ts`.
 
 ## Dekning per UI-familie
 
-| Familie                     | Primære referanser        | Hva som fryses                                                             |
-| --------------------------- | ------------------------- | -------------------------------------------------------------------------- |
-| App-shell og navigation     | SWP-V01–SWP-V11           | Mobil topp/bunn, desktopsidefelt, aktiv route, tenant og theme             |
-| Page, Section og Document   | SWP-V02, SWP-V04, SWP-V10 | Sideintro, headings, leseinnhold, settingsseksjoner og statistikkseksjoner |
-| Collection og rows          | SWP-V05, SWP-V08, SWP-V09 | Header, selection/filter, statuser, schedule- og ekspanderbar rad          |
-| Form og Settings            | SWP-V01, SWP-V03, SWP-V04 | Felt, paneler, tabs, label/hjelpetekst og mobile handlinger                |
-| Dialog, Select og Calendar  | SWP-V06, SWP-V07, SWP-V08 | Portal, overlay, standard-/editorgeometri, liste og kalender               |
-| Rich-text-editor            | SWP-V09                   | Mobil editorflate, toolbar, skriveflate, feltkobling og sticky submit      |
-| Statistikk og visualisering | SWP-V10, SWP-V11          | Filtre, nøkkeltall, grafer, medlemskort og responsivt skifte               |
+| Familie                     | Primære referanser        | Hva som fryses                                                                      |
+| --------------------------- | ------------------------- | ----------------------------------------------------------------------------------- |
+| App-shell og navigation     | SWP-V01–SWP-V11           | Mobil topp/bunn, desktoprekkefølge og fast bunnområde, aktiv route, tenant og theme |
+| Page, Section og Document   | SWP-V02, SWP-V04, SWP-V10 | Sideintro, headings, leseinnhold, settingsseksjoner og statistikkseksjoner          |
+| Collection og rows          | SWP-V05, SWP-V08, SWP-V09 | Header, selection/filter, statuser, schedule- og ekspanderbar rad                   |
+| Form og Settings            | SWP-V01, SWP-V03, SWP-V04 | Felt, paneler, tabs, label/hjelpetekst og mobile handlinger                         |
+| Dialog, Select og Calendar  | SWP-V06, SWP-V07, SWP-V08 | Portal, overlay, standard-/editorgeometri, liste og kalender                        |
+| Rich-text-editor            | SWP-V09                   | Mobil editorflate, toolbar, skriveflate, feltkobling og sticky submit               |
+| Statistikk og visualisering | SWP-V10, SWP-V11          | Filtre, nøkkeltall, grafer, medlemskort og responsivt skifte                        |
 
 ## Interaktiv kontrakt
 

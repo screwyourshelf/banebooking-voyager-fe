@@ -7,43 +7,51 @@
   import { buildAppNavigationState } from "./navigation-model";
 
   let {
+    authenticated = true,
     onSignOut,
     onTheme,
   }: {
+    authenticated?: boolean;
     onSignOut: () => void;
     onTheme: () => void;
   } = $props();
 
-  const builtNavigation = buildAppNavigationState({
-    auth: {
-      status: "authenticated",
-      user: {
-        id: "user-1",
-        email: "kari@example.no",
-        name: "Kari Nordmann",
-        source: "supabase",
+  const navigation = $derived.by(() => {
+    const builtNavigation = buildAppNavigationState({
+      auth: authenticated
+        ? {
+            status: "authenticated",
+            user: {
+              id: "user-1",
+              email: "kari@example.no",
+              name: "Kari Nordmann",
+              source: "supabase",
+            },
+          }
+        : { status: "anonymous", user: null },
+      bruker: {
+        status: "success",
+        data: authenticated
+          ? {
+              id: "user-1",
+              epost: "kari@example.no",
+              visningsnavn: "Kari",
+              roller: ["KlubbAdmin"],
+              kapabiliteter: ["baner:admin", "brukere:lese"],
+            }
+          : undefined,
       },
-    },
-    bruker: {
-      status: "success",
-      data: {
-        id: "user-1",
-        epost: "kari@example.no",
-        visningsnavn: "Kari",
-        roller: ["KlubbAdmin"],
-        kapabiliteter: ["baner:admin", "brukere:lese"],
+      klubb: {
+        status: "success",
+        data: { slug: "fjordvik", navn: "Fjordvik Tennisklubb", feedSynligAntallDager: 30 },
       },
-    },
-    klubb: {
-      status: "success",
-      data: { slug: "fjordvik", navn: "Fjordvik Tennisklubb", feedSynligAntallDager: 30 },
-    },
-    pathname: "/fjordvik/admin/grener",
-    tenant: { slug: "fjordvik", source: "route" },
-  });
+      pathname: "/fjordvik/admin/grener",
+      tenant: { slug: "fjordvik", source: "route" },
+    });
 
-  if (builtNavigation.status !== "ready") throw new Error("Fixture krever klar navigasjon");
-  const navigation = builtNavigation;
+    if (builtNavigation.status !== "ready") throw new Error("Fixture krever klar navigasjon");
+    return builtNavigation;
+  });
   let accountOpen = $state(false);
   let moreOpen = $state(false);
   let theme = $state<"dark" | "light">("light");

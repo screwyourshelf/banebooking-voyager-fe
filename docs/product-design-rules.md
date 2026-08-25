@@ -332,9 +332,11 @@ SvelteKit-routes, auth, tenant og serverdata.
 
 Den observerte produktkontrakten er:
 
-- Desktop-sidefeltet viser tenantidentitet, tema og konto sammen med grupperte hoved-, person- og
-  adminlenker. Mobil viser samme produktvokabular som tenantidentitet, tema og nyheter i toppfeltet,
-  tre prioriterte lenker i bunnfeltet og resten i «Mer»; primærlenker dupliseres ikke i menyen.
+- Desktop-sidefeltet viser tenantidentitet først, deretter hovedlenker uten seksjonsoverskrift og
+  grupperte person- og adminlenker. Tema og konto ligger i denne rekkefølgen i et fast bunnområde,
+  mens lenkeområdet eier eventuell vertikal scrolling. Mobil viser samme produktvokabular som
+  tenantidentitet, tema og nyheter i toppfeltet, tre prioriterte lenker i bunnfeltet og resten i
+  «Mer»; primærlenker dupliseres ikke i menyen.
 - Routeaktivitet uttrykkes med `aria-current="page"` og ett sentralt visuelt uttrykk. Sammensatte
   arbeidsområder som Baner og grener kan markere samme hovedlenke for flere routes. App-shellen
   beregner aktiv state fra normalisert SvelteKit-URL; patternet gjetter ikke route.
@@ -400,8 +402,8 @@ Den observerte produktkontrakten er:
 - Typografien er kompakt på mobil og kontrollert ett trinn større i arbeidsflater på desktop.
 - Appskallet har ikke global breadcrumb-rad. Hovednavigasjon og sidetittel gir orientering; dype
   editorflater bruker lokal tilbakehandling ved behov.
-- Desktop bruker sidefelt som samlet navigasjonsflate uten separat toppbar. Tema og konto ligger
-  før hovednavigasjonen.
+- Desktop bruker sidefelt som samlet navigasjonsflate uten separat toppbar. Hoved-, person- og
+  adminnavigasjon ligger foran det faste bunnområdet med tema og konto.
 - Mobil bruker toppfelt for klubbidentitet, tema og nyheter samt bunnnavigasjon.
 - Desktopbakgrunnen kan bruke klubbens bilde med mørkt scrim og retningsgradient. Innholdsflater
   eier sin egen kontrast, og mobil laster ikke bakgrunnsressursen.

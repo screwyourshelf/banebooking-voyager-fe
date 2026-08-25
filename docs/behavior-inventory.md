@@ -251,7 +251,9 @@ Sentralt API: `GET /klubb/{slug}/statistikk/bookinger?fra=&til=&sammenlignMedFor
 
 - Appskallet reserverer geometri under boot og routebytte; sentrale arbeidsflater returnerer ikke
   blankt innhold som loadingtilstand.
-- Desktop bruker sidefelt, mobil bruker klubbidentitet i toppfelt og primærnavigasjon nederst.
+- Desktop bruker sidefelt med klubbidentitet, hoved-/person-/adminlenker og et fast bunnområde med
+  tema før konto eller innlogging. Mobil bruker klubbidentitet i toppfelt og primærnavigasjon
+  nederst.
 - Queryfeil beholder side-/samlingskontekst og tilbyr retry når kallet kan gjentas.
 - Feltfeil vises ved feltet, mutasjonsfeil ved handlingen og globale sessionhendelser som toast.
 - Dialoger, editorer, filtre, kalender og ekspanderbare rader må bevare tastaturbruk, fokusretur,
