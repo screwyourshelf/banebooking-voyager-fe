@@ -3,7 +3,7 @@ import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
-import { analyzeStylingSource } from "./styling-guards/analyze.mjs";
+import { analyzeStylingSource, analyzeStylingSourceDetails } from "./styling-guards/analyze.mjs";
 import { loadStylingGuardContract } from "./styling-guards/contract.mjs";
 import {
   assertNoProductionStylingDiagnostics,
@@ -11,6 +11,7 @@ import {
   checkStylingProductionTree,
   collectProductionStylingSourcePaths,
 } from "./styling-guards/production-tree-contract.mjs";
+import { validateStartupDocumentThemeBindings } from "./styling-guards/startup-document-contract.mjs";
 
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
 const fixturesRoot = path.join(projectRoot, "scripts/styling-guards/fixtures");
@@ -22,6 +23,7 @@ assert.equal(Object.hasOwn(contract.productionTree, "legacyBaselinePath"), false
 await proveProductionDiscoveryIsNarrowAndExplicit();
 await proveCustomPropertyReferencesResolveAcrossTheProject();
 await proveEveryProductionRuleRejectsANewOccurrence();
+await proveStartupDocumentContractIsExact();
 proveMarkupMutationChannelsCannotBypass();
 proveCustomPropertySyntaxCannotBypass();
 
@@ -45,6 +47,10 @@ async function proveProductionDiscoveryIsNarrowAndExplicit() {
         "<div>Generert navn i produksjon</div>\n"
       ),
       writeFile(
+        path.join(temporaryRoot, "src/generated/Generated.html"),
+        "<!doctype html><p>HTML-navn i produksjon</p>\n"
+      ),
+      writeFile(
         path.join(temporaryRoot, "src/Guard.test.svelte"),
         "<div>Eksplisitt testfixture</div>\n"
       ),
@@ -55,11 +61,144 @@ async function proveProductionDiscoveryIsNarrowAndExplicit() {
       "src/Guard.fixture.svelte",
       "src/Screen.svelte",
       "src/base.css",
+      "src/generated/Generated.html",
       "src/generated/Generated.svelte",
     ]);
   } finally {
     await rm(temporaryRoot, { recursive: true });
   }
+}
+
+async function proveStartupDocumentContractIsExact() {
+  const [startupSource, tokenSource] = await Promise.all([
+    readFile(path.join(projectRoot, contract.startupDocument.sourcePath), "utf8"),
+    readFile(path.join(projectRoot, contract.startupDocument.tokenStylesheet), "utf8"),
+  ]);
+
+  assert.deepEqual(
+    analyzeStylingSourceDetails({
+      contract,
+      source: startupSource,
+      sourcePath: contract.startupDocument.sourcePath,
+    }).diagnostics,
+    []
+  );
+  assert.deepEqual(
+    validateStartupDocumentThemeBindings({ contract, startupSource, tokenSource }),
+    []
+  );
+
+  const sourceMutations = [
+    {
+      label: "ny startupselector",
+      source: startupSource.replace("</style>", "#boot strong { color: red; }\n    </style>"),
+    },
+    {
+      label: "startupklasse",
+      source: startupSource.replace('<div id="boot"', '<div id="boot" class="boot"'),
+    },
+    {
+      label: "driftet startupmetadata",
+      source: startupSource.replace('content="dark light"', 'content="light dark"'),
+    },
+    {
+      label: "driftet bootanker",
+      source: startupSource.replace('aria-label="Laster Banebooking"', 'aria-label="Laster"'),
+    },
+    {
+      label: "opaque startupspread",
+      source: startupSource.replace('<div id="boot"', '<div id="boot" {...attributes}'),
+    },
+    {
+      label: "startup-eventattributt",
+      source: startupSource.replace('<div id="boot"', '<div id="boot" onclick="reload()"'),
+    },
+    {
+      label: "manuelt startupstylesheet",
+      source: startupSource.replace(
+        "</head>",
+        '<link rel="stylesheet" href="/startup.css" />\n  </head>'
+      ),
+    },
+    {
+      label: "presentasjonsattributt",
+      source: startupSource.replace(
+        '<div data-boot-part="loader"></div>',
+        '<svg fill="red"></svg><div data-boot-part="loader"></div>'
+      ),
+    },
+    {
+      label: "ekstra inline style",
+      source: startupSource.replace(
+        '<div data-boot-part="loader"></div>',
+        '<div data-boot-part="loader" style="opacity: 1"></div>'
+      ),
+    },
+    {
+      label: "fjernet theme-binding",
+      source: startupSource.replace("var(--app-startup-light-canvas, #f2f3ed)", "#f2f3ed"),
+    },
+  ];
+
+  for (const mutation of sourceMutations) {
+    const diagnostics = analyzeStylingSource({
+      contract,
+      source: mutation.source,
+      sourcePath: contract.startupDocument.sourcePath,
+    });
+    assert.ok(
+      diagnostics.some(({ ruleId }) => ruleId === contract.rules.cssApplication.id),
+      `${mutation.label} passerte den eksakte oppstartsdokumentkontrakten.`
+    );
+  }
+
+  const driftedFallback = startupSource.replace(
+    "var(--app-startup-light-canvas, #f2f3ed)",
+    "var(--app-startup-light-canvas, #ffffff)"
+  );
+  assert.ok(
+    validateStartupDocumentThemeBindings({
+      contract,
+      startupSource: driftedFallback,
+      tokenSource,
+    }).some(({ ruleId }) => ruleId === contract.rules.customProperty.id),
+    "En oppstartsfallback kunne avvike fra theme-eieren."
+  );
+
+  const driftedTheme = tokenSource.replace(
+    "--app-startup-light-canvas: #f2f3ed",
+    "--app-startup-light-canvas: #ffffff"
+  );
+  assert.ok(
+    validateStartupDocumentThemeBindings({
+      contract,
+      startupSource,
+      tokenSource: driftedTheme,
+    }).some(({ ruleId }) => ruleId === contract.rules.customProperty.id),
+    "Oppstartstheme kunne endres uten synkron fallback."
+  );
+
+  const expandedTheme = tokenSource.replace(
+    "--app-startup-theme-color: #0b3a4a",
+    "--app-startup-theme-color: #0b3a4a;\n    --app-startup-unregistered: red"
+  );
+  assert.ok(
+    validateStartupDocumentThemeBindings({
+      contract,
+      startupSource,
+      tokenSource: expandedTheme,
+    }).some(({ ruleId }) => ruleId === contract.rules.customProperty.id),
+    "En tolvte oppstartsrolle kunne utvide den lukkede theme-kontrakten."
+  );
+
+  assert.ok(
+    analyzeStylingSource({
+      contract,
+      source: "<!doctype html><p>Uregistrert dokument</p>",
+      sourcePath: "src/secondary.html",
+    }).some(({ ruleId }) => ruleId === contract.rules.cssApplication.id),
+    "En uregistrert HTML-produksjonsflate kunne omgå ADR-007-eierskapet."
+  );
 }
 
 async function proveCustomPropertyReferencesResolveAcrossTheProject() {

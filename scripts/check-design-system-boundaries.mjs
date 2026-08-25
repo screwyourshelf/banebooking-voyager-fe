@@ -1,6 +1,7 @@
 import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import process from "node:process";
+import { loadStylingGuardContract } from "./styling-guards/contract.mjs";
 import { customPropertyReferences } from "./styling-guards/custom-property-references.mjs";
 
 const projectRoot = process.cwd();
@@ -9,6 +10,7 @@ const primitivesRoot = `${path.join(sourceRoot, "lib", "ui", "primitives")}${pat
 const patternsRoot = `${path.join(sourceRoot, "lib", "ui", "patterns")}${path.sep}`;
 const stylesheetEntryPath = path.join(sourceRoot, "index.css");
 const tokensPath = path.join(sourceRoot, "styles", "design-system", "tokens.css");
+const stylingContract = await loadStylingGuardContract();
 const sourceFiles = await collectFiles(sourceRoot);
 const sourceByPath = new Map(
   await Promise.all(
@@ -259,7 +261,11 @@ function validateCssVariables() {
       .map((filePath) => sourceByPath.get(filePath) ?? ""),
     componentSource,
   ].join("\n");
-  const reachableTokens = new Set(customPropertyReferences(nonTokenSource));
+  const reachableTokens = new Set([
+    ...customPropertyReferences(nonTokenSource),
+    // Meta content cannot consume var(); ADR-007 binds this one value through the startup guard.
+    stylingContract.startupDocument.themeColorToken,
+  ]);
   const pendingTokens = [...reachableTokens];
   while (pendingTokens.length > 0) {
     const token = pendingTokens.pop();

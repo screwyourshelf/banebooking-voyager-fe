@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 5,
+  "schemaVersion": 6,
   "analyzerEnforcementPhase": "final",
   "cascadeContractEnforcementPhase": "active",
   "themeContractEnforcementPhase": "active",
@@ -136,9 +136,193 @@
       "removeAttributeNode"
     ]
   },
+  "startupDocument": {
+    "decision": "ADR-007",
+    "sourcePath": "src/app.html",
+    "tokenStylesheet": "src/styles/design-system/tokens.css",
+    "themeColorToken": "--app-startup-theme-color",
+    "themeTokens": [
+      "--app-startup-action-border",
+      "--app-startup-action-radius",
+      "--app-startup-action-surface",
+      "--app-startup-action-text",
+      "--app-startup-dark-canvas",
+      "--app-startup-dark-ink",
+      "--app-startup-font-family",
+      "--app-startup-light-canvas",
+      "--app-startup-light-ink",
+      "--app-startup-loader-track",
+      "--app-startup-theme-color"
+    ],
+    "metadata": [
+      { "name": "theme-color", "content": "#0b3a4a" },
+      { "name": "color-scheme", "content": "dark light" }
+    ],
+    "elements": [
+      {
+        "tag": "div",
+        "key": { "name": "id", "value": "boot" },
+        "attributes": {
+          "aria-label": "Laster Banebooking",
+          "id": "boot",
+          "role": "status"
+        }
+      },
+      {
+        "tag": "div",
+        "key": { "name": "data-boot-part", "value": "loader" },
+        "attributes": { "data-boot-part": "loader" }
+      },
+      {
+        "tag": "div",
+        "key": { "name": "id", "value": "root" },
+        "attributes": { "id": "root", "style": "display: contents" }
+      }
+    ],
+    "styleAttributes": [{ "id": "root", "tag": "div", "value": "display: contents" }],
+    "stylesheet": [
+      {
+        "type": "rule",
+        "selector": "#boot",
+        "declarations": [
+          { "property": "position", "value": "fixed", "important": false },
+          { "property": "z-index", "value": "9999", "important": false },
+          { "property": "inset", "value": "0", "important": false },
+          { "property": "display", "value": "grid", "important": false },
+          { "property": "place-items", "value": "center", "important": false },
+          { "property": "padding", "value": "1.5rem", "important": false },
+          {
+            "property": "background",
+            "value": "var(--app-startup-light-canvas, #f2f3ed)",
+            "important": false
+          },
+          {
+            "property": "color",
+            "value": "var(--app-startup-light-ink, #173c25)",
+            "important": false
+          },
+          {
+            "property": "font-family",
+            "value": "var(--app-startup-font-family, system-ui, sans-serif)",
+            "important": false
+          },
+          { "property": "text-align", "value": "center", "important": false }
+        ]
+      },
+      {
+        "type": "at-rule",
+        "name": "media",
+        "params": "(prefers-color-scheme: dark)",
+        "children": [
+          {
+            "type": "rule",
+            "selector": "#boot",
+            "declarations": [
+              {
+                "property": "background",
+                "value": "var(--app-startup-dark-canvas, #0f1611)",
+                "important": false
+              },
+              {
+                "property": "color",
+                "value": "var(--app-startup-dark-ink, white)",
+                "important": false
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "type": "rule",
+        "selector": "#boot [data-boot-part=\"loader\"]",
+        "declarations": [
+          { "property": "width", "value": "36px", "important": false },
+          { "property": "height", "value": "36px", "important": false },
+          {
+            "property": "border",
+            "value": "3px solid var(--app-startup-loader-track, rgb(23 60 37 / 0.18))",
+            "important": false
+          },
+          { "property": "border-top-color", "value": "currentColor", "important": false },
+          { "property": "border-radius", "value": "50%", "important": false },
+          {
+            "property": "animation",
+            "value": "boot-spin 0.8s linear infinite",
+            "important": false
+          }
+        ]
+      },
+      {
+        "type": "rule",
+        "selector": "#boot [data-boot-part=\"recovery\"]",
+        "declarations": [{ "property": "max-width", "value": "28rem", "important": false }]
+      },
+      {
+        "type": "rule",
+        "selector": "#boot h1",
+        "declarations": [
+          { "property": "margin", "value": "0 0 0.75rem", "important": false },
+          { "property": "font-size", "value": "1.25rem", "important": false }
+        ]
+      },
+      {
+        "type": "rule",
+        "selector": "#boot p",
+        "declarations": [
+          { "property": "margin", "value": "0 0 1rem", "important": false },
+          { "property": "opacity", "value": "0.78", "important": false },
+          { "property": "line-height", "value": "1.5", "important": false }
+        ]
+      },
+      {
+        "type": "rule",
+        "selector": "#boot button",
+        "declarations": [
+          {
+            "property": "border",
+            "value": "1px solid var(--app-startup-action-border, rgb(23 60 37 / 0.25))",
+            "important": false
+          },
+          {
+            "property": "border-radius",
+            "value": "var(--app-startup-action-radius, 0.5rem)",
+            "important": false
+          },
+          { "property": "padding", "value": "0.65rem 1rem", "important": false },
+          {
+            "property": "background",
+            "value": "var(--app-startup-action-surface, #173c25)",
+            "important": false
+          },
+          {
+            "property": "color",
+            "value": "var(--app-startup-action-text, white)",
+            "important": false
+          },
+          { "property": "font", "value": "inherit", "important": false },
+          { "property": "font-weight", "value": "600", "important": false },
+          { "property": "cursor", "value": "pointer", "important": false }
+        ]
+      },
+      {
+        "type": "at-rule",
+        "name": "keyframes",
+        "params": "boot-spin",
+        "children": [
+          {
+            "type": "rule",
+            "selector": "to",
+            "declarations": [
+              { "property": "transform", "value": "rotate(360deg)", "important": false }
+            ]
+          }
+        ]
+      }
+    ]
+  },
   "productionTree": {
     "sourceRoots": ["src/"],
-    "sourceExtensions": [".css", ".svelte"],
+    "sourceExtensions": [".css", ".html", ".svelte"],
     "excludedFileSuffixes": [".test.svelte"],
     "transitionBaselineRemovalCheckpoint": "SWP-5.5",
     "enforcedRuleIds": [

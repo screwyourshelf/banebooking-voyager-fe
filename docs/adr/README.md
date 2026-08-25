@@ -11,3 +11,4 @@ skjule at beslutningen har endret seg; den erstattes av en ny ADR som viser til 
 | [004](./004-ui-and-component-boundaries.md)          | UI- og komponentgrenser            | Delvis erstattet av ADR-006 |
 | [005](./005-pre-module-startup-recovery.md)          | Pre-module startup recovery        | Godkjent                    |
 | [006](./006-tailwind-styling-and-theme-ownership.md) | Tailwind-styling og theme-eierskap | Godkjent                    |
+| [007](./007-pre-module-startup-presentation.md)      | Pre-module oppstartspresentasjon   | Godkjent                    |

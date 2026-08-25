@@ -46,6 +46,8 @@ de håndhevende theme-, cascade-, fixture-, produksjonstre- og stylingbaselinepo
 formatkontroll. Stylingløftet har null legacydiagnostics. Designsystemgrensen validerer aktiv
 Svelte-anatomi, CSS-klasser, `data-ui`, primitives, slots, utilities og tokens toveis, mens den
 separate permanente visualiseringskontrakten bare tillater registrert datadrevet geometri.
+Produksjonstreet inkluderer også `src/app.html` og håndhever ADR-007-flatens eksakte inline-CSS,
+eneste styleattributt og synkronisering mot de elleve `--app-startup-*`-rollene.
 Sluttkravene er definert i
 [`styling-lift-and-shift-plan.md`](./styling-lift-and-shift-plan.md).
 
@@ -111,5 +113,7 @@ analysen over. Selve opplastingen til Cloudflare Pages eller GitHub Pages er en 
 skal bare gjøres etter eksplisitt godkjenning.
 
 Detaljer om testdata og prosesseierskap finnes i [`e2e-harness.md`](./e2e-harness.md). Gjeldende
-route-, fallback- og bundlebevis finnes i
-[`wp-7-production-evidence.md`](./wp-7-production-evidence.md).
+styling-, route-, fallback- og bundlebevis finnes i
+[`styling-conformance-evidence.md`](./styling-conformance-evidence.md) og
+[`styling-baseline.json`](./styling-baseline.json). Det tidligere rammeverksløftets historiske
+produksjonsbevis ligger i [`wp-7-production-evidence.md`](./wp-7-production-evidence.md).

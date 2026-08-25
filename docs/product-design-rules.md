@@ -10,7 +10,8 @@ Dette dokumentet beskriver Banebookings visuelle språk, informasjonssemantikk o
 UI-mønstre uavhengig av frontendrammeverk. Det skal brukes sammen med
 [`sveltekit-architecture.md`](./sveltekit-architecture.md) og
 [`ADR-004`](./adr/004-ui-and-component-boundaries.md) samt
-[`ADR-006`](./adr/006-tailwind-styling-and-theme-ownership.md).
+[`ADR-006`](./adr/006-tailwind-styling-and-theme-ownership.md) og
+[`ADR-007`](./adr/007-pre-module-startup-presentation.md).
 
 Designsystemet skal gjøre den naturlige løsningen til den riktige løsningen. En feature beskriver
 innhold, tilstand og handlinger; den konstruerer ikke sin egen visuelle grammatikk.
@@ -376,6 +377,17 @@ Den observerte produktkontrakten er:
 - Loadingflater reserverer appskallets og sluttinnholdets geometri.
 - `null`, blank flate eller en generisk sentrert skeleton er ikke gyldig førstegangsloading for en
   sentral arbeidsflyt.
+
+### Oppstart før appmodulen
+
+- `src/app.html` kan bare vise den navngitte loaderen og recoveryflaten som må fungere før
+  SvelteKit og offentlig UI er lastet. Den er ikke en ny `Page`-, feedback- eller knappvariant.
+- Inlineflaten har én eksakt selector-, metadata- og anatomikontrakt. Features, routes og vanlig UI
+  kan ikke gjenbruke eller utvide den.
+- Farge, font og radius speiler de elleve sentrale `--app-startup-*`-rollene. Literalene finnes
+  bare som identiske fallbacks når stylesheeten ikke kan lastes og håndheves maskinelt.
+- Systemets lyst/mørkt-preferanse styrer flaten frem til appens ThemeProvider tar over. Bootstrapen
+  leser ikke lagret tema eller andre produktdata.
 
 ## Responsivitet og app-shell
 

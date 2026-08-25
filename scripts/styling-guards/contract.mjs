@@ -1,4 +1,5 @@
 import { readFile } from "node:fs/promises";
+import { isDeepStrictEqual } from "node:util";
 
 const contractUrl = new URL("./contract.json", import.meta.url);
 
@@ -9,8 +10,8 @@ export async function loadStylingGuardContract(url = contractUrl) {
 }
 
 function validateStylingGuardContract(contract) {
-  if (contract?.schemaVersion !== 5) {
-    throw new Error("Styling guard-kontrakten må ha schemaVersion 5.");
+  if (contract?.schemaVersion !== 6) {
+    throw new Error("Styling guard-kontrakten må ha schemaVersion 6.");
   }
   if (
     contract.analyzerEnforcementPhase !== "final" ||
@@ -62,9 +63,97 @@ function validateStylingGuardContract(contract) {
   validateMarkupContract(contract);
   validatePublicUiForwardingContract(contract);
   validateSvelteScriptContract(contract);
+  validateStartupDocumentContract(contract);
   validateThemeVocabulary(contract);
   validateCssCascadeContract(contract);
   validateVisualizationExceptionContract(contract);
+}
+
+function validateStartupDocumentContract(contract) {
+  const startup = contract.startupDocument ?? {};
+  if (
+    startup.decision !== "ADR-007" ||
+    startup.sourcePath !== "src/app.html" ||
+    startup.tokenStylesheet !== contract.theme.tokenStylesheet ||
+    startup.themeColorToken !== "--app-startup-theme-color"
+  ) {
+    throw new Error("Oppstartsdokumentet må ha én eksakt ADR-007-eier og theme-kilde.");
+  }
+
+  const expectedThemeTokens = [
+    "--app-startup-action-border",
+    "--app-startup-action-radius",
+    "--app-startup-action-surface",
+    "--app-startup-action-text",
+    "--app-startup-dark-canvas",
+    "--app-startup-dark-ink",
+    "--app-startup-font-family",
+    "--app-startup-light-canvas",
+    "--app-startup-light-ink",
+    "--app-startup-loader-track",
+    "--app-startup-theme-color",
+  ];
+  if (!isDeepStrictEqual(startup.themeTokens, expectedThemeTokens)) {
+    throw new Error("Oppstartsdokumentets elleve theme-roller må være eksakte og sorterte.");
+  }
+
+  const expectedMetadata = [
+    { name: "theme-color", content: "#0b3a4a" },
+    { name: "color-scheme", content: "dark light" },
+  ];
+  const expectedElements = [
+    {
+      tag: "div",
+      key: { name: "id", value: "boot" },
+      attributes: {
+        "aria-label": "Laster Banebooking",
+        id: "boot",
+        role: "status",
+      },
+    },
+    {
+      tag: "div",
+      key: { name: "data-boot-part", value: "loader" },
+      attributes: { "data-boot-part": "loader" },
+    },
+    {
+      tag: "div",
+      key: { name: "id", value: "root" },
+      attributes: { id: "root", style: "display: contents" },
+    },
+  ];
+  const expectedStyleAttributes = [{ id: "root", tag: "div", value: "display: contents" }];
+
+  if (
+    !isDeepStrictEqual(startup.metadata, expectedMetadata) ||
+    !isDeepStrictEqual(startup.elements, expectedElements) ||
+    !isDeepStrictEqual(startup.styleAttributes, expectedStyleAttributes) ||
+    !Array.isArray(startup.stylesheet) ||
+    startup.stylesheet.length !== 8
+  ) {
+    throw new Error(
+      "Oppstartsdokumentets metadata, boot/root-anatomi og inlineflate må være eksakt."
+    );
+  }
+
+  const topLevelSelectors = startup.stylesheet
+    .filter(({ type }) => type === "rule")
+    .map(({ selector }) => selector);
+  if (
+    topLevelSelectors.join(",") !==
+    '#boot,#boot [data-boot-part="loader"],#boot [data-boot-part="recovery"],#boot h1,#boot p,#boot button'
+  ) {
+    throw new Error("Oppstartsdokumentets selectors kan ikke utvides uten en ny beslutning.");
+  }
+
+  const atRules = startup.stylesheet
+    .filter(({ type }) => type === "at-rule")
+    .map(({ name, params }) => `${name}:${params}`);
+  if (atRules.join(",") !== "media:(prefers-color-scheme: dark),keyframes:boot-spin") {
+    throw new Error(
+      "Oppstartsdokumentet tillater bare systemtheme og den låste loaderanimasjonen."
+    );
+  }
 }
 
 function validatePublicUiForwardingContract(contract) {
@@ -155,13 +244,13 @@ function validateProductionTreeContract(contract, ruleEntries) {
   const productionTree = contract.productionTree ?? {};
   if (
     productionTree.sourceRoots?.join(",") !== "src/" ||
-    productionTree.sourceExtensions?.join(",") !== ".css,.svelte" ||
+    productionTree.sourceExtensions?.join(",") !== ".css,.html,.svelte" ||
     productionTree.excludedFileSuffixes?.join(",") !== ".test.svelte" ||
     productionTree.transitionBaselineRemovalCheckpoint !== "SWP-5.5" ||
     Object.hasOwn(productionTree, "legacyBaselinePath")
   ) {
     throw new Error(
-      "Produksjonstreet må analysere src/**/*.css og produksjons-Svelte med bare *.test.svelte som eksplisitt kildeunntak."
+      "Produksjonstreet må analysere src/**/*.css, ADR-007-HTML og produksjons-Svelte med bare *.test.svelte som eksplisitt kildeunntak."
     );
   }
 

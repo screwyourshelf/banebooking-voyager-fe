@@ -16,6 +16,7 @@ import {
 } from "./public-ui-spread-policy.mjs";
 import { offsetLocation, staticPropertyName, walkAst } from "./svelte-ast.mjs";
 import { analyzeImperativeDomStyling } from "./svelte-script-policy.mjs";
+import { analyzeStartupDocumentSource } from "./startup-document-contract.mjs";
 
 export function analyzeStylingSource({ contract, source, sourcePath }) {
   return analyzeStylingSourceDetails({ contract, source, sourcePath }).diagnostics;
@@ -24,7 +25,9 @@ export function analyzeStylingSource({ contract, source, sourcePath }) {
 export function analyzeStylingSourceDetails({ contract, source, sourcePath }) {
   const result = sourcePath.endsWith(".css")
     ? analyzeGlobalStylesheet({ contract, source, sourcePath })
-    : analyzeSvelteComponent({ contract, source, sourcePath });
+    : sourcePath.endsWith(".html")
+      ? analyzeStartupDocumentSource({ contract, source, sourcePath })
+      : analyzeSvelteComponent({ contract, source, sourcePath });
 
   return {
     customProperties: result.customProperties,

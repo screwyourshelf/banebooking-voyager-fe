@@ -28,6 +28,7 @@ Følgende ADR-er er bindende deler av målarkitekturen:
 - [ADR-004: UI- og komponentgrenser](./adr/004-ui-and-component-boundaries.md)
 - [ADR-005: Gjenoppretting før appmodulen starter](./adr/005-pre-module-startup-recovery.md)
 - [ADR-006: Tailwind-styling og theme-eierskap](./adr/006-tailwind-styling-and-theme-ownership.md)
+- [ADR-007: Presentasjon før appmodulen starter](./adr/007-pre-module-startup-presentation.md)
 
 ## Arkitekturprinsipper
 
@@ -178,6 +179,12 @@ Det eneste unntaket er den dokumenterte pre-module recoveryen i `src/app.html`: 
 kan starte, kan den lese og skrive sin ene private `sessionStorage`-nøkkel for reload-cooldown.
 Den kan ikke lese eller slette produktdata, `localStorage` eller origin-delt Cache Storage. Se
 [ADR-005](./adr/005-pre-module-startup-recovery.md).
+
+Samme dokument har én eksakt pre-module-presentasjon som må fungere når den bygde stylesheeten
+mangler. Elleve `--app-startup-*`-roller eies av theme-filen og speiles som identiske inline-
+fallbacks; selectors, metadata og stylekanaler er låst av produksjonstreguarden. Unntaket kan ikke
+brukes av routes, features eller offentlig UI. Se
+[ADR-007](./adr/007-pre-module-startup-presentation.md).
 
 ### `contracts`
 
@@ -392,6 +399,7 @@ Følgende skal inngå i `npm run check` når SvelteKit-grunnlaget etableres:
 - forbud mot direkte Supabase-, Sentry- og storage-importer utenfor platformlaget
 - forbud mot direkte `fetch` i komponenter
 - eksakt, maskinell storage-grense for pre-module bootstrapen
+- eksakt, token-synkronisert presentasjonsgrense for pre-module oppstartsdokumentet
 - tester og `git diff --check`
 
 Arkitekturkontrollen skal bruke eksplisitte tillatte grenser. En voksende unntaksliste er teknisk

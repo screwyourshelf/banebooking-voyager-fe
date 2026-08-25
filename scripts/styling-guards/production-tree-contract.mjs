@@ -2,11 +2,22 @@ import { readdir, readFile } from "node:fs/promises";
 import path from "node:path";
 import { analyzeStylingSourceDetails } from "./analyze.mjs";
 import { loadStylingGuardContract } from "./contract.mjs";
+import { validateStartupDocumentThemeBindings } from "./startup-document-contract.mjs";
 
 export async function checkStylingProductionTree(projectRoot) {
   const contract = await loadStylingGuardContract();
   const { diagnostics, sourcePaths } = await analyzeProductionStylingTree(projectRoot, contract);
-  assertNoProductionStylingDiagnostics(diagnostics);
+  const completeDiagnostics = [...diagnostics];
+  if (!sourcePaths.includes(contract.startupDocument.sourcePath)) {
+    completeDiagnostics.push({
+      column: 1,
+      file: contract.startupDocument.sourcePath,
+      line: 1,
+      message: "den registrerte ADR-007-oppstartsdokumenteieren mangler fra produksjonstreet",
+      ruleId: contract.rules.cssApplication.id,
+    });
+  }
+  assertNoProductionStylingDiagnostics(completeDiagnostics);
 
   const diagnosticCountsByRule = Object.fromEntries(
     contract.productionTree.enforcedRuleIds.map((ruleId) => [
@@ -26,18 +37,42 @@ export async function analyzeProductionStylingTree(projectRoot, contract) {
   const activeContract = contract ?? (await loadStylingGuardContract());
   const enforcedRuleIds = new Set(activeContract.productionTree.enforcedRuleIds);
   const sourcePaths = await collectProductionStylingSourcePaths(projectRoot, activeContract);
-  const analyses = [];
+  const sources = new Map(
+    await Promise.all(
+      sourcePaths.map(async (sourcePath) => [
+        sourcePath,
+        await readFile(path.join(projectRoot, sourcePath), "utf8"),
+      ])
+    )
+  );
+  const analyses = sourcePaths.map((sourcePath) =>
+    analyzeStylingSourceDetails({
+      contract: activeContract,
+      source: sources.get(sourcePath) ?? "",
+      sourcePath,
+    })
+  );
 
-  for (const sourcePath of sourcePaths) {
-    const source = await readFile(path.join(projectRoot, sourcePath), "utf8");
-    analyses.push(analyzeStylingSourceDetails({ contract: activeContract, source, sourcePath }));
-  }
+  const startupSource = sources.get(activeContract.startupDocument.sourcePath);
+  const tokenSource = sources.get(activeContract.startupDocument.tokenStylesheet);
+  const startupThemeDiagnostics =
+    startupSource === undefined || tokenSource === undefined
+      ? []
+      : validateStartupDocumentThemeBindings({
+          contract: activeContract,
+          startupSource,
+          tokenSource,
+        });
 
   const projectReferences = new Set(
     analyses.flatMap(({ customProperties }) => customProperties.references.map(({ name }) => name))
   );
+  if (startupSource !== undefined) {
+    projectReferences.add(activeContract.startupDocument.themeColorToken);
+  }
   const diagnostics = analyses
     .flatMap(({ diagnostics: sourceDiagnostics }) => sourceDiagnostics)
+    .concat(startupThemeDiagnostics)
     .filter(({ ruleId }) => enforcedRuleIds.has(ruleId))
     .filter(
       (diagnostic) =>

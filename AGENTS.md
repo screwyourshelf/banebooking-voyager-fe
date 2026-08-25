@@ -118,6 +118,8 @@ For hver arbeidsflate:
 - Tailwind-styling følger ADR-006: offentlig UI eier visuelle utilities, mens features og routes
   ikke lager lokal produktstyling, restyler UI gjennom `class`/`style` eller innfører parallelle
   designvarianter. Bare maskinelt registrert visualiseringsgeometri er unntatt.
+- `src/app.html` har i tillegg bare det eksakte, maskinlåste pre-module-unntaket i ADR-007;
+  selectors, verdier eller presentasjonskanaler kan ikke utvides som vanlig frontendstyling.
 - Ny kode bruker Svelte 5 runes, snippets og typed context; legacy Svelte-syntaks brukes ikke.
 
 ## Handover ved slutten av hver sesjon

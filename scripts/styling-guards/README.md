@@ -12,15 +12,21 @@ ADR-006.
 - `svelte-script-policy.mjs` eier imperative DOM-stylingsinks, mens `svelte-ast.mjs` deler de små
   AST-primitivene uten å blande policyene.
 - `custom-property-references.mjs` tokeniserer gyldige `var()`-referanser med whitespace, escapes
-  og nested fallback for styling-, design- og baselineportene.
+  og nested fallback for styling-, design- og baselineportene. Den eksponerer også den bokstavelige
+  fallbacken som oppstartskontrakten må synkronisere.
+- `startup-document-contract.mjs` låser ADR-007-flatens metadata, boot-/rootanatomi, eneste
+  styleattributt, inline stylesheet og elleve theme-bindinger. Hver `var()`-fallback må være
+  identisk med den direkte `:root`-verdien i `tokens.css`.
 - `theme-contract.mjs` beviser at hver godkjente utility genereres fra sin registrerte
   `@theme inline`-rolle, og at produktrollen kan løses i både lyst og mørkt theme.
 - `cascade-contract.mjs` oppdager hele den registrerte produksjons-CSS-flaten og beviser at hver
   regel ligger i Tailwinds `theme`, `base`, `components` eller `utilities`-lag.
 - `production-tree-contract.mjs` oppdager alle produksjonsfiler under `src`, kjører de ni øvrige
-  reglene og krever null diagnostics. Schema 5 klassifiserer alle Svelte-attributtkanaler,
+  reglene og krever null diagnostics. Schema 6 klassifiserer alle Svelte-attributtkanaler,
   bevisbare spreads, dynamiske elementer/komponenter, rå HTML, stylesheet-markup og imperative
-  DOM-stylingsinks fail-closed. Legitime semantiske DOM-operasjoner har egne positive bevis.
+  DOM-stylingsinks fail-closed. Det oppdager også `.html`, godtar bare den eksakte ADR-007-eieren og
+  synkroniserer oppstartsflaten mot theme. Legitime semantiske DOM-operasjoner har egne positive
+  bevis.
 - `src/lib/ui/public-html-attributes.test.ts` avleder alle runtimekomponenter direkte fra
   `src/lib/ui/index.ts` og gjør `class`/`style` til en typefeil for enhver nåværende eller ny
   offentlig eksport; den håndskrevne komponentlisten er fjernet.
@@ -42,6 +48,8 @@ seks inline custom-property-verdier og 32 SVG-geometriattributter hos fire eksak
 statistikkeiere. Nye visualiseringskanaler krever en eksplisitt kontraktendring og kan bare
 beskrive datadrevet geometri, aldri produktidentitet.
 
-`src/app.html` er foreløpig bare målt av stylingbaselinen. Pre-module-presentasjonen er ikke en del
-av schema 5-produksjonstreguarden og kan ikke gjøres til et permanent stylingunntak før den
-pågående SWP-7-stoppregelen er besluttet og dokumentert.
+`src/app.html` er det eneste permanente stylingunntaket utover datadrevet geometri. ADR-007
+begrenser det til pre-module-loaderen og recoveryflaten: én styleblokk, ett eksakt styleattributt,
+ingen class eller manuell stylesheet, seks selectors, systemtheme, én keyframe og elleve
+theme-roller med selvstendige, identiske fallbacks. Mutasjonsporten avviser nye kanaler, driftede
+verdier og nye HTML-eiere. Unntaket gir ingen åpning for feature-, route- eller UI-styling.

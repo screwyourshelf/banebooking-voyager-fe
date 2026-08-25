@@ -17,23 +17,23 @@
         display: grid;
         place-items: center;
         padding: 1.5rem;
-        background: #f2f3ed;
-        color: #173c25;
-        font-family: system-ui, sans-serif;
+        background: var(--app-startup-light-canvas, #f2f3ed);
+        color: var(--app-startup-light-ink, #173c25);
+        font-family: var(--app-startup-font-family, system-ui, sans-serif);
         text-align: center;
       }
 
       @media (prefers-color-scheme: dark) {
         #boot {
-          background: #0f1611;
-          color: white;
+          background: var(--app-startup-dark-canvas, #0f1611);
+          color: var(--app-startup-dark-ink, white);
         }
       }
 
       #boot [data-boot-part="loader"] {
         width: 36px;
         height: 36px;
-        border: 3px solid rgb(23 60 37 / 0.18);
+        border: 3px solid var(--app-startup-loader-track, rgb(23 60 37 / 0.18));
         border-top-color: currentColor;
         border-radius: 50%;
         animation: boot-spin 0.8s linear infinite;
@@ -55,11 +55,11 @@
       }
 
       #boot button {
-        border: 1px solid rgb(23 60 37 / 0.25);
-        border-radius: 0.5rem;
+        border: 1px solid var(--app-startup-action-border, rgb(23 60 37 / 0.25));
+        border-radius: var(--app-startup-action-radius, 0.5rem);
         padding: 0.65rem 1rem;
-        background: #173c25;
-        color: white;
+        background: var(--app-startup-action-surface, #173c25);
+        color: var(--app-startup-action-text, white);
         font: inherit;
         font-weight: 600;
         cursor: pointer;

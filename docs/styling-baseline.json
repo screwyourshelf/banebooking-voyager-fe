@@ -10,17 +10,17 @@
     "summary": {
       "applyDirectiveCount": 0,
       "applyUtilityTokenCount": 0,
-      "cssCustomPropertyDefinitionCount": 1411,
+      "cssCustomPropertyDefinitionCount": 1422,
       "cssCustomPropertyReferenceCount": 909,
       "cssFileCount": 4,
-      "cssLineCount": 2045,
+      "cssLineCount": 2061,
       "cssRuleCount": 10,
       "featureClassOccurrenceCount": 0,
       "importantDeclarationCount": 4,
       "layeredCssRuleCount": 10,
       "legacyDebtCount": 0,
       "markupFileCount": 181,
-      "rawVisualDeclarationCount": 652,
+      "rawVisualDeclarationCount": 663,
       "selectorCount": 12,
       "styleAttributeCount": 7,
       "styleBlockCount": 4,
@@ -67,11 +67,11 @@
         },
         {
           "atRuleCount": 2,
-          "declarationCount": 757,
+          "declarationCount": 768,
           "file": "src/styles/design-system/tokens.css",
           "keyframeStepCount": 0,
           "layeredRuleCount": 3,
-          "lineCount": 976,
+          "lineCount": 992,
           "ruleCount": 3,
           "selectorCount": 3,
           "unlayeredRuleCount": 0
@@ -189,7 +189,7 @@
         {
           "column": 3,
           "file": "src/styles/design-system/tokens.css",
-          "line": 905,
+          "line": 921,
           "layer": "theme",
           "selector": ".dark",
           "ownerFamily": "theme-and-tokens",
@@ -199,7 +199,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 963,
+          "line": 979,
           "layer": "theme",
           "selector": ":root",
           "ownerFamily": "theme-and-tokens",
@@ -7039,7 +7039,128 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
+          "line": 897,
+          "property": "--app-startup-action-border",
+          "rawValues": ["0.25", "23", "37", "60"],
+          "value": "rgb(23 60 37 / 0.25)",
+          "ownerFamily": "theme-and-tokens",
+          "ownerPackage": "src/lib/platform/theme",
+          "plannedRemovalCheckpoint": "SWP-1.1"
+        },
+        {
+          "column": 5,
+          "file": "src/styles/design-system/tokens.css",
+          "line": 898,
+          "property": "--app-startup-action-radius",
+          "rawValues": ["0.5rem"],
+          "value": "0.5rem",
+          "ownerFamily": "theme-and-tokens",
+          "ownerPackage": "src/lib/platform/theme",
+          "plannedRemovalCheckpoint": "SWP-1.1"
+        },
+        {
+          "column": 5,
+          "file": "src/styles/design-system/tokens.css",
+          "line": 899,
+          "property": "--app-startup-action-surface",
+          "rawValues": ["#173c25"],
+          "value": "#173c25",
+          "ownerFamily": "theme-and-tokens",
+          "ownerPackage": "src/lib/platform/theme",
+          "plannedRemovalCheckpoint": "SWP-1.1"
+        },
+        {
+          "column": 5,
+          "file": "src/styles/design-system/tokens.css",
+          "line": 900,
+          "property": "--app-startup-action-text",
+          "rawValues": ["white"],
+          "value": "white",
+          "ownerFamily": "theme-and-tokens",
+          "ownerPackage": "src/lib/platform/theme",
+          "plannedRemovalCheckpoint": "SWP-1.1"
+        },
+        {
+          "column": 5,
+          "file": "src/styles/design-system/tokens.css",
+          "line": 901,
+          "property": "--app-startup-dark-canvas",
+          "rawValues": ["#0f1611"],
+          "value": "#0f1611",
+          "ownerFamily": "theme-and-tokens",
+          "ownerPackage": "src/lib/platform/theme",
+          "plannedRemovalCheckpoint": "SWP-1.1"
+        },
+        {
+          "column": 5,
+          "file": "src/styles/design-system/tokens.css",
+          "line": 902,
+          "property": "--app-startup-dark-ink",
+          "rawValues": ["white"],
+          "value": "white",
+          "ownerFamily": "theme-and-tokens",
+          "ownerPackage": "src/lib/platform/theme",
+          "plannedRemovalCheckpoint": "SWP-1.1"
+        },
+        {
+          "column": 5,
+          "file": "src/styles/design-system/tokens.css",
+          "line": 903,
+          "property": "--app-startup-font-family",
+          "rawValues": ["system-ui, sans-serif"],
+          "value": "system-ui, sans-serif",
+          "ownerFamily": "theme-and-tokens",
+          "ownerPackage": "src/lib/platform/theme",
+          "plannedRemovalCheckpoint": "SWP-1.1"
+        },
+        {
+          "column": 5,
+          "file": "src/styles/design-system/tokens.css",
+          "line": 904,
+          "property": "--app-startup-light-canvas",
+          "rawValues": ["#f2f3ed"],
+          "value": "#f2f3ed",
+          "ownerFamily": "theme-and-tokens",
+          "ownerPackage": "src/lib/platform/theme",
+          "plannedRemovalCheckpoint": "SWP-1.1"
+        },
+        {
+          "column": 5,
+          "file": "src/styles/design-system/tokens.css",
+          "line": 905,
+          "property": "--app-startup-light-ink",
+          "rawValues": ["#173c25"],
+          "value": "#173c25",
+          "ownerFamily": "theme-and-tokens",
+          "ownerPackage": "src/lib/platform/theme",
+          "plannedRemovalCheckpoint": "SWP-1.1"
+        },
+        {
+          "column": 5,
+          "file": "src/styles/design-system/tokens.css",
+          "line": 906,
+          "property": "--app-startup-loader-track",
+          "rawValues": ["0.18", "23", "37", "60"],
+          "value": "rgb(23 60 37 / 0.18)",
+          "ownerFamily": "theme-and-tokens",
+          "ownerPackage": "src/lib/platform/theme",
+          "plannedRemovalCheckpoint": "SWP-1.1"
+        },
+        {
+          "column": 5,
+          "file": "src/styles/design-system/tokens.css",
           "line": 907,
+          "property": "--app-startup-theme-color",
+          "rawValues": ["#0b3a4a"],
+          "value": "#0b3a4a",
+          "ownerFamily": "theme-and-tokens",
+          "ownerPackage": "src/lib/platform/theme",
+          "plannedRemovalCheckpoint": "SWP-1.1"
+        },
+        {
+          "column": 5,
+          "file": "src/styles/design-system/tokens.css",
+          "line": 923,
           "property": "--app-canvas",
           "rawValues": ["#0f1611"],
           "value": "#0f1611",
@@ -7050,7 +7171,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 908,
+          "line": 924,
           "property": "--app-surface",
           "rawValues": ["#151e17"],
           "value": "#151e17",
@@ -7061,7 +7182,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 909,
+          "line": 925,
           "property": "--app-surface-subtle",
           "rawValues": ["#1a251d"],
           "value": "#1a251d",
@@ -7072,7 +7193,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 910,
+          "line": 926,
           "property": "--app-surface-raised",
           "rawValues": ["#1d2920"],
           "value": "#1d2920",
@@ -7083,7 +7204,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 911,
+          "line": 927,
           "property": "--app-ink",
           "rawValues": ["#eff5ef"],
           "value": "#eff5ef",
@@ -7094,7 +7215,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 912,
+          "line": 928,
           "property": "--app-ink-soft",
           "rawValues": ["#b3bfb5"],
           "value": "#b3bfb5",
@@ -7105,7 +7226,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 913,
+          "line": 929,
           "property": "--app-ink-faint",
           "rawValues": ["#89958b"],
           "value": "#89958b",
@@ -7116,7 +7237,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 914,
+          "line": 930,
           "property": "--app-line",
           "rawValues": ["#304035"],
           "value": "#304035",
@@ -7127,7 +7248,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 915,
+          "line": 931,
           "property": "--app-line-strong",
           "rawValues": ["#425447"],
           "value": "#425447",
@@ -7138,7 +7259,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 918,
+          "line": 934,
           "property": "--app-brand-soft",
           "rawValues": ["28%"],
           "value": "color-mix(in oklab, var(--aas-green-500) 28%, var(--app-surface))",
@@ -7149,7 +7270,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 920,
+          "line": 936,
           "property": "--app-accent-soft",
           "rawValues": ["28%"],
           "value": "color-mix(in oklab, var(--aas-orange-500) 28%, var(--app-surface))",
@@ -7160,7 +7281,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 923,
+          "line": 939,
           "property": "--app-sidebar",
           "rawValues": ["#0b3021"],
           "value": "#0b3021",
@@ -7171,7 +7292,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 925,
+          "line": 941,
           "property": "--app-nav-active-surface",
           "rawValues": ["24%"],
           "value": "color-mix(in oklab, var(--aas-green-500) 24%, var(--app-surface))",
@@ -7182,7 +7303,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 928,
+          "line": 944,
           "property": "--app-control-surface",
           "rawValues": ["#194d32"],
           "value": "#194d32",
@@ -7193,7 +7314,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 929,
+          "line": 945,
           "property": "--app-control-surface-strong",
           "rawValues": ["#225c3b"],
           "value": "#225c3b",
@@ -7204,7 +7325,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 930,
+          "line": 946,
           "property": "--app-action-primary-text",
           "rawValues": ["#102115"],
           "value": "#102115",
@@ -7215,7 +7336,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 931,
+          "line": 947,
           "property": "--app-shadow-sm",
           "rawValues": ["0.25", "1px", "2px"],
           "value": "0 1px 2px rgb(0 0 0 / 0.25)",
@@ -7226,7 +7347,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 932,
+          "line": 948,
           "property": "--app-shadow-md",
           "rawValues": ["0.24", "12px", "32px"],
           "value": "0 12px 32px rgb(0 0 0 / 0.24)",
@@ -7237,7 +7358,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 933,
+          "line": 949,
           "property": "--app-shadow-lg",
           "rawValues": ["0.34", "24px", "70px"],
           "value": "0 24px 70px rgb(0 0 0 / 0.34)",
@@ -7248,7 +7369,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 934,
+          "line": 950,
           "property": "--app-record-shadow",
           "rawValues": ["0.22", "16px", "4px"],
           "value": "0 4px 16px rgb(0 0 0 / 0.22)",
@@ -7259,7 +7380,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 936,
+          "line": 952,
           "property": "--status-available-bg",
           "rawValues": ["#203d25"],
           "value": "#203d25",
@@ -7270,7 +7391,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 937,
+          "line": 953,
           "property": "--status-available-text",
           "rawValues": ["#afe0ae"],
           "value": "#afe0ae",
@@ -7281,7 +7402,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 938,
+          "line": 954,
           "property": "--status-available-indicator",
           "rawValues": ["#79ca7e"],
           "value": "#79ca7e",
@@ -7292,7 +7413,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 939,
+          "line": 955,
           "property": "--status-own-bg",
           "rawValues": ["#20364c"],
           "value": "#20364c",
@@ -7303,7 +7424,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 940,
+          "line": 956,
           "property": "--status-own-text",
           "rawValues": ["#b9d7f4"],
           "value": "#b9d7f4",
@@ -7314,7 +7435,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 941,
+          "line": 957,
           "property": "--status-event-bg",
           "rawValues": ["#462d1e"],
           "value": "#462d1e",
@@ -7325,7 +7446,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 942,
+          "line": 958,
           "property": "--status-event-text",
           "rawValues": ["#ffc28f"],
           "value": "#ffc28f",
@@ -7336,7 +7457,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 943,
+          "line": 959,
           "property": "--status-busy-bg",
           "rawValues": ["#2c352e"],
           "value": "#2c352e",
@@ -7347,7 +7468,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 944,
+          "line": 960,
           "property": "--status-busy-text",
           "rawValues": ["#c1c8c1"],
           "value": "#c1c8c1",
@@ -7358,7 +7479,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 945,
+          "line": 961,
           "property": "--status-past-bg",
           "rawValues": ["#252c27"],
           "value": "#252c27",
@@ -7369,7 +7490,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 946,
+          "line": 962,
           "property": "--status-past-text",
           "rawValues": ["#929b94"],
           "value": "#929b94",
@@ -7380,7 +7501,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 947,
+          "line": 963,
           "property": "--status-warning-bg",
           "rawValues": ["#44361d"],
           "value": "#44361d",
@@ -7391,7 +7512,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 948,
+          "line": 964,
           "property": "--status-warning-text",
           "rawValues": ["#f3ce7a"],
           "value": "#f3ce7a",
@@ -7402,7 +7523,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 949,
+          "line": 965,
           "property": "--status-warning-indicator",
           "rawValues": ["#e0ac42"],
           "value": "#e0ac42",
@@ -7413,7 +7534,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 950,
+          "line": 966,
           "property": "--status-danger-bg",
           "rawValues": ["#472523"],
           "value": "#472523",
@@ -7424,7 +7545,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 951,
+          "line": 967,
           "property": "--status-danger-text",
           "rawValues": ["#ffaaa3"],
           "value": "#ffaaa3",
@@ -7435,7 +7556,7 @@
         {
           "column": 5,
           "file": "src/styles/design-system/tokens.css",
-          "line": 952,
+          "line": 968,
           "property": "--status-danger-indicator",
           "rawValues": ["#ef756d"],
           "value": "#ef756d",
@@ -7446,7 +7567,7 @@
         {
           "column": 7,
           "file": "src/styles/design-system/tokens.css",
-          "line": 973,
+          "line": 989,
           "property": "--app-form-actions-padding-bottom",
           "rawValues": ["0.875rem"],
           "value": "0.875rem",
@@ -20901,6 +21022,116 @@
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
             "line": 897,
+            "name": "--app-startup-action-border",
+            "value": "rgb(23 60 37 / 0.25)",
+            "ownerFamily": "theme-and-tokens",
+            "ownerPackage": "src/lib/platform/theme",
+            "plannedRemovalCheckpoint": "SWP-1.1"
+          },
+          {
+            "column": 5,
+            "file": "src/styles/design-system/tokens.css",
+            "line": 898,
+            "name": "--app-startup-action-radius",
+            "value": "0.5rem",
+            "ownerFamily": "theme-and-tokens",
+            "ownerPackage": "src/lib/platform/theme",
+            "plannedRemovalCheckpoint": "SWP-1.1"
+          },
+          {
+            "column": 5,
+            "file": "src/styles/design-system/tokens.css",
+            "line": 899,
+            "name": "--app-startup-action-surface",
+            "value": "#173c25",
+            "ownerFamily": "theme-and-tokens",
+            "ownerPackage": "src/lib/platform/theme",
+            "plannedRemovalCheckpoint": "SWP-1.1"
+          },
+          {
+            "column": 5,
+            "file": "src/styles/design-system/tokens.css",
+            "line": 900,
+            "name": "--app-startup-action-text",
+            "value": "white",
+            "ownerFamily": "theme-and-tokens",
+            "ownerPackage": "src/lib/platform/theme",
+            "plannedRemovalCheckpoint": "SWP-1.1"
+          },
+          {
+            "column": 5,
+            "file": "src/styles/design-system/tokens.css",
+            "line": 901,
+            "name": "--app-startup-dark-canvas",
+            "value": "#0f1611",
+            "ownerFamily": "theme-and-tokens",
+            "ownerPackage": "src/lib/platform/theme",
+            "plannedRemovalCheckpoint": "SWP-1.1"
+          },
+          {
+            "column": 5,
+            "file": "src/styles/design-system/tokens.css",
+            "line": 902,
+            "name": "--app-startup-dark-ink",
+            "value": "white",
+            "ownerFamily": "theme-and-tokens",
+            "ownerPackage": "src/lib/platform/theme",
+            "plannedRemovalCheckpoint": "SWP-1.1"
+          },
+          {
+            "column": 5,
+            "file": "src/styles/design-system/tokens.css",
+            "line": 903,
+            "name": "--app-startup-font-family",
+            "value": "system-ui, sans-serif",
+            "ownerFamily": "theme-and-tokens",
+            "ownerPackage": "src/lib/platform/theme",
+            "plannedRemovalCheckpoint": "SWP-1.1"
+          },
+          {
+            "column": 5,
+            "file": "src/styles/design-system/tokens.css",
+            "line": 904,
+            "name": "--app-startup-light-canvas",
+            "value": "#f2f3ed",
+            "ownerFamily": "theme-and-tokens",
+            "ownerPackage": "src/lib/platform/theme",
+            "plannedRemovalCheckpoint": "SWP-1.1"
+          },
+          {
+            "column": 5,
+            "file": "src/styles/design-system/tokens.css",
+            "line": 905,
+            "name": "--app-startup-light-ink",
+            "value": "#173c25",
+            "ownerFamily": "theme-and-tokens",
+            "ownerPackage": "src/lib/platform/theme",
+            "plannedRemovalCheckpoint": "SWP-1.1"
+          },
+          {
+            "column": 5,
+            "file": "src/styles/design-system/tokens.css",
+            "line": 906,
+            "name": "--app-startup-loader-track",
+            "value": "rgb(23 60 37 / 0.18)",
+            "ownerFamily": "theme-and-tokens",
+            "ownerPackage": "src/lib/platform/theme",
+            "plannedRemovalCheckpoint": "SWP-1.1"
+          },
+          {
+            "column": 5,
+            "file": "src/styles/design-system/tokens.css",
+            "line": 907,
+            "name": "--app-startup-theme-color",
+            "value": "#0b3a4a",
+            "ownerFamily": "theme-and-tokens",
+            "ownerPackage": "src/lib/platform/theme",
+            "plannedRemovalCheckpoint": "SWP-1.1"
+          },
+          {
+            "column": 5,
+            "file": "src/styles/design-system/tokens.css",
+            "line": 913,
             "name": "--background",
             "value": "var(--app-surface)",
             "ownerFamily": "theme-and-tokens",
@@ -20910,7 +21141,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 898,
+            "line": 914,
             "name": "--foreground",
             "value": "var(--app-ink)",
             "ownerFamily": "theme-and-tokens",
@@ -20920,7 +21151,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 899,
+            "line": 915,
             "name": "--border",
             "value": "var(--app-line)",
             "ownerFamily": "theme-and-tokens",
@@ -20930,7 +21161,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 900,
+            "line": 916,
             "name": "--ring",
             "value": "var(--app-focus)",
             "ownerFamily": "theme-and-tokens",
@@ -20940,7 +21171,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 901,
+            "line": 917,
             "name": "--chart-1",
             "value": "var(--aas-green-500)",
             "ownerFamily": "theme-and-tokens",
@@ -20950,7 +21181,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 902,
+            "line": 918,
             "name": "--chart-2",
             "value": "var(--aas-orange-500)",
             "ownerFamily": "theme-and-tokens",
@@ -20960,7 +21191,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 907,
+            "line": 923,
             "name": "--app-canvas",
             "value": "#0f1611",
             "ownerFamily": "theme-and-tokens",
@@ -20970,7 +21201,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 908,
+            "line": 924,
             "name": "--app-surface",
             "value": "#151e17",
             "ownerFamily": "theme-and-tokens",
@@ -20980,7 +21211,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 909,
+            "line": 925,
             "name": "--app-surface-subtle",
             "value": "#1a251d",
             "ownerFamily": "theme-and-tokens",
@@ -20990,7 +21221,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 910,
+            "line": 926,
             "name": "--app-surface-raised",
             "value": "#1d2920",
             "ownerFamily": "theme-and-tokens",
@@ -21000,7 +21231,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 911,
+            "line": 927,
             "name": "--app-ink",
             "value": "#eff5ef",
             "ownerFamily": "theme-and-tokens",
@@ -21010,7 +21241,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 912,
+            "line": 928,
             "name": "--app-ink-soft",
             "value": "#b3bfb5",
             "ownerFamily": "theme-and-tokens",
@@ -21020,7 +21251,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 913,
+            "line": 929,
             "name": "--app-ink-faint",
             "value": "#89958b",
             "ownerFamily": "theme-and-tokens",
@@ -21030,7 +21261,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 914,
+            "line": 930,
             "name": "--app-line",
             "value": "#304035",
             "ownerFamily": "theme-and-tokens",
@@ -21040,7 +21271,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 915,
+            "line": 931,
             "name": "--app-line-strong",
             "value": "#425447",
             "ownerFamily": "theme-and-tokens",
@@ -21050,7 +21281,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 916,
+            "line": 932,
             "name": "--app-brand",
             "value": "var(--aas-green-300)",
             "ownerFamily": "theme-and-tokens",
@@ -21060,7 +21291,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 917,
+            "line": 933,
             "name": "--app-brand-strong",
             "value": "var(--aas-green-100)",
             "ownerFamily": "theme-and-tokens",
@@ -21070,7 +21301,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 918,
+            "line": 934,
             "name": "--app-brand-soft",
             "value": "color-mix(in oklab, var(--aas-green-500) 28%, var(--app-surface))",
             "ownerFamily": "theme-and-tokens",
@@ -21080,7 +21311,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 919,
+            "line": 935,
             "name": "--app-accent",
             "value": "var(--aas-orange-500)",
             "ownerFamily": "theme-and-tokens",
@@ -21090,7 +21321,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 920,
+            "line": 936,
             "name": "--app-accent-soft",
             "value": "color-mix(in oklab, var(--aas-orange-500) 28%, var(--app-surface))",
             "ownerFamily": "theme-and-tokens",
@@ -21100,7 +21331,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 921,
+            "line": 937,
             "name": "--app-choice-indicator",
             "value": "var(--app-accent)",
             "ownerFamily": "theme-and-tokens",
@@ -21110,7 +21341,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 922,
+            "line": 938,
             "name": "--app-focus",
             "value": "var(--aas-blue-300)",
             "ownerFamily": "theme-and-tokens",
@@ -21120,7 +21351,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 923,
+            "line": 939,
             "name": "--app-sidebar",
             "value": "#0b3021",
             "ownerFamily": "theme-and-tokens",
@@ -21130,7 +21361,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 924,
+            "line": 940,
             "name": "--app-nav-active",
             "value": "var(--aas-green-100)",
             "ownerFamily": "theme-and-tokens",
@@ -21140,7 +21371,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 925,
+            "line": 941,
             "name": "--app-nav-active-surface",
             "value": "color-mix(in oklab, var(--aas-green-500) 24%, var(--app-surface))",
             "ownerFamily": "theme-and-tokens",
@@ -21150,7 +21381,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 926,
+            "line": 942,
             "name": "--app-nav-indicator",
             "value": "var(--aas-green-300)",
             "ownerFamily": "theme-and-tokens",
@@ -21160,7 +21391,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 927,
+            "line": 943,
             "name": "--app-nav-indicator-on-dark",
             "value": "var(--aas-green-300)",
             "ownerFamily": "theme-and-tokens",
@@ -21170,7 +21401,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 928,
+            "line": 944,
             "name": "--app-control-surface",
             "value": "#194d32",
             "ownerFamily": "theme-and-tokens",
@@ -21180,7 +21411,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 929,
+            "line": 945,
             "name": "--app-control-surface-strong",
             "value": "#225c3b",
             "ownerFamily": "theme-and-tokens",
@@ -21190,7 +21421,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 930,
+            "line": 946,
             "name": "--app-action-primary-text",
             "value": "#102115",
             "ownerFamily": "theme-and-tokens",
@@ -21200,7 +21431,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 931,
+            "line": 947,
             "name": "--app-shadow-sm",
             "value": "0 1px 2px rgb(0 0 0 / 0.25)",
             "ownerFamily": "theme-and-tokens",
@@ -21210,7 +21441,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 932,
+            "line": 948,
             "name": "--app-shadow-md",
             "value": "0 12px 32px rgb(0 0 0 / 0.24)",
             "ownerFamily": "theme-and-tokens",
@@ -21220,7 +21451,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 933,
+            "line": 949,
             "name": "--app-shadow-lg",
             "value": "0 24px 70px rgb(0 0 0 / 0.34)",
             "ownerFamily": "theme-and-tokens",
@@ -21230,7 +21461,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 934,
+            "line": 950,
             "name": "--app-record-shadow",
             "value": "0 4px 16px rgb(0 0 0 / 0.22)",
             "ownerFamily": "theme-and-tokens",
@@ -21240,7 +21471,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 936,
+            "line": 952,
             "name": "--status-available-bg",
             "value": "#203d25",
             "ownerFamily": "theme-and-tokens",
@@ -21250,7 +21481,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 937,
+            "line": 953,
             "name": "--status-available-text",
             "value": "#afe0ae",
             "ownerFamily": "theme-and-tokens",
@@ -21260,7 +21491,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 938,
+            "line": 954,
             "name": "--status-available-indicator",
             "value": "#79ca7e",
             "ownerFamily": "theme-and-tokens",
@@ -21270,7 +21501,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 939,
+            "line": 955,
             "name": "--status-own-bg",
             "value": "#20364c",
             "ownerFamily": "theme-and-tokens",
@@ -21280,7 +21511,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 940,
+            "line": 956,
             "name": "--status-own-text",
             "value": "#b9d7f4",
             "ownerFamily": "theme-and-tokens",
@@ -21290,7 +21521,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 941,
+            "line": 957,
             "name": "--status-event-bg",
             "value": "#462d1e",
             "ownerFamily": "theme-and-tokens",
@@ -21300,7 +21531,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 942,
+            "line": 958,
             "name": "--status-event-text",
             "value": "#ffc28f",
             "ownerFamily": "theme-and-tokens",
@@ -21310,7 +21541,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 943,
+            "line": 959,
             "name": "--status-busy-bg",
             "value": "#2c352e",
             "ownerFamily": "theme-and-tokens",
@@ -21320,7 +21551,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 944,
+            "line": 960,
             "name": "--status-busy-text",
             "value": "#c1c8c1",
             "ownerFamily": "theme-and-tokens",
@@ -21330,7 +21561,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 945,
+            "line": 961,
             "name": "--status-past-bg",
             "value": "#252c27",
             "ownerFamily": "theme-and-tokens",
@@ -21340,7 +21571,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 946,
+            "line": 962,
             "name": "--status-past-text",
             "value": "#929b94",
             "ownerFamily": "theme-and-tokens",
@@ -21350,7 +21581,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 947,
+            "line": 963,
             "name": "--status-warning-bg",
             "value": "#44361d",
             "ownerFamily": "theme-and-tokens",
@@ -21360,7 +21591,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 948,
+            "line": 964,
             "name": "--status-warning-text",
             "value": "#f3ce7a",
             "ownerFamily": "theme-and-tokens",
@@ -21370,7 +21601,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 949,
+            "line": 965,
             "name": "--status-warning-indicator",
             "value": "#e0ac42",
             "ownerFamily": "theme-and-tokens",
@@ -21380,7 +21611,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 950,
+            "line": 966,
             "name": "--status-danger-bg",
             "value": "#472523",
             "ownerFamily": "theme-and-tokens",
@@ -21390,7 +21621,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 951,
+            "line": 967,
             "name": "--status-danger-text",
             "value": "#ffaaa3",
             "ownerFamily": "theme-and-tokens",
@@ -21400,7 +21631,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 952,
+            "line": 968,
             "name": "--status-danger-indicator",
             "value": "#ef756d",
             "ownerFamily": "theme-and-tokens",
@@ -21410,7 +21641,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 954,
+            "line": 970,
             "name": "--background",
             "value": "var(--app-canvas)",
             "ownerFamily": "theme-and-tokens",
@@ -21420,7 +21651,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 955,
+            "line": 971,
             "name": "--foreground",
             "value": "var(--app-ink)",
             "ownerFamily": "theme-and-tokens",
@@ -21430,7 +21661,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 956,
+            "line": 972,
             "name": "--border",
             "value": "var(--app-line)",
             "ownerFamily": "theme-and-tokens",
@@ -21440,7 +21671,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 957,
+            "line": 973,
             "name": "--ring",
             "value": "var(--app-focus)",
             "ownerFamily": "theme-and-tokens",
@@ -21450,7 +21681,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 958,
+            "line": 974,
             "name": "--chart-1",
             "value": "var(--aas-green-300)",
             "ownerFamily": "theme-and-tokens",
@@ -21460,7 +21691,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 959,
+            "line": 975,
             "name": "--chart-2",
             "value": "var(--aas-orange-500)",
             "ownerFamily": "theme-and-tokens",
@@ -21470,7 +21701,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 964,
+            "line": 980,
             "name": "--app-type-micro",
             "value": "var(--app-type-micro-comfortable)",
             "ownerFamily": "theme-and-tokens",
@@ -21480,7 +21711,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 965,
+            "line": 981,
             "name": "--app-type-caption",
             "value": "var(--app-type-caption-comfortable)",
             "ownerFamily": "theme-and-tokens",
@@ -21490,7 +21721,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 966,
+            "line": 982,
             "name": "--app-type-label",
             "value": "var(--app-type-label-comfortable)",
             "ownerFamily": "theme-and-tokens",
@@ -21500,7 +21731,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 967,
+            "line": 983,
             "name": "--app-type-body-sm",
             "value": "var(--app-type-body-sm-comfortable)",
             "ownerFamily": "theme-and-tokens",
@@ -21510,7 +21741,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 968,
+            "line": 984,
             "name": "--app-type-body",
             "value": "var(--app-type-body-comfortable)",
             "ownerFamily": "theme-and-tokens",
@@ -21520,7 +21751,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 969,
+            "line": 985,
             "name": "--app-type-body-lg",
             "value": "var(--app-type-body-lg-comfortable)",
             "ownerFamily": "theme-and-tokens",
@@ -21530,7 +21761,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 970,
+            "line": 986,
             "name": "--app-type-heading-sm",
             "value": "var(--app-type-heading-sm-comfortable)",
             "ownerFamily": "theme-and-tokens",
@@ -21540,7 +21771,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 971,
+            "line": 987,
             "name": "--app-type-heading-md",
             "value": "var(--app-type-heading-md-comfortable)",
             "ownerFamily": "theme-and-tokens",
@@ -21550,7 +21781,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 972,
+            "line": 988,
             "name": "--app-type-page-title",
             "value": "var(--app-type-page-title-comfortable)",
             "ownerFamily": "theme-and-tokens",
@@ -21560,7 +21791,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 973,
+            "line": 989,
             "name": "--app-form-actions-padding-bottom",
             "value": "0.875rem",
             "ownerFamily": "theme-and-tokens",
@@ -31186,7 +31417,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 897,
+            "line": 913,
             "name": "--app-surface",
             "property": "--background",
             "referenceIndex": 0,
@@ -31197,7 +31428,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 898,
+            "line": 914,
             "name": "--app-ink",
             "property": "--foreground",
             "referenceIndex": 0,
@@ -31208,7 +31439,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 899,
+            "line": 915,
             "name": "--app-line",
             "property": "--border",
             "referenceIndex": 0,
@@ -31219,7 +31450,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 900,
+            "line": 916,
             "name": "--app-focus",
             "property": "--ring",
             "referenceIndex": 0,
@@ -31230,7 +31461,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 901,
+            "line": 917,
             "name": "--aas-green-500",
             "property": "--chart-1",
             "referenceIndex": 0,
@@ -31241,7 +31472,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 902,
+            "line": 918,
             "name": "--aas-orange-500",
             "property": "--chart-2",
             "referenceIndex": 0,
@@ -31252,7 +31483,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 916,
+            "line": 932,
             "name": "--aas-green-300",
             "property": "--app-brand",
             "referenceIndex": 0,
@@ -31263,7 +31494,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 917,
+            "line": 933,
             "name": "--aas-green-100",
             "property": "--app-brand-strong",
             "referenceIndex": 0,
@@ -31274,7 +31505,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 918,
+            "line": 934,
             "name": "--aas-green-500",
             "property": "--app-brand-soft",
             "referenceIndex": 0,
@@ -31285,7 +31516,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 918,
+            "line": 934,
             "name": "--app-surface",
             "property": "--app-brand-soft",
             "referenceIndex": 1,
@@ -31296,7 +31527,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 919,
+            "line": 935,
             "name": "--aas-orange-500",
             "property": "--app-accent",
             "referenceIndex": 0,
@@ -31307,7 +31538,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 920,
+            "line": 936,
             "name": "--aas-orange-500",
             "property": "--app-accent-soft",
             "referenceIndex": 0,
@@ -31318,7 +31549,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 920,
+            "line": 936,
             "name": "--app-surface",
             "property": "--app-accent-soft",
             "referenceIndex": 1,
@@ -31329,7 +31560,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 921,
+            "line": 937,
             "name": "--app-accent",
             "property": "--app-choice-indicator",
             "referenceIndex": 0,
@@ -31340,7 +31571,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 922,
+            "line": 938,
             "name": "--aas-blue-300",
             "property": "--app-focus",
             "referenceIndex": 0,
@@ -31351,7 +31582,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 924,
+            "line": 940,
             "name": "--aas-green-100",
             "property": "--app-nav-active",
             "referenceIndex": 0,
@@ -31362,7 +31593,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 925,
+            "line": 941,
             "name": "--aas-green-500",
             "property": "--app-nav-active-surface",
             "referenceIndex": 0,
@@ -31373,7 +31604,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 925,
+            "line": 941,
             "name": "--app-surface",
             "property": "--app-nav-active-surface",
             "referenceIndex": 1,
@@ -31384,7 +31615,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 926,
+            "line": 942,
             "name": "--aas-green-300",
             "property": "--app-nav-indicator",
             "referenceIndex": 0,
@@ -31395,7 +31626,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 927,
+            "line": 943,
             "name": "--aas-green-300",
             "property": "--app-nav-indicator-on-dark",
             "referenceIndex": 0,
@@ -31406,7 +31637,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 954,
+            "line": 970,
             "name": "--app-canvas",
             "property": "--background",
             "referenceIndex": 0,
@@ -31417,7 +31648,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 955,
+            "line": 971,
             "name": "--app-ink",
             "property": "--foreground",
             "referenceIndex": 0,
@@ -31428,7 +31659,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 956,
+            "line": 972,
             "name": "--app-line",
             "property": "--border",
             "referenceIndex": 0,
@@ -31439,7 +31670,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 957,
+            "line": 973,
             "name": "--app-focus",
             "property": "--ring",
             "referenceIndex": 0,
@@ -31450,7 +31681,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 958,
+            "line": 974,
             "name": "--aas-green-300",
             "property": "--chart-1",
             "referenceIndex": 0,
@@ -31461,7 +31692,7 @@
           {
             "column": 5,
             "file": "src/styles/design-system/tokens.css",
-            "line": 959,
+            "line": 975,
             "name": "--aas-orange-500",
             "property": "--chart-2",
             "referenceIndex": 0,
@@ -31472,7 +31703,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 964,
+            "line": 980,
             "name": "--app-type-micro-comfortable",
             "property": "--app-type-micro",
             "referenceIndex": 0,
@@ -31483,7 +31714,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 965,
+            "line": 981,
             "name": "--app-type-caption-comfortable",
             "property": "--app-type-caption",
             "referenceIndex": 0,
@@ -31494,7 +31725,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 966,
+            "line": 982,
             "name": "--app-type-label-comfortable",
             "property": "--app-type-label",
             "referenceIndex": 0,
@@ -31505,7 +31736,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 967,
+            "line": 983,
             "name": "--app-type-body-sm-comfortable",
             "property": "--app-type-body-sm",
             "referenceIndex": 0,
@@ -31516,7 +31747,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 968,
+            "line": 984,
             "name": "--app-type-body-comfortable",
             "property": "--app-type-body",
             "referenceIndex": 0,
@@ -31527,7 +31758,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 969,
+            "line": 985,
             "name": "--app-type-body-lg-comfortable",
             "property": "--app-type-body-lg",
             "referenceIndex": 0,
@@ -31538,7 +31769,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 970,
+            "line": 986,
             "name": "--app-type-heading-sm-comfortable",
             "property": "--app-type-heading-sm",
             "referenceIndex": 0,
@@ -31549,7 +31780,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 971,
+            "line": 987,
             "name": "--app-type-heading-md-comfortable",
             "property": "--app-type-heading-md",
             "referenceIndex": 0,
@@ -31560,7 +31791,7 @@
           {
             "column": 7,
             "file": "src/styles/design-system/tokens.css",
-            "line": 972,
+            "line": 988,
             "name": "--app-type-page-title-comfortable",
             "property": "--app-type-page-title",
             "referenceIndex": 0,
@@ -33207,6 +33438,17 @@
           { "definitionCount": 1, "name": "--app-space-sm", "referenceCount": 3 },
           { "definitionCount": 1, "name": "--app-space-xl", "referenceCount": 1 },
           { "definitionCount": 1, "name": "--app-space-xs", "referenceCount": 2 },
+          { "definitionCount": 1, "name": "--app-startup-action-border", "referenceCount": 0 },
+          { "definitionCount": 1, "name": "--app-startup-action-radius", "referenceCount": 0 },
+          { "definitionCount": 1, "name": "--app-startup-action-surface", "referenceCount": 0 },
+          { "definitionCount": 1, "name": "--app-startup-action-text", "referenceCount": 0 },
+          { "definitionCount": 1, "name": "--app-startup-dark-canvas", "referenceCount": 0 },
+          { "definitionCount": 1, "name": "--app-startup-dark-ink", "referenceCount": 0 },
+          { "definitionCount": 1, "name": "--app-startup-font-family", "referenceCount": 0 },
+          { "definitionCount": 1, "name": "--app-startup-light-canvas", "referenceCount": 0 },
+          { "definitionCount": 1, "name": "--app-startup-light-ink", "referenceCount": 0 },
+          { "definitionCount": 1, "name": "--app-startup-loader-track", "referenceCount": 0 },
+          { "definitionCount": 1, "name": "--app-startup-theme-color", "referenceCount": 0 },
           { "definitionCount": 1, "name": "--app-stat-chart-label-size", "referenceCount": 1 },
           { "definitionCount": 1, "name": "--app-stat-chart-label-weight", "referenceCount": 1 },
           { "definitionCount": 1, "name": "--app-stat-chart-meta-size", "referenceCount": 1 },
@@ -78970,22 +79212,22 @@
       "basePath": "/",
       "host": "Cloudflare Pages",
       "initialCssAssets": [
-        { "asset": "_app/immutable/assets/0.C5Rq59au.css", "gzipBytes": 28475, "rawBytes": 189722 }
+        { "asset": "_app/immutable/assets/0.BPvaPNiD.css", "gzipBytes": 28568, "rawBytes": 190112 }
       ],
-      "initialCssGzipBytes": 28475,
+      "initialCssGzipBytes": 28568,
       "initialJavaScriptAssets": [
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
-        { "asset": "_app/immutable/chunks/BtmXmn-H.js", "gzipBytes": 11219, "rawBytes": 29273 },
+        { "asset": "_app/immutable/chunks/Btj8er9s.js", "gzipBytes": 11219, "rawBytes": 29273 },
         { "asset": "_app/immutable/chunks/BxCIeGOe.js", "gzipBytes": 725, "rawBytes": 1401 },
         { "asset": "_app/immutable/chunks/Cpi0lLfN.js", "gzipBytes": 530, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/Dpzkwr9j.js", "gzipBytes": 612, "rawBytes": 1143 },
         { "asset": "_app/immutable/chunks/j1LAjlpn.js", "gzipBytes": 20600, "rawBytes": 54865 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.CN1TypYL.js", "gzipBytes": 2507, "rawBytes": 9050 },
-        { "asset": "_app/immutable/entry/start.B13M8jY8.js", "gzipBytes": 92, "rawBytes": 82 },
-        { "asset": "_app/immutable/nodes/0.DD6Pq7DV.js", "gzipBytes": 427, "rawBytes": 806 }
+        { "asset": "_app/immutable/entry/app.DmOeHROu.js", "gzipBytes": 2509, "rawBytes": 9050 },
+        { "asset": "_app/immutable/entry/start.C8HOANZ6.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/nodes/0.DabLXOXG.js", "gzipBytes": 427, "rawBytes": 806 }
       ],
-      "initialJavaScriptGzipBytes": 38151,
+      "initialJavaScriptGzipBytes": 38153,
       "javaScriptChunkCount": 60,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",
@@ -79021,22 +79263,22 @@
       "basePath": "/banebooking",
       "host": "GitHub Pages",
       "initialCssAssets": [
-        { "asset": "_app/immutable/assets/0.DxmrIExO.css", "gzipBytes": 28496, "rawBytes": 189782 }
+        { "asset": "_app/immutable/assets/0.DMM4eUJi.css", "gzipBytes": 28585, "rawBytes": 190172 }
       ],
-      "initialCssGzipBytes": 28496,
+      "initialCssGzipBytes": 28585,
       "initialJavaScriptAssets": [
-        { "asset": "_app/immutable/chunks/BVmI2CjL.js", "gzipBytes": 11229, "rawBytes": 29285 },
+        { "asset": "_app/immutable/chunks/4KTU_CiV.js", "gzipBytes": 11229, "rawBytes": 29281 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/BxCIeGOe.js", "gzipBytes": 725, "rawBytes": 1401 },
         { "asset": "_app/immutable/chunks/Cpi0lLfN.js", "gzipBytes": 530, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/Dpzkwr9j.js", "gzipBytes": 621, "rawBytes": 1179 },
         { "asset": "_app/immutable/chunks/j1LAjlpn.js", "gzipBytes": 20600, "rawBytes": 54865 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.ephWE4X_.js", "gzipBytes": 2517, "rawBytes": 9614 },
-        { "asset": "_app/immutable/entry/start.DXkA_wO7.js", "gzipBytes": 92, "rawBytes": 82 },
-        { "asset": "_app/immutable/nodes/0.DVWJp2e5.js", "gzipBytes": 437, "rawBytes": 866 }
+        { "asset": "_app/immutable/entry/app.uCMByhm1.js", "gzipBytes": 2519, "rawBytes": 9614 },
+        { "asset": "_app/immutable/entry/start.BSw7JxmL.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/nodes/0.DxJjGeIe.js", "gzipBytes": 437, "rawBytes": 866 }
       ],
-      "initialJavaScriptGzipBytes": 38190,
+      "initialJavaScriptGzipBytes": 38192,
       "javaScriptChunkCount": 60,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",

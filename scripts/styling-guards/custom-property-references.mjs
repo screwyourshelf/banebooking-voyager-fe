@@ -6,7 +6,18 @@
  * first argument, and keeps scanning fallbacks for nested var() calls.
  */
 export function customPropertyReferences(value) {
-  const references = [];
+  return customPropertyFunctions(value).map(({ name }) => name);
+}
+
+/**
+ * Return every var() reference together with its literal fallback, when present.
+ *
+ * Startup-document styling must remain usable when the built stylesheet is unavailable. The
+ * fallback is therefore part of that permanent contract and is parsed with the same CSS-token
+ * rules as ordinary custom-property references.
+ */
+export function customPropertyFunctions(value) {
+  const functions = [];
 
   for (let index = 0; index < value.length; index += 1) {
     const character = value[index];
@@ -22,10 +33,17 @@ export function customPropertyReferences(value) {
     if (openingParenthesis === null) continue;
     const argumentStart = skipWhitespaceAndComments(value, openingParenthesis + 1);
     const reference = readCustomPropertyName(value, argumentStart);
-    if (reference !== null) references.push(reference);
+    if (reference === null) continue;
+
+    const closingParenthesis = findClosingParenthesis(value, openingParenthesis);
+    const separator = findFallbackSeparator(value, reference.end, closingParenthesis);
+    functions.push({
+      fallback: separator === null ? null : value.slice(separator + 1, closingParenthesis).trim(),
+      name: reference.name,
+    });
   }
 
-  return references;
+  return functions;
 }
 
 function varFunctionOpeningParenthesis(value, index) {
@@ -82,7 +100,47 @@ function readCustomPropertyName(value, index) {
     break;
   }
 
-  return cursor > index + 2 ? value.slice(index, cursor) : null;
+  return cursor > index + 2 ? { end: cursor, name: value.slice(index, cursor) } : null;
+}
+
+function findClosingParenthesis(value, openingParenthesis) {
+  let depth = 1;
+  for (let cursor = openingParenthesis + 1; cursor < value.length; cursor += 1) {
+    const character = value[cursor];
+    if (character === '"' || character === "'") {
+      cursor = skipString(value, cursor, character);
+      continue;
+    }
+    if (startsComment(value, cursor)) {
+      cursor = skipComment(value, cursor);
+      continue;
+    }
+    if (character === "(") depth += 1;
+    if (character === ")") {
+      depth -= 1;
+      if (depth === 0) return cursor;
+    }
+  }
+  return value.length;
+}
+
+function findFallbackSeparator(value, start, closingParenthesis) {
+  let depth = 0;
+  for (let cursor = start; cursor < closingParenthesis; cursor += 1) {
+    const character = value[cursor];
+    if (character === '"' || character === "'") {
+      cursor = skipString(value, cursor, character);
+      continue;
+    }
+    if (startsComment(value, cursor)) {
+      cursor = skipComment(value, cursor);
+      continue;
+    }
+    if (character === "(") depth += 1;
+    if (character === ")") depth = Math.max(0, depth - 1);
+    if (character === "," && depth === 0) return cursor;
+  }
+  return null;
 }
 
 function skipWhitespaceAndComments(value, start) {

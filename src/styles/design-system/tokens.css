@@ -891,6 +891,22 @@
     --status-danger-indicator: #c9534c;
 
     /*
+     * ADR-007 mirrors these exact values as fallbacks in src/app.html. The startup document must
+     * remain presentable when the built stylesheet or application module cannot load.
+     */
+    --app-startup-action-border: rgb(23 60 37 / 0.25);
+    --app-startup-action-radius: 0.5rem;
+    --app-startup-action-surface: #173c25;
+    --app-startup-action-text: white;
+    --app-startup-dark-canvas: #0f1611;
+    --app-startup-dark-ink: white;
+    --app-startup-font-family: system-ui, sans-serif;
+    --app-startup-light-canvas: #f2f3ed;
+    --app-startup-light-ink: #173c25;
+    --app-startup-loader-track: rgb(23 60 37 / 0.18);
+    --app-startup-theme-color: #0b3a4a;
+
+    /*
    * Compatibility roles consumed by the current base CSS. New public UI uses the semantic
    * --app-* roles exposed from src/index.css instead of adding more generic aliases here.
    */
