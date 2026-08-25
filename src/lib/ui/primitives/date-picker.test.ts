@@ -59,6 +59,12 @@ describe("DatePicker and MultiDatePicker", () => {
       "bg-choice-selected-surface",
       "text-choice-selected-text"
     );
+    const unselectedBookingTrigger = screen.getByRole("button", {
+      name: "Annen bookingdato",
+    });
+    expect(unselectedBookingTrigger).toHaveTextContent("Velg dato");
+    expect(unselectedBookingTrigger).toHaveAttribute("aria-pressed", "false");
+    expect(unselectedBookingTrigger).toHaveAttribute("data-placeholder", "true");
     expect(screen.getByRole("group", { name: "Bookingdatoer" })).toHaveClass(
       "max-w-calendar",
       "rounded-calendar-surface",

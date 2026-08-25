@@ -36,7 +36,7 @@ describe("public shared data patterns", () => {
       "leading-schedule-time",
       "tracking-schedule-time-start"
     );
-    expect(end).toHaveTextContent("11:00");
+    expect(end).toHaveTextContent("–11:00");
     expect(end).toHaveClass("text-caption", "leading-schedule-time");
     expect(accessory).toHaveClass("inline-flex");
 

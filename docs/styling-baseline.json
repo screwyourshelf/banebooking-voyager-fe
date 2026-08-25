@@ -25,8 +25,8 @@
       "styleAttributeCount": 7,
       "styleBlockCount": 4,
       "styleDirectiveCount": 0,
-      "svelteTailwindUtilityOccurrenceCount": 1280,
-      "tailwindUtilityOccurrenceCount": 1280,
+      "svelteTailwindUtilityOccurrenceCount": 1310,
+      "tailwindUtilityOccurrenceCount": 1310,
       "unlayeredCssRuleCount": 0,
       "visualizationExceptionCount": 38
     },
@@ -37911,9 +37911,297 @@
           "plannedRemovalCheckpoint": "SWP-3.3"
         },
         {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "flex",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "font-collection-row-title",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "gap-collection-control-detail",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "items-center",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "leading-collection-row-copy",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "min-w-0",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "overflow-hidden",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "text-body",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "text-ink",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "whitespace-nowrap",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 17,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 115,
+          "className": "min-w-0",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 17,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 115,
+          "className": "overflow-hidden",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 17,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 115,
+          "className": "text-ellipsis",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 17,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 115,
+          "className": "whitespace-nowrap",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 124,
+          "className": "font-collection-row-description",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 124,
+          "className": "leading-collection-row-copy",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 124,
+          "className": "min-w-0",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 124,
+          "className": "mt-collection-row-description",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 124,
+          "className": "overflow-hidden",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 124,
+          "className": "text-body-sm",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 124,
+          "className": "text-ellipsis",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 124,
+          "className": "text-ink-soft",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 124,
+          "className": "whitespace-nowrap",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 130,
+          "className": "font-collection-row-meta",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 130,
+          "className": "leading-collection-row-copy",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 130,
+          "className": "min-w-0",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 130,
+          "className": "mt-collection-row-meta",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 130,
+          "className": "overflow-hidden",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 130,
+          "className": "text-caption",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 130,
+          "className": "text-ellipsis",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 130,
+          "className": "text-ink-faint",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 130,
+          "className": "whitespace-nowrap",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
           "column": 11,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 185,
+          "line": 168,
           "className": "collection-wide:px-xl",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -37922,7 +38210,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 185,
+          "line": 168,
           "className": "collection-wide:py-lg",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -37931,7 +38219,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 185,
+          "line": 168,
           "className": "gap-lg",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -37940,7 +38228,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 185,
+          "line": 168,
           "className": "grid",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -37949,7 +38237,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 185,
+          "line": 168,
           "className": "p-collection-row-details",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -37958,7 +38246,7 @@
         {
           "column": 18,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 190,
+          "line": 173,
           "className": "flex",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -37967,7 +38255,7 @@
         {
           "column": 18,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 190,
+          "line": 173,
           "className": "flex-wrap",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -37976,7 +38264,7 @@
         {
           "column": 18,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 190,
+          "line": 173,
           "className": "gap-sm",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -37985,7 +38273,7 @@
         {
           "column": 18,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 190,
+          "line": 173,
           "className": "justify-end",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -37994,7 +38282,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "bg-transparent",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38003,7 +38291,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "border-0",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38012,7 +38300,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "collection-wide:min-h-collection-row-wide",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38021,7 +38309,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "collection-wide:px-xl",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38030,7 +38318,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "collection-wide:py-sm",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38039,7 +38327,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "disabled:cursor-not-allowed",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38048,7 +38336,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "disabled:opacity-collection-row-disabled",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38057,7 +38345,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "enabled:hover:bg-surface-subtle",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38066,7 +38354,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "flex",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38075,7 +38363,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "flex-1",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38084,7 +38372,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "focus-visible:outline-3",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38093,7 +38381,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "focus-visible:outline-focus-outline",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38102,7 +38390,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "focus-visible:outline-offset-collection-inset",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38111,7 +38399,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "focus-visible:z-10",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38120,7 +38408,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "gap-md",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38129,7 +38417,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "items-center",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38138,7 +38426,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "min-w-0",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38147,7 +38435,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "px-md",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38156,7 +38444,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "py-collection-row-block",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38165,7 +38453,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "text-ink",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38174,7 +38462,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "text-left",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38183,7 +38471,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 211,
+          "line": 194,
           "className": "border-l",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38192,7 +38480,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 211,
+          "line": 194,
           "className": "border-line",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38201,7 +38489,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 211,
+          "line": 194,
           "className": "collection-reorder-control:text-ink-soft",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38210,7 +38498,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 211,
+          "line": 194,
           "className": "content-center",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38219,7 +38507,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 211,
+          "line": 194,
           "className": "flex-none",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38228,7 +38516,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 211,
+          "line": 194,
           "className": "gap-2xs",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38237,7 +38525,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 211,
+          "line": 194,
           "className": "grid",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38246,7 +38534,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 211,
+          "line": 194,
           "className": "p-xs",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38255,7 +38543,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 248,
+          "line": 231,
           "className": "flex-none",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38264,7 +38552,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 248,
+          "line": 231,
           "className": "grid",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38273,7 +38561,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 248,
+          "line": 231,
           "className": "leading-collection-status",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38282,7 +38570,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 248,
+          "line": 231,
           "className": "place-items-center",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38291,7 +38579,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 248,
+          "line": 231,
           "className": "self-center",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38300,7 +38588,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 248,
+          "line": 231,
           "className": "text-collection-row-indicator",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38309,7 +38597,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 248,
+          "line": 231,
           "className": "text-ink-faint",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38318,7 +38606,7 @@
         {
           "column": 14,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 257,
+          "line": 240,
           "className": "collection-wide:pl-sm",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38327,7 +38615,7 @@
         {
           "column": 14,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 257,
+          "line": 240,
           "className": "flex",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38336,7 +38624,7 @@
         {
           "column": 14,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 257,
+          "line": 240,
           "className": "flex-none",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38345,7 +38633,7 @@
         {
           "column": 14,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 257,
+          "line": 240,
           "className": "items-center",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -45968,7 +46256,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "bg-field-control-surface",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45977,7 +46265,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "border",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45986,7 +46274,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "border-field-control-border",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -45995,7 +46283,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "cursor-pointer",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46004,7 +46292,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "disabled:cursor-not-allowed",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46013,7 +46301,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "disabled:opacity-50",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46022,7 +46310,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "duration-120",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46031,7 +46319,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "enabled:hover:bg-surface-subtle",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46040,7 +46328,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "focus-visible:border-focus",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46049,7 +46337,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "focus-visible:ring-3",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46058,7 +46346,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "focus-visible:ring-field-focus-ring",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46067,7 +46355,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "font-body",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46076,7 +46364,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "inline-flex",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46085,7 +46373,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "items-center",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46094,7 +46382,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "justify-center",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46103,7 +46391,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "min-h-date-trigger",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46112,7 +46400,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "min-w-0",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46121,7 +46409,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "outline-none",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46130,7 +46418,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "p-0",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46139,7 +46427,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "rounded-control",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46148,7 +46436,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "text-field-control-text",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46157,7 +46445,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "transition",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46166,7 +46454,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 138,
+          "line": 143,
           "className": "flex-none",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46175,7 +46463,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 138,
+          "line": 143,
           "className": "h-control-icon",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46184,7 +46472,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 138,
+          "line": 143,
           "className": "w-control-icon",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46193,7 +46481,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 193,
+          "line": 198,
           "className": "min-w-0",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46202,7 +46490,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 193,
+          "line": 198,
           "className": "overflow-hidden",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46211,7 +46499,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 193,
+          "line": 198,
           "className": "text-ellipsis",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46220,7 +46508,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 193,
+          "line": 198,
           "className": "whitespace-nowrap",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46229,7 +46517,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "bg-surface",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46238,7 +46526,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "border",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46247,7 +46535,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "border-line",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46256,7 +46544,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "max-h-date-popover",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46265,7 +46553,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "outline-none",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46274,7 +46562,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "overflow-auto",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46283,7 +46571,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "p-md",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46292,7 +46580,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "rounded-calendar-surface",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46301,7 +46589,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "shadow-floating-surface",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46310,7 +46598,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "text-ink",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46319,7 +46607,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "w-date-popover",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46328,7 +46616,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "z-90",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46337,7 +46625,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "bg-field-control-surface",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46346,7 +46634,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "border",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46355,7 +46643,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "border-field-control-border",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46364,7 +46652,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "cursor-pointer",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46373,7 +46661,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "disabled:cursor-not-allowed",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46382,7 +46670,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "disabled:opacity-50",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46391,7 +46679,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "duration-120",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46400,7 +46688,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "enabled:hover:bg-surface-subtle",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46409,7 +46697,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "focus-visible:border-focus",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46418,7 +46706,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "focus-visible:ring-3",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46427,7 +46715,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "focus-visible:ring-field-focus-ring",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46436,7 +46724,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "font-body",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46445,7 +46733,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "inline-flex",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46454,7 +46742,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "items-center",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46463,7 +46751,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "justify-center",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46472,7 +46760,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "min-h-date-trigger",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46481,7 +46769,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "min-w-0",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46490,7 +46778,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "outline-none",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46499,7 +46787,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "p-0",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46508,7 +46796,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "rounded-control",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46517,7 +46805,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "text-field-control-text",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46526,7 +46814,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "transition",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46535,7 +46823,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 229,
+          "line": 234,
           "className": "flex-none",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46544,7 +46832,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 229,
+          "line": 234,
           "className": "h-control-icon",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46553,7 +46841,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 229,
+          "line": 234,
           "className": "w-control-icon",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -46562,7 +46850,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 251,
+          "line": 256,
           "className": "sr-only",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -47935,8 +48223,8 @@
         {
           "column": 5,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 75,
-          "expression": "class={[\n      surfaceOwnsSummaryLayout && \"grid min-w-0 flex-1 grid-cols-1 items-center gap-md\",\n      surfaceOwnsSummaryLayout &&\n        !(layout === \"schedule\" && leading) &&\n        \"collection-wide:gap-collection-row-summary-wide\",\n      surfaceOwnsSummaryLayout && leading && \"grid-cols-collection-row-leading\",\n      surfaceOwnsSummaryLayout &&\n        layout === \"schedule\" &&\n        leading &&\n        \"grid-cols-collection-row-schedule grid-rows-collection-row-schedule gap-x-md gap-y-collection-row-copy\",\n      surfaceOwnsSummaryLayout &&\n        layout === \"schedule\" &&\n        \"collection-row-schedule-status:row-start-1 collection-row-schedule-status:col-start-2 collection-row-schedule-status:justify-self-start\",\n    ]}",
+          "line": 72,
+          "expression": "class={[\n      \"grid min-w-0 flex-1 grid-cols-1 items-center gap-md\",\n      !(layout === \"schedule\" && leading) && \"collection-wide:gap-collection-row-summary-wide\",\n      leading && \"grid-cols-collection-row-leading\",\n      layout === \"schedule\" &&\n        leading &&\n        \"grid-cols-collection-row-schedule grid-rows-collection-row-schedule gap-x-md gap-y-collection-row-copy\",\n      layout === \"schedule\" &&\n        \"collection-row-schedule-status:row-start-1 collection-row-schedule-status:col-start-2 collection-row-schedule-status:justify-self-start\",\n    ]}",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
           "plannedRemovalCheckpoint": "SWP-3.3"
@@ -47944,8 +48232,8 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 96,
-          "expression": "class={[\n          surfaceOwnsSummaryLayout && \"flex min-w-0 items-center\",\n          surfaceOwnsSummaryLayout &&\n            layout === \"schedule\" &&\n            \"row-start-1 row-span-2 col-start-1 self-center\",\n          surfaceOwnsSummaryLayout && layout === \"schedule\" && !status && \"row-start-1\",\n        ]}",
+          "line": 89,
+          "expression": "class={[\n          \"flex min-w-0 items-center\",\n          layout === \"schedule\" && \"row-start-1 row-span-2 col-start-1 self-center\",\n          layout === \"schedule\" && !status && \"row-start-1\",\n        ]}",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
           "plannedRemovalCheckpoint": "SWP-3.3"
@@ -47953,44 +48241,8 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "expression": "class={[\n          surfaceOwnsSummaryLayout && \"flex min-w-0 flex-col\",\n          surfaceOwnsSummaryLayout && layout === \"schedule\" && \"row-start-2 col-start-2\",\n          surfaceOwnsSummaryLayout && layout === \"schedule\" && !status && \"row-start-1\",\n        ]}",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 118,
-          "expression": "class={surfaceOwnsSummaryLayout\n              ? \"flex overflow-hidden min-w-0 items-center gap-collection-control-detail text-ink text-body font-collection-row-title leading-collection-row-copy whitespace-nowrap\"\n              : \"\"}",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 17,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 126,
-          "expression": "class={surfaceOwnsSummaryLayout\n                  ? \"overflow-hidden min-w-0 text-ellipsis whitespace-nowrap\"\n                  : \"\"}",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 137,
-          "expression": "class={surfaceOwnsSummaryLayout\n              ? \"overflow-hidden min-w-0 mt-collection-row-description text-ink-soft text-body-sm font-collection-row-description leading-collection-row-copy text-ellipsis whitespace-nowrap\"\n              : \"\"}",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 145,
-          "expression": "class={surfaceOwnsSummaryLayout\n              ? \"overflow-hidden min-w-0 mt-collection-row-meta text-ink-faint text-caption font-collection-row-meta leading-collection-row-copy text-ellipsis whitespace-nowrap\"\n              : \"\"}",
+          "line": 100,
+          "expression": "class={[\n          \"flex min-w-0 flex-col\",\n          layout === \"schedule\" && \"row-start-2 col-start-2\",\n          layout === \"schedule\" && !status && \"row-start-1\",\n        ]}",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
           "plannedRemovalCheckpoint": "SWP-3.3"
@@ -47998,7 +48250,7 @@
         {
           "column": 3,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 159,
+          "line": 142,
           "expression": "class={[\n    \"min-w-0 collection-row-surface:w-full collection-row-surface:min-w-0 collection-row-surface:min-h-collection-row collection-row-surface:border collection-row-surface:border-line collection-row-surface:rounded-record collection-row-surface:bg-surface-raised collection-row-surface:text-ink collection-row-surface:shadow-record collection-row-surface:text-left collection-row-button-surface:cursor-pointer collection-row-button-surface:enabled:hover:border-line-strong collection-row-button-surface:enabled:hover:bg-surface-subtle collection-row-button-surface:focus-visible:outline-3 collection-row-button-surface:focus-visible:outline-focus-outline collection-row-button-surface:focus-visible:outline-offset-2 collection-row-button-surface:disabled:cursor-not-allowed collection-row-button-surface:disabled:opacity-collection-row-disabled collection-wide:collection-row-surface:min-h-collection-row-wide collection-wide:collection-row-surface:border-x-0 collection-wide:collection-row-surface:border-t-0 collection-wide:collection-row-surface:rounded-none collection-wide:collection-row-surface:shadow-none\",\n    !surfaceDelegatesSpacing &&\n      \"collection-row-surface:flex collection-row-surface:items-stretch collection-row-surface:gap-md collection-row-surface:px-md collection-row-surface:py-collection-row-block collection-wide:collection-row-surface:px-xl collection-wide:collection-row-surface:py-sm\",\n    muted &&\n      \"collection-row-surface:bg-collection-row-muted-surface collection-row-surface:shadow-none\",\n    interaction.type === \"expand\" &&\n      \"collection-row-surface:block collection-row-surface:overflow-hidden collection-row-surface:p-0 collection-row-summary-row:flex collection-row-summary-row:min-w-0 collection-row-summary-row:items-stretch collection-row-trigger-header:flex collection-row-trigger-header:min-w-0 collection-row-trigger-header:flex-1 collection-row-trigger:flex collection-row-trigger:w-full collection-row-trigger:min-w-0 collection-row-trigger:min-h-collection-row-trigger collection-row-trigger:items-center collection-row-trigger:gap-md collection-row-trigger:border-0 collection-row-trigger:bg-transparent collection-row-trigger:px-md collection-row-trigger:py-collection-row-block collection-row-trigger:text-ink collection-row-trigger:text-left collection-row-trigger:enabled:hover:bg-surface-subtle collection-row-trigger:focus-visible:z-10 collection-row-trigger:focus-visible:outline-3 collection-row-trigger:focus-visible:outline-focus-outline collection-row-trigger:focus-visible:outline-offset-collection-inset collection-row-trigger:disabled:cursor-not-allowed collection-row-trigger:disabled:opacity-collection-row-disabled collection-row-trigger-indicator:grid collection-row-trigger-indicator:size-collection-row-trigger-indicator collection-row-trigger-indicator:flex-none collection-row-trigger-indicator:place-items-center collection-row-trigger-indicator:text-ink-faint collection-row-trigger-indicator:transition-transform collection-row-trigger-indicator:duration-160 collection-row-trigger-indicator:ease-collection collection-row-summary-action:flex collection-row-summary-action:flex-none collection-row-summary-action:items-center collection-row-summary-action:pr-md collection-row-details:border-t collection-row-details:border-line collection-row-details:bg-surface-subtle collection-wide:collection-row-surface:p-0 collection-wide:collection-row-trigger:min-h-collection-row-wide collection-wide:collection-row-trigger:px-xl collection-wide:collection-row-trigger:py-sm collection-wide:collection-row-summary-action:pr-xl\",\n    interaction.type === \"reorder\" &&\n      \"collection-row-surface:flex collection-row-surface:items-stretch collection-row-surface:overflow-hidden collection-row-surface:gap-0 collection-row-surface:p-0 collection-wide:collection-row-surface:p-0\",\n  ]}",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -48520,7 +48772,7 @@
         {
           "column": 3,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 117,
+          "line": 122,
           "expression": "class={[\n    \"grid min-w-0 gap-sm\",\n    presentation === \"booking\" ? \"w-fit\" : \"w-full\",\n    showDayNavigation\n      ? \"grid-cols-date-navigation compact-control:grid-cols-date-navigation-compact\"\n      : \"grid-cols-1\",\n  ]}",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -48529,7 +48781,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 152,
+          "line": 157,
           "expression": "class={[\n        \"inline-flex min-w-0 items-center justify-start gap-sm overflow-hidden border font-body text-body-sm text-left cursor-pointer outline-none transition duration-120 focus-visible:ring-3 focus-visible:ring-field-focus-ring aria-[invalid=true]:ring-3 aria-[invalid=true]:ring-field-invalid-ring aria-[invalid=true]:focus-visible:ring-field-invalid-ring disabled:cursor-not-allowed disabled:opacity-50\",\n        presentation === \"booking\"\n          ? selected\n            ? \"min-h-control border-choice-selected-border rounded-choice bg-choice-selected-surface px-choice-inline py-choice-block font-choice text-choice-selected-text\"\n            : \"min-h-control border-field-control-border rounded-choice bg-field-control-surface px-choice-inline py-choice-block font-choice text-choice-text enabled:hover:bg-surface-subtle focus-visible:border-focus aria-[invalid=true]:border-status-danger-indicator aria-[invalid=true]:focus-visible:border-status-danger-indicator\"\n          : \"min-h-date-trigger border-field-control-border rounded-control bg-field-control-surface px-date-control-inline py-control-block font-action text-field-control-text enabled:hover:bg-surface-subtle focus-visible:border-focus data-[placeholder]:text-ink-faint aria-[invalid=true]:border-status-danger-indicator aria-[invalid=true]:focus-visible:border-status-danger-indicator\",\n      ]}",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -48538,7 +48790,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 176,
+          "line": 181,
           "expression": "class={[\n          \"w-control-icon h-control-icon flex-none\",\n          showDayNavigation && \"compact-control:hidden\",\n        ]}",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -49438,11 +49690,11 @@
           "styleDirectiveCount": 0
         },
         {
-          "classTokenCount": 49,
+          "classTokenCount": 81,
           "cssImportCount": 0,
-          "dynamicClassAttributeCount": 8,
+          "dynamicClassAttributeCount": 4,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "lineCount": 263,
+          "lineCount": 246,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -50082,7 +50334,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 3,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "lineCount": 255,
+          "lineCount": 260,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -54051,9 +54303,339 @@
           "utility": "w-full"
         },
         {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "flex",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "flex"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "font-collection-row-title",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "font-collection-row-title"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "gap-collection-control-detail",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "gap-collection-control-detail"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "items-center",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "items-center"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "leading-collection-row-copy",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "leading-collection-row-copy"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "min-w-0",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "min-w-0"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "overflow-hidden",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "overflow-hidden"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "text-body",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "text-body"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "text-ink",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "text-ink"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 109,
+          "className": "whitespace-nowrap",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "whitespace-nowrap"
+        },
+        {
+          "column": 17,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 115,
+          "className": "min-w-0",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "min-w-0"
+        },
+        {
+          "column": 17,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 115,
+          "className": "overflow-hidden",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "overflow-hidden"
+        },
+        {
+          "column": 17,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 115,
+          "className": "text-ellipsis",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "text-ellipsis"
+        },
+        {
+          "column": 17,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 115,
+          "className": "whitespace-nowrap",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "whitespace-nowrap"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 124,
+          "className": "font-collection-row-description",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "font-collection-row-description"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 124,
+          "className": "leading-collection-row-copy",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "leading-collection-row-copy"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 124,
+          "className": "min-w-0",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "min-w-0"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 124,
+          "className": "overflow-hidden",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "overflow-hidden"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 124,
+          "className": "text-body-sm",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "text-body-sm"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 124,
+          "className": "text-ellipsis",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "text-ellipsis"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 124,
+          "className": "text-ink-soft",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "text-ink-soft"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 124,
+          "className": "whitespace-nowrap",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "whitespace-nowrap"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 130,
+          "className": "font-collection-row-meta",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "font-collection-row-meta"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 130,
+          "className": "leading-collection-row-copy",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "leading-collection-row-copy"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 130,
+          "className": "min-w-0",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "min-w-0"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 130,
+          "className": "overflow-hidden",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "overflow-hidden"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 130,
+          "className": "text-caption",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "text-caption"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 130,
+          "className": "text-ellipsis",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "text-ellipsis"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 130,
+          "className": "text-ink-faint",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "text-ink-faint"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 130,
+          "className": "whitespace-nowrap",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3",
+          "origin": "class",
+          "utility": "whitespace-nowrap"
+        },
+        {
           "column": 11,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 185,
+          "line": 168,
           "className": "gap-lg",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54064,7 +54646,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 185,
+          "line": 168,
           "className": "grid",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54075,7 +54657,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 185,
+          "line": 168,
           "className": "p-collection-row-details",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54086,7 +54668,7 @@
         {
           "column": 18,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 190,
+          "line": 173,
           "className": "flex",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54097,7 +54679,7 @@
         {
           "column": 18,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 190,
+          "line": 173,
           "className": "flex-wrap",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54108,7 +54690,7 @@
         {
           "column": 18,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 190,
+          "line": 173,
           "className": "gap-sm",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54119,7 +54701,7 @@
         {
           "column": 18,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 190,
+          "line": 173,
           "className": "justify-end",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54130,7 +54712,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "bg-transparent",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54141,7 +54723,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "border-0",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54152,7 +54734,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "collection-wide:min-h-collection-row-wide",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54163,7 +54745,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "disabled:cursor-not-allowed",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54174,7 +54756,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "disabled:opacity-collection-row-disabled",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54185,7 +54767,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "enabled:hover:bg-surface-subtle",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54196,7 +54778,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "flex",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54207,7 +54789,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "flex-1",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54218,7 +54800,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "focus-visible:outline-3",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54229,7 +54811,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "focus-visible:outline-focus-outline",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54240,7 +54822,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "focus-visible:outline-offset-collection-inset",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54251,7 +54833,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "focus-visible:z-10",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54262,7 +54844,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "gap-md",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54273,7 +54855,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "items-center",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54284,7 +54866,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "min-w-0",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54295,7 +54877,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "text-ink",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54306,7 +54888,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 200,
+          "line": 183,
           "className": "text-left",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54317,7 +54899,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 211,
+          "line": 194,
           "className": "border-l",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54328,7 +54910,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 211,
+          "line": 194,
           "className": "border-line",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54339,7 +54921,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 211,
+          "line": 194,
           "className": "collection-reorder-control:text-ink-soft",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54350,7 +54932,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 211,
+          "line": 194,
           "className": "content-center",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54361,7 +54943,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 211,
+          "line": 194,
           "className": "flex-none",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54372,7 +54954,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 211,
+          "line": 194,
           "className": "gap-2xs",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54383,7 +54965,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 211,
+          "line": 194,
           "className": "grid",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54394,7 +54976,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 211,
+          "line": 194,
           "className": "p-xs",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54405,7 +54987,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 248,
+          "line": 231,
           "className": "flex-none",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54416,7 +54998,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 248,
+          "line": 231,
           "className": "grid",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54427,7 +55009,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 248,
+          "line": 231,
           "className": "leading-collection-status",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54438,7 +55020,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 248,
+          "line": 231,
           "className": "place-items-center",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54449,7 +55031,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 248,
+          "line": 231,
           "className": "text-collection-row-indicator",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54460,7 +55042,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 248,
+          "line": 231,
           "className": "text-ink-faint",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54471,7 +55053,7 @@
         {
           "column": 14,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 257,
+          "line": 240,
           "className": "flex",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54482,7 +55064,7 @@
         {
           "column": 14,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 257,
+          "line": 240,
           "className": "flex-none",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54493,7 +55075,7 @@
         {
           "column": 14,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 257,
+          "line": 240,
           "className": "items-center",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -62754,7 +63336,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "bg-field-control-surface",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62765,7 +63347,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "border",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62776,7 +63358,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "border-field-control-border",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62787,7 +63369,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "cursor-pointer",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62798,7 +63380,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "disabled:cursor-not-allowed",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62809,7 +63391,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "disabled:opacity-50",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62820,7 +63402,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "duration-120",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62831,7 +63413,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "enabled:hover:bg-surface-subtle",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62842,7 +63424,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "focus-visible:border-focus",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62853,7 +63435,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "focus-visible:ring-3",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62864,7 +63446,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "focus-visible:ring-field-focus-ring",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62875,7 +63457,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "font-body",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62886,7 +63468,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "inline-flex",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62897,7 +63479,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "items-center",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62908,7 +63490,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "justify-center",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62919,7 +63501,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "min-h-date-trigger",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62930,7 +63512,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "min-w-0",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62941,7 +63523,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "outline-none",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62952,7 +63534,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "p-0",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62963,7 +63545,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "rounded-control",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62974,7 +63556,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "text-field-control-text",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62985,7 +63567,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 130,
+          "line": 135,
           "className": "transition",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -62996,7 +63578,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 138,
+          "line": 143,
           "className": "flex-none",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63007,7 +63589,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 138,
+          "line": 143,
           "className": "h-control-icon",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63018,7 +63600,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 138,
+          "line": 143,
           "className": "w-control-icon",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63029,7 +63611,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 193,
+          "line": 198,
           "className": "min-w-0",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63040,7 +63622,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 193,
+          "line": 198,
           "className": "overflow-hidden",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63051,7 +63633,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 193,
+          "line": 198,
           "className": "text-ellipsis",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63062,7 +63644,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 193,
+          "line": 198,
           "className": "whitespace-nowrap",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63073,7 +63655,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "bg-surface",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63084,7 +63666,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "border",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63095,7 +63677,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "border-line",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63106,7 +63688,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "max-h-date-popover",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63117,7 +63699,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "outline-none",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63128,7 +63710,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "overflow-auto",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63139,7 +63721,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "p-md",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63150,7 +63732,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "rounded-calendar-surface",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63161,7 +63743,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "shadow-floating-surface",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63172,7 +63754,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "text-ink",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63183,7 +63765,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "w-date-popover",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63194,7 +63776,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 198,
+          "line": 203,
           "className": "z-90",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63205,7 +63787,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "bg-field-control-surface",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63216,7 +63798,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "border",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63227,7 +63809,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "border-field-control-border",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63238,7 +63820,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "cursor-pointer",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63249,7 +63831,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "disabled:cursor-not-allowed",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63260,7 +63842,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "disabled:opacity-50",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63271,7 +63853,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "duration-120",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63282,7 +63864,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "enabled:hover:bg-surface-subtle",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63293,7 +63875,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "focus-visible:border-focus",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63304,7 +63886,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "focus-visible:ring-3",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63315,7 +63897,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "focus-visible:ring-field-focus-ring",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63326,7 +63908,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "font-body",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63337,7 +63919,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "inline-flex",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63348,7 +63930,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "items-center",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63359,7 +63941,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "justify-center",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63370,7 +63952,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "min-h-date-trigger",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63381,7 +63963,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "min-w-0",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63392,7 +63974,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "outline-none",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63403,7 +63985,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "p-0",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63414,7 +63996,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "rounded-control",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63425,7 +64007,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "text-field-control-text",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63436,7 +64018,7 @@
         {
           "column": 7,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 221,
+          "line": 226,
           "className": "transition",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63447,7 +64029,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 229,
+          "line": 234,
           "className": "flex-none",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63458,7 +64040,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 229,
+          "line": 234,
           "className": "h-control-icon",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -63469,7 +64051,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/primitives/DatePicker.svelte",
-          "line": 229,
+          "line": 234,
           "className": "w-control-icon",
           "ownerFamily": "ui-primitives",
           "ownerPackage": "src/lib/ui/primitives",
@@ -68134,9 +68716,339 @@
         "utility": "w-full"
       },
       {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 109,
+        "className": "flex",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "flex"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 109,
+        "className": "font-collection-row-title",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "font-collection-row-title"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 109,
+        "className": "gap-collection-control-detail",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "gap-collection-control-detail"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 109,
+        "className": "items-center",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "items-center"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 109,
+        "className": "leading-collection-row-copy",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "leading-collection-row-copy"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 109,
+        "className": "min-w-0",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "min-w-0"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 109,
+        "className": "overflow-hidden",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "overflow-hidden"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 109,
+        "className": "text-body",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "text-body"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 109,
+        "className": "text-ink",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "text-ink"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 109,
+        "className": "whitespace-nowrap",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "whitespace-nowrap"
+      },
+      {
+        "column": 17,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 115,
+        "className": "min-w-0",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "min-w-0"
+      },
+      {
+        "column": 17,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 115,
+        "className": "overflow-hidden",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "overflow-hidden"
+      },
+      {
+        "column": 17,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 115,
+        "className": "text-ellipsis",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "text-ellipsis"
+      },
+      {
+        "column": 17,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 115,
+        "className": "whitespace-nowrap",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "whitespace-nowrap"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 124,
+        "className": "font-collection-row-description",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "font-collection-row-description"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 124,
+        "className": "leading-collection-row-copy",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "leading-collection-row-copy"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 124,
+        "className": "min-w-0",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "min-w-0"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 124,
+        "className": "overflow-hidden",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "overflow-hidden"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 124,
+        "className": "text-body-sm",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "text-body-sm"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 124,
+        "className": "text-ellipsis",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "text-ellipsis"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 124,
+        "className": "text-ink-soft",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "text-ink-soft"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 124,
+        "className": "whitespace-nowrap",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "whitespace-nowrap"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 130,
+        "className": "font-collection-row-meta",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "font-collection-row-meta"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 130,
+        "className": "leading-collection-row-copy",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "leading-collection-row-copy"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 130,
+        "className": "min-w-0",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "min-w-0"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 130,
+        "className": "overflow-hidden",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "overflow-hidden"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 130,
+        "className": "text-caption",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "text-caption"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 130,
+        "className": "text-ellipsis",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "text-ellipsis"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 130,
+        "className": "text-ink-faint",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "text-ink-faint"
+      },
+      {
+        "column": 13,
+        "file": "src/lib/ui/patterns/CollectionRow.svelte",
+        "line": 130,
+        "className": "whitespace-nowrap",
+        "ownerFamily": "collection",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3.3",
+        "origin": "class",
+        "utility": "whitespace-nowrap"
+      },
+      {
         "column": 11,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 185,
+        "line": 168,
         "className": "gap-lg",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68147,7 +69059,7 @@
       {
         "column": 11,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 185,
+        "line": 168,
         "className": "grid",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68158,7 +69070,7 @@
       {
         "column": 11,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 185,
+        "line": 168,
         "className": "p-collection-row-details",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68169,7 +69081,7 @@
       {
         "column": 18,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 190,
+        "line": 173,
         "className": "flex",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68180,7 +69092,7 @@
       {
         "column": 18,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 190,
+        "line": 173,
         "className": "flex-wrap",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68191,7 +69103,7 @@
       {
         "column": 18,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 190,
+        "line": 173,
         "className": "gap-sm",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68202,7 +69114,7 @@
       {
         "column": 18,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 190,
+        "line": 173,
         "className": "justify-end",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68213,7 +69125,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 200,
+        "line": 183,
         "className": "bg-transparent",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68224,7 +69136,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 200,
+        "line": 183,
         "className": "border-0",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68235,7 +69147,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 200,
+        "line": 183,
         "className": "collection-wide:min-h-collection-row-wide",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68246,7 +69158,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 200,
+        "line": 183,
         "className": "disabled:cursor-not-allowed",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68257,7 +69169,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 200,
+        "line": 183,
         "className": "disabled:opacity-collection-row-disabled",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68268,7 +69180,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 200,
+        "line": 183,
         "className": "enabled:hover:bg-surface-subtle",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68279,7 +69191,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 200,
+        "line": 183,
         "className": "flex",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68290,7 +69202,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 200,
+        "line": 183,
         "className": "flex-1",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68301,7 +69213,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 200,
+        "line": 183,
         "className": "focus-visible:outline-3",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68312,7 +69224,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 200,
+        "line": 183,
         "className": "focus-visible:outline-focus-outline",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68323,7 +69235,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 200,
+        "line": 183,
         "className": "focus-visible:outline-offset-collection-inset",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68334,7 +69246,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 200,
+        "line": 183,
         "className": "focus-visible:z-10",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68345,7 +69257,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 200,
+        "line": 183,
         "className": "gap-md",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68356,7 +69268,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 200,
+        "line": 183,
         "className": "items-center",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68367,7 +69279,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 200,
+        "line": 183,
         "className": "min-w-0",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68378,7 +69290,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 200,
+        "line": 183,
         "className": "text-ink",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68389,7 +69301,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 200,
+        "line": 183,
         "className": "text-left",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68400,7 +69312,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 211,
+        "line": 194,
         "className": "border-l",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68411,7 +69323,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 211,
+        "line": 194,
         "className": "border-line",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68422,7 +69334,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 211,
+        "line": 194,
         "className": "collection-reorder-control:text-ink-soft",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68433,7 +69345,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 211,
+        "line": 194,
         "className": "content-center",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68444,7 +69356,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 211,
+        "line": 194,
         "className": "flex-none",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68455,7 +69367,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 211,
+        "line": 194,
         "className": "gap-2xs",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68466,7 +69378,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 211,
+        "line": 194,
         "className": "grid",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68477,7 +69389,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 211,
+        "line": 194,
         "className": "p-xs",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68488,7 +69400,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 248,
+        "line": 231,
         "className": "flex-none",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68499,7 +69411,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 248,
+        "line": 231,
         "className": "grid",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68510,7 +69422,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 248,
+        "line": 231,
         "className": "leading-collection-status",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68521,7 +69433,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 248,
+        "line": 231,
         "className": "place-items-center",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68532,7 +69444,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 248,
+        "line": 231,
         "className": "text-collection-row-indicator",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68543,7 +69455,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 248,
+        "line": 231,
         "className": "text-ink-faint",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68554,7 +69466,7 @@
       {
         "column": 14,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 257,
+        "line": 240,
         "className": "flex",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68565,7 +69477,7 @@
       {
         "column": 14,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 257,
+        "line": 240,
         "className": "flex-none",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -68576,7 +69488,7 @@
       {
         "column": 14,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 257,
+        "line": 240,
         "className": "items-center",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -76837,7 +77749,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "bg-field-control-surface",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76848,7 +77760,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "border",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76859,7 +77771,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "border-field-control-border",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76870,7 +77782,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "cursor-pointer",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76881,7 +77793,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "disabled:cursor-not-allowed",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76892,7 +77804,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "disabled:opacity-50",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76903,7 +77815,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "duration-120",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76914,7 +77826,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "enabled:hover:bg-surface-subtle",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76925,7 +77837,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "focus-visible:border-focus",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76936,7 +77848,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "focus-visible:ring-3",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76947,7 +77859,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "focus-visible:ring-field-focus-ring",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76958,7 +77870,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "font-body",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76969,7 +77881,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "inline-flex",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76980,7 +77892,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "items-center",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -76991,7 +77903,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "justify-center",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77002,7 +77914,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "min-h-date-trigger",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77013,7 +77925,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "min-w-0",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77024,7 +77936,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "outline-none",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77035,7 +77947,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "p-0",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77046,7 +77958,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "rounded-control",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77057,7 +77969,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "text-field-control-text",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77068,7 +77980,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 130,
+        "line": 135,
         "className": "transition",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77079,7 +77991,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 138,
+        "line": 143,
         "className": "flex-none",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77090,7 +78002,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 138,
+        "line": 143,
         "className": "h-control-icon",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77101,7 +78013,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 138,
+        "line": 143,
         "className": "w-control-icon",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77112,7 +78024,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 193,
+        "line": 198,
         "className": "min-w-0",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77123,7 +78035,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 193,
+        "line": 198,
         "className": "overflow-hidden",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77134,7 +78046,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 193,
+        "line": 198,
         "className": "text-ellipsis",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77145,7 +78057,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 193,
+        "line": 198,
         "className": "whitespace-nowrap",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77156,7 +78068,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 198,
+        "line": 203,
         "className": "bg-surface",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77167,7 +78079,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 198,
+        "line": 203,
         "className": "border",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77178,7 +78090,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 198,
+        "line": 203,
         "className": "border-line",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77189,7 +78101,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 198,
+        "line": 203,
         "className": "max-h-date-popover",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77200,7 +78112,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 198,
+        "line": 203,
         "className": "outline-none",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77211,7 +78123,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 198,
+        "line": 203,
         "className": "overflow-auto",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77222,7 +78134,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 198,
+        "line": 203,
         "className": "p-md",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77233,7 +78145,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 198,
+        "line": 203,
         "className": "rounded-calendar-surface",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77244,7 +78156,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 198,
+        "line": 203,
         "className": "shadow-floating-surface",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77255,7 +78167,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 198,
+        "line": 203,
         "className": "text-ink",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77266,7 +78178,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 198,
+        "line": 203,
         "className": "w-date-popover",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77277,7 +78189,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 198,
+        "line": 203,
         "className": "z-90",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77288,7 +78200,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "bg-field-control-surface",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77299,7 +78211,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "border",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77310,7 +78222,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "border-field-control-border",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77321,7 +78233,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "cursor-pointer",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77332,7 +78244,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "disabled:cursor-not-allowed",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77343,7 +78255,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "disabled:opacity-50",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77354,7 +78266,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "duration-120",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77365,7 +78277,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "enabled:hover:bg-surface-subtle",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77376,7 +78288,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "focus-visible:border-focus",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77387,7 +78299,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "focus-visible:ring-3",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77398,7 +78310,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "focus-visible:ring-field-focus-ring",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77409,7 +78321,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "font-body",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77420,7 +78332,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "inline-flex",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77431,7 +78343,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "items-center",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77442,7 +78354,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "justify-center",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77453,7 +78365,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "min-h-date-trigger",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77464,7 +78376,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "min-w-0",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77475,7 +78387,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "outline-none",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77486,7 +78398,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "p-0",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77497,7 +78409,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "rounded-control",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77508,7 +78420,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "text-field-control-text",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77519,7 +78431,7 @@
       {
         "column": 7,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 221,
+        "line": 226,
         "className": "transition",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77530,7 +78442,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 229,
+        "line": 234,
         "className": "flex-none",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77541,7 +78453,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 229,
+        "line": 234,
         "className": "h-control-icon",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -77552,7 +78464,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/primitives/DatePicker.svelte",
-        "line": 229,
+        "line": 234,
         "className": "w-control-icon",
         "ownerFamily": "ui-primitives",
         "ownerPackage": "src/lib/ui/primitives",
@@ -79509,11 +80421,11 @@
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/CB3145jA.js", "gzipBytes": 536, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/CIT7X3lM.js", "gzipBytes": 615, "rawBytes": 1148 },
-        { "asset": "_app/immutable/chunks/DFORZITb.js", "gzipBytes": 11228, "rawBytes": 29269 },
         { "asset": "_app/immutable/chunks/DeNejD04.js", "gzipBytes": 731, "rawBytes": 1401 },
+        { "asset": "_app/immutable/chunks/DgCAtKDH.js", "gzipBytes": 11225, "rawBytes": 29269 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.DIt_BFUS.js", "gzipBytes": 2509, "rawBytes": 9051 },
-        { "asset": "_app/immutable/entry/start.CGVOrXlq.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/entry/app.cJD2KVlY.js", "gzipBytes": 2512, "rawBytes": 9051 },
+        { "asset": "_app/immutable/entry/start.Dx5eRUzf.js", "gzipBytes": 92, "rawBytes": 82 },
         { "asset": "_app/immutable/nodes/0.CxHEDeHX.js", "gzipBytes": 430, "rawBytes": 806 }
       ],
       "initialJavaScriptGzipBytes": 38279,
@@ -79556,18 +80468,18 @@
       ],
       "initialCssGzipBytes": 28596,
       "initialJavaScriptAssets": [
+        { "asset": "_app/immutable/chunks/BAMnSL5D.js", "gzipBytes": 11238, "rawBytes": 29285 },
         { "asset": "_app/immutable/chunks/BG4X2aRC.js", "gzipBytes": 20699, "rawBytes": 55233 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/CB3145jA.js", "gzipBytes": 536, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/CIT7X3lM.js", "gzipBytes": 624, "rawBytes": 1184 },
-        { "asset": "_app/immutable/chunks/CZhey9Cc.js", "gzipBytes": 11238, "rawBytes": 29281 },
         { "asset": "_app/immutable/chunks/DeNejD04.js", "gzipBytes": 731, "rawBytes": 1401 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.DJaOJ-l5.js", "gzipBytes": 2528, "rawBytes": 9615 },
-        { "asset": "_app/immutable/entry/start.DUhpPenu.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/entry/app.D_QW9t21.js", "gzipBytes": 2524, "rawBytes": 9615 },
+        { "asset": "_app/immutable/entry/start.BCbRE0sh.js", "gzipBytes": 92, "rawBytes": 82 },
         { "asset": "_app/immutable/nodes/0.CmPkLapC.js", "gzipBytes": 440, "rawBytes": 866 }
       ],
-      "initialJavaScriptGzipBytes": 38327,
+      "initialJavaScriptGzipBytes": 38323,
       "javaScriptChunkCount": 60,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",

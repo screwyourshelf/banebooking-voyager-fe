@@ -65,25 +65,18 @@
   const surfaceDelegatesSpacing = $derived(
     interaction.type === "expand" || interaction.type === "reorder"
   );
-  const surfaceOwnsSummaryLayout = $derived(
-    interaction.type === "static" || interaction.type === "open" || interaction.type === "action"
-  );
 </script>
 
 {#snippet summary()}
   <span
     class={[
-      surfaceOwnsSummaryLayout && "grid min-w-0 flex-1 grid-cols-1 items-center gap-md",
-      surfaceOwnsSummaryLayout &&
-        !(layout === "schedule" && leading) &&
-        "collection-wide:gap-collection-row-summary-wide",
-      surfaceOwnsSummaryLayout && leading && "grid-cols-collection-row-leading",
-      surfaceOwnsSummaryLayout &&
-        layout === "schedule" &&
+      "grid min-w-0 flex-1 grid-cols-1 items-center gap-md",
+      !(layout === "schedule" && leading) && "collection-wide:gap-collection-row-summary-wide",
+      leading && "grid-cols-collection-row-leading",
+      layout === "schedule" &&
         leading &&
         "grid-cols-collection-row-schedule grid-rows-collection-row-schedule gap-x-md gap-y-collection-row-copy",
-      surfaceOwnsSummaryLayout &&
-        layout === "schedule" &&
+      layout === "schedule" &&
         "collection-row-schedule-status:row-start-1 collection-row-schedule-status:col-start-2 collection-row-schedule-status:justify-self-start",
     ]}
     data-part="summary"
@@ -94,11 +87,9 @@
     {#if leading}
       <span
         class={[
-          surfaceOwnsSummaryLayout && "flex min-w-0 items-center",
-          surfaceOwnsSummaryLayout &&
-            layout === "schedule" &&
-            "row-start-1 row-span-2 col-start-1 self-center",
-          surfaceOwnsSummaryLayout && layout === "schedule" && !status && "row-start-1",
+          "flex min-w-0 items-center",
+          layout === "schedule" && "row-start-1 row-span-2 col-start-1 self-center",
+          layout === "schedule" && !status && "row-start-1",
         ]}
         data-part="leading">{@render leading()}</span
       >
@@ -107,25 +98,21 @@
     {#if title || category || titleStatus || description || meta}
       <span
         class={[
-          surfaceOwnsSummaryLayout && "flex min-w-0 flex-col",
-          surfaceOwnsSummaryLayout && layout === "schedule" && "row-start-2 col-start-2",
-          surfaceOwnsSummaryLayout && layout === "schedule" && !status && "row-start-1",
+          "flex min-w-0 flex-col",
+          layout === "schedule" && "row-start-2 col-start-2",
+          layout === "schedule" && !status && "row-start-1",
         ]}
         data-part="content"
       >
         {#if title || category || titleStatus}
           <span
-            class={surfaceOwnsSummaryLayout
-              ? "flex overflow-hidden min-w-0 items-center gap-collection-control-detail text-ink text-body font-collection-row-title leading-collection-row-copy whitespace-nowrap"
-              : ""}
+            class="flex overflow-hidden min-w-0 items-center gap-collection-control-detail text-ink text-body font-collection-row-title leading-collection-row-copy whitespace-nowrap"
             data-part="title"
           >
             {#if category}<CollectionStatus {...category} />{/if}
             {#if title}
               <span
-                class={surfaceOwnsSummaryLayout
-                  ? "overflow-hidden min-w-0 text-ellipsis whitespace-nowrap"
-                  : ""}
+                class="overflow-hidden min-w-0 text-ellipsis whitespace-nowrap"
                 data-part="title-text">{title}</span
               >
             {/if}
@@ -134,17 +121,13 @@
         {/if}
         {#if description}
           <span
-            class={surfaceOwnsSummaryLayout
-              ? "overflow-hidden min-w-0 mt-collection-row-description text-ink-soft text-body-sm font-collection-row-description leading-collection-row-copy text-ellipsis whitespace-nowrap"
-              : ""}
+            class="overflow-hidden min-w-0 mt-collection-row-description text-ink-soft text-body-sm font-collection-row-description leading-collection-row-copy text-ellipsis whitespace-nowrap"
             data-part="description">{description}</span
           >
         {/if}
         {#if meta}
           <span
-            class={surfaceOwnsSummaryLayout
-              ? "overflow-hidden min-w-0 mt-collection-row-meta text-ink-faint text-caption font-collection-row-meta leading-collection-row-copy text-ellipsis whitespace-nowrap"
-              : ""}
+            class="overflow-hidden min-w-0 mt-collection-row-meta text-ink-faint text-caption font-collection-row-meta leading-collection-row-copy text-ellipsis whitespace-nowrap"
             data-part="meta">{meta}</span
           >
         {/if}

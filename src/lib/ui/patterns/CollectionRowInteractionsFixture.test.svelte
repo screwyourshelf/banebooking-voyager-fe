@@ -38,6 +38,14 @@
   <p>Banereglement og bookingvilkår.</p>
 {/snippet}
 
+{#snippet scheduleTime()}
+  <span>10:00–11:00</span>
+{/snippet}
+
+{#snippet scheduleDetails()}
+  <p>Treningen er åpen for alle medlemmer.</p>
+{/snippet}
+
 <CollectionList label="Sammensatte rader" bind:value>
   <CollectionRow
     title="Ada Lovelace"
@@ -57,6 +65,18 @@
       value: "second",
       details: secondDetails,
       summaryAction: quickAction,
+    }}
+  />
+  <CollectionRow
+    layout="schedule"
+    leading={scheduleTime}
+    title="Trening"
+    category={{ label: "Arrangement", tone: "event" }}
+    status={{ label: "Opptatt", tone: "busy" }}
+    interaction={{
+      type: "expand",
+      value: "schedule",
+      details: scheduleDetails,
     }}
   />
   <CollectionRow

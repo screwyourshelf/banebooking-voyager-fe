@@ -49,6 +49,10 @@
       />
     </FormField>
 
+    <FormField label="Annen bookingdato">
+      <DatePicker value="2026-08-25" presentation="booking" />
+    </FormField>
+
     <FormField label="Statistikk fra">
       <DatePicker value="2026-01-01" presentation="filter" />
     </FormField>

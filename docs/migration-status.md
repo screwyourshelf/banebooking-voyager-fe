@@ -31,6 +31,9 @@
 - Lokal utviklingsinnlogging sender backendens eksplisitte `DevelopmentBearer`-scheme. Medlem,
   utvidet bruker og klubbadministrator kan derfor testes mot lokal backend uten Supabase i
   produksjon eller Playwright-spesifikk headeromskriving.
+- Bookingens schedule-rader har samme kompakte informasjonsgeometri for statiske, handlings- og
+  ekspanderbare rader. Den offentlige `CollectionRow`-kontrakten eier tid, status, sekundærlinje,
+  ekspanderingsindikator og hurtighandling; bookingfeaturen har ingen lokal styling.
 
 ## Avsluttende opprydding
 
@@ -65,6 +68,17 @@ Lokal utviklingsauth er rettet uten backend- eller produksjonsauthendringer:
   headere og kan derfor ikke maskere forskjellen mellom manuell testing og Playwright
 - tom `204`-respons fra det anonyme brukerendepunktet normaliseres til `null`, slik at Query-cachen
   aldri mottar ugyldig `undefined`
+
+Bookingens mobilparitet er rettet gjennom det offentlige UI-laget:
+
+- `CollectionRow` lar nå summary-anatomien eie samme entity- eller schedule-grid uavhengig av om
+  raden er statisk, har en hurtighandling eller delegerer ekspandering til accordion-primitiven
+- `ScheduleTime` eier produksjonens tankestrek foran sluttiden, og `DatePicker` sin
+  bookingpresentasjon viser «Velg dato» når «I dag» eller «I morgen» er det aktive valget
+- en egen mørk mobilreferanse beskytter den kompakte bookinglisten; desktopreferansen og
+  kalenderens mobilreferanse er oppdatert etter den godkjente paritetsrettingen
+- implementasjon og kontrakttester ligger i `src/lib/ui/patterns`, `src/lib/ui/primitives` og
+  `e2e/visual-regressions.spec.ts`; bookingfeaturen og backend er uendret
 
 ## Permanente arkitektur- og produktkontrakter
 
@@ -133,12 +147,13 @@ og vente på en konkret produkt- eller vedlikeholdsoppgave; den skal ikke oppret
 | ---------------------------------- | -------------------------------------------------------------------------- |
 | Målrettet navigasjons-/shelltest   | 4 testfiler, 30 tester                                                     |
 | Målrettet auth-/API-regresjon      | 5 testfiler, 15 tester                                                     |
+| Målrettet booking-/UI-regresjon    | 4 testfiler, 40 tester                                                     |
 | Manuell lokal rolleflyt            | Medlem, utvidet bruker og klubbadministrator mot lokal backend             |
-| `npm test`                         | 96 testfiler, 350 tester                                                   |
+| `npm test`                         | 96 testfiler, 351 tester                                                   |
 | `npm run check`                    | Type, arkitektur, legacy, statisk analyse, design, styling, lint og format |
 | Knip                               | 0 døde filer, pakker, importer, eksporter eller typer                      |
 | Kritiske Playwright-flyter         | 3/3; authflyten dekker alle tre profiler, lokale testdata gjenopprettet    |
-| Visuelle Playwright-referanser     | 11/11 bestått; 4 desktop oppdatert, 5 mobil uendret                        |
+| Visuelle Playwright-referanser     | 12/12; booking desktop/mobil og kalendergrunnlag verifisert                |
 | `npm run test:e2e:production`      | 8/8 ruter for begge hostartefakter                                         |
 | Produksjonsbudsjett                | 37,4 KiB initial JS gzip, 27,9 KiB CSS gzip, 120,5 KiB største lazy JS     |
 | `npm audit --audit-level=moderate` | 6 lave; 0 moderate, høye eller kritiske                                    |

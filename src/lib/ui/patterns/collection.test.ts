@@ -202,6 +202,28 @@ describe("compound collection row interactions", () => {
     expect(secondTrigger).toHaveFocus();
   });
 
+  it("keeps the schedule grid when the row delegates interaction to the accordion", () => {
+    const { container } = renderInteractions({ value: "" });
+    const summary = container.querySelector('[data-part="summary"][data-layout="schedule"]');
+
+    expect(summary).toHaveClass(
+      "grid",
+      "flex-1",
+      "grid-cols-collection-row-schedule",
+      "grid-rows-collection-row-schedule",
+      "collection-row-schedule-status:row-start-1"
+    );
+    expect(summary?.querySelector(':scope > [data-part="leading"]')).toHaveClass(
+      "row-start-1",
+      "row-span-2",
+      "col-start-1"
+    );
+    expect(summary?.querySelector(':scope > [data-part="content"]')).toHaveClass(
+      "row-start-2",
+      "col-start-2"
+    );
+  });
+
   it("supports one controlled open row and accordion keyboard focus", async () => {
     renderInteractions({ value: "first" });
 

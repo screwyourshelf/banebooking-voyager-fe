@@ -79,6 +79,19 @@ test("member booking collection — desktop, dark", async ({ page, e2e }) => {
   await expectStableScreenshot(page, diagnostics, "member-booking-collection-desktop-dark.png");
 });
 
+test("member booking collection — mobile, dark", async ({ page, e2e }) => {
+  const diagnostics = await prepareReferenceSurface(page, {
+    profile: "medlem",
+    theme: "dark",
+    viewport: mobile,
+  });
+  await signInAndOpen(page, e2e.signIn, "medlem", e2e.tenantPath());
+
+  await expectProductSurface(page, "Book bane");
+  await expect(page.getByRole("heading", { name: "2 ledige tider" })).toBeVisible();
+  await expectStableScreenshot(page, diagnostics, "member-booking-collection-mobile-dark.png");
+});
+
 test("member booking calendar — mobile, light", async ({ page, e2e }) => {
   const diagnostics = await prepareReferenceSurface(page, {
     profile: "medlem",

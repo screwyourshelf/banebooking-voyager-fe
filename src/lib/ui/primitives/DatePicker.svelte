@@ -67,7 +67,12 @@
     )
   );
   const isDisabled = $derived(disabled || pending);
-  const displayValue = $derived(formatDatePickerValue(value, presentation) ?? placeholder);
+  const displaysBookingPlaceholder = $derived(presentation === "booking" && !selected);
+  const displayValue = $derived(
+    displaysBookingPlaceholder
+      ? placeholder
+      : (formatDatePickerValue(value, presentation) ?? placeholder)
+  );
   const parsedValue = $derived(parseIsoDate(value));
   const minimumDate = $derived(parseIsoDate(minValue));
   const maximumDate = $derived(parseIsoDate(maxValue));
@@ -161,7 +166,7 @@
       type="button"
       id={resolvedId ?? undefined}
       data-part="trigger"
-      data-placeholder={!value || undefined}
+      data-placeholder={!value || displaysBookingPlaceholder || undefined}
       data-selected={selected || undefined}
       disabled={isDisabled}
       aria-label={ariaLabel}
