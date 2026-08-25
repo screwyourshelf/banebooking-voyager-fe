@@ -1,10 +1,28 @@
 import { expect, test as base, type APIRequestContext, type Page } from "@playwright/test";
-import { E2E_BACKEND_ORIGIN, E2E_TENANT_SLUG } from "./environment";
+import {
+  E2E_APP_BASE_PATH,
+  E2E_APP_ORIGIN,
+  E2E_BACKEND_ORIGIN,
+  E2E_TENANT_SLUG,
+} from "./environment";
 
 export type DevelopmentProfile = "admin" | "medlem" | "utvidet";
 
 type DevelopmentLoginResponse = {
   accessToken: string;
+};
+
+type DevelopmentUserResponse = {
+  erSperret?: boolean;
+  måBekrefteMedlemskap?: boolean;
+  ulestKunngjøring?: unknown;
+};
+
+type DevelopmentLandingPath = "" | "bekreft-medlemskap" | "kunngjøring" | "sperret";
+
+type SignedInDevelopmentProfile = {
+  accountName: string;
+  landingPath: DevelopmentLandingPath;
 };
 
 type BookingMutationResponse = {
@@ -43,7 +61,7 @@ type ClubCleanup = {
 
 export type E2EHarness = {
   preserveClubSettings(): Promise<ClubResponse>;
-  signIn(page: Page, profile: DevelopmentProfile): Promise<void>;
+  signIn(page: Page, profile: DevelopmentProfile): Promise<SignedInDevelopmentProfile>;
   tenantPath(path?: string): string;
 };
 
@@ -51,6 +69,12 @@ const developmentProfileLabels: Record<DevelopmentProfile, string> = {
   admin: "Klubbadministrator",
   medlem: "Medlem",
   utvidet: "Utvidet bruker",
+};
+
+const developmentAccountNames: Record<DevelopmentProfile, string> = {
+  admin: "Utvikling Administrator · Klubbadministrator",
+  medlem: "Utvikling Medlem · Medlem",
+  utvidet: "Utvikling Utvidet · Utvidet bruker",
 };
 
 export const test = base.extend<{ e2e: E2EHarness }>({
@@ -102,10 +126,21 @@ export const test = base.extend<{ e2e: E2EHarness }>({
       async signIn(page, profile) {
         await page.goto(buildTenantPath("login"));
         await page.getByText("Testinnlogging").click();
+        const userResponsePromise = page.waitForResponse(
+          (response) =>
+            response.request().method() === "GET" &&
+            response.url().endsWith(`/api/klubb/${E2E_TENANT_SLUG}/bruker`) &&
+            response.ok()
+        );
         await page
           .getByRole("button", { name: developmentProfileLabels[profile], exact: true })
           .click();
-        await expect(page.getByRole("heading", { level: 1, name: "Book bane" })).toBeVisible();
+        const bruker = (await (await userResponsePromise).json()) as DevelopmentUserResponse;
+        const landingPath = developmentLandingPath(bruker);
+        const accountName = developmentAccountNames[profile];
+
+        await expect(page).toHaveURL(buildTenantUrl(landingPath));
+        return { accountName, landingPath };
       },
       tenantPath(path = "") {
         return buildTenantPath(path);
@@ -183,4 +218,20 @@ function toClubUpdateRequest(club: ClubResponse): ClubUpdateRequest {
 function buildTenantPath(path = "") {
   const suffix = path.replace(/^\/+|\/+$/g, "");
   return `./${E2E_TENANT_SLUG}${suffix ? `/${suffix}` : ""}`;
+}
+
+function buildTenantUrl(path: DevelopmentLandingPath) {
+  const encodedPath = path
+    .split("/")
+    .filter(Boolean)
+    .map((segment) => encodeURIComponent(segment))
+    .join("/");
+  return `${E2E_APP_ORIGIN}${E2E_APP_BASE_PATH}/${E2E_TENANT_SLUG}${encodedPath ? `/${encodedPath}` : ""}`;
+}
+
+function developmentLandingPath(bruker: DevelopmentUserResponse): DevelopmentLandingPath {
+  if (bruker.erSperret) return "sperret";
+  if (bruker.ulestKunngjøring) return "kunngjøring";
+  if (bruker.måBekrefteMedlemskap) return "bekreft-medlemskap";
+  return "";
 }

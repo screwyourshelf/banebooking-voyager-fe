@@ -34,6 +34,8 @@
 - Browserens percent-kodede paths normaliseres én gang i tenantplattformen før routes sammenlignes.
   Norske route-navn fungerer derfor likt i policyguards, kapabilitetsguards og aktiv navigasjon,
   mens kodede skilletegn som `%2F` fortsatt ikke kan bli falske pathsegmenter.
+- Policyredirecten knytter hvert navigasjonsforsøk til både kilde-URL og mål. En samtidig retur fra
+  login kan derfor ikke etterlate brukeren i redirect-loading dersom den avbryter første forsøk.
 - Bookingens schedule-rader har samme kompakte informasjonsgeometri for statiske, handlings- og
   ekspanderbare rader. Den offentlige `CollectionRow`-kontrakten eier tid, status, sekundærlinje,
   ekspanderingsindikator og hurtighandling; bookingfeaturen har ingen lokal styling.
@@ -78,11 +80,16 @@ Den obligatoriske kunngjøringsguarden håndterer browser-URL-er med norske tegn
   navigasjon i stedet for lokale dekodingsvarianter
 - en innlogget bruker med ulest kunngjøring kommer frem til `/kunngjøring` uten å bli stående i
   redirect-loading, og en avsluttet guardflate sender brukeren tilbake til tenantroten
+- en konkurrerende retur fra login utløser et nytt redirectforsøk fra den ferdig navigerte URL-en;
+  en deterministisk Playwright-fixture dekker kappløpet uten å mutere backenddata
 - normaliseringen dekoder teksttegn med `decodeURI`, bevarer kodede skilletegn og feiler lukket ved
   ugyldig percent-koding; kontrakten og begge guardretninger er dekket av regresjonstester
 - implementasjonen og testene ligger i `src/lib/platform/tenant/tenant.ts`,
   `src/lib/features/session/guard-model.ts`, `src/lib/features/session/navigation-model.ts` og deres
   samlokaliserte testfiler
+- navigasjonsretryen og den deterministiske browserregresjonen ligger i
+  `src/lib/features/session/SessionGate.svelte`, `e2e/harness.ts` og
+  `e2e/critical-flows.spec.ts`
 
 Bookingens mobilparitet er rettet gjennom det offentlige UI-laget:
 
@@ -169,7 +176,7 @@ og vente på en konkret produkt- eller vedlikeholdsoppgave; den skal ikke oppret
 | `npm test`                         | 96 testfiler, 352 tester                                                   |
 | `npm run check`                    | Type, arkitektur, legacy, statisk analyse, design, styling, lint og format |
 | Knip                               | 0 døde filer, pakker, importer, eksporter eller typer                      |
-| Kritiske Playwright-flyter         | 3/3; authflyten dekker alle tre profiler, lokale testdata gjenopprettet    |
+| Kritiske Playwright-flyter         | 4/4; tre profiler, policyredirect og lokale testdata gjenopprettet         |
 | Visuelle Playwright-referanser     | 12/12; booking desktop/mobil og kalendergrunnlag verifisert                |
 | `npm run test:e2e:production`      | 8/8 ruter for begge hostartefakter                                         |
 | Produksjonsbudsjett                | 37,4 KiB initial JS gzip, 27,9 KiB CSS gzip, 120,5 KiB største lazy JS     |

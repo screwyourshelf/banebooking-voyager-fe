@@ -11,8 +11,8 @@ test("all development profiles load user data with tenant and base path", async 
   ] as const;
 
   for (const profile of profiles) {
-    await e2e.signIn(page, profile.profile);
-    await expect(page).toHaveURL(/\/banebooking\/aas-tennisklubb\/?$/);
+    const signedIn = await e2e.signIn(page, profile.profile);
+    expect(signedIn.accountName).toBe(profile.accountName);
     await expect(
       page.getByRole("button", { name: profile.accountName, exact: true })
     ).toBeVisible();
@@ -21,6 +21,38 @@ test("all development profiles load user data with tenant and base path", async 
     await page.getByRole("button", { name: "Logg ut", exact: true }).click();
     await expect(page.getByRole("link", { name: "Logg inn", exact: true })).toBeVisible();
   }
+});
+
+test("mandatory announcement redirect survives the login return navigation", async ({
+  page,
+  e2e,
+}) => {
+  await page.route("**/api/klubb/aas-tennisklubb/bruker", async (route) => {
+    const response = await route.fetch();
+    const bruker = (await response.json()) as Record<string, unknown>;
+    await route.fulfill({
+      response,
+      json: {
+        ...bruker,
+        erSperret: false,
+        måBekrefteMedlemskap: false,
+        ulestKunngjøring: {
+          id: "e2e-login-policy-redirect",
+          tittel: "E2E-kunngjøring",
+          tekst: JSON.stringify({
+            type: "doc",
+            content: [{ type: "paragraph", content: [{ type: "text", text: "Les dette." }] }],
+          }),
+        },
+      },
+    });
+  });
+
+  const signedIn = await e2e.signIn(page, "utvidet");
+
+  expect(signedIn.landingPath).toBe("kunngjøring");
+  await expect(page.getByRole("heading", { level: 1, name: "E2E-kunngjøring" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Jeg har lest kunngjøringen" })).toBeVisible();
 });
 
 test("member books and cancels the same slot", async ({ page, e2e }) => {

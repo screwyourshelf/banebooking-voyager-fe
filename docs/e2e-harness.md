@@ -38,11 +38,13 @@ Kjør porten med:
 npm run test:e2e
 ```
 
-Denne porten inkluderer tre kritiske flyter og elleve fryste visuelle referanser. Authflyten logger
-inn og ut med alle tre utviklingsprofiler; de to andre kritiske flytene verifiserer medlemmenes
-booking/avbestilling og administratorens klubbendring. De visuelle testene bruker stabile,
-test-eide svar og den samme authharnessen, men utfører ingen mutasjoner. Den navngitte route-,
-rolle-, state-, viewport-, theme- og interaksjonskontrakten ligger i
+Denne porten inkluderer fire kritiske flyter og tolv fryste visuelle referanser. Authflyten logger
+inn og ut med alle tre utviklingsprofiler og aksepterer den policyflaten backenddataene faktisk
+krever. En egen, responslokal kunngjøringsfixture verifiserer kappløpet mellom retur fra login og
+obligatorisk policyredirect uten å endre backenddata. De to øvrige kritiske flytene verifiserer
+medlemmenes booking/avbestilling og administratorens klubbendring. De visuelle testene bruker
+stabile, test-eide svar og den samme authharnessen, men utfører ingen mutasjoner. Den navngitte
+route-, rolle-, state-, viewport-, theme- og interaksjonskontrakten ligger i
 [`styling-reference-matrix.md`](./styling-reference-matrix.md).
 
 ## Produksjonsartefakter og routes

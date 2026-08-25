@@ -14,7 +14,7 @@
   const auth = getAuthContext();
   const session = getSessionDataContext();
   const tenant = getTenantContext();
-  let lastRedirect: string | null = null;
+  let lastRedirectAttempt: string | null = null;
 
   const redirectTarget = $derived(
     auth.state.status === "authenticated" && session.bruker
@@ -35,8 +35,16 @@
   });
 
   $effect(() => {
-    if (!redirectTarget || redirectTarget === lastRedirect) return;
-    lastRedirect = redirectTarget;
+    if (!redirectTarget) {
+      lastRedirectAttempt = null;
+      return;
+    }
+
+    // Innlogging kan starte en retur-navigasjon samtidig som brukerdata utløser policyredirecten.
+    // Knyt forsøket til kilde-URL-en slik at en avbrutt redirect prøves igjen etter at returen lander.
+    const redirectAttempt = `${page.url.href}\n${redirectTarget}`;
+    if (redirectAttempt === lastRedirectAttempt) return;
+    lastRedirectAttempt = redirectAttempt;
     void goto(resolve(stripBasePath(redirectTarget, base)), { replaceState: true });
   });
 </script>
