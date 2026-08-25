@@ -1,7 +1,7 @@
 import type { BrukerRespons } from "$lib/contracts";
 import { harHandling } from "$lib/domain";
 import type { AppPath, TenantContext } from "$lib/platform/tenant";
-import { buildTenantPath, readSafeReturnPath } from "$lib/platform/tenant";
+import { buildTenantPath, normalizeAppPathname, readSafeReturnPath } from "$lib/platform/tenant";
 
 export type GuardRedirectInput = {
   bruker: BrukerRespons;
@@ -16,7 +16,8 @@ export function resolvePolicyRedirect({
   tenant,
   basePath = "",
 }: GuardRedirectInput): AppPath | null {
-  const currentLeaf = currentUrl.pathname.split("/").filter(Boolean).at(-1) ?? "";
+  const currentLeaf =
+    normalizeAppPathname(currentUrl.pathname).split("/").filter(Boolean).at(-1) ?? "";
   const root = buildTenantPath(tenant, "", basePath);
 
   if (bruker.erSperret) {
@@ -43,7 +44,7 @@ export function resolvePolicyRedirect({
 }
 
 export function requiredCapabilitiesForPath(pathname: string): readonly string[] | null {
-  const normalizedPathname = decodePathname(pathname);
+  const normalizedPathname = normalizeAppPathname(pathname);
   const rules: Array<[RegExp, readonly string[]]> = [
     [/\/arrangement\/?$/, ["arrangement:se"]],
     [/\/admin\/klubb\/?$/, ["klubb:admin"]],
@@ -55,14 +56,6 @@ export function requiredCapabilitiesForPath(pathname: string): readonly string[]
   ];
 
   return rules.find(([pattern]) => pattern.test(normalizedPathname))?.[1] ?? null;
-}
-
-function decodePathname(pathname: string) {
-  try {
-    return decodeURI(pathname);
-  } catch {
-    return pathname;
-  }
 }
 
 export function hasAnyRequiredCapability(

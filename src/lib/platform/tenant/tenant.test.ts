@@ -3,6 +3,7 @@ import {
   buildLoginPath,
   buildTenantPath,
   getCallbackDestination,
+  normalizeAppPathname,
   readSafeReturnPath,
   resolveTenant,
   stripBasePath,
@@ -26,6 +27,17 @@ describe("tenant contract", () => {
     expect(buildTenantPath(buildTenant, "admin/baner", "/banebooking/")).toBe(
       "/banebooking/admin/baner"
     );
+  });
+
+  it("normaliserer browser-paths uten å dekode strukturelle skilletegn", () => {
+    expect(normalizeAppPathname("/askim-tennis/kunngj%C3%B8ring/")).toBe(
+      "/askim-tennis/kunngjøring"
+    );
+    expect(normalizeAppPathname("/admin/ukjent%2Fkunngj%C3%B8ringer")).toBe(
+      "/admin/ukjent%2Fkunngjøringer"
+    );
+    expect(normalizeAppPathname("/ugyldig%E0%A4%A")).toBe("/ugyldig%E0%A4%A");
+    expect(normalizeAppPathname("///")).toBe("/");
   });
 
   it("bevarer et trygt returnTo-mål gjennom login", () => {

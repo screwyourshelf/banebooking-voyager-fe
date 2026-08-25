@@ -63,6 +63,21 @@ export function getCallbackDestination(
   return readSafeReturnPath(returnTo, tenant, basePath) ?? buildTenantPath(tenant, "", basePath);
 }
 
+/**
+ * Normaliserer browserens percent-kodede `URL.pathname` før intern route-sammenligning.
+ * `decodeURI` dekoder teksttegn uten å gjøre kodede skilletegn som `%2F` til nye pathsegmenter.
+ */
+export function normalizeAppPathname(pathname: string) {
+  let decodedPathname = pathname;
+  try {
+    decodedPathname = decodeURI(pathname);
+  } catch {
+    // Ugyldig percent-koding beholdes og kan dermed ikke bli en falsk gyldig route.
+  }
+
+  return decodedPathname.replace(/\/+$/, "") || "/";
+}
+
 /** Fjerner SvelteKit-base path før en intern path sendes gjennom `$app/paths.resolve`. */
 export function stripBasePath(path: AppPath, basePath = ""): AppPath {
   const normalizedBase = normalizePathPart(basePath);

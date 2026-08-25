@@ -43,6 +43,12 @@ describe("session guards", () => {
         bruker({ ulestKunngjøring: allBlocked.ulestKunngjøring })
       )
     ).toBe("/askim-tennis/kunngjøring");
+    expect(
+      redirectFor(
+        "/askim-tennis/kunngjøring",
+        bruker({ ulestKunngjøring: allBlocked.ulestKunngjøring })
+      )
+    ).toBeNull();
     expect(redirectFor("/askim-tennis/bookinger", bruker({ måBekrefteMedlemskap: true }))).toBe(
       "/askim-tennis/bekreft-medlemskap"
     );
@@ -50,6 +56,7 @@ describe("session guards", () => {
 
   it("sender innlogget bruker bort fra en avsluttet guardflate", () => {
     expect(redirectFor("/askim-tennis/sperret", bruker())).toBe("/askim-tennis");
+    expect(redirectFor("/askim-tennis/kunngjøring", bruker())).toBe("/askim-tennis");
   });
 
   it("bruker any-of for brukeradministrasjon og eksakt kapabilitet ellers", () => {

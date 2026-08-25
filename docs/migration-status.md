@@ -31,6 +31,9 @@
 - Lokal utviklingsinnlogging sender backendens eksplisitte `DevelopmentBearer`-scheme. Medlem,
   utvidet bruker og klubbadministrator kan derfor testes mot lokal backend uten Supabase i
   produksjon eller Playwright-spesifikk headeromskriving.
+- Browserens percent-kodede paths normaliseres én gang i tenantplattformen før routes sammenlignes.
+  Norske route-navn fungerer derfor likt i policyguards, kapabilitetsguards og aktiv navigasjon,
+  mens kodede skilletegn som `%2F` fortsatt ikke kan bli falske pathsegmenter.
 - Bookingens schedule-rader har samme kompakte informasjonsgeometri for statiske, handlings- og
   ekspanderbare rader. Den offentlige `CollectionRow`-kontrakten eier tid, status, sekundærlinje,
   ekspanderingsindikator og hurtighandling; bookingfeaturen har ingen lokal styling.
@@ -68,6 +71,18 @@ Lokal utviklingsauth er rettet uten backend- eller produksjonsauthendringer:
   headere og kan derfor ikke maskere forskjellen mellom manuell testing og Playwright
 - tom `204`-respons fra det anonyme brukerendepunktet normaliseres til `null`, slik at Query-cachen
   aldri mottar ugyldig `undefined`
+
+Den obligatoriske kunngjøringsguarden håndterer browser-URL-er med norske tegn:
+
+- tenantplattformens delte pathnormalisering brukes av policyguard, kapabilitetsguard og aktiv
+  navigasjon i stedet for lokale dekodingsvarianter
+- en innlogget bruker med ulest kunngjøring kommer frem til `/kunngjøring` uten å bli stående i
+  redirect-loading, og en avsluttet guardflate sender brukeren tilbake til tenantroten
+- normaliseringen dekoder teksttegn med `decodeURI`, bevarer kodede skilletegn og feiler lukket ved
+  ugyldig percent-koding; kontrakten og begge guardretninger er dekket av regresjonstester
+- implementasjonen og testene ligger i `src/lib/platform/tenant/tenant.ts`,
+  `src/lib/features/session/guard-model.ts`, `src/lib/features/session/navigation-model.ts` og deres
+  samlokaliserte testfiler
 
 Bookingens mobilparitet er rettet gjennom det offentlige UI-laget:
 
@@ -149,7 +164,9 @@ og vente på en konkret produkt- eller vedlikeholdsoppgave; den skal ikke oppret
 | Målrettet auth-/API-regresjon      | 5 testfiler, 15 tester                                                     |
 | Målrettet booking-/UI-regresjon    | 4 testfiler, 40 tester                                                     |
 | Manuell lokal rolleflyt            | Medlem, utvidet bruker og klubbadministrator mot lokal backend             |
-| `npm test`                         | 96 testfiler, 351 tester                                                   |
+| Målrettet path-/guardregresjon     | 3 testfiler, 20 tester                                                     |
+| Manuell lokal kunngjøringsflyt     | Medlemsredirect og hard refresh; korrekt innhold uten konsollfeil          |
+| `npm test`                         | 96 testfiler, 352 tester                                                   |
 | `npm run check`                    | Type, arkitektur, legacy, statisk analyse, design, styling, lint og format |
 | Knip                               | 0 døde filer, pakker, importer, eksporter eller typer                      |
 | Kritiske Playwright-flyter         | 3/3; authflyten dekker alle tre profiler, lokale testdata gjenopprettet    |

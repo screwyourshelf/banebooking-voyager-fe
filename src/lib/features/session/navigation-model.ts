@@ -1,7 +1,12 @@
 import type { BrukerRespons, KlubbRespons } from "$lib/contracts";
 import { formaterRoller } from "$lib/domain";
 import type { AuthState } from "$lib/platform/auth";
-import { buildTenantPath, type AppPath, type TenantContext } from "$lib/platform/tenant";
+import {
+  buildTenantPath,
+  normalizeAppPathname,
+  type AppPath,
+  type TenantContext,
+} from "$lib/platform/tenant";
 import { hasAnyRequiredCapability, requiredCapabilitiesForPath } from "./guard-model";
 import type { SessionQueryStatus } from "./context";
 
@@ -298,14 +303,5 @@ function buildSections(items: AppNavigationItem[]): AppNavigationSection[] {
 }
 
 function pathsEqual(actual: string, expected: string) {
-  const normalize = (value: string) => {
-    let decoded = value;
-    try {
-      decoded = decodeURI(value);
-    } catch {
-      // En ugyldig percent-koding beholdes og kan ikke bli falskt aktiv.
-    }
-    return decoded.replace(/\/+$/, "") || "/";
-  };
-  return normalize(actual) === normalize(expected);
+  return normalizeAppPathname(actual) === normalizeAppPathname(expected);
 }
