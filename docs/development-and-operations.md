@@ -41,12 +41,40 @@ npm test
 npm run check
 ```
 
-`check` kjører Svelte-typekontroll, arkitektur-, legacy- og designsystemgrenser, lint og
-formatkontroll. Før styling lift-and-shift-en er ferdig, validerer designsystemgrensen fortsatt den
-globale CSS-baselinen toveis: aktiv Svelte-anatomi må ha en stylingeier, og CSS-klasser, `data-ui`,
-primitives, slots og tokens uten aktiv konsument avvises. SWP-1 utvider porten med Tailwind-/theme-
-og featurestylingguards; den avtakende overgangsbaselinen og sluttkravene er definert i
+`check` kjører Svelte-typekontroll, arkitektur-, legacy-, statisk analyse- og designsystemgrenser,
+de håndhevende theme-, cascade-, fixture-, produksjonstre- og stylingbaselineportene, lint og
+formatkontroll. Stylingløftet har null legacydiagnostics. Designsystemgrensen validerer aktiv
+Svelte-anatomi, CSS-klasser, `data-ui`, primitives, slots, utilities og tokens toveis, mens den
+separate permanente visualiseringskontrakten bare tillater registrert datadrevet geometri.
+Sluttkravene er definert i
 [`styling-lift-and-shift-plan.md`](./styling-lift-and-shift-plan.md).
+
+### Reproduserbar statisk analyse
+
+Kjør den repoeide død-kode-, eksport-, import- og direkte avhengighetskontrollen med:
+
+```bash
+npm run static-analysis:check
+```
+
+Knip 6.32.2 er eksakt pinnet i `devDependencies`. [`knip.json`](../knip.json) registrerer de 28
+isolerte stylingfixturene og `scripts/test-styling-production-tree-contract.mjs` som eksplisitte
+innganger. Den navngitte kontrollen avviser alle runtimefiler, verdi-exports, pakke-, binary-,
+ulistet- og uoppløst-importfunn. Den godtar bare disse 19 eksakt registrerte, type-only
+transportkontraktene:
+
+| Fil                                 | Beholdte type-exports                                                                                                                                                                                                                                                           |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `src/lib/contracts/arrangement.ts`  | `BaneGruppeForespørsel`, `SlettArrangementForespørsel`, `ArrangementPresentasjonType`, `ArrangementPresentasjon`, `ArrangementSlotRespons`, `ArrangementKonfliktRespons`, `BaneGruppeRespons`, `OffentligArrangementRespons`, `BatchBookingFeilet`, `ErstattArrangementRespons` |
+| `src/lib/contracts/booking-slot.ts` | `BookingSlotRespons`                                                                                                                                                                                                                                                            |
+| `src/lib/contracts/bruker.ts`       | `AksepterVilkårForespørsel`                                                                                                                                                                                                                                                     |
+| `src/lib/contracts/kunngjoring.ts`  | `KunngjøringBekreftelseRespons`                                                                                                                                                                                                                                                 |
+| `src/lib/contracts/statistikk.ts`   | `StatistikkPeriode`, `SammenlignbarBookingstatistikk`, `BookingPerGren`, `BookingPerUkedag`, `BookingToppBruker`, `BookingMedlemsstatistikkPerBookingtype`                                                                                                                      |
+
+Typene bevarer den komplette .NET-transportflaten og brukes enten som deler av andre DTO-er eller
+som foreløpig ukonsumerte endpointkontrakter. De er ikke runtimekode. Allowlisten i
+`scripts/check-static-analysis.mjs` krever nøyaktig samme fil-/navnesett: et nytt funn, en type som
+blir brukt, eller en slettet type krever en eksplisitt avstemming av kontrakt og dokumentasjon.
 
 De kritiske innloggede flytene og de fryste visuelle referansene krever lokal database/backend:
 
@@ -78,8 +106,9 @@ npm run build:github-pages
 - `auth/callback` prerendres; tenant-rutene håndteres av hostfallbacken og klientrouteren.
 
 Før et artefakt publiseres, kjør minst `npm test`, `npm run check`, `npm run test:e2e` og
-`npm run test:e2e:production`, og kontroller `npm audit`. Selve opplastingen til Cloudflare Pages
-eller GitHub Pages er en ekstern endring og skal bare gjøres etter eksplisitt godkjenning.
+`npm run test:e2e:production`, og kontroller `npm audit`. `npm run check` inkluderer den statiske
+analysen over. Selve opplastingen til Cloudflare Pages eller GitHub Pages er en ekstern endring og
+skal bare gjøres etter eksplisitt godkjenning.
 
 Detaljer om testdata og prosesseierskap finnes i [`e2e-harness.md`](./e2e-harness.md). Gjeldende
 route-, fallback- og bundlebevis finnes i

@@ -2,11 +2,13 @@
 
 > **Resultat:** Ikke vellykket
 >
+> **Rettelsesstatus:** SWP-7.1 og SWP-7.2 er fullført; en ny kald SWP-7.3-review gjenstår
+>
 > **Revidert kildecheckpoint:** `e60c8f7` (`refactor(swp-6): remove dead public surface`)
 >
 > **SWP-0 guard-/målebaseline:** `700cd2b` / `85cc31f`
 >
-> **Dato:** 2026-08-24
+> **Dato:** 2026-08-24; rettelsesstatus avstemt 2026-08-25
 
 ## Konklusjon
 
@@ -212,7 +214,7 @@ reviewet; SWP-7.2 må gjøre kontrollen permanent og reproduserbar.
 
 ## Avgrensede rettingscheckpoints
 
-### SWP-7.1 — lukk markup- og offentlig UI-grense
+### SWP-7.1 — lukk markup- og offentlig UI-grense — fullført
 
 1. Etabler én delt typekontrakt som utelater `class` og `style` fra offentlige HTML-attributter,
    og bruk den på de 31 berørte `$lib/ui`-exports uten produkt- eller DOM-endring.
@@ -222,7 +224,11 @@ reviewet; SWP-7.2 må gjøre kontrollen permanent og reproduserbar.
 4. Legg til positive og negative fixtures, mutasjonsprober og typekontrakttester som beviser at
    hver kanal både avvises og tillater legitim semantisk bruk.
 
-### SWP-7.2 — reproduserbar statisk audit og dokumentavstemming
+Checkpointet er fullført uten produkt- eller DOM-endring. Schema 4 klassifiserer kanalene
+fail-closed, det eksakte Icon-unntaket er fixture- og mutasjonsbevist, og alle 31 offentlige
+UI-exports utelater `class` og `style`.
+
+### SWP-7.2 — reproduserbar statisk audit og dokumentavstemming — fullført
 
 1. Pin Knip, sjekk inn config og et navngitt script, registrer fixture- og dynamiske innganger og
    dokumenter de 19 bevisst beholdte transporttypene.
@@ -230,7 +236,13 @@ reviewet; SWP-7.2 må gjøre kontrollen permanent og reproduserbar.
 3. Kjør statisk død-kode-, eksport-, utility-, token- og direkte avhengighetskontroll fra bare
    repoets deklarerte kommandoer.
 
-### SWP-7.3 — ny uavhengig sluttport
+Knip 6.32.2, `knip.json` og `npm run static-analysis:check` er nå repoeide. Fixturene og det
+dynamiske kontrakttestscriptet er eksplisitte innganger, og kontrollen krever nøyaktig de 19
+dokumenterte type-only transportfunnene samtidig som alle runtime-, eksport-, import- og
+pakkefunn avvises. Guard-README, driftshåndbok, produktregler og designsystemprinsipper beskriver
+den faktiske kilden. Full test-, check-, kritisk/visuell E2E- og produksjonsruteport er grønn.
+
+### SWP-7.3 — ny uavhengig sluttport — neste
 
 Start en ny kald `/start` etter SWP-7.1 og SWP-7.2. Les baseline, samlet diff og ferdig kilde på
 nytt; kjør hele test-, check-, E2E-, snapshot-, hostbuild-, bundle- og statisk analyseport. SWP-7

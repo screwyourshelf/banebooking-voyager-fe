@@ -221,11 +221,11 @@ Regler:
 - Vanlige entitetsrader plasserer status ved tittelen.
 - Features bygger ikke badges manuelt inne i tittelen.
 - Eyebrow brukes ikke i listerader.
-- En rad har nøyaktig én interaction: `static`, `open`, `action`, `actions`, `expand` eller
-  `reorder`.
+- En rad har nøyaktig én interaction: `static`, `open`, `action`, `expand` eller `reorder`.
 - `open` brukes når hele raden åpner editor eller side.
 - `expand` brukes når raden viser nye detaljer; redigeringshandlinger ligger i detaljområdet.
-- `action` og `actions` brukes når eksplisitte knapper er selve handlingen.
+- `action` brukes når en eksplisitt knapp er selve handlingen. Flere handlinger hører til
+  `expand`-variantens detaljområde og er ikke en egen radinteraction.
 - Hele sammendragsflaten er trigger for ekspanderbare rader. Hurtighandlinger er separate
   søskenkontroller.
 - En samling har høyst én åpen detaljrad. En forhåndsvalgt rad kan styres fra featurestate, og
