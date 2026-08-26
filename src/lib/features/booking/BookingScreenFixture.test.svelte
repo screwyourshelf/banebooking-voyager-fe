@@ -18,7 +18,7 @@
     defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
   });
   setApiClient({
-    request: <TResponse, TBody = never>(path: string, options?: ApiRequestOptions<TBody>) =>
+    request: <TResponse, TBody = never>(path: string, options: ApiRequestOptions<TBody>) =>
       request<TResponse, TBody>(path, options),
   });
   setAuthContext({

@@ -40,17 +40,22 @@ function createRequest() {
 
 describe("arrangement administration", () => {
   it("viser kapabilitetsstyrt oversikt, editorsteg og har ingen oppdagede a11y-brudd", async () => {
+    const request = createRequest();
     const result = render(AdminFixture, {
-      request: createRequest() as ApiClient["request"],
+      request: request as ApiClient["request"],
     });
 
     expect(
       await screen.findByRole("heading", { level: 1, name: "Administrer arrangementer" })
     ).toBeVisible();
     expect(await screen.findByText("Høstcup")).toBeVisible();
+    expect(request.mock.calls.some(([path]) => path.endsWith("baner"))).toBe(false);
     expect((await axe.run(result.container, axeOptions)).violations).toEqual([]);
 
     await fireEvent.click(screen.getByRole("button", { name: /Rediger Høstcup/ }));
+    await waitFor(() =>
+      expect(request.mock.calls.some(([path]) => path.endsWith("baner"))).toBe(true)
+    );
     const dialog = screen.getByRole("dialog", { name: "Høstcup" });
     expect(within(dialog).getByRole("button", { name: /Informasjon/ })).toHaveAttribute(
       "aria-current",

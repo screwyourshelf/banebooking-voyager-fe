@@ -36,21 +36,31 @@ describe("arrangement-admin endpoints", () => {
     await deleteArrangementBooking(api, "fjord vik", "event/1", "booking/1");
 
     expect(request.mock.calls).toEqual([
-      ["klubb/fjord%20vik/arrangementer", { signal: undefined }],
+      ["klubb/fjord%20vik/arrangementer", { auth: "required", signal: undefined }],
       [
         "klubb/fjord%20vik/arrangement/event%2F1/forhandsvis",
-        { method: "PUT", json: arrangementRequest },
+        { auth: "required", method: "PUT", json: arrangementRequest },
       ],
-      ["klubb/fjord%20vik/arrangement", { method: "POST", json: arrangementRequest }],
+      [
+        "klubb/fjord%20vik/arrangement",
+        { auth: "required", method: "POST", json: arrangementRequest },
+      ],
       [
         "klubb/fjord%20vik/arrangement/event%2F1/metadata",
-        { method: "PATCH", json: { kategori: "Kurs", publisertPåNettsiden: false } },
+        {
+          auth: "required",
+          method: "PATCH",
+          json: { kategori: "Kurs", publisertPåNettsiden: false },
+        },
       ],
       [
         "klubb/fjord%20vik/arrangement/event%2F1/bookinger/batch",
-        expect.objectContaining({ method: "POST" }),
+        expect.objectContaining({ auth: "required", method: "POST" }),
       ],
-      ["klubb/fjord%20vik/arrangement/event%2F1/bookinger/booking%2F1", { method: "DELETE" }],
+      [
+        "klubb/fjord%20vik/arrangement/event%2F1/bookinger/booking%2F1",
+        { auth: "required", method: "DELETE" },
+      ],
     ]);
   });
 });

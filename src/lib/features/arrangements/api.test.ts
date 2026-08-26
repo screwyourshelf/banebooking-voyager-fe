@@ -14,12 +14,12 @@ describe("arrangement API", () => {
     expect(request).toHaveBeenNthCalledWith(
       1,
       "offentlig/klubb/fjord%20vik/arrangementer/visning",
-      { signal }
+      { auth: "none", signal }
     );
     expect(request).toHaveBeenNthCalledWith(
       2,
       "klubb/fjord%20vik/arrangementer?inkluderHistoriske=true",
-      { signal }
+      { auth: "required", signal }
     );
   });
 
@@ -30,6 +30,7 @@ describe("arrangement API", () => {
     await cancelArrangement(api, "fjordvik", "event/1");
 
     expect(request).toHaveBeenCalledWith("klubb/fjordvik/arrangement/event%2F1", {
+      auth: "required",
       method: "DELETE",
     });
   });

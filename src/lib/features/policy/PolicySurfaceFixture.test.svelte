@@ -21,7 +21,7 @@
 
   const queryClient = createAppQueryClient();
   setApiClient({
-    request: <TResponse, TBody = never>(path: string, options?: ApiRequestOptions<TBody>) =>
+    request: <TResponse, TBody = never>(path: string, options: ApiRequestOptions<TBody>) =>
       request<TResponse, TBody>(path, options),
   });
   setTenantContext({ slug: "fjordvik", source: "route" });

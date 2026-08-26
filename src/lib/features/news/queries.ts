@@ -8,6 +8,6 @@ export function newsQueryOptions(api: ApiClient, slug: string) {
     meta: tenantQueryMeta(slug, "news"),
     queryKey: newsQueryKeys.all(slug),
     queryFn: ({ signal }: { signal: AbortSignal }) => getNews(api, slug, signal),
-    staleTime: 60_000,
+    staleTime: 5 * 60_000,
   };
 }

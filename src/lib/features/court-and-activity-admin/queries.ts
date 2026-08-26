@@ -33,7 +33,7 @@ export function adminCourtsQueryOptions(api: ApiClient, slug: string) {
     meta: tenantQueryMeta(slug, "courts"),
     queryKey: courtAndActivityAdminQueryKeys.courts(slug),
     queryFn: ({ signal }: { signal: AbortSignal }) => getAdminCourts(api, slug, signal),
-    staleTime: 60_000,
+    staleTime: 10 * 60_000,
   };
 }
 
@@ -42,7 +42,7 @@ export function adminActivitiesQueryOptions(api: ApiClient, slug: string) {
     meta: tenantQueryMeta(slug, "activities"),
     queryKey: courtAndActivityAdminQueryKeys.activities(slug),
     queryFn: ({ signal }: { signal: AbortSignal }) => getAdminActivities(api, slug, signal),
-    staleTime: 60_000,
+    staleTime: 10 * 60_000,
   };
 }
 

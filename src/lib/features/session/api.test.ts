@@ -12,9 +12,13 @@ describe("session endpoints", () => {
     };
     const request = vi.fn().mockResolvedValue(klubb);
     const api = { request } as unknown as ApiClient;
+    const controller = new AbortController();
 
-    await expect(getKlubb(api, "askim-tennis")).resolves.toBe(klubb);
-    expect(request).toHaveBeenCalledWith("klubb/askim-tennis");
+    await expect(getKlubb(api, "askim-tennis", controller.signal)).resolves.toBe(klubb);
+    expect(request).toHaveBeenCalledWith("klubb/askim-tennis", {
+      auth: "none",
+      signal: controller.signal,
+    });
   });
 
   it("aksepterer aktive vilkår én gang og henter guardbrukeren på nytt", async () => {
@@ -33,13 +37,24 @@ describe("session endpoints", () => {
       .mockResolvedValueOnce(undefined)
       .mockResolvedValueOnce(accepted);
     const api = { request } as unknown as ApiClient;
+    const controller = new AbortController();
 
-    await expect(getBrukerWithCurrentTermsAcceptance(api, "askim-tennis")).resolves.toEqual(
-      accepted
-    );
+    await expect(
+      getBrukerWithCurrentTermsAcceptance(api, "askim-tennis", controller.signal)
+    ).resolves.toEqual(accepted);
+    expect(request).toHaveBeenNthCalledWith(1, "klubb/askim-tennis/bruker", {
+      auth: "required",
+      signal: controller.signal,
+    });
     expect(request).toHaveBeenNthCalledWith(2, "klubb/askim-tennis/bruker/vilkaar", {
+      auth: "required",
       method: "POST",
       json: { versjon: "2026-08-22" },
+      signal: controller.signal,
+    });
+    expect(request).toHaveBeenNthCalledWith(3, "klubb/askim-tennis/bruker", {
+      auth: "required",
+      signal: controller.signal,
     });
     expect(request).toHaveBeenCalledTimes(3);
   });

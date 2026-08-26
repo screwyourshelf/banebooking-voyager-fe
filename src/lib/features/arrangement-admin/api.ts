@@ -20,15 +20,18 @@ function clubPath(slug: string, resource: string) {
 }
 
 export function getAdminArrangements(api: ApiClient, slug: string, signal?: AbortSignal) {
-  return api.request<ArrangementRespons[]>(clubPath(slug, "arrangementer"), { signal });
+  return api.request<ArrangementRespons[]>(clubPath(slug, "arrangementer"), {
+    auth: "required",
+    signal,
+  });
 }
 
 export function getArrangementActivities(api: ApiClient, slug: string, signal?: AbortSignal) {
-  return api.request<GrenRespons[]>(clubPath(slug, "grener"), { signal });
+  return api.request<GrenRespons[]>(clubPath(slug, "grener"), { auth: "required", signal });
 }
 
 export function getArrangementCourts(api: ApiClient, slug: string, signal?: AbortSignal) {
-  return api.request<BaneRespons[]>(clubPath(slug, "baner"), { signal });
+  return api.request<BaneRespons[]>(clubPath(slug, "baner"), { auth: "required", signal });
 }
 
 export function getArrangementBookings(
@@ -39,7 +42,7 @@ export function getArrangementBookings(
 ) {
   return api.request<ArrangementBookingRespons[]>(
     clubPath(slug, `arrangement/${encodeURIComponent(arrangementId)}/bookinger`),
-    { signal }
+    { auth: "required", signal }
   );
 }
 
@@ -50,7 +53,7 @@ export function previewArrangement(
 ) {
   return api.request<ArrangementForhåndsvisningRespons, OpprettArrangementForespørsel>(
     clubPath(slug, "arrangement/forhandsvis"),
-    { method: "POST", json: request }
+    { auth: "required", method: "POST", json: request }
   );
 }
 
@@ -62,7 +65,7 @@ export function previewArrangementEdit(
 ) {
   return api.request<ArrangementForhåndsvisningRespons, OpprettArrangementForespørsel>(
     clubPath(slug, `arrangement/${encodeURIComponent(arrangementId)}/forhandsvis`),
-    { method: "PUT", json: request }
+    { auth: "required", method: "PUT", json: request }
   );
 }
 
@@ -74,6 +77,7 @@ export function createArrangement(
   return api.request<OpprettArrangementRespons, OpprettArrangementForespørsel>(
     clubPath(slug, "arrangement"),
     {
+      auth: "required",
       method: "POST",
       json: request,
     }
@@ -88,14 +92,14 @@ export function updateArrangementMetadata(
 ) {
   return api.request<OppdaterArrangementMetadataRespons, OppdaterArrangementMetadataForespørsel>(
     clubPath(slug, `arrangement/${encodeURIComponent(arrangementId)}/metadata`),
-    { method: "PATCH", json: request }
+    { auth: "required", method: "PATCH", json: request }
   );
 }
 
 export function deleteArrangement(api: ApiClient, slug: string, arrangementId: string) {
   return api.request<SlettArrangementRespons>(
     clubPath(slug, `arrangement/${encodeURIComponent(arrangementId)}`),
-    { method: "DELETE" }
+    { auth: "required", method: "DELETE" }
   );
 }
 
@@ -107,7 +111,7 @@ export function addArrangementBooking(
 ) {
   return api.request<ArrangementBookingRespons, LeggTilArrangementBookingForespørsel>(
     clubPath(slug, `arrangement/${encodeURIComponent(arrangementId)}/bookinger`),
-    { method: "POST", json: request }
+    { auth: "required", method: "POST", json: request }
   );
 }
 
@@ -121,6 +125,7 @@ export function addArrangementBookingsBatch(
     BatchLeggTilArrangementBookingerRespons,
     BatchLeggTilArrangementBookingerForespørsel
   >(clubPath(slug, `arrangement/${encodeURIComponent(arrangementId)}/bookinger/batch`), {
+    auth: "required",
     method: "POST",
     json: request,
   });
@@ -137,6 +142,6 @@ export function deleteArrangementBooking(
       slug,
       `arrangement/${encodeURIComponent(arrangementId)}/bookinger/${encodeURIComponent(bookingId)}`
     ),
-    { method: "DELETE" }
+    { auth: "required", method: "DELETE" }
   );
 }

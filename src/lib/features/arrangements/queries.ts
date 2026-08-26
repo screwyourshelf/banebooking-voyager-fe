@@ -17,7 +17,7 @@ export function arrangementsQueryOptions(
     queryFn: ({ signal }: { signal: AbortSignal }) =>
       getArrangements(api, slug, includeHistorical, authenticated, signal),
     select: sortArrangements,
-    staleTime: 30_000,
+    staleTime: 5 * 60_000,
   };
 }
 

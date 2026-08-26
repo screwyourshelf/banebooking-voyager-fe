@@ -26,14 +26,20 @@ export function getBookingStatistics(
 
   return api.request<BookingstatistikkRespons>(
     clubPath(slug, `statistikk/bookinger?${parameters.toString()}`),
-    { signal }
+    { auth: "required", signal }
   );
 }
 
 export function getStatisticsActivities(api: ApiClient, slug: string, signal?: AbortSignal) {
-  return api.request<GrenRespons[]>(clubPath(slug, "grener?inkluderInaktive=true"), { signal });
+  return api.request<GrenRespons[]>(clubPath(slug, "grener?inkluderInaktive=true"), {
+    auth: "required",
+    signal,
+  });
 }
 
 export function getStatisticsCourts(api: ApiClient, slug: string, signal?: AbortSignal) {
-  return api.request<BaneRespons[]>(clubPath(slug, "baner?inkluderInaktive=true"), { signal });
+  return api.request<BaneRespons[]>(clubPath(slug, "baner?inkluderInaktive=true"), {
+    auth: "required",
+    signal,
+  });
 }

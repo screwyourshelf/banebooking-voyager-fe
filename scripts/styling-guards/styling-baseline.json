@@ -48994,7 +48994,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/arrangement-admin/ArrangementAdminScreen.svelte",
-          "lineCount": 267,
+          "lineCount": 271,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -49354,7 +49354,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/session/SessionDataProvider.svelte",
-          "lineCount": 60,
+          "lineCount": 61,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -80419,17 +80419,17 @@
       "initialJavaScriptAssets": [
         { "asset": "_app/immutable/chunks/BG4X2aRC.js", "gzipBytes": 20699, "rawBytes": 55233 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
+        { "asset": "_app/immutable/chunks/C5uVOy6_.js", "gzipBytes": 11226, "rawBytes": 29273 },
         { "asset": "_app/immutable/chunks/CB3145jA.js", "gzipBytes": 536, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/CIT7X3lM.js", "gzipBytes": 615, "rawBytes": 1148 },
-        { "asset": "_app/immutable/chunks/CJ3AIjmM.js", "gzipBytes": 11227, "rawBytes": 29273 },
         { "asset": "_app/immutable/chunks/DeNejD04.js", "gzipBytes": 731, "rawBytes": 1401 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.g1P3Biz7.js", "gzipBytes": 2508, "rawBytes": 9051 },
-        { "asset": "_app/immutable/entry/start.Ct547zng.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/entry/app.CPcDTjmb.js", "gzipBytes": 2526, "rawBytes": 9097 },
+        { "asset": "_app/immutable/entry/start.Ba9bL8Me.js", "gzipBytes": 92, "rawBytes": 82 },
         { "asset": "_app/immutable/nodes/0.Dqb21u4L.js", "gzipBytes": 430, "rawBytes": 806 }
       ],
-      "initialJavaScriptGzipBytes": 38277,
-      "javaScriptChunkCount": 60,
+      "initialJavaScriptGzipBytes": 38294,
+      "javaScriptChunkCount": 61,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",
         "gzipBytes": 123363,
@@ -80470,17 +80470,17 @@
       "initialJavaScriptAssets": [
         { "asset": "_app/immutable/chunks/BG4X2aRC.js", "gzipBytes": 20699, "rawBytes": 55233 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
-        { "asset": "_app/immutable/chunks/C548J1TJ.js", "gzipBytes": 11235, "rawBytes": 29281 },
         { "asset": "_app/immutable/chunks/CB3145jA.js", "gzipBytes": 536, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/CIT7X3lM.js", "gzipBytes": 624, "rawBytes": 1184 },
         { "asset": "_app/immutable/chunks/DeNejD04.js", "gzipBytes": 731, "rawBytes": 1401 },
+        { "asset": "_app/immutable/chunks/Fd9sZgzL.js", "gzipBytes": 11237, "rawBytes": 29281 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.Dolzs1SN.js", "gzipBytes": 2522, "rawBytes": 9615 },
-        { "asset": "_app/immutable/entry/start.DWhP7lHf.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/entry/app.BxHEXHZd.js", "gzipBytes": 2535, "rawBytes": 9673 },
+        { "asset": "_app/immutable/entry/start.DGgX5gE1.js", "gzipBytes": 92, "rawBytes": 82 },
         { "asset": "_app/immutable/nodes/0.BAlwLI-u.js", "gzipBytes": 440, "rawBytes": 866 }
       ],
-      "initialJavaScriptGzipBytes": 38318,
-      "javaScriptChunkCount": 60,
+      "initialJavaScriptGzipBytes": 38333,
+      "javaScriptChunkCount": 61,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",
         "gzipBytes": 123363,

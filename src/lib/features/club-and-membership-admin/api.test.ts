@@ -32,17 +32,21 @@ describe("club and membership admin API", () => {
     await deactivateMembershipConfirmation(api, "fjord vik");
 
     expect(request).toHaveBeenNthCalledWith(1, "klubb/fjord%20vik", {
+      auth: "required",
       method: "PUT",
       json: clubRequest,
     });
     expect(request).toHaveBeenNthCalledWith(2, "klubb/fjord%20vik/medlemskap/status", {
+      auth: "required",
       signal,
     });
     expect(request).toHaveBeenNthCalledWith(3, "klubb/fjord%20vik/medlemskap/aktiver", {
+      auth: "required",
       method: "POST",
       json: activationRequest,
     });
     expect(request).toHaveBeenNthCalledWith(4, "klubb/fjord%20vik/medlemskap/aktiver", {
+      auth: "required",
       method: "DELETE",
     });
   });

@@ -36,7 +36,7 @@ export function adminArrangementsQueryOptions(api: ApiClient, slug: string, enab
     meta: tenantQueryMeta(slug, "arrangements"),
     queryKey: arrangementAdminQueryKeys.arrangements(slug),
     queryFn: ({ signal }: { signal: AbortSignal }) => getAdminArrangements(api, slug, signal),
-    staleTime: 30_000,
+    staleTime: 5 * 60_000,
   };
 }
 
@@ -46,7 +46,7 @@ export function arrangementActivitiesQueryOptions(api: ApiClient, slug: string, 
     meta: tenantQueryMeta(slug, "activities"),
     queryKey: arrangementAdminQueryKeys.activities(slug),
     queryFn: ({ signal }: { signal: AbortSignal }) => getArrangementActivities(api, slug, signal),
-    staleTime: 60_000,
+    staleTime: 10 * 60_000,
   };
 }
 
@@ -56,7 +56,7 @@ export function arrangementCourtsQueryOptions(api: ApiClient, slug: string, enab
     meta: tenantQueryMeta(slug, "courts"),
     queryKey: arrangementAdminQueryKeys.courts(slug),
     queryFn: ({ signal }: { signal: AbortSignal }) => getArrangementCourts(api, slug, signal),
-    staleTime: 60_000,
+    staleTime: 10 * 60_000,
   };
 }
 

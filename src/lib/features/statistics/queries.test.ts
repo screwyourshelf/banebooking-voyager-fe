@@ -1,6 +1,10 @@
 import { describe, expect, it, vi } from "vitest";
 import type { ApiClient } from "$lib/platform/api";
-import { bookingStatisticsQueryOptions } from "./queries";
+import {
+  bookingStatisticsQueryOptions,
+  statisticsActivitiesQueryOptions,
+  statisticsCourtsQueryOptions,
+} from "./queries";
 
 describe("statistics queries", () => {
   it("beholder forrige resultat mens et nytt filterresultat hentes", () => {
@@ -23,6 +27,23 @@ describe("statistics queries", () => {
       true,
       null,
       null,
+    ]);
+  });
+
+  it("bruker de kanoniske, beskyttede ressursnøklene for filtergrunnlaget", () => {
+    const api = { request: vi.fn() } as ApiClient;
+
+    expect(statisticsActivitiesQueryOptions(api, "fjordvik").queryKey).toEqual([
+      "tenant-resource",
+      { slug: "fjordvik" },
+      "activities",
+      { auth: "required", includeInactive: true },
+    ]);
+    expect(statisticsCourtsQueryOptions(api, "fjordvik").queryKey).toEqual([
+      "tenant-resource",
+      { slug: "fjordvik" },
+      "courts",
+      { auth: "required", includeInactive: true },
     ]);
   });
 });

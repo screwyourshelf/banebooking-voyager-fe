@@ -2,7 +2,7 @@
 
 > **Status:** Aktivt initiativ
 >
-> **Aktiv fase:** Fase 1 — frontend-hardening
+> **Aktiv fase:** Fase 2 — ettermåling og fullstackbeslutning
 
 ## Mål og beslutning
 

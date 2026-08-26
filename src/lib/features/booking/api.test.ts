@@ -23,18 +23,20 @@ describe("booking endpoints", () => {
     expect(request).toHaveBeenNthCalledWith(
       1,
       "klubb/fjord%20vik/booking-bootstrap?dato=2026-08-23",
-      { signal: undefined }
+      { auth: "optional", signal: undefined }
     );
     expect(request).toHaveBeenNthCalledWith(2, "klubb/fjord%20vik/grener", {
+      auth: "optional",
       signal: undefined,
     });
     expect(request).toHaveBeenNthCalledWith(3, "klubb/fjord%20vik/baner", {
+      auth: "optional",
       signal: undefined,
     });
     expect(request).toHaveBeenNthCalledWith(
       4,
       "klubb/fjord%20vik/kalender?baneId=court+%26+1&dato=2026-08-24",
-      { signal: undefined }
+      { auth: "optional", signal: undefined }
     );
   });
 
@@ -54,16 +56,18 @@ describe("booking endpoints", () => {
     await getActiveArrangements(api, "fjordvik", "activity & 1");
 
     expect(request).toHaveBeenNthCalledWith(1, "klubb/fjordvik/bookinger", {
+      auth: "required",
       method: "POST",
       json: booking,
     });
     expect(request).toHaveBeenNthCalledWith(2, "klubb/fjordvik/bookinger/booking%2F1", {
+      auth: "required",
       method: "DELETE",
     });
     expect(request).toHaveBeenNthCalledWith(
       3,
       "klubb/fjordvik/arrangement/aktive?grenId=activity%20%26%201",
-      { signal: undefined }
+      { auth: "optional", signal: undefined }
     );
   });
 });

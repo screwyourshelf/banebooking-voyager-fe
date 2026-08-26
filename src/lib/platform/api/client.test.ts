@@ -10,27 +10,6 @@ function createClient(fetchImplementation: typeof fetch, overrides = {}) {
     onUnauthorized: async () => {},
     ...overrides,
   });
-
-  it("bevarer utviklingsbackenden sitt eksplisitte authscheme", async () => {
-    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(
-      new Response(null, {
-        status: 204,
-      })
-    );
-    const client = createClient(fetchMock, {
-      getAuthorization: async () => ({
-        scheme: "DevelopmentBearer" as const,
-        token: "development-token",
-      }),
-    });
-
-    await expect(client.request("bruker")).resolves.toBeUndefined();
-
-    const [, init] = fetchMock.mock.calls[0];
-    expect(new Headers(init?.headers).get("Authorization")).toBe(
-      "DevelopmentBearer development-token"
-    );
-  });
 }
 
 describe("createApiClient", () => {
@@ -45,6 +24,7 @@ describe("createApiClient", () => {
 
     await expect(
       client.request<{ id: string }, { baneId: string }>("/booking", {
+        auth: "required",
         method: "POST",
         json: { baneId: "bane-1" },
       })
@@ -55,6 +35,47 @@ describe("createApiClient", () => {
     expect(new Headers(init?.headers).get("Authorization")).toBe("Bearer access-token");
     expect(new Headers(init?.headers).get("Content-Type")).toBe("application/json");
     expect(init?.body).toBe(JSON.stringify({ baneId: "bane-1" }));
+  });
+
+  it("bevarer utviklingsbackenden sitt eksplisitte authscheme", async () => {
+    const fetchMock = vi.fn<typeof fetch>().mockResolvedValue(new Response(null, { status: 204 }));
+    const client = createClient(fetchMock, {
+      getAuthorization: async () => ({
+        scheme: "DevelopmentBearer" as const,
+        token: "development-token",
+      }),
+    });
+
+    await expect(client.request("bruker", { auth: "required" })).resolves.toBeUndefined();
+
+    const [, init] = fetchMock.mock.calls[0];
+    expect(new Headers(init?.headers).get("Authorization")).toBe(
+      "DevelopmentBearer development-token"
+    );
+  });
+
+  it("hopper over autharbeid og global 401-håndtering for offentlige requests", async () => {
+    const getAuthorization = vi.fn(async () => ({
+      scheme: "Bearer" as const,
+      token: "skal-ikke-brukes",
+    }));
+    const onUnauthorized = vi.fn(async () => {});
+    const fetchMock = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(new Response(null, { status: 204 }))
+      .mockResolvedValueOnce(new Response(null, { status: 401 }));
+    const client = createClient(fetchMock, { getAuthorization, onUnauthorized });
+
+    await client.request("offentlig", { auth: "none" });
+    await expect(client.request("offentlig-feil", { auth: "none" })).rejects.toMatchObject({
+      status: 401,
+    });
+
+    expect(getAuthorization).not.toHaveBeenCalled();
+    expect(onUnauthorized).not.toHaveBeenCalled();
+    for (const [, init] of fetchMock.mock.calls) {
+      expect(new Headers(init?.headers).has("Authorization")).toBe(false);
+    }
   });
 
   it("normaliserer HTTP-feil uten å lagre responsbody i feilen", async () => {
@@ -68,7 +89,9 @@ describe("createApiClient", () => {
       )
     );
 
-    const error = await client.request("booking").catch((reason: unknown) => reason);
+    const error = await client
+      .request("booking", { auth: "required" })
+      .catch((reason: unknown) => reason);
     expect(error).toEqual(expect.objectContaining({ message: "Banen er opptatt", status: 409 }));
     expect(JSON.stringify(error)).not.toContain("hemmelig");
   });
@@ -81,8 +104,8 @@ describe("createApiClient", () => {
     );
 
     const results = await Promise.allSettled([
-      client.request("bookinger"),
-      client.request("bruker"),
+      client.request("bookinger", { auth: "required" }),
+      client.request("bruker", { auth: "required" }),
     ]);
 
     expect(onUnauthorized).toHaveBeenCalledTimes(1);
@@ -96,7 +119,7 @@ describe("createApiClient", () => {
       { onUnauthorized: async () => Promise.reject(new Error("redirect feilet")) }
     );
 
-    await expect(client.request("bruker")).rejects.toEqual(
+    await expect(client.request("bruker", { auth: "required" })).rejects.toEqual(
       expect.objectContaining({ status: 401, message: "Uautorisert" })
     );
   });
@@ -113,12 +136,13 @@ describe("createApiClient", () => {
     });
     const timedClient = createClient(pendingFetch, { timeoutMs: 1 });
 
-    await expect(timedClient.request("langsom")).rejects.toEqual(
+    await expect(timedClient.request("langsom", { auth: "required" })).rejects.toEqual(
       expect.objectContaining({ code: "timeout" })
     );
 
     const controller = new AbortController();
     const abortedRequest = createClient(pendingFetch, { timeoutMs: 1_000 }).request("avbrutt", {
+      auth: "required",
       signal: controller.signal,
     });
     controller.abort();

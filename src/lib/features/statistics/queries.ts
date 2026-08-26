@@ -25,7 +25,7 @@ export function statisticsActivitiesQueryOptions(api: ApiClient, slug: string) {
     meta: tenantQueryMeta(slug, "activities"),
     queryKey: statisticsQueryKeys.activities(slug),
     queryFn: ({ signal }: { signal: AbortSignal }) => getStatisticsActivities(api, slug, signal),
-    staleTime: 5 * 60_000,
+    staleTime: 10 * 60_000,
   };
 }
 
@@ -34,6 +34,6 @@ export function statisticsCourtsQueryOptions(api: ApiClient, slug: string) {
     meta: tenantQueryMeta(slug, "courts"),
     queryKey: statisticsQueryKeys.courts(slug),
     queryFn: ({ signal }: { signal: AbortSignal }) => getStatisticsCourts(api, slug, signal),
-    staleTime: 5 * 60_000,
+    staleTime: 10 * 60_000,
   };
 }

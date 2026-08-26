@@ -16,12 +16,15 @@ export function getArrangements(
   const path = authenticated
     ? clubPath(slug, `arrangementer${query}`)
     : `offentlig/${clubPath(slug, `arrangementer/visning${query}`)}`;
-  return api.request<ArrangementRespons[]>(path, { signal });
+  return api.request<ArrangementRespons[]>(path, {
+    auth: authenticated ? "required" : "none",
+    signal,
+  });
 }
 
 export function cancelArrangement(api: ApiClient, slug: string, arrangementId: string) {
   return api.request<SlettArrangementRespons>(
     clubPath(slug, `arrangement/${encodeURIComponent(arrangementId)}`),
-    { method: "DELETE" }
+    { auth: "required", method: "DELETE" }
   );
 }

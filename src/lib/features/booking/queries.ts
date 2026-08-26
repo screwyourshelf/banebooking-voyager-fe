@@ -68,7 +68,7 @@ export function bookingSlotsQueryOptions(
     enabled: Boolean(courtId && date),
     initialData,
     placeholderData: keepPreviousData,
-    refetchInterval: 30_000,
+    refetchInterval: 60_000,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: true,
     staleTime: 5_000,
@@ -87,7 +87,7 @@ export function activeArrangementsQueryOptions(
     queryFn: ({ signal }: { signal: AbortSignal }) =>
       getActiveArrangements(api, slug, activityId, signal),
     enabled: enabled && Boolean(activityId),
-    staleTime: 30_000,
+    staleTime: 5 * 60_000,
   };
 }
 

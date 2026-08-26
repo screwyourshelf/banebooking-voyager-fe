@@ -19,7 +19,7 @@ function userPath(slug: string, userId: string, suffix = "") {
 }
 
 export function getAdminUsers(api: ApiClient, slug: string, signal?: AbortSignal) {
-  return api.request<BrukerRespons[]>(usersPath(slug), { signal });
+  return api.request<BrukerRespons[]>(usersPath(slug), { auth: "required", signal });
 }
 
 export function updateAdminUser(
@@ -29,17 +29,21 @@ export function updateAdminUser(
   request: OppdaterBrukerForespørsel
 ) {
   return api.request<void, OppdaterBrukerForespørsel>(userPath(slug, userId), {
+    auth: "required",
     method: "PUT",
     json: request,
   });
 }
 
 export function deleteAdminUser(api: ApiClient, slug: string, userId: string) {
-  return api.request<void>(userPath(slug, userId), { method: "DELETE" });
+  return api.request<void>(userPath(slug, userId), { auth: "required", method: "DELETE" });
 }
 
 export function getUserBlocks(api: ApiClient, slug: string, userId: string, signal?: AbortSignal) {
-  return api.request<BrukerSperrerRespons>(userPath(slug, userId, "sperr"), { signal });
+  return api.request<BrukerSperrerRespons>(userPath(slug, userId, "sperr"), {
+    auth: "required",
+    signal,
+  });
 }
 
 export function blockUser(
@@ -49,6 +53,7 @@ export function blockUser(
   request: SperrBrukerForespørsel
 ) {
   return api.request<SperrBrukerRespons, SperrBrukerForespørsel>(userPath(slug, userId, "sperr"), {
+    auth: "required",
     method: "POST",
     json: request,
   });
@@ -57,6 +62,6 @@ export function blockUser(
 export function revokeUserBlock(api: ApiClient, slug: string, userId: string, blockId: string) {
   return api.request<OpphevSperreRespons>(
     userPath(slug, userId, `sperr/${encodeURIComponent(blockId)}`),
-    { method: "DELETE" }
+    { auth: "required", method: "DELETE" }
   );
 }

@@ -1,5 +1,5 @@
 import type { BookingstatistikkFiltre } from "$lib/contracts";
-import { createTenantQueryKey } from "$lib/platform/query";
+import { createTenantQueryKey, tenantResourceQueryKeys } from "$lib/platform/query";
 
 export const statisticsQueryKeys = {
   all: (slug: string) => createTenantQueryKey("statistics", slug),
@@ -13,6 +13,6 @@ export const statisticsQueryKeys = {
       filters.grenId,
       filters.baneId,
     ] as const,
-  activities: (slug: string) => [...statisticsQueryKeys.all(slug), "activities"] as const,
-  courts: (slug: string) => [...statisticsQueryKeys.all(slug), "courts"] as const,
+  activities: (slug: string) => tenantResourceQueryKeys.activities(slug, true, "required"),
+  courts: (slug: string) => tenantResourceQueryKeys.courts(slug, true, "required"),
 };

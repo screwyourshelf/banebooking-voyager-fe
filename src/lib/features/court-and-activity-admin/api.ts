@@ -14,17 +14,22 @@ function resourcePath(slug: string, resource: string) {
 }
 
 export function getAdminCourts(api: ApiClient, slug: string, signal?: AbortSignal) {
-  return api.request<BaneRespons[]>(resourcePath(slug, "baner?inkluderInaktive=true"), { signal });
+  return api.request<BaneRespons[]>(resourcePath(slug, "baner?inkluderInaktive=true"), {
+    auth: "required",
+    signal,
+  });
 }
 
 export function getAdminActivities(api: ApiClient, slug: string, signal?: AbortSignal) {
   return api.request<GrenRespons[]>(resourcePath(slug, "grener?inkluderInaktive=true"), {
+    auth: "required",
     signal,
   });
 }
 
 export function createCourt(api: ApiClient, slug: string, request: OpprettBaneForespørsel) {
   return api.request<void, OpprettBaneForespørsel>(resourcePath(slug, "baner"), {
+    auth: "required",
     method: "POST",
     json: request,
   });
@@ -38,7 +43,7 @@ export function updateCourt(
 ) {
   return api.request<void, OppdaterBaneForespørsel>(
     resourcePath(slug, `baner/${encodeURIComponent(courtId)}`),
-    { method: "PUT", json: request }
+    { auth: "required", method: "PUT", json: request }
   );
 }
 
@@ -50,12 +55,13 @@ export function updateCourtBookingSettings(
 ) {
   return api.request<void, OppdaterBaneBookingInnstillingerForespørsel>(
     resourcePath(slug, `baner/${encodeURIComponent(courtId)}/booking-innstillinger`),
-    { method: "PUT", json: request }
+    { auth: "required", method: "PUT", json: request }
   );
 }
 
 export function createActivity(api: ApiClient, slug: string, request: OpprettGrenForespørsel) {
   return api.request<void, OpprettGrenForespørsel>(resourcePath(slug, "grener"), {
+    auth: "required",
     method: "POST",
     json: request,
   });
@@ -69,6 +75,6 @@ export function updateActivity(
 ) {
   return api.request<void, OppdaterGrenForespørsel>(
     resourcePath(slug, `grener/${encodeURIComponent(activityId)}`),
-    { method: "PUT", json: request }
+    { auth: "required", method: "PUT", json: request }
   );
 }
