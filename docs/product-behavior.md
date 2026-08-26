@@ -114,8 +114,10 @@ tillatt.
 - Sperret konto kan bare lese sperreinformasjon og kontakte klubben; booking og arrangementhandlinger
   er utilgjengelige.
 - Obligatorisk kunngjøring må leses og bekreftes før ordinære appflater åpnes.
-- Obligatorisk medlemsbekreftelse krever fullt navn og medlemskapstype og lenker til vilkår og
-  klubbens medlemskapsside.
+- Obligatorisk medlemsbekreftelse er en egenerklæring, ikke en automatisk kontroll mot klubbens
+  medlemsregister. Flaten krever brukerens eget fulle navn og medlemskapstypen brukeren er omfattet
+  av, forklarer at familiemedlemmer bekrefter fra hver sin konto, og lenker til vilkår og klubbens
+  medlemskapsside.
 - Alle guardflater skiller mellom avklaring/loading, retrybar brukerdatafeil, blokkert state og
   normal videreføring.
 

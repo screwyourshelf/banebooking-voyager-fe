@@ -78,24 +78,30 @@ describe("protected policy surfaces", () => {
         })
     );
     const { onConfirmed, result } = renderFixture("membership", requestMock);
-    const submit = screen.getByRole("button", { name: "Jeg bekrefter medlemskapet" });
+    expect(screen.getByRole("article", { name: "Medlemskapsbekreftelse" })).toHaveTextContent(
+      "Banebooking er ikke koblet til klubbens medlemsregister"
+    );
+    expect(screen.getByRole("article", { name: "Medlemskapsbekreftelse" })).toHaveTextContent(
+      "Hver person som logger inn, bekrefter fra sin egen konto"
+    );
+    const submit = screen.getByRole("button", { name: "Bekreft og fortsett" });
 
     await fireEvent.click(submit);
     expect(screen.getByText("Skriv inn fullt navn.")).toHaveAttribute("role", "alert");
     expect(screen.getByText("Velg medlemskapstype.")).toHaveAttribute("role", "alert");
-    expect(screen.getByRole("textbox", { name: /Fullt navn/ })).toHaveFocus();
+    expect(screen.getByRole("textbox", { name: "Ditt fulle navn" })).toHaveFocus();
     expect(screen.getByRole("radiogroup", { name: "Medlemskapstype" })).toHaveAttribute(
       "aria-invalid",
       "true"
     );
 
-    await fireEvent.input(screen.getByRole("textbox", { name: /Fullt navn/ }), {
+    await fireEvent.input(screen.getByRole("textbox", { name: "Ditt fulle navn" }), {
       target: { value: "  Ada Lovelace  " },
     });
     await fireEvent.click(screen.getByRole("radio", { name: "Voksen" }));
     await fireEvent.click(submit);
 
-    await waitFor(() => expect(screen.getByRole("button", { name: "Bekrefter …" })).toBeDisabled());
+    await waitFor(() => expect(screen.getByRole("button", { name: "Lagrer …" })).toBeDisabled());
     expect(result.container.querySelector('[data-ui="form"]')).toHaveAttribute("aria-busy", "true");
     await waitFor(() =>
       expect(requestMock).toHaveBeenCalledWith("klubb/fjordvik/bruker/bekreft-medlemskap", {
