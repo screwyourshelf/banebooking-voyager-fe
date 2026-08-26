@@ -20,10 +20,11 @@ effekten mot den låste [`førmålingen`](./performance/baseline-2026-08-26.md).
 
 ## Neste eksakte steg
 
-1. Implementer FE-1 med eksplisitt ressursmatrise for invalidering.
-2. Oppdater arrangementcachen direkte fra autoritative mutasjonssvar og unngå refetch ved feil.
-3. Verifiser invalidasjonsmatrisen med enhetstester og den korte måleharnessen.
-4. Fortsett med FE-2–FE-5 før samlet ti-minutters ettermåling.
+1. Implementer FE-2 ved å fjerne klubbavhengigheten fra brukerqueryen og videresende
+   session-`AbortSignal`.
+2. Implementer eksplisitt authpolicy i FE-3.
+3. Juster kalenderpolling og stabile stale-tider i FE-4/FE-5.
+4. Kjør samlet ti-minutters ettermåling før fullstackomfang velges.
 
 ## Blokkeringer
 

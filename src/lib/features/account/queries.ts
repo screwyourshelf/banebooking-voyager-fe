@@ -1,5 +1,6 @@
 import type { MinBookingRespons, OppdaterProfilForespørsel } from "$lib/contracts";
 import type { ApiClient } from "$lib/platform/api";
+import { tenantQueryMeta } from "$lib/platform/query";
 import type { QueryClient } from "@tanstack/svelte-query";
 import {
   cancelMyBooking,
@@ -20,6 +21,7 @@ type BookingQueriesSnapshot = Array<readonly [readonly unknown[], MinBookingResp
 
 export function myBookingsQueryOptions(api: ApiClient, slug: string, includeHistorical: boolean) {
   return {
+    meta: tenantQueryMeta(slug, "my-bookings"),
     queryKey: accountQueryKeys.myBookingsList(slug, includeHistorical),
     queryFn: ({ signal }: { signal: AbortSignal }) =>
       getMyBookings(api, slug, includeHistorical, signal),

@@ -49354,7 +49354,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/session/SessionDataProvider.svelte",
-          "lineCount": 57,
+          "lineCount": 60,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -80413,22 +80413,22 @@
       "basePath": "/",
       "host": "Cloudflare Pages",
       "initialCssAssets": [
-        { "asset": "_app/immutable/assets/0.GJq9erKa.css", "gzipBytes": 28575, "rawBytes": 190132 }
+        { "asset": "_app/immutable/assets/0.DTivEK-d.css", "gzipBytes": 28528, "rawBytes": 190012 }
       ],
-      "initialCssGzipBytes": 28575,
+      "initialCssGzipBytes": 28528,
       "initialJavaScriptAssets": [
         { "asset": "_app/immutable/chunks/BG4X2aRC.js", "gzipBytes": 20699, "rawBytes": 55233 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/CB3145jA.js", "gzipBytes": 536, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/CIT7X3lM.js", "gzipBytes": 615, "rawBytes": 1148 },
+        { "asset": "_app/immutable/chunks/CJ3AIjmM.js", "gzipBytes": 11227, "rawBytes": 29273 },
         { "asset": "_app/immutable/chunks/DeNejD04.js", "gzipBytes": 731, "rawBytes": 1401 },
-        { "asset": "_app/immutable/chunks/DomEpKHu.js", "gzipBytes": 11226, "rawBytes": 29269 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.6b7z5l69.js", "gzipBytes": 2515, "rawBytes": 9051 },
-        { "asset": "_app/immutable/entry/start.D90jkYZW.js", "gzipBytes": 92, "rawBytes": 82 },
-        { "asset": "_app/immutable/nodes/0.DGAeXFGP.js", "gzipBytes": 430, "rawBytes": 806 }
+        { "asset": "_app/immutable/entry/app.g1P3Biz7.js", "gzipBytes": 2508, "rawBytes": 9051 },
+        { "asset": "_app/immutable/entry/start.Ct547zng.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/nodes/0.Dqb21u4L.js", "gzipBytes": 430, "rawBytes": 806 }
       ],
-      "initialJavaScriptGzipBytes": 38283,
+      "initialJavaScriptGzipBytes": 38277,
       "javaScriptChunkCount": 60,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",
@@ -80464,22 +80464,22 @@
       "basePath": "/banebooking",
       "host": "GitHub Pages",
       "initialCssAssets": [
-        { "asset": "_app/immutable/assets/0.D7r4Jzcx.css", "gzipBytes": 28592, "rawBytes": 190192 }
+        { "asset": "_app/immutable/assets/0.CduXLXNf.css", "gzipBytes": 28546, "rawBytes": 190072 }
       ],
-      "initialCssGzipBytes": 28592,
+      "initialCssGzipBytes": 28546,
       "initialJavaScriptAssets": [
         { "asset": "_app/immutable/chunks/BG4X2aRC.js", "gzipBytes": 20699, "rawBytes": 55233 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
+        { "asset": "_app/immutable/chunks/C548J1TJ.js", "gzipBytes": 11235, "rawBytes": 29281 },
         { "asset": "_app/immutable/chunks/CB3145jA.js", "gzipBytes": 536, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/CIT7X3lM.js", "gzipBytes": 624, "rawBytes": 1184 },
-        { "asset": "_app/immutable/chunks/COsSRBpx.js", "gzipBytes": 11235, "rawBytes": 29285 },
         { "asset": "_app/immutable/chunks/DeNejD04.js", "gzipBytes": 731, "rawBytes": 1401 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.CbBR1HV-.js", "gzipBytes": 2521, "rawBytes": 9615 },
-        { "asset": "_app/immutable/entry/start.DLfLF1Np.js", "gzipBytes": 92, "rawBytes": 82 },
-        { "asset": "_app/immutable/nodes/0.C8JwGQ_o.js", "gzipBytes": 440, "rawBytes": 866 }
+        { "asset": "_app/immutable/entry/app.Dolzs1SN.js", "gzipBytes": 2522, "rawBytes": 9615 },
+        { "asset": "_app/immutable/entry/start.DWhP7lHf.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/nodes/0.BAlwLI-u.js", "gzipBytes": 440, "rawBytes": 866 }
       ],
-      "initialJavaScriptGzipBytes": 38317,
+      "initialJavaScriptGzipBytes": 38318,
       "javaScriptChunkCount": 60,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",

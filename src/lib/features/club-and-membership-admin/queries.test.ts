@@ -1,6 +1,7 @@
 import { QueryClient } from "@tanstack/svelte-query";
 import { describe, expect, it, vi } from "vitest";
 import type { ApiClient } from "$lib/platform/api";
+import { tenantQueryMeta } from "$lib/platform/query";
 import {
   activateMembershipMutationOptions,
   membershipStatusQueryOptions,
@@ -17,7 +18,7 @@ describe("club and membership admin queries", () => {
     ]);
   });
 
-  it("invaliderer hele tenantgrensen etter klubb- og medlemskapsendring", async () => {
+  it("invaliderer bare klubb- og medlemskapsressurser", async () => {
     const request = vi.fn().mockResolvedValue(undefined);
     const api = { request } as unknown as ApiClient;
     const queryClient = new QueryClient();
@@ -30,8 +31,23 @@ describe("club and membership admin queries", () => {
 
     expect(invalidate).toHaveBeenCalledTimes(2);
     const predicate = invalidate.mock.calls[0]?.[0]?.predicate;
-    expect(predicate!({ queryKey: ["klubb", { slug: "fjordvik" }] } as never)).toBe(true);
-    expect(predicate!({ queryKey: ["news", { slug: "fjordvik" }] } as never)).toBe(true);
-    expect(predicate!({ queryKey: ["klubb", { slug: "annen" }] } as never)).toBe(false);
+    expect(
+      predicate!({
+        meta: tenantQueryMeta("fjordvik", "club"),
+        queryKey: ["klubb", { slug: "fjordvik" }],
+      } as never)
+    ).toBe(true);
+    expect(
+      predicate!({
+        meta: tenantQueryMeta("fjordvik", "news"),
+        queryKey: ["news", { slug: "fjordvik" }],
+      } as never)
+    ).toBe(false);
+    expect(
+      predicate!({
+        meta: tenantQueryMeta("annen", "club"),
+        queryKey: ["klubb", { slug: "annen" }],
+      } as never)
+    ).toBe(false);
   });
 });

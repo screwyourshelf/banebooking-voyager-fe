@@ -1,12 +1,13 @@
 import { QueryClient } from "@tanstack/svelte-query";
 import { describe, expect, it, vi } from "vitest";
 import type { ApiClient } from "$lib/platform/api";
+import { tenantQueryMeta } from "$lib/platform/query";
 import { createCourt } from "./admin-test-data";
 import { courtToDraft, toCourtBookingSettingsRequest, toCourtUpdateRequest } from "./model";
 import { saveCourtMutationOptions } from "./queries";
 
 describe("court admin mutations", () => {
-  it("lagrer banedata og overstyringer sekvensielt og invaliderer hele tenantgrensen", async () => {
+  it("lagrer banedata og overstyringer sekvensielt og invaliderer berørte ressurser", async () => {
     const request = vi.fn().mockResolvedValue(undefined);
     const api = { request } as unknown as ApiClient;
     const queryClient = new QueryClient();
@@ -36,7 +37,23 @@ describe("court admin mutations", () => {
     expect(invalidate).toHaveBeenCalledWith({ predicate: expect.any(Function) });
     const predicate = invalidate.mock.calls.at(0)?.[0]?.predicate;
     expect(predicate).toBeTypeOf("function");
-    expect(predicate!({ queryKey: ["booking", { slug: "fjordvik" }] } as never)).toBe(true);
-    expect(predicate!({ queryKey: ["booking", { slug: "annen" }] } as never)).toBe(false);
+    expect(
+      predicate!({
+        meta: tenantQueryMeta("fjordvik", "booking-slots"),
+        queryKey: ["booking", { slug: "fjordvik" }],
+      } as never)
+    ).toBe(true);
+    expect(
+      predicate!({
+        meta: tenantQueryMeta("fjordvik", "user"),
+        queryKey: ["session", { slug: "fjordvik" }],
+      } as never)
+    ).toBe(false);
+    expect(
+      predicate!({
+        meta: tenantQueryMeta("annen", "courts"),
+        queryKey: ["court-admin", { slug: "annen" }],
+      } as never)
+    ).toBe(false);
   });
 });

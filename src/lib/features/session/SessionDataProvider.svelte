@@ -3,6 +3,7 @@
   import type { Snippet } from "svelte";
   import { getApiClient } from "$lib/platform/api";
   import { getAuthContext } from "$lib/platform/auth";
+  import { tenantQueryMeta } from "$lib/platform/query";
   import { getTenantContext } from "$lib/platform/tenant";
   import { getBrukerWithCurrentTermsAcceptance, getKlubb } from "./api";
   import { setSessionDataContext, type SessionDataContext } from "./context";
@@ -16,11 +17,13 @@
   const queryClient = useQueryClient();
 
   const klubbQuery = createQuery(() => ({
+    meta: tenantQueryMeta(tenant.slug, "club"),
     queryKey: sessionQueryKeys.klubb(tenant.slug),
     queryFn: () => getKlubb(api, tenant.slug),
   }));
 
   const brukerQuery = createQuery(() => ({
+    meta: tenantQueryMeta(tenant.slug, "user"),
     queryKey: sessionQueryKeys.bruker(tenant.slug),
     queryFn: () => getBrukerWithCurrentTermsAcceptance(api, tenant.slug),
     enabled: auth.state.status === "authenticated" && klubbQuery.isSuccess,

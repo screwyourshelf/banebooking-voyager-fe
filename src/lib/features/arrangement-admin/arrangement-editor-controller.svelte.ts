@@ -292,14 +292,17 @@ export function createArrangementEditorController(input: ArrangementEditorInput)
 
   async function deleteBooking(booking: LocalBooking) {
     if (booking.source === "existing" && booking.externalId) {
-      await deleteBookingMutation.mutateAsync(booking.externalId);
+      await deleteBookingMutation.mutateAsync({ bookingId: booking.externalId });
     }
     bookings = bookings.filter((candidate) => candidate.id !== booking.id);
   }
 
   async function saveBooking(original: LocalBooking, updated: LocalBooking) {
     if (original.source === "existing" && original.externalId) {
-      await deleteBookingMutation.mutateAsync(original.externalId);
+      await deleteBookingMutation.mutateAsync({
+        bookingId: original.externalId,
+        invalidateDerived: false,
+      });
       await addBookingMutation.mutateAsync(toBookingRequest(updated));
       bookings = bookings.filter((booking) => booking.id !== original.id);
       return;

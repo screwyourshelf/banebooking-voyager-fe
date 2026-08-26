@@ -1,6 +1,7 @@
 import type { QueryClient } from "@tanstack/svelte-query";
 import type { OppdaterBrukerForespørsel, SperrBrukerForespørsel } from "$lib/contracts";
 import type { ApiClient } from "$lib/platform/api";
+import { tenantQueryMeta } from "$lib/platform/query";
 import {
   blockUser,
   deleteAdminUser,
@@ -13,6 +14,7 @@ import { userAdminQueryKeys } from "./query-keys";
 
 export function adminUsersQueryOptions(api: ApiClient, slug: string) {
   return {
+    meta: tenantQueryMeta(slug, "users"),
     queryKey: userAdminQueryKeys.users(slug),
     queryFn: ({ signal }: { signal: AbortSignal }) => getAdminUsers(api, slug, signal),
     staleTime: 30_000,
@@ -26,6 +28,7 @@ export function userBlocksQueryOptions(
   enabled: boolean
 ) {
   return {
+    meta: tenantQueryMeta(slug, "user-blocks"),
     queryKey: userAdminQueryKeys.blocks(slug, userId),
     queryFn: ({ signal }: { signal: AbortSignal }) => getUserBlocks(api, slug, userId, signal),
     enabled: enabled && Boolean(userId),
