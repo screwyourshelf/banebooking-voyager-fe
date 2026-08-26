@@ -189,12 +189,7 @@ async function fulfillClubRequest(route: Route, options: StylingReferenceFixture
     return;
   }
   if (resource === "/booking-bootstrap") {
-    await route.fulfill({
-      json: {
-        ...bookingBootstrap,
-        bruker: options.profile ? createSessionUser(options) : null,
-      },
-    });
+    await route.fulfill({ json: bookingBootstrap });
     return;
   }
   if (resource === "/kalender") {

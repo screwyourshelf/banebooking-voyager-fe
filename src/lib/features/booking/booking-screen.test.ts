@@ -93,13 +93,6 @@ describe("booking screen", () => {
 
   it("booker en kapabilitetsstyrt slot og sender eksakt request", async () => {
     const bootstrap = createBootstrap({
-      bruker: {
-        id: "user-1",
-        epost: "ada@example.no",
-        visningsnavn: "Ada",
-        roller: ["Medlem"],
-        kapabiliteter: [],
-      },
       kalenderSlots: [
         createSlot({
           dato: createBootstrap().dato,

@@ -7,6 +7,7 @@ import {
   addArrangementBookingMutationOptions,
   addArrangementBookingsBatchMutationOptions,
   deleteArrangementBookingMutationOptions,
+  updateArrangementBookingMutationOptions,
   updateArrangementMetadataMutationOptions,
 } from "./queries";
 import { arrangementAdminQueryKeys } from "./query-keys";
@@ -123,24 +124,28 @@ describe("arrangement admin cache updates", () => {
     ).toBe(false);
   });
 
-  it("kan utsette avledet invalidasjon under en delete-post-redigering", async () => {
+  it("erstatter en oppdatert booking direkte og invaliderer avledede ressurser én gang", async () => {
     const { invalidate, queryClient } = createClient();
     const key = arrangementAdminQueryKeys.bookings("fjordvik", arrangement.id);
     queryClient.setQueryData(key, [booking]);
-    const options = deleteArrangementBookingMutationOptions(
+    const options = updateArrangementBookingMutationOptions(
       fakeApi(),
       queryClient,
       "fjordvik",
       arrangement.id
     );
+    const updated = {
+      ...booking,
+      baneId: "court-2",
+      baneNavn: "Bane 2",
+      startTid: "12:00",
+      sluttTid: "13:00",
+    };
 
-    await options.onSuccess(undefined, {
-      bookingId: booking.bookingId,
-      invalidateDerived: false,
-    });
+    await options.onSuccess(updated);
 
-    expect(queryClient.getQueryData(key)).toEqual([]);
-    expect(invalidate).not.toHaveBeenCalled();
+    expect(queryClient.getQueryData(key)).toEqual([updated]);
+    expect(invalidate).toHaveBeenCalledTimes(1);
     expect(options).not.toHaveProperty("onSettled");
   });
 
@@ -155,7 +160,7 @@ describe("arrangement admin cache updates", () => {
       arrangement.id
     );
 
-    await options.onSuccess(undefined, { bookingId: booking.bookingId });
+    await options.onSuccess(undefined, booking.bookingId);
 
     expect(queryClient.getQueryData(key)).toEqual([]);
     expect(invalidate).toHaveBeenCalledTimes(1);

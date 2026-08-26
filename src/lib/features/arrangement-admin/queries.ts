@@ -21,13 +21,14 @@ import {
   getArrangementCourts,
   previewArrangement,
   previewArrangementEdit,
+  updateArrangementBooking,
   updateArrangementMetadata,
 } from "./api";
 import { arrangementAdminQueryKeys } from "./query-keys";
 
-export type DeleteArrangementBookingVariables = {
+export type UpdateArrangementBookingVariables = {
   bookingId: string;
-  invalidateDerived?: boolean;
+  request: LeggTilArrangementBookingForespørsel;
 };
 
 export function adminArrangementsQueryOptions(api: ApiClient, slug: string, enabled = true) {
@@ -196,17 +197,35 @@ export function deleteArrangementBookingMutationOptions(
   arrangementId: string
 ) {
   return {
-    mutationFn: ({ bookingId }: DeleteArrangementBookingVariables) =>
+    mutationFn: (bookingId: string) =>
       deleteArrangementBooking(api, slug, arrangementId, bookingId),
-    onSuccess: (
-      _result: void,
-      { bookingId, invalidateDerived = true }: DeleteArrangementBookingVariables
-    ) => {
+    onSuccess: (_result: void, bookingId: string) => {
       queryClient.setQueryData<ArrangementBookingRespons[]>(
         arrangementAdminQueryKeys.bookings(slug, arrangementId),
         (bookings) => bookings?.filter((booking) => booking.bookingId !== bookingId)
       );
-      if (invalidateDerived) return invalidateArrangementDerivedResources(queryClient, slug);
+      return invalidateArrangementDerivedResources(queryClient, slug);
+    },
+    retry: false,
+  };
+}
+
+export function updateArrangementBookingMutationOptions(
+  api: ApiClient,
+  queryClient: QueryClient,
+  slug: string,
+  arrangementId: string
+) {
+  return {
+    mutationFn: ({ bookingId, request }: UpdateArrangementBookingVariables) =>
+      updateArrangementBooking(api, slug, arrangementId, bookingId, request),
+    onSuccess: (updated: ArrangementBookingRespons) => {
+      queryClient.setQueryData<ArrangementBookingRespons[]>(
+        arrangementAdminQueryKeys.bookings(slug, arrangementId),
+        (bookings) =>
+          bookings?.map((booking) => (booking.bookingId === updated.bookingId ? updated : booking))
+      );
+      return invalidateArrangementDerivedResources(queryClient, slug);
     },
     retry: false,
   };

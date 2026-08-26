@@ -6,6 +6,7 @@ import {
   deleteArrangementBooking,
   getAdminArrangements,
   previewArrangementEdit,
+  updateArrangementBooking,
   updateArrangementMetadata,
 } from "./api";
 
@@ -33,6 +34,13 @@ describe("arrangement-admin endpoints", () => {
     await addArrangementBookingsBatch(api, "fjord vik", "event/1", {
       bookinger: [{ baneId: "court", dato: "2026-08-24", sluttTid: "09:00", startTid: "08:00" }],
     });
+    const bookingRequest = {
+      baneId: "court",
+      dato: "2026-08-25",
+      sluttTid: "10:00",
+      startTid: "09:00",
+    };
+    await updateArrangementBooking(api, "fjord vik", "event/1", "booking/1", bookingRequest);
     await deleteArrangementBooking(api, "fjord vik", "event/1", "booking/1");
 
     expect(request.mock.calls).toEqual([
@@ -56,6 +64,10 @@ describe("arrangement-admin endpoints", () => {
       [
         "klubb/fjord%20vik/arrangement/event%2F1/bookinger/batch",
         expect.objectContaining({ auth: "required", method: "POST" }),
+      ],
+      [
+        "klubb/fjord%20vik/arrangement/event%2F1/bookinger/booking%2F1",
+        { auth: "required", method: "PUT", json: bookingRequest },
       ],
       [
         "klubb/fjord%20vik/arrangement/event%2F1/bookinger/booking%2F1",

@@ -115,6 +115,22 @@ export function addArrangementBooking(
   );
 }
 
+export function updateArrangementBooking(
+  api: ApiClient,
+  slug: string,
+  arrangementId: string,
+  bookingId: string,
+  request: LeggTilArrangementBookingForespørsel
+) {
+  return api.request<ArrangementBookingRespons, LeggTilArrangementBookingForespørsel>(
+    clubPath(
+      slug,
+      `arrangement/${encodeURIComponent(arrangementId)}/bookinger/${encodeURIComponent(bookingId)}`
+    ),
+    { auth: "required", method: "PUT", json: request }
+  );
+}
+
 export function addArrangementBookingsBatch(
   api: ApiClient,
   slug: string,

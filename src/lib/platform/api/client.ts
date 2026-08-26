@@ -14,7 +14,7 @@ export type ApiAuthorization = {
   token: string;
 };
 
-export type ApiAuthPolicy = "none" | "optional" | "required";
+type ApiAuthPolicy = "none" | "optional" | "required";
 
 export type ApiRequestOptions<TBody = unknown> = {
   auth: ApiAuthPolicy;

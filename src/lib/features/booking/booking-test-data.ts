@@ -68,8 +68,6 @@ export function createBootstrap(
   const activity = createActivity();
   const court = createCourt();
   return {
-    klubb: { slug: "fjordvik", navn: "Fjordvik Tennisklubb", feedSynligAntallDager: 30 },
-    bruker: null,
     grener: [activity],
     baner: [court],
     valgtGrenId: activity.id,

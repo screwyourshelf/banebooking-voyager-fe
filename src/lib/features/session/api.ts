@@ -21,15 +21,12 @@ export async function getBrukerWithCurrentTermsAcceptance(
     null;
 
   if (bruker && !bruker.vilkårAkseptertDato) {
-    await api.request<void, AksepterVilkårForespørsel>(`${path}/vilkaar`, {
+    bruker = await api.request<BrukerRespons, AksepterVilkårForespørsel>(`${path}/vilkaar`, {
       method: "POST",
       auth: "required",
       json: { versjon: AKTIV_VILKAAR.versjon },
       signal,
     });
-    bruker =
-      (await api.request<BrukerRespons | null | undefined>(path, { auth: "required", signal })) ??
-      null;
   }
 
   return bruker;

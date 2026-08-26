@@ -32,6 +32,7 @@ import {
   deleteArrangementBookingMutationOptions,
   deleteArrangementMutationOptions,
   previewArrangementMutationOptions,
+  updateArrangementBookingMutationOptions,
   updateArrangementMetadataMutationOptions,
 } from "./queries";
 
@@ -94,6 +95,9 @@ export function createArrangementEditorController(input: ArrangementEditorInput)
   const deleteBookingMutation = createSvelteMutation(() =>
     deleteArrangementBookingMutationOptions(api, queryClient, tenant.slug, arrangementId)
   );
+  const updateBookingMutation = createSvelteMutation(() =>
+    updateArrangementBookingMutationOptions(api, queryClient, tenant.slug, arrangementId)
+  );
 
   let synchronizedArrangementId = $state<string | undefined>();
   let initialized = $state(false);
@@ -127,7 +131,8 @@ export function createArrangementEditorController(input: ArrangementEditorInput)
       deleteMutation.isPending ||
       addBookingMutation.isPending ||
       addBatchMutation.isPending ||
-      deleteBookingMutation.isPending
+      deleteBookingMutation.isPending ||
+      updateBookingMutation.isPending
   );
 
   $effect(() => input.onBusyChange?.(busy));
@@ -292,19 +297,18 @@ export function createArrangementEditorController(input: ArrangementEditorInput)
 
   async function deleteBooking(booking: LocalBooking) {
     if (booking.source === "existing" && booking.externalId) {
-      await deleteBookingMutation.mutateAsync({ bookingId: booking.externalId });
+      await deleteBookingMutation.mutateAsync(booking.externalId);
     }
     bookings = bookings.filter((candidate) => candidate.id !== booking.id);
   }
 
   async function saveBooking(original: LocalBooking, updated: LocalBooking) {
     if (original.source === "existing" && original.externalId) {
-      await deleteBookingMutation.mutateAsync({
+      await updateBookingMutation.mutateAsync({
         bookingId: original.externalId,
-        invalidateDerived: false,
+        request: toBookingRequest(updated),
       });
-      await addBookingMutation.mutateAsync(toBookingRequest(updated));
-      bookings = bookings.filter((booking) => booking.id !== original.id);
+      bookings = bookings.map((booking) => (booking.id === original.id ? updated : booking));
       return;
     }
     const next = bookings.map((booking) => (booking.id === original.id ? updated : booking));
@@ -332,6 +336,7 @@ export function createArrangementEditorController(input: ArrangementEditorInput)
     deleteMutation,
     metadataMutation,
     previewMutation,
+    updateBookingMutation,
     get bookingDialogOpen() {
       return bookingDialogOpen;
     },
