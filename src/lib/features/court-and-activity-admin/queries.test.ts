@@ -28,8 +28,12 @@ describe("court admin mutations", () => {
     ]);
   });
 
-  it("lagrer banedata og overstyringer sekvensielt og invaliderer berørte ressurser", async () => {
-    const request = vi.fn().mockResolvedValue(undefined);
+  it("starter banedata og overstyringer parallelt og invaliderer etter begge", async () => {
+    let resolveRequests!: () => void;
+    const pendingRequest = new Promise<void>((resolve) => {
+      resolveRequests = resolve;
+    });
+    const request = vi.fn().mockReturnValue(pendingRequest);
     const api = { request } as unknown as ApiClient;
     const queryClient = new QueryClient();
     const invalidate = vi.spyOn(queryClient, "invalidateQueries");
@@ -37,13 +41,17 @@ describe("court admin mutations", () => {
     const draft = { ...courtToDraft(court), name: "Bane A", overrides: null };
     const options = saveCourtMutationOptions(api, queryClient, "fjordvik");
 
-    await options.mutationFn({
+    const save = options.mutationFn({
       bookingSettingsChanged: true,
       bookingSettingsRequest: toCourtBookingSettingsRequest(draft.overrides),
       courtChanged: true,
       courtId: court.id,
       courtRequest: toCourtUpdateRequest(court, draft),
     });
+
+    expect(request).toHaveBeenCalledTimes(2);
+    resolveRequests();
+    await save;
     await options.onSuccess();
 
     expect(request).toHaveBeenNthCalledWith(1, "klubb/fjordvik/baner/court-1", {
