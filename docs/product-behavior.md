@@ -109,6 +109,7 @@ tillatt.
 ### Auth, policy, feil og guards
 
 - Login bevarer tiltenkt mål og viser egne sending-, verifisering-, fullført- og feiltilstander.
+  Det sekssifrede kodefeltet annonseres som en engangskode til nettleserens native autofyll.
 - Vilkår er offentlig leseinnhold tilpasset klubbdata. Første innloggede brukerlast uten registrert
   aksept poster aktiv vilkårsversjon og bruker den oppdaterte brukerprofilen fra mutasjonssvaret.
 - Sperret konto kan bare lese sperreinformasjon og kontakte klubben; booking og arrangementhandlinger

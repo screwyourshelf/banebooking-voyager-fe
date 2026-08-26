@@ -6,6 +6,7 @@ import {
 } from "$lib/platform/storage/browser-storage.client";
 
 const APP_STARTED_EVENT = "banebooking:app-started";
+const ASSET_RECOVERY_ATTRIBUTE = "data-banebooking-asset-recovery";
 
 let observability: Observability = noopObservability;
 let initialization: Promise<void> | null = null;
@@ -49,6 +50,13 @@ export function createBrowserStorageErrorReporter(target: Observability) {
 
 export function getBrowserObservability() {
   return observability;
+}
+
+export function isBrowserAssetRecoveryActive() {
+  return (
+    typeof document !== "undefined" &&
+    document.documentElement.hasAttribute(ASSET_RECOVERY_ATTRIBUTE)
+  );
 }
 
 export function completeBrowserAppStartup() {

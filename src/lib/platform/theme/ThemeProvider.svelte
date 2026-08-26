@@ -31,8 +31,7 @@
   onMount(() => {
     let active = true;
 
-    // Asset recovery may intentionally suppress a failed import and resolve without a module.
-    // Keep this continuation inert while recovery replaces the current document.
+    // Keep the module continuation defensive while asset recovery replaces the document.
     void import("./browser-theme.client").then((browserTheme) => {
       if (!active || !browserTheme) return;
 

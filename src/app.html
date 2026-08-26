@@ -75,6 +75,7 @@
     <script>
       (() => {
         const appStartedEvent = "banebooking:app-started";
+        const assetRecoveryAttribute = "data-banebooking-asset-recovery";
         const recoveryStorageKey = "banebooking:asset-recovery-at";
         const recoveryQueryParameter = "_app_reload";
         const recoveryCooldownMs = 60_000;
@@ -160,9 +161,30 @@
           }
         }
 
+        function getRecoverySurface() {
+          const existingBoot = document.getElementById("boot");
+          if (existingBoot) return existingBoot;
+
+          const boot = document.createElement("div");
+          boot.id = "boot";
+          boot.setAttribute("role", "status");
+          boot.setAttribute("aria-label", "Laster Banebooking");
+          document.body.prepend(boot);
+          return boot;
+        }
+
+        function showRecoveryLoader() {
+          const boot = getRecoverySurface();
+          if (boot.childElementCount > 0) return;
+
+          const loader = document.createElement("div");
+          loader.dataset.bootPart = "loader";
+          boot.append(loader);
+        }
+
         function showRecoveryMessage() {
-          const boot = document.getElementById("boot");
-          if (!boot || boot.querySelector('[data-boot-part="recovery"]')) return;
+          const boot = getRecoverySurface();
+          if (boot.querySelector('[data-boot-part="recovery"]')) return;
 
           const content = document.createElement("div");
           content.dataset.bootPart = "recovery";
@@ -187,8 +209,10 @@
         function recoverFromAssetError() {
           if (recoveryStarted) return;
           recoveryStarted = true;
+          document.documentElement.setAttribute(assetRecoveryAttribute, "true");
 
           if (canRecoverAutomatically()) {
+            showRecoveryLoader();
             void reloadLatestVersion();
           } else {
             showRecoveryMessage();
@@ -207,8 +231,9 @@
         );
 
         // Vite dokumenterer hendelsen for utdaterte chunks etter en ny deploy.
-        window.addEventListener("vite:preloadError", (event) => {
-          event.preventDefault();
+        // Feilen må fortsette som en avvist import; kansellering får Vite til å returnere
+        // undefined til SvelteKit, som deretter feiler på en manglende routemodul.
+        window.addEventListener("vite:preloadError", () => {
           recoverFromAssetError();
         });
 

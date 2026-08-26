@@ -31,7 +31,7 @@ describe("SvelteKit asset recovery", () => {
     expect(dom.window.clearTimeout).toHaveBeenCalled();
   });
 
-  it("avbryter Vite-feilen og tilbyr origin-sikker recovery innen cooldown", async () => {
+  it("bevarer Vite-feilen og tilbyr origin-sikker recovery innen cooldown", async () => {
     const { dom } = createRecoveryDocument(
       `https://booking.example.test/askim?_app_reload=${Date.now()}`
     );
@@ -51,7 +51,10 @@ describe("SvelteKit asset recovery", () => {
     const preloadError = new dom.window.CustomEvent("vite:preloadError", { cancelable: true });
     dom.window.dispatchEvent(preloadError);
 
-    expect(preloadError.defaultPrevented).toBe(true);
+    expect(preloadError.defaultPrevented).toBe(false);
+    expect(
+      dom.window.document.documentElement.getAttribute("data-banebooking-asset-recovery")
+    ).toBe("true");
     expect(fetch).not.toHaveBeenCalled();
     expect(dom.window.document.querySelector("h1")?.textContent).toBe(
       "Siden trenger en ny innlasting"
@@ -96,6 +99,25 @@ describe("SvelteKit asset recovery", () => {
       "https://booking.example.test/_app/shared.js",
       "https://booking.example.test/_app/start.js",
     ]);
+  });
+
+  it("gjenoppretter recoveryflaten når en utdatert route feiler etter appstart", () => {
+    const { dom } = createRecoveryDocument(
+      `https://booking.example.test/askim?_app_reload=${Date.now()}`
+    );
+    Object.defineProperty(dom.window, "fetch", { value: vi.fn(), configurable: true });
+    dom.window.eval(recoveryScript);
+    dom.window.dispatchEvent(new dom.window.Event("banebooking:app-started"));
+
+    expect(dom.window.document.getElementById("boot")).toBeNull();
+
+    const preloadError = new dom.window.CustomEvent("vite:preloadError", { cancelable: true });
+    dom.window.dispatchEvent(preloadError);
+
+    expect(preloadError.defaultPrevented).toBe(false);
+    expect(dom.window.document.querySelector("#boot h1")?.textContent).toBe(
+      "Siden trenger en ny innlasting"
+    );
   });
 
   it("tilbyr recoverymelding når oppstarten varer for lenge", () => {
