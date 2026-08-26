@@ -17,9 +17,9 @@ describe("announcement admin API", () => {
     await deactivateAnnouncement(api, "fjord vik", "announcement/id");
 
     expect(request.mock.calls).toEqual([
-      ["klubb/fjord%20vik/kunngjøringer/aktiv", { signal: undefined }],
-      ["klubb/fjord%20vik/kunngjøringer", { method: "POST", json: body }],
-      ["klubb/fjord%20vik/kunngjøringer/announcement%2Fid", { method: "DELETE" }],
+      ["klubb/fjord%20vik/kunngjøringer/aktiv", { auth: "required", signal: undefined }],
+      ["klubb/fjord%20vik/kunngjøringer", { auth: "required", method: "POST", json: body }],
+      ["klubb/fjord%20vik/kunngjøringer/announcement%2Fid", { auth: "required", method: "DELETE" }],
     ]);
   });
 });

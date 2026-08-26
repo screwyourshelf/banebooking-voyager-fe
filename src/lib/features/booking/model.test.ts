@@ -83,6 +83,23 @@ describe("booking slot presentation", () => {
     });
   });
 
+  it("viser ikke passerte, ledige tider som booket", () => {
+    expect(getBookingSlotPresentation(createSlot({ erPassert: true }), true)).toMatchObject({
+      status: { label: "Passert", tone: "past" },
+      title: undefined,
+    });
+
+    expect(
+      getBookingSlotPresentation(
+        createSlot({ bookingId: "booking-1", booketAv: "spiller@example.no", erPassert: true }),
+        true
+      )
+    ).toMatchObject({
+      status: { label: "Passert", tone: "past" },
+      title: "spiller@example.no",
+    });
+  });
+
   it("grupperer fler-slotsbookinger og filtrerer passerte tider bare i dag", () => {
     const slots = [
       createSlot({ bookingId: "booking-1", erPassert: true }),

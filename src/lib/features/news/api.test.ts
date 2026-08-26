@@ -10,6 +10,6 @@ describe("news API", () => {
 
     await getNews(api, "fjord vik", signal);
 
-    expect(request).toHaveBeenCalledWith("klubb/fjord%20vik/feed", { signal });
+    expect(request).toHaveBeenCalledWith("klubb/fjord%20vik/feed", { auth: "none", signal });
   });
 });

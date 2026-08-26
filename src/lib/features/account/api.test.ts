@@ -18,13 +18,17 @@ describe("account API", () => {
     await getMyBookings(api, "fjord vik", true, signal);
     await cancelMyBooking(api, "fjord vik", "booking/1");
 
-    expect(request).toHaveBeenNthCalledWith(1, "klubb/fjord%20vik/bookinger/mine", { signal });
+    expect(request).toHaveBeenNthCalledWith(1, "klubb/fjord%20vik/bookinger/mine", {
+      auth: "required",
+      signal,
+    });
     expect(request).toHaveBeenNthCalledWith(
       2,
       "klubb/fjord%20vik/bookinger/mine?inkluderHistoriske=true",
-      { signal }
+      { auth: "required", signal }
     );
     expect(request).toHaveBeenNthCalledWith(3, "klubb/fjord%20vik/bookinger/booking%2F1", {
+      auth: "required",
       method: "DELETE",
     });
   });
@@ -38,11 +42,15 @@ describe("account API", () => {
     await deleteMyAccount(api, "fjordvik");
 
     expect(request).toHaveBeenNthCalledWith(1, "klubb/fjordvik/bruker/meg", {
+      auth: "required",
       method: "PATCH",
       json: { visningsnavn: "Ada" },
     });
-    expect(request).toHaveBeenNthCalledWith(2, "klubb/fjordvik/bruker/meg/egen-data");
+    expect(request).toHaveBeenNthCalledWith(2, "klubb/fjordvik/bruker/meg/egen-data", {
+      auth: "required",
+    });
     expect(request).toHaveBeenNthCalledWith(3, "klubb/fjordvik/bruker/meg", {
+      auth: "required",
       method: "DELETE",
     });
   });

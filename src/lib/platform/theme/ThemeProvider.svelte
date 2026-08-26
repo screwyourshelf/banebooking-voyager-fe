@@ -31,19 +31,19 @@
   onMount(() => {
     let active = true;
 
-    void import("./browser-theme.client").then(
-      ({ applyTheme, readStoredTheme, storeAndApplyTheme }) => {
-        if (!active) return;
+    // Asset recovery may intentionally suppress a failed import and resolve without a module.
+    // Keep this continuation inert while recovery replaces the current document.
+    void import("./browser-theme.client").then((browserTheme) => {
+      if (!active || !browserTheme) return;
 
-        applyInBrowser = storeAndApplyTheme;
-        if (hasLocalChange) {
-          storeAndApplyTheme(current);
-        } else {
-          current = readStoredTheme(defaultTheme);
-          applyTheme(current);
-        }
+      applyInBrowser = browserTheme.storeAndApplyTheme;
+      if (hasLocalChange) {
+        browserTheme.storeAndApplyTheme(current);
+      } else {
+        current = browserTheme.readStoredTheme(defaultTheme);
+        browserTheme.applyTheme(current);
       }
-    );
+    });
 
     return () => {
       active = false;

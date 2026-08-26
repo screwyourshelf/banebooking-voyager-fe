@@ -12,12 +12,16 @@ describe("session endpoints", () => {
     };
     const request = vi.fn().mockResolvedValue(klubb);
     const api = { request } as unknown as ApiClient;
+    const controller = new AbortController();
 
-    await expect(getKlubb(api, "askim-tennis")).resolves.toBe(klubb);
-    expect(request).toHaveBeenCalledWith("klubb/askim-tennis");
+    await expect(getKlubb(api, "askim-tennis", controller.signal)).resolves.toBe(klubb);
+    expect(request).toHaveBeenCalledWith("klubb/askim-tennis", {
+      auth: "none",
+      signal: controller.signal,
+    });
   });
 
-  it("aksepterer aktive vilkår én gang og henter guardbrukeren på nytt", async () => {
+  it("aksepterer aktive vilkår og bruker den oppdaterte profilen fra POST-responsen", async () => {
     const first: BrukerRespons = {
       id: "user-1",
       epost: "a@example.no",
@@ -27,21 +31,24 @@ describe("session endpoints", () => {
       vilkårAkseptertDato: null,
     };
     const accepted = { ...first, vilkårAkseptertDato: "2026-08-22" };
-    const request = vi
-      .fn()
-      .mockResolvedValueOnce(first)
-      .mockResolvedValueOnce(undefined)
-      .mockResolvedValueOnce(accepted);
+    const request = vi.fn().mockResolvedValueOnce(first).mockResolvedValueOnce(accepted);
     const api = { request } as unknown as ApiClient;
+    const controller = new AbortController();
 
-    await expect(getBrukerWithCurrentTermsAcceptance(api, "askim-tennis")).resolves.toEqual(
-      accepted
-    );
+    await expect(
+      getBrukerWithCurrentTermsAcceptance(api, "askim-tennis", controller.signal)
+    ).resolves.toEqual(accepted);
+    expect(request).toHaveBeenNthCalledWith(1, "klubb/askim-tennis/bruker", {
+      auth: "required",
+      signal: controller.signal,
+    });
     expect(request).toHaveBeenNthCalledWith(2, "klubb/askim-tennis/bruker/vilkaar", {
+      auth: "required",
       method: "POST",
       json: { versjon: "2026-08-22" },
+      signal: controller.signal,
     });
-    expect(request).toHaveBeenCalledTimes(3);
+    expect(request).toHaveBeenCalledTimes(2);
   });
 
   it("normaliserer tom anonym respons til null for query-cachen", async () => {

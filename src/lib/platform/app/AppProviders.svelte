@@ -73,7 +73,7 @@
   const api: ApiClient = {
     async request<TResponse, TBody = never>(
       path: string,
-      options?: ApiRequestOptions<TBody>
+      options: ApiRequestOptions<TBody>
     ): Promise<TResponse> {
       const readyApi = await apiClientReady;
       if (!readyApi) throw new Error("API-plattformen kunne ikke startes.");
@@ -86,9 +86,9 @@
     let alive = true;
 
     void import("./browser-runtime.client")
-      .then(async ({ createBrowserAppRuntime }) => {
-        if (!alive) return;
-        runtime = createBrowserAppRuntime({
+      .then(async (browserRuntime) => {
+        if (!alive || !browserRuntime) return;
+        runtime = browserRuntime.createBrowserAppRuntime({
           getTenant: () => tenantContext,
           onAuthState: (state) => {
             authState = state;

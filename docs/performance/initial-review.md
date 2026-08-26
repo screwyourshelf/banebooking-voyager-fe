@@ -1,6 +1,6 @@
 # Førstegjennomgang: API- og fullstackytelse
 
-> **Status:** Referansegrunnlag for det aktive ytelsesinitiativet
+> **Status:** Historisk referansegrunnlag for det fullførte ytelsesinitiativet
 >
 > **Reviewtidspunkt:** Frontend og backend, 2026-08-25
 >
@@ -13,9 +13,9 @@ samspillet med backend kan forbedres. Målet er bedre opplevd ytelse og lavere r
 gjøre API-et vanskeligere å forstå, skjule dataflyt eller svekke autorisasjons- og
 cachekorrektheten.
 
-Gjennomgangen var lesende. Tallene under er statiske estimater fra kontrollflyten og skal
-verifiseres med målinger før implementering. Aktiv fase og neste steg ligger i
-[`README.md`](./README.md) og [`../current-work.md`](../current-work.md).
+Gjennomgangen var lesende. Tallene under er statiske estimater fra kontrollflyten og ble etterfulgt
+av målinger før implementering. Levert resultat ligger i [`README.md`](./README.md), mens eventuell
+ny aktiv status ligger i [`../current-work.md`](../current-work.md).
 
 ## Beslutning om arbeidsdeling
 
@@ -73,21 +73,21 @@ Antallet avhenger av hvilke queries som er aktive og må måles på nytt ved opp
 
 Dette er frontend-only og forventes å være tiltaket med størst umiddelbar gevinst.
 
-### 2. Sessionoppstart og booking-bootstrap danner en waterfall
+### 2. Sessionoppstart har en klubb-/brukeravhengighet
 
 `src/lib/features/session/SessionDataProvider.svelte` laster klubb først. Brukerqueryen aktiveres
-først når klubbqueryen har lykkes. `SessionGate.svelte` rendrer deretter ikke featureinnholdet før
-sessiondataene er klare, slik at booking-bootstrap starter sist.
+først når klubbqueryen har lykkes. Førmålingen 2026-08-26 viste at booking-bootstrap i praksis
+starter parallelt med klubbrequesten for anonyme og parallelt med brukerrequesten for innloggede.
+Den statiske antakelsen om at bootstrap alltid starter sist var derfor feil.
 
-Kald, autentisert bookingoppstart er derfor normalt:
+Kald, autentisert bookingoppstart er målt som:
 
 1. `GET /klubb/{slug}`
-2. `GET /klubb/{slug}/bruker`
-3. `GET /klubb/{slug}/booking-bootstrap`
+2. `GET /klubb/{slug}/bruker` og `GET /klubb/{slug}/booking-bootstrap` parallelt
 
 `src/lib/features/session/api.ts` gjør i tillegg `GET -> POST /vilkaar -> GET` dersom brukeren ikke
-har registrert aktiv vilkårsversjon. Denne førstegangsflyten kan dermed bli fem sekvensielle
-API-kall før bookingflaten er klar.
+har registrert aktiv vilkårsversjon. Førstegangsflyten har fem API-kall, men bootstrap overlapper
+den tidligere delen av sessionflyten.
 
 Backendens `BookingBootstrapController` bygger samtidig komplett brukerprofil på nytt og returnerer
 både klubb og bruker. Frontendens bookingkontrakt konsumerer bare grener, baner, valgt utvalg, dato

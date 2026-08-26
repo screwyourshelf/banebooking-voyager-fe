@@ -18,7 +18,7 @@ describe("statistics API", () => {
     expect(request).toHaveBeenCalledWith(
       "klubb/fjord%20vik/statistikk/bookinger?fra=2026-01-01&til=2026-08-23&" +
         "sammenlignMedForrige%C3%85r=true&grenId=gren%2Fid&baneId=bane+id",
-      { signal: undefined }
+      { auth: "required", signal: undefined }
     );
   });
 
@@ -30,8 +30,8 @@ describe("statistics API", () => {
     await getStatisticsCourts(api, "fjordvik");
 
     expect(request.mock.calls).toEqual([
-      ["klubb/fjordvik/grener?inkluderInaktive=true", { signal: undefined }],
-      ["klubb/fjordvik/baner?inkluderInaktive=true", { signal: undefined }],
+      ["klubb/fjordvik/grener?inkluderInaktive=true", { auth: "required", signal: undefined }],
+      ["klubb/fjordvik/baner?inkluderInaktive=true", { auth: "required", signal: undefined }],
     ]);
   });
 });

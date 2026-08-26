@@ -168,8 +168,9 @@ export type OppdaterArrangementMetadataForespørsel = {
 };
 
 /**
- * Forespørsel for å legge til én booking i en arrangementsserie.
- * POST /api/klubb/{slug}/arrangement/{id}/bookinger
+ * Forespørsel for å legge til eller oppdatere én booking i en arrangementsserie.
+ * POST /api/klubb/{slug}/arrangement/{id}/bookinger eller
+ * PUT /api/klubb/{slug}/arrangement/{id}/bookinger/{bookingId}
  */
 export type LeggTilArrangementBookingForespørsel = {
   baneId: string;

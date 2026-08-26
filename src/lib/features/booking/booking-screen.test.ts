@@ -81,7 +81,7 @@ describe("booking screen", () => {
     expect(screen.getByText("18°")).toBeVisible();
     expect(request).toHaveBeenCalledWith(
       expect.stringMatching(/^klubb\/fjordvik\/booking-bootstrap\?dato=\d{4}-\d{2}-\d{2}$/),
-      { signal: expect.any(AbortSignal) }
+      { auth: "optional", signal: expect.any(AbortSignal) }
     );
 
     await fireEvent.click(screen.getByRole("button", { name: "Bookingregler" }));
@@ -93,13 +93,6 @@ describe("booking screen", () => {
 
   it("booker en kapabilitetsstyrt slot og sender eksakt request", async () => {
     const bootstrap = createBootstrap({
-      bruker: {
-        id: "user-1",
-        epost: "ada@example.no",
-        visningsnavn: "Ada",
-        roller: ["Medlem"],
-        kapabiliteter: [],
-      },
       kalenderSlots: [
         createSlot({
           dato: createBootstrap().dato,
@@ -114,6 +107,7 @@ describe("booking screen", () => {
 
     await waitFor(() =>
       expect(request).toHaveBeenCalledWith("klubb/fjordvik/bookinger", {
+        auth: "required",
         method: "POST",
         json: {
           baneId: "court-1",
@@ -162,6 +156,7 @@ describe("booking screen", () => {
 
     await waitFor(() =>
       expect(request).toHaveBeenCalledWith("klubb/fjordvik/bookinger/booking-1", {
+        auth: "required",
         method: "DELETE",
       })
     );
@@ -199,6 +194,7 @@ describe("booking screen", () => {
 
     await waitFor(() =>
       expect(request).toHaveBeenCalledWith("klubb/fjordvik/bookinger", {
+        auth: "required",
         method: "POST",
         json: {
           arrangementId: "arrangement-1",

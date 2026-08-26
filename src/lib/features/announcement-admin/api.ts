@@ -9,7 +9,7 @@ function announcementsPath(slug: string, suffix = "") {
 export async function getActiveAnnouncement(api: ApiClient, slug: string, signal?: AbortSignal) {
   const response = await api.request<KunngjøringAdminRespons | null | undefined>(
     announcementsPath(slug, "aktiv"),
-    { signal }
+    { auth: "required", signal }
   );
   return response ?? null;
 }
@@ -21,12 +21,13 @@ export function createAnnouncement(
 ) {
   return api.request<KunngjøringAdminRespons, OpprettKunngjøringForespørsel>(
     announcementsPath(slug),
-    { method: "POST", json: request }
+    { auth: "required", method: "POST", json: request }
   );
 }
 
 export function deactivateAnnouncement(api: ApiClient, slug: string, announcementId: string) {
   return api.request<void>(announcementsPath(slug, encodeURIComponent(announcementId)), {
+    auth: "required",
     method: "DELETE",
   });
 }

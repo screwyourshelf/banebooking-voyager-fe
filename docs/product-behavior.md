@@ -61,12 +61,13 @@ adressen.
 
 ## Oppstart, auth og guardrekkefølge
 
-1. Appen gjenoppretter utviklingssession eller Supabase-session og starter klubbqueryen. Mens
+1. Appen gjenoppretter utviklingssession eller Supabase-session og starter klubbqueryen. En
+   innlogget brukerquery starter parallelt og kan fullføres uavhengig av klubbresponsen. Mens
    utfallet er ukjent reserveres appgeometrien med en tydelig innloggings-/boottilstand.
 2. Klubben må være lastet før appskallet regnes som klart. Manglende klubb gir en tenantfeil uten
    blank mellomflate.
-3. For innloggede brukere hentes brukerprofilen etter klubbqueryen. Guardene håndheves i denne
-   rekkefølgen:
+3. For innloggede brukere må både klubb- og brukerprofilen være avklart før guardene håndheves i
+   denne rekkefølgen:
    sperret konto, obligatorisk kunngjøring, obligatorisk medlemsbekreftelse, deretter ordinær route.
 4. Featureinnhold rendres først når session- og policytilstanden er avklart. På bookingroten starter
    deretter `booking-bootstrap` for dagens dato og aktuell brukeridentitet. `404` eller `405` bruker
@@ -109,12 +110,14 @@ tillatt.
 
 - Login bevarer tiltenkt mål og viser egne sending-, verifisering-, fullført- og feiltilstander.
 - Vilkår er offentlig leseinnhold tilpasset klubbdata. Første innloggede brukerlast uten registrert
-  aksept poster aktiv vilkårsversjon og henter brukerdata på nytt.
+  aksept poster aktiv vilkårsversjon og bruker den oppdaterte brukerprofilen fra mutasjonssvaret.
 - Sperret konto kan bare lese sperreinformasjon og kontakte klubben; booking og arrangementhandlinger
   er utilgjengelige.
 - Obligatorisk kunngjøring må leses og bekreftes før ordinære appflater åpnes.
-- Obligatorisk medlemsbekreftelse krever fullt navn og medlemskapstype og lenker til vilkår og
-  klubbens medlemskapsside.
+- Obligatorisk medlemsbekreftelse er en egenerklæring, ikke en automatisk kontroll mot klubbens
+  medlemsregister. Flaten krever brukerens eget fulle navn og medlemskapstypen brukeren er omfattet
+  av, forklarer at familiemedlemmer bekrefter fra hver sin konto, og lenker til vilkår og klubbens
+  medlemskapsside.
 - Alle guardflater skiller mellom avklaring/loading, retrybar brukerdatafeil, blokkert state og
   normal videreføring.
 
@@ -126,6 +129,8 @@ Sentrale API-er: `GET /klubb/{slug}`, `GET /klubb/{slug}/bruker`,
 
 - Bookingroten viser aktive grener, tilhørende baner og kalender for valgt dato. Første gren med
   bane, første bane i grenen og dagens dato velges som standard.
+- Bootstrapresponsen eier bare grener, baner, valgt utvalg, dato og kalender-slots. Klubb og
+  brukerprofil eies av sessionens separate queries.
 - Offentlige brukere kan lese fysisk tilgjengelighet, arrangementinformasjon, vær og reglement.
   Innlogging endrer tilgjengelige handlinger, ikke statusordene `Ledig` og `Opptatt`.
 - Slotkapabiliteter styrer hurtigbooking, avbestilling og kobling til et aktivt arrangement.
@@ -201,8 +206,9 @@ Sentrale API-er: `GET|PUT /klubb/{slug}`, `GET /klubb/{slug}/medlemskap/status` 
   informasjon/metadata fra banetider.
 - Banetider kan foreslås gjentakende eller manuelt. Backend forhåndsviser ledige tider og
   konflikter; klienten beholder et lokalt stagingutkast og sender bare gyldige forslag.
-- Eksisterende arrangement kan endre metadata, legge til enkelttider eller batch, fjerne tider og
-  avlyses. Delvis batchsuksess beholder feilede forslag og forklarer resultatet.
+- Eksisterende arrangement kan endre metadata, legge til enkelttider eller batch, oppdatere en
+  booking atomisk, fjerne tider og avlyses. Delvis batchsuksess beholder feilede forslag og
+  forklarer resultatet.
 - Kritiske states er tilgangskontroll, tom arrangementliste, loading av oppsett/arrangement/tider,
   validering, ingen forslag, konflikter, staging, lagring, delvis suksess, full suksess,
   retrybar lesefeil og lokale mutasjonsfeil.
@@ -211,7 +217,7 @@ Sentrale API-er: `GET /klubb/{slug}/arrangementer`,
 `POST /klubb/{slug}/arrangement/forhandsvis`, `POST /klubb/{slug}/arrangement`,
 `PUT /klubb/{slug}/arrangement/{id}/forhandsvis`, `PUT|DELETE /klubb/{slug}/arrangement/{id}`,
 `PATCH /klubb/{slug}/arrangement/{id}/metadata` og
-`GET|POST|DELETE /klubb/{slug}/arrangement/{id}/bookinger[/{bookingId}]` med eget
+`GET|POST|PUT|DELETE /klubb/{slug}/arrangement/{id}/bookinger[/{bookingId}]` med eget
 `POST .../bookinger/batch`.
 
 ### Brukere og sperre

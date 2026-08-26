@@ -77,6 +77,7 @@ describe("account screens", () => {
 
     await waitFor(() =>
       expect(request).toHaveBeenCalledWith("klubb/fjordvik/bruker/meg", {
+        auth: "required",
         method: "PATCH",
         json: { visningsnavn: "Ada Lovelace" },
       })
@@ -103,7 +104,9 @@ describe("account screens", () => {
     await fireEvent.click(screen.getByRole("button", { name: "Last ned data" }));
 
     await waitFor(() =>
-      expect(request).toHaveBeenCalledWith("klubb/fjordvik/bruker/meg/egen-data", undefined)
+      expect(request).toHaveBeenCalledWith("klubb/fjordvik/bruker/meg/egen-data", {
+        auth: "required",
+      })
     );
     await waitFor(() => expect(createObjectURL).toHaveBeenCalledTimes(1));
     expect(revokeObjectURL).toHaveBeenCalledWith("blob:account-data");
@@ -162,7 +165,7 @@ describe("account screens", () => {
     await waitFor(() =>
       expect(request).toHaveBeenCalledWith(
         "klubb/fjordvik/bookinger/mine?inkluderHistoriske=true",
-        { signal: expect.any(AbortSignal) }
+        { auth: "required", signal: expect.any(AbortSignal) }
       )
     );
     await fireEvent.click(screen.getByRole("button", { name: "Padel" }));

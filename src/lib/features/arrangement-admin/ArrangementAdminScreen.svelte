@@ -41,7 +41,6 @@
   const activitiesQuery = createQuery(() =>
     arrangementActivitiesQueryOptions(api, tenant.slug, allowed)
   );
-  const courtsQuery = createQuery(() => arrangementCourtsQueryOptions(api, tenant.slug, allowed));
 
   let createOpen = $state(false);
   let editorOpen = $state(false);
@@ -50,6 +49,11 @@
   let includeHistorical = $state(false);
   let selectedActivities = $state<string[]>([]);
   let creationFeedback = $state<{ message: string; tone: "success" | "warning" } | null>(null);
+
+  const editorNeedsCourts = $derived(createOpen || editorOpen);
+  const courtsQuery = createQuery(() =>
+    arrangementCourtsQueryOptions(api, tenant.slug, allowed && editorNeedsCourts)
+  );
 
   const arrangements = $derived(arrangementsQuery.data ?? []);
   const activities = $derived(activitiesQuery.data ?? []);
@@ -71,14 +75,14 @@
       )
       .map((activity) => ({ value: activity.slug, label: activity.navn }))
   );
-  const loading = $derived(
-    arrangementsQuery.isPending || activitiesQuery.isPending || courtsQuery.isPending
-  );
+  const loading = $derived(arrangementsQuery.isPending || activitiesQuery.isPending);
   const fetching = $derived(
     arrangementsQuery.isFetching || activitiesQuery.isFetching || courtsQuery.isFetching
   );
   const queryError = $derived(
-    arrangementsQuery.error ?? activitiesQuery.error ?? courtsQuery.error
+    arrangementsQuery.error ??
+      activitiesQuery.error ??
+      (editorNeedsCourts ? courtsQuery.error : null)
   );
 
   function toggleActivity(value: string) {
@@ -187,7 +191,7 @@
             void Promise.all([
               arrangementsQuery.refetch(),
               activitiesQuery.refetch(),
-              courtsQuery.refetch(),
+              ...(editorNeedsCourts ? [courtsQuery.refetch()] : []),
             ])}
         />
       {:else if visibleArrangements.length === 0}

@@ -96,7 +96,7 @@ export function getBookingSlotPresentation(
     muted: slot.erPassert,
     start: (slot.bookingStartTid ?? slot.slotStartTid).slice(0, 5),
     status: getSlotStatusPresentation(status),
-    title: getSlotTitle(slot, status),
+    title: getSlotTitle(slot, status, booked),
   };
 }
 
@@ -221,10 +221,10 @@ function getSlotStatusPresentation(status: SlotStatus): BookingSlotPresentation[
   return { label: "Opptatt", tone: "busy" };
 }
 
-function getSlotTitle(slot: KalenderSlotRespons, status: SlotStatus) {
+function getSlotTitle(slot: KalenderSlotRespons, status: SlotStatus, booked: boolean) {
   if (slot.arrangementTittel) return slot.arrangementTittel;
   if (status === "din_booking") return "Din tid";
-  if (status === "ledig") return undefined;
+  if (status === "ledig" || !booked) return undefined;
   return slot.booketAv?.trim() || "Booket";
 }
 

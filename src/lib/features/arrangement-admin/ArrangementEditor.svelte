@@ -198,12 +198,13 @@
         </SettingsSection>
 
         <FormActions>
-          {#if controller.previewMutation.isError || controller.createArrangementMutation.isError || controller.addBatchMutation.isError || controller.addBookingMutation.isError || controller.deleteBookingMutation.isError}
+          {#if controller.previewMutation.isError || controller.createArrangementMutation.isError || controller.addBatchMutation.isError || controller.addBookingMutation.isError || controller.updateBookingMutation.isError || controller.deleteBookingMutation.isError}
             {@const mutationError =
               controller.previewMutation.error ??
               controller.createArrangementMutation.error ??
               controller.addBatchMutation.error ??
               controller.addBookingMutation.error ??
+              controller.updateBookingMutation.error ??
               controller.deleteBookingMutation.error}
             <Feedback
               tone="danger"

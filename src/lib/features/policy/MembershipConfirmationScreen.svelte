@@ -57,7 +57,7 @@
   const mutationErrorMessage = $derived(
     confirmation.error instanceof Error
       ? confirmation.error.message
-      : "Medlemskapet kunne ikke bekreftes."
+      : "Bekreftelsen kunne ikke lagres."
   );
 
   function submit(event: SubmitEvent) {
@@ -85,38 +85,49 @@
 
 <Page
   eyebrow="Medlemskap"
-  title="Bekreft medlemskap"
-  description="Oppgi medlemskapstype og navnet medlemskapet står på."
+  title="Bekreft medlemskapet ditt"
+  description="Bekreft hvilket medlemskap du er omfattet av før du booker."
   actions={membershipStatus}
 >
   <Document label="Medlemskapsbekreftelse">
     <DocumentIntro>
       <p>
-        For å booke baner må du være medlem av <strong>{klubb.navn}</strong>. Alle spillere du
-        booker for, må også ha gyldig medlemskap.
+        Før du booker, ber vi deg bekrefte at du er omfattet av et gyldig medlemskap i
+        <strong>{klubb.navn}</strong>. Banebooking er ikke koblet til klubbens medlemsregister og
+        kontrollerer derfor ikke medlemskapet automatisk.
+      </p>
+      <p>
+        Har du familiemedlemskap? Velg «Familiemedlemskap» og oppgi ditt eget navn. Hver person som
+        logger inn, bekrefter fra sin egen konto.
+      </p>
+      <p>
+        Vi ber deg også passe på at personer du booker for, er omfattet av et gyldig medlemskap.
       </p>
       {#if klubb.nettside}
         <p>
-          Ikke medlem ennå?
+          Usikker på medlemskapet ditt, eller ikke medlem ennå?
           <a href={klubb.nettside} target="_blank" rel="external noopener noreferrer">
-            Se medlemskap og priser på klubbens nettside
+            Les om medlemskap og priser på klubbens nettside
           </a>.
         </p>
       {/if}
-      <p>Ved å bekrefte godtar du <a href={resolve(termsHref)}>vilkårene for bruk</a>.</p>
+      <p>
+        Når du fortsetter, bekrefter du at opplysningene er riktige og godtar
+        <a href={resolve(termsHref)}>vilkårene for bruk</a>.
+      </p>
     </DocumentIntro>
 
     <Form onsubmit={submit} pending={confirmation.isPending}>
       <SettingsSection
         eyebrow="Påkrevd"
-        title="Dine opplysninger"
-        description="Opplysningene brukes til klubbens medlemsoversikt."
+        title="Om medlemskapet ditt"
+        description="Klubben kan se opplysningene du oppgir her."
         embedded
       >
         <FormFields>
           <FormField
-            label="Fullt navn"
-            description="Skriv navnet medlemskapet står på."
+            label="Ditt fulle navn"
+            description="Oppgi ditt eget navn, også når du er del av et familiemedlemskap."
             controlId="membership-full-name"
             error={visibleErrors.fullName}
             required
@@ -132,7 +143,7 @@
 
           <FormField
             label="Medlemskapstype"
-            description="Velg medlemskapet du har betalt."
+            description="Velg medlemskapet du er omfattet av."
             error={visibleErrors.membershipType}
             required
           >
@@ -151,12 +162,12 @@
           {#if confirmation.isError}
             <Feedback
               tone="danger"
-              title="Kunne ikke bekrefte medlemskapet"
+              title="Kunne ikke lagre bekreftelsen"
               description={mutationErrorMessage}
             />
           {/if}
-          <FormSubmit pending={confirmation.isPending} pendingLabel="Bekrefter …">
-            Jeg bekrefter medlemskapet
+          <FormSubmit pending={confirmation.isPending} pendingLabel="Lagrer …">
+            Bekreft og fortsett
           </FormSubmit>
         </FormActions>
       </SettingsSection>

@@ -6,6 +6,7 @@ import {
   deleteArrangementBooking,
   getAdminArrangements,
   previewArrangementEdit,
+  updateArrangementBooking,
   updateArrangementMetadata,
 } from "./api";
 
@@ -33,24 +34,45 @@ describe("arrangement-admin endpoints", () => {
     await addArrangementBookingsBatch(api, "fjord vik", "event/1", {
       bookinger: [{ baneId: "court", dato: "2026-08-24", sluttTid: "09:00", startTid: "08:00" }],
     });
+    const bookingRequest = {
+      baneId: "court",
+      dato: "2026-08-25",
+      sluttTid: "10:00",
+      startTid: "09:00",
+    };
+    await updateArrangementBooking(api, "fjord vik", "event/1", "booking/1", bookingRequest);
     await deleteArrangementBooking(api, "fjord vik", "event/1", "booking/1");
 
     expect(request.mock.calls).toEqual([
-      ["klubb/fjord%20vik/arrangementer", { signal: undefined }],
+      ["klubb/fjord%20vik/arrangementer", { auth: "required", signal: undefined }],
       [
         "klubb/fjord%20vik/arrangement/event%2F1/forhandsvis",
-        { method: "PUT", json: arrangementRequest },
+        { auth: "required", method: "PUT", json: arrangementRequest },
       ],
-      ["klubb/fjord%20vik/arrangement", { method: "POST", json: arrangementRequest }],
+      [
+        "klubb/fjord%20vik/arrangement",
+        { auth: "required", method: "POST", json: arrangementRequest },
+      ],
       [
         "klubb/fjord%20vik/arrangement/event%2F1/metadata",
-        { method: "PATCH", json: { kategori: "Kurs", publisertPåNettsiden: false } },
+        {
+          auth: "required",
+          method: "PATCH",
+          json: { kategori: "Kurs", publisertPåNettsiden: false },
+        },
       ],
       [
         "klubb/fjord%20vik/arrangement/event%2F1/bookinger/batch",
-        expect.objectContaining({ method: "POST" }),
+        expect.objectContaining({ auth: "required", method: "POST" }),
       ],
-      ["klubb/fjord%20vik/arrangement/event%2F1/bookinger/booking%2F1", { method: "DELETE" }],
+      [
+        "klubb/fjord%20vik/arrangement/event%2F1/bookinger/booking%2F1",
+        { auth: "required", method: "PUT", json: bookingRequest },
+      ],
+      [
+        "klubb/fjord%20vik/arrangement/event%2F1/bookinger/booking%2F1",
+        { auth: "required", method: "DELETE" },
+      ],
     ]);
   });
 });

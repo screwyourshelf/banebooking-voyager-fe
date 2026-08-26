@@ -4,7 +4,7 @@ import type { ApiClient } from "$lib/platform/api";
 export function confirmRequiredAnnouncement(api: ApiClient, slug: string, announcementId: string) {
   return api.request<void>(
     `klubb/${encodeURIComponent(slug)}/kunngjøringer/${encodeURIComponent(announcementId)}/bekreft`,
-    { method: "POST" }
+    { auth: "required", method: "POST" }
   );
 }
 
@@ -15,6 +15,6 @@ export function confirmMembership(
 ) {
   return api.request<void, BekreftMedlemskapForespørsel>(
     `klubb/${encodeURIComponent(slug)}/bruker/bekreft-medlemskap`,
-    { method: "POST", json: request }
+    { auth: "required", method: "POST", json: request }
   );
 }

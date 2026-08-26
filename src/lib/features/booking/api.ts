@@ -21,16 +21,16 @@ export function getBookingBootstrap(
 ) {
   return api.request<BookingBootstrapRespons>(
     tenantPath(slug, `booking-bootstrap?dato=${encodeURIComponent(date)}`),
-    { signal }
+    { auth: "optional", signal }
   );
 }
 
 export function getBookingActivities(api: ApiClient, slug: string, signal?: AbortSignal) {
-  return api.request<GrenRespons[]>(tenantPath(slug, "grener"), { signal });
+  return api.request<GrenRespons[]>(tenantPath(slug, "grener"), { auth: "optional", signal });
 }
 
 export function getBookingCourts(api: ApiClient, slug: string, signal?: AbortSignal) {
-  return api.request<BaneRespons[]>(tenantPath(slug, "baner"), { signal });
+  return api.request<BaneRespons[]>(tenantPath(slug, "baner"), { auth: "optional", signal });
 }
 
 export function getBookingSlots(
@@ -41,20 +41,23 @@ export function getBookingSlots(
   signal?: AbortSignal
 ) {
   const query = new URLSearchParams({ baneId: courtId, dato: date });
-  return api.request<KalenderSlotRespons[]>(tenantPath(slug, `kalender?${query}`), { signal });
+  return api.request<KalenderSlotRespons[]>(tenantPath(slug, `kalender?${query}`), {
+    auth: "optional",
+    signal,
+  });
 }
 
 export function createBooking(api: ApiClient, slug: string, request: OpprettBookingForespørsel) {
   return api.request<BookingSuksessRespons, OpprettBookingForespørsel>(
     tenantPath(slug, "bookinger"),
-    { method: "POST", json: request }
+    { auth: "required", method: "POST", json: request }
   );
 }
 
 export function cancelBooking(api: ApiClient, slug: string, bookingId: string) {
   return api.request<BookingSuksessRespons>(
     tenantPath(slug, `bookinger/${encodeURIComponent(bookingId)}`),
-    { method: "DELETE" }
+    { auth: "required", method: "DELETE" }
   );
 }
 
@@ -66,6 +69,6 @@ export function getActiveArrangements(
 ) {
   return api.request<AktivtArrangementRespons[]>(
     tenantPath(slug, `arrangement/aktive?grenId=${encodeURIComponent(activityId)}`),
-    { signal }
+    { auth: "optional", signal }
   );
 }

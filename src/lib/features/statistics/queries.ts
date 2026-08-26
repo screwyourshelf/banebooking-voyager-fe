@@ -1,6 +1,7 @@
 import { keepPreviousData } from "@tanstack/svelte-query";
 import type { BookingstatistikkFiltre } from "$lib/contracts";
 import type { ApiClient } from "$lib/platform/api";
+import { tenantQueryMeta } from "$lib/platform/query";
 import { getBookingStatistics, getStatisticsActivities, getStatisticsCourts } from "./api";
 import { statisticsQueryKeys } from "./query-keys";
 
@@ -10,6 +11,7 @@ export function bookingStatisticsQueryOptions(
   filters: BookingstatistikkFiltre
 ) {
   return {
+    meta: tenantQueryMeta(slug, "statistics"),
     queryKey: statisticsQueryKeys.booking(slug, filters),
     queryFn: ({ signal }: { signal: AbortSignal }) =>
       getBookingStatistics(api, slug, filters, signal),
@@ -20,16 +22,18 @@ export function bookingStatisticsQueryOptions(
 
 export function statisticsActivitiesQueryOptions(api: ApiClient, slug: string) {
   return {
+    meta: tenantQueryMeta(slug, "activities"),
     queryKey: statisticsQueryKeys.activities(slug),
     queryFn: ({ signal }: { signal: AbortSignal }) => getStatisticsActivities(api, slug, signal),
-    staleTime: 5 * 60_000,
+    staleTime: 10 * 60_000,
   };
 }
 
 export function statisticsCourtsQueryOptions(api: ApiClient, slug: string) {
   return {
+    meta: tenantQueryMeta(slug, "courts"),
     queryKey: statisticsQueryKeys.courts(slug),
     queryFn: ({ signal }: { signal: AbortSignal }) => getStatisticsCourts(api, slug, signal),
-    staleTime: 5 * 60_000,
+    staleTime: 10 * 60_000,
   };
 }

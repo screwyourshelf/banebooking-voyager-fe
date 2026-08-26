@@ -89,6 +89,7 @@ describe("AnnouncementAdminScreen", () => {
     await fireEvent.click(within(dialog).getByRole("button", { name: "Deaktiver kunngjøring" }));
     await waitFor(() => expect(screen.getByText("Klar for neste beskjed")).toBeVisible());
     expect(request).toHaveBeenCalledWith("klubb/fjordvik/kunngjøringer/announcement-1", {
+      auth: "required",
       method: "DELETE",
     });
   });

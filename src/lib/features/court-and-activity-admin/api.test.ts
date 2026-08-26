@@ -20,9 +20,11 @@ describe("court and activity admin API", () => {
     await getAdminActivities(api, "fjord vik", signal);
 
     expect(request).toHaveBeenNthCalledWith(1, "klubb/fjord%20vik/baner?inkluderInaktive=true", {
+      auth: "required",
       signal,
     });
     expect(request).toHaveBeenNthCalledWith(2, "klubb/fjord%20vik/grener?inkluderInaktive=true", {
+      auth: "required",
       signal,
     });
   });
@@ -58,23 +60,27 @@ describe("court and activity admin API", () => {
     await updateActivity(api, "fjordvik", "activity/1", { ...activityCreate, aktiv: true });
 
     expect(request).toHaveBeenNthCalledWith(1, "klubb/fjordvik/baner", {
+      auth: "required",
       method: "POST",
       json: courtCreate,
     });
     expect(request).toHaveBeenNthCalledWith(2, "klubb/fjordvik/baner/court%2F1", {
+      auth: "required",
       method: "PUT",
       json: courtUpdate,
     });
     expect(request).toHaveBeenNthCalledWith(
       3,
       "klubb/fjordvik/baner/court%2F1/booking-innstillinger",
-      { method: "PUT", json: bookingUpdate }
+      { auth: "required", method: "PUT", json: bookingUpdate }
     );
     expect(request).toHaveBeenNthCalledWith(4, "klubb/fjordvik/grener", {
+      auth: "required",
       method: "POST",
       json: activityCreate,
     });
     expect(request).toHaveBeenNthCalledWith(5, "klubb/fjordvik/grener/activity%2F1", {
+      auth: "required",
       method: "PUT",
       json: { ...activityCreate, aktiv: true },
     });

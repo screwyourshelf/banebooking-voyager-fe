@@ -6,6 +6,7 @@ import type {
   OpprettBookingForespørsel,
 } from "$lib/contracts";
 import { ApiError, type ApiClient } from "$lib/platform/api";
+import { tenantQueryMeta } from "$lib/platform/query";
 import {
   cancelBooking,
   createBooking,
@@ -43,6 +44,7 @@ export function bookingBootstrapQueryOptions(
   userIdentity: string
 ) {
   return {
+    meta: tenantQueryMeta(slug, "activities", "courts", "booking-slots"),
     queryKey: bookingQueryKeys.bootstrap(slug, date, userIdentity),
     queryFn: ({ signal }: { signal: AbortSignal }) =>
       loadInitialBookingData(api, slug, date, signal),
@@ -59,13 +61,14 @@ export function bookingSlotsQueryOptions(
   initialData?: KalenderSlotRespons[]
 ) {
   return {
+    meta: tenantQueryMeta(slug, "booking-slots"),
     queryKey: bookingQueryKeys.slots(slug, courtId, date),
     queryFn: ({ signal }: { signal: AbortSignal }) =>
       getBookingSlots(api, slug, courtId, date, signal),
     enabled: Boolean(courtId && date),
     initialData,
     placeholderData: keepPreviousData,
-    refetchInterval: 30_000,
+    refetchInterval: 60_000,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: true,
     staleTime: 5_000,
@@ -79,11 +82,12 @@ export function activeArrangementsQueryOptions(
   enabled: boolean
 ) {
   return {
+    meta: tenantQueryMeta(slug, "arrangements"),
     queryKey: bookingQueryKeys.activeArrangements(slug, activityId),
     queryFn: ({ signal }: { signal: AbortSignal }) =>
       getActiveArrangements(api, slug, activityId, signal),
     enabled: enabled && Boolean(activityId),
-    staleTime: 30_000,
+    staleTime: 5 * 60_000,
   };
 }
 
@@ -111,7 +115,7 @@ export function createBookingMutationOptions(
       _request: OpprettBookingForespørsel,
       context: OptimisticBookingContext | undefined
     ) => restorePreviousSlots(queryClient, queryKey, context),
-    onSettled: () => invalidateBookingData(queryClient, slug, courtId, date),
+    onSuccess: () => invalidateBookingData(queryClient, slug, courtId, date),
     retry: false,
   };
 }
@@ -140,7 +144,7 @@ export function cancelBookingMutationOptions(
       _variables: CancelBookingVariables,
       context: OptimisticBookingContext | undefined
     ) => restorePreviousSlots(queryClient, queryKey, context),
-    onSettled: () => invalidateBookingData(queryClient, slug, courtId, date),
+    onSuccess: () => invalidateBookingData(queryClient, slug, courtId, date),
     retry: false,
   };
 }
