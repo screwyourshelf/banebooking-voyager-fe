@@ -65,10 +65,12 @@ førstegangskompilering og styrer derfor ikke prioriteringen. Medlemsoppstartene
 501,0 ms. `*` Banelagringens rundeheuristikk grupperte overlappende response-end events, men råsporet
 viser at andre PUT startet 47,7 ms etter den første; koden avventer dem sekvensielt.
 
-Produksjonsbuilden hadde 37,4 KiB initial JS gzip, 27,9 KiB initial CSS gzip, 120,5 KiB største lazy
-JS-chunk og 61 JS-chunks for begge hostvarianter. Ingen bundle- eller renderkandidat ble valgt:
-brukbar UI etter varm retur krevde null HTTP-kall, ingen duplikate browserrequests ble observert,
-og de store lazy chunkene lastes ikke inn i bookingoppstarten.
+Produksjonsbuildens opprinnelige port målte 37,4 KiB JS gzip fra HTML-referansene, 27,9 KiB initial
+CSS gzip, 120,5 KiB største lazy JS-chunk og 61 JS-chunks for begge hostvarianter. En senere
+PageSpeed-oppfølging viste at HTML-tallet var for smalt som rutemål: offentlig booking laster også
+rutenodene og deres statiske avhengigheter etter klientroutingen. Den korrigerte, transitive
+rutemålingen er dokumentert under. Den endrer ikke den lokale HTTP-/SQL-prioriteringen, men lukker
+et hull i bundleporten.
 
 ## API- og databasefunn
 
@@ -204,9 +206,39 @@ Delvis feilsemantikk er uendret: visningen invalideres først når begge request
   denne iterasjonen.
 - Lokale SQL-tider bekreftet ikke behov for nye indekser. Generell policycache ble forkastet fordi
   den ville gi foreldelsesrisiko uten dokumentert sluttbrukergevinst.
-- Bundlehypotesen ble ikke bekreftet. Begge etterbuildene var uendret på 37,4 KiB initial JS gzip,
-  27,9 KiB initial CSS gzip, 120,5 KiB største lazy chunk og 61 JS-chunks.
+- Den første bundlehypotesen var basert på en ufullstendig målegrense. HTML-referansene var uendret
+  på 37,4 KiB initial JS gzip, men PageSpeed-oppfølgingen under målte også rutens transitive
+  avhengigheter og prøvde den konkrete UI-chunkhypotesen.
 - Auth-callbacken var ingen målt flaskehals og ble ikke endret.
+
+## Produksjonsoppfølging: PageSpeed
+
+PageSpeed-snapshotet fra 2026-08-26 hadde ingen feltdata og behandles derfor som Lighthouse-
+diagnostikk, ikke en produksjons-SLO. [Mobilrapporten](https://pagespeed.web.dev/analysis/https-banebooking-aastk-no/35ksxfzjmj?form_factor=mobile)
+målte Performance 94, Accessibility 96, FCP 1,7 s, LCP 3,0 s, TBT 40 ms og CLS 0.
+[Desktoprapporten](https://pagespeed.web.dev/analysis/https-banebooking-aastk-no/35ksxfzjmj?form_factor=desktop)
+målte Performance 96, Accessibility 96, FCP 0,4 s, LCP 1,0 s, TBT 140 ms og CLS 0.
+
+Tre funn ble fulgt opp:
+
+1. Lighthouse estimerte 60,1 KiB ubrukt JavaScript i den delte UI-chunken på 92,6 KiB overført.
+   Den nye produksjonsporten følger SvelteKit-ruten og alle statiske imports for offentlig booking,
+   og måler 157,2 KiB gzip på Cloudflare-varianten og 157,3 KiB på GitHub-varianten. Budsjettet er
+   satt til 165 KiB. Dette erstatter ikke 37,4 KiB HTML-startmålingen, men kompletterer den.
+2. To kontrollerte UI-entrypoint-eksperimenter ble bygget mot samme rute. Familieinndeling økte
+   rutekostnaden 157,2→158,2 KiB gzip og antall ruteassets 23→33. Finere inndeling økte den videre
+   til 161,0 KiB og 37 assets. Rå JavaScript gikk noe ned, men gzip- og request-overhead spiste
+   gevinsten. Importarkitekturen ble derfor ikke endret.
+3. Accessibility-feilen traff alle sluttider i `ScheduleTime`. Den tidligere lys-temakontrasten
+   var 4,09:1 mot hvit flate. Sluttiden bruker nå den eksisterende `text-ink-soft`-rollen og gir
+   6,61:1 mot hvit og 6,19:1 mot subtil flate. Mørk kontrast går 5,48:1→8,97:1. Den faktiske
+   PageSpeed-scoren kan først bekreftes etter en godkjent deploy.
+
+Det renderblokkerende hovedstilarket er uendret på 27,9 KiB gzip lokalt; PageSpeed estimerte
+450 ms mobilgevinst og 40 ms desktop. Asynkron lasting eller en parallell critical-CSS-kontrakt ble
+ikke innført fordi dagens app-shell, theme og pre-module-fallback må være visuelt korrekte før
+innholdet vises. Kandidaten utsettes til en rutesplittet CSS-prototype kan dokumentere lavere
+mobil-LCP uten FOUC, layoutskift eller duplisert stylingeierskap.
 
 ## Korrekthet og verifikasjon
 

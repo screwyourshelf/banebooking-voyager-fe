@@ -13,7 +13,9 @@ verifikasjonsmatrise ligger i
 
 Frontendtiltakene fjerner refetch etter avvist booking og starter bane-/overstyringswrites
 parallelt. Måleharnessen dekker 27 flyter og bevarer auth-callback med `returnTo` som eksplisitt
-regresjonskontrakt.
+regresjonskontrakt. En etterfølgende PageSpeed-kontroll har i tillegg rettet sluttidskontrasten og
+utvidet produksjonsporten fra HTML-startfiler til hele JavaScript-grafen for offentlig booking.
+UI-chunksplitt og asynkron CSS ble målt, men ikke beholdt fordi de ikke dokumenterte en trygg gevinst.
 
 ## Neste steg
 

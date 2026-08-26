@@ -1,11 +1,12 @@
 import { readdirSync, readFileSync } from "node:fs";
-import { join } from "node:path";
+import { basename, dirname, join, normalize, relative } from "node:path";
 import { gzipSync } from "node:zlib";
 
 const budgets = {
   initialCssGzipKiB: 50,
   initialJavaScriptGzipKiB: 50,
   largestLazyJavaScriptGzipKiB: 130,
+  publicBookingJavaScriptGzipKiB: 165,
 };
 
 const builds = [
@@ -30,6 +31,7 @@ for (const measurement of measurements) {
     [
       measurement.host,
       `initial JS ${formatKiB(measurement.initialJavaScriptGzipBytes)}`,
+      `public booking JS ${formatKiB(measurement.publicBookingJavaScriptGzipBytes)}`,
       `initial CSS ${formatKiB(measurement.initialCssGzipBytes)}`,
       `largest lazy JS ${formatKiB(measurement.largestLazyJavaScriptGzipBytes)}`,
       `JS chunks ${measurement.javaScriptChunkCount}`,
@@ -86,6 +88,12 @@ function verifyBuild(build) {
   const javaScriptFiles = listFiles(join(build.directory, "_app/immutable")).filter((file) =>
     file.endsWith(".js")
   );
+  const publicBookingJavaScript = collectRouteJavaScript({
+    buildDirectory: build.directory,
+    initialJavaScript,
+    javaScriptFiles,
+    routeId: "/[[slug=tenant]]/(public)",
+  });
   const lazyJavaScript = javaScriptFiles.filter((file) => !initialFiles.has(file));
 
   const reactRuntimeMarkers = [
@@ -122,6 +130,7 @@ function verifyBuild(build) {
     initialCssGzipBytes: gzipSize(initialCss),
     largestLazyJavaScriptGzipBytes: Math.max(...lazyJavaScript.map(gzipFileSize)),
     javaScriptChunkCount: javaScriptFiles.length,
+    publicBookingJavaScriptGzipBytes: gzipSize(publicBookingJavaScript),
   };
 
   assertBudget(
@@ -142,8 +151,79 @@ function verifyBuild(build) {
     measurement.largestLazyJavaScriptGzipBytes,
     budgets.largestLazyJavaScriptGzipKiB
   );
+  assertBudget(
+    build.host,
+    "public booking JavaScript",
+    measurement.publicBookingJavaScriptGzipBytes,
+    budgets.publicBookingJavaScriptGzipKiB
+  );
 
   return measurement;
+}
+
+function collectRouteJavaScript({ buildDirectory, initialJavaScript, javaScriptFiles, routeId }) {
+  const applicationEntry = initialJavaScript.find((file) => basename(file).startsWith("app."));
+  assert(applicationEntry, `Fant ikke SvelteKit app-entry for ${routeId}.`);
+
+  const routeNodeIds = readRouteNodeIds(readFileSync(applicationEntry, "utf8"), routeId);
+  const routeNodes = [0, ...routeNodeIds].map((nodeId) => {
+    const node = javaScriptFiles.find(
+      (file) => basename(dirname(file)) === "nodes" && basename(file).startsWith(`${nodeId}.`)
+    );
+    assert(node, `Fant ikke klientnode ${nodeId} for ${routeId}.`);
+    return node;
+  });
+
+  const availableFiles = new Set(javaScriptFiles.map((file) => normalize(file)));
+  const includedFiles = new Set();
+  const pendingFiles = [...initialJavaScript, ...routeNodes].map((file) => normalize(file));
+
+  while (pendingFiles.length > 0) {
+    const file = pendingFiles.pop();
+    if (!file || includedFiles.has(file)) continue;
+    includedFiles.add(file);
+
+    for (const specifier of readStaticImportSpecifiers(readFileSync(file, "utf8"))) {
+      if (!specifier.startsWith(".")) continue;
+      const importedFile = normalize(join(dirname(file), specifier));
+      const buildRelativePath = relative(buildDirectory, importedFile);
+      assert(
+        buildRelativePath && !buildRelativePath.startsWith(".."),
+        `${routeId}: import utenfor produksjonsartefaktet: ${specifier}`
+      );
+      if (importedFile.endsWith(".js") && availableFiles.has(importedFile)) {
+        pendingFiles.push(importedFile);
+      }
+    }
+  }
+
+  return [...includedFiles];
+}
+
+function readRouteNodeIds(applicationSource, routeId) {
+  const escapedRouteId = escapeRegularExpression(JSON.stringify(routeId));
+  const routeMatch = applicationSource.match(
+    new RegExp(`${escapedRouteId}:\\[(\\d+),\\[([\\d,]*)\\]\\]`)
+  );
+  assert(routeMatch, `Fant ikke klientruten ${routeId} i SvelteKit app-entry.`);
+
+  const leafNodeId = Number(routeMatch[1]);
+  const layoutNodeIds = routeMatch[2]
+    .split(",")
+    .filter(Boolean)
+    .map((value) => Number(value));
+  return [...layoutNodeIds, leafNodeId];
+}
+
+function readStaticImportSpecifiers(source) {
+  const imports = [];
+  const staticImportPattern = /\b(?:import|export)\s*(?!\()(?:[^"']*?\bfrom\s*)?["']([^"']+)["']/g;
+  for (const match of source.matchAll(staticImportPattern)) imports.push(match[1]);
+  return imports;
+}
+
+function escapeRegularExpression(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
 
 function readStartupReferences(html) {

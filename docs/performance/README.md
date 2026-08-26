@@ -10,7 +10,9 @@ Den komplette, nye målingen av offentlig booking, sesjonsoppstart, bookinglivsl
 medlemsarrangementer og representative adminflater ligger i
 [`fullstack-iteration-2026-08-26.md`](./fullstack-iteration-2026-08-26.md). Dokumentet inneholder
 målekontrakt, førbaseline, prioritert plan, implementerte tiltak, ettermåling, avviste hypoteser og
-separat mergeplan for frontend og backend.
+separat mergeplan for frontend og backend. Samme dokument inneholder også PageSpeed-oppfølgingen:
+den korrigerte produksjonsmålingen for hele offentlig booking-ruten, det forkastede
+UI-chunksplitt-eksperimentet og den beholdte kontrastforbedringen.
 
 Iterasjonen er fullført på lokale feature branches, men er ikke pushet eller merget. Den tidligere
 leveransen under er fortsatt historisk referansegrunnlag.

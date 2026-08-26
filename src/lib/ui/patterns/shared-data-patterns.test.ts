@@ -37,7 +37,7 @@ describe("public shared data patterns", () => {
       "tracking-schedule-time-start"
     );
     expect(end).toHaveTextContent("–11:00");
-    expect(end).toHaveClass("text-caption", "leading-schedule-time");
+    expect(end).toHaveClass("text-ink-soft", "text-caption", "leading-schedule-time");
     expect(accessory).toHaveClass("inline-flex");
 
     const compactWeather = accessory?.querySelector('[data-ui="weather"]');
