@@ -55,6 +55,12 @@ describe("login screen", () => {
     );
 
     const otp = screen.getByRole("textbox", { name: "Skriv inn koden fra e-posten" });
+    expect(otp).toHaveAttribute("id", "otp");
+    expect(otp).toHaveAttribute("name", "otp");
+    expect(otp).toHaveAttribute("autocomplete", "one-time-code");
+    expect(otp).toHaveAttribute("inputmode", "numeric");
+    expect(otp).toHaveAttribute("pattern", "[0-9]*");
+    expect(otp).toHaveAttribute("maxlength", "6");
     await fireEvent.input(otp, { target: { value: "12a3456" } });
     expect(otp).toHaveValue("123456");
     await fireEvent.click(screen.getByRole("button", { name: "Verifiser kode" }));

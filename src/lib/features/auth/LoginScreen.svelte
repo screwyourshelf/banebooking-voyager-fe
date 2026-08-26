@@ -214,6 +214,7 @@
         <Form density="compact" pending={busy} onsubmit={verifyOtp}>
           <FormFields>
             <FormField
+              controlId="otp"
               label="Skriv inn koden fra e-posten"
               description={`Koden ble sendt til ${email}.`}
               error={otpError}
@@ -225,6 +226,7 @@
                 name="otp"
                 autocomplete="one-time-code"
                 inputmode="numeric"
+                pattern="[0-9]*"
                 maxlength={6}
                 disabled={busy}
                 oninput={normalizeOtp}

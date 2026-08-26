@@ -18,9 +18,12 @@ logge brukeren ut, slette appdata eller påvirke andre apper på samme origin.
 ## Beslutning
 
 1. `src/app.html` kan lytte etter Vites `vite:preloadError` og feil på inngangsmodulen før
-   SvelteKit-runtime har startet.
-2. Recovery henter HTML med `cache: "no-store"`, varmer kun ressursene som den nye HTML-filen peker
-   på, og erstatter dokumentet eller gjør en vanlig navigasjon som fallback.
+   SvelteKit-runtime har startet. `vite:preloadError` kanselleres ikke: Vite må avvise importen med
+   den opprinnelige feilen i stedet for å gi SvelteKit en `undefined` routemodul.
+2. Recovery markerer dokumentet mens den pågår, viser oppstartsflaten også når feilen oppstår etter
+   appstart, henter HTML med `cache: "no-store"`, varmer kun ressursene som den nye HTML-filen peker
+   på, og erstatter dokumentet eller gjør en vanlig navigasjon som fallback. Feilen rapporteres ikke
+   separat av SvelteKit-hooken mens denne recoveryen er aktiv.
 3. Bootstrapen kan ikke lese, endre eller slette `localStorage` eller Cache Storage.
 4. Bootstrapen kan ikke rydde `sessionStorage`. Det eneste tillatte storage-unntaket er å lese og
    skrive den private nøkkelen `banebooking:asset-recovery-at` for å hindre reload-løkker.
@@ -31,6 +34,8 @@ logge brukeren ut, slette appdata eller påvirke andre apper på samme origin.
 ## Konsekvenser
 
 - Utdaterte chunks kan gjenopprettes før appen har startet.
+- En utdatert routechunk etter appstart gir samme recoveryflate og blir ikke omskrevet til en
+  misvisende intern SvelteKit-feil.
 - Recovery kan ikke løse en korrupt produktverdi ved å slette all nettleserdata; slike feil må
   håndteres av den ansvarlige platformadapteren.
 - En app under GitHub Pages-base path påvirker ikke søskenapper på samme origin.
