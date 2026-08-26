@@ -7,9 +7,8 @@
 ## Kontekst
 
 Applikasjonen har mye klientstyrt serverdata, caching og mutations mot et separat .NET-API.
-React-versjonen bruker TanStack Query og Axios. SvelteKit tilbyr route data og invalidation, mens
-Svelte 5 tilbyr universal reactivity. Uten tydelige grenser kan samme data ende i flere cacher og
-globale stateobjekter.
+SvelteKit tilbyr route data og invalidation, mens Svelte 5 tilbyr universal reactivity. Uten
+tydelige grenser kan samme data ende i flere cacher og globale stateobjekter.
 
 ## Beslutning
 
@@ -24,14 +23,14 @@ globale stateobjekter.
    for tenant, bruker eller sesjon.
 6. Delbar eller reload-stabil state legges i URL-parametere. Browser storage brukes bare gjennom
    en adapter for eksplisitt persistente preferanser og auth.
-7. Axios erstattes med en typed klient rundt native `fetch`. Klienten injiseres med `fetch`, base
+7. API-klienten er en typed klient rundt native `fetch`. Klienten injiseres med `fetch`, base
    URL, tokenleverandør og 401-handler.
 8. Endpointfunksjoner er rammeverksuavhengige. Queries og mutations eies av featuremodulen.
 9. SvelteKit remote functions brukes ikke mens API-et er eksperimentelt og backend er separat.
 
 ## Konsekvenser
 
-- Dagens querysemantikk kan flyttes uten å lage et eget state-rammeverk.
+- Querysemantikken har én eier uten et eget parallelt state-rammeverk.
 - Native `fetch` gjør endpointlaget brukbart fra både SvelteKit og klienten.
 - Utviklere må velge stateeier eksplisitt fremfor å opprette en generell store.
 - Query key factories og invalidation blir del av featurekontrakten.

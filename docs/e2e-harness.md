@@ -1,6 +1,6 @@
 # Lokal E2E-harness
 
-Den kritiske WP-7-porten kjører Playwright mot SvelteKit og den isolerte lokale
+Den kritiske E2E-porten kjører Playwright mot SvelteKit og den isolerte lokale
 utviklingsbackenden. Harnessen endrer ikke produksjonsauth eller backendkode.
 
 ## Forutsetninger og prosesser
@@ -30,7 +30,7 @@ registrerer bare test-eide booking-ID-er for avgrenset opprydding.
   midlertidig og setter navnet tilbake i produktflyten. Ettertesten gjenoppretter hele det leste
   klubbobjektet med et separat admin-token dersom testen stopper underveis.
 - Harnessen seeder, nullstiller eller sletter ikke andre utviklingsdata. Backenden eier fortsatt
-  migrering og idempotent seed ved oppstart.
+  databasemigrering og idempotent seed ved oppstart.
 
 Kjør porten med:
 
@@ -45,7 +45,7 @@ obligatorisk policyredirect uten å endre backenddata. De to øvrige kritiske fl
 medlemmenes booking/avbestilling og administratorens klubbendring. De visuelle testene bruker
 stabile, test-eide svar og den samme authharnessen, men utfører ingen mutasjoner. Den navngitte
 route-, rolle-, state-, viewport-, theme- og interaksjonskontrakten ligger i
-[`styling-reference-matrix.md`](./styling-reference-matrix.md).
+[`visual-regression-matrix.md`](./visual-regression-matrix.md).
 
 ## Produksjonsartefakter og routes
 
@@ -58,5 +58,5 @@ npm run test:e2e:production
 ```
 
 Produksjonsporten bruker deterministiske nettverkssvar og trenger ikke backend eller database.
-Detaljert route-, viewport- og bundlebevis finnes i
-[`wp-7-production-evidence.md`](./wp-7-production-evidence.md).
+Route-, viewport- og bundlekravene eies av produksjonsspesifikasjonen og
+`scripts/verify-production-builds.mjs`.

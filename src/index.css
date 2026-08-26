@@ -2,7 +2,7 @@
 @import "@fontsource-variable/figtree";
 @import "./styles/design-system.css";
 
-@source not "../docs/styling-baseline.json";
+@source not "../scripts/styling-guards/styling-baseline.json";
 @source not "../scripts/measure-styling-baseline.mjs";
 @source not "../scripts/styling-baseline";
 @source not "../scripts/styling-guards";

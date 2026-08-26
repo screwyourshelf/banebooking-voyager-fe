@@ -8,7 +8,7 @@
 
 Dette dokumentet beskriver Banebookings visuelle språk, informasjonssemantikk og offentlige
 UI-mønstre uavhengig av frontendrammeverk. Det skal brukes sammen med
-[`sveltekit-architecture.md`](./sveltekit-architecture.md) og
+[`architecture.md`](./architecture.md) og
 [`ADR-004`](./adr/004-ui-and-component-boundaries.md) samt
 [`ADR-006`](./adr/006-tailwind-styling-and-theme-ownership.md) og
 [`ADR-007`](./adr/007-pre-module-startup-presentation.md).
@@ -265,7 +265,7 @@ offentlige grensen er typed filterstate og semantiske callbacks; features bygger
 filteranatomi med snippets eller lokal CSS. Et eksplisitt custom choice-snippet finnes bare for en
 kontroll som allerede eies av designsystemet, som bookingpresentasjonen av `DatePicker`.
 
-React-referansens reelle konsumenter er kaldkartlagt slik:
+Dagens reelle konsumenter er kartlagt slik:
 
 | Kontrollkombinasjon                | Flater                                                                                        |
 | ---------------------------------- | --------------------------------------------------------------------------------------------- |
@@ -326,9 +326,9 @@ som skal leses fremfor redigeres. Det er en avgrenset leseflate, ikke en generel
 ## Navigasjon
 
 Navigation-familien eier semantikk, aktiv state, fokusuttrykk og den indre geometrien for
-sidefelt, mobil bunnnavigasjon, seksjonslenker og navigasjonsnære handlinger. App-shellen i WP-5
-eier hvilke av disse flatene som rendres, plasseringen rundt arbeidsområdet og koblingen til
-SvelteKit-routes, auth, tenant og serverdata.
+sidefelt, mobil bunnnavigasjon, seksjonslenker og navigasjonsnære handlinger. App-shellen eier hvilke
+av disse flatene som rendres, plasseringen rundt arbeidsområdet og koblingen til SvelteKit-routes,
+auth, tenant og serverdata.
 
 Den observerte produktkontrakten er:
 
@@ -410,7 +410,7 @@ Den observerte produktkontrakten er:
 
 ### App-shellkontrakt
 
-React-referansen og SvelteKit-grunnlaget er kaldkartlagt til én responsiv shellkontrakt:
+Den aktive frontendimplementasjonen følger én responsiv shellkontrakt:
 
 | Tilstand                            | Observerbar flate                                                                                       | Eier i SvelteKit                                                                                                     |
 | ----------------------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- |
@@ -468,7 +468,7 @@ Delte produktkomponenter uttrykker offentlig anatomi og state med dataattributte
 
 ## Ferdigkriterier
 
-En migrert arbeidsflate er ferdig når:
+En arbeidsflate er ferdig når:
 
 - funksjonalitet, URL-er og backendautorisasjon er bevart eller eksplisitt avtalt endret
 - mobil og desktop er bevisst utformet og kontrollert
@@ -479,5 +479,5 @@ En migrert arbeidsflate er ferdig når:
 - tastaturnavigasjon og fokusoppførsel er kontrollert
 - arkitekturkontroll, tester, build og visuell kontroll passerer
 
-React-versjonen brukes bare til å observere produktadferd og visuell referanse. Dens komponenttre,
-hooks, providers og filstruktur er ikke en del av ferdigkriteriene.
+Historiske frontendimplementasjoner er ikke en strukturmal. Aktiv kode, produktkontraktene og de
+kjørbare testene er autoritative.

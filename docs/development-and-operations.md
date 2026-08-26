@@ -48,8 +48,7 @@ Svelte-anatomi, CSS-klasser, `data-ui`, primitives, slots, utilities og tokens t
 separate permanente visualiseringskontrakten bare tillater registrert datadrevet geometri.
 Produksjonstreet inkluderer også `src/app.html` og håndhever ADR-007-flatens eksakte inline-CSS,
 eneste styleattributt og synkronisering mot de elleve `--app-startup-*`-rollene.
-De bindende stylingkravene ligger i ADR-006, ADR-007 og de kjørbare kontrollene. Den fullførte
-utførelsesrekkefølgen finnes i [`styling-lift-and-shift-plan.md`](./styling-lift-and-shift-plan.md).
+De bindende stylingkravene ligger i ADR-006, ADR-007 og de kjørbare kontrollene.
 
 ### Reproduserbar statisk analyse
 
@@ -103,8 +102,7 @@ Før et artefakt publiseres, kjør minst `npm test`, `npm run check`, `npm run t
 analysen over. Selve opplastingen til Cloudflare Pages eller GitHub Pages er en ekstern endring og
 skal bare gjøres etter eksplisitt godkjenning.
 
-Detaljer om testdata og prosesseierskap finnes i [`e2e-harness.md`](./e2e-harness.md). Gjeldende
-styling-, route-, fallback- og bundlebevis finnes i
-[`styling-conformance-evidence.md`](./styling-conformance-evidence.md) og
-[`styling-baseline.json`](./styling-baseline.json). Det tidligere rammeverksløftets historiske
-produksjonsbevis ligger i [`wp-7-production-evidence.md`](./wp-7-production-evidence.md).
+Detaljer om testdata og prosesseierskap finnes i [`e2e-harness.md`](./e2e-harness.md), og den aktive
+snapshotdekningen beskrives i [`visual-regression-matrix.md`](./visual-regression-matrix.md).
+Stylingguardene og deres maskinelle baseline eies av `scripts/styling-guards/`; gjeldende route-,
+fallback- og bundlekrav håndheves av produksjons-E2E og `scripts/verify-production-builds.mjs`.

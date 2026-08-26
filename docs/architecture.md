@@ -1,26 +1,24 @@
-# SvelteKit-målarkitektur
+# Frontendarkitektur
 
-> **Status:** Godkjent målarkitektur for migreringen
+> **Status:** Bindende arkitektur
 >
-> **Branch:** `feature/sveltekit-lift-and-shift`
->
-> **Sist oppdatert:** 2026-08-23
+> **Sist oppdatert:** 2026-08-26
 
 ## Formål
 
-Frontend skal omskrives fra React/Vite til Svelte 5 og SvelteKit uten å endre produktets
-funksjonelle kontrakt mot backend. Migreringen er en samlet lift-and-shift på egen branch.
-React-applikasjonen er produksjonsreferanse frem til SvelteKit-versjonen har funksjonsparitet.
+Frontend er bygget med Svelte 5 og SvelteKit og bruker et separat .NET-API. Arkitekturen bevarer
+tydelige produkt-, URL- og API-kontrakter samtidig som ansvaret ligger hos rammeverkets naturlige
+eiere.
 
-Målarkitekturen skal:
+Arkitekturen skal:
 
 - gi tydelig eierskap til routing, serverdata, lokal state og UI-atferd
-- beholde det etablerte designspråket uten å kopiere React-komponentstrukturen
+- holde produktets designspråk uavhengig av featureimplementasjonen
 - isolere Supabase, nettleser-API-er og hostingvalg slik at senere SSR er mulig
 - organisere kode etter produktfeatures uten skjulte avhengigheter mellom dem
 - gjøre arkitekturgrensene maskinelt kontrollerbare
 
-Følgende ADR-er er bindende deler av målarkitekturen:
+Følgende ADR-er er bindende deler av arkitekturen:
 
 - [ADR-001: Rendering og hosting](./adr/001-rendering-and-hosting.md)
 - [ADR-002: State, data og API](./adr/002-state-data-and-api.md)
@@ -32,9 +30,8 @@ Følgende ADR-er er bindende deler av målarkitekturen:
 
 ## Arkitekturprinsipper
 
-1. **Svelte, ikke React oversatt linje for linje.** React-hooks, providers og container/view-par
-   kopieres ikke mekanisk. SvelteKit-layouts, route data, snippets, runes og context brukes der de
-   eier problemet bedre.
+1. **SvelteKit-eierskap først.** Layouts, route data, snippets, runes og context brukes der de eier
+   problemet. Parallelle rammeverksabstraksjoner innføres ikke uten et eget behov.
 2. **Én eier per tilstand.** URL, route data, Query-cache, context og lokal komponentstate har
    forskjellige ansvarsområder. Samme data lagres ikke parallelt uten en eksplisitt hydreringsbro.
 3. **Avhengigheter peker innover.** Routes komponerer features. Features bruker offentlig UI,
@@ -69,8 +66,7 @@ endring. Dette påvirker kodeformen direkte:
 - Kommentarer forklarer beslutninger som ikke kan uttrykkes gjennom struktur og typer. Store
   forklaringsblokker er et signal om at modulgrensen bør vurderes på nytt.
 
-Disse reglene supplerer avhengighetstabellen under og inngår i kvalitetsporten for hver
-arbeidspakke.
+Disse reglene supplerer avhengighetstabellen under og inngår i kvalitetsporten for hver endring.
 
 ## Mappestruktur
 
@@ -189,8 +185,8 @@ brukes av routes, features eller offentlig UI. Se
 ### `contracts`
 
 Inneholder DTO-er som speiler HTTP-kontrakten mot .NET-API-et. Kontraktene er transporttyper, ikke
-UI-modeller. Eksisterende typer flyttes hit før de eventuelt forbedres. Respons- og requesttyper
-skal kunne genereres fra OpenAPI senere uten at features må reorganiseres.
+UI-modeller. Respons- og requesttyper skal kunne genereres fra OpenAPI senere uten at features må
+reorganiseres.
 
 ### `domain`
 
@@ -385,18 +381,17 @@ komponentkontrakten, primært i skjemakontroller, og ikke som generell dataflyt 
 | Brukerflyt        | Playwright                           | login, booking, avbestilling, adminendring |
 | Visuell paritet   | skjermbilder på definerte viewporter | app-shell og sentrale features             |
 
-Ingen feature regnes som migrert før dens kritiske flyt har minst samme verifikasjonsnivå som
-React-versjonen. Manglende React-tester er ikke grunn til å videreføre manglende dekning.
+En featureendring regnes ikke som ferdig før dens kritiske flyt har et verifikasjonsnivå som svarer
+til risikoen. Manglende eksisterende tester er ikke grunn til å videreføre manglende dekning.
 
 ## Maskinelle grenser
 
-Følgende skal inngå i `npm run check` når SvelteKit-grunnlaget etableres:
+Følgende inngår i `npm run check`:
 
 - `svelte-check`
 - ESLint og Prettier med Svelte-støtte
 - eksisterende design-systemkontroll tilpasset `.svelte`
-- semantisk Tailwind-/theme-vokabular, featurestylingforbud og avtakende stylingbaseline etter
-  ADR-006
+- semantisk Tailwind-/theme-vokabular, featurestylingforbud og stylingbaseline etter ADR-006
 - forbud mot Bits UI-import utenfor `ui/primitives`
 - forbud mot feature-til-feature-importer
 - forbud mot direkte Supabase-, Sentry- og storage-importer utenfor platformlaget
@@ -408,30 +403,13 @@ Følgende skal inngå i `npm run check` når SvelteKit-grunnlaget etableres:
 Arkitekturkontrollen skal bruke eksplisitte tillatte grenser. En voksende unntaksliste er teknisk
 gjeld og kan ikke utvides uten en dokumentert beslutning.
 
-## Migreringsrekkefølge
+## Evolusjonsgrenser
 
-Migreringen skjer på samme branch og deployes ikke delvis:
-
-1. SvelteKit-build, adapter-static, base path og fallback.
-2. Contracts, domainverktøy og platformlag.
-3. Auth, tenant-routing, Query client, feil og observability.
-4. UI-primitives og designsystem-patterns.
-5. App-shell og navigasjon.
-6. Features i avhengighetsrekkefølge.
-7. Full funksjonell, visuell og deploymessig paritetskontroll.
-8. Produksjonsbytte og deretter fjerning av React-koden.
-
-En tidlig komplett flyt brukes til å validere implementasjonen av beslutningene, men er ikke et
-separat eksperiment eller en delvis produksjonsutrulling.
-
-## Ikke-mål for lift-and-shift
-
-- endre backendkontrakter uten at migreringen avdekker en reell blokkering
-- innføre BFF eller SvelteKit-server som nytt autoritativt backendlag
-- redesigne produktet samtidig med rammeverksbyttet
-- innføre offline-first, lokal database eller realtime uten separat beslutning
-- gjøre SSR-auth til del av paritetsleveransen
-- videreføre React-struktur bare for å minimere linjediff
+- Backendkontrakter endres som koordinerte fullstackleveranser med separat verifikasjon og commits.
+- BFF, SvelteKit-server som autoritativt backendlag, SSR-auth, offline-first, lokal database og
+  realtime krever en eksplisitt arkitekturbeslutning.
+- Arkitekturen utvides gjennom navngitte eiere og ADR-er, ikke parallelle data-, state- eller
+  UI-lag.
 
 ## Referanser
 
