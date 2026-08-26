@@ -63,10 +63,11 @@ export function saveCourtMutationOptions(api: ApiClient, queryClient: QueryClien
       courtId,
       courtRequest,
     }: SaveCourtVariables) => {
-      if (courtChanged) await updateCourt(api, slug, courtId, courtRequest);
-      if (bookingSettingsChanged) {
-        await updateCourtBookingSettings(api, slug, courtId, bookingSettingsRequest);
-      }
+      const requests = [];
+      if (courtChanged) requests.push(updateCourt(api, slug, courtId, courtRequest));
+      if (bookingSettingsChanged)
+        requests.push(updateCourtBookingSettings(api, slug, courtId, bookingSettingsRequest));
+      await Promise.all(requests);
     },
     onSuccess: () => invalidateCourtResources(queryClient, slug),
     retry: false,

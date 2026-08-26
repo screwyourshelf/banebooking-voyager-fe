@@ -1,25 +1,31 @@
 # Aktivt arbeid
 
-> **Status:** Ingen aktiv leveranse
+> **Status:** Fullstack-ytelsesiterasjon fullført lokalt — klar for review
 >
-> **Sist avsluttet:** API- og fullstackytelse, 2026-08-26
+> **Branch:** `perf/fullstack-iteration-2026-08-26`
 
-## Avsluttet leveranse
+## Aktiv leveranse
 
-Performanceplanens frontend- og fullstacktiltak er merget. Resultatene ligger i
-[`frontend-ettermålingen`](./performance/frontend-after-2026-08-26.md) og
-[`fullstack-sluttkontrollen`](./performance/fullstack-after-2026-08-26.md).
+En ny fullstackbaseline, evidensbasert prioritering, tre tiltak og identisk ettermåling er fullført
+mot lokal Development-backend og PostgreSQL. Resultater, gjenstående kandidater og full
+verifikasjonsmatrise ligger i
+[`fullstack-iterasjonen`](./performance/fullstack-iteration-2026-08-26.md).
 
-Detaljer og mellomtilstander skal leses fra disse referansene og git-historikken, ikke videreføres
-som aktiv oppgave i denne filen.
+Frontendtiltakene fjerner refetch etter avvist booking og starter bane-/overstyringswrites
+parallelt. Måleharnessen dekker 27 flyter og bevarer auth-callback med `returnTo` som eksplisitt
+regresjonskontrakt. En etterfølgende PageSpeed-kontroll har i tillegg rettet sluttidskontrasten og
+utvidet produksjonsporten fra HTML-startfiler til hele JavaScript-grafen for offentlig booking.
+UI-chunksplitt og asynkron CSS ble målt, men ikke beholdt fordi de ikke dokumenterte en trygg gevinst.
 
-## Neste vurdering
+## Neste steg
 
-En ny, helhetlig ytelsesvurdering av frontend, API og underliggende datatilgang er avtalt, men ikke
-startet. Den skal etableres som et eget initiativ fra mergede `main`/`master`, med nytt scope og ny
-baseline før kandidater velges.
+Opprett separate reviewløp når ekstern endring godkjennes:
 
-Ikke fortsett direkte på tiltak eller kandidater fra den avsluttede planen uten en ny måling.
+1. Merge backendbranchen til `master`.
+2. Merge denne frontendbranchen til `main`.
+
+Ikke start de utsatte cache-, polling- eller arrangementskontraktene uten ny produksjonsrelevant
+evidens.
 
 ## Blokkeringer
 

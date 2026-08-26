@@ -63,7 +63,7 @@ describe("booking bootstrap", () => {
 });
 
 describe("booking slots", () => {
-  it("beholder forrige data og oppdaterer synlige tider hvert 30. sekund", () => {
+  it("beholder forrige data og oppdaterer synlige tider hvert 60. sekund", () => {
     const initialData = [createSlot()];
     const options = bookingSlotsQueryOptions(
       { request: vi.fn() as ApiClient["request"] },
@@ -86,7 +86,7 @@ describe("booking slots", () => {
 });
 
 describe("booking mutations", () => {
-  it("oppdaterer optimistisk og invaliderer aktiv kalender og Mine tider", async () => {
+  it("oppdaterer optimistisk og invaliderer aktiv kalender og Mine tider ved suksess", async () => {
     const queryClient = new QueryClient();
     const queryKey = bookingQueryKeys.slots("fjordvik", "court-1", "2026-08-23");
     const slot = createSlot({ kapabiliteter: [Kapabiliteter.booking.book] });
@@ -111,7 +111,7 @@ describe("booking mutations", () => {
       booketAv: "Du",
       erEier: true,
     });
-    await options.onSettled();
+    await options.onSuccess();
     expect(invalidate).toHaveBeenNthCalledWith(1, { queryKey });
     expect(invalidate).toHaveBeenNthCalledWith(2, {
       queryKey: bookingQueryKeys.mine("fjordvik"),
@@ -121,7 +121,34 @@ describe("booking mutations", () => {
     expect(queryClient.getQueryData(queryKey)).toEqual([slot]);
   });
 
-  it("ruller avbestilling tilbake til eksakt forrige slotliste", async () => {
+  it("ruller oppretting tilbake uten refetch når serveren avviser bookingen", async () => {
+    const queryClient = new QueryClient();
+    const queryKey = bookingQueryKeys.slots("fjordvik", "court-1", "2026-08-23");
+    const slot = createSlot({ kapabiliteter: [Kapabiliteter.booking.book] });
+    queryClient.setQueryData(queryKey, [slot]);
+    const invalidate = vi.spyOn(queryClient, "invalidateQueries").mockResolvedValue(undefined);
+    const options = createBookingMutationOptions(
+      { request: vi.fn() as ApiClient["request"] },
+      queryClient,
+      "fjordvik",
+      "court-1",
+      "2026-08-23"
+    );
+    const request = {
+      baneId: "court-1",
+      dato: "2026-08-23",
+      startTid: "10:00",
+      sluttTid: "11:00",
+    };
+
+    const context = await options.onMutate(request);
+    options.onError(new Error("Avvist"), request, context);
+
+    expect(queryClient.getQueryData(queryKey)).toEqual([slot]);
+    expect(invalidate).not.toHaveBeenCalled();
+  });
+
+  it("invaliderer etter vellykket avbestilling", async () => {
     const queryClient = new QueryClient();
     const queryKey = bookingQueryKeys.slots("fjordvik", "court-1", "2026-08-23");
     const slot = createSlot({
@@ -131,6 +158,7 @@ describe("booking mutations", () => {
       kapabiliteter: [Kapabiliteter.booking.fjern],
     });
     queryClient.setQueryData(queryKey, [slot]);
+    const invalidate = vi.spyOn(queryClient, "invalidateQueries").mockResolvedValue(undefined);
     const options = cancelBookingMutationOptions(
       { request: vi.fn().mockResolvedValue({ melding: "OK" }) as ApiClient["request"] },
       queryClient,
@@ -139,12 +167,41 @@ describe("booking mutations", () => {
       "2026-08-23"
     );
 
-    const context = await options.onMutate({ bookingId: "booking-1" });
+    await options.onMutate({ bookingId: "booking-1" });
     expect(queryClient.getQueryData<(typeof slot)[]>(queryKey)?.[0]).toMatchObject({
       bookingId: null,
       booketAv: null,
     });
+    await options.onSuccess();
+    expect(invalidate).toHaveBeenNthCalledWith(1, { queryKey });
+    expect(invalidate).toHaveBeenNthCalledWith(2, {
+      queryKey: bookingQueryKeys.mine("fjordvik"),
+    });
+  });
+
+  it("ruller avbestilling tilbake uten refetch når serveren avviser den", async () => {
+    const queryClient = new QueryClient();
+    const queryKey = bookingQueryKeys.slots("fjordvik", "court-1", "2026-08-23");
+    const slot = createSlot({
+      bookingId: "booking-1",
+      booketAv: "Du",
+      erEier: true,
+      kapabiliteter: [Kapabiliteter.booking.fjern],
+    });
+    queryClient.setQueryData(queryKey, [slot]);
+    const invalidate = vi.spyOn(queryClient, "invalidateQueries").mockResolvedValue(undefined);
+    const options = cancelBookingMutationOptions(
+      { request: vi.fn() as ApiClient["request"] },
+      queryClient,
+      "fjordvik",
+      "court-1",
+      "2026-08-23"
+    );
+
+    const context = await options.onMutate({ bookingId: "booking-1" });
     options.onError(new Error("Avvist"), { bookingId: "booking-1" }, context);
+
     expect(queryClient.getQueryData(queryKey)).toEqual([slot]);
+    expect(invalidate).not.toHaveBeenCalled();
   });
 });

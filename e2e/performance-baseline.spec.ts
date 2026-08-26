@@ -24,7 +24,7 @@ const developmentSessionKey = "banebooking_development_session";
 const frontendRoot = path.resolve(import.meta.dirname, "..");
 const backendRoot = path.resolve(frontendRoot, "../backend");
 
-type DevelopmentProfile = "admin" | "medlem";
+type DevelopmentProfile = "admin" | "medlem" | "utvidet";
 
 type DevelopmentSession = {
   accessToken: string;
@@ -68,6 +68,8 @@ type CalendarSlot = {
   baneId: string;
   bookingId?: string | null;
   erPassert: boolean;
+  kapabiliteter?: string[];
+  dato?: string;
   slotSluttTid: string;
   slotStartTid: string;
 };
@@ -77,7 +79,7 @@ type ArrangementFixture = {
   court: Court;
   date: string;
   daysAhead: number;
-  slots: [CalendarSlot, CalendarSlot, CalendarSlot];
+  slots: [CalendarSlot, CalendarSlot, CalendarSlot, CalendarSlot];
   title: string;
 };
 
@@ -128,33 +130,48 @@ test("records the local API and full-stack baseline", async ({ browser, request 
 
   const flows: NetworkFlow[] = [];
   const memberSession = await developmentLogin(request, "medlem");
+  const extendedSession = await developmentLogin(request, "utvidet");
   const adminSession = await developmentLogin(request, "admin");
   const fixture = await createArrangementFixture(request, adminSession);
   const cleanupCourt = fixture.court;
+  const cleanupBookings: { bookingId: string; session: DevelopmentSession }[] = [];
+  let cleanupCreatedArrangementId: string | null = null;
   const cleanupErrors: unknown[] = [];
 
   try {
-    const anonymous = await createMeasuredPage(browser, request);
-    await anonymous.recorder.begin("cold-anonymous-booking-startup");
-    await anonymous.page.goto(tenantUrl());
-    await expectUsableBooking(anonymous.page);
-    anonymous.recorder.markReady();
-    flows.push(await anonymous.recorder.end());
-    await anonymous.context.close();
+    const skippedScenarios: string[] = [];
+    for (let run = 1; run <= 3; run += 1) {
+      const anonymous = await createMeasuredPage(browser, request);
+      await anonymous.recorder.begin(`cold-anonymous-booking-startup-run-${run}`);
+      await anonymous.page.goto(tenantUrl());
+      await expectUsableBooking(anonymous.page);
+      anonymous.recorder.markReady();
+      flows.push(await anonymous.recorder.end());
+      if (run === 1) {
+        skippedScenarios.push(
+          ...(await measurePublicBookingInteractions(anonymous.page, anonymous.recorder, flows))
+        );
+      }
+      await anonymous.context.close();
+    }
 
-    const authenticated = await createMeasuredPage(browser, request, memberSession);
-    await authenticated.recorder.begin("cold-authenticated-booking-startup-terms-accepted");
-    await authenticated.page.goto(tenantUrl());
-    await expectUsableBooking(authenticated.page);
-    await expect(
-      authenticated.page.getByRole("button", {
-        name: "Utvikling Medlem · Medlem",
-        exact: true,
-      })
-    ).toBeVisible();
-    authenticated.recorder.markReady();
-    flows.push(await authenticated.recorder.end());
-    await authenticated.context.close();
+    for (let run = 1; run <= 3; run += 1) {
+      const authenticated = await createMeasuredPage(browser, request, memberSession);
+      await authenticated.recorder.begin(
+        `cold-authenticated-booking-startup-terms-accepted-run-${run}`
+      );
+      await authenticated.page.goto(tenantUrl());
+      await expectUsableBooking(authenticated.page);
+      await expect(
+        authenticated.page.getByRole("button", {
+          name: "Utvikling Medlem · Medlem",
+          exact: true,
+        })
+      ).toBeVisible();
+      authenticated.recorder.markReady();
+      flows.push(await authenticated.recorder.end());
+      await authenticated.context.close();
+    }
 
     setMemberTermsAcceptance(false);
     const withoutTerms = await createMeasuredPage(browser, request, memberSession);
@@ -165,6 +182,18 @@ test("records the local API and full-stack baseline", async ({ browser, request 
     flows.push(await withoutTerms.recorder.end());
     await withoutTerms.context.close();
 
+    skippedScenarios.push(
+      ...(await measureMemberFlows({
+        browser,
+        cleanupBookings,
+        extendedSession,
+        fixture,
+        flows,
+        memberSession,
+        request,
+      }))
+    );
+
     const polling = await createMeasuredPage(browser, request, memberSession);
     await polling.page.goto(tenantUrl());
     await expectUsableBooking(polling.page);
@@ -174,11 +203,19 @@ test("records the local API and full-stack baseline", async ({ browser, request 
     flows.push(await polling.recorder.end());
     await polling.context.close();
 
+    await measureAdminReadSurfaces(browser, request, adminSession, flows);
+
     const arrangement = await createMeasuredPage(browser, request, adminSession);
     await arrangement.page.goto(tenantUrl("arrangement"));
     await expect(
       arrangement.page.getByRole("heading", { level: 1, name: "Administrer arrangementer" })
     ).toBeVisible();
+    cleanupCreatedArrangementId = await createArrangementThroughUi(
+      arrangement.page,
+      arrangement.recorder,
+      flows,
+      fixture
+    );
     await arrangement.page
       .getByRole("button", { name: new RegExp(`^Rediger ${escapeRegex(fixture.title)},`) })
       .click();
@@ -257,6 +294,25 @@ test("records the local API and full-stack baseline", async ({ browser, request 
     ).toHaveCount(0);
     arrangement.recorder.markReady();
     flows.push(await arrangement.recorder.end());
+
+    await arrangementEditor.getByRole("button", { name: /Informasjon$/ }).click();
+    await arrangementEditor.getByRole("button", { name: "Avlys arrangement", exact: true }).click();
+    const deleteArrangementDialog = arrangement.page.getByRole("dialog", {
+      name: "Avlys arrangement?",
+    });
+    await expect(deleteArrangementDialog).toBeVisible();
+    await arrangement.recorder.begin("delete-arrangement");
+    await deleteArrangementDialog
+      .getByRole("button", { name: "Avlys arrangement", exact: true })
+      .click();
+    await expect(arrangementEditor).toBeHidden();
+    await expect(
+      arrangement.page.getByRole("button", {
+        name: new RegExp(`^Rediger ${escapeRegex(fixture.title)},`),
+      })
+    ).toHaveCount(0);
+    arrangement.recorder.markReady();
+    flows.push(await arrangement.recorder.end());
     await arrangement.context.close();
 
     const court = await createMeasuredPage(browser, request, adminSession);
@@ -294,6 +350,14 @@ test("records the local API and full-stack baseline", async ({ browser, request 
         cwd: frontendRoot,
         encoding: "utf8",
       }).trim(),
+      coverage: {
+        developmentProfiles: ["admin", "utvidet", "medlem"],
+        regressionContracts: [
+          "auth/callback prerender and refresh",
+          "auth/callback returnTo tenant isolation",
+        ],
+        skippedScenarios,
+      },
       finishedAt: new Date().toISOString(),
       flows,
       node: process.version,
@@ -313,8 +377,18 @@ test("records the local API and full-stack baseline", async ({ browser, request 
     } catch (error) {
       cleanupErrors.push(error);
     }
+    for (const booking of cleanupBookings) {
+      try {
+        await deleteBookingFixture(request, booking.session, booking.bookingId);
+      } catch (error) {
+        cleanupErrors.push(error);
+      }
+    }
     for (const cleanup of [
       () => restoreCourt(request, adminSession, cleanupCourt),
+      ...(cleanupCreatedArrangementId
+        ? [() => deleteArrangementFixture(request, adminSession, cleanupCreatedArrangementId)]
+        : []),
       () => deleteArrangementFixture(request, adminSession, fixture.arrangementId),
     ]) {
       try {
@@ -328,6 +402,272 @@ test("records the local API and full-stack baseline", async ({ browser, request 
     throw new AggregateError(cleanupErrors, "Performanceharnessen kunne ikke rydde opp testdata.");
   }
 });
+
+async function measurePublicBookingInteractions(
+  page: Page,
+  recorder: FlowRecorder,
+  flows: NetworkFlow[]
+) {
+  const skipped: string[] = [];
+  const dayGroup = page.getByRole("group", { name: "Dag" });
+  await recorder.begin("public-booking-change-date");
+  await dayGroup.getByRole("button", { name: "I morgen", exact: true }).click();
+  await expectBookingSelectionSettled(page);
+  recorder.markReady();
+  flows.push(await recorder.end());
+
+  const courtChoice = page
+    .getByRole("group", { name: "Bane" })
+    .getByRole("button", { pressed: false })
+    .first();
+  if ((await courtChoice.count()) > 0) {
+    await recorder.begin("public-booking-change-court");
+    await courtChoice.click();
+    await expectBookingSelectionSettled(page);
+    recorder.markReady();
+    flows.push(await recorder.end());
+  } else {
+    skipped.push("Bytte bane: testdataene har bare én aktiv bane i valgt gren.");
+  }
+
+  const activityChoice = page
+    .getByRole("group", { name: "Gren" })
+    .getByRole("button", { pressed: false })
+    .first();
+  if ((await activityChoice.count()) > 0) {
+    await recorder.begin("public-booking-change-activity");
+    await activityChoice.click();
+    await expectBookingSelectionSettled(page);
+    recorder.markReady();
+    flows.push(await recorder.end());
+  } else {
+    skipped.push("Bytte gren: testdataene har bare én aktiv gren.");
+  }
+
+  await page.getByRole("link", { name: "Arrangementer", exact: true }).first().click();
+  await expect(page.getByRole("heading", { level: 1, name: "Arrangementer" })).toBeVisible();
+  await recorder.begin("warm-booking-route-return");
+  await page.getByRole("link", { name: "Book bane", exact: true }).first().click();
+  await expectUsableBooking(page);
+  recorder.markReady();
+  flows.push(await recorder.end());
+  return skipped;
+}
+
+async function measureMemberFlows({
+  browser,
+  cleanupBookings,
+  extendedSession,
+  fixture,
+  flows,
+  memberSession,
+  request,
+}: {
+  browser: Browser;
+  cleanupBookings: { bookingId: string; session: DevelopmentSession }[];
+  extendedSession: DevelopmentSession;
+  fixture: ArrangementFixture;
+  flows: NetworkFlow[];
+  memberSession: DevelopmentSession;
+  request: APIRequestContext;
+}) {
+  const skipped: string[] = [];
+  const measured = await createMeasuredPage(browser, request, memberSession);
+  try {
+    await measured.recorder.begin("member-arrangements-list");
+    await measured.page.goto(tenantUrl("arrangementer"));
+    await expect(
+      measured.page.getByRole("heading", { level: 1, name: "Arrangementer" })
+    ).toBeVisible();
+    await expect(measured.page.getByText("Laster arrangementer", { exact: true })).toHaveCount(0);
+    measured.recorder.markReady();
+    flows.push(await measured.recorder.end());
+
+    const arrangementRow = measured.page
+      .getByRole("button", { name: new RegExp(escapeRegex(fixture.title)) })
+      .first();
+    if ((await arrangementRow.count()) > 0) {
+      await measured.recorder.begin("member-arrangement-details");
+      await arrangementRow.click();
+      await expect(measured.page.getByRole("heading", { level: 4, name: "Program" })).toBeVisible();
+      measured.recorder.markReady();
+      flows.push(await measured.recorder.end());
+    } else {
+      skipped.push("Arrangementsdetalj: testfixture var ikke synlig i medlemslisten.");
+    }
+    skipped.push(
+      "Arrangementspåmelding, endring og trekking: produktet har ingen slik medlemsflate eller arrangementkontrakt."
+    );
+
+    await measured.page.goto(tenantUrl());
+    await expectUsableBooking(measured.page);
+    await measured.page
+      .getByRole("group", { name: "Dag" })
+      .getByRole("button", {
+        name: "I morgen",
+        exact: true,
+      })
+      .click();
+    await expectBookingSelectionSettled(measured.page);
+    const date = addDays(todayIso(), 1);
+    const successfulCandidate = await getBookableSlot(request, memberSession, date);
+    if (!successfulCandidate) {
+      skipped.push("Vellykket booking og konflikt: ingen bookbar tid i morgen.");
+      return skipped;
+    }
+
+    const bookButton = measured.page.getByRole("button", {
+      name: bookingButtonName(successfulCandidate.slot),
+      exact: true,
+    });
+    await expect(bookButton).toBeVisible();
+    const createResponse = measured.page.waitForResponse(
+      (response) =>
+        response.request().method() === "POST" &&
+        new URL(response.url()).pathname === `/api/klubb/${E2E_TENANT_SLUG}/bookinger`
+    );
+    await measured.recorder.begin("create-member-booking");
+    await bookButton.click();
+    const createdResponse = await createResponse;
+    expect(createdResponse.ok()).toBe(true);
+    await expect(measured.page.getByText("Din tid", { exact: true }).first()).toBeVisible();
+    measured.recorder.markReady();
+    flows.push(await measured.recorder.end());
+    const created = (await createdResponse.json()) as { bookingId: string };
+    cleanupBookings.push({ bookingId: created.bookingId, session: memberSession });
+
+    await measured.recorder.begin("open-my-bookings-after-create");
+    await measured.page.goto(tenantUrl("bookinger"));
+    await expect(
+      measured.page.getByRole("heading", { level: 1, name: "Mine bookinger" })
+    ).toBeVisible();
+    const createdRow = measured.page
+      .locator('[data-ui="collection-row"]')
+      .filter({ hasText: successfulCandidate.court.navn })
+      .filter({ hasText: successfulCandidate.slot.slotStartTid })
+      .first();
+    await expect(createdRow).toBeVisible();
+    measured.recorder.markReady();
+    flows.push(await measured.recorder.end());
+
+    await createdRow.getByRole("button").first().click();
+    await measured.recorder.begin("cancel-member-booking");
+    await createdRow.getByRole("button", { name: "Avbestill", exact: true }).click();
+    await expect(createdRow).toHaveCount(0);
+    measured.recorder.markReady();
+    flows.push(await measured.recorder.end());
+
+    await measured.page.goto(tenantUrl());
+    await expectUsableBooking(measured.page);
+    await measured.page
+      .getByRole("group", { name: "Dag" })
+      .getByRole("button", {
+        name: "I morgen",
+        exact: true,
+      })
+      .click();
+    await expectBookingSelectionSettled(measured.page);
+    const conflictCandidate = await getBookableSlot(request, memberSession, date);
+    if (!conflictCandidate) {
+      skipped.push("Bookingkonflikt: ingen bookbar tid i morgen etter opprydding.");
+      return skipped;
+    }
+    const blockingBooking = await createBookingFixture(
+      request,
+      extendedSession,
+      date,
+      conflictCandidate
+    );
+    cleanupBookings.push({ bookingId: blockingBooking, session: extendedSession });
+    const conflictingButton = measured.page.getByRole("button", {
+      name: bookingButtonName(conflictCandidate.slot),
+      exact: true,
+    });
+    await expect(conflictingButton).toBeVisible();
+    await measured.recorder.begin("create-member-booking-conflict");
+    await conflictingButton.click();
+    await expect(measured.page.getByText("Tiden kunne ikke bookes", { exact: true })).toBeVisible();
+    measured.recorder.markReady();
+    flows.push(await measured.recorder.end());
+    await deleteBookingFixture(request, extendedSession, blockingBooking);
+  } finally {
+    await measured.context.close();
+  }
+  return skipped;
+}
+
+async function measureAdminReadSurfaces(
+  browser: Browser,
+  request: APIRequestContext,
+  adminSession: DevelopmentSession,
+  flows: NetworkFlow[]
+) {
+  for (const surface of [
+    {
+      label: "open-user-administration",
+      path: "admin/brukere",
+      ready: async (page: Page) => {
+        await expect(page.getByRole("heading", { level: 1, name: "Brukere" })).toBeVisible();
+        await expect(page.getByText("Laster brukere", { exact: true })).toHaveCount(0);
+      },
+    },
+    {
+      label: "open-booking-statistics",
+      path: "admin/statistikk",
+      ready: async (page: Page) => {
+        await expect(page.getByRole("heading", { level: 1, name: "Statistikk" })).toBeVisible();
+        await expect(
+          page.getByText(/^(Beregnet .+|Ingen bookinger i perioden)$/).first()
+        ).toBeVisible();
+      },
+    },
+  ]) {
+    const measured = await createMeasuredPage(browser, request, adminSession);
+    await measured.recorder.begin(surface.label);
+    await measured.page.goto(tenantUrl(surface.path));
+    await surface.ready(measured.page);
+    measured.recorder.markReady();
+    flows.push(await measured.recorder.end());
+    await measured.context.close();
+  }
+}
+
+async function createArrangementThroughUi(
+  page: Page,
+  recorder: FlowRecorder,
+  flows: NetworkFlow[],
+  fixture: ArrangementFixture
+) {
+  await page.getByRole("button", { name: "Nytt arrangement", exact: true }).click();
+  const editor = page.getByRole("dialog").filter({
+    has: page.getByRole("navigation", { name: "Opprett arrangement" }),
+  });
+  await expect(editor).toBeVisible();
+  await editor.getByRole("combobox", { name: "Gren" }).click();
+  await page.getByRole("option", { name: fixture.court.grenNavn, exact: true }).click();
+  await editor.getByLabel("Intern beskrivelse").fill(`Performance UI-opprettelse ${Date.now()}`);
+  await editor.getByRole("button", { name: "Neste: Tider", exact: true }).click();
+  await selectScheduleDate(editor, fixture.daysAhead);
+  await editor.getByRole("switch", { name: "Alle ukedager i perioden" }).click();
+  await editor.getByRole("button", { name: fixture.court.navn, exact: true }).click();
+  await editor.getByRole("button", { name: fixture.slots[3].slotStartTid, exact: true }).click();
+  await editor.getByRole("button", { name: "Legg forslag i listen", exact: true }).click();
+  const submit = editor.getByRole("button", { name: "Opprett arrangement (1)", exact: true });
+  await expect(submit).toBeVisible();
+  const responsePromise = page.waitForResponse(
+    (response) =>
+      response.request().method() === "POST" &&
+      new URL(response.url()).pathname === `/api/klubb/${E2E_TENANT_SLUG}/arrangement`
+  );
+  await recorder.begin("create-arrangement");
+  await submit.click();
+  const response = await responsePromise;
+  expect(response.ok()).toBe(true);
+  await expect(page.getByText("Arrangementet er opprettet", { exact: true })).toBeVisible();
+  recorder.markReady();
+  flows.push(await recorder.end());
+  return ((await response.json()) as { arrangementId: string }).arrangementId;
+}
 
 async function createMeasuredPage(
   browser: Browser,
@@ -431,7 +771,7 @@ class FlowRecorder {
       durationMs: round(
         responseEnd >= 0 ? responseEnd : performance.now() - active.startedAtMs - pending.startMs
       ),
-      failed,
+      failed: failed && response === null,
       fromServiceWorker: response?.fromServiceWorker() ?? false,
       method: request.method(),
       path: apiPath(request.url()),
@@ -489,9 +829,9 @@ async function createArrangementFixture(
       const available = ((await calendarResponse.json()) as CalendarSlot[]).filter(
         (slot) => !slot.bookingId && !slot.erPassert
       );
-      if (available.length < 3) continue;
+      if (available.length < 4) continue;
 
-      const slots = available.slice(-3) as [CalendarSlot, CalendarSlot, CalendarSlot];
+      const slots = available.slice(-4) as [CalendarSlot, CalendarSlot, CalendarSlot, CalendarSlot];
       const title = `Performance baseline ${Date.now()}`;
       const createResponse = await request.post(
         `${E2E_BACKEND_ORIGIN}/api/klubb/${E2E_TENANT_SLUG}/arrangement`,
@@ -531,7 +871,66 @@ async function createArrangementFixture(
     }
   }
 
-  throw new Error("Fant ikke tre ledige slots på samme aktive bane de neste åtte dagene.");
+  throw new Error("Fant ikke fire ledige slots på samme aktive bane de neste åtte dagene.");
+}
+
+async function getBookableSlot(
+  request: APIRequestContext,
+  session: DevelopmentSession,
+  date: string
+) {
+  const response = await request.get(
+    `${E2E_BACKEND_ORIGIN}/api/klubb/${E2E_TENANT_SLUG}/booking-bootstrap?dato=${date}`,
+    { headers: developmentAuthorization(session) }
+  );
+  expect(response.ok()).toBe(true);
+  const bootstrap = (await response.json()) as {
+    baner: Court[];
+    kalenderSlots: CalendarSlot[];
+    valgtBaneId: string | null;
+  };
+  const court = bootstrap.baner.find((candidate) => candidate.id === bootstrap.valgtBaneId);
+  const slot = bootstrap.kalenderSlots.find(
+    (candidate) =>
+      !candidate.bookingId &&
+      !candidate.erPassert &&
+      (candidate.kapabiliteter?.includes("booking:book") ?? true)
+  );
+  return court && slot ? { court, slot } : null;
+}
+
+async function createBookingFixture(
+  request: APIRequestContext,
+  session: DevelopmentSession,
+  date: string,
+  candidate: { court: Court; slot: CalendarSlot }
+) {
+  const response = await request.post(
+    `${E2E_BACKEND_ORIGIN}/api/klubb/${E2E_TENANT_SLUG}/bookinger`,
+    {
+      data: {
+        baneId: candidate.court.id,
+        dato: date,
+        sluttTid: candidate.slot.slotSluttTid,
+        startTid: candidate.slot.slotStartTid,
+      },
+      headers: developmentAuthorization(session),
+    }
+  );
+  expect(response.ok()).toBe(true);
+  return ((await response.json()) as { bookingId: string }).bookingId;
+}
+
+async function deleteBookingFixture(
+  request: APIRequestContext,
+  session: DevelopmentSession,
+  bookingId: string
+) {
+  const response = await request.delete(
+    `${E2E_BACKEND_ORIGIN}/api/klubb/${E2E_TENANT_SLUG}/bookinger/${bookingId}`,
+    { headers: developmentAuthorization(session) }
+  );
+  expect(response.ok() || response.status() === 404).toBe(true);
 }
 
 async function deleteArrangementFixture(
@@ -582,6 +981,11 @@ async function restoreCourt(request: APIRequestContext, session: DevelopmentSess
 async function expectUsableBooking(page: Page) {
   await expect(page.getByRole("heading", { level: 1, name: "Book bane" })).toBeVisible();
   await expect(page.getByRole("region", { name: /ledige tider$/ })).toBeVisible();
+}
+
+async function expectBookingSelectionSettled(page: Page) {
+  await expect(page.getByRole("region", { name: /ledige tider$/ })).toBeVisible();
+  await expect(page.getByText("Laster tider …", { exact: true })).toHaveCount(0);
 }
 
 async function selectScheduleDate(editor: Locator, daysAhead: number) {
@@ -652,6 +1056,10 @@ function countSequentialRounds(requests: NetworkRequest[]) {
 
 function bookingRowName(courtName: string, slot: CalendarSlot) {
   return `Rediger ${courtName}, ${slot.slotStartTid}–${slot.slotSluttTid}`;
+}
+
+function bookingButtonName(slot: CalendarSlot) {
+  return `Book tiden ${slot.slotStartTid} til ${slot.slotSluttTid}`;
 }
 
 function todayIso() {
