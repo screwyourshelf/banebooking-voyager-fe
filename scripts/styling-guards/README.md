@@ -6,6 +6,9 @@ ADR-006.
 - `contract.json` er eneste kilde for stabile regel-ID-er, lageiere, utilityvokabular, den eksakte
   Tailwind-til-produktrolle-mappingen, custom-property-eierskap, cascade layers og det lukkede
   visualiseringsunntaket.
+- `styling-baseline.json` er det genererte kilde- og produksjonsmålet som
+  `scripts/measure-styling-baseline.mjs` validerer. Det er et maskinelt kontrollartefakt, ikke en
+  håndskrevet dokumentasjonsfil.
 - `analyze.mjs` orkestrerer én oppgitt Svelte- eller CSS-kilde gjennom de navngitte policyene.
 - `public-ui-spread-policy.mjs` beviser native UI-spreads; typed rest-props kan ikke gjeninnføre
   `class`/`style` gjennom en union, intersection, bred indeks, alias eller shadowed binding.

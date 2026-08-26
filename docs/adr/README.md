@@ -1,6 +1,6 @@
 # Architecture Decision Records
 
-ADR-ene dokumenterer bindende valg for SvelteKit-migreringen. En godkjent ADR endres ikke for å
+ADR-ene dokumenterer bindende arkitekturvalg for frontenden. En godkjent ADR endres ikke for å
 skjule at beslutningen har endret seg; den erstattes av en ny ADR som viser til den gamle.
 
 | ADR                                                  | Beslutning                         | Status                      |

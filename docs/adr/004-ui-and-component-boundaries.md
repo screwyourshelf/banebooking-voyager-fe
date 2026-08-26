@@ -1,14 +1,14 @@
 # ADR-004: UI- og komponentgrenser
 
-> **Status:** Godkjent
+> **Status:** Godkjent, punkt 8 erstattet av ADR-006
 >
 > **Dato:** 2026-08-22
 
 ## Kontekst
 
-React-versjonen har shadcn/Radix-primitives under et eget Banebooking-designsystem. Det visuelle
-språket, CSS-tokenene og produktmønstrene er verdifulle, men React-komponentene kan ikke flyttes.
-En full ferdigstylet UI-pakke ville konkurrere med produktets etablerte designregler.
+Banebooking har et eget visuelt språk, semantiske CSS-tokens og produktmønstre. Sammensatte
+kontroller trenger robust tilgjengelighetsatferd, men en ferdigstylet UI-pakke ville konkurrere med
+produktets etablerte designregler.
 
 ## Beslutning
 
@@ -23,8 +23,7 @@ En full ferdigstylet UI-pakke ville konkurrere med produktets etablerte designre
    DOM-hendelser lekker ikke ut som produkt-API.
 7. Featurekode bruker offentlig UI-API og kan ikke importere Bits UI, interne patternfiler eller
    sette produktets `data-ui`/`data-part` direkte.
-8. Eksisterende tokens og sentral CSS videreføres. Feature-CSS og lokale utilitykomposisjoner er
-   forbudt, med samme dokumenterte unntak for datadrevne visualiseringer som i dagens system.
+8. Styling- og theme-eierskap følger ADR-006.
 9. `createEventDispatcher`, legacy slots og legacy reaktiv syntaks brukes ikke i ny kode.
 10. Tilgjengelighet testes på primitive- og patternnivå; features skal ikke reparere manglende
     tilgjengelighet lokalt.
@@ -46,9 +45,9 @@ konsumenter.
 
 - Produktdesignet forblir vårt, mens komplisert tilgjengelighetsatferd vedlikeholdes av Bits UI.
 - En oppgradering av Bits UI berører primitive wrappers, ikke alle features.
-- Noen shadcn-komponenter blir bevisst ikke erstattet fordi native HTML eller eksisterende pattern
-  dekker behovet.
-- Patterns får et stabilt offentlig API som kan utvikles uavhengig av featuremigreringen.
+- Native HTML eller eksisterende patterns brukes når en egen primitive ikke tilfører nødvendig
+  atferd.
+- Patterns har et stabilt offentlig API som kan utvikles uavhengig av featureimplementasjonen.
 
 ## Verifikasjon
 

@@ -1,14 +1,14 @@
 # Observerbar adferdskontrakt
 
-> **Status:** React-baseline for SvelteKit-migreringen
+> **Status:** Bindende produktadferd
 >
-> **Sist oppdatert:** 2026-08-22
+> **Sist oppdatert:** 2026-08-26
 
 ## Formål og avgrensning
 
-Dette dokumentet beskriver produktadferden som skal bevares gjennom lift-and-shift: URL-er,
-tenantformer, tilgang, sentrale backendkall, kritiske states og brukerflyter. Det beskriver ikke
-React-komponenter, hooks eller dagens filstruktur.
+Dette dokumentet beskriver gjeldende produktadferd: URL-er, tenantformer, tilgang, sentrale
+backendkall, kritiske states og brukerflyter. Implementasjonsdetaljer er bare med når de er del av
+den observerbare kontrakten.
 
 Backend er autoritativ for roller og kapabiliteter. Klienten bruker kapabiliteter til å vise eller
 skjule handlinger og til å presentere blokkerte flater; routebeskyttelse er ikke en
@@ -61,15 +61,16 @@ adressen.
 
 ## Oppstart, auth og guardrekkefølge
 
-1. Appen gjenoppretter utviklingssession eller Supabase-session. Mens utfallet er ukjent reserveres
-   appgeometrien med en tydelig innloggings-/boottilstand.
-2. På bookingroten forsøkes ett samlet `booking-bootstrap`-kall for dagens dato og aktuell
-   brukeridentitet. `404` eller `405` betyr at klienten bruker de eksisterende enkeltkallene;
-   andre feil gir en retrybar bootstrapfeil.
-3. Klubben lastes før appskallet regnes som klart. Manglende klubb gir en tenantfeil uten blank
-   mellomflate.
-4. For innloggede brukere hentes brukerprofilen. Guardene håndheves i denne rekkefølgen:
+1. Appen gjenoppretter utviklingssession eller Supabase-session og starter klubbqueryen. Mens
+   utfallet er ukjent reserveres appgeometrien med en tydelig innloggings-/boottilstand.
+2. Klubben må være lastet før appskallet regnes som klart. Manglende klubb gir en tenantfeil uten
+   blank mellomflate.
+3. For innloggede brukere hentes brukerprofilen etter klubbqueryen. Guardene håndheves i denne
+   rekkefølgen:
    sperret konto, obligatorisk kunngjøring, obligatorisk medlemsbekreftelse, deretter ordinær route.
+4. Featureinnhold rendres først når session- og policytilstanden er avklart. På bookingroten starter
+   deretter `booking-bootstrap` for dagens dato og aktuell brukeridentitet. `404` eller `405` bruker
+   de eksisterende enkeltkallene; andre feil gir en retrybar bootstrapfeil.
 5. En beskyttet route uten session sender brukeren til tenantens login og bevarer opprinnelig
    pathname, query og hash. Etter vellykket login returneres brukeren dit.
 6. En backend-`401` håndteres sentralt og idempotent: lokal auth ryddes, sessionutløp varsles én
@@ -261,9 +262,9 @@ Sentralt API: `GET /klubb/{slug}/statistikk/bookinger?fra=&til=&sammenlignMedFor
 - Mobil og desktop bruker samme ordlyd, status og informasjonsrekkefølge. Lyst og mørkt tema er del
   av alle flater.
 
-## Baselinebevis
+## Eierskap og verifikasjon
 
-Inventaret er utledet fra den kjørbare React-referansen, routekonfigurasjonen, tilgangsmodellene,
-endpointkontraktene, testene og den sentrale produkt- og designkontrakten. Det er autoritativt for
-hva som skal observeres under featureparitet, mens backendresponsene er autoritative for konkrete
-kapabiliteter og transportdata.
+Kontrakten vedlikeholdes mot aktive routes, tilgangsmodeller, endpointkontrakter og tester.
+Backendresponsene er autoritative for konkrete kapabiliteter og transportdata. Ved avvik veier kode
+og kjørbare tester tyngre enn dette dokumentet, og dokumentet oppdateres sammen med den godkjente
+adferdsendringen.
