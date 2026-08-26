@@ -4,27 +4,27 @@
 >
 > **Initiativ:** API- og fullstackytelse
 >
-> **Aktiv fase:** Fase 2 — ettermåling og fullstackbeslutning
+> **Aktiv fase:** Fase 3 — smal fullstackleveranse
 
 ## Mål
 
-Mål den samlede effekten av FE-1–FE-5 mot den låste
-[`førmålingen`](./performance/baseline-2026-08-26.md), og velg bare fullstacktiltak som fortsatt
-har dokumentert gevinst.
+Implementer de tre valgte kontraktsendringene fra
+[`frontend-ettermålingen`](./performance/frontend-after-2026-08-26.md): smal booking-bootstrap,
+oppdatert bruker fra vilkårsmutasjonen og atomisk arrangementsbookingredigering.
 
 ## Scope
 
 - Frontend og lokal fullstackflyt kan inspiseres og måles.
-- Ingen backendkontrakt eller backendadferd endres før ettermålingen er vurdert.
+- Backend- og frontendendringer holdes i separate commits og verifiseres sammen.
 - Frontend-hardening avgrenses og måles før eventuelt fullstackomfang velges.
 - Produktadferd, URL-er, roller, guards og autorisasjonsansvar skal bevares.
 
 ## Neste eksakte steg
 
-1. Kjør samme ti-minutters harness og request-/EF-korrelasjon som førmålingen.
-2. Dokumenter før/etter for HTTP-kall, nettverksrunder, bytes og DB-arbeid.
-3. Vurder de smale fullstackkandidatene mot de gjenværende målte kostnadene.
-4. Oppdater aktivt scope før et backend-repo eventuelt endres.
+1. Endre og test backendkontraktene som én separat backendleveranse.
+2. Oppdater frontendkontrakter, API-funksjoner og cacheoppdatering i en separat frontendcommit.
+3. Kjør full frontend- og backendverifikasjon.
+4. Kjør en kort kontraktsharness og dokumenter sluttresultatet.
 
 ## Blokkeringer
 

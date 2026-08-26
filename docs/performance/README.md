@@ -19,7 +19,8 @@ Arbeidet gjennomføres i denne rekkefølgen:
 Den detaljerte førstegjennomgangen ligger i [`initial-review.md`](./initial-review.md). Den er et
 reviewgrunnlag, ikke sannhet foran kode og målinger. Den reproduserbare lokale målekontrakten ligger
 i [`baseline-protocol.md`](./baseline-protocol.md), og den låste førmålingen ligger i
-[`baseline-2026-08-26.md`](./baseline-2026-08-26.md).
+[`baseline-2026-08-26.md`](./baseline-2026-08-26.md). Frontendens ettermåling og fullstackbeslutning
+ligger i [`frontend-after-2026-08-26.md`](./frontend-after-2026-08-26.md).
 
 ## Baselineflyter
 
