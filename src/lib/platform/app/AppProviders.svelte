@@ -30,6 +30,10 @@
   });
   let QueryDevtools = $state<Component | null>(null);
 
+  function isAssetRecoveryActive() {
+    return document.documentElement.hasAttribute("data-banebooking-asset-recovery");
+  }
+
   async function requireController() {
     const readyController = runtime?.auth ?? (await controllerReady);
     if (!readyController) throw new Error("Authplattformen kunne ikke startes.");
@@ -100,15 +104,18 @@
         await runtime.initialize();
       })
       .catch((error) => {
-        if (!alive) return;
+        if (!alive || isAssetRecoveryActive()) return;
+
         void import("./browser-startup.client").then(({ getBrowserObservability }) => {
+          if (!alive || isAssetRecoveryActive()) return;
+
           getBrowserObservability().captureException(error, {
             source: "app-runtime.initialize",
           });
+          authState = { status: "anonymous", user: null };
+          resolveController(null);
+          resolveApiClient(null);
         });
-        authState = { status: "anonymous", user: null };
-        resolveController(null);
-        resolveApiClient(null);
       });
 
     if (dev) {
