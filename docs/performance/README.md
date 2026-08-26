@@ -1,6 +1,6 @@
 # API- og fullstackytelse
 
-> **Status:** Ny lokal iterasjon fullført — klar for review
+> **Status:** Fullstack-iterasjonen er levert
 >
 > **Sist målt:** 2026-08-26
 
@@ -14,8 +14,11 @@ separat mergeplan for frontend og backend. Samme dokument inneholder også PageS
 den korrigerte produksjonsmålingen for hele offentlig booking-ruten, det forkastede
 UI-chunksplitt-eksperimentet og den beholdte kontrastforbedringen.
 
-Iterasjonen er fullført på lokale feature branches, men er ikke pushet eller merget. Den tidligere
-leveransen under er fortsatt historisk referansegrunnlag.
+Iterasjonen ble levert med
+[backend-PR #12](https://github.com/screwyourshelf/banebooking-voyager-be/pull/12) først og deretter
+[frontend-PR #31](https://github.com/screwyourshelf/banebooking-voyager-fe/pull/31). Ingen ny
+API-kontrakt eller koordinert deploy var nødvendig. Begge repoenes aktive status er nullstilt;
+målingene under beholdes som historisk referansegrunnlag.
 
 ## Tidligere mål og beslutning
 
