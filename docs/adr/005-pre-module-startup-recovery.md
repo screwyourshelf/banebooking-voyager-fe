@@ -23,7 +23,7 @@ logge brukeren ut, slette appdata eller påvirke andre apper på samme origin.
 2. Recovery markerer dokumentet mens den pågår, viser oppstartsflaten også når feilen oppstår etter
    appstart, henter HTML med `cache: "no-store"`, varmer kun ressursene som den nye HTML-filen peker
    på, og erstatter dokumentet eller gjør en vanlig navigasjon som fallback. Feilen rapporteres ikke
-   separat av SvelteKit-hooken mens denne recoveryen er aktiv.
+   separat av SvelteKit-hooken eller appens runtime-oppstart mens denne recoveryen er aktiv.
 3. Bootstrapen kan ikke lese, endre eller slette `localStorage` eller Cache Storage.
 4. Bootstrapen kan ikke rydde `sessionStorage`. Det eneste tillatte storage-unntaket er å lese og
    skrive den private nøkkelen `banebooking:asset-recovery-at` for å hindre reload-løkker.
