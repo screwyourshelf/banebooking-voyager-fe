@@ -6,7 +6,7 @@
 >
 > **Aktiv arbeidspakke:** Ingen WP-/SWP-pakke
 >
-> **Sist oppdatert:** 2026-08-25
+> **Sist oppdatert:** 2026-08-26
 
 ## Nåtilstand
 
@@ -39,6 +39,9 @@
 - Bookingens schedule-rader har samme kompakte informasjonsgeometri for statiske, handlings- og
   ekspanderbare rader. Den offentlige `CollectionRow`-kontrakten eier tid, status, sekundærlinje,
   ekspanderingsindikator og hurtighandling; bookingfeaturen har ingen lokal styling.
+- SPA-fallbacken har en statisk standardtittel og egne gyldige `robots.txt`- og `llms.txt`-filer.
+  Inaktiv mobilnavigasjon bruker den kontraststerkere tekstrollen, og loading-sheen animerer bare
+  `transform` slik at browseren kan kompositere bevegelsen.
 
 ## Avsluttende opprydding
 
@@ -102,6 +105,19 @@ Bookingens mobilparitet er rettet gjennom det offentlige UI-laget:
 - implementasjon og kontrakttester ligger i `src/lib/ui/patterns`, `src/lib/ui/primitives` og
   `e2e/visual-regressions.spec.ts`; bookingfeaturen og backend er uendret
 
+## Lighthouse-vedlikehold
+
+PageSpeed-rapportene fra 2026-08-26 er fulgt opp uten backendendringer:
+
+- `src/app.html` eier standardtittelen `Banebooking` før SvelteKit starter;
+  `scripts/verify-production-builds.mjs` og produksjons-E2E låser tittelen i begge hostfallbackene
+- `public/robots.txt` svarer med gyldig crawlpolicy i stedet for SPA-fallbacken, og
+  `public/llms.txt` har navngitt Markdown-innhold og offentlige produktlenker
+- `NavigationLink` og `NavigationAction` bruker `text-ink-soft` for inaktive elementer i
+  mobilbunnen, mens aktiv state og øvrige navigasjonsflater er uendret
+- `page-loading-sheen` og `collection-loading` animerer `transform` fremfor background-position;
+  den genererte stylingbaselinen er oppdatert og alle visuelle referanser er uendret
+
 ## Permanente arkitektur- og produktkontrakter
 
 - [`sveltekit-architecture.md`](./sveltekit-architecture.md) beskriver aktiv lagdeling, dataflyt og
@@ -146,6 +162,10 @@ Bookingens mobilparitet er rettet gjennom det offentlige UI-laget:
 - Den store `styling-baseline.json` er et generert, aktivt kontrollartefakt. Den beholdes fordi
   `npm run check` sammenligner kilde- og produksjonsmålinger mot den; mennesker skal bruke de
   kortere normative dokumentene over.
+- Lighthouse rapporterer fortsatt den delte UI-chunken som omtrent 62 KiB ubrukt JavaScript på
+  bookingruten og den samlede stylesheeten som renderblokkerende. Å redusere disse krever en egen
+  beslutning om finere offentlige UI-entrypoints eller kritisk CSS; dagens produksjonsbudsjetter er
+  uendret og grønne.
 
 ## Blokkeringer og beslutninger
 
@@ -179,6 +199,7 @@ og vente på en konkret produkt- eller vedlikeholdsoppgave; den skal ikke oppret
 | Kritiske Playwright-flyter         | 4/4; tre profiler, policyredirect og lokale testdata gjenopprettet         |
 | Visuelle Playwright-referanser     | 12/12; booking desktop/mobil og kalendergrunnlag verifisert                |
 | `npm run test:e2e:production`      | 8/8 ruter for begge hostartefakter                                         |
+| Lighthouse-regresjonskontrakter    | Tittel, crawlerfiler, mobilkontrast og kompositerte loading-keyframes      |
 | Produksjonsbudsjett                | 37,4 KiB initial JS gzip, 27,9 KiB CSS gzip, 120,5 KiB største lazy JS     |
 | `npm audit --audit-level=moderate` | 6 lave; 0 moderate, høye eller kritiske                                    |
 | Parkert API-oppfølgingsnotat       | Prettier for tre dokumenter; ingen runtime- eller backendendring           |

@@ -85,6 +85,8 @@ describe("public Navigation patterns", () => {
     const bottom = screen.getByRole("navigation", { name: "Mobilnavigasjon" });
     const list = bottom.querySelector('[data-ui="navigation-list"]');
     const active = within(bottom).getByRole("link", { name: "Book" });
+    const inactive = within(bottom).getByRole("link", { name: "Mine tider" });
+    const more = within(bottom).getByRole("button", { name: "Mer" });
     const iconAction = screen.getByRole("button", { name: "Bruk mørkt tema" });
 
     expect(list).toHaveClass(
@@ -100,6 +102,8 @@ describe("public Navigation patterns", () => {
       "before:h-navigation-bottom-indicator",
       "before:rounded-navigation-bottom-indicator"
     );
+    expect(inactive).toHaveClass("text-ink-soft");
+    expect(more).toHaveClass("text-ink-soft");
     expect(iconAction).toHaveClass("size-navigation-action-icon", "p-0");
     expect(
       result.container.querySelector('[data-ui="navigation"][data-layout="actions"]')
