@@ -1,10 +1,21 @@
 # API- og fullstackytelse
 
-> **Status:** Referansegrunnlag — ingen aktiv leveranse
+> **Status:** Ny lokal iterasjon fullført — klar for review
 >
-> **Levert og merget:** 2026-08-26
+> **Sist målt:** 2026-08-26
 
-## Mål og beslutning
+## Siste iterasjon
+
+Den komplette, nye målingen av offentlig booking, sesjonsoppstart, bookinglivsløp,
+medlemsarrangementer og representative adminflater ligger i
+[`fullstack-iteration-2026-08-26.md`](./fullstack-iteration-2026-08-26.md). Dokumentet inneholder
+målekontrakt, førbaseline, prioritert plan, implementerte tiltak, ettermåling, avviste hypoteser og
+separat mergeplan for frontend og backend.
+
+Iterasjonen er fullført på lokale feature branches, men er ikke pushet eller merget. Den tidligere
+leveransen under er fortsatt historisk referansegrunnlag.
+
+## Tidligere mål og beslutning
 
 Forbedre opplevd ytelse og ressursbruk uten å skjule dataflyt eller svekke autorisasjons- og
 cachekorrekthet.
