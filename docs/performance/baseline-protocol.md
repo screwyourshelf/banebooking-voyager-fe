@@ -74,20 +74,28 @@ ikke fordi den inneholder SQL-tekst og lokale requestdetaljer.
 
 ## Flyter og brukbar UI
 
-1. **Kald anonym bookingoppstart:** ny browser context åpner bookingruten. UI er brukbar når
-   «Book bane» og listen med ledige tider er synlige.
-2. **Kald autentisert bookingoppstart:** en ny context får en lokal Development-session før første
-   navigasjon. Flyten kjøres både med og uten eksisterende vilkårsaksept. Varianten uten aksept
-   nullstiller bare `dev|medlem` i den lokale Compose-databasen; produktflyten registrerer aktiv
-   versjon på nytt, og `finally` gjenoppretter tilstanden ved feil.
-3. **Kalender i forgrunn:** en ferdig lastet medlemskalender står synlig i ti minutter uten
+1. **Kald og varm bookingoppstart:** tre nye anonyme contexts og tre nye medlemscontexts åpner
+   bookingruten. UI er brukbar når «Book bane» og listen med ledige tider er synlige. En varm
+   retur fra arrangementlisten måles i samme context.
+2. **Bookingvalg:** dato, bane og gren byttes separat. Hver flyt avsluttes først når den valgte
+   kalenderen igjen er synlig og ferdig lastet.
+3. **Autentisert oppstart og vilkår:** kald medlemsoppstart kjøres både med og uten eksisterende
+   vilkårsaksept. Varianten uten aksept nullstiller bare `dev|medlem` i den lokale
+   Compose-databasen; produktflyten registrerer aktiv versjon på nytt, og `finally` gjenoppretter
+   tilstanden ved feil.
+4. **Bookingens livsløp:** medlem oppretter en booking, åpner Mine bookinger og avbestiller den.
+   En separat konflikt opprettes ved at `utvidet` reserverer den synlige sloten rett før medlemmet
+   forsøker å booke. UI-feil, rollback, refetch og opprydding kontrolleres eksplisitt.
+5. **Medlemsarrangementer:** listen og detaljen åpnes som medlem. Påmelding, endring og trekking
+   registreres som ikke støttet dersom gjeldende produktkontrakt fortsatt mangler disse flatene.
+6. **Kalender i forgrunn:** en ferdig lastet medlemskalender står synlig i ti minutter uten
    interaksjon. Bare API-kall innenfor intervallet telles.
-4. **Arrangementmetadata:** en test-eid arrangementsfixture åpnes i admineditoren. Intern
-   beskrivelse endres og lagres gjennom produkt-UI-et.
-5. **Arrangementsbooking:** samme fixture bruker tre kontrollerte, ledige slots på én bane.
-   Eksisterende booking redigeres, ett forslag opprettes og samme forslag slettes gjennom UI-et.
-   De tre mutasjonene registreres som egne delmålinger.
-6. **Bane med generelle felt og bookingoverstyring:** beskrivelse og en baneoverstyring endres og
+7. **Arrangementadministrasjon:** administrator oppretter et test-eid arrangement, endrer metadata,
+   redigerer, oppretter og sletter en arrangementsbooking og avlyser til slutt fixturearrangementet
+   gjennom produkt-UI-et. Mutasjonene registreres som separate delmålinger.
+8. **Representative administrasjonsflater:** brukeradministrasjon og statistikk åpnes som egne
+   kalde fullstackflyter.
+9. **Bane med generelle felt og bookingoverstyring:** beskrivelse og en baneoverstyring endres og
    lagres i én brukerhandling.
 
 Arrangementet slettes, banen gjenopprettes felt for felt og vilkårsaksept settes tilbake etter
@@ -98,6 +106,8 @@ den faste lokale E2E-origin-kontrakten.
 
 - Bruk samme commitgrunnlag og registrer commit-SHA, Chromium- og Node-versjon.
 - Kjør minst én full ti-minutters måling før implementering og én etter hver samlet kandidat.
+  Oppstartsvariantene repeteres tre ganger i hver full kjøring; sammenlign medianen og oppgi
+  spennvidden slik at Vite-kompilering, JIT og schedulerstøy ikke styrer prioriteringen.
 - Sammenlign først requestantall, nettverksrunder og DB-queries; lokale millisekunder brukes som
   støttesignal fordi scheduler, JIT, cacheoppvarming og maskinlast gir støy.
 - En response uten HTTP-request i flytvinduet er frontendcache. En request med null EF-kall og et
