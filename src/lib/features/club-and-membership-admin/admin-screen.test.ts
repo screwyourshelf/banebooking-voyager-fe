@@ -93,6 +93,7 @@ describe("club and membership administration", () => {
 
     await waitFor(() =>
       expect(request).toHaveBeenCalledWith("klubb/fjordvik", {
+        auth: "required",
         method: "PUT",
         json: expect.objectContaining({ navn: "Fjordvik IL", latitude: 59.25 }),
       })
@@ -130,6 +131,7 @@ describe("club and membership administration", () => {
 
     await waitFor(() =>
       expect(request).toHaveBeenCalledWith("klubb/fjordvik/medlemskap/aktiver", {
+        auth: "required",
         method: "POST",
         json: { label: "Sesong 2027", gyldigTil: "2026-08-23T00:00:00.000Z" },
       })

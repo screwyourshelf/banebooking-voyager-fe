@@ -13,13 +13,17 @@ function clubPath(slug: string, suffix = "") {
 
 export function updateClub(api: ApiClient, slug: string, request: OppdaterKlubbForespørsel) {
   return api.request<void, OppdaterKlubbForespørsel>(clubPath(slug), {
+    auth: "required",
     method: "PUT",
     json: request,
   });
 }
 
 export function getMembershipStatus(api: ApiClient, slug: string, signal?: AbortSignal) {
-  return api.request<MedlemskapStatusRespons>(clubPath(slug, "medlemskap/status"), { signal });
+  return api.request<MedlemskapStatusRespons>(clubPath(slug, "medlemskap/status"), {
+    auth: "required",
+    signal,
+  });
 }
 
 export function activateMembershipConfirmation(
@@ -29,10 +33,13 @@ export function activateMembershipConfirmation(
 ) {
   return api.request<MedlemskapBekreftelseRespons, AktiverMedlemskapBekreftelseForespørsel>(
     clubPath(slug, "medlemskap/aktiver"),
-    { method: "POST", json: request }
+    { auth: "required", method: "POST", json: request }
   );
 }
 
 export function deactivateMembershipConfirmation(api: ApiClient, slug: string) {
-  return api.request<void>(clubPath(slug, "medlemskap/aktiver"), { method: "DELETE" });
+  return api.request<void>(clubPath(slug, "medlemskap/aktiver"), {
+    auth: "required",
+    method: "DELETE",
+  });
 }

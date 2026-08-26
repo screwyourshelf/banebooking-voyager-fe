@@ -29,19 +29,24 @@ describe("user admin API", () => {
     await revokeUserBlock(api, "fjord vik", "user/id", "block/id");
 
     expect(request.mock.calls).toEqual([
-      ["klubb/fjord%20vik/bruker/admin/bruker", { signal: undefined }],
+      ["klubb/fjord%20vik/bruker/admin/bruker", { auth: "required", signal: undefined }],
       [
         "klubb/fjord%20vik/bruker/admin/bruker/user%2Fid",
         {
+          auth: "required",
           method: "PUT",
           json: { rolle: "Utvidet", visningsnavn: "Ola" },
         },
       ],
-      ["klubb/fjord%20vik/bruker/admin/bruker/user%2Fid", { method: "DELETE" }],
-      ["klubb/fjord%20vik/bruker/admin/bruker/user%2Fid/sperr", { signal: undefined }],
+      ["klubb/fjord%20vik/bruker/admin/bruker/user%2Fid", { auth: "required", method: "DELETE" }],
+      [
+        "klubb/fjord%20vik/bruker/admin/bruker/user%2Fid/sperr",
+        { auth: "required", signal: undefined },
+      ],
       [
         "klubb/fjord%20vik/bruker/admin/bruker/user%2Fid/sperr",
         {
+          auth: "required",
           method: "POST",
           json: { type: "ManuellSperre", årsak: "Brudd på reglene", aktivTil: null },
         },
@@ -49,6 +54,7 @@ describe("user admin API", () => {
       [
         "klubb/fjord%20vik/bruker/admin/bruker/user%2Fid/sperr/block%2Fid",
         {
+          auth: "required",
           method: "DELETE",
         },
       ],

@@ -38,6 +38,7 @@ describe("account mutations", () => {
     await options.onSettled(undefined, null, variables);
 
     expect(request).toHaveBeenCalledWith("klubb/fjordvik/bookinger/booking-1", {
+      auth: "required",
       method: "DELETE",
     });
     expect(invalidate).toHaveBeenCalledWith({ queryKey: accountQueryKeys.myBookings("fjordvik") });

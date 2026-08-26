@@ -76,7 +76,7 @@ describe("booking slots", () => {
     expect(options).toMatchObject({
       enabled: true,
       initialData,
-      refetchInterval: 30_000,
+      refetchInterval: 60_000,
       refetchIntervalInBackground: false,
       refetchOnWindowFocus: true,
       staleTime: 5_000,

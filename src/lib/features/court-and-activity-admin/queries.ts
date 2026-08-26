@@ -7,7 +7,7 @@ import type {
   OppdaterGrenForespørsel,
 } from "$lib/contracts";
 import type { ApiClient } from "$lib/platform/api";
-import { invalidateTenantQueries } from "$lib/platform/query";
+import { invalidateTenantResources, tenantQueryMeta } from "$lib/platform/query";
 import {
   createActivity,
   createCourt,
@@ -30,24 +30,26 @@ export type SaveCourtVariables = {
 
 export function adminCourtsQueryOptions(api: ApiClient, slug: string) {
   return {
+    meta: tenantQueryMeta(slug, "courts"),
     queryKey: courtAndActivityAdminQueryKeys.courts(slug),
     queryFn: ({ signal }: { signal: AbortSignal }) => getAdminCourts(api, slug, signal),
-    staleTime: 60_000,
+    staleTime: 10 * 60_000,
   };
 }
 
 export function adminActivitiesQueryOptions(api: ApiClient, slug: string) {
   return {
+    meta: tenantQueryMeta(slug, "activities"),
     queryKey: courtAndActivityAdminQueryKeys.activities(slug),
     queryFn: ({ signal }: { signal: AbortSignal }) => getAdminActivities(api, slug, signal),
-    staleTime: 60_000,
+    staleTime: 10 * 60_000,
   };
 }
 
 export function createCourtMutationOptions(api: ApiClient, queryClient: QueryClient, slug: string) {
   return {
     mutationFn: (request: OpprettBaneForespørsel) => createCourt(api, slug, request),
-    onSuccess: () => invalidateTenantQueries(queryClient, slug),
+    onSuccess: () => invalidateCourtResources(queryClient, slug),
     retry: false,
   };
 }
@@ -66,7 +68,7 @@ export function saveCourtMutationOptions(api: ApiClient, queryClient: QueryClien
         await updateCourtBookingSettings(api, slug, courtId, bookingSettingsRequest);
       }
     },
-    onSuccess: () => invalidateTenantQueries(queryClient, slug),
+    onSuccess: () => invalidateCourtResources(queryClient, slug),
     retry: false,
   };
 }
@@ -79,7 +81,7 @@ export function reorderCourtsMutationOptions(
   return {
     mutationFn: (updates: CourtReorderUpdate[]) =>
       Promise.all(updates.map(({ courtId, request }) => updateCourt(api, slug, courtId, request))),
-    onSettled: () => invalidateTenantQueries(queryClient, slug),
+    onSuccess: () => invalidateCourtResources(queryClient, slug),
     retry: false,
   };
 }
@@ -91,7 +93,7 @@ export function createActivityMutationOptions(
 ) {
   return {
     mutationFn: (request: OpprettGrenForespørsel) => createActivity(api, slug, request),
-    onSuccess: () => invalidateTenantQueries(queryClient, slug),
+    onSuccess: () => invalidateActivityResources(queryClient, slug),
     retry: false,
   };
 }
@@ -109,7 +111,27 @@ export function updateActivityMutationOptions(
       activityId: string;
       request: OppdaterGrenForespørsel;
     }) => updateActivity(api, slug, activityId, request),
-    onSuccess: () => invalidateTenantQueries(queryClient, slug),
+    onSuccess: () => invalidateActivityResources(queryClient, slug),
     retry: false,
   };
+}
+
+function invalidateCourtResources(queryClient: QueryClient, slug: string) {
+  return invalidateTenantResources(queryClient, slug, [
+    "arrangement-bookings",
+    "arrangements",
+    "booking-slots",
+    "courts",
+    "statistics",
+  ]);
+}
+
+function invalidateActivityResources(queryClient: QueryClient, slug: string) {
+  return invalidateTenantResources(queryClient, slug, [
+    "activities",
+    "arrangements",
+    "booking-slots",
+    "courts",
+    "statistics",
+  ]);
 }

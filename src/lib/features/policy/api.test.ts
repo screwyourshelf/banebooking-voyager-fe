@@ -10,6 +10,7 @@ describe("protected policy endpoints", () => {
     await confirmRequiredAnnouncement(api, "askim tennis", "nyhet/1");
 
     expect(request).toHaveBeenCalledWith("klubb/askim%20tennis/kunngjøringer/nyhet%2F1/bekreft", {
+      auth: "required",
       method: "POST",
     });
   });
@@ -22,6 +23,7 @@ describe("protected policy endpoints", () => {
     await confirmMembership(api, "askim-tennis", body);
 
     expect(request).toHaveBeenCalledWith("klubb/askim-tennis/bruker/bekreft-medlemskap", {
+      auth: "required",
       method: "POST",
       json: body,
     });

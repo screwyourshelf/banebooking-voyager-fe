@@ -73,7 +73,7 @@
   const api: ApiClient = {
     async request<TResponse, TBody = never>(
       path: string,
-      options?: ApiRequestOptions<TBody>
+      options: ApiRequestOptions<TBody>
     ): Promise<TResponse> {
       const readyApi = await apiClientReady;
       if (!readyApi) throw new Error("API-plattformen kunne ikke startes.");

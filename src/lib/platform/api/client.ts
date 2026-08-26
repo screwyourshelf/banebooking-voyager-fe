@@ -14,7 +14,10 @@ export type ApiAuthorization = {
   token: string;
 };
 
+type ApiAuthPolicy = "none" | "optional" | "required";
+
 export type ApiRequestOptions<TBody = unknown> = {
+  auth: ApiAuthPolicy;
   method?: "DELETE" | "GET" | "PATCH" | "POST" | "PUT";
   headers?: HeadersInit;
   json?: TBody;
@@ -25,7 +28,7 @@ export type ApiRequestOptions<TBody = unknown> = {
 export type ApiClient = {
   request<TResponse, TBody = never>(
     path: string,
-    options?: ApiRequestOptions<TBody>
+    options: ApiRequestOptions<TBody>
   ): Promise<TResponse>;
 };
 
@@ -37,7 +40,7 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
   return {
     async request<TResponse, TBody = never>(
       path: string,
-      requestOptions: ApiRequestOptions<TBody> = {}
+      requestOptions: ApiRequestOptions<TBody> = { auth: "optional" }
     ): Promise<TResponse> {
       const { controller, cleanup, didTimeout } = createRequestSignal(
         requestOptions.signal,
@@ -46,7 +49,8 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
 
       try {
         const headers = new Headers(requestOptions.headers);
-        const authorization = await options.getAuthorization();
+        const auth = requestOptions.auth;
+        const authorization = auth === "none" ? null : await options.getAuthorization();
         if (authorization) {
           headers.set("Authorization", `${authorization.scheme} ${authorization.token}`);
         }
@@ -68,7 +72,7 @@ export function createApiClient(options: ApiClientOptions): ApiClient {
         });
 
         if (!response.ok) {
-          if (response.status === 401) {
+          if (response.status === 401 && auth !== "none") {
             try {
               await handleUnauthorized();
             } catch {

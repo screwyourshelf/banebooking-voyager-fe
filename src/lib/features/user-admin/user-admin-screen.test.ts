@@ -200,6 +200,7 @@ describe("UserAdminScreen", () => {
       expect(request).toHaveBeenCalledWith(
         "klubb/fjordvik/bruker/admin/bruker/user-ola",
         expect.objectContaining({
+          auth: "required",
           method: "PUT",
           json: { rolle: "Utvidet", visningsnavn: "Ola Oppdatert" },
         })
@@ -219,7 +220,7 @@ describe("UserAdminScreen", () => {
     await waitFor(() =>
       expect(request).toHaveBeenCalledWith(
         "klubb/fjordvik/bruker/admin/bruker/user-ola/sperr",
-        expect.objectContaining({ method: "POST" })
+        expect.objectContaining({ auth: "required", method: "POST" })
       )
     );
     expect(await screen.findByText("Sperret")).toBeVisible();
@@ -230,7 +231,7 @@ describe("UserAdminScreen", () => {
     await waitFor(() =>
       expect(request).toHaveBeenCalledWith(
         "klubb/fjordvik/bruker/admin/bruker/user-ola/sperr/block-1",
-        { method: "DELETE" }
+        { auth: "required", method: "DELETE" }
       )
     );
     expect((await screen.findAllByText(/Opphevet .* av Ada Admin/)).length).toBeGreaterThan(0);
@@ -241,6 +242,7 @@ describe("UserAdminScreen", () => {
     await fireEvent.click(screen.getByRole("button", { name: "Slett bruker" }));
     await waitFor(() =>
       expect(request).toHaveBeenCalledWith("klubb/fjordvik/bruker/admin/bruker/user-ola", {
+        auth: "required",
         method: "DELETE",
       })
     );

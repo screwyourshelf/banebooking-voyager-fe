@@ -48994,7 +48994,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/arrangement-admin/ArrangementAdminScreen.svelte",
-          "lineCount": 267,
+          "lineCount": 271,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -49004,7 +49004,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/arrangement-admin/ArrangementEditor.svelte",
-          "lineCount": 281,
+          "lineCount": 282,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -49354,7 +49354,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/session/SessionDataProvider.svelte",
-          "lineCount": 57,
+          "lineCount": 61,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -80413,23 +80413,23 @@
       "basePath": "/",
       "host": "Cloudflare Pages",
       "initialCssAssets": [
-        { "asset": "_app/immutable/assets/0.GJq9erKa.css", "gzipBytes": 28575, "rawBytes": 190132 }
+        { "asset": "_app/immutable/assets/0.DTivEK-d.css", "gzipBytes": 28528, "rawBytes": 190012 }
       ],
-      "initialCssGzipBytes": 28575,
+      "initialCssGzipBytes": 28528,
       "initialJavaScriptAssets": [
         { "asset": "_app/immutable/chunks/BG4X2aRC.js", "gzipBytes": 20699, "rawBytes": 55233 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/CB3145jA.js", "gzipBytes": 536, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/CIT7X3lM.js", "gzipBytes": 615, "rawBytes": 1148 },
         { "asset": "_app/immutable/chunks/DeNejD04.js", "gzipBytes": 731, "rawBytes": 1401 },
-        { "asset": "_app/immutable/chunks/DomEpKHu.js", "gzipBytes": 11226, "rawBytes": 29269 },
+        { "asset": "_app/immutable/chunks/eQMbADR4.js", "gzipBytes": 11227, "rawBytes": 29273 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.6b7z5l69.js", "gzipBytes": 2515, "rawBytes": 9051 },
-        { "asset": "_app/immutable/entry/start.D90jkYZW.js", "gzipBytes": 92, "rawBytes": 82 },
-        { "asset": "_app/immutable/nodes/0.DGAeXFGP.js", "gzipBytes": 430, "rawBytes": 806 }
+        { "asset": "_app/immutable/entry/app.pKLLSmFc.js", "gzipBytes": 2526, "rawBytes": 9097 },
+        { "asset": "_app/immutable/entry/start.CgzKXB47.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/nodes/0.Dqb21u4L.js", "gzipBytes": 430, "rawBytes": 806 }
       ],
-      "initialJavaScriptGzipBytes": 38283,
-      "javaScriptChunkCount": 60,
+      "initialJavaScriptGzipBytes": 38295,
+      "javaScriptChunkCount": 61,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",
         "gzipBytes": 123363,
@@ -80464,23 +80464,23 @@
       "basePath": "/banebooking",
       "host": "GitHub Pages",
       "initialCssAssets": [
-        { "asset": "_app/immutable/assets/0.D7r4Jzcx.css", "gzipBytes": 28592, "rawBytes": 190192 }
+        { "asset": "_app/immutable/assets/0.CduXLXNf.css", "gzipBytes": 28546, "rawBytes": 190072 }
       ],
-      "initialCssGzipBytes": 28592,
+      "initialCssGzipBytes": 28546,
       "initialJavaScriptAssets": [
         { "asset": "_app/immutable/chunks/BG4X2aRC.js", "gzipBytes": 20699, "rawBytes": 55233 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/CB3145jA.js", "gzipBytes": 536, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/CIT7X3lM.js", "gzipBytes": 624, "rawBytes": 1184 },
-        { "asset": "_app/immutable/chunks/COsSRBpx.js", "gzipBytes": 11235, "rawBytes": 29285 },
+        { "asset": "_app/immutable/chunks/CtXFgUBy.js", "gzipBytes": 11235, "rawBytes": 29281 },
         { "asset": "_app/immutable/chunks/DeNejD04.js", "gzipBytes": 731, "rawBytes": 1401 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.CbBR1HV-.js", "gzipBytes": 2521, "rawBytes": 9615 },
-        { "asset": "_app/immutable/entry/start.DLfLF1Np.js", "gzipBytes": 92, "rawBytes": 82 },
-        { "asset": "_app/immutable/nodes/0.C8JwGQ_o.js", "gzipBytes": 440, "rawBytes": 866 }
+        { "asset": "_app/immutable/entry/app.CP9u616z.js", "gzipBytes": 2532, "rawBytes": 9673 },
+        { "asset": "_app/immutable/entry/start.DxMs7eLQ.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/nodes/0.BAlwLI-u.js", "gzipBytes": 440, "rawBytes": 866 }
       ],
-      "initialJavaScriptGzipBytes": 38317,
-      "javaScriptChunkCount": 60,
+      "initialJavaScriptGzipBytes": 38328,
+      "javaScriptChunkCount": 61,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",
         "gzipBytes": 123363,

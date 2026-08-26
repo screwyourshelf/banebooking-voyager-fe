@@ -51,6 +51,7 @@ describe("protected policy surfaces", () => {
 
     await waitFor(() =>
       expect(requestMock).toHaveBeenCalledWith("klubb/fjordvik/kunngjøringer/news-1/bekreft", {
+        auth: "required",
         method: "POST",
       })
     );
@@ -98,6 +99,7 @@ describe("protected policy surfaces", () => {
     expect(result.container.querySelector('[data-ui="form"]')).toHaveAttribute("aria-busy", "true");
     await waitFor(() =>
       expect(requestMock).toHaveBeenCalledWith("klubb/fjordvik/bruker/bekreft-medlemskap", {
+        auth: "required",
         method: "POST",
         json: { fulltNavn: "Ada Lovelace", medlemskapType: "Voksen" },
       })

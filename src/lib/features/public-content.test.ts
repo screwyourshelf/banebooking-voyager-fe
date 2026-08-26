@@ -45,6 +45,7 @@ describe("public arrangements", () => {
     expect(await screen.findByRole("heading", { level: 1, name: "Arrangementer" })).toBeVisible();
     expect(await screen.findByText("Velkommen til klubbens årlige høstcup.")).toBeVisible();
     expect(request).toHaveBeenCalledWith("klubb/fjordvik/arrangementer", {
+      auth: "required",
       signal: expect.any(AbortSignal),
     });
     expect(screen.getByRole("button", { name: "Avlys" })).toBeVisible();
@@ -73,7 +74,7 @@ describe("public arrangements", () => {
     await waitFor(() =>
       expect(request).toHaveBeenCalledWith(
         "offentlig/klubb/fjordvik/arrangementer/visning?inkluderHistoriske=true",
-        { signal: expect.any(AbortSignal) }
+        { auth: "none", signal: expect.any(AbortSignal) }
       )
     );
     await fireEvent.click(screen.getByRole("button", { name: "Tennis" }));
