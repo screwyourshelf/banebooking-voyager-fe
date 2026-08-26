@@ -47,13 +47,13 @@
 @layer components {
   @keyframes page-loading-sheen {
     to {
-      background-position: -220% 0;
+      transform: translateX(100%);
     }
   }
 
   @keyframes collection-loading {
     to {
-      background-position: -220% 0;
+      transform: translateX(100%);
     }
   }
 
