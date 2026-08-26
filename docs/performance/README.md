@@ -2,7 +2,7 @@
 
 > **Status:** Aktivt initiativ
 >
-> **Aktiv fase:** Fase 0 — baseline
+> **Aktiv fase:** Fase 1 — frontend-hardening
 
 ## Mål og beslutning
 
@@ -17,7 +17,9 @@ Arbeidet gjennomføres i denne rekkefølgen:
 4. Velg bare fullstack- eller backendtiltak som fortsatt har dokumentert gevinst.
 
 Den detaljerte førstegjennomgangen ligger i [`initial-review.md`](./initial-review.md). Den er et
-reviewgrunnlag, ikke sannhet foran kode og målinger.
+reviewgrunnlag, ikke sannhet foran kode og målinger. Den reproduserbare lokale målekontrakten ligger
+i [`baseline-protocol.md`](./baseline-protocol.md), og den låste førmålingen ligger i
+[`baseline-2026-08-26.md`](./baseline-2026-08-26.md).
 
 ## Baselineflyter
 
