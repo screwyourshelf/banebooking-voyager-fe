@@ -1,0 +1,5 @@
+@layer theme {
+  :root {
+    --app-unused: 1px;
+  }
+}

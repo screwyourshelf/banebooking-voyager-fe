@@ -1,0 +1,23 @@
+@layer theme {
+  :root {
+    color: var(--app-ink);
+  }
+}
+
+@layer base {
+  html {
+    color: var(--app-ink);
+  }
+}
+
+@layer components {
+  .ProseMirror {
+    color: var(--app-ink);
+  }
+}
+
+@layer utilities {
+  .selectedCell {
+    color: var(--app-ink);
+  }
+}

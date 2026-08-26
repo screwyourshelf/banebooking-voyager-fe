@@ -1,0 +1,571 @@
+{
+  "schemaVersion": 1,
+  "fixtures": [
+    {
+      "id": "positive-bits-owner",
+      "fixture": "positive/bits-owner.svelte",
+      "sourcePath": "src/lib/ui/primitives/GuardDialog.svelte",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-001-BITS-OWNER"],
+      "diagnostics": []
+    },
+    {
+      "id": "positive-feature-composition",
+      "fixture": "positive/feature-composition.svelte",
+      "sourcePath": "src/lib/features/example/ExampleScreen.svelte",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-002-FEATURE-STYLING"],
+      "diagnostics": []
+    },
+    {
+      "id": "positive-root-stylesheet-import",
+      "fixture": "positive/root-stylesheet-import.svelte",
+      "sourcePath": "src/routes/+layout.svelte",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-002-FEATURE-STYLING"],
+      "diagnostics": []
+    },
+    {
+      "id": "positive-public-ui-props",
+      "fixture": "positive/public-ui-props.svelte",
+      "sourcePath": "src/lib/features/example/ExampleActions.svelte",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-003-UI-OVERRIDE"],
+      "diagnostics": []
+    },
+    {
+      "id": "positive-icon-dynamic-element",
+      "fixture": "positive/icon-dynamic-element.svelte",
+      "sourcePath": "src/lib/ui/primitives/Icon.svelte",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-007-CSS-APPLICATION"],
+      "diagnostics": []
+    },
+    {
+      "id": "positive-public-ui-attribute-forwarding",
+      "fixture": "positive/public-ui-attribute-forwarding.svelte",
+      "sourcePath": "src/lib/ui/patterns/GuardAttributes.svelte",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-007-CSS-APPLICATION"],
+      "diagnostics": []
+    },
+    {
+      "id": "positive-public-ui-sanitized-spread",
+      "fixture": "positive/public-ui-sanitized-spread.svelte",
+      "sourcePath": "src/lib/ui/patterns/SanitizedAttributes.svelte",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-007-CSS-APPLICATION"],
+      "diagnostics": []
+    },
+    {
+      "id": "positive-semantic-dom-operations",
+      "fixture": "positive/semantic-dom-operations.svelte",
+      "sourcePath": "src/lib/features/example/SemanticDom.svelte",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-002-FEATURE-STYLING"],
+      "diagnostics": []
+    },
+    {
+      "id": "positive-utility-vocabulary",
+      "fixture": "positive/utility-vocabulary.svelte",
+      "sourcePath": "src/lib/ui/patterns/GuardSection.svelte",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-004-UTILITY-VOCABULARY"],
+      "diagnostics": []
+    },
+    {
+      "id": "positive-theme-role",
+      "fixture": "positive/theme-role.svelte",
+      "sourcePath": "src/lib/ui/patterns/GuardSurface.svelte",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-005-THEME-ROLE"],
+      "diagnostics": []
+    },
+    {
+      "id": "positive-static-class-set",
+      "fixture": "positive/static-class-set.svelte",
+      "sourcePath": "src/lib/ui/patterns/GuardState.svelte",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-006-STATIC-CLASS-SET"],
+      "diagnostics": []
+    },
+    {
+      "id": "positive-css-application",
+      "fixture": "positive/css-application.css",
+      "sourcePath": "src/styles/design-system/base.css",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-007-CSS-APPLICATION"],
+      "diagnostics": []
+    },
+    {
+      "id": "positive-global-css-import",
+      "fixture": "positive/global-css-import.css",
+      "sourcePath": "src/index.css",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-007-CSS-APPLICATION"],
+      "diagnostics": []
+    },
+    {
+      "id": "positive-custom-property",
+      "fixture": "positive/custom-property.css",
+      "sourcePath": "src/styles/design-system/tokens.css",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-008-CUSTOM-PROPERTY"],
+      "diagnostics": []
+    },
+    {
+      "id": "positive-cascade-layer",
+      "fixture": "positive/cascade-layer.css",
+      "sourcePath": "src/styles/design-system/tokens.css",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-009-CASCADE-LAYER"],
+      "diagnostics": []
+    },
+    {
+      "id": "positive-visualization-exception",
+      "fixture": "positive/visualization-exception.svelte",
+      "sourcePath": "src/lib/features/statistics/StatisticsMonthChart.svelte",
+      "outcome": "allowed",
+      "coversRules": ["STYLING-010-VISUALIZATION-EXCEPTION"],
+      "diagnostics": []
+    },
+    {
+      "id": "negative-bits-owner",
+      "fixture": "negative/bits-owner.svelte",
+      "sourcePath": "src/lib/features/example/BitsBoundary.svelte",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-001-BITS-OWNER"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-001-BITS-OWNER",
+          "message": "bits-ui kan bare importeres fra src/lib/ui/primitives; fant import i src/lib/features/example/BitsBoundary.svelte"
+        }
+      ]
+    },
+    {
+      "id": "negative-feature-styling",
+      "fixture": "negative/feature-styling.svelte",
+      "sourcePath": "src/lib/features/example/StyledScreen.svelte",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-002-FEATURE-STYLING"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "CSS-import «./screen.css» er bare tillatt fra den registrerte root-inngangen"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "feature-/routekode kan ikke bruke class på native elementer"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "feature-/routekode kan ikke bruke style-attributt"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "feature-/routekode kan ikke bruke style:-direktiv"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "feature-/routekode kan ikke eie <style>-blokk"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "data-visualization kan bare brukes av en eksakt registrert visualiseringseier; fant src/lib/features/example/StyledScreen.svelte"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "data-series kan bare brukes av en eksakt registrert visualiseringseier; fant src/lib/features/example/StyledScreen.svelte"
+        }
+      ]
+    },
+    {
+      "id": "negative-imperative-dom-styling",
+      "fixture": "negative/imperative-dom-styling.svelte",
+      "sourcePath": "src/lib/features/example/ImperativeStyling.svelte",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-002-FEATURE-STYLING"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom setProperty er forbudt; bruk offentlig UI, theme og statiske utilities"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom classList.add er forbudt; bruk offentlig UI, theme og statiske utilities"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom color er forbudt; bruk offentlig UI, theme og statiske utilities"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom classList.toggle er forbudt; bruk offentlig UI, theme og statiske utilities"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom className er forbudt; bruk offentlig UI, theme og statiske utilities"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom setAttribute(\"style\") er forbudt; bruk offentlig UI, theme og statiske utilities"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom removeAttributeNS(\"class\") er forbudt; bruk offentlig UI, theme og statiske utilities"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom setAttribute(dynamisk attributt) er forbudt; bruk offentlig UI, theme og statiske utilities"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "imperativ DOM-styling gjennom Object.assign(style) er forbudt; bruk offentlig UI, theme og statiske utilities"
+        }
+      ]
+    },
+    {
+      "id": "negative-feature-markup-channels",
+      "fixture": "negative/feature-markup-channels.svelte",
+      "sourcePath": "src/lib/features/example/MarkupChannels.svelte",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-002-FEATURE-STYLING", "STYLING-003-UI-OVERRIDE"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "feature-/routekode kan ikke bruke class på native elementer"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "SvelteElement er en dynamisk markupkanal som ikke kan bevise stylingeierskap"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "feature-/routekode kan ikke bruke class på native elementer"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "feature-/routekode kan ikke bruke attributtspread; skriv semantiske props eksplisitt"
+        },
+        {
+          "ruleId": "STYLING-003-UI-OVERRIDE",
+          "message": "offentlig UI-komponent Page kan ikke overstyres med attributtspread"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "rå {@html}-markup kan inneholde styling som ikke kan analyseres statisk"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "feature-/routekode kan ikke bruke den ugjennomsiktige stylingkanalen UseDirective"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "feature-/routekode kan ikke bruke den ugjennomsiktige stylingkanalen AttachTag"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "feature-/routekode kan ikke bruke den ugjennomsiktige stylingkanalen TransitionDirective"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "SvelteComponent er en dynamisk markupkanal som ikke kan bevise stylingeierskap"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "rå style-/stylesheet-markup er forbudt; bruk den registrerte CSS-inngangen"
+        },
+        {
+          "ruleId": "STYLING-002-FEATURE-STYLING",
+          "message": "rå style-/stylesheet-markup er forbudt; bruk den registrerte CSS-inngangen"
+        }
+      ]
+    },
+    {
+      "id": "negative-public-ui-override",
+      "fixture": "negative/public-ui-override.svelte",
+      "sourcePath": "src/lib/features/example/OverrideAction.svelte",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-003-UI-OVERRIDE"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-003-UI-OVERRIDE",
+          "message": "offentlig UI-komponent Action kan ikke overstyres med class"
+        },
+        {
+          "ruleId": "STYLING-003-UI-OVERRIDE",
+          "message": "offentlig UI-komponent Action kan ikke overstyres med style"
+        },
+        {
+          "ruleId": "STYLING-003-UI-OVERRIDE",
+          "message": "offentlig UI-komponent Action kan ikke overstyres med attributtspread"
+        }
+      ]
+    },
+    {
+      "id": "negative-public-ui-markup-channels",
+      "fixture": "negative/public-ui-markup-channels.svelte",
+      "sourcePath": "src/lib/ui/patterns/InvalidMarkupChannels.svelte",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-007-CSS-APPLICATION"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-007-CSS-APPLICATION",
+          "message": "SvelteElement er en dynamisk markupkanal som ikke kan bevise stylingeierskap"
+        },
+        {
+          "ruleId": "STYLING-007-CSS-APPLICATION",
+          "message": "offentlig UI kan ikke skjule class/style i attributtspread"
+        },
+        {
+          "ruleId": "STYLING-007-CSS-APPLICATION",
+          "message": "rå {@html}-markup kan inneholde styling som ikke kan analyseres statisk"
+        },
+        {
+          "ruleId": "STYLING-007-CSS-APPLICATION",
+          "message": "offentlig UI kan ikke bruke den ugjennomsiktige stylingkanalen UseDirective"
+        },
+        {
+          "ruleId": "STYLING-007-CSS-APPLICATION",
+          "message": "offentlig UI kan ikke bruke den ugjennomsiktige stylingkanalen AttachTag"
+        },
+        {
+          "ruleId": "STYLING-007-CSS-APPLICATION",
+          "message": "offentlig UI kan ikke bruke den ugjennomsiktige stylingkanalen AnimateDirective"
+        }
+      ]
+    },
+    {
+      "id": "negative-public-ui-broad-forwarder",
+      "fixture": "negative/public-ui-broad-forwarder.svelte",
+      "sourcePath": "src/lib/ui/patterns/BroadForwarder.svelte",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-007-CSS-APPLICATION"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-007-CSS-APPLICATION",
+          "message": "offentlig UI må bevise at attributtspread på native element utelater class og style"
+        }
+      ]
+    },
+    {
+      "id": "negative-public-ui-identifier-spread",
+      "fixture": "negative/public-ui-identifier-spread.svelte",
+      "sourcePath": "src/lib/ui/patterns/HiddenStyling.svelte",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-007-CSS-APPLICATION"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-007-CSS-APPLICATION",
+          "message": "offentlig UI kan ikke skjule class/style i attributtspread"
+        }
+      ]
+    },
+    {
+      "id": "negative-icon-dynamic-element",
+      "fixture": "negative/icon-dynamic-element.svelte",
+      "sourcePath": "src/lib/ui/primitives/Icon.svelte",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-007-CSS-APPLICATION"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-007-CSS-APPLICATION",
+          "message": "SvelteElement er en dynamisk markupkanal som ikke kan bevise stylingeierskap"
+        }
+      ]
+    },
+    {
+      "id": "negative-utility-vocabulary",
+      "fixture": "negative/utility-vocabulary.svelte",
+      "sourcePath": "src/lib/ui/patterns/InvalidUtilities.svelte",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-004-UTILITY-VOCABULARY"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-004-UTILITY-VOCABULARY",
+          "message": "arbitrary utilityverdi er ikke tillatt i «bg-[#123456]»"
+        },
+        {
+          "ruleId": "STYLING-004-UTILITY-VOCABULARY",
+          "message": "dark:-varianten er ikke tillatt; bruk semantiske theme-roller i «dark:bg-surface»"
+        },
+        {
+          "ruleId": "STYLING-004-UTILITY-VOCABULARY",
+          "message": "important-modifier er ikke tillatt i «font-bold!»"
+        },
+        {
+          "ruleId": "STYLING-004-UTILITY-VOCABULARY",
+          "message": "rå palettutility er ikke tillatt i «text-green-600»"
+        }
+      ]
+    },
+    {
+      "id": "negative-theme-role",
+      "fixture": "negative/theme-role.svelte",
+      "sourcePath": "src/lib/ui/patterns/UnknownThemeRole.svelte",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-005-THEME-ROLE"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-005-THEME-ROLE",
+          "message": "«bg-marketing-card» bruker theme-rollen «marketing-card», som ikke finnes i kontrakten"
+        }
+      ]
+    },
+    {
+      "id": "negative-static-class-set",
+      "fixture": "negative/static-class-set.svelte",
+      "sourcePath": "src/lib/ui/patterns/DynamicUtility.svelte",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-006-STATIC-CLASS-SET"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-006-STATIC-CLASS-SET",
+          "message": "dynamisk class må kunne løses til et endelig sett med hele klassenavn"
+        }
+      ]
+    },
+    {
+      "id": "negative-css-application",
+      "fixture": "negative/css-application.css",
+      "sourcePath": "src/styles/invalid-product.css",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-007-CSS-APPLICATION"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-007-CSS-APPLICATION",
+          "message": "@apply er forbudt; skriv utilities direkte i eierkomponenten"
+        },
+        {
+          "ruleId": "STYLING-007-CSS-APPLICATION",
+          "message": "app-eid !important er forbudt på «display»"
+        },
+        {
+          "ruleId": "STYLING-007-CSS-APPLICATION",
+          "message": "CSS-import «./legacy.css» er ikke registrert for src/styles/invalid-product.css"
+        },
+        {
+          "ruleId": "STYLING-007-CSS-APPLICATION",
+          "message": "global produktselektor «.booking-card» er forbudt"
+        }
+      ]
+    },
+    {
+      "id": "negative-custom-property",
+      "fixture": "negative/custom-property.css",
+      "sourcePath": "src/styles/base.css",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-008-CUSTOM-PROPERTY"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-008-CUSTOM-PROPERTY",
+          "message": "--app-surface defineres utenfor registrert product-theme-eier"
+        },
+        {
+          "ruleId": "STYLING-008-CUSTOM-PROPERTY",
+          "message": "--missing-role brukes uten registrert definisjon eller eier"
+        }
+      ]
+    },
+    {
+      "id": "negative-custom-property-syntax",
+      "fixture": "negative/custom-property-syntax.css",
+      "sourcePath": "src/styles/design-system/base.css",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-008-CUSTOM-PROPERTY"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-008-CUSTOM-PROPERTY",
+          "message": "--missing-fallback brukes uten registrert definisjon eller eier"
+        },
+        {
+          "ruleId": "STYLING-008-CUSTOM-PROPERTY",
+          "message": "--missing-escaped-function brukes uten registrert definisjon eller eier"
+        },
+        {
+          "ruleId": "STYLING-008-CUSTOM-PROPERTY",
+          "message": "--missing-whitespace brukes uten registrert definisjon eller eier"
+        }
+      ]
+    },
+    {
+      "id": "negative-cascade-layer",
+      "fixture": "negative/cascade-layer.css",
+      "sourcePath": "src/styles/unlayered.css",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-009-CASCADE-LAYER"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-009-CASCADE-LAYER",
+          "message": "CSS-regelen «body» ligger utenfor et registrert cascade layer"
+        },
+        {
+          "ruleId": "STYLING-009-CASCADE-LAYER",
+          "message": "cascade layer «overrides» er ikke registrert for «.ProseMirror»"
+        }
+      ]
+    },
+    {
+      "id": "negative-custom-property-unused",
+      "fixture": "negative/custom-property-unused.css",
+      "sourcePath": "src/styles/design-system/tokens.css",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-008-CUSTOM-PROPERTY"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-008-CUSTOM-PROPERTY",
+          "message": "--app-unused defineres uten en registrert konsument"
+        }
+      ]
+    },
+    {
+      "id": "negative-visualization-exception",
+      "fixture": "negative/visualization-exception.svelte",
+      "sourcePath": "src/lib/features/statistics/StatisticsMonthChart.svelte",
+      "outcome": "rejected",
+      "coversRules": ["STYLING-010-VISUALIZATION-EXCEPTION"],
+      "diagnostics": [
+        {
+          "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
+          "message": "visualiseringsunntaket tillater bare en deklarasjonsliste med navngitte geometry-custom-properties i style"
+        },
+        {
+          "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
+          "message": "--statistics-series-color er ikke registrert i det lukkede visualiseringsunntaket"
+        },
+        {
+          "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
+          "message": "SVG-geometriattributtet «rx» er ikke registrert for src/lib/features/statistics/StatisticsMonthChart.svelte"
+        },
+        {
+          "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
+          "message": "statistikkroller er ikke tillatt; produktidentitet skal eies av offentlig UI"
+        },
+        {
+          "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
+          "message": "visualiseringsankeret «identity» er ikke registrert for src/lib/features/statistics/StatisticsMonthChart.svelte"
+        },
+        {
+          "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
+          "message": "visualiseringsunntaket tillater ikke CSS-egenskapen «color»"
+        },
+        {
+          "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
+          "message": "den skoperte CSS-egenskapen «width» må konsumere en registrert geometry-custom-property for src/lib/features/statistics/StatisticsMonthChart.svelte"
+        },
+        {
+          "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
+          "message": "visualiseringsunntaket tillater ikke SVG-presentasjonsattributtet «fill»"
+        },
+        {
+          "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
+          "message": "visualiseringsunntaket tillater ikke SVG-presentasjonsattributtet «filter»"
+        },
+        {
+          "ruleId": "STYLING-010-VISUALIZATION-EXCEPTION",
+          "message": "visualiseringsunntaket tillater ikke SVG-presentasjonsattributtet «text-anchor»"
+        }
+      ]
+    }
+  ]
+}

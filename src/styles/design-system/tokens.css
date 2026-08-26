@@ -5,316 +5,988 @@
  * semantic classes, so the product can be retuned without editing pages.
  */
 
-:root {
-  color-scheme: light;
-  --radius: 0.625rem;
+@layer theme {
+  :root {
+    color-scheme: light;
+    --radius: 0.625rem;
 
-  /* Ås tennisklubb palette. The three 500 values are sampled from the crest. */
-  --aas-green-500: #4c911f;
-  --aas-orange-500: #f28d3b;
-  --aas-blue-500: #1c4f99;
-  --aas-cream-500: #f4f0e1;
-  --aas-green-50: color-mix(in oklab, var(--aas-green-500) 7%, white);
-  --aas-green-100: color-mix(in oklab, var(--aas-green-500) 18%, white);
-  --aas-green-300: color-mix(in oklab, var(--aas-green-500) 55%, white);
-  --aas-green-700: color-mix(in oklab, var(--aas-green-500) 76%, black);
-  --aas-green-900: color-mix(in oklab, var(--aas-green-500) 48%, black);
-  --aas-orange-100: color-mix(in oklab, var(--aas-orange-500) 18%, white);
-  --aas-orange-700: color-mix(in oklab, var(--aas-orange-500) 74%, black);
-  --aas-orange-900: color-mix(in oklab, var(--aas-orange-500) 48%, black);
-  --aas-blue-50: color-mix(in oklab, var(--aas-blue-500) 7%, white);
-  --aas-blue-100: color-mix(in oklab, var(--aas-blue-500) 16%, white);
-  --aas-blue-300: color-mix(in oklab, var(--aas-blue-500) 48%, white);
-  --aas-blue-900: color-mix(in oklab, var(--aas-blue-500) 52%, black);
+    /* Raw club identity. Components and Tailwind utilities never consume this palette directly. */
+    --aas-green-500: #4c911f;
+    --aas-orange-500: #f28d3b;
+    --aas-blue-500: #1c4f99;
+    --aas-cream-500: #f4f0e1;
+    --aas-green-50: color-mix(in oklab, var(--aas-green-500) 7%, white);
+    --aas-green-100: color-mix(in oklab, var(--aas-green-500) 18%, white);
+    --aas-green-300: color-mix(in oklab, var(--aas-green-500) 55%, white);
+    --aas-green-700: color-mix(in oklab, var(--aas-green-500) 76%, black);
+    --aas-green-900: color-mix(in oklab, var(--aas-green-500) 48%, black);
+    --aas-orange-100: color-mix(in oklab, var(--aas-orange-500) 18%, white);
+    --aas-orange-700: color-mix(in oklab, var(--aas-orange-500) 74%, black);
+    --aas-orange-900: color-mix(in oklab, var(--aas-orange-500) 48%, black);
+    --aas-blue-100: color-mix(in oklab, var(--aas-blue-500) 16%, white);
+    --aas-blue-300: color-mix(in oklab, var(--aas-blue-500) 48%, white);
+    --aas-blue-900: color-mix(in oklab, var(--aas-blue-500) 52%, black);
 
-  /* Product roles */
-  --app-canvas: color-mix(in oklab, var(--aas-cream-500) 72%, var(--aas-green-50));
-  --app-surface: #ffffff;
-  --app-surface-subtle: #f7f8f3;
-  --app-surface-raised: #ffffff;
-  --app-ink: #172019;
-  --app-ink-soft: #536057;
-  --app-ink-faint: #768078;
-  --app-line: #dfe3dc;
-  --app-line-strong: #cbd2c9;
-  --app-brand: var(--aas-green-700);
-  --app-brand-strong: var(--aas-green-900);
-  --app-brand-soft: var(--aas-green-100);
-  --app-accent: var(--aas-orange-700);
-  --app-accent-strong: var(--aas-orange-900);
-  --app-accent-soft: var(--aas-orange-100);
-  --app-accent-contrast: #ffffff;
-  --app-choice-indicator: var(--app-accent);
-  --app-focus: var(--aas-blue-500);
-  --app-backdrop-scrim: rgb(3 17 10 / 0.5);
-  --app-desktop-backdrop-horizontal: linear-gradient(
-    90deg,
-    rgb(3 20 13 / 0.94) 0,
-    rgb(4 23 15 / 0.84) 28%,
-    rgb(6 26 18 / 0.72) 62%,
-    rgb(4 21 15 / 0.78) 100%
-  );
-  --app-desktop-backdrop-vertical: linear-gradient(rgb(3 16 10 / 0.18), rgb(3 16 10 / 0.5));
-  --app-sidebar: #0b3021;
-  --app-sidebar-divider-width: 2px;
-  --app-sidebar-divider: color-mix(in srgb, var(--app-control-muted) 38%, transparent);
-  --app-sidebar-hover: color-mix(in oklab, var(--aas-green-500) 42%, var(--app-sidebar));
-  --app-sidebar-active: color-mix(in oklab, var(--aas-green-500) 58%, var(--app-sidebar));
-  --app-sidebar-text: #f7fbf6;
-  --app-nav-active: var(--aas-green-700);
-  --app-nav-active-surface: var(--aas-green-50);
-  --app-nav-indicator: var(--aas-green-500);
-  --app-nav-indicator-on-dark: var(--aas-green-300);
-  --app-control-surface: #194d32;
-  --app-control-surface-strong: #225c3b;
-  --app-control-text: #ffffff;
-  --app-control-muted: #c7dacd;
-  --activity-accent: var(--aas-green-300);
-  --activity-accent-strong: var(--aas-green-700);
-  --activity-soft: var(--aas-green-100);
-  --app-shadow-sm: 0 1px 2px rgb(18 36 23 / 0.05);
-  --app-shadow-md: 0 12px 32px rgb(18 36 23 / 0.08);
-  --app-shadow-lg: 0 24px 70px rgb(18 36 23 / 0.12);
-  --app-content-max: 112rem;
-  --app-page-width: 96rem;
-  --app-sidebar-width: 15.5rem;
-  --app-sidebar-rail-width: 4.5rem;
-  --app-sidebar-logo-size: 2.75rem;
-  --app-space-2xs: 0.125rem;
-  --app-space-xs: 0.25rem;
-  --app-space-sm: 0.5rem;
-  --app-space-md: 0.75rem;
-  --app-space-lg: 1rem;
-  --app-status-inline-padding: 0.55rem;
-  --app-toast-offset: 5rem;
-  --app-record-gap: 0.5rem;
-  --app-record-padding-inline: 0.5rem;
-  --app-record-padding-block: 0.375rem;
-  --app-record-radius: 0.875rem;
-  --app-record-shadow: 0 4px 16px rgb(18 36 23 / 0.07);
-  --app-radius-sm: calc(var(--radius) * 0.6);
+    /* Semantic product color roles. Light and dark themes override these, not component markup. */
+    --app-canvas: color-mix(in oklab, var(--aas-cream-500) 72%, var(--aas-green-50));
+    --app-surface: #ffffff;
+    --app-surface-subtle: #f7f8f3;
+    --app-surface-raised: #ffffff;
+    --app-ink: #172019;
+    --app-ink-soft: #536057;
+    --app-ink-faint: #768078;
+    --app-line: #dfe3dc;
+    --app-line-strong: #cbd2c9;
+    --app-brand: var(--aas-green-700);
+    --app-brand-strong: var(--aas-green-900);
+    --app-brand-soft: var(--aas-green-100);
+    --app-accent: var(--aas-orange-700);
+    --app-accent-soft: var(--aas-orange-100);
+    --app-choice-indicator: var(--app-accent);
+    --app-focus: var(--aas-blue-500);
+    --app-backdrop-scrim: rgb(3 17 10 / 0.5);
+    --app-desktop-backdrop-horizontal: linear-gradient(
+      90deg,
+      rgb(3 20 13 / 0.94) 0,
+      rgb(4 23 15 / 0.84) 28%,
+      rgb(6 26 18 / 0.72) 62%,
+      rgb(4 21 15 / 0.78) 100%
+    );
+    --app-desktop-backdrop-vertical: linear-gradient(rgb(3 16 10 / 0.18), rgb(3 16 10 / 0.5));
+    --app-shell-court-background:
+      linear-gradient(var(--app-backdrop-scrim), var(--app-backdrop-scrim)),
+      linear-gradient(
+        90deg,
+        color-mix(in srgb, var(--aas-green-900) 90%, transparent) 0,
+        color-mix(in srgb, var(--aas-green-900) 74%, transparent) 28%,
+        color-mix(in srgb, var(--aas-green-700) 58%, transparent) 62%,
+        color-mix(in srgb, var(--aas-green-900) 64%, transparent) 100%
+      ),
+      linear-gradient(
+        color-mix(in srgb, var(--aas-green-900) 12%, transparent),
+        color-mix(in srgb, var(--aas-green-900) 42%, transparent)
+      ),
+      url("/backgrounds/tennis-net.avif") center / cover fixed;
+    --app-shell-desktop-backdrop-background:
+      var(--app-desktop-backdrop-horizontal), var(--app-desktop-backdrop-vertical),
+      url("/backgrounds/tennis-net.avif") center / cover no-repeat;
+    --app-shell-loading-placeholder: var(--app-navigation-loading-placeholder);
+    --app-shell-main-surface: color-mix(in srgb, var(--app-surface-subtle) 20%, transparent);
+    --app-shell-sidebar-background: linear-gradient(
+      90deg,
+      rgb(7 31 19 / 0.92),
+      rgb(10 43 27 / 0.66)
+    );
+    --app-shell-sidebar-desktop-background: linear-gradient(
+      90deg,
+      rgb(5 27 17 / 0.93),
+      rgb(8 39 24 / 0.7)
+    );
+    --app-shell-topbar-divider: color-mix(in srgb, var(--app-line) 82%, transparent);
+    --app-shell-topbar-surface: color-mix(in srgb, var(--app-surface) 92%, transparent);
+    --app-sidebar: #0b3021;
+    --app-sidebar-divider-width: 2px;
+    --app-sidebar-divider: color-mix(in srgb, var(--app-control-muted) 38%, transparent);
+    --app-sidebar-text: #f7fbf6;
+    --app-nav-active: var(--aas-green-700);
+    --app-nav-active-surface: var(--aas-green-50);
+    --app-nav-indicator: var(--aas-green-500);
+    --app-nav-indicator-on-dark: var(--aas-green-300);
+    --app-navigation-bottom-surface: color-mix(in srgb, var(--app-surface-raised) 97%, transparent);
+    --app-navigation-loading-placeholder: color-mix(
+      in srgb,
+      var(--app-line-strong) 64%,
+      var(--app-surface)
+    );
+    --app-navigation-loading-shell-placeholder: rgb(255 255 255 / 0.14);
+    --app-navigation-sidebar-active-surface: color-mix(
+      in srgb,
+      var(--app-nav-indicator-on-dark) 18%,
+      transparent
+    );
+    --app-navigation-sidebar-active-text: #ffffff;
+    --app-control-surface: #194d32;
+    --app-control-surface-strong: #225c3b;
+    --app-control-text: #ffffff;
+    --app-control-muted: #c7dacd;
+    --app-action-primary-text: #ffffff;
+    --app-action-primary-hover: color-mix(in oklab, var(--app-brand) 84%, var(--app-ink));
+    --app-action-secondary: color-mix(in oklab, var(--app-surface) 72%, var(--app-line));
+    --app-action-destructive-hover: color-mix(
+      in oklab,
+      var(--status-danger-bg) 84%,
+      var(--status-danger-text)
+    );
+    --app-field-surface: color-mix(in srgb, var(--app-line-strong) 30%, transparent);
+    --app-field-control-border: var(--app-line-strong);
+    --app-field-control-surface: var(--app-field-surface);
+    --app-field-control-text: var(--app-ink);
+    --app-focus-outline: color-mix(in srgb, var(--app-focus) 45%, transparent);
+    --app-field-focus-ring: color-mix(in srgb, var(--app-focus) 32%, transparent);
+    --app-field-invalid-ring: color-mix(in srgb, var(--status-danger-indicator) 20%, transparent);
+    --app-choice-control-border: var(--app-line);
+    --app-choice-control-bg: var(--app-surface);
+    --app-choice-control-text: var(--app-ink-soft);
+    --app-choice-control-hover-bg: var(--app-surface-subtle);
+    --app-choice-control-hover-text: var(--app-ink);
+    --app-choice-control-selected-border: var(--app-line-strong);
+    --app-choice-control-selected-bg: var(--app-nav-active-surface);
+    --app-choice-control-selected-text: var(--app-nav-active);
+    --app-choice-control-indicator: var(--app-choice-indicator);
+    --app-collection-choice-selected-border: color-mix(
+      in srgb,
+      var(--app-control-text) 28%,
+      transparent
+    );
+    --app-collection-control-divider: color-mix(in srgb, var(--app-control-text) 14%, transparent);
+    --app-collection-control-item-hover-surface: color-mix(
+      in srgb,
+      var(--app-control-text) 14%,
+      transparent
+    );
+    --app-collection-control-item-surface: color-mix(
+      in srgb,
+      var(--app-control-text) 8%,
+      transparent
+    );
+    --app-collection-field-border: color-mix(in srgb, var(--app-control-text) 18%, transparent);
+    --app-collection-icon-surface: color-mix(in srgb, var(--app-control-text) 10%, transparent);
+    --app-collection-loading-placeholder: color-mix(
+      in srgb,
+      var(--app-line-strong) 64%,
+      var(--app-surface)
+    );
+    --app-collection-row-muted-surface: color-mix(
+      in srgb,
+      var(--app-surface-subtle) 70%,
+      var(--app-surface)
+    );
+    --app-data-table-row-even-surface: color-mix(
+      in srgb,
+      var(--app-surface-subtle) 55%,
+      transparent
+    );
+    --app-collection-toggle-expanded-border: color-mix(
+      in srgb,
+      var(--app-control-text) 30%,
+      transparent
+    );
+    --app-switch-track: var(--app-line-strong);
+    --app-dialog-border: color-mix(in srgb, var(--app-line) 76%, transparent);
+    --app-dialog-overlay: rgb(0 0 0 / 0.8);
+    --app-editor-dialog-actions-surface: color-mix(in srgb, var(--app-surface) 96%, transparent);
+    --app-editor-dialog-back-hover-surface: color-mix(
+      in srgb,
+      var(--app-control-text) 10%,
+      transparent
+    );
+    --app-editor-dialog-divider: color-mix(in srgb, var(--app-control-text) 16%, transparent);
+    --app-editor-dialog-eyebrow: var(--app-choice-indicator);
+    --app-rich-text-content-quote-border: var(--app-brand);
+    --app-rich-text-editor-focus-ring: color-mix(in srgb, var(--app-focus) 28%, transparent);
+    --app-rich-text-toolbar-column: var(--app-focus);
+    --app-rich-text-toolbar-danger: var(--status-danger-text);
+    --app-rich-text-toolbar-divider: var(--app-line);
+    --app-rich-text-toolbar-row: var(--app-brand);
+    --app-tabs-active-border: color-mix(in srgb, var(--app-control-text) 18%, transparent);
+    --app-tabs-active-surface: color-mix(in srgb, var(--app-control-text) 11%, transparent);
+    --app-tabs-list-border: color-mix(in srgb, var(--app-control-text) 14%, transparent);
+    --app-document-intro-surface: color-mix(in srgb, var(--app-brand-soft) 42%, var(--app-surface));
+    --app-document-link-decoration: color-mix(in srgb, var(--app-brand) 38%, transparent);
+    --app-feedback-danger-border: color-mix(
+      in srgb,
+      var(--status-danger-indicator) 34%,
+      var(--app-line)
+    );
+    --app-feedback-danger-surface: color-mix(
+      in srgb,
+      var(--status-danger-bg) 72%,
+      var(--app-surface)
+    );
+    --app-feedback-description: color-mix(in srgb, currentColor 86%, var(--app-ink));
+    --app-feedback-info-border: color-mix(in srgb, var(--status-own-text) 24%, var(--app-line));
+    --app-feedback-info-surface: color-mix(in srgb, var(--status-own-bg) 72%, var(--app-surface));
+    --app-feedback-success-border: color-mix(
+      in srgb,
+      var(--status-available-indicator) 34%,
+      var(--app-line)
+    );
+    --app-feedback-success-surface: color-mix(
+      in srgb,
+      var(--status-available-bg) 72%,
+      var(--app-surface)
+    );
+    --app-feedback-warning-border: color-mix(
+      in srgb,
+      var(--status-warning-indicator) 34%,
+      var(--app-line)
+    );
+    --app-feedback-warning-surface: color-mix(
+      in srgb,
+      var(--status-warning-bg) 72%,
+      var(--app-surface)
+    );
+    --app-form-actions-surface: color-mix(in srgb, var(--app-surface) 92%, transparent);
+    --app-page-description-text: var(--app-ink-soft);
+    --app-page-heading-text: var(--app-ink);
+    --app-page-shell-description-text: var(--app-control-muted);
+    --app-page-shell-heading-text: var(--app-control-text);
+    --app-page-loading-placeholder: color-mix(
+      in srgb,
+      var(--app-line-strong) 64%,
+      var(--app-surface)
+    );
+    --app-page-loading-sheen-background: linear-gradient(
+      100deg,
+      transparent 20%,
+      color-mix(in srgb, var(--app-surface) 72%, transparent) 45%,
+      transparent 70%
+    );
+    --app-page-loading-sheen-background-size: 220% 100%;
+    --app-control-background: linear-gradient(
+      120deg,
+      var(--app-control-surface),
+      var(--app-control-surface-strong)
+    );
+    --app-collection-control-background: var(--app-control-background);
+    --app-editor-dialog-header-background: var(--app-control-background);
+    --app-tabs-list-background: var(--app-control-background);
+    --app-collection-loading-sheen-background: linear-gradient(
+      100deg,
+      transparent 20%,
+      color-mix(in srgb, var(--app-surface) 72%, transparent) 45%,
+      transparent 70%
+    );
+    --app-collection-loading-sheen-background-size: 220% 100%;
+    --app-section-soft-background: linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--app-surface-subtle) 72%, transparent),
+      transparent
+    );
+    --app-visualization-grid-background: repeating-linear-gradient(
+      to bottom,
+      transparent,
+      transparent calc(25% - 1px),
+      color-mix(in srgb, var(--app-line) 65%, transparent) 25%
+    );
+    --app-settings-choice-selected-border: color-mix(
+      in srgb,
+      var(--app-choice-indicator) 42%,
+      var(--app-line)
+    );
+    --app-settings-choice-selected-surface: color-mix(
+      in srgb,
+      var(--app-choice-indicator) 8%,
+      var(--app-surface)
+    );
+    --app-settings-danger-actions-border: color-mix(
+      in srgb,
+      var(--status-danger-indicator) 22%,
+      var(--app-line)
+    );
+    --app-settings-danger-actions-surface: color-mix(
+      in srgb,
+      var(--status-danger-bg) 34%,
+      var(--app-surface)
+    );
+    --app-settings-danger-border: color-mix(
+      in srgb,
+      var(--status-danger-indicator) 34%,
+      var(--app-line)
+    );
+    --app-settings-danger-header-border: color-mix(
+      in srgb,
+      var(--status-danger-indicator) 25%,
+      var(--app-line)
+    );
+    --app-settings-danger-header-surface: color-mix(
+      in srgb,
+      var(--status-danger-bg) 62%,
+      var(--app-surface)
+    );
+    --app-settings-header-surface: color-mix(
+      in srgb,
+      var(--app-surface-subtle) 84%,
+      var(--app-surface)
+    );
+    --app-settings-radio-selected-border: color-mix(
+      in srgb,
+      var(--app-choice-indicator) 32%,
+      var(--app-line)
+    );
+    --app-settings-radio-selected-surface: color-mix(
+      in srgb,
+      var(--app-choice-indicator) 7%,
+      var(--app-surface)
+    );
+    --app-settings-row-divider: color-mix(in srgb, var(--app-line) 60%, transparent);
+    --activity-accent: var(--aas-green-300);
+    --app-shadow-sm: 0 1px 2px rgb(18 36 23 / 0.05);
+    --app-shadow-md: 0 12px 32px rgb(18 36 23 / 0.08);
+    --app-shadow-lg: 0 24px 70px rgb(18 36 23 / 0.12);
+    --app-floating-surface-shadow: 0 18px 48px
+      color-mix(in srgb, var(--foreground) 18%, transparent);
+    --app-switch-thumb-shadow: 0 1px 2px color-mix(in srgb, var(--app-ink) 22%, transparent);
+    --app-navigation-bottom-shadow: 0 -8px 28px rgb(18 36 23 / 0.06);
+    --app-shell-sidebar-shadow: 1rem 0 3rem rgb(2 18 10 / 0.18);
+    --app-shell-sidebar-desktop-shadow: 1.25rem 0 4rem rgb(2 18 10 / 0.2);
+    --app-dialog-overlay-blur: 3px;
+    --app-editor-dialog-actions-blur: 12px;
+    --app-navigation-bottom-blur: 18px;
+    --app-shell-topbar-blur: 18px;
 
-  /* Typography
+    /* Semantic product geometry. Values mirror the verified pre-Tailwind component baseline. */
+    --app-content-max: 112rem;
+    --app-page-width: 96rem;
+    --app-document-max-width: 58rem;
+    --app-page-description-max-width: 42rem;
+    --app-page-intro-max-width: 54rem;
+    --app-page-title-max-width: 18ch;
+    --app-section-description-max-width: 65ch;
+    --app-settings-description-max-width: 42rem;
+    --app-shell-loading-action-width: 2.5rem;
+    --app-shell-loading-identity-width: min(13rem, 56vw);
+    --app-shell-loading-placeholder-height: 2.5rem;
+    --app-shell-min-height: 100svh;
+    --app-shell-topbar-min-height: calc(4rem + env(safe-area-inset-top));
+    --app-sidebar-width: 15.5rem;
+    --app-control-height: 2.25rem;
+    --app-compact-control-height: 2rem;
+    --app-form-control-min-height: 2.625rem;
+    --app-search-control-height: 2.75rem;
+    --app-textarea-min-height: 4rem;
+    --app-control-icon-size: 1rem;
+    --app-choice-control-min-height: var(--app-control-height);
+    --app-choice-control-min-width: 0rem;
+    --app-choice-indicator-height: 2px;
+    --app-radio-size: 1rem;
+    --app-radio-selected-border-width: 0.25rem;
+    --app-switch-width: 2rem;
+    --app-switch-height: 1.15rem;
+    --app-switch-thumb-size: 0.9rem;
+    --app-control-min-width: 10rem;
+    --app-select-trigger-min-height: var(--app-control-height);
+    --app-select-content-max-width: calc(100vw - 1rem);
+    --app-select-content-max-height: 20rem;
+    --app-select-viewport-max-height: 18rem;
+    --app-select-option-min-height: 2.5rem;
+    --app-select-scroll-button-min-height: 1.75rem;
+    --app-date-trigger-min-height: 2.75rem;
+    --app-date-popover-width: min(20rem, calc(100vw - 1rem));
+    --app-date-popover-max-height: calc(100dvh - 1rem);
+    --app-calendar-max-width: 20rem;
+    --app-calendar-min-width: 17.5rem;
+    --app-calendar-compact-min-width: 13rem;
+    --app-calendar-header-min-height: 2.5rem;
+    --app-calendar-compact-day-width: 1.85rem;
+    --app-rich-text-content-table-min-width: 28rem;
+    --app-rich-text-editor-min-height: 13.75rem;
+    --app-rich-text-table-min-width: 30rem;
+    --app-rich-text-table-cell-min-width: 5rem;
+    --app-tabs-list-min-width: 24rem;
+    --app-tabs-trigger-min-height: 2.75rem;
+    --app-navigation-action-icon-size: 2.5rem;
+    --app-navigation-badge-size: 1.375rem;
+    --app-navigation-bottom-indicator-height: 0.125rem;
+    --app-navigation-bottom-item-min-height: 4.25rem;
+    --app-navigation-bottom-list-min-height: calc(4.25rem + env(safe-area-inset-bottom));
+    --app-navigation-icon-size: 1.25rem;
+    --app-navigation-loading-item-min-height: 2.75rem;
+    --app-navigation-overlay-max-height: min(42rem, calc(100dvh - 2rem));
+    --app-navigation-overlay-more-max-height: min(80dvh, 44rem);
+    --app-navigation-overlay-more-width: min(40rem, 100vw);
+    --app-navigation-section-indicator-height: 0.1875rem;
+    --app-navigation-section-item-min-height: 2.75rem;
+    --app-navigation-sidebar-max-width: 17rem;
+    --app-page-loading-min-height: 18rem;
+    --app-page-loading-eyebrow-width: 7rem;
+    --app-page-loading-title-width: min(70%, 22rem);
+    --app-page-loading-description-width: min(88%, 36rem);
+    --app-page-loading-eyebrow-height: 0.75rem;
+    --app-page-loading-title-height: 2rem;
+    --app-page-loading-description-height: 1rem;
+    --app-page-loading-row-height: 2.75rem;
+    --app-data-table-heading-height: 2.75rem;
+    --app-collection-header-min-height: 4.75rem;
+    --app-collection-header-wide-min-height: 5rem;
+    --app-collection-field-control-min-height: 2.5rem;
+    --app-collection-row-min-height: 4.75rem;
+    --app-collection-row-trigger-min-height: 4.625rem;
+    --app-collection-row-wide-min-height: 4.25rem;
+    --app-collection-state-min-height: 18rem;
+    --app-collection-toggle-min-height: 2.75rem;
+    --app-form-step-indicator-height: 0.1875rem;
+    --app-metric-icon-size: 2rem;
+    --app-visualization-bar-height: 0.65rem;
+    --app-visualization-comparison-bar-height: 0.18rem;
+    --app-visualization-hour-plot-height: 14rem;
+    --app-visualization-hour-plot-wide-height: 17rem;
+    --app-visualization-loading-metric-height: 6.5rem;
+    --app-visualization-loading-title-height: 1.5rem;
+    --app-settings-choice-min-height: 2.5rem;
+    --app-settings-radio-option-min-height: 2.75rem;
+    --app-dialog-width: 34rem;
+    --app-dialog-max-height: calc(100dvh - 2rem);
+    --app-dialog-surface-width: min(var(--app-dialog-width), calc(100vw - 2rem));
+    --app-dialog-surface-max-height: var(--app-dialog-max-height);
+    --app-dialog-surface-border-bottom-width: 1px;
+    --app-feedback-indicator-border-width: var(--app-space-xs);
+    --app-form-submit-spinner-border-width: 2px;
+    --app-rich-text-content-quote-border-width: 0.2rem;
+    --app-rich-text-quote-border-width: 3px;
+    --app-tabs-indicator-height: 0.1875rem;
+    --app-editor-dialog-width: min(52rem, calc(100vw - 2rem));
+    --app-editor-dialog-height: min(48rem, calc(100dvh - 2rem));
+    --app-date-navigation-columns: 2.75rem minmax(0, 1fr) 2.75rem;
+    --app-metric-content-columns: auto minmax(0, 1fr);
+    --app-visualization-donut-columns: minmax(8rem, 10rem) minmax(0, 1fr);
+    --app-visualization-hour-rows: minmax(0, 1fr) 1rem 1.5rem;
+    --app-date-navigation-compact-columns: 2.5rem minmax(0, 1fr) 2.5rem;
+    --app-calendar-header-columns: 2.25rem minmax(0, 1fr) 2.25rem;
+    --app-document-facts-columns: repeat(auto-fit, minmax(9rem, 1fr));
+    --app-feedback-wide-columns: minmax(0, 1fr) auto;
+    --app-shell-columns: var(--app-sidebar-width) minmax(0, 1fr);
+    --app-settings-row-columns: minmax(12rem, 0.65fr) minmax(15rem, 1fr);
+    --app-collection-controls-top-columns: minmax(0, 1fr) auto;
+    --app-collection-loading-entity-columns: 5.5rem minmax(0, 1fr) 4.5rem;
+    --app-collection-loading-schedule-columns: 5.75rem minmax(0, 1fr) 4.5rem;
+    --app-collection-loading-wide-columns: 7rem minmax(0, 1fr) 4.5rem;
+    --app-collection-row-leading-columns: auto minmax(0, 1fr);
+    --app-collection-row-schedule-columns: max-content minmax(0, 1fr);
+    --app-collection-row-schedule-rows: auto auto;
+    --app-select-disabled-opacity: 0.45;
+    --app-visualization-comparison-opacity: 0.78;
+    --app-visualization-fetching-opacity: 0.68;
+    --app-settings-disabled-opacity: 0.55;
+    --app-collection-busy-opacity: 0.72;
+    --app-collection-disabled-opacity: 0.6;
+    --app-collection-row-disabled-opacity: 0.55;
+    --app-date-disabled-opacity: 0.55;
+    --app-calendar-disabled-opacity: 0.35;
+    --app-rich-text-editor-disabled-opacity: 0.68;
+    --app-space-2xs: 0.125rem;
+    --app-space-xs: 0.25rem;
+    --app-space-sm: 0.5rem;
+    --app-space-md: 0.75rem;
+    --app-space-lg: 1rem;
+    --app-space-xl: 1.5rem;
+    --app-control-gap: var(--app-space-sm);
+    --app-control-padding-block: var(--app-space-sm);
+    --app-control-padding-inline: var(--app-space-md);
+    --app-action-padding-inline: 0.875rem;
+    --app-action-compact-padding-block: 0.375rem;
+    --app-choice-padding-block: 0.35rem;
+    --app-choice-padding-inline: 0.625rem;
+    --app-choice-indicator-offset: 0.15rem;
+    --app-select-trigger-gap: 0.625rem;
+    --app-select-option-padding-block: 0.55rem;
+    --app-select-option-indicator-padding: 2.25rem;
+    --app-date-control-padding-inline: 0.875rem;
+    --app-calendar-cell-padding: 0.1rem;
+    --app-document-wide-padding-block: 1.25rem;
+    --app-document-wide-padding-inline: 1.5rem;
+    --app-page-content-desktop-gap: 1.25rem;
+    --app-page-content-desktop-padding-bottom: 2.5rem;
+    --app-page-desktop-padding-block-end: 4.5rem;
+    --app-page-desktop-padding-block-start: 3rem;
+    --app-page-desktop-padding-inline-end: 3rem;
+    --app-page-desktop-padding-inline-start: 2.5rem;
+    --app-page-header-wide-gap: 2rem;
+    --app-page-intro-gap: 0.375rem;
+    --app-page-loading-line-gap: 0.625rem;
+    --app-page-loading-padding: clamp(1rem, 4vw, 2rem);
+    --app-page-status-padding-block: 0.28rem;
+    --app-page-wide-padding-block-end: 2.5rem;
+    --app-page-wide-padding-block-start: 1.75rem;
+    --app-page-wide-padding-inline: 2rem;
+    --app-data-table-cell-padding-inline: 0.55rem;
+    --app-data-table-detail-margin-top: 0.2rem;
+    --app-metric-change-padding-block: 0.18rem;
+    --app-metric-change-padding-inline: 0.4rem;
+    --app-metric-content-gap: 0.625rem;
+    --app-metric-content-padding: 0.875rem;
+    --app-metric-grid-gap: 0.625rem;
+    --app-metric-grid-wide-gap: 0.875rem;
+    --app-metric-value-gap: 0.12rem;
+    --app-navigation-actions-gap: 0.375rem;
+    --app-navigation-badge-padding-inline: 0.375rem;
+    --app-navigation-bottom-badge-left: calc(50% + 0.375rem);
+    --app-navigation-bottom-badge-top: 0.375rem;
+    --app-navigation-item-gap: 0.625rem;
+    --app-navigation-item-padding-block: 0.625rem;
+    --app-navigation-overlay-header-padding-bottom: 0.875rem;
+    --app-navigation-safe-padding-bottom: env(safe-area-inset-bottom);
+    --app-navigation-section-indicator-bottom: 1px;
+    --app-navigation-sidebar-gap: 1.25rem;
+    --app-shell-loading-gap: 0.5rem;
+    --app-shell-main-safe-padding-bottom: calc(4.25rem + env(safe-area-inset-bottom));
+    --app-shell-sidebar-gap: 1.25rem;
+    --app-shell-sidebar-padding-block: 1.25rem;
+    --app-shell-sidebar-padding-inline: 1rem;
+    --app-shell-topbar-padding-inline: 1rem;
+    --app-shell-topbar-safe-padding-top: env(safe-area-inset-top);
+    --app-shell-workspace-safe-padding-bottom: calc(4.75rem + env(safe-area-inset-bottom));
+    --app-schedule-time-gap: 0.15rem;
+    --app-schedule-time-range-gap: 0.05rem;
+    --app-weather-icon-size: 1rem;
+    --app-visualization-description-gap: 0.45rem;
+    --app-visualization-hour-bars-gap: 0.12rem;
+    --app-visualization-hour-gap: 0.2rem;
+    --app-visualization-legend-copy-gap: 0.2rem;
+    --app-visualization-legend-item-gap: 0.3rem;
+    --app-visualization-legend-row-gap: 0.35rem;
+    --app-visualization-list-gap: 0.875rem;
+    --app-visualization-row-gap: 0.4rem;
+    --app-visualization-scroll-padding: 0.35rem;
+    --app-visualization-section-offset: 0.1rem;
+    --app-visualization-section-wide-offset: 0.25rem;
+    --app-visualization-status-row-gap: 0.35rem;
+    --app-visualization-summary-padding-block: 0.45rem;
+    --app-visualization-summary-padding-inline: 0.65rem;
+    --app-visualization-swatch-size: 0.55rem;
+    --app-visualization-swatch-top: 0.3rem;
+    --app-rich-text-flow-gap: 0.6rem;
+    --app-rich-text-content-list-gap: 0.35rem;
+    --app-rich-text-content-list-padding-inline: 1.35rem;
+    --app-rich-text-content-quote-padding-inline: 0.85rem;
+    --app-rich-text-list-padding-inline: 1.4rem;
+    --app-rich-text-list-item-gap: 0.2rem;
+    --app-rich-text-quote-padding-inline: 0.875rem;
+    --app-rich-text-toolbar-padding: 0.375rem;
+    --app-form-actions-padding-bottom: 0.75rem;
+    --app-form-actions-wide-padding-top: 0.875rem;
+    --app-form-control-gap: 0.375rem;
+    --app-form-field-gap: 0.625rem;
+    --app-form-field-intro-gap: 0.2rem;
+    --app-form-field-padding: 0.875rem;
+    --app-form-field-wide-padding-inline: 1.25rem;
+    --app-form-step-navigation-padding-inline: 0.875rem;
+    --app-form-step-navigation-wide-padding-inline: 1.25rem;
+    --app-collection-control-count-size: 1.2rem;
+    --app-collection-control-detail-gap: 0.4rem;
+    --app-collection-control-icon-size: 0.9rem;
+    --app-collection-control-item-gap: 0.625rem;
+    --app-collection-control-item-padding-inline: 0.625rem;
+    --app-collection-controls-content-margin-top: 0.625rem;
+    --app-collection-controls-padding-bottom: 0.75rem;
+    --app-collection-controls-padding-inline: 0.875rem;
+    --app-collection-controls-padding-top: 0.625rem;
+    --app-collection-controls-wide-padding-bottom: 0.875rem;
+    --app-collection-header-icon-size: 2.35rem;
+    --app-collection-header-icon-glyph-size: 1.15rem;
+    --app-collection-header-padding-inline: 0.875rem;
+    --app-collection-header-summary-gap: 0.625rem;
+    --app-collection-header-wide-padding-block: 0.875rem;
+    --app-collection-row-copy-gap: 0.15rem;
+    --app-collection-row-description-margin-top: 0.15rem;
+    --app-collection-row-details-padding: 0.875rem;
+    --app-collection-row-meta-margin-top: 0.12rem;
+    --app-collection-row-padding-block: 0.625rem;
+    --app-collection-row-summary-wide-gap: 1.25rem;
+    --app-collection-row-trigger-indicator-size: 1.25rem;
+    --app-collection-search-icon-inset: 0.875rem;
+    --app-collection-state-action-margin-top: 1.125rem;
+    --app-collection-state-description-margin-top: 0.35rem;
+    --app-collection-state-icon-size: 1.35rem;
+    --app-collection-state-indicator-margin-bottom: 0.875rem;
+    --app-collection-state-indicator-size: 3rem;
+    --app-collection-state-mark-size: 0.75rem;
+    --app-collection-state-padding-block: 3rem;
+    --app-collection-status-padding-block: 0.28rem;
+    --app-settings-radio-indicator-bottom: 0.15rem;
+    --app-settings-radio-option-padding-block: 0.625rem;
+    --app-settings-section-description-margin-top: 0.2rem;
+    --app-settings-section-eyebrow-margin-bottom: 0.1rem;
+    --app-settings-section-header-padding: 0.875rem;
+    --app-settings-header-wide-padding-inline: 1.25rem;
+    --app-dialog-actions-gap: 0.625rem;
+    --app-dialog-close-offset: 0.375rem;
+    --app-dialog-inline: 1.25rem;
+    --app-dialog-intro-gap: 0.35rem;
+    --app-editor-dialog-actions-padding-bottom: max(0.75rem, env(safe-area-inset-bottom));
+    --app-editor-dialog-intro-gap: 0.15rem;
+    --app-editor-dialog-padding: 0.875rem;
+    --app-editor-dialog-safe-padding-top: max(0.75rem, env(safe-area-inset-top));
+    --app-editor-dialog-wide-padding-inline: 1.25rem;
+    --app-dialog-surface-top: 50%;
+    --app-dialog-surface-bottom: auto;
+    --app-dialog-surface-translate-x: -50%;
+    --app-dialog-surface-translate-y: -50%;
+    --app-dialog-surface-padding-bottom: 0rem;
+    --app-tabs-indicator-bottom: 0.2rem;
+    --app-tabs-indicator-inline: 0.75rem;
+    --app-tabs-trigger-padding-block: 0.625rem;
+    --app-search-control-padding-inline: 2.5rem;
+    --app-switch-padding: 1px;
+    --app-switch-thumb-shift: 0.85rem;
+    --app-page-padding: var(--app-space-lg);
+    --app-section-gap: var(--app-space-lg);
+    --app-status-inline-padding: 0.55rem;
+    --app-record-gap: 0.5rem;
+    --app-record-padding-inline: 0.5rem;
+    --app-collection-control-field-basis: 15rem;
+    --app-collection-control-field-expanded-basis: 18rem;
+    --app-collection-control-field-min-width: min(100%, 13rem);
+    --app-collection-loading-content-width: min(12rem, 80%);
+    --app-collection-loading-leading-width: 5rem;
+    --app-collection-loading-leading-wide-width: 6rem;
+    --app-collection-search-max-width: 34rem;
+    --app-collection-state-description-max-width: 30rem;
+    --app-collection-toggle-wide-min-width: 11rem;
+    --app-data-table-four-first-width: 9%;
+    --app-data-table-four-second-width: 35%;
+    --app-data-table-four-third-width: 19%;
+    --app-data-table-four-fourth-width: 37%;
+    --app-data-table-three-first-width: 34%;
+    --app-data-table-three-second-width: 25%;
+    --app-data-table-three-third-width: 41%;
+    --app-visualization-donut-size: min(10rem, 100%);
+    --app-visualization-hour-bar-width: min(0.9rem, 42%);
+    --app-visualization-loading-title-width: min(16rem, 65%);
+    --app-control-radius: 999px;
+    --app-navigation-badge-radius: 999px;
+    --app-navigation-bottom-indicator-radius: 0 0 999px 999px;
+    --app-navigation-item-radius: 0.75rem;
+    --app-navigation-overlay-more-radius: 1.5rem 1.5rem 0 0;
+    --app-navigation-section-indicator-radius: 999px 999px 0 0;
+    --app-navigation-section-item-radius: 0.625rem 0.625rem 0 0;
+    --app-navigation-sidebar-radius: 1rem;
+    --app-shell-loading-radius: 0.75rem;
+    --app-page-shell-title-shadow: 0 3px 24px rgb(0 0 0 / 0.28);
+    --app-collection-control-item-radius: 0.75rem;
+    --app-collection-radius: 1.25rem;
+    --app-collection-state-indicator-radius: 1rem;
+    --app-calendar-day-radius: 50%;
+    --app-choice-radius: 0.675rem;
+    --app-select-content-radius: 0.875rem;
+    --app-calendar-surface-radius: 1rem;
+    --app-textarea-radius: 0.75rem;
+    --app-dialog-radius: 1.5rem;
+    --app-dialog-surface-radius: var(--app-dialog-radius);
+    --app-document-fact-radius: var(--radius);
+    --app-document-radius: 1.25rem;
+    --app-document-wide-radius: 1.5rem;
+    --app-form-actions-radius: 1rem;
+    --app-page-loading-surface-radius: 1rem;
+    --app-record-radius: 0.875rem;
+    --app-metric-icon-radius: 0.625rem;
+    --app-visualization-bar-radius: 0.25rem;
+    --app-visualization-plot-radius: 0.625rem;
+    --app-visualization-summary-radius: calc(var(--radius) * 0.6);
+    --app-visualization-swatch-radius: 0.18rem;
+    --app-rich-text-editor-radius: 0.875rem;
+    --app-section-radius: 1rem;
+    --app-settings-radio-option-radius: 0.75rem;
+    --app-settings-section-radius: 1.25rem;
+    --app-settings-section-wide-radius: 1.5rem;
+    --app-surface-radius: 1.25rem;
+    --app-tabs-list-radius: 1rem;
+    --app-tabs-trigger-radius: 0.75rem;
+    --app-record-shadow: 0 4px 16px rgb(18 36 23 / 0.07);
+
+    /* Typography
    *
    * One family keeps the product calm and recognisable. The role-based scale
    * separates display text, reading text and compact UI labels without letting
    * individual pages invent their own sizes.
    */
-  --app-font-body: "Figtree Variable", sans-serif;
-  --app-font-sans: var(--app-font-body);
-  --app-font-display: var(--app-font-body);
-  --app-type-micro-compact: 0.75rem;
-  --app-type-micro-comfortable: 0.8125rem;
-  --app-type-caption-compact: 0.8125rem;
-  --app-type-label-compact: 0.875rem;
-  --app-type-body-sm-compact: 0.9375rem;
-  --app-type-body-compact: 1rem;
-  --app-type-body-lg-compact: 1.0625rem;
-  --app-type-heading-sm-compact: 1.25rem;
-  --app-type-heading-md-compact: 1.375rem;
-  --app-type-caption-comfortable: 0.875rem;
-  --app-type-label-comfortable: 0.9375rem;
-  --app-type-body-sm-comfortable: 1rem;
-  --app-type-body-comfortable: 1.0625rem;
-  --app-type-body-lg-comfortable: 1.125rem;
-  --app-type-heading-sm-comfortable: 1.375rem;
-  --app-type-heading-md-comfortable: 1.5rem;
-  --app-type-micro: var(--app-type-micro-compact);
-  --app-type-caption: var(--app-type-caption-compact);
-  --app-type-label: var(--app-type-label-compact);
-  --app-type-body-sm: var(--app-type-body-sm-compact);
-  --app-type-body: var(--app-type-body-compact);
-  --app-type-body-lg: var(--app-type-body-lg-compact);
-  --app-type-heading-sm: var(--app-type-heading-sm-compact);
-  --app-type-heading-md: var(--app-type-heading-md-compact);
-  --app-type-page-title-compact: clamp(2rem, calc(1.7rem + 1vw), 2.625rem);
-  --app-type-page-title-comfortable: clamp(2.125rem, calc(1.8rem + 1vw), 2.875rem);
-  --app-type-display-compact: clamp(2.125rem, 4.8vw, 3.5rem);
-  --app-type-display-comfortable: clamp(2.25rem, 4.8vw, 3.75rem);
-  --app-type-page-title: var(--app-type-page-title-compact);
-  --app-type-display: var(--app-type-display-compact);
+    --app-font-body: "Figtree Variable", Figtree, ui-sans-serif, system-ui, sans-serif;
+    --app-font-sans: var(--app-font-body);
+    --app-font-display: var(--app-font-body);
+    --app-dialog-close-font-size: 1.375rem;
+    --app-editor-dialog-title-font-size: 1.75rem;
+    --app-editor-dialog-title-wide-font-size: 2rem;
+    --app-metric-unit-font-size: 0.58em;
+    --app-rich-text-toolbar-separator-height: 1.5rem;
+    --app-action-font-weight: 650;
+    --app-choice-font-weight: 680;
+    --app-calendar-heading-font-weight: 700;
+    --app-calendar-selected-font-weight: 750;
+    --app-document-fact-label-font-weight: 720;
+    --app-document-fact-value-font-weight: 680;
+    --app-document-link-font-weight: 650;
+    --app-document-section-title-font-weight: 740;
+    --app-document-strong-font-weight: 700;
+    --app-dialog-title-font-weight: 720;
+    --app-editor-dialog-eyebrow-font-weight: 750;
+    --app-editor-dialog-title-font-weight: 720;
+    --app-feedback-title-font-weight: 720;
+    --app-collection-control-label-font-weight: 730;
+    --app-collection-group-font-weight: 680;
+    --app-collection-group-relative-font-weight: 760;
+    --app-collection-row-description-font-weight: 580;
+    --app-collection-row-meta-font-weight: 560;
+    --app-collection-row-title-font-weight: 720;
+    --app-collection-state-title-font-weight: 740;
+    --app-collection-status-font-weight: 720;
+    --app-collection-title-font-weight: 740;
+    --app-collection-toggle-font-weight: 680;
+    --app-data-table-detail-font-weight: 500;
+    --app-data-table-heading-font-weight: 700;
+    --app-data-table-row-heading-font-weight: 690;
+    --app-form-label-font-weight: 690;
+    --app-form-step-font-weight: 650;
+    --app-form-step-number-font-weight: 750;
+    --app-metric-change-font-weight: 740;
+    --app-metric-unit-font-weight: 680;
+    --app-navigation-badge-font-weight: 750;
+    --app-navigation-identity-font-weight: 700;
+    --app-navigation-item-font-weight: 600;
+    --app-navigation-overlay-title-font-weight: 750;
+    --app-navigation-section-font-weight: 700;
+    --app-page-eyebrow-font-weight: 750;
+    --app-page-status-font-weight: 720;
+    --app-page-title-font-weight: 720;
+    --app-schedule-time-font-weight: 620;
+    --app-schedule-time-start-font-weight: 760;
+    --app-rich-text-content-heading-font-weight: 750;
+    --app-rich-text-heading-2-font-weight: 700;
+    --app-rich-text-heading-3-font-weight: 650;
+    --app-rich-text-strong-font-weight: 700;
+    --app-rich-text-table-heading-font-weight: 650;
+    --app-section-title-font-weight: 720;
+    --app-settings-eyebrow-font-weight: 750;
+    --app-settings-radio-description-font-weight: 520;
+    --app-settings-radio-option-font-weight: 650;
+    --app-settings-row-title-font-weight: 500;
+    --app-settings-title-font-weight: 740;
+    --app-tabs-trigger-font-weight: 680;
+    --app-control-line-height: 1.2;
+    --app-choice-line-height: 1.15;
+    --app-document-fact-value-line-height: 1.4;
+    --app-document-intro-line-height: 1.6;
+    --app-document-section-content-line-height: 1.65;
+    --app-document-section-description-line-height: 1.5;
+    --app-document-section-title-line-height: 1.3;
+    --app-dialog-close-line-height: 1;
+    --app-dialog-description-line-height: 1.5;
+    --app-dialog-title-line-height: 1.15;
+    --app-editor-dialog-title-line-height: 1.05;
+    --app-feedback-description-line-height: 1.5;
+    --app-feedback-title-line-height: 1.35;
+    --app-collection-count-line-height: 1;
+    --app-collection-group-line-height: 1.3;
+    --app-collection-row-copy-line-height: 1.35;
+    --app-collection-state-description-line-height: 1.5;
+    --app-collection-status-line-height: 1;
+    --app-collection-title-line-height: 1.25;
+    --app-data-table-detail-line-height: 1.3;
+    --app-form-label-line-height: 1.3;
+    --app-form-supporting-line-height: 1.4;
+    --app-metric-label-line-height: 1.2;
+    --app-metric-value-line-height: 1.1;
+    --app-page-description-line-height: 1.4;
+    --app-page-status-line-height: 1;
+    --app-page-title-line-height: 1.05;
+    --app-schedule-time-line-height: 1.2;
+    --app-rich-text-content-heading-line-height: 1.25;
+    --app-select-option-line-height: 1.3;
+    --app-rich-text-content-line-height: 1.6;
+    --app-rich-text-heading-2-line-height: 1.3;
+    --app-rich-text-heading-3-line-height: 1.35;
+    --app-section-description-line-height: 1.45;
+    --app-section-title-line-height: 1.25;
+    --app-settings-description-line-height: 1.4;
+    --app-settings-eyebrow-line-height: 1.2;
+    --app-settings-row-description-line-height: 1rem;
+    --app-settings-row-title-line-height: 1.25rem;
+    --app-settings-text-line-height: 1.55;
+    --app-visualization-donut-line-height: 1;
+    --app-visualization-hour-value-line-height: 1;
+    --app-document-link-underline-offset: 0.18em;
+    --app-rich-text-link-underline-offset: 2px;
+    --app-document-fact-label-letter-spacing: 0.06em;
+    --app-editor-dialog-eyebrow-letter-spacing: 0.1em;
+    --app-editor-dialog-title-letter-spacing: -0.035em;
+    --app-metric-unit-letter-spacing: 0;
+    --app-metric-value-letter-spacing: -0.035em;
+    --app-navigation-section-letter-spacing: 0.06em;
+    --app-page-eyebrow-letter-spacing: 0.11em;
+    --app-page-title-letter-spacing: -0.035em;
+    --app-schedule-time-start-letter-spacing: -0.02em;
+    --app-settings-eyebrow-letter-spacing: 0.08em;
+    --app-form-submit-animation: form-submit-spin 700ms linear infinite;
+    --app-page-loading-animation: page-loading-sheen 1.5s ease-in-out infinite;
+    --app-collection-loading-animation: collection-loading 1.5s ease-in-out infinite;
+    --app-navigation-loading-animation: navigation-loading 1.8s ease-in-out infinite;
+    --app-page-shell-enter-animation: app-desktop-content-enter 420ms cubic-bezier(0.22, 1, 0.36, 1)
+      both;
+    --app-collection-busy-transition-duration: 140ms;
+    --app-visualization-bar-transition-duration: 180ms;
+    --app-collection-transition-easing: ease;
+    --app-visualization-comparison-stroke-dasharray: 7 6;
+    --app-visualization-comparison-stroke-width: 2.5;
+    --app-collection-focus-inset: -3px;
+    --app-collection-row-indicator-size: 1.5rem;
+    --app-type-micro-compact: 0.75rem;
+    --app-type-micro-comfortable: 0.8125rem;
+    --app-type-caption-compact: 0.8125rem;
+    --app-type-label-compact: 0.875rem;
+    --app-type-body-sm-compact: 0.9375rem;
+    --app-type-body-compact: 1rem;
+    --app-type-body-lg-compact: 1.0625rem;
+    --app-type-heading-sm-compact: 1.25rem;
+    --app-type-heading-md-compact: 1.375rem;
+    --app-type-caption-comfortable: 0.875rem;
+    --app-type-label-comfortable: 0.9375rem;
+    --app-type-body-sm-comfortable: 1rem;
+    --app-type-body-comfortable: 1.0625rem;
+    --app-type-body-lg-comfortable: 1.125rem;
+    --app-type-heading-sm-comfortable: 1.375rem;
+    --app-type-heading-md-comfortable: 1.5rem;
+    --app-type-micro: var(--app-type-micro-compact);
+    --app-type-caption: var(--app-type-caption-compact);
+    --app-type-label: var(--app-type-label-compact);
+    --app-type-body-sm: var(--app-type-body-sm-compact);
+    --app-type-body: var(--app-type-body-compact);
+    --app-type-body-lg: var(--app-type-body-lg-compact);
+    --app-type-heading-sm: var(--app-type-heading-sm-compact);
+    --app-type-heading-md: var(--app-type-heading-md-compact);
+    --app-type-page-title-compact: clamp(2rem, calc(1.7rem + 1vw), 2.625rem);
+    --app-type-page-title-comfortable: clamp(2.125rem, calc(1.8rem + 1vw), 2.875rem);
+    --app-type-page-title: var(--app-type-page-title-compact);
+    --app-form-steps-max-width: 30rem;
+    --app-form-submit-min-width: 9rem;
+    --app-settings-choice-min-width: 4.25rem;
 
-  /* Statistics typography
+    /* Statistics typography
    *
    * Charts and metric cards use meaning-based roles instead of selecting
    * arbitrary steps from the general type scale in each component.
    */
-  --app-stat-key-value-size: var(--app-type-heading-md);
-  --app-stat-chart-value-size: var(--app-type-body-sm);
-  --app-stat-chart-label-size: var(--app-type-label);
-  --app-stat-chart-meta-size: var(--app-type-caption);
-  --app-stat-key-value-weight: 720;
-  --app-stat-chart-value-weight: 690;
-  --app-stat-chart-label-weight: 680;
-  --app-stat-chart-meta-weight: 620;
+    --app-stat-key-value-size: var(--app-type-heading-md);
+    --app-stat-chart-value-size: var(--app-type-body-sm);
+    --app-stat-chart-label-size: var(--app-type-label);
+    --app-stat-chart-meta-size: var(--app-type-caption);
+    --app-stat-key-value-weight: 720;
+    --app-stat-chart-value-weight: 690;
+    --app-stat-chart-label-weight: 680;
+    --app-stat-chart-meta-weight: 620;
 
-  /* Menu roles
+    /* Navigation roles
    *
-   * Navigation components share these roles across drawers, dropdowns and
-   * sidebars. Layout remains component-specific; typography and surface text
-   * hierarchy do not.
+   * Navigation components share these roles across sidebars and overlays.
+   * Layout remains component-specific; typography and surface text hierarchy do not.
    */
-  --app-menu-title-size: var(--app-type-heading-sm);
-  --app-menu-title-weight: 750;
-  --app-menu-item-size: var(--app-type-body-sm);
-  --app-menu-item-weight: 600;
-  --app-menu-meta-size: var(--app-type-caption);
-  --app-menu-label-weight: 700;
-  --app-menu-text: var(--app-ink);
-  --app-menu-muted: var(--app-ink-soft);
-  --app-menu-faint: var(--app-ink-faint);
+    --app-menu-text: var(--app-ink);
+    --app-menu-muted: var(--app-ink-soft);
 
-  /* Status */
-  --status-available-bg: var(--aas-green-100);
-  --status-available-text: var(--aas-green-900);
-  --status-available-indicator: var(--aas-green-500);
-  --status-own-bg: var(--aas-blue-100);
-  --status-own-text: var(--aas-blue-900);
-  --status-event-bg: var(--aas-orange-100);
-  --status-event-text: var(--aas-orange-900);
-  --status-busy-bg: #eceeeb;
-  --status-busy-text: #596159;
-  --status-past-bg: #f1f1ee;
-  --status-past-text: #7b807b;
-  --status-warning-bg: #fff3d8;
-  --status-warning-text: #765114;
-  --status-warning-indicator: #d89b2b;
-  --status-danger-bg: #fbe8e6;
-  --status-danger-text: #9b312d;
-  --status-danger-indicator: #c9534c;
+    /* Status */
+    --status-available-bg: var(--aas-green-100);
+    --status-available-text: var(--aas-green-900);
+    --status-available-indicator: var(--aas-green-500);
+    --status-own-bg: var(--aas-blue-100);
+    --status-own-text: var(--aas-blue-900);
+    --status-event-bg: var(--aas-orange-100);
+    --status-event-text: var(--aas-orange-900);
+    --status-busy-bg: #eceeeb;
+    --status-busy-text: #596159;
+    --status-past-bg: #f1f1ee;
+    --status-past-text: #7b807b;
+    --status-warning-bg: #fff3d8;
+    --status-warning-text: #765114;
+    --status-warning-indicator: #d89b2b;
+    --status-danger-bg: #fbe8e6;
+    --status-danger-text: #9b312d;
+    --status-danger-indicator: #c9534c;
 
-  /* shadcn/Radix compatibility */
-  --background: var(--app-surface);
-  --foreground: var(--app-ink);
-  --card: var(--app-surface-raised);
-  --card-foreground: var(--app-ink);
-  --popover: var(--app-surface-raised);
-  --popover-foreground: var(--app-ink);
-  --primary: var(--aas-green-700);
-  --primary-foreground: #ffffff;
-  --secondary: var(--aas-blue-100);
-  --secondary-foreground: var(--aas-blue-900);
-  --muted: var(--app-surface-subtle);
-  --muted-foreground: var(--app-ink-soft);
-  --accent: var(--aas-orange-100);
-  --accent-foreground: var(--aas-orange-700);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: var(--app-line);
-  --input: var(--app-line-strong);
-  --ring: var(--app-focus);
-  --chart-1: var(--aas-green-500);
-  --chart-2: var(--aas-orange-500);
-  --chart-3: var(--aas-blue-500);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: var(--app-sidebar);
-  --sidebar-foreground: #f7fbf6;
-  --sidebar-primary: var(--app-accent);
-  --sidebar-primary-foreground: var(--app-accent-contrast);
-  --sidebar-accent: var(--app-accent);
-  --sidebar-accent-foreground: var(--app-accent-contrast);
-  --sidebar-border: rgb(255 255 255 / 14%);
-  --sidebar-ring: var(--aas-blue-300);
-}
+    /*
+     * ADR-007 mirrors these exact values as fallbacks in src/app.html. The startup document must
+     * remain presentable when the built stylesheet or application module cannot load.
+     */
+    --app-startup-action-border: rgb(23 60 37 / 0.25);
+    --app-startup-action-radius: 0.5rem;
+    --app-startup-action-surface: #173c25;
+    --app-startup-action-text: white;
+    --app-startup-dark-canvas: #0f1611;
+    --app-startup-dark-ink: white;
+    --app-startup-font-family: system-ui, sans-serif;
+    --app-startup-light-canvas: #f2f3ed;
+    --app-startup-light-ink: #173c25;
+    --app-startup-loader-track: rgb(23 60 37 / 0.18);
+    --app-startup-theme-color: #0b3a4a;
 
-.dark {
-  color-scheme: dark;
-  --app-canvas: #0f1611;
-  --app-surface: #151e17;
-  --app-surface-subtle: #1a251d;
-  --app-surface-raised: #1d2920;
-  --app-ink: #eff5ef;
-  --app-ink-soft: #b3bfb5;
-  --app-ink-faint: #89958b;
-  --app-line: #304035;
-  --app-line-strong: #425447;
-  --app-brand: var(--aas-green-300);
-  --app-brand-strong: var(--aas-green-100);
-  --app-brand-soft: color-mix(in oklab, var(--aas-green-500) 28%, var(--app-surface));
-  --app-accent: var(--aas-orange-500);
-  --app-accent-strong: color-mix(in oklab, var(--aas-orange-500) 35%, white);
-  --app-accent-soft: color-mix(in oklab, var(--aas-orange-500) 28%, var(--app-surface));
-  --app-accent-contrast: #2b160c;
-  --app-choice-indicator: var(--app-accent);
-  --app-focus: var(--aas-blue-300);
-  --app-sidebar: #0b3021;
-  --app-sidebar-hover: color-mix(in oklab, var(--aas-green-500) 38%, var(--app-sidebar));
-  --app-sidebar-active: color-mix(in oklab, var(--aas-green-500) 52%, var(--app-sidebar));
-  --app-nav-active: var(--aas-green-100);
-  --app-nav-active-surface: color-mix(in oklab, var(--aas-green-500) 24%, var(--app-surface));
-  --app-nav-indicator: var(--aas-green-300);
-  --app-nav-indicator-on-dark: var(--aas-green-300);
-  --app-control-surface: #194d32;
-  --app-control-surface-strong: #225c3b;
-  --activity-accent-strong: var(--aas-green-300);
-  --activity-soft: color-mix(in oklab, var(--aas-green-500) 24%, var(--app-surface));
-  --app-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.25);
-  --app-shadow-md: 0 12px 32px rgb(0 0 0 / 0.24);
-  --app-shadow-lg: 0 24px 70px rgb(0 0 0 / 0.34);
-  --app-record-shadow: 0 4px 16px rgb(0 0 0 / 0.22);
+    /*
+   * Compatibility roles consumed by the current base CSS. New public UI uses the semantic
+   * --app-* roles exposed from src/index.css instead of adding more generic aliases here.
+   */
+    --background: var(--app-surface);
+    --foreground: var(--app-ink);
+    --border: var(--app-line);
+    --ring: var(--app-focus);
+    --chart-1: var(--aas-green-500);
+    --chart-2: var(--aas-orange-500);
+  }
 
-  --status-available-bg: #203d25;
-  --status-available-text: #afe0ae;
-  --status-available-indicator: #79ca7e;
-  --status-own-bg: #20364c;
-  --status-own-text: #b9d7f4;
-  --status-event-bg: #462d1e;
-  --status-event-text: #ffc28f;
-  --status-busy-bg: #2c352e;
-  --status-busy-text: #c1c8c1;
-  --status-past-bg: #252c27;
-  --status-past-text: #929b94;
-  --status-warning-bg: #44361d;
-  --status-warning-text: #f3ce7a;
-  --status-warning-indicator: #e0ac42;
-  --status-danger-bg: #472523;
-  --status-danger-text: #ffaaa3;
-  --status-danger-indicator: #ef756d;
+  .dark {
+    color-scheme: dark;
+    --app-canvas: #0f1611;
+    --app-surface: #151e17;
+    --app-surface-subtle: #1a251d;
+    --app-surface-raised: #1d2920;
+    --app-ink: #eff5ef;
+    --app-ink-soft: #b3bfb5;
+    --app-ink-faint: #89958b;
+    --app-line: #304035;
+    --app-line-strong: #425447;
+    --app-brand: var(--aas-green-300);
+    --app-brand-strong: var(--aas-green-100);
+    --app-brand-soft: color-mix(in oklab, var(--aas-green-500) 28%, var(--app-surface));
+    --app-accent: var(--aas-orange-500);
+    --app-accent-soft: color-mix(in oklab, var(--aas-orange-500) 28%, var(--app-surface));
+    --app-choice-indicator: var(--app-accent);
+    --app-focus: var(--aas-blue-300);
+    --app-sidebar: #0b3021;
+    --app-nav-active: var(--aas-green-100);
+    --app-nav-active-surface: color-mix(in oklab, var(--aas-green-500) 24%, var(--app-surface));
+    --app-nav-indicator: var(--aas-green-300);
+    --app-nav-indicator-on-dark: var(--aas-green-300);
+    --app-control-surface: #194d32;
+    --app-control-surface-strong: #225c3b;
+    --app-action-primary-text: #102115;
+    --app-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.25);
+    --app-shadow-md: 0 12px 32px rgb(0 0 0 / 0.24);
+    --app-shadow-lg: 0 24px 70px rgb(0 0 0 / 0.34);
+    --app-record-shadow: 0 4px 16px rgb(0 0 0 / 0.22);
 
-  --background: var(--app-canvas);
-  --foreground: var(--app-ink);
-  --card: var(--app-surface-raised);
-  --card-foreground: var(--app-ink);
-  --popover: var(--app-surface-raised);
-  --popover-foreground: var(--app-ink);
-  --primary: var(--aas-green-300);
-  --primary-foreground: #102115;
-  --secondary: var(--aas-blue-900);
-  --secondary-foreground: color-mix(in oklab, var(--aas-blue-500) 26%, white);
-  --muted: var(--app-surface-subtle);
-  --muted-foreground: var(--app-ink-soft);
-  --accent: color-mix(in oklab, var(--aas-orange-500) 35%, black);
-  --accent-foreground: color-mix(in oklab, var(--aas-orange-500) 38%, white);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: var(--app-line);
-  --input: var(--app-line-strong);
-  --ring: var(--app-focus);
-  --chart-1: var(--aas-green-300);
-  --chart-2: var(--aas-orange-500);
-  --chart-3: var(--aas-blue-300);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: var(--app-sidebar);
-  --sidebar-foreground: #f7fbf6;
-  --sidebar-primary: var(--app-accent);
-  --sidebar-primary-foreground: var(--app-accent-contrast);
-  --sidebar-accent: var(--app-accent);
-  --sidebar-accent-foreground: var(--app-accent-contrast);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: var(--aas-blue-300);
-}
+    --status-available-bg: #203d25;
+    --status-available-text: #afe0ae;
+    --status-available-indicator: #79ca7e;
+    --status-own-bg: #20364c;
+    --status-own-text: #b9d7f4;
+    --status-event-bg: #462d1e;
+    --status-event-text: #ffc28f;
+    --status-busy-bg: #2c352e;
+    --status-busy-text: #c1c8c1;
+    --status-past-bg: #252c27;
+    --status-past-text: #929b94;
+    --status-warning-bg: #44361d;
+    --status-warning-text: #f3ce7a;
+    --status-warning-indicator: #e0ac42;
+    --status-danger-bg: #472523;
+    --status-danger-text: #ffaaa3;
+    --status-danger-indicator: #ef756d;
 
-@media (min-width: 48rem) {
-  :root {
-    --app-type-micro: var(--app-type-micro-comfortable);
-    --app-type-caption: var(--app-type-caption-comfortable);
-    --app-type-label: var(--app-type-label-comfortable);
-    --app-type-body-sm: var(--app-type-body-sm-comfortable);
-    --app-type-body: var(--app-type-body-comfortable);
-    --app-type-body-lg: var(--app-type-body-lg-comfortable);
-    --app-type-heading-sm: var(--app-type-heading-sm-comfortable);
-    --app-type-heading-md: var(--app-type-heading-md-comfortable);
-    --app-type-page-title: var(--app-type-page-title-comfortable);
-    --app-type-display: var(--app-type-display-comfortable);
+    --background: var(--app-canvas);
+    --foreground: var(--app-ink);
+    --border: var(--app-line);
+    --ring: var(--app-focus);
+    --chart-1: var(--aas-green-300);
+    --chart-2: var(--aas-orange-500);
+  }
+
+  @media (min-width: 48rem) {
+    :root {
+      --app-type-micro: var(--app-type-micro-comfortable);
+      --app-type-caption: var(--app-type-caption-comfortable);
+      --app-type-label: var(--app-type-label-comfortable);
+      --app-type-body-sm: var(--app-type-body-sm-comfortable);
+      --app-type-body: var(--app-type-body-comfortable);
+      --app-type-body-lg: var(--app-type-body-lg-comfortable);
+      --app-type-heading-sm: var(--app-type-heading-sm-comfortable);
+      --app-type-heading-md: var(--app-type-heading-md-comfortable);
+      --app-type-page-title: var(--app-type-page-title-comfortable);
+      --app-form-actions-padding-bottom: 0.875rem;
+    }
   }
 }

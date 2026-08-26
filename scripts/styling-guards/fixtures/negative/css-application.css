@@ -1,0 +1,8 @@
+@import "./legacy.css";
+
+@layer components {
+  .booking-card {
+    @apply bg-surface;
+    display: block !important;
+  }
+}

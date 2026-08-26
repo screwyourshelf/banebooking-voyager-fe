@@ -1,0 +1,96 @@
+/*
+ * Banebooking's documented global base: document defaults, accessibility
+ * fallbacks and keyframes referenced by semantic animation roles.
+ */
+
+@layer base {
+  * {
+    border-color: var(--border);
+    outline-color: color-mix(in oklab, var(--ring) 50%, transparent);
+  }
+
+  html {
+    min-width: 20rem;
+    background: var(--app-canvas);
+    font-family: var(--app-font-sans);
+  }
+
+  body {
+    min-height: 100svh;
+    background-color: var(--background);
+    color: var(--foreground);
+    font-size: var(--app-type-body);
+    line-height: 1.55;
+    font-optical-sizing: auto;
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings:
+      "ss01" 1,
+      "cv05" 1;
+  }
+
+  small {
+    font-size: inherit;
+  }
+
+  ::selection {
+    background: var(--app-brand-soft);
+    color: var(--app-brand-strong);
+  }
+
+  :focus-visible {
+    outline-color: var(--app-focus);
+  }
+}
+
+@layer components {
+  @keyframes page-loading-sheen {
+    to {
+      background-position: -220% 0;
+    }
+  }
+
+  @keyframes collection-loading {
+    to {
+      background-position: -220% 0;
+    }
+  }
+
+  @keyframes form-submit-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  @keyframes navigation-loading {
+    50% {
+      opacity: 0.48;
+    }
+  }
+
+  @keyframes app-desktop-content-enter {
+    from {
+      opacity: 0;
+      transform: translateY(0.5rem);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+@layer base {
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      transition-duration: 0.01ms !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+    }
+  }
+}

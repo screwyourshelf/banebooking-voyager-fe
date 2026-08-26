@@ -1,0 +1,53 @@
+<script lang="ts">
+  import type { Snippet } from "svelte";
+  import type { HTMLButtonAttributes } from "svelte/elements";
+  import type { PublicHtmlAttributes } from "../public-html-attributes";
+  import Button, { type ButtonSize, type ButtonVariant } from "../primitives/Button.svelte";
+
+  type Props = Omit<
+    PublicHtmlAttributes<HTMLButtonAttributes>,
+    "children" | "disabled" | "type"
+  > & {
+    children: Snippet;
+    disabled?: boolean;
+    fullWidth?: boolean;
+    pending?: boolean;
+    pendingLabel?: string;
+    size?: ButtonSize;
+    variant?: ButtonVariant;
+  };
+
+  let {
+    children,
+    disabled = false,
+    fullWidth = false,
+    pending = false,
+    pendingLabel = "Lagrer …",
+    size = "small",
+    variant = "primary",
+    ...attributes
+  }: Props = $props();
+</script>
+
+<Button
+  {...attributes}
+  type="submit"
+  {size}
+  {variant}
+  {fullWidth}
+  disabled={disabled || pending}
+  data-ui="form-submit"
+  data-pending={pending ? "true" : undefined}
+  aria-busy={pending || undefined}
+>
+  {#if pending}
+    <span
+      class="w-control-icon h-control-icon flex-none border-form-submit-spinner border-current border-r-transparent rounded-control animate-form-submit motion-reduce:animate-none"
+      data-part="spinner"
+      aria-hidden="true"
+    ></span>
+  {/if}
+  <span data-part="label" aria-live={pending ? "polite" : undefined}>
+    {#if pending}{pendingLabel}{:else}{@render children()}{/if}
+  </span>
+</Button>
