@@ -82,7 +82,9 @@ async function expectHostFallbackTwice(
     const response = await request.get(routePath, { headers });
     expect(response.ok()).toBe(true);
     expect(response.headers()["x-banebooking-static-fallback"]).toBe(expectedFallback);
-    expect(await response.text()).toContain('id="root"');
+    const html = await response.text();
+    expect(html).toContain('id="root"');
+    expect(html).toContain("<title>Banebooking</title>");
   }
 }
 

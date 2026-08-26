@@ -52,6 +52,23 @@ function verifyBuild(build) {
     callbackHtml.includes(`${build.basePath}/_app/immutable/entry/start.`),
     `${build.host}: callbackartefaktet bruker ikke forventet base path.`
   );
+  assert(
+    fallbackHtml.includes("<title>Banebooking</title>"),
+    `${build.host}: SPA-fallbacken mangler standard dokumenttittel.`
+  );
+
+  const robots = readFileSync(join(build.directory, "robots.txt"), "utf8").trim();
+  assert(
+    robots === "User-agent: *\nAllow: /",
+    `${build.host}: robots.txt avviker fra den offentlige crawlkontrakten.`
+  );
+
+  const llms = readFileSync(join(build.directory, "llms.txt"), "utf8").trim();
+  assert(llms.startsWith("# Banebooking\n"), `${build.host}: llms.txt mangler H1-tittel.`);
+  assert(
+    /\[[^\]]+\]\(https:\/\/banebooking\.aastk\.no\/[^)]*\)/.test(llms),
+    `${build.host}: llms.txt mangler offentlig Banebooking-lenke.`
+  );
 
   if (build.fallback === "index.html") {
     const redirects = readFileSync(join(build.directory, "_redirects"), "utf8").trim();

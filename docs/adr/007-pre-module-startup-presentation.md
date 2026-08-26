@@ -24,7 +24,9 @@ navngitt og maskinelt låst unntak.
    loaderen og recoverypresentasjonen.
 2. Dokumentet kan ha nøyaktig én inline styleblokk og det eksisterende
    `style="display: contents"` på SvelteKit-roten. Selectors, at-rules, deklarasjoner, metadata og
-   boot-/rootanatomien er en lukket kontrakt i stylingguardens schema 6.
+   boot-/rootanatomien er en lukket kontrakt i stylingguardens schema 6. Dokumentet eier i tillegg
+   standardtittelen `Banebooking`, slik at SPA-fallbacken har et tilgjengelig dokumentnavn før
+   SvelteKit starter; routes kan erstatte den med en mer spesifikk tittel.
 3. Produktverdiene eies fortsatt i `src/styles/design-system/tokens.css` som elleve eksplisitte
    `--app-startup-*`-roller. Inlineflaten bruker `var(rolle, fallback)`, og hver fallback må være
    identisk med theme-eierens verdi. `meta[name="theme-color"]` speiler sin rolle maskinelt fordi
@@ -52,6 +54,7 @@ navngitt og maskinelt låst unntak.
 
 - Guarden sammenligner inline-CSS, metadata, elementanatomi og stylekanaler med den strukturelle
   ADR-007-kontrakten.
+- Produksjonsverifikasjonen krever standardtittelen i begge hostfallbackene.
 - Guarden parser alle `var()`-bindinger og krever identiske fallbacks og `:root`-verdier i
   `tokens.css`.
 - Mutasjonsprober avviser ny selector, class, metadata-/ankerdrift, spread, event-/

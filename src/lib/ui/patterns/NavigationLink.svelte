@@ -58,7 +58,7 @@
         "bg-transparent text-ink hover:bg-nav-active-surface hover:text-nav-active",
       !active &&
         navigation.layout === "bottom" &&
-        "bg-transparent text-ink-faint hover:bg-nav-active-surface hover:text-nav-active",
+        "bg-transparent text-ink-soft hover:bg-nav-active-surface hover:text-nav-active",
       !active &&
         navigation.layout !== "sidebar" &&
         navigation.layout !== "bottom" &&

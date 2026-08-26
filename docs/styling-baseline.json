@@ -310,9 +310,9 @@
           "column": 7,
           "file": "src/styles/design-system/base.css",
           "line": 50,
-          "property": "background-position",
-          "rawValues": ["-220%"],
-          "value": "-220% 0",
+          "property": "transform",
+          "rawValues": ["100%"],
+          "value": "translateX(100%)",
           "ownerFamily": "page-section-feedback-and-document",
           "ownerPackage": "src/lib/ui/patterns",
           "plannedRemovalCheckpoint": "SWP-5.4"
@@ -321,9 +321,9 @@
           "column": 7,
           "file": "src/styles/design-system/base.css",
           "line": 56,
-          "property": "background-position",
-          "rawValues": ["-220%"],
-          "value": "-220% 0",
+          "property": "transform",
+          "rawValues": ["100%"],
+          "value": "translateX(100%)",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
           "plannedRemovalCheckpoint": "SWP-5.4"
@@ -48440,7 +48440,7 @@
           "column": 5,
           "file": "src/lib/ui/patterns/NavigationAction.svelte",
           "line": 46,
-          "expression": "class={[\n      \"relative flex min-w-0 items-center gap-navigation-item border-0 rounded-navigation-item bg-transparent text-body-sm font-navigation-item text-left transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50\",\n      navigation.layout === \"sidebar\" && navigation.surface !== \"overlay\"\n        ? \"text-control-text hover:bg-nav-active-surface hover:text-nav-active\"\n        : navigation.layout === \"sidebar\" && navigation.surface === \"overlay\"\n          ? \"text-ink hover:bg-nav-active-surface hover:text-nav-active\"\n          : navigation.layout === \"bottom\"\n            ? \"text-ink-faint hover:bg-nav-active-surface hover:text-nav-active\"\n            : \"text-menu-text hover:bg-nav-active-surface hover:text-nav-active\",\n      navigation.layout === \"bottom\" &&\n        \"min-h-navigation-bottom-item flex-col justify-center gap-xs rounded-none text-caption text-center\",\n      presentation === \"item\" &&\n        (navigation.layout === \"bottom\"\n          ? \"w-full px-xs py-sm\"\n          : \"w-full px-md py-navigation-item-block\"),\n      presentation === \"icon\" && \"size-navigation-action-icon min-h-0 justify-center p-0\",\n      presentation === \"back\" && \"w-auto px-md py-navigation-item-block\",\n    ]}",
+          "expression": "class={[\n      \"relative flex min-w-0 items-center gap-navigation-item border-0 rounded-navigation-item bg-transparent text-body-sm font-navigation-item text-left transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50\",\n      navigation.layout === \"sidebar\" && navigation.surface !== \"overlay\"\n        ? \"text-control-text hover:bg-nav-active-surface hover:text-nav-active\"\n        : navigation.layout === \"sidebar\" && navigation.surface === \"overlay\"\n          ? \"text-ink hover:bg-nav-active-surface hover:text-nav-active\"\n          : navigation.layout === \"bottom\"\n            ? \"text-ink-soft hover:bg-nav-active-surface hover:text-nav-active\"\n            : \"text-menu-text hover:bg-nav-active-surface hover:text-nav-active\",\n      navigation.layout === \"bottom\" &&\n        \"min-h-navigation-bottom-item flex-col justify-center gap-xs rounded-none text-caption text-center\",\n      presentation === \"item\" &&\n        (navigation.layout === \"bottom\"\n          ? \"w-full px-xs py-sm\"\n          : \"w-full px-md py-navigation-item-block\"),\n      presentation === \"icon\" && \"size-navigation-action-icon min-h-0 justify-center p-0\",\n      presentation === \"back\" && \"w-auto px-md py-navigation-item-block\",\n    ]}",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
           "plannedRemovalCheckpoint": "SWP-4.1"
@@ -48485,7 +48485,7 @@
           "column": 5,
           "file": "src/lib/ui/patterns/NavigationLink.svelte",
           "line": 42,
-          "expression": "class={[\n      \"relative flex min-w-0 items-center gap-navigation-item border-0 rounded-navigation-item text-body-sm font-navigation-item text-left no-underline transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2\",\n      presentation === \"icon\"\n        ? \"size-navigation-action-icon min-h-0 justify-center p-0\"\n        : navigation.layout === \"bottom\"\n          ? \"w-full px-xs py-sm\"\n          : navigation.layout === \"section\"\n            ? \"w-full px-lg py-navigation-item-block\"\n            : \"w-full px-md py-navigation-item-block\",\n      !active &&\n        navigation.layout === \"sidebar\" &&\n        navigation.surface !== \"overlay\" &&\n        \"bg-transparent text-control-text hover:bg-nav-active-surface hover:text-nav-active\",\n      !active &&\n        navigation.layout === \"sidebar\" &&\n        navigation.surface === \"overlay\" &&\n        \"bg-transparent text-ink hover:bg-nav-active-surface hover:text-nav-active\",\n      !active &&\n        navigation.layout === \"bottom\" &&\n        \"bg-transparent text-ink-faint hover:bg-nav-active-surface hover:text-nav-active\",\n      !active &&\n        navigation.layout !== \"sidebar\" &&\n        navigation.layout !== \"bottom\" &&\n        \"bg-transparent text-menu-text hover:bg-nav-active-surface hover:text-nav-active\",\n      active &&\n        navigation.layout === \"sidebar\" &&\n        navigation.surface !== \"overlay\" &&\n        \"bg-navigation-sidebar-active-surface text-navigation-sidebar-active\",\n      active &&\n        navigation.layout === \"bottom\" &&\n        \"bg-transparent text-brand before:absolute before:top-0 before:right-md before:left-md before:h-navigation-bottom-indicator before:rounded-navigation-bottom-indicator before:bg-brand before:content-empty\",\n      active &&\n        navigation.layout !== \"bottom\" &&\n        !(navigation.layout === \"sidebar\" && navigation.surface !== \"overlay\") &&\n        \"bg-nav-active-surface text-nav-active\",\n      navigation.layout === \"bottom\" &&\n        \"min-h-navigation-bottom-item flex-col justify-center gap-xs rounded-none text-caption text-center\",\n      navigation.layout === \"section\" &&\n        \"min-h-navigation-section-item rounded-navigation-section-item\",\n      active &&\n        navigation.layout === \"section\" &&\n        \"after:absolute after:right-md after:-bottom-navigation-section-indicator-bottom after:left-md after:h-navigation-section-indicator after:rounded-navigation-section-indicator after:bg-nav-indicator after:content-empty\",\n    ]}",
+          "expression": "class={[\n      \"relative flex min-w-0 items-center gap-navigation-item border-0 rounded-navigation-item text-body-sm font-navigation-item text-left no-underline transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2\",\n      presentation === \"icon\"\n        ? \"size-navigation-action-icon min-h-0 justify-center p-0\"\n        : navigation.layout === \"bottom\"\n          ? \"w-full px-xs py-sm\"\n          : navigation.layout === \"section\"\n            ? \"w-full px-lg py-navigation-item-block\"\n            : \"w-full px-md py-navigation-item-block\",\n      !active &&\n        navigation.layout === \"sidebar\" &&\n        navigation.surface !== \"overlay\" &&\n        \"bg-transparent text-control-text hover:bg-nav-active-surface hover:text-nav-active\",\n      !active &&\n        navigation.layout === \"sidebar\" &&\n        navigation.surface === \"overlay\" &&\n        \"bg-transparent text-ink hover:bg-nav-active-surface hover:text-nav-active\",\n      !active &&\n        navigation.layout === \"bottom\" &&\n        \"bg-transparent text-ink-soft hover:bg-nav-active-surface hover:text-nav-active\",\n      !active &&\n        navigation.layout !== \"sidebar\" &&\n        navigation.layout !== \"bottom\" &&\n        \"bg-transparent text-menu-text hover:bg-nav-active-surface hover:text-nav-active\",\n      active &&\n        navigation.layout === \"sidebar\" &&\n        navigation.surface !== \"overlay\" &&\n        \"bg-navigation-sidebar-active-surface text-navigation-sidebar-active\",\n      active &&\n        navigation.layout === \"bottom\" &&\n        \"bg-transparent text-brand before:absolute before:top-0 before:right-md before:left-md before:h-navigation-bottom-indicator before:rounded-navigation-bottom-indicator before:bg-brand before:content-empty\",\n      active &&\n        navigation.layout !== \"bottom\" &&\n        !(navigation.layout === \"sidebar\" && navigation.surface !== \"overlay\") &&\n        \"bg-nav-active-surface text-nav-active\",\n      navigation.layout === \"bottom\" &&\n        \"min-h-navigation-bottom-item flex-col justify-center gap-xs rounded-none text-caption text-center\",\n      navigation.layout === \"section\" &&\n        \"min-h-navigation-section-item rounded-navigation-section-item\",\n      active &&\n        navigation.layout === \"section\" &&\n        \"after:absolute after:right-md after:-bottom-navigation-section-indicator-bottom after:left-md after:h-navigation-section-indicator after:rounded-navigation-section-indicator after:bg-nav-indicator after:content-empty\",\n    ]}",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
           "plannedRemovalCheckpoint": "SWP-4.1"
@@ -48894,7 +48894,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/app.html",
-          "lineCount": 238,
+          "lineCount": 239,
           "styleAttributeCount": 1,
           "styleBlockCount": 1,
           "styleDirectiveCount": 0
@@ -50715,7 +50715,7 @@
         {
           "column": 20,
           "file": "src/app.html",
-          "line": 236,
+          "line": 237,
           "customProperties": [],
           "disposition": "startup-document-contract",
           "expression": "style=\"display: contents\"",
@@ -50794,7 +50794,7 @@
         {
           "column": 5,
           "file": "src/app.html",
-          "line": 12,
+          "line": 13,
           "contentLineCount": 62,
           "disposition": "startup-document-contract",
           "ownerFamily": "startup-document",
@@ -80413,22 +80413,22 @@
       "basePath": "/",
       "host": "Cloudflare Pages",
       "initialCssAssets": [
-        { "asset": "_app/immutable/assets/0.VtG0yRHS.css", "gzipBytes": 28581, "rawBytes": 190136 }
+        { "asset": "_app/immutable/assets/0.GJq9erKa.css", "gzipBytes": 28575, "rawBytes": 190132 }
       ],
-      "initialCssGzipBytes": 28581,
+      "initialCssGzipBytes": 28575,
       "initialJavaScriptAssets": [
         { "asset": "_app/immutable/chunks/BG4X2aRC.js", "gzipBytes": 20699, "rawBytes": 55233 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/CB3145jA.js", "gzipBytes": 536, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/CIT7X3lM.js", "gzipBytes": 615, "rawBytes": 1148 },
         { "asset": "_app/immutable/chunks/DeNejD04.js", "gzipBytes": 731, "rawBytes": 1401 },
-        { "asset": "_app/immutable/chunks/XejDLl8X.js", "gzipBytes": 11225, "rawBytes": 29269 },
+        { "asset": "_app/immutable/chunks/DomEpKHu.js", "gzipBytes": 11226, "rawBytes": 29269 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.6LHHaRHh.js", "gzipBytes": 2510, "rawBytes": 9051 },
-        { "asset": "_app/immutable/entry/start.Ufw3W4p0.js", "gzipBytes": 92, "rawBytes": 82 },
-        { "asset": "_app/immutable/nodes/0.CxHEDeHX.js", "gzipBytes": 430, "rawBytes": 806 }
+        { "asset": "_app/immutable/entry/app.6b7z5l69.js", "gzipBytes": 2515, "rawBytes": 9051 },
+        { "asset": "_app/immutable/entry/start.D90jkYZW.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/nodes/0.DGAeXFGP.js", "gzipBytes": 430, "rawBytes": 806 }
       ],
-      "initialJavaScriptGzipBytes": 38277,
+      "initialJavaScriptGzipBytes": 38283,
       "javaScriptChunkCount": 60,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",
@@ -80464,22 +80464,22 @@
       "basePath": "/banebooking",
       "host": "GitHub Pages",
       "initialCssAssets": [
-        { "asset": "_app/immutable/assets/0.46Lad0yI.css", "gzipBytes": 28596, "rawBytes": 190196 }
+        { "asset": "_app/immutable/assets/0.D7r4Jzcx.css", "gzipBytes": 28592, "rawBytes": 190192 }
       ],
-      "initialCssGzipBytes": 28596,
+      "initialCssGzipBytes": 28592,
       "initialJavaScriptAssets": [
         { "asset": "_app/immutable/chunks/BG4X2aRC.js", "gzipBytes": 20699, "rawBytes": 55233 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/CB3145jA.js", "gzipBytes": 536, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/CIT7X3lM.js", "gzipBytes": 624, "rawBytes": 1184 },
-        { "asset": "_app/immutable/chunks/Cg14Tn5l.js", "gzipBytes": 11236, "rawBytes": 29281 },
+        { "asset": "_app/immutable/chunks/COsSRBpx.js", "gzipBytes": 11235, "rawBytes": 29285 },
         { "asset": "_app/immutable/chunks/DeNejD04.js", "gzipBytes": 731, "rawBytes": 1401 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
-        { "asset": "_app/immutable/entry/app.BaxD92l1.js", "gzipBytes": 2524, "rawBytes": 9615 },
-        { "asset": "_app/immutable/entry/start.CMfEcHhF.js", "gzipBytes": 92, "rawBytes": 82 },
-        { "asset": "_app/immutable/nodes/0.CmPkLapC.js", "gzipBytes": 440, "rawBytes": 866 }
+        { "asset": "_app/immutable/entry/app.CbBR1HV-.js", "gzipBytes": 2521, "rawBytes": 9615 },
+        { "asset": "_app/immutable/entry/start.DLfLF1Np.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/nodes/0.C8JwGQ_o.js", "gzipBytes": 440, "rawBytes": 866 }
       ],
-      "initialJavaScriptGzipBytes": 38321,
+      "initialJavaScriptGzipBytes": 38317,
       "javaScriptChunkCount": 60,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",

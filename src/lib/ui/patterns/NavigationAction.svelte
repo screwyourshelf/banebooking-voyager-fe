@@ -50,7 +50,7 @@
         : navigation.layout === "sidebar" && navigation.surface === "overlay"
           ? "text-ink hover:bg-nav-active-surface hover:text-nav-active"
           : navigation.layout === "bottom"
-            ? "text-ink-faint hover:bg-nav-active-surface hover:text-nav-active"
+            ? "text-ink-soft hover:bg-nav-active-surface hover:text-nav-active"
             : "text-menu-text hover:bg-nav-active-surface hover:text-nav-active",
       navigation.layout === "bottom" &&
         "min-h-navigation-bottom-item flex-col justify-center gap-xs rounded-none text-caption text-center",
