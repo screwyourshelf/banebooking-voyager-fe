@@ -1,32 +1,24 @@
 # Frontenddokumentasjon
 
-## Normative dokumenter
+Start alltid med [`current-work.md`](./current-work.md). Tabellen under ruter videre til dokumentene
+som er relevante for oppgaven; hele dokumentsettet skal ikke leses som standard.
 
-| Dokument                                                           | Formål                                                            |
-| ------------------------------------------------------------------ | ----------------------------------------------------------------- |
-| [`migration-status.md`](./migration-status.md)                     | Kort nåtilstand, verifikasjon og eventuelt neste vedlikeholdssteg |
-| [`development-and-operations.md`](./development-and-operations.md) | Lokal utvikling, kvalitetsporter, bygg og hosting                 |
-| [`sveltekit-architecture.md`](./sveltekit-architecture.md)         | Aktiv SvelteKit-arkitektur og laggrenser                          |
-| [`product-design-rules.md`](./product-design-rules.md)             | Produktets visuelle, semantiske og responsive regler              |
-| [`behavior-inventory.md`](./behavior-inventory.md)                 | Observerbar route-, rolle- og produktkontrakt                     |
-| [`e2e-harness.md`](./e2e-harness.md)                               | Lokal Playwright-auth, prosesser og testdata                      |
-| [`adr/`](./adr/README.md)                                          | Bindende arkitekturbeslutninger                                   |
+| Oppgave                                       | Les                                                                                                    |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| Aktiv leveranse og neste steg                 | [`current-work.md`](./current-work.md)                                                                 |
+| API-, query- eller ytelsesarbeid              | [`performance/README.md`](./performance/README.md), deretter relevante funn                            |
+| Arkitektur, lagdeling eller dataeierskap      | [`architecture.md`](./architecture.md) og relevante [`ADR-er`](./adr/README.md)                        |
+| Routes, roller eller produktadferd            | [`product-behavior.md`](./product-behavior.md)                                                         |
+| UI, responsivitet eller visuell kontrakt      | [`product-design-rules.md`](./product-design-rules.md)                                                 |
+| Lokal utvikling, kvalitetsporter eller build  | [`development-and-operations.md`](./development-and-operations.md)                                     |
+| Playwright, testdata eller visuelle snapshots | [`e2e-harness.md`](./e2e-harness.md) og [`visual-regression-matrix.md`](./visual-regression-matrix.md) |
 
-## Historisk migreringsbevis
+## Dokumentroller
 
-`migration-plan.md`, `styling-lift-and-shift-plan.md`, `architecture-conformance-review.md`,
-`wp-7-*`, `styling-*-evidence/matrix` og `swp-*-audit` dokumenterer fullførte checkpoints. De er
-referansemateriale, ikke aktive planer eller instruksjonskilder. `styling-baseline.json` er et
-generert kontrollartefakt som leses av `npm run check`, ikke en håndskrevet styringsfil.
+- `current-work.md` er kort aktiv status, ikke historikk eller dagbok.
+- Arkitektur, produktkontrakter og ADR-er beskriver varige regler.
+- Utviklings- og testdokumenter beskriver kjørbare arbeidsformer.
+- Detaljerte performancefunn er referansegrunnlag og leses bare for kandidaten som undersøkes.
+- Fullførte prosjektforløp og mellomtilstander ligger i git-historikken, ikke i aktiv dokumentasjon.
 
-Vedlikeholds- og handoverprotokollen ligger i [`../AGENTS.md`](../AGENTS.md). Git bevarer den
-detaljerte migreringshistorikken; `migration-status.md` skal bare beskrive sann nåtilstand.
-
-## Parkerte oppfølgingsnotater
-
-| Dokument                                                         | Formål                                                                  |
-| ---------------------------------------------------------------- | ----------------------------------------------------------------------- |
-| [`api-performance-follow-up.md`](./api-performance-follow-up.md) | Førstegjennomgang av API-/fullstackytelse etter migreringen; ikke aktiv |
-
-Parkerte notater er ikke en arbeidskø og startes ikke automatisk av `/start`. De aktiveres bare
-etter en eksplisitt brukerbeslutning og må valideres mot gjeldende kode før de brukes som plan.
+Maskinelle baselines og guardkontrakter eies av `scripts/`; de er ikke dokumentkontekst.

@@ -6,16 +6,16 @@
 
 ## Kontekst
 
-Dagens frontend er en statisk deployet SPA med base path, fallback-routing og støtte for både
-GitHub Pages og Cloudflare Pages. Supabase-sesjonen gjenopprettes i nettleseren. En full overgang
-til SSR ville derfor utvide lift-and-shift til hosting, cookies og autharkitektur.
+Frontenden er en statisk deployet SPA med base path, fallback-routing og støtte for både GitHub
+Pages og Cloudflare Pages. Supabase-sesjonen gjenopprettes i nettleseren. En full overgang til SSR
+vil derfor også berøre hosting, cookies og autharkitektur.
 
 Ren SPA-rendering har samtidig kjente oppstarts-, robusthets- og SEO-ulemper. Vi skal ikke spre
 nettleseravhengigheter slik at en senere overgang til SSR krever en ny omskriving.
 
 ## Beslutning
 
-1. Første paritetsleveranse bruker SvelteKit med `adapter-static` og hosttilpasset fallback.
+1. Frontenden bruker SvelteKit med `adapter-static` og hosttilpasset fallback.
 2. Klientrenderte app-ruter får `ssr = false` på nærmeste felles layout, ikke i hver side.
 3. Offentlige sider kan eksplisitt velge `ssr = true` og `prerender = true` når data og hosting gjør
    det forsvarlig.
@@ -28,8 +28,8 @@ nettleseravhengigheter slik at en senere overgang til SSR krever en ny omskrivin
 
 ## Konsekvenser
 
-- Migreringen kan beholde dagens deploymodell og authsemantikk.
-- Første versjon beholder SPA-ulempene for dynamiske app-ruter.
+- Dagens deploymodell og authsemantikk beholdes.
+- Dynamiske app-ruter beholder SPA-ulempene.
 - Kodegrensene blir strengere enn det statisk hosting alene krever.
 - Full SSR krever en egen beslutning om cookie-basert Supabase-sesjon og hosting, men ikke en ny
   featurearkitektur.

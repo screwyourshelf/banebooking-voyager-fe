@@ -9,7 +9,7 @@ import { measureStylingSource } from "./styling-baseline/source-measurement.mjs"
 
 const baselineSchemaVersion = 3;
 const projectRoot = fileURLToPath(new URL("..", import.meta.url));
-const baselinePath = path.join(projectRoot, "docs/styling-baseline.json");
+const baselinePath = path.join(projectRoot, "scripts/styling-guards/styling-baseline.json");
 const mode = readMode(process.argv.slice(2));
 const source = await measureStylingSource(projectRoot);
 
@@ -76,7 +76,7 @@ function validateBaseline(baseline) {
     baseline.productionBuilds.length !== 2
   ) {
     throw new Error(
-      `docs/styling-baseline.json følger ikke stylingbaseline schemaVersion ${baselineSchemaVersion}.`
+      `scripts/styling-guards/styling-baseline.json følger ikke stylingbaseline schemaVersion ${baselineSchemaVersion}.`
     );
   }
 }

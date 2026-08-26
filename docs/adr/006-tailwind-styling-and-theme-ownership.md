@@ -8,9 +8,9 @@
 
 ## Kontekst
 
-SvelteKit-lift-and-shift-en bevarte produktets visuelle kontrakt, men samlet nesten all
-produktstyling i globale CSS-filer. Etterreviewen fant at komponentvokabularet og de semantiske
-tokenene er sterke, mens CSS-eierskapet er vanskeligere å vedlikeholde:
+Før denne beslutningen var nesten all produktstyling samlet i globale CSS-filer. Reviewet fant at
+komponentvokabularet og de semantiske tokenene var sterke, mens CSS-eierskapet var vanskeligere å
+vedlikeholde:
 
 - `patterns.css` er en bred, global mønsterfil med regler for mange uavhengige UI-familier
 - responsive regler ligger separat fra komponentene de endrer
@@ -40,13 +40,12 @@ andre produktvarianter.
    men ikke definere produktfarger, typografi, radius, skygge eller kontrollvarianter.
 7. Tailwind-utilities skrives direkte i markup. `@apply` brukes ikke til å bygge et parallelt
    komponentklasselag.
-8. Global CSS begrenses etter migreringen til Tailwind-inngang, font, base/reset, theme-variabler,
-   nødvendige globale dokumentregler og eksplisitt dokumenterte tredjepartsgrenser. Globale
-   produktselektorer er migreringsgjeld, ikke målarkitektur.
+8. Global CSS er begrenset til Tailwind-inngang, font, base/reset, theme-variabler, nødvendige
+   globale dokumentregler og eksplisitt dokumenterte tredjepartsgrenser. Globale
+   produktselektorer er ikke tillatt.
 9. Bits UI forblir headless atferdslager bak `ui/primitives`. Tailwind er ikke en Bits UI-avhengighet;
    det er Banebookings valgte visuelle implementasjon.
-10. Arkitektur- og designsystemkontroller håndhever grensene med en avtakende baseline under
-    migreringen og uten åpne legacyunntak i sluttporten.
+10. Arkitektur- og designsystemkontroller håndhever grensene uten åpne legacyunntak.
 
 ## Tillatt Tailwind-vokabular
 
@@ -73,8 +72,7 @@ Følgende er ikke tillatt uten et navngitt, maskinelt unntak:
 - Featurekode får mindre selektorkunnskap og kan ikke bruke `class` som skjult variant-API.
 - Svelte-markup i UI-laget får flere presentasjonelle utilities; komponentnavn og typed props
   bærer den offentlige semantikken.
-- Den sentrale CSS-monolitten fjernes gradvis. En familie migreres og verifiseres før dens gamle
-  selektorer slettes.
+- Den tidligere sentrale CSS-monolitten er fjernet; hver offentlig UI-familie eier sin presentasjon.
 - Tailwind beholdes som en reell del av målarkitekturen, ikke bare som indirekte Preflight-verktøy.
 
 ## Verifikasjon
@@ -87,7 +85,7 @@ Følgende er ikke tillatt uten et navngitt, maskinelt unntak:
   produktselektorer er null i sluttporten. Det eneste registrerte `!important`-unntaket er den
   globale reduced-motion-fallbacken for dokumentet.
 - Lyst og mørkt theme, representative viewporter, fokus, tastatur og visuelle snapshots er grønne.
-- Sluttevalueringen i stylingplanen beviser at theme-identitet kan endres sentralt.
+- Theme- og stylingguardene beviser at identiteten kan endres sentralt uten lokal drift.
 
 ## Referanser
 

@@ -1,13 +1,10 @@
-# Parkert oppfølging: API- og fullstackytelse
+# Førstegjennomgang: API- og fullstackytelse
 
-> **Status:** Parkert oppfølgingsnotat — ikke en aktiv WP-/SWP-pakke
+> **Status:** Referansegrunnlag for det aktive ytelsesinitiativet
 >
-> **Reviewgrunnlag:** `feature/sveltekit-lift-and-shift` og backend `master`, 2026-08-25
+> **Reviewtidspunkt:** Frontend og backend, 2026-08-25
 >
-> **Aktivering:** Krever en eksplisitt beslutning etter at migreringsbranchen er ferdig behandlet
->
-> **Repoomfang ved gjennomføring:** Separate, koordinerte leveranser i `frontend/` og eventuelt
-> `backend/`
+> **Autoritet:** Gjeldende kode og nye målinger veier tyngre enn dette dokumentet
 
 ## Formål
 
@@ -16,12 +13,9 @@ samspillet med backend kan forbedres. Målet er bedre opplevd ytelse og lavere r
 gjøre API-et vanskeligere å forstå, skjule dataflyt eller svekke autorisasjons- og
 cachekorrektheten.
 
-Gjennomgangen var lesende. Den medførte ingen kodeendringer, backendendringer, commits, merge eller
-push. Tallene under er statiske estimater fra kontrollflyten og skal verifiseres med målinger før
-implementering.
-
-Oppfølgingen er bevisst skilt fra React-til-Svelte- og styling-lift-and-shift-en. Migreringen skal
-ikke gjenåpnes, og dette dokumentet er ikke et automatisk neste steg for `/start`.
+Gjennomgangen var lesende. Tallene under er statiske estimater fra kontrollflyten og skal
+verifiseres med målinger før implementering. Aktiv fase og neste steg ligger i
+[`README.md`](./README.md) og [`../current-work.md`](../current-work.md).
 
 ## Beslutning om arbeidsdeling
 
@@ -33,8 +27,7 @@ Arbeidet bør gjennomføres i to leveranser under én ytelsesgjennomgang:
    målbar gevinst etter frontend-hardening. Frontend- og backendendringer skal ha separate commits
    og verifiseres sammen.
 
-Dette skillet gjør gevinstene målbare, holder den fullførte migreringshistorikken ren og begrenser
-risikoen ved endringer i API-kontrakter.
+Dette skillet gjør gevinstene målbare og begrenser risikoen ved endringer i API-kontrakter.
 
 ## Eksisterende styrker som skal bevares
 
@@ -336,14 +329,14 @@ leveransen inneholde:
 
 - backendkontrakt og OpenAPI-respons
 - oppdatert håndskrevet frontendkontrakt
-- migrerings-/kompatibilitetsbeslutning for eventuelle andre klienter
+- utrullings-/kompatibilitetsbeslutning for eventuelle andre klienter
 - cache- og invalidasjonsregler
 - autorisasjons- og anonymitetsregler
 - backendtester og frontend kontrakt-/flyttester
 - før-/ettermåling
 - separate commits i de to repoene
 
-Backendendringer skal ikke presenteres som en del av lift-and-shift-en.
+Backendendringer skal være en eksplisitt, separat fullstackleveranse.
 
 ## Akseptansekriterier for en senere leveranse
 
@@ -382,33 +375,20 @@ bort historiske arrangementer før UI-et får dataene.
 Dette er ikke et ytelsestiltak. Ved oppstart av oppfølgingen skal forventet produktadferd verifiseres
 separat før queryparametre, cacheidentitet eller UI endres.
 
-## Startprotokoll når oppfølgingen aktiveres
-
-1. Bekreft at migreringsbranchen er ferdig behandlet og at brukeren eksplisitt har aktivert
-   ytelsesarbeidet.
-2. Les gjeldende `AGENTS.md`, normative frontenddokumenter og eventuelle nye backendinstrukser.
-3. Bekreft branch og ren/forstått arbeidskopi separat i `frontend/` og `backend/`.
-4. Verifiser at alle filstier, kontrollflyter, intervaller, cachetider og API-responser i dette
-   notatet fortsatt stemmer; kode veier tyngre enn dokumentet.
-5. Etabler baseline fra fase 0.
-6. Avgrens frontend-hardening før backendomfang godkjennes.
-7. Oppdater dette dokumentet eller erstatt det med en konkret, aktiv leveranseplan når beslutningen
-   er tatt. Ikke gjør det parkede notatet til en løpende sesjonslogg.
-
 ## Kildekart fra førstegjennomgangen
 
 Frontend:
 
-- [`src/lib/platform/api/client.ts`](../src/lib/platform/api/client.ts)
-- [`src/lib/platform/query/client.ts`](../src/lib/platform/query/client.ts)
-- [`src/lib/platform/query/query-key.ts`](../src/lib/platform/query/query-key.ts)
-- [`src/lib/features/session/SessionDataProvider.svelte`](../src/lib/features/session/SessionDataProvider.svelte)
-- [`src/lib/features/session/SessionGate.svelte`](../src/lib/features/session/SessionGate.svelte)
-- [`src/lib/features/session/api.ts`](../src/lib/features/session/api.ts)
-- [`src/lib/features/booking/queries.ts`](../src/lib/features/booking/queries.ts)
-- [`src/lib/features/arrangement-admin/queries.ts`](../src/lib/features/arrangement-admin/queries.ts)
-- [`src/lib/features/arrangement-admin/arrangement-editor-controller.svelte.ts`](../src/lib/features/arrangement-admin/arrangement-editor-controller.svelte.ts)
-- [`src/lib/features/court-and-activity-admin/queries.ts`](../src/lib/features/court-and-activity-admin/queries.ts)
+- [`src/lib/platform/api/client.ts`](../../src/lib/platform/api/client.ts)
+- [`src/lib/platform/query/client.ts`](../../src/lib/platform/query/client.ts)
+- [`src/lib/platform/query/query-key.ts`](../../src/lib/platform/query/query-key.ts)
+- [`src/lib/features/session/SessionDataProvider.svelte`](../../src/lib/features/session/SessionDataProvider.svelte)
+- [`src/lib/features/session/SessionGate.svelte`](../../src/lib/features/session/SessionGate.svelte)
+- [`src/lib/features/session/api.ts`](../../src/lib/features/session/api.ts)
+- [`src/lib/features/booking/queries.ts`](../../src/lib/features/booking/queries.ts)
+- [`src/lib/features/arrangement-admin/queries.ts`](../../src/lib/features/arrangement-admin/queries.ts)
+- [`src/lib/features/arrangement-admin/arrangement-editor-controller.svelte.ts`](../../src/lib/features/arrangement-admin/arrangement-editor-controller.svelte.ts)
+- [`src/lib/features/court-and-activity-admin/queries.ts`](../../src/lib/features/court-and-activity-admin/queries.ts)
 
 Backend, med stier relativt til workspace-roten:
 
