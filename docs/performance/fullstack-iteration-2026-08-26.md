@@ -1,6 +1,10 @@
 # Fullstack-ytelsesiterasjon 2026-08-26
 
-> **Status:** Fullført lokalt — klar for separate reviews
+> **Status:** Levert
+>
+> **Leveranse:** [backend-PR #12](https://github.com/screwyourshelf/banebooking-voyager-be/pull/12)
+> (`9f27aa0`) og
+> [frontend-PR #31](https://github.com/screwyourshelf/banebooking-voyager-fe/pull/31) (`86b0c22`)
 >
 > **Frontendgrunnlag:** `fbba604` fra `origin/main` (`606e9d2`)
 >
@@ -262,14 +266,15 @@ Kjørte kvalitetsporter:
 - `npm audit --omit=dev` rapporterte fem eksisterende lave, transitive `cookie`-funn. Foreslått
   tvungen løsning ville nedgradert SvelteKit brytende og ble derfor ikke blandet inn i iterasjonen.
 
-## Leveranse- og mergeplan
+## Leveranse
 
-Tiltakene endrer ingen ekstern HTTP-kontrakt. Opprett to separate PR-er:
+Tiltakene endret ingen ekstern HTTP-kontrakt og ble levert i separate PR-er:
 
-1. Backend fra `perf/fullstack-iteration-2026-08-26` til `master`: ikke-cachet policyprojeksjon og
-   tester.
-2. Frontend fra `perf/fullstack-iteration-2026-08-26` til `main`: utvidet harness,
-   booking-/adminforbedringer og før-/ettermåling.
+1. [Backend-PR #12](https://github.com/screwyourshelf/banebooking-voyager-be/pull/12) ble merget til
+   `master` som `9f27aa0`: ikke-cachet policyprojeksjon og tester.
+2. [Frontend-PR #31](https://github.com/screwyourshelf/banebooking-voyager-fe/pull/31) ble deretter
+   merget til `main` som `86b0c22`: utvidet harness, booking-/adminforbedringer og
+   før-/ettermåling.
 
-Backend bør merges først, slik at frontendens dokumenterte sluttkontroll beskriver tilstanden som
-finnes når frontend-PR-en merges. Det er ingen kodeavhengighet som krever koordinert deploy.
+Den anbefalte backend-først-rekkefølgen ble fulgt. Ingen kodeavhengighet krevde koordinert deploy.
+Det finnes ingen aktiv oppfølging; utsatte kandidater krever ny evidens og et nytt eksplisitt mål.
