@@ -86,9 +86,9 @@
     let alive = true;
 
     void import("./browser-runtime.client")
-      .then(async ({ createBrowserAppRuntime }) => {
-        if (!alive) return;
-        runtime = createBrowserAppRuntime({
+      .then(async (browserRuntime) => {
+        if (!alive || !browserRuntime) return;
+        runtime = browserRuntime.createBrowserAppRuntime({
           getTenant: () => tenantContext,
           onAuthState: (state) => {
             authState = state;
