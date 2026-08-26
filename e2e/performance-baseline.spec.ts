@@ -771,7 +771,7 @@ class FlowRecorder {
       durationMs: round(
         responseEnd >= 0 ? responseEnd : performance.now() - active.startedAtMs - pending.startMs
       ),
-      failed,
+      failed: failed && response === null,
       fromServiceWorker: response?.fromServiceWorker() ?? false,
       method: request.method(),
       path: apiPath(request.url()),
