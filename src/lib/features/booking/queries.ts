@@ -115,7 +115,7 @@ export function createBookingMutationOptions(
       _request: OpprettBookingForespørsel,
       context: OptimisticBookingContext | undefined
     ) => restorePreviousSlots(queryClient, queryKey, context),
-    onSettled: () => invalidateBookingData(queryClient, slug, courtId, date),
+    onSuccess: () => invalidateBookingData(queryClient, slug, courtId, date),
     retry: false,
   };
 }
@@ -144,7 +144,7 @@ export function cancelBookingMutationOptions(
       _variables: CancelBookingVariables,
       context: OptimisticBookingContext | undefined
     ) => restorePreviousSlots(queryClient, queryKey, context),
-    onSettled: () => invalidateBookingData(queryClient, slug, courtId, date),
+    onSuccess: () => invalidateBookingData(queryClient, slug, courtId, date),
     retry: false,
   };
 }
