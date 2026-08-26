@@ -85,9 +85,17 @@ describe("booking screen", () => {
     );
 
     await fireEvent.click(screen.getByRole("button", { name: "Bookingregler" }));
-    expect(screen.getByRole("dialog", { name: "Bookingregler for Bane 1" })).toHaveTextContent(
-      "Maks 2 bookinger"
+    const rulesDialog = screen.getByRole("dialog", { name: "Bookingregler for Bane 1" });
+    expect(rulesDialog).toHaveTextContent("Opptil 2 bookinger");
+    expect(rulesDialog).toHaveTextContent("Passerte bookinger samme dag teller mot dagsgrensen.");
+    expect(rulesDialog).toHaveTextContent("En booking teller som aktiv frem til sluttiden.");
+    expect(rulesDialog).toHaveTextContent(
+      "Reglene som vises gjelder når du booker Bane 1. Andre baner kan ha egne tider og bookinggrenser."
     );
+    expect(rulesDialog).toHaveTextContent(
+      "Dine bookinger i tennis, også på andre baner, teller mot grensene som vises her."
+    );
+    expect(rulesDialog).not.toHaveTextContent("arrangement");
     expect((await axe.run(result.container, axeOptions)).violations).toEqual([]);
   });
 

@@ -135,6 +135,11 @@ Sentrale API-er: `GET /klubb/{slug}`, `GET /klubb/{slug}/bruker`,
 - Offentlige brukere kan lese fysisk tilgjengelighet, arrangementinformasjon, vær og reglement.
   Innlogging endrer tilgjengelige handlinger, ikke statusordene `Ledig` og `Opptatt`.
 - Slotkapabiliteter styrer hurtigbooking, avbestilling og kobling til et aktivt arrangement.
+- Bookingregeldialogen viser den valgte banens effektive regler. Baneoverstyringer kan derfor avvike
+  fra grenens standard og fra andre baner. Når brukerens kvote vurderes mot den viste banegrensen,
+  telles personlige bookinger per gren på tvers av banene. Dagsgrensen inkluderer passerte tider på
+  valgt dag, mens totalgrensen bare teller bookinger som ikke er ferdige. Administrative
+  arrangementsbookinger inngår ikke i medlemmenes dialogforklaring.
 - Booking og avbestilling oppdaterer sloten optimistisk, ruller tilbake ved feil og invaliderer
   kalender og Mine tider etterpå.
 - Kritiske states er bootstrap/loading med bevart appgeometri, manglende bookingoppsett, manglende

@@ -6,6 +6,7 @@ import {
   countAvailableBookingSlots,
   countPassedBookingSlots,
   getBookingDayChoice,
+  getBookingRuleCopy,
   getBookingRuleFacts,
   getBookingSlotPresentation,
   getVisibleBookingSlots,
@@ -136,7 +137,26 @@ describe("booking rules and optimistic state", () => {
       maksPerDag: 1,
       slotLengdeMinutter: 30,
     });
-    expect(rules && getBookingRuleFacts(rules).limits[0]?.value).toBe("Maks 1 booking");
+    expect(rules && getBookingRuleFacts(rules).limits).toEqual([
+      {
+        label: "På én dag",
+        value: "Opptil 1 booking",
+      },
+      {
+        label: "Aktive bookinger",
+        value: "Opptil 5 bookinger totalt",
+      },
+      {
+        label: "Hvor langt frem",
+        value: "Opptil 14 dager fra i dag",
+      },
+    ]);
+    expect(getBookingRuleCopy(createActivity(), createCourt())).toEqual({
+      scopeDescription:
+        "Reglene som vises gjelder når du booker Bane 1. Andre baner kan ha egne tider og bookinggrenser.",
+      limitsExplanation:
+        "Dine bookinger i tennis, også på andre baner, teller mot grensene som vises her. Passerte bookinger samme dag teller mot dagsgrensen. En booking teller som aktiv frem til sluttiden.",
+    });
   });
 
   it("markerer booking og avbestilling uten å endre andre slots", () => {

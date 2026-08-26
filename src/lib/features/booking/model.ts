@@ -40,6 +40,11 @@ export type BookingRuleFacts = {
   times: Array<{ label: string; value: string }>;
 };
 
+export type BookingRuleCopy = {
+  limitsExplanation: string;
+  scopeDescription: string;
+};
+
 export function resolveBookingSelection(
   activities: readonly GrenRespons[],
   courts: readonly BaneRespons[],
@@ -159,20 +164,37 @@ export function resolveBookingRules(
 export function getBookingRuleFacts(rules: BookingRegelRespons): BookingRuleFacts {
   return {
     limits: [
-      { label: "Per dag", value: `Maks ${formatCount(rules.maksPerDag, "booking", "bookinger")}` },
       {
-        label: "Aktive totalt",
-        value: `Maks ${formatCount(rules.maksTotalt, "booking", "bookinger")}`,
+        label: "På én dag",
+        value: `Opptil ${formatCount(rules.maksPerDag, "booking", "bookinger")}`,
       },
       {
-        label: "Frem i tid",
-        value: `Opptil ${formatCount(rules.dagerFremITid, "dag", "dager")}`,
+        label: "Aktive bookinger",
+        value: `Opptil ${formatCount(rules.maksTotalt, "booking", "bookinger")} totalt`,
+      },
+      {
+        label: "Hvor langt frem",
+        value: `Opptil ${formatCount(rules.dagerFremITid, "dag", "dager")} fra i dag`,
       },
     ],
     times: [
       { label: "Åpningstid", value: `${rules.aapningstid}–${rules.stengetid}` },
       { label: "Varighet", value: `${rules.slotLengdeMinutter} minutter` },
     ],
+  };
+}
+
+export function getBookingRuleCopy(
+  activity: GrenRespons,
+  court: BaneRespons | undefined
+): BookingRuleCopy {
+  const activityName = activity.navn.toLocaleLowerCase("nb-NO");
+
+  return {
+    scopeDescription: court
+      ? `Reglene som vises gjelder når du booker ${court.navn}. Andre baner kan ha egne tider og bookinggrenser.`
+      : `Reglene som vises er standardreglene for ${activityName}.`,
+    limitsExplanation: `Dine bookinger i ${activityName}, også på andre baner, teller mot grensene som vises her. Passerte bookinger samme dag teller mot dagsgrensen. En booking teller som aktiv frem til sluttiden.`,
   };
 }
 
