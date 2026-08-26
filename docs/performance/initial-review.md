@@ -1,6 +1,6 @@
 # Førstegjennomgang: API- og fullstackytelse
 
-> **Status:** Referansegrunnlag for det aktive ytelsesinitiativet
+> **Status:** Historisk referansegrunnlag for det fullførte ytelsesinitiativet
 >
 > **Reviewtidspunkt:** Frontend og backend, 2026-08-25
 >
@@ -13,9 +13,9 @@ samspillet med backend kan forbedres. Målet er bedre opplevd ytelse og lavere r
 gjøre API-et vanskeligere å forstå, skjule dataflyt eller svekke autorisasjons- og
 cachekorrektheten.
 
-Gjennomgangen var lesende. Tallene under er statiske estimater fra kontrollflyten og skal
-verifiseres med målinger før implementering. Aktiv fase og neste steg ligger i
-[`README.md`](./README.md) og [`../current-work.md`](../current-work.md).
+Gjennomgangen var lesende. Tallene under er statiske estimater fra kontrollflyten og ble etterfulgt
+av målinger før implementering. Levert resultat ligger i [`README.md`](./README.md), mens eventuell
+ny aktiv status ligger i [`../current-work.md`](../current-work.md).
 
 ## Beslutning om arbeidsdeling
 

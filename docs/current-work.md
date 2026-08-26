@@ -1,30 +1,25 @@
 # Aktivt arbeid
 
-> **Status:** Fullført
+> **Status:** Ingen aktiv leveranse
 >
-> **Initiativ:** API- og fullstackytelse
->
-> **Sluttkontroll:** 2026-08-26
+> **Sist avsluttet:** API- og fullstackytelse, 2026-08-26
 
-## Mål
+## Avsluttet leveranse
 
-Performanceplanens frontend- og fullstacktiltak er levert. Resultatene ligger i
+Performanceplanens frontend- og fullstacktiltak er merget. Resultatene ligger i
 [`frontend-ettermålingen`](./performance/frontend-after-2026-08-26.md) og
 [`fullstack-sluttkontrollen`](./performance/fullstack-after-2026-08-26.md).
 
-## Resultat
+Detaljer og mellomtilstander skal leses fra disse referansene og git-historikken, ikke videreføres
+som aktiv oppgave i denne filen.
 
-- Kalenderpollingen er halvert, mutasjonsrefetcher er målrettet og stabile ressurser gjenbrukes.
-- Kaldstart bygger ikke lenger full brukerprofil i booking-bootstrap.
-- Vilkårsflyten bruker fire i stedet for fem API-kall og 12 i stedet for 16 DB-kommandoer.
-- Arrangementbooking redigeres atomisk med to i stedet for tre API-kall og 8 i stedet for 11
-  DB-kommandoer.
-- Backend- og frontendendringene er levert i separate commits og verifisert sammen.
+## Neste vurdering
 
-## Neste steg
+En ny, helhetlig ytelsesvurdering av frontend, API og underliggende datatilgang er avtalt, men ikke
+startet. Den skal etableres som et eget initiativ fra mergede `main`/`master`, med nytt scope og ny
+baseline før kandidater velges.
 
-Ingen aktiv performanceoppgave. Policycache og selektiv HTTP-caching er eksplisitt utsatt til en ny
-produksjonsmåling eventuelt dokumenterer et konkret behov.
+Ikke fortsett direkte på tiltak eller kandidater fra den avsluttede planen uten en ny måling.
 
 ## Blokkeringer
 
