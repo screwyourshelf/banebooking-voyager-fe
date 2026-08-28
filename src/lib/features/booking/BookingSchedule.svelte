@@ -224,6 +224,7 @@
           <BookingSlotRow
             activityId={selectedActivityId}
             {authenticated}
+            {bookingstatus}
             busy={mutationBusy}
             {slot}
             {onBook}
