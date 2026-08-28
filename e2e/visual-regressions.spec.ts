@@ -28,6 +28,18 @@ test("anonymous login — mobile, light", async ({ page, e2e }) => {
   await expectStableScreenshot(page, diagnostics, "anonymous-login-mobile-light.png");
 });
 
+test("anonymous login — desktop, dark", async ({ page, e2e }) => {
+  const diagnostics = await prepareReferenceSurface(page, {
+    theme: "dark",
+    viewport: desktop,
+  });
+  await page.goto(e2e.tenantPath("login"));
+
+  await expectProductSurface(page, "Logg inn");
+  await expect(page.locator('[data-ui="page"]')).toHaveAttribute("data-layout", "focused");
+  await expectStableScreenshot(page, diagnostics, "anonymous-login-desktop-dark.png");
+});
+
 test("public terms — desktop, dark", async ({ page, e2e }) => {
   const diagnostics = await prepareReferenceSurface(page, {
     theme: "dark",

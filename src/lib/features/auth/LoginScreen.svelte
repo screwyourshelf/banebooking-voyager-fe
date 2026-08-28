@@ -150,6 +150,7 @@
   eyebrow="Min konto"
   title="Logg inn"
   description="Book bane og hold oversikt over tidene dine."
+  layout="focused"
 >
   <Section
     title="Velg innlogging"

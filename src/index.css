@@ -609,6 +609,7 @@
   --max-width-document: var(--app-document-max-width);
   --max-width-form-steps: var(--app-form-steps-max-width);
   --max-width-page: var(--app-page-width);
+  --max-width-page-focused: var(--app-page-focused-width);
   --max-width-page-description: var(--app-page-description-max-width);
   --max-width-page-intro: var(--app-page-intro-max-width);
   --max-width-page-title: var(--app-page-title-max-width);

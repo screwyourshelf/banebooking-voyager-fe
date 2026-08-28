@@ -1,4 +1,6 @@
 <script lang="ts">
+  export type PageLayout = "default" | "focused";
+
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
   import type { PublicHtmlAttributes } from "../public-html-attributes";
@@ -9,6 +11,7 @@
     children?: Snippet;
     description?: string;
     eyebrow?: string;
+    layout?: PageLayout;
     standalone?: boolean;
     title?: string;
   };
@@ -18,6 +21,7 @@
     children,
     description,
     eyebrow,
+    layout = "default",
     standalone = false,
     title,
     ...attributes
@@ -85,16 +89,22 @@
 {#if standalone}
   <main
     {...attributes}
-    class="w-full min-w-0 max-w-page mx-auto p-page md:px-page-wide-inline md:pt-page-wide-top md:pb-page-wide-bottom lg:animate-page-shell-enter lg:pt-page-desktop-top lg:pr-page-desktop-inline-end lg:pb-page-desktop-bottom lg:pl-page-desktop-inline-start lg:motion-reduce:animate-none"
+    class="w-full min-w-0 mx-auto p-page md:px-page-wide-inline md:pt-page-wide-top md:pb-page-wide-bottom lg:animate-page-shell-enter lg:pt-page-desktop-top lg:pr-page-desktop-inline-end lg:pb-page-desktop-bottom lg:pl-page-desktop-inline-start lg:motion-reduce:animate-none"
+    class:max-w-page={layout === "default"}
+    class:max-w-page-focused={layout === "focused"}
     data-ui="page"
+    data-layout={layout}
   >
     {@render content()}
   </main>
 {:else}
   <div
     {...attributes}
-    class="w-full min-w-0 max-w-page mx-auto p-page md:px-page-wide-inline md:pt-page-wide-top md:pb-page-wide-bottom lg:animate-page-shell-enter lg:pt-page-desktop-top lg:pr-page-desktop-inline-end lg:pb-page-desktop-bottom lg:pl-page-desktop-inline-start lg:motion-reduce:animate-none"
+    class="w-full min-w-0 mx-auto p-page md:px-page-wide-inline md:pt-page-wide-top md:pb-page-wide-bottom lg:animate-page-shell-enter lg:pt-page-desktop-top lg:pr-page-desktop-inline-end lg:pb-page-desktop-bottom lg:pl-page-desktop-inline-start lg:motion-reduce:animate-none"
+    class:max-w-page={layout === "default"}
+    class:max-w-page-focused={layout === "focused"}
     data-ui="page"
+    data-layout={layout}
   >
     {@render content()}
   </div>

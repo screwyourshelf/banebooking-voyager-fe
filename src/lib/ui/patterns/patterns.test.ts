@@ -26,6 +26,7 @@ describe("public page and section patterns", () => {
     });
 
     expect(screen.getByRole("main")).toHaveAttribute("data-ui", "page");
+    expect(screen.getByRole("main")).toHaveAttribute("data-layout", "default");
     expect(screen.getByRole("main")).toHaveClass(
       "max-w-page",
       "p-page",
@@ -47,6 +48,19 @@ describe("public page and section patterns", () => {
       "data-part",
       "description"
     );
+  });
+
+  it("constrains focused tasks through the shared page geometry", () => {
+    const { container } = render(Page, {
+      eyebrow: "Min konto",
+      layout: "focused",
+      title: "Logg inn",
+    });
+
+    const page = container.querySelector('[data-ui="page"]');
+    expect(page).toHaveAttribute("data-layout", "focused");
+    expect(page).toHaveClass("max-w-page-focused");
+    expect(page).not.toHaveClass("max-w-page");
   });
 
   it("gir sidestatus en kompakt sentral tonekontrakt", () => {
