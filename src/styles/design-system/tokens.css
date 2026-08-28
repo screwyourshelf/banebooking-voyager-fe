@@ -338,6 +338,7 @@
     /* Semantic product geometry. Values mirror the verified pre-Tailwind component baseline. */
     --app-content-max: 112rem;
     --app-page-width: 96rem;
+    --app-page-focused-width: 40rem;
     --app-document-max-width: 58rem;
     --app-page-description-max-width: 42rem;
     --app-page-intro-max-width: 54rem;

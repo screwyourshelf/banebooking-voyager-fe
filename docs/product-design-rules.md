@@ -60,6 +60,11 @@ familie før det lages lokal struktur.
 10. `Page`, vanlig `Dialog` og editorvarianten eier standardstørrelsen. Featurekode velger ikke
     lokal bredde eller høyde.
 
+`Page` har to sentralt eide layoutkontrakter. `default` gir arbeidsflater plass til samlinger,
+booking og administrasjon. `focused` begrenser korte, lineære oppgaver som innlogging og
+tilgangsrecovery til en lesbar kolonne, sentrert i arbeidsområdet. Mobil beholder tilgjengelig
+viewportbredde; features velger bare den semantiske layouten og oppgir aldri egen geometri.
+
 ## Farger og status
 
 - Grønt er produktets strukturfarge for navigasjon, kontrollflater og positive hovedhandlinger.
