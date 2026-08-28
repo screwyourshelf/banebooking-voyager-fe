@@ -2,7 +2,7 @@
 
 > **Status:** Bindende produktadferd
 >
-> **Sist oppdatert:** 2026-08-26
+> **Sist oppdatert:** 2026-08-28
 
 ## Formål og avgrensning
 
@@ -130,16 +130,21 @@ Sentrale API-er: `GET /klubb/{slug}`, `GET /klubb/{slug}/bruker`,
 
 - Bookingroten viser aktive grener, tilhørende baner og kalender for valgt dato. Første gren med
   bane, første bane i grenen og dagens dato velges som standard.
-- Bootstrapresponsen eier bare grener, baner, valgt utvalg, dato og kalender-slots. Klubb og
-  brukerprofil eies av sessionens separate queries.
+- Bootstrapresponsen eier bare grener, baner, valgt utvalg, dato og kalenderresponsen. Kalenderen
+  inneholder slots og, for en innlogget bruker, autoritativ kvotestatus. Klubb og brukerprofil eies
+  av sessionens separate queries.
 - Offentlige brukere kan lese fysisk tilgjengelighet, arrangementinformasjon, vær og reglement.
   Innlogging endrer tilgjengelige handlinger, ikke statusordene `Ledig` og `Opptatt`.
 - Slotkapabiliteter styrer hurtigbooking, avbestilling og kobling til et aktivt arrangement.
-- Bookingregeldialogen viser den valgte banens effektive regler. Baneoverstyringer kan derfor avvike
-  fra grenens standard og fra andre baner. Når brukerens kvote vurderes mot den viste banegrensen,
-  telles personlige bookinger per gren på tvers av banene. Dagsgrensen inkluderer passerte tider på
-  valgt dag, mens totalgrensen bare teller bookinger som ikke er ferdige. Administrative
-  arrangementsbookinger inngår ikke i medlemmenes dialogforklaring.
+- Dialogen `Grenser og tider` skiller gren-eide medlemskvoter fra den valgte banens tider.
+  `maks per dag` og `maks kommende` gjelder ordinære bookinger på tvers av alle baner i grenen;
+  arrangementsbookinger inngår ikke. Dagskvoten inkluderer passerte bookinger på valgt dato, mens
+  kommende-kvoten teller alle uavsluttede bookinger i grenen, også utenfor den valgte banens
+  bookinghorisont. Innloggede brukere ser egne tellerverdier fra samme backendgrunnlag som
+  bookingvalideringen. Banen kan bare avvike fra Gren-standard på åpningstid, siste sluttid,
+  slotlengde og bookinghorisont.
+- Datovelgerens maksimum følger den valgte banens effektive bookinghorisont, og genererte slots må
+  være ferdige senest ved banens siste sluttid.
 - Booking og avbestilling oppdaterer sloten optimistisk, ruller tilbake ved feil og invaliderer
   kalender og Mine tider etterpå.
 - Kritiske states er bootstrap/loading med bevart appgeometri, manglende bookingoppsett, manglende
@@ -182,10 +187,10 @@ Sentrale API-er: `GET /offentlig/klubb/{slug}/arrangementer/visning`,
 ### Baner og grener
 
 - `/admin/baner` og `/admin/grener` er samme arbeidsområde med kapabilitetsstyrte seksjonslenker.
-- Baner kan opprettes og redigeres, aktiveres/deaktiveres gjennom objektets state og overstyre
-  bookinginnstillinger per bane.
-- Grener kan opprettes, redigeres, aktiveres/deaktiveres og eier standard bookingregler og
-  banereglement.
+- Baner kan opprettes og redigeres, aktiveres/deaktiveres gjennom objektets state og avvike fra
+  Gren-standarden på åpningstid, siste sluttid, slotlengde og bookinghorisont.
+- Grener kan opprettes, redigeres, aktiveres/deaktiveres og eier medlemskvotene, standardtidene og
+  banereglementet. Kvoter kan ikke overstyres per bane.
 - Valgt bane/gren kan huskes lokalt, men er ikke en del av URL-kontrakten.
 - Kritiske states er tilgangskontroll, lasting, tom samling, retrybar feil, åpen editor,
   feltvalidering, ulagret utkast, lagring, lagret bekreftelse og mutasjonsfeil.

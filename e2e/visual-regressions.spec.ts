@@ -116,7 +116,7 @@ test("member booking calendar — mobile, light", async ({ page, e2e }) => {
   await expectNoBrowserDiagnostics(diagnostics);
 });
 
-test("member booking rules dialog — desktop, light", async ({ page, e2e }) => {
+test("member booking limits and times dialog — desktop, light", async ({ page, e2e }) => {
   const diagnostics = await prepareReferenceSurface(page, {
     profile: "medlem",
     theme: "light",
@@ -125,13 +125,15 @@ test("member booking rules dialog — desktop, light", async ({ page, e2e }) => 
   await signInAndOpen(page, e2e.signIn, "medlem", e2e.tenantPath());
 
   await expectProductSurface(page, "Book bane");
-  const trigger = page.getByRole("button", { name: "Bookingregler" });
+  const trigger = page.getByRole("button", { name: "Grenser og tider" });
   await trigger.click();
-  await expect(page.getByRole("dialog", { name: "Bookingregler for Senterbanen" })).toBeVisible();
+  await expect(
+    page.getByRole("dialog", { name: "Grenser og tider for Senterbanen" })
+  ).toBeVisible();
   const close = page.getByRole("button", { name: "Lukk dialog" });
   await expect(close).toBeFocused();
   await expectNoHorizontalOverflow(page);
-  await expectStableScreenshot(page, diagnostics, "member-booking-rules-dialog-desktop-light.png");
+  await expectStableScreenshot(page, diagnostics, "member-booking-limits-dialog-desktop-light.png");
 
   await page.keyboard.press("Tab");
   await expect(close).toBeFocused();

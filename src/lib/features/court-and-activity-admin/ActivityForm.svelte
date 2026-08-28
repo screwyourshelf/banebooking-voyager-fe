@@ -13,7 +13,8 @@
     SettingsSwitchRow,
     Textarea,
   } from "$lib/ui";
-  import BookingRulesFields from "./BookingRulesFields.svelte";
+  import BookingQuotaFields from "./BookingQuotaFields.svelte";
+  import BookingTimeFields from "./BookingTimeFields.svelte";
   import type { ActivityDraft, BookingOverrideDraft } from "./model";
 
   let {
@@ -39,22 +40,18 @@
   } = $props();
 
   const changed = (patch: Partial<ActivityDraft>) => onChange({ ...draft, ...patch });
-  const bookingValues = $derived<BookingOverrideDraft>({
+  const timeValues = $derived<BookingOverrideDraft>({
     openingHour: draft.openingHour,
     closingHour: draft.closingHour,
-    maxPerDay: draft.maxPerDay,
-    maxActive: draft.maxActive,
     daysAhead: draft.daysAhead,
     slotMinutes: draft.slotMinutes,
   });
 
-  function changeBookingRule(field: keyof BookingOverrideDraft, value: number | null) {
+  function changeBookingTime(field: keyof BookingOverrideDraft, value: number | null) {
     if (value === null) return;
     const draftKey: Record<keyof BookingOverrideDraft, keyof ActivityDraft> = {
       openingHour: "openingHour",
       closingHour: "closingHour",
-      maxPerDay: "maxPerDay",
-      maxActive: "maxActive",
       daysAhead: "daysAhead",
       slotMinutes: "slotMinutes",
     };
@@ -135,8 +132,8 @@
     <SettingsSection
       embedded
       eyebrow="Booking"
-      title="Bookingregler"
-      description="Standardverdier for alle baner i denne grenen."
+      title="Bookinginnstillinger"
+      description="Kvoter for hele grenen og standardtider for alle banene."
     >
       {#if errors.hours}<Feedback
           tone="danger"
@@ -144,11 +141,13 @@
           description={errors.hours}
         />{/if}
       <SettingsPanel>
-        <BookingRulesFields
-          values={bookingValues}
-          onChange={changeBookingRule}
+        <BookingQuotaFields
+          maxPerDay={draft.maxPerDay}
+          maxUpcoming={draft.maxUpcoming}
+          onChange={(field, value) => changed({ [field]: value })}
           disabled={pending}
         />
+        <BookingTimeFields values={timeValues} onChange={changeBookingTime} disabled={pending} />
       </SettingsPanel>
     </SettingsSection>
 

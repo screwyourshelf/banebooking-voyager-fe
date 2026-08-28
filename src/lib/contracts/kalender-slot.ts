@@ -22,3 +22,22 @@ export type KalenderSlotRespons = {
   vind?: number;
   kapabiliteter: string[];
 };
+
+export type BookingstatusRespons = {
+  grenId: string;
+  baneId: string;
+  dato: string;
+  bookingerPaaDato: number;
+  maksPerDag: number;
+  gjenstaaendePaaDato: number;
+  kommendeBookinger: number;
+  maksKommende: number;
+  gjenstaaendeKommende: number;
+  sisteBookbareDato: string;
+  erUnntattKvoter: boolean;
+};
+
+export type KalenderRespons = {
+  slots: KalenderSlotRespons[];
+  bookingstatus: BookingstatusRespons | null;
+};

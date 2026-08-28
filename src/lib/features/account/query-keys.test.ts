@@ -9,10 +9,10 @@ describe("account query keys", () => {
       "mine",
       { includeHistorical: true },
     ]);
-    expect(accountQueryKeys.bookingSlots("fjordvik", "court-1", "2026-08-25")).toEqual([
+    expect(accountQueryKeys.bookingCalendar("fjordvik", "court-1", "2026-08-25")).toEqual([
       "booking",
       { slug: "fjordvik" },
-      "slots",
+      "calendar",
       { courtId: "court-1", date: "2026-08-25" },
     ]);
   });

@@ -1,4 +1,4 @@
-import type { BookingRegelRespons } from "./klubb";
+import type { BookingInnstillingRespons } from "./booking-innstilling";
 
 // Response
 export type GrenRespons = {
@@ -8,7 +8,7 @@ export type GrenRespons = {
   banereglement: string;
   sortering: number;
   aktiv: boolean;
-  bookingInnstillinger: BookingRegelRespons;
+  bookingInnstillinger: BookingInnstillingRespons;
   kapabiliteter: string[];
 };
 
@@ -20,7 +20,7 @@ export type OpprettGrenForespørsel = {
   aapningstid: string;
   stengetid: string;
   maksPerDag: number;
-  maksTotalt: number;
+  maksKommende: number;
   dagerFremITid: number;
   slotLengdeMinutter: number;
 };
@@ -33,7 +33,7 @@ export type OppdaterGrenForespørsel = {
   aapningstid: string;
   stengetid: string;
   maksPerDag: number;
-  maksTotalt: number;
+  maksKommende: number;
   dagerFremITid: number;
   slotLengdeMinutter: number;
 };

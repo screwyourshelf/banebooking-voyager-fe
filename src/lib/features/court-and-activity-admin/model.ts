@@ -1,7 +1,7 @@
 import type {
   BaneBookingOverstyringRespons,
   BaneRespons,
-  BookingRegelRespons,
+  BookingInnstillingRespons,
   GrenRespons,
   OppdaterBaneBookingInnstillingerForespørsel,
   OppdaterBaneForespørsel,
@@ -15,8 +15,6 @@ export type BookingOverrideDraft = {
   openingHour: number | null;
   closingHour: number | null;
   slotMinutes: number | null;
-  maxPerDay: number | null;
-  maxActive: number | null;
   daysAhead: number | null;
 };
 
@@ -36,7 +34,7 @@ export type ActivityDraft = {
   openingHour: number;
   closingHour: number;
   maxPerDay: number;
-  maxActive: number;
+  maxUpcoming: number;
   daysAhead: number;
   slotMinutes: number;
 };
@@ -50,8 +48,6 @@ export const EMPTY_BOOKING_OVERRIDE: BookingOverrideDraft = {
   openingHour: null,
   closingHour: null,
   slotMinutes: null,
-  maxPerDay: null,
-  maxActive: null,
   daysAhead: null,
 };
 
@@ -63,7 +59,7 @@ const DEFAULT_ACTIVITY_DRAFT: ActivityDraft = {
   openingHour: 7,
   closingHour: 22,
   maxPerDay: 2,
-  maxActive: 5,
+  maxUpcoming: 5,
   daysAhead: 7,
   slotMinutes: 60,
 };
@@ -87,7 +83,7 @@ export function activityToDraft(activity: GrenRespons): ActivityDraft {
     openingHour: timeToHour(activity.bookingInnstillinger.aapningstid),
     closingHour: timeToHour(activity.bookingInnstillinger.stengetid),
     maxPerDay: activity.bookingInnstillinger.maksPerDag,
-    maxActive: activity.bookingInnstillinger.maksTotalt,
+    maxUpcoming: activity.bookingInnstillinger.maksKommende,
     daysAhead: activity.bookingInnstillinger.dagerFremITid,
     slotMinutes: activity.bookingInnstillinger.slotLengdeMinutter,
   };
@@ -160,8 +156,6 @@ export function toCourtBookingSettingsRequest(
     aapningstid: value.openingHour === null ? null : hourToTime(value.openingHour),
     stengetid: value.closingHour === null ? null : hourToTime(value.closingHour),
     slotLengdeMinutter: value.slotMinutes,
-    maksPerDag: value.maxPerDay,
-    maksTotalt: value.maxActive,
     dagerFremITid: value.daysAhead,
   };
 }
@@ -175,7 +169,7 @@ export function toActivityUpdateRequest(draft: ActivityDraft): OppdaterGrenFores
     aapningstid: hourToTime(draft.openingHour),
     stengetid: hourToTime(draft.closingHour),
     maksPerDag: draft.maxPerDay,
-    maksTotalt: draft.maxActive,
+    maksKommende: draft.maxUpcoming,
     dagerFremITid: draft.daysAhead,
     slotLengdeMinutter: draft.slotMinutes,
   };
@@ -263,22 +257,18 @@ function bookingOverrideToDraft(
     openingHour: override?.aapningstid == null ? null : timeToHour(override.aapningstid),
     closingHour: override?.stengetid == null ? null : timeToHour(override.stengetid),
     slotMinutes: override?.slotLengdeMinutter ?? null,
-    maxPerDay: override?.maksPerDag ?? null,
-    maxActive: override?.maksTotalt ?? null,
     daysAhead: override?.dagerFremITid ?? null,
   };
 }
 
 export function defaultOverrideValue(
   field: keyof BookingOverrideDraft,
-  defaults: BookingRegelRespons
+  defaults: BookingInnstillingRespons
 ) {
   const values: Record<keyof BookingOverrideDraft, number> = {
     openingHour: timeToHour(defaults.aapningstid),
     closingHour: timeToHour(defaults.stengetid),
     slotMinutes: defaults.slotLengdeMinutter,
-    maxPerDay: defaults.maksPerDag,
-    maxActive: defaults.maksTotalt,
     daysAhead: defaults.dagerFremITid,
   };
   return values[field];

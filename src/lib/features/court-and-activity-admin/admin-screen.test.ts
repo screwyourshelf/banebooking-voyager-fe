@@ -89,7 +89,7 @@ describe("court administration workspace", () => {
 
     await fireEvent.input(name, { target: { value: "Bane A" } });
     dialog = screen.getByRole("dialog", { name: "Bane A" });
-    await fireEvent.click(within(dialog).getByRole("switch", { name: "Egne bookingregler" }));
+    await fireEvent.click(within(dialog).getByRole("switch", { name: "Avvik fra grenstandard" }));
     await fireEvent.click(within(dialog).getByRole("switch", { name: "Egen åpningstid" }));
     await fireEvent.input(within(dialog).getByRole("slider", { name: "Åpningstid" }), {
       target: { value: "8" },

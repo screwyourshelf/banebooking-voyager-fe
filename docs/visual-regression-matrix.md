@@ -24,7 +24,7 @@ rikteksteditor og statistikk.
 | VR-04 | Klubbens medlemskap       | `/admin/klubb`, medlemskapsfanen           | Administrator | 390 × 844   | Mørk  | `club-administrator-mobile-dark`                |
 | VR-05 | Bookingliste              | `/`, fire representative slotstates        | Medlem        | 1440 × 1000 | Mørk  | `member-booking-collection-desktop-dark`        |
 | VR-06 | Bookingkalender           | `/`, åpen datopopover                      | Medlem        | 390 × 844   | Lys   | `member-booking-calendar-mobile-light`          |
-| VR-07 | Bookingregler             | `/`, åpen standarddialog                   | Medlem        | 1440 × 1000 | Lys   | `member-booking-rules-dialog-desktop-light`     |
+| VR-07 | Grenser og tider          | `/`, åpen status- og innstillingsdialog    | Medlem        | 1440 × 1000 | Lys   | `member-booking-limits-dialog-desktop-light`    |
 | VR-08 | Brukereditor og rollevalg | `/admin/brukere`, editor med åpen Select   | Administrator | 1440 × 1000 | Mørk  | `user-administrator-editor-select-desktop-dark` |
 | VR-09 | Kunngjøringseditor        | `/admin/kunngjøringer`, tom rikteksteditor | Administrator | 390 × 844   | Lys   | `announcement-editor-mobile-light`              |
 | VR-10 | Statistikk for banebruk   | `/admin/statistikk`, banebrukfanen         | Administrator | 1440 × 1000 | Mørk  | `statistics-court-usage-desktop-dark`           |
@@ -47,7 +47,7 @@ plattformendelse og ligger ved `e2e/visual-regressions.spec.ts`.
 
 ## Interaktiv kontrakt
 
-Alle elleve tester krever før snapshot:
+Alle referansetestene krever før snapshot:
 
 - nøyaktig ett `main`-landmark og en synlig `h1` på den underliggende routen
 - ingen horisontal overflow i `html` eller `body`
@@ -83,13 +83,13 @@ dev-, preview- og produksjonstrafikk bruker fortsatt de autoritative API- og aut
 Kjør hele referansen med:
 
 ```bash
-npx playwright test e2e/visual-regressions.spec.ts
+npm run test:e2e:visual
 ```
 
 Snapshotene oppdateres bare etter en bevisst, godkjent visuell endring:
 
 ```bash
-npx playwright test e2e/visual-regressions.spec.ts --update-snapshots
+npm run test:e2e:visual -- --update-snapshots
 ```
 
 Et snapshotavvik er ikke i seg selv godkjenning til å regenerere referansen. Før oppdatering skal

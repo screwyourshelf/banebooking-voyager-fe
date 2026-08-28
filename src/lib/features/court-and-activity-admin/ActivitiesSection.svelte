@@ -163,7 +163,7 @@
         {@const unsaved = Boolean(draft && activityDraftIsDirty(activity, draft))}
         <CollectionRow
           title={values.name.trim() || activity.navn}
-          description={`${values.slotMinutes} min · maks ${values.maxPerDay} per dag`}
+          description={`${values.slotMinutes} min · ${values.maxPerDay} per dag · ${values.maxUpcoming} kommende`}
           meta={`${hourLabel(values.openingHour)}–${hourLabel(values.closingHour)}`}
           status={{
             label: unsaved ? "Ulagret" : values.active ? "Aktiv" : "Inaktiv",

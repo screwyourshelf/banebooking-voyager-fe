@@ -6,8 +6,8 @@ import {
   getActiveArrangements,
   getBookingActivities,
   getBookingBootstrap,
+  getBookingCalendar,
   getBookingCourts,
-  getBookingSlots,
 } from "./api";
 
 describe("booking endpoints", () => {
@@ -18,7 +18,7 @@ describe("booking endpoints", () => {
     await getBookingBootstrap(api, "fjord vik", "2026-08-23");
     await getBookingActivities(api, "fjord vik");
     await getBookingCourts(api, "fjord vik");
-    await getBookingSlots(api, "fjord vik", "court & 1", "2026-08-24");
+    await getBookingCalendar(api, "fjord vik", "court & 1", "2026-08-24");
 
     expect(request).toHaveBeenNthCalledWith(
       1,

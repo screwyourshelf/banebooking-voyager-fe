@@ -4,7 +4,7 @@ import type {
   BookingBootstrapRespons,
   BookingSuksessRespons,
   GrenRespons,
-  KalenderSlotRespons,
+  KalenderRespons,
   OpprettBookingForespørsel,
 } from "$lib/contracts";
 import type { ApiClient } from "$lib/platform/api";
@@ -33,7 +33,7 @@ export function getBookingCourts(api: ApiClient, slug: string, signal?: AbortSig
   return api.request<BaneRespons[]>(tenantPath(slug, "baner"), { auth: "optional", signal });
 }
 
-export function getBookingSlots(
+export function getBookingCalendar(
   api: ApiClient,
   slug: string,
   courtId: string,
@@ -41,7 +41,7 @@ export function getBookingSlots(
   signal?: AbortSignal
 ) {
   const query = new URLSearchParams({ baneId: courtId, dato: date });
-  return api.request<KalenderSlotRespons[]>(tenantPath(slug, `kalender?${query}`), {
+  return api.request<KalenderRespons>(tenantPath(slug, `kalender?${query}`), {
     auth: "optional",
     signal,
   });
