@@ -1,11 +1,11 @@
 <script lang="ts">
-  import type { BookingRegelRespons } from "$lib/contracts";
+  import type { BookingInnstillingRespons } from "$lib/contracts";
   import { SettingsRange, SettingsRow, SettingsSwitchRow, SettingsValue } from "$lib/ui";
   import type { BookingOverrideDraft } from "./model";
   import { defaultOverrideValue, hourLabel } from "./model";
 
-  type BookingRuleField = keyof BookingOverrideDraft;
-  type BookingRuleValues = Record<BookingRuleField, number | null>;
+  type BookingTimeField = keyof BookingOverrideDraft;
+  type BookingTimeValues = Record<BookingTimeField, number | null>;
 
   let {
     defaults,
@@ -14,21 +14,21 @@
     overridable = false,
     values,
   }: {
-    defaults?: BookingRegelRespons;
+    defaults?: BookingInnstillingRespons;
     disabled?: boolean;
-    onChange: (field: BookingRuleField, value: number | null) => void;
+    onChange: (field: BookingTimeField, value: number | null) => void;
     overridable?: boolean;
-    values: BookingRuleValues;
+    values: BookingTimeValues;
   } = $props();
 
   const slotValues = [30, 45, 60, 90] as const;
 
-  function toggle(field: BookingRuleField, enabled: boolean) {
+  function toggle(field: BookingTimeField, enabled: boolean) {
     if (!enabled) onChange(field, null);
     else if (defaults) onChange(field, defaultOverrideValue(field, defaults));
   }
 
-  function defaultDescription(field: BookingRuleField, suffix = "") {
+  function defaultDescription(field: BookingTimeField, suffix = "") {
     if (!defaults) return undefined;
     const value = defaultOverrideValue(field, defaults);
     return `Standard: ${field === "openingHour" || field === "closingHour" ? hourLabel(value) : `${value}${suffix}`}`;
@@ -70,7 +70,7 @@
 
 {#if overridable}
   <SettingsSwitchRow
-    title="Egen stengetid"
+    title="Egen siste sluttid"
     description={defaultDescription("closingHour")}
     checked={values.closingHour !== null}
     onCheckedChange={(checked) => toggle("closingHour", checked)}
@@ -80,66 +80,18 @@
 {#if values.closingHour !== null}
   {#snippet closingValue()}<SettingsValue>{hourLabel(values.closingHour ?? 0)}</SettingsValue
     >{/snippet}
-  <SettingsRow title="Stengetid" description="Seneste starttid." right={closingValue}>
+  <SettingsRow
+    title="Siste sluttid"
+    description="Bookingen må være ferdig innen dette tidspunktet."
+    right={closingValue}
+  >
     <SettingsRange
-      aria-label="Stengetid"
+      aria-label="Siste sluttid"
       value={values.closingHour}
       min="6"
       max="23"
       step="1"
       oninput={(event) => onChange("closingHour", Number(event.currentTarget.value))}
-      {disabled}
-    />
-  </SettingsRow>
-{/if}
-
-{#if overridable}
-  <SettingsSwitchRow
-    title="Egen grense per dag"
-    description={defaultDescription("maxPerDay")}
-    checked={values.maxPerDay !== null}
-    onCheckedChange={(checked) => toggle("maxPerDay", checked)}
-    {disabled}
-  />
-{/if}
-{#if values.maxPerDay !== null}
-  {#snippet maxPerDayValue()}<SettingsValue>{values.maxPerDay}</SettingsValue>{/snippet}
-  <SettingsRow title="Maks per dag" description="Bookinger per medlem." right={maxPerDayValue}>
-    <SettingsRange
-      aria-label="Maks bookinger per dag"
-      value={values.maxPerDay}
-      min="1"
-      max="5"
-      step="1"
-      oninput={(event) => onChange("maxPerDay", Number(event.currentTarget.value))}
-      {disabled}
-    />
-  </SettingsRow>
-{/if}
-
-{#if overridable}
-  <SettingsSwitchRow
-    title="Egen grense for aktive bookinger"
-    description={defaultDescription("maxActive")}
-    checked={values.maxActive !== null}
-    onCheckedChange={(checked) => toggle("maxActive", checked)}
-    {disabled}
-  />
-{/if}
-{#if values.maxActive !== null}
-  {#snippet maxActiveValue()}<SettingsValue>{values.maxActive}</SettingsValue>{/snippet}
-  <SettingsRow
-    title="Maks aktive"
-    description="Samtidige bookinger per medlem."
-    right={maxActiveValue}
-  >
-    <SettingsRange
-      aria-label="Maks aktive bookinger"
-      value={values.maxActive}
-      min="1"
-      max="10"
-      step="1"
-      oninput={(event) => onChange("maxActive", Number(event.currentTarget.value))}
       {disabled}
     />
   </SettingsRow>
@@ -156,12 +108,16 @@
 {/if}
 {#if values.daysAhead !== null}
   {#snippet daysAheadValue()}<SettingsValue>{values.daysAhead} dager</SettingsValue>{/snippet}
-  <SettingsRow title="Bookinghorisont" description="Dager frem i tid." right={daysAheadValue}>
+  <SettingsRow
+    title="Bookinghorisont"
+    description="Antall dager frem i tid."
+    right={daysAheadValue}
+  >
     <SettingsRange
       aria-label="Dager frem i tid"
       value={values.daysAhead}
       min="1"
-      max="14"
+      max="150"
       step="1"
       oninput={(event) => onChange("daysAhead", Number(event.currentTarget.value))}
       {disabled}

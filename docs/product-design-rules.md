@@ -2,7 +2,7 @@
 
 > **Status:** Bindende produktkontrakt
 >
-> **Sist oppdatert:** 2026-08-23
+> **Sist oppdatert:** 2026-08-28
 
 ## Formål
 
@@ -306,7 +306,7 @@ som skal leses fremfor redigeres. Det er en avgrenset leseflate, ikke en generel
   linjeskift i kunngjøringstekst.
 - `Document.Section` eier navngitte innholdsseksjoner på nivået under sidens hovedoverskrift.
   Features lager ikke lokal seksjonsanatomi eller hopper over headingnivåer.
-- `Document.Facts` brukes for korte label/verdi-fakta som bookinggrenser og åpningstid. Løpende
+- `Document.Facts` brukes for korte label/verdi-fakta som bookingstatus, kvoter og åpningstid. Løpende
   tekst eller redigerbare felt uttrykkes ikke som fakta.
 - Lenkene bruker native lenkesemantikk og det sentrale dokumentuttrykket. Eksterne lenker beholder
   sikker `rel`; kontaktlenker bruker riktig `mailto:`- eller `tel:`-mål.
@@ -317,8 +317,8 @@ som skal leses fremfor redigeres. Det er en avgrenset leseflate, ikke en generel
 - Obligatoriske lesehandlinger komponerer `Form.Actions` etter innholdet. `Document` eier ikke
   mutasjonsstate eller bekreftelseslogikk.
 - Vilkår dekker intro, nummererte seksjoner, oppdatert-metadata og kontaktlenke. Obligatoriske
-  kunngjøringer dekker bevart kunngjøringstekst, status og bekreftelse. Bookingreglement dekker
-  grupperte fakta i dialog. Sperre- og medlemskapsflyter kombinerer intro og lenker med delte
+  kunngjøringer dekker bevart kunngjøringstekst, status og bekreftelse. Bookinggrenser og tider
+  dekker grupperte fakta i dialog. Sperre- og medlemskapsflyter kombinerer intro og lenker med delte
   Settings-/Form-patterns.
 - Lesebredden, typografien, avstanden og mobiltilpasningen er sentral. Mobil og desktop beholder
   samme innholdsrekkefølge og headinghierarki.

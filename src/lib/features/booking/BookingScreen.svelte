@@ -10,7 +10,7 @@
   import { addDaysToIsoDate, resolveBookingSelection } from "./model";
   import {
     bookingBootstrapQueryOptions,
-    bookingSlotsQueryOptions,
+    bookingCalendarQueryOptions,
     cancelBookingMutationOptions,
     createBookingMutationOptions,
   } from "./queries";
@@ -41,15 +41,21 @@
       preferredCourtId ?? bootstrap.data?.initialCourtId ?? null
     )
   );
-  const initialSlots = $derived(
+  const selectedCourt = $derived(allCourts.find((court) => court.id === selection.courtId));
+  const selectedMaxDate = $derived(
+    selectedCourt
+      ? addDaysToIsoDate(today, selectedCourt.bookingInnstillinger.dagerFremITid)
+      : today
+  );
+  const initialCalendar = $derived(
     bootstrap.data &&
       selection.courtId === bootstrap.data.initialCourtId &&
       selectedDate === bootstrap.data.date
-      ? bootstrap.data.slots
+      ? bootstrap.data.calendar
       : undefined
   );
-  const slots = createQuery(() =>
-    bookingSlotsQueryOptions(api, tenant.slug, selection.courtId, selectedDate, initialSlots)
+  const calendar = createQuery(() =>
+    bookingCalendarQueryOptions(api, tenant.slug, selection.courtId, selectedDate, initialCalendar)
   );
   const bookMutation = createMutation(() =>
     createBookingMutationOptions(api, queryClient, tenant.slug, selection.courtId, selectedDate)
@@ -77,6 +83,10 @@
           }
         : null
   );
+
+  $effect(() => {
+    if (selectedDate > selectedMaxDate) selectedDate = selectedMaxDate;
+  });
 
   function selectActivity(activityId: string) {
     preferredActivityId = activityId;
@@ -136,10 +146,12 @@
     {tomorrow}
     selectedActivityId={selection.activityId}
     selectedCourtId={selection.courtId}
-    slots={slots.data ?? []}
-    slotsLoading={slots.isPending && slots.isFetching}
-    slotsFetching={slots.isFetching}
-    slotsError={slots.isError && slots.error instanceof Error ? slots.error.message : null}
+    maxDate={selectedMaxDate}
+    slots={calendar.data?.slots ?? []}
+    bookingstatus={calendar.data?.bookingstatus ?? null}
+    slotsLoading={calendar.isPending && calendar.isFetching}
+    slotsFetching={calendar.isFetching}
+    slotsError={calendar.isError && calendar.error instanceof Error ? calendar.error.message : null}
     setupFetching={bootstrap.isFetching}
     authenticated={auth.state.status === "authenticated"}
     {mutationBusy}
@@ -149,6 +161,6 @@
     onDateChange={selectDate}
     onBook={bookSlot}
     onCancel={cancelSlot}
-    onSlotsRetry={() => void slots.refetch()}
+    onSlotsRetry={() => void calendar.refetch()}
   />
 {/if}

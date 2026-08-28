@@ -5,6 +5,6 @@ export const accountQueryKeys = {
   myBookings: (slug: string) => [...accountQueryKeys.booking(slug), "mine"] as const,
   myBookingsList: (slug: string, includeHistorical: boolean) =>
     [...accountQueryKeys.myBookings(slug), { includeHistorical }] as const,
-  bookingSlots: (slug: string, courtId: string, date: string) =>
-    [...accountQueryKeys.booking(slug), "slots", { courtId, date }] as const,
+  bookingCalendar: (slug: string, courtId: string, date: string) =>
+    [...accountQueryKeys.booking(slug), "calendar", { courtId, date }] as const,
 };

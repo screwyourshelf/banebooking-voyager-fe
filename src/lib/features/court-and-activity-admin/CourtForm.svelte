@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { BaneRespons, BookingRegelRespons, GrenRespons } from "$lib/contracts";
+  import type { BaneRespons, BookingInnstillingRespons, GrenRespons } from "$lib/contracts";
   import {
     Feedback,
     Form,
@@ -14,7 +14,7 @@
     SettingsStack,
     SettingsSwitchRow,
   } from "$lib/ui";
-  import BookingRulesFields from "./BookingRulesFields.svelte";
+  import BookingTimeFields from "./BookingTimeFields.svelte";
   import { EMPTY_BOOKING_OVERRIDE, type CourtDraft } from "./model";
 
   let {
@@ -51,7 +51,7 @@
   );
   const changed = (patch: Partial<CourtDraft>) => onChange({ ...draft, ...patch });
 
-  function changeBookingRule(
+  function changeBookingTime(
     field: keyof NonNullable<CourtDraft["overrides"]>,
     value: number | null
   ) {
@@ -124,9 +124,9 @@
             disabled={pending}
           />
           <SettingsSwitchRow
-            title="Egne bookingregler"
+            title="Avvik fra grenstandard"
             description={activityDefaults
-              ? `Avvik fra standard for ${activities.find((item) => item.id === draft.activityId)?.navn ?? "grenen"}.`
+              ? `Bruk andre tider eller bookinghorisont enn standarden for ${activities.find((item) => item.id === draft.activityId)?.navn ?? "grenen"}.`
               : "Velg en aktiv gren for å angi avvik."}
             checked={draft.overrides !== null}
             onCheckedChange={(enabled) =>
@@ -140,14 +140,14 @@
         <SettingsSection
           embedded
           eyebrow="Avvik"
-          title="Bookingregler"
-          description="Bare aktiver verdiene som skal avvike fra grenens standard."
+          title="Tider og bookinghorisont"
+          description="Kvotene gjelder hele grenen og kan ikke endres per bane."
         >
           <SettingsPanel>
-            <BookingRulesFields
+            <BookingTimeFields
               values={draft.overrides}
-              defaults={activityDefaults as BookingRegelRespons}
-              onChange={changeBookingRule}
+              defaults={activityDefaults as BookingInnstillingRespons}
+              onChange={changeBookingTime}
               overridable
               disabled={pending}
             />

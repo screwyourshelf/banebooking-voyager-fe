@@ -38,8 +38,6 @@ describe("court and activity admin API", () => {
       aapningstid: "08:00",
       stengetid: null,
       slotLengdeMinutter: null,
-      maksPerDag: null,
-      maksTotalt: null,
       dagerFremITid: null,
     };
     const activityCreate = {
@@ -48,7 +46,7 @@ describe("court and activity admin API", () => {
       aapningstid: "07:00",
       stengetid: "22:00",
       maksPerDag: 2,
-      maksTotalt: 5,
+      maksKommende: 5,
       dagerFremITid: 7,
       slotLengdeMinutter: 60,
     };

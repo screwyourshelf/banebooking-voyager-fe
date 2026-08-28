@@ -43,7 +43,7 @@ describe("account mutations", () => {
     });
     expect(invalidate).toHaveBeenCalledWith({ queryKey: accountQueryKeys.myBookings("fjordvik") });
     expect(invalidate).toHaveBeenCalledWith({
-      queryKey: accountQueryKeys.bookingSlots("fjordvik", "court-1", "2026-08-25"),
+      queryKey: accountQueryKeys.bookingCalendar("fjordvik", "court-1", "2026-08-25"),
     });
     expect(context.previous).toHaveLength(2);
   });

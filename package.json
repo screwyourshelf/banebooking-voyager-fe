@@ -11,6 +11,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:e2e": "playwright test",
+    "test:e2e:visual": "playwright test --config playwright.visual.config.ts",
     "test:e2e:headed": "playwright test --headed",
     "performance:baseline": "PERFORMANCE_BASELINE=1 playwright test e2e/performance-baseline.spec.ts",
     "performance:backend-summary": "node scripts/summarize-performance-backend-log.mjs",

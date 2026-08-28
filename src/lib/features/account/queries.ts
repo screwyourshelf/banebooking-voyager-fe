@@ -58,7 +58,7 @@ export function cancelMyBookingMutationOptions(
       Promise.all([
         queryClient.invalidateQueries({ queryKey: mineKey }),
         queryClient.invalidateQueries({
-          queryKey: accountQueryKeys.bookingSlots(slug, variables.courtId, variables.date),
+          queryKey: accountQueryKeys.bookingCalendar(slug, variables.courtId, variables.date),
         }),
       ]),
     retry: false,

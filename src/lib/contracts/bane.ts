@@ -1,12 +1,10 @@
-import type { BookingRegelRespons } from "./klubb";
+import type { BookingInnstillingRespons } from "./booking-innstilling";
 
 // Response
 export type BaneBookingOverstyringRespons = {
   aapningstid: string | null;
   stengetid: string | null;
   slotLengdeMinutter: number | null;
-  maksPerDag: number | null;
-  maksTotalt: number | null;
   dagerFremITid: number | null;
 };
 
@@ -19,7 +17,7 @@ export type BaneRespons = {
   grenId: string;
   grenNavn: string;
   kapabiliteter: string[];
-  bookingInnstillinger: BookingRegelRespons;
+  bookingInnstillinger: BookingInnstillingRespons;
   harOverstyring: boolean;
   bookingOverstyring: BaneBookingOverstyringRespons | null;
 };
@@ -44,7 +42,5 @@ export type OppdaterBaneBookingInnstillingerForespørsel = {
   aapningstid: string | null;
   stengetid: string | null;
   slotLengdeMinutter: number | null;
-  maksPerDag: number | null;
-  maksTotalt: number | null;
   dagerFremITid: number | null;
 };

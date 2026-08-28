@@ -1,18 +1,23 @@
 import { describe, expect, it } from "vitest";
 import { Kapabiliteter } from "$lib/domain";
-import { bookingRules, createActivity, createCourt, createSlot } from "./booking-test-data";
+import {
+  bookingSettings,
+  createActivity,
+  createBookingStatus,
+  createCourt,
+  createSlot,
+} from "./booking-test-data";
 import {
   addDaysToIsoDate,
   countAvailableBookingSlots,
   countPassedBookingSlots,
   getBookingDayChoice,
-  getBookingRuleCopy,
-  getBookingRuleFacts,
+  getBookingLimitCopy,
+  getBookingLimitFacts,
   getBookingSlotPresentation,
   getVisibleBookingSlots,
   markSlotAsAvailable,
   markSlotAsOwnBooking,
-  resolveBookingRules,
   resolveBookingSelection,
 } from "./model";
 
@@ -115,47 +120,36 @@ describe("booking slot presentation", () => {
   });
 });
 
-describe("booking rules and optimistic state", () => {
-  it("slår sammen baneoverstyring med grenens standardregler", () => {
-    const rules = resolveBookingRules(
-      createActivity(),
-      createCourt({
-        bookingOverstyring: {
-          aapningstid: null,
-          stengetid: "20:00",
-          maksPerDag: 1,
-          maksTotalt: null,
-          dagerFremITid: null,
-          slotLengdeMinutter: 30,
-        },
-      })
-    );
-
-    expect(rules).toEqual({
-      ...bookingRules,
-      stengetid: "20:00",
-      maksPerDag: 1,
-      slotLengdeMinutter: 30,
-    });
-    expect(rules && getBookingRuleFacts(rules).limits).toEqual([
+describe("booking limits and optimistic state", () => {
+  it("presenterer Gren-kvoter, personlig status og banens effektive tider", () => {
+    expect(getBookingLimitFacts(bookingSettings, null, "2026-09-06").quotas).toEqual([
       {
-        label: "På én dag",
-        value: "Opptil 1 booking",
+        label: "Per dag",
+        value: "Maks 2 bookinger",
       },
       {
-        label: "Aktive bookinger",
-        value: "Opptil 5 bookinger totalt",
-      },
-      {
-        label: "Hvor langt frem",
-        value: "Opptil 14 dager fra i dag",
+        label: "Kommende",
+        value: "Maks 5 bookinger",
       },
     ]);
-    expect(getBookingRuleCopy(createActivity(), createCourt())).toEqual({
-      scopeDescription:
-        "Reglene som vises gjelder når du booker Bane 1. Andre baner kan ha egne tider og bookinggrenser.",
-      limitsExplanation:
-        "Dine bookinger i tennis, også på andre baner, teller mot grensene som vises her. Passerte bookinger samme dag teller mot dagsgrensen. En booking teller som aktiv frem til sluttiden.",
+    expect(
+      getBookingLimitFacts(bookingSettings, createBookingStatus(), "2026-09-06").quotas
+    ).toEqual([
+      { label: "Valgt dag", value: "1 av 2 brukt · 1 igjen" },
+      { label: "Kommende", value: "3 av 5 brukt · 2 igjen" },
+    ]);
+    expect(getBookingLimitFacts(bookingSettings, null, "2026-09-06").times).toEqual([
+      { label: "Åpningstid", value: "08:00–22:00" },
+      { label: "Lengde per tid", value: "60 minutter" },
+      { label: "Kan bookes til", value: "06.09.2026" },
+    ]);
+    expect(getBookingLimitCopy(createActivity(), createCourt())).toEqual({
+      exemptExplanation: "Du har administratortilgang og er ikke begrenset av disse kvotene.",
+      quotaDescription: "Alle dine ordinære bookinger i tennis teller, også på andre baner.",
+      quotaExplanation:
+        "Passerte bookinger teller fortsatt på valgt dag. En kommende booking frigjør plass etter sluttiden.",
+      timeDescription: "Bane 1 kan ha andre tider og en annen bookinghorisont enn øvrige baner.",
+      timeExplanation: "Siste booking må være ferdig kl. 22:00.",
     });
   });
 

@@ -57,16 +57,12 @@ describe("court and activity drafts", () => {
         openingHour: 8,
         closingHour: null,
         slotMinutes: 45,
-        maxPerDay: null,
-        maxActive: 4,
         daysAhead: null,
       })
     ).toEqual({
       aapningstid: "08:00",
       stengetid: null,
       slotLengdeMinutter: 45,
-      maksPerDag: null,
-      maksTotalt: 4,
       dagerFremITid: null,
     });
   });

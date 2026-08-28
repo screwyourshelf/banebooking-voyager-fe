@@ -1,6 +1,11 @@
 <script lang="ts">
   import { CalendarAdd01Icon } from "@hugeicons/core-free-icons";
-  import type { BaneRespons, GrenRespons, KalenderSlotRespons } from "$lib/contracts";
+  import type {
+    BaneRespons,
+    BookingstatusRespons,
+    GrenRespons,
+    KalenderSlotRespons,
+  } from "$lib/contracts";
   import {
     Button,
     Collection,
@@ -16,7 +21,7 @@
     type CollectionChoiceContext,
     type CollectionControlGroup,
   } from "$lib/ui";
-  import BookingRulesDialog from "./BookingRulesDialog.svelte";
+  import BookingLimitsDialog from "./BookingLimitsDialog.svelte";
   import BookingSlotRow from "./BookingSlotRow.svelte";
   import {
     countAvailableBookingSlots,
@@ -32,6 +37,8 @@
     date,
     mutationBusy = false,
     mutationError,
+    bookingstatus,
+    maxDate,
     onActivityChange,
     onBook,
     onCancel,
@@ -54,6 +61,8 @@
     date: string;
     mutationBusy?: boolean;
     mutationError?: { description: string; title: string } | null;
+    bookingstatus: BookingstatusRespons | null;
+    maxDate: string;
     onActivityChange: (activityId: string) => void;
     onBook: (slot: KalenderSlotRespons, arrangementId?: string) => void;
     onCancel: (slot: KalenderSlotRespons) => void;
@@ -125,6 +134,7 @@
     presentation="booking"
     value={date}
     minValue={today}
+    maxValue={maxDate}
     {disabled}
     {selected}
     aria-label="Velg annen dato"
@@ -137,9 +147,11 @@
 {/snippet}
 
 {#snippet rulesAction()}
-  <BookingRulesDialog
+  <BookingLimitsDialog
     activity={selectedActivity}
     court={selectedCourt}
+    {bookingstatus}
+    {maxDate}
     disabled={!selectedActivity || !selectedCourt}
   />
 {/snippet}

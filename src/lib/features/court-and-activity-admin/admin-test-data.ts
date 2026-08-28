@@ -1,10 +1,10 @@
-import type { BaneRespons, BookingRegelRespons, GrenRespons } from "$lib/contracts";
+import type { BaneRespons, BookingInnstillingRespons, GrenRespons } from "$lib/contracts";
 
-const bookingRules: BookingRegelRespons = {
+const bookingSettings: BookingInnstillingRespons = {
   aapningstid: "07:00",
   stengetid: "22:00",
   maksPerDag: 2,
-  maksTotalt: 5,
+  maksKommende: 5,
   dagerFremITid: 7,
   slotLengdeMinutter: 60,
 };
@@ -17,7 +17,7 @@ export function createActivity(overrides: Partial<GrenRespons> = {}): GrenRespon
     banereglement: "Vis hensyn til andre spillere.",
     sortering: 0,
     aktiv: true,
-    bookingInnstillinger: bookingRules,
+    bookingInnstillinger: bookingSettings,
     kapabiliteter: ["grener:admin"],
     ...overrides,
   };
@@ -33,7 +33,7 @@ export function createCourt(overrides: Partial<BaneRespons> = {}): BaneRespons {
     grenId: "activity-1",
     grenNavn: "Tennis",
     kapabiliteter: ["baner:admin"],
-    bookingInnstillinger: bookingRules,
+    bookingInnstillinger: bookingSettings,
     harOverstyring: false,
     bookingOverstyring: null,
     ...overrides,

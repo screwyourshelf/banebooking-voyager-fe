@@ -12,7 +12,7 @@ export const activity: GrenRespons = {
     aapningstid: "08:00",
     dagerFremITid: 30,
     maksPerDag: 2,
-    maksTotalt: 4,
+    maksKommende: 4,
     slotLengdeMinutter: 60,
     stengetid: "10:00",
   },

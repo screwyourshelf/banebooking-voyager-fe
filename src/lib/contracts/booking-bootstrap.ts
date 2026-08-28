@@ -1,6 +1,6 @@
 import type { BaneRespons } from "./bane";
 import type { GrenRespons } from "./gren";
-import type { KalenderSlotRespons } from "./kalender-slot";
+import type { KalenderRespons } from "./kalender-slot";
 
 export type BookingBootstrapRespons = {
   grener: GrenRespons[];
@@ -8,5 +8,5 @@ export type BookingBootstrapRespons = {
   valgtGrenId: string | null;
   valgtBaneId: string | null;
   dato: string;
-  kalenderSlots: KalenderSlotRespons[];
+  kalender: KalenderRespons;
 };

@@ -1,11 +1,13 @@
 import type {
   BaneRespons,
-  BookingRegelRespons,
+  BookingInnstillingRespons,
+  BookingstatusRespons,
   GrenRespons,
   KalenderSlotRespons,
   OpprettBookingForespørsel,
   SlotStatus,
 } from "$lib/contracts";
+import { formatDatoKort } from "$lib/domain";
 import {
   erSlotBooket,
   grupperSlots,
@@ -35,14 +37,17 @@ export type BookingSlotPresentation = {
   title?: string;
 };
 
-export type BookingRuleFacts = {
-  limits: Array<{ label: string; value: string }>;
+export type BookingLimitFacts = {
+  quotas: Array<{ label: string; value: string }>;
   times: Array<{ label: string; value: string }>;
 };
 
-export type BookingRuleCopy = {
-  limitsExplanation: string;
-  scopeDescription: string;
+export type BookingLimitCopy = {
+  exemptExplanation: string;
+  quotaDescription: string;
+  quotaExplanation: string;
+  timeDescription: string;
+  timeExplanation: string;
 };
 
 export function resolveBookingSelection(
@@ -142,59 +147,59 @@ export function addDaysToIsoDate(date: string, days: number) {
   return `${resultYear}-${resultMonth}-${resultDay}`;
 }
 
-export function resolveBookingRules(
-  activity: GrenRespons | undefined,
-  court: BaneRespons | undefined
-): BookingRegelRespons | null {
-  const standard = court?.bookingInnstillinger ?? activity?.bookingInnstillinger;
-  if (!standard) return null;
-  const override = court?.bookingOverstyring;
-  if (!override) return standard;
-
+export function getBookingLimitFacts(
+  settings: BookingInnstillingRespons,
+  status: BookingstatusRespons | null,
+  maxDate: string
+): BookingLimitFacts {
   return {
-    aapningstid: override.aapningstid ?? standard.aapningstid,
-    stengetid: override.stengetid ?? standard.stengetid,
-    maksPerDag: override.maksPerDag ?? standard.maksPerDag,
-    maksTotalt: override.maksTotalt ?? standard.maksTotalt,
-    dagerFremITid: override.dagerFremITid ?? standard.dagerFremITid,
-    slotLengdeMinutter: override.slotLengdeMinutter ?? standard.slotLengdeMinutter,
-  };
-}
-
-export function getBookingRuleFacts(rules: BookingRegelRespons): BookingRuleFacts {
-  return {
-    limits: [
-      {
-        label: "På én dag",
-        value: `Opptil ${formatCount(rules.maksPerDag, "booking", "bookinger")}`,
-      },
-      {
-        label: "Aktive bookinger",
-        value: `Opptil ${formatCount(rules.maksTotalt, "booking", "bookinger")} totalt`,
-      },
-      {
-        label: "Hvor langt frem",
-        value: `Opptil ${formatCount(rules.dagerFremITid, "dag", "dager")} fra i dag`,
-      },
-    ],
+    quotas: status
+      ? [
+          {
+            label: "Valgt dag",
+            value: formatQuotaUsage(
+              status.bookingerPaaDato,
+              status.maksPerDag,
+              status.gjenstaaendePaaDato
+            ),
+          },
+          {
+            label: "Kommende",
+            value: formatQuotaUsage(
+              status.kommendeBookinger,
+              status.maksKommende,
+              status.gjenstaaendeKommende
+            ),
+          },
+        ]
+      : [
+          {
+            label: "Per dag",
+            value: `Maks ${formatCount(settings.maksPerDag, "booking", "bookinger")}`,
+          },
+          {
+            label: "Kommende",
+            value: `Maks ${formatCount(settings.maksKommende, "booking", "bookinger")}`,
+          },
+        ],
     times: [
-      { label: "Åpningstid", value: `${rules.aapningstid}–${rules.stengetid}` },
-      { label: "Varighet", value: `${rules.slotLengdeMinutter} minutter` },
+      { label: "Åpningstid", value: `${settings.aapningstid}–${settings.stengetid}` },
+      { label: "Lengde per tid", value: `${settings.slotLengdeMinutter} minutter` },
+      { label: "Kan bookes til", value: formatDatoKort(status?.sisteBookbareDato ?? maxDate) },
     ],
   };
 }
 
-export function getBookingRuleCopy(
-  activity: GrenRespons,
-  court: BaneRespons | undefined
-): BookingRuleCopy {
+export function getBookingLimitCopy(activity: GrenRespons, court: BaneRespons): BookingLimitCopy {
   const activityName = activity.navn.toLocaleLowerCase("nb-NO");
 
   return {
-    scopeDescription: court
-      ? `Reglene som vises gjelder når du booker ${court.navn}. Andre baner kan ha egne tider og bookinggrenser.`
-      : `Reglene som vises er standardreglene for ${activityName}.`,
-    limitsExplanation: `Dine bookinger i ${activityName}, også på andre baner, teller mot grensene som vises her. Passerte bookinger samme dag teller mot dagsgrensen. En booking teller som aktiv frem til sluttiden.`,
+    exemptExplanation: "Du har administratortilgang og er ikke begrenset av disse kvotene.",
+    quotaDescription: `Alle dine ordinære bookinger i ${activityName} teller, også på andre baner.`,
+    quotaExplanation:
+      "Passerte bookinger teller fortsatt på valgt dag. En kommende booking frigjør plass etter sluttiden.",
+    timeDescription: `${court.navn} kan ha andre tider og en annen bookinghorisont enn øvrige baner.`,
+    timeExplanation: `Siste booking må være ferdig kl. ${court.bookingInnstillinger.stengetid}.`,
   };
 }
 
@@ -252,4 +257,8 @@ function getSlotTitle(slot: KalenderSlotRespons, status: SlotStatus, booked: boo
 
 function formatCount(value: number, singular: string, plural: string) {
   return `${value} ${value === 1 ? singular : plural}`;
+}
+
+function formatQuotaUsage(used: number, maximum: number, remaining: number) {
+  return `${used} av ${maximum} brukt · ${remaining} igjen`;
 }

@@ -43,15 +43,13 @@ type Court = {
     aapningstid: string;
     dagerFremITid: number;
     maksPerDag: number;
-    maksTotalt: number;
+    maksKommende: number;
     slotLengdeMinutter: number;
     stengetid: string;
   };
   bookingOverstyring: {
     aapningstid: string | null;
     dagerFremITid: number | null;
-    maksPerDag: number | null;
-    maksTotalt: number | null;
     slotLengdeMinutter: number | null;
     stengetid: string | null;
   } | null;
@@ -329,10 +327,10 @@ test("records the local API and full-stack baseline", async ({ browser, request 
       .getByLabel("Beskrivelse")
       .fill(`${cleanupCourt.beskrivelse} [performance baseline]`);
     if (!cleanupCourt.harOverstyring) {
-      await courtEditor.getByRole("switch", { name: "Egne bookingregler" }).click();
-      await courtEditor.getByRole("switch", { name: "Egen grense per dag" }).click();
+      await courtEditor.getByRole("switch", { name: "Avvik fra grenstandard" }).click();
+      await courtEditor.getByRole("switch", { name: "Egen åpningstid" }).click();
     } else {
-      const overrideSwitch = courtEditor.getByRole("switch", { name: "Egen grense per dag" });
+      const overrideSwitch = courtEditor.getByRole("switch", { name: "Egen åpningstid" });
       if (!(await overrideSwitch.isChecked())) await overrideSwitch.click();
     }
 
@@ -886,11 +884,11 @@ async function getBookableSlot(
   expect(response.ok()).toBe(true);
   const bootstrap = (await response.json()) as {
     baner: Court[];
-    kalenderSlots: CalendarSlot[];
+    kalender: { slots: CalendarSlot[] };
     valgtBaneId: string | null;
   };
   const court = bootstrap.baner.find((candidate) => candidate.id === bootstrap.valgtBaneId);
-  const slot = bootstrap.kalenderSlots.find(
+  const slot = bootstrap.kalender.slots.find(
     (candidate) =>
       !candidate.bookingId &&
       !candidate.erPassert &&
@@ -967,8 +965,6 @@ async function restoreCourt(request: APIRequestContext, session: DevelopmentSess
       data: court.bookingOverstyring ?? {
         aapningstid: null,
         dagerFremITid: null,
-        maksPerDag: null,
-        maksTotalt: null,
         slotLengdeMinutter: null,
         stengetid: null,
       },

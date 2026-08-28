@@ -1,8 +1,8 @@
-import { keepPreviousData, type QueryClient } from "@tanstack/svelte-query";
+import type { QueryClient } from "@tanstack/svelte-query";
 import type {
   BaneRespons,
   GrenRespons,
-  KalenderSlotRespons,
+  KalenderRespons,
   OpprettBookingForespørsel,
 } from "$lib/contracts";
 import { ApiError, type ApiClient } from "$lib/platform/api";
@@ -14,7 +14,7 @@ import {
   getBookingActivities,
   getBookingBootstrap,
   getBookingCourts,
-  getBookingSlots,
+  getBookingCalendar,
 } from "./api";
 import { markSlotAsAvailable, markSlotAsOwnBooking, resolveBookingSelection } from "./model";
 import { bookingQueryKeys } from "./query-keys";
@@ -25,7 +25,7 @@ export type BookingInitialData = {
   date: string;
   initialCourtId: string;
   initialActivityId: string;
-  slots: KalenderSlotRespons[];
+  calendar: KalenderRespons;
   source: "bootstrap" | "fallback";
 };
 
@@ -34,7 +34,7 @@ export type CancelBookingVariables = {
 };
 
 type OptimisticBookingContext = {
-  previousSlots: KalenderSlotRespons[] | undefined;
+  previousCalendar: KalenderRespons | undefined;
 };
 
 export function bookingBootstrapQueryOptions(
@@ -53,26 +53,30 @@ export function bookingBootstrapQueryOptions(
   };
 }
 
-export function bookingSlotsQueryOptions(
+export function bookingCalendarQueryOptions(
   api: ApiClient,
   slug: string,
   courtId: string,
   date: string,
-  initialData?: KalenderSlotRespons[]
+  initialData?: KalenderRespons
 ) {
   return {
     meta: tenantQueryMeta(slug, "booking-slots"),
-    queryKey: bookingQueryKeys.slots(slug, courtId, date),
+    queryKey: bookingQueryKeys.calendar(slug, courtId, date),
     queryFn: ({ signal }: { signal: AbortSignal }) =>
-      getBookingSlots(api, slug, courtId, date, signal),
+      getBookingCalendar(api, slug, courtId, date, signal),
     enabled: Boolean(courtId && date),
     initialData,
-    placeholderData: keepPreviousData,
+    placeholderData: retainPreviousSlotsWithoutStatus,
     refetchInterval: 60_000,
     refetchIntervalInBackground: false,
     refetchOnWindowFocus: true,
     staleTime: 5_000,
   };
+}
+
+function retainPreviousSlotsWithoutStatus(previous: KalenderRespons | undefined) {
+  return previous ? { slots: previous.slots, bookingstatus: null } : undefined;
 }
 
 export function activeArrangementsQueryOptions(
@@ -98,17 +102,17 @@ export function createBookingMutationOptions(
   courtId: string,
   date: string
 ) {
-  const queryKey = bookingQueryKeys.slots(slug, courtId, date);
+  const queryKey = bookingQueryKeys.calendar(slug, courtId, date);
 
   return {
     mutationFn: (request: OpprettBookingForespørsel) => createBooking(api, slug, request),
     onMutate: async (request: OpprettBookingForespørsel): Promise<OptimisticBookingContext> => {
       await queryClient.cancelQueries({ queryKey });
-      const previousSlots = queryClient.getQueryData<KalenderSlotRespons[]>(queryKey);
-      queryClient.setQueryData<KalenderSlotRespons[]>(queryKey, (slots = []) =>
-        markSlotAsOwnBooking(slots, request)
+      const previousCalendar = queryClient.getQueryData<KalenderRespons>(queryKey);
+      queryClient.setQueryData<KalenderRespons>(queryKey, (calendar) =>
+        calendar ? { ...calendar, slots: markSlotAsOwnBooking(calendar.slots, request) } : calendar
       );
-      return { previousSlots };
+      return { previousCalendar };
     },
     onError: (
       _error: Error,
@@ -127,17 +131,17 @@ export function cancelBookingMutationOptions(
   courtId: string,
   date: string
 ) {
-  const queryKey = bookingQueryKeys.slots(slug, courtId, date);
+  const queryKey = bookingQueryKeys.calendar(slug, courtId, date);
 
   return {
     mutationFn: ({ bookingId }: CancelBookingVariables) => cancelBooking(api, slug, bookingId),
     onMutate: async ({ bookingId }: CancelBookingVariables): Promise<OptimisticBookingContext> => {
       await queryClient.cancelQueries({ queryKey });
-      const previousSlots = queryClient.getQueryData<KalenderSlotRespons[]>(queryKey);
-      queryClient.setQueryData<KalenderSlotRespons[]>(queryKey, (slots = []) =>
-        markSlotAsAvailable(slots, bookingId)
+      const previousCalendar = queryClient.getQueryData<KalenderRespons>(queryKey);
+      queryClient.setQueryData<KalenderRespons>(queryKey, (calendar) =>
+        calendar ? { ...calendar, slots: markSlotAsAvailable(calendar.slots, bookingId) } : calendar
       );
-      return { previousSlots };
+      return { previousCalendar };
     },
     onError: (
       _error: Error,
@@ -169,7 +173,7 @@ export async function loadInitialBookingData(
       date: bootstrap.dato,
       initialActivityId: selection.activityId,
       initialCourtId: selection.courtId,
-      slots: bootstrap.kalenderSlots,
+      calendar: bootstrap.kalender,
       source: "bootstrap",
     };
   } catch (error) {
@@ -181,9 +185,9 @@ export async function loadInitialBookingData(
     getBookingCourts(api, slug, signal),
   ]);
   const selection = resolveBookingSelection(activities, courts, null, null);
-  const slots = selection.courtId
-    ? await getBookingSlots(api, slug, selection.courtId, date, signal)
-    : [];
+  const calendar = selection.courtId
+    ? await getBookingCalendar(api, slug, selection.courtId, date, signal)
+    : { slots: [], bookingstatus: null };
 
   return {
     activities,
@@ -191,7 +195,7 @@ export async function loadInitialBookingData(
     date,
     initialActivityId: selection.activityId,
     initialCourtId: selection.courtId,
-    slots,
+    calendar,
     source: "fallback",
   };
 }
@@ -207,15 +211,15 @@ function invalidateBookingData(
   date: string
 ) {
   return Promise.all([
-    queryClient.invalidateQueries({ queryKey: bookingQueryKeys.slots(slug, courtId, date) }),
+    queryClient.invalidateQueries({ queryKey: bookingQueryKeys.calendar(slug, courtId, date) }),
     queryClient.invalidateQueries({ queryKey: bookingQueryKeys.mine(slug) }),
   ]);
 }
 
 function restorePreviousSlots(
   queryClient: QueryClient,
-  queryKey: ReturnType<typeof bookingQueryKeys.slots>,
+  queryKey: ReturnType<typeof bookingQueryKeys.calendar>,
   context: OptimisticBookingContext | undefined
 ) {
-  if (context?.previousSlots) queryClient.setQueryData(queryKey, context.previousSlots);
+  if (context?.previousCalendar) queryClient.setQueryData(queryKey, context.previousCalendar);
 }

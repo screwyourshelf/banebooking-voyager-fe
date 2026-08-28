@@ -9,10 +9,10 @@ describe("booking query keys", () => {
       "bootstrap",
       { date: "2026-08-23", userIdentity: "anonymous" },
     ]);
-    expect(bookingQueryKeys.slots("fjordvik", "court-1", "2026-08-23")).toEqual([
+    expect(bookingQueryKeys.calendar("fjordvik", "court-1", "2026-08-23")).toEqual([
       "booking",
       { slug: "fjordvik" },
-      "slots",
+      "calendar",
       { courtId: "court-1", date: "2026-08-23" },
     ]);
     expect(bookingQueryKeys.mine("fjordvik")).toEqual(["booking", { slug: "fjordvik" }, "mine"]);

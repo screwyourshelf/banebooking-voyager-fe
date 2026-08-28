@@ -1,6 +1,7 @@
 import type { Page, Route } from "@playwright/test";
 import {
   createActivity,
+  createBookingStatus,
   createBootstrap,
   createCourt,
   createSlot,
@@ -115,13 +116,20 @@ const bookingSlots = [
 ];
 
 const bookingBootstrap = createBootstrap({
-  klubb: club,
   grener: [tennis, padel],
   baner: [centreCourt, parkCourt, padelCourt],
   valgtGrenId: tennis.id,
   valgtBaneId: centreCourt.id,
   dato: bookingDate,
-  kalenderSlots: bookingSlots,
+  kalender: {
+    slots: bookingSlots,
+    bookingstatus: createBookingStatus({
+      grenId: tennis.id,
+      baneId: centreCourt.id,
+      dato: bookingDate,
+      sisteBookbareDato: "2026-09-06",
+    }),
+  },
 });
 
 const adminUsers = [
@@ -164,6 +172,27 @@ export async function installStylingReferenceFixtures(
   page: Page,
   options: StylingReferenceFixtureOptions = {}
 ) {
+  await page.route("**/api/dev-auth/login", async (route) => {
+    const payload = route.request().postDataJSON() as { profile?: DevelopmentProfile } | null;
+    const profile = payload?.profile ?? options.profile ?? "medlem";
+    await route.fulfill({
+      json: {
+        accessToken: `visual-${profile}-token`,
+        expiresAt: "2099-12-31T23:59:59Z",
+        user: {
+          developmentProfile: profile,
+          email: `${profile}@example.test`,
+          id: `visual-${profile}`,
+          name:
+            profile === "admin"
+              ? "Utvikling Administrator"
+              : profile === "utvidet"
+                ? "Utvikling Utvidet"
+                : "Utvikling Medlem",
+        },
+      },
+    });
+  });
   await page.route(`**${clubApiPath}**`, async (route) => {
     await fulfillClubRequest(route, options);
   });
@@ -193,7 +222,7 @@ async function fulfillClubRequest(route: Route, options: StylingReferenceFixture
     return;
   }
   if (resource === "/kalender") {
-    await route.fulfill({ json: bookingSlots });
+    await route.fulfill({ json: bookingBootstrap.kalender });
     return;
   }
   if (resource === "/grener") {

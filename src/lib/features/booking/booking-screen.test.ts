@@ -8,7 +8,7 @@ import type { BookingBootstrapRespons } from "$lib/contracts";
 import { Kapabiliteter } from "$lib/domain";
 import { ApiError, type ApiClient } from "$lib/platform/api";
 import BookingScreenFixture from "./BookingScreenFixture.test.svelte";
-import { createBootstrap, createSlot } from "./booking-test-data";
+import { createBookingStatus, createBootstrap, createSlot } from "./booking-test-data";
 
 const axeOptions: axe.RunOptions = {
   rules: { "color-contrast": { enabled: false } },
@@ -43,7 +43,7 @@ function renderBooking(
 ) {
   const request = vi.fn(async (path: string, options?: { method?: string }) => {
     if (path.includes("booking-bootstrap")) return bootstrap;
-    if (path.includes("/kalender?")) return bootstrap.kalenderSlots;
+    if (path.includes("/kalender?")) return bootstrap.kalender;
     if (path.includes("/arrangement/aktive?")) return activeArrangements;
     if (options?.method === "POST") {
       if (postError) throw postError;
@@ -62,13 +62,15 @@ function renderBooking(
 describe("booking screen", () => {
   it("viser bootstrapdata, fysisk status, vær og regler uten anonyme handlinger", async () => {
     const bootstrap = createBootstrap({
-      kalenderSlots: [
-        createSlot({
-          kapabiliteter: [Kapabiliteter.booking.book],
-          værSymbol: "fair_day",
-          temperatur: 18.4,
-        }),
-      ],
+      kalender: {
+        slots: [
+          createSlot({
+            kapabiliteter: [Kapabiliteter.booking.book],
+            værSymbol: "fair_day",
+            temperatur: 18.4,
+          }),
+        ],
+      },
     });
     const { request, result } = renderBooking(bootstrap);
 
@@ -84,29 +86,41 @@ describe("booking screen", () => {
       { auth: "optional", signal: expect.any(AbortSignal) }
     );
 
-    await fireEvent.click(screen.getByRole("button", { name: "Bookingregler" }));
-    const rulesDialog = screen.getByRole("dialog", { name: "Bookingregler for Bane 1" });
-    expect(rulesDialog).toHaveTextContent("Opptil 2 bookinger");
-    expect(rulesDialog).toHaveTextContent("Passerte bookinger samme dag teller mot dagsgrensen.");
-    expect(rulesDialog).toHaveTextContent("En booking teller som aktiv frem til sluttiden.");
-    expect(rulesDialog).toHaveTextContent(
-      "Reglene som vises gjelder når du booker Bane 1. Andre baner kan ha egne tider og bookinggrenser."
+    await fireEvent.click(screen.getByRole("button", { name: "Grenser og tider" }));
+    const limitsDialog = screen.getByRole("dialog", { name: "Grenser og tider for Bane 1" });
+    expect(limitsDialog).toHaveTextContent("Maks 2 bookinger");
+    expect(limitsDialog).toHaveTextContent(
+      "Alle dine ordinære bookinger i tennis teller, også på andre baner."
     );
-    expect(rulesDialog).toHaveTextContent(
-      "Dine bookinger i tennis, også på andre baner, teller mot grensene som vises her."
-    );
-    expect(rulesDialog).not.toHaveTextContent("arrangement");
+    expect(limitsDialog).toHaveTextContent("Siste booking må være ferdig kl. 22:00.");
+    expect(limitsDialog).not.toHaveTextContent("arrangement");
     expect((await axe.run(result.container, axeOptions)).violations).toEqual([]);
+  });
+
+  it("viser innlogget medlems personlige bookingstatus fra kalenderresponsen", async () => {
+    const bootstrap = createBootstrap({
+      kalender: { bookingstatus: createBookingStatus() },
+    });
+    renderBooking(bootstrap, { authenticated: true });
+
+    await fireEvent.click(await screen.findByRole("button", { name: "Grenser og tider" }));
+    const dialog = screen.getByRole("dialog", { name: "Grenser og tider for Bane 1" });
+    expect(dialog).toHaveTextContent("Din status i Tennis");
+    expect(dialog).toHaveTextContent("1 av 2 brukt · 1 igjen");
+    expect(dialog).toHaveTextContent("3 av 5 brukt · 2 igjen");
+    expect(dialog).toHaveTextContent("En kommende booking frigjør plass etter sluttiden.");
   });
 
   it("booker en kapabilitetsstyrt slot og sender eksakt request", async () => {
     const bootstrap = createBootstrap({
-      kalenderSlots: [
-        createSlot({
-          dato: createBootstrap().dato,
-          kapabiliteter: [Kapabiliteter.booking.book],
-        }),
-      ],
+      kalender: {
+        slots: [
+          createSlot({
+            dato: createBootstrap().dato,
+            kapabiliteter: [Kapabiliteter.booking.book],
+          }),
+        ],
+      },
     });
     const { request } = renderBooking(bootstrap, { authenticated: true });
     const bookButton = await screen.findByRole("button", { name: "Book tiden 10:00 til 11:00" });
@@ -129,7 +143,7 @@ describe("booking screen", () => {
 
   it("ruller tilbake en avvist optimistisk booking og viser vedvarende inline-feil", async () => {
     const bootstrap = createBootstrap({
-      kalenderSlots: [createSlot({ kapabiliteter: [Kapabiliteter.booking.book] })],
+      kalender: { slots: [createSlot({ kapabiliteter: [Kapabiliteter.booking.book] })] },
     });
     renderBooking(bootstrap, {
       authenticated: true,
@@ -146,16 +160,18 @@ describe("booking screen", () => {
 
   it("avbestiller egen tid fra den utvidede slotraden", async () => {
     const bootstrap = createBootstrap({
-      kalenderSlots: [
-        createSlot({
-          bookingId: "booking-1",
-          bookingStartTid: "10:00",
-          bookingSluttTid: "11:00",
-          booketAv: "Ada",
-          erEier: true,
-          kapabiliteter: [Kapabiliteter.booking.fjern],
-        }),
-      ],
+      kalender: {
+        slots: [
+          createSlot({
+            bookingId: "booking-1",
+            bookingStartTid: "10:00",
+            bookingSluttTid: "11:00",
+            booketAv: "Ada",
+            erEier: true,
+            kapabiliteter: [Kapabiliteter.booking.fjern],
+          }),
+        ],
+      },
     });
     const { request } = renderBooking(bootstrap, { authenticated: true });
 
@@ -172,16 +188,18 @@ describe("booking screen", () => {
 
   it("kobler en opptatt tid til et valgt aktivt arrangement", async () => {
     const bootstrap = createBootstrap({
-      kalenderSlots: [
-        createSlot({
-          bookingId: "booking-1",
-          bookingStartTid: "10:00",
-          bookingSluttTid: "11:00",
-          booketAv: "Ada",
-          erEier: true,
-          kapabiliteter: [Kapabiliteter.booking.kobleTilArrangement],
-        }),
-      ],
+      kalender: {
+        slots: [
+          createSlot({
+            bookingId: "booking-1",
+            bookingStartTid: "10:00",
+            bookingSluttTid: "11:00",
+            booketAv: "Ada",
+            erEier: true,
+            kapabiliteter: [Kapabiliteter.booking.kobleTilArrangement],
+          }),
+        ],
+      },
     });
     const { request } = renderBooking(bootstrap, {
       authenticated: true,
@@ -237,13 +255,13 @@ describe("booking screen", () => {
         baner: [],
         valgtGrenId: null,
         valgtBaneId: null,
-        kalenderSlots: [],
+        kalender: { slots: [] },
       })
     );
     expect(await screen.findByText("Booking er ikke satt opp")).toBeVisible();
     noSetup.unmount();
 
-    renderBooking(createBootstrap({ kalenderSlots: [] }));
+    renderBooking(createBootstrap({ kalender: { slots: [] } }));
     expect(await screen.findByText("Ingen tider denne dagen")).toBeVisible();
   });
 });

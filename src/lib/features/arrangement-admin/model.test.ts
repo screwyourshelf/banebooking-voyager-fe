@@ -19,7 +19,7 @@ function court(id: string, slotLengthMinutes: number): BaneRespons {
       aapningstid: "08:00",
       dagerFremITid: 30,
       maksPerDag: 2,
-      maksTotalt: 4,
+      maksKommende: 4,
       slotLengdeMinutter: slotLengthMinutes,
       stengetid: "10:00",
     },
