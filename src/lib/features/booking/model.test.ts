@@ -106,6 +106,37 @@ describe("booking slot presentation", () => {
     });
   });
 
+  it("forklarer konkret hvilken bookingkvote som hindrer booking", () => {
+    const unavailable = createSlot({ kapabiliteter: [] });
+
+    expect(
+      getBookingSlotPresentation(unavailable, true, createBookingStatus({ gjenstaaendePaaDato: 0 }))
+        .cannotBookExplanation
+    ).toBe("Du har nådd dagsgrensen på 2 bookinger.");
+    expect(
+      getBookingSlotPresentation(
+        unavailable,
+        true,
+        createBookingStatus({ gjenstaaendeKommende: 0 })
+      ).cannotBookExplanation
+    ).toBe("Du har nådd grensen på 5 kommende bookinger.");
+    expect(
+      getBookingSlotPresentation(
+        unavailable,
+        true,
+        createBookingStatus({ gjenstaaendePaaDato: 0, gjenstaaendeKommende: 0 })
+      ).cannotBookExplanation
+    ).toBe("Du har nådd både dagsgrensen og grensen for kommende bookinger.");
+  });
+
+  it("gjetter ikke på kvoteårsak når statusen ikke forklarer sperren", () => {
+    const unavailable = createSlot({ kapabiliteter: [] });
+
+    expect(
+      getBookingSlotPresentation(unavailable, true, createBookingStatus()).cannotBookExplanation
+    ).toBe("Kontoen din har ikke tilgang til å booke denne tiden akkurat nå.");
+  });
+
   it("grupperer fler-slotsbookinger og filtrerer passerte tider bare i dag", () => {
     const slots = [
       createSlot({ bookingId: "booking-1", erPassert: true }),

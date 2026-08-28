@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { KalenderSlotRespons } from "$lib/contracts";
+  import type { BookingstatusRespons, KalenderSlotRespons } from "$lib/contracts";
   import { Button, CollectionRow, DocumentFacts, ScheduleTime, Weather } from "$lib/ui";
   import ArrangementBookingDialog from "./ArrangementBookingDialog.svelte";
   import { getBookingSlotPresentation } from "./model";
@@ -7,6 +7,7 @@
   let {
     activityId,
     authenticated,
+    bookingstatus,
     busy = false,
     onBook,
     onCancel,
@@ -14,13 +15,14 @@
   }: {
     activityId: string;
     authenticated: boolean;
+    bookingstatus: BookingstatusRespons | null;
     busy?: boolean;
     onBook: (slot: KalenderSlotRespons, arrangementId?: string) => void;
     onCancel: (slot: KalenderSlotRespons) => void;
     slot: KalenderSlotRespons;
   } = $props();
 
-  const presentation = $derived(getBookingSlotPresentation(slot, authenticated));
+  const presentation = $derived(getBookingSlotPresentation(slot, authenticated, bookingstatus));
   const arrangementOwner = $derived(slot.arrangementTittel ? slot.booketAv?.trim() : null);
 </script>
 
@@ -52,8 +54,8 @@
   {#if arrangementOwner}
     <DocumentFacts items={[{ label: "Booket av", value: arrangementOwner }]} />
   {/if}
-  {#if presentation.cannotBook}
-    <p>Du kan ikke booke denne tiden akkurat nå. Maks antall bookinger kan være nådd.</p>
+  {#if presentation.cannotBookExplanation}
+    <p>{presentation.cannotBookExplanation}</p>
   {/if}
 {/snippet}
 

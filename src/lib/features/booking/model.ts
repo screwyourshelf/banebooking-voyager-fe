@@ -26,7 +26,7 @@ export type BookingSlotPresentation = {
   canBook: boolean;
   canCancel: boolean;
   canConnectToArrangement: boolean;
-  cannotBook: boolean;
+  cannotBookExplanation: string | null;
   category: { label: string; tone: "event" } | undefined;
   end: string;
   hasDetails: boolean;
@@ -75,7 +75,8 @@ export function resolveBookingSelection(
 
 export function getBookingSlotPresentation(
   slot: KalenderSlotRespons,
-  authenticated: boolean
+  authenticated: boolean,
+  bookingstatus: BookingstatusRespons | null = null
 ): BookingSlotPresentation {
   const can = (capability: string) => harHandling(slot.kapabiliteter, capability);
   const status = utledSlotStatus(slot, authenticated);
@@ -88,6 +89,7 @@ export function getBookingSlotPresentation(
     !booked &&
     !slot.arrangementTittel &&
     !can(Kapabiliteter.booking.book);
+  const cannotBookExplanation = cannotBook ? getCannotBookExplanation(slot, bookingstatus) : null;
   const hasPublicDetails = Boolean(slot.arrangementBeskrivelse?.trim());
   const hasArrangementOwner = Boolean(slot.arrangementTittel && slot.booketAv?.trim());
 
@@ -95,19 +97,42 @@ export function getBookingSlotPresentation(
     canBook: authenticated && !slot.erPassert && can(Kapabiliteter.booking.book),
     canCancel,
     canConnectToArrangement,
-    cannotBook,
+    cannotBookExplanation,
     category: slot.arrangementTittel ? { label: "Arrangement", tone: "event" } : undefined,
     end: (slot.bookingSluttTid ?? slot.slotSluttTid).slice(0, 5),
     hasDetails:
       hasPublicDetails ||
       hasArrangementOwner ||
-      (authenticated && (canConnectToArrangement || canCancel || cannotBook)),
+      (authenticated && (canConnectToArrangement || canCancel || cannotBookExplanation !== null)),
     key: getBookingSlotKey(slot),
     muted: slot.erPassert,
     start: (slot.bookingStartTid ?? slot.slotStartTid).slice(0, 5),
     status: getSlotStatusPresentation(status),
     title: getSlotTitle(slot, status, booked),
   };
+}
+
+function getCannotBookExplanation(slot: KalenderSlotRespons, status: BookingstatusRespons | null) {
+  if (!status || status.dato !== slot.dato || status.erUnntattKvoter) {
+    return "Kontoen din har ikke tilgang til å booke denne tiden akkurat nå.";
+  }
+
+  const hasReachedDailyLimit = status.gjenstaaendePaaDato === 0;
+  const hasReachedUpcomingLimit = status.gjenstaaendeKommende === 0;
+
+  if (hasReachedDailyLimit && hasReachedUpcomingLimit) {
+    return "Du har nådd både dagsgrensen og grensen for kommende bookinger.";
+  }
+
+  if (hasReachedDailyLimit) {
+    return `Du har nådd dagsgrensen på ${formatCount(status.maksPerDag, "booking", "bookinger")}.`;
+  }
+
+  if (hasReachedUpcomingLimit) {
+    return `Du har nådd grensen på ${formatCount(status.maksKommende, "kommende booking", "kommende bookinger")}.`;
+  }
+
+  return "Kontoen din har ikke tilgang til å booke denne tiden akkurat nå.";
 }
 
 export function getVisibleBookingSlots(
