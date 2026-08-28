@@ -1,7 +1,7 @@
 import { describe, expect, it, vi } from "vitest";
 import type { BrukerRespons, KlubbRespons } from "$lib/contracts";
 import type { ApiClient } from "$lib/platform/api";
-import { getBrukerWithCurrentTermsAcceptance, getKlubb } from "./api";
+import { getBrukerWithCurrentTermsAcceptance, getFeedStatus, getKlubb } from "./api";
 
 describe("session endpoints", () => {
   it("bruker typed tenantpath for klubb", async () => {
@@ -16,6 +16,19 @@ describe("session endpoints", () => {
 
     await expect(getKlubb(api, "askim-tennis", controller.signal)).resolves.toBe(klubb);
     expect(request).toHaveBeenCalledWith("klubb/askim-tennis", {
+      auth: "none",
+      signal: controller.signal,
+    });
+  });
+
+  it("henter bare feedstatusen som navigasjonen trenger", async () => {
+    const status = { antallNyheter: 4 };
+    const request = vi.fn().mockResolvedValue(status);
+    const api = { request } as unknown as ApiClient;
+    const controller = new AbortController();
+
+    await expect(getFeedStatus(api, "askim tennis", controller.signal)).resolves.toBe(status);
+    expect(request).toHaveBeenCalledWith("klubb/askim%20tennis/feed/status", {
       auth: "none",
       signal: controller.signal,
     });

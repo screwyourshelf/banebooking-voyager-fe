@@ -32,6 +32,13 @@
   }: Props = $props();
 
   const navigation = requireNavigationContext();
+  const accessibleLabel = $derived(
+    presentation === "icon" && badge?.accessibleLabel
+      ? `${label}, ${badge.accessibleLabel}`
+      : presentation === "icon"
+        ? label
+        : undefined
+  );
 </script>
 
 <li
@@ -64,7 +71,7 @@
     {type}
     {disabled}
     onclick={disabled ? undefined : onclick}
-    aria-label={presentation === "icon" ? label : undefined}
+    aria-label={accessibleLabel}
     aria-busy={busy || undefined}
   >
     {#if icon}
@@ -90,12 +97,13 @@
           badge.tone === "accent"
             ? "bg-status-warning-bg text-status-warning-text"
             : "bg-surface-subtle text-ink-soft",
-          navigation.layout === "bottom" &&
+          (navigation.layout === "bottom" || presentation === "icon") &&
             "absolute top-navigation-bottom-badge-top left-navigation-bottom-badge-left",
         ]}
         data-part="badge"
         data-tone={badge.tone ?? "neutral"}
-        aria-label={badge.accessibleLabel}>{badge.label}</span
+        aria-label={presentation === "icon" ? undefined : badge.accessibleLabel}
+        aria-hidden={presentation === "icon" ? "true" : undefined}>{badge.label}</span
       >
     {/if}
   </button>

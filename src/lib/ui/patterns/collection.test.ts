@@ -86,6 +86,26 @@ describe("public collection anatomy", () => {
     expect(onAction).toHaveBeenCalledOnce();
   });
 
+  it("gir innholdsforhåndsvisninger flerlinnet tekst og handling under teksten", () => {
+    const { container } = render(CollectionFixture, {
+      onAction: () => undefined,
+      onOpen: () => undefined,
+    });
+    const previewRow = [...container.querySelectorAll('[data-ui="collection-row"]')].at(-1);
+
+    expect(previewRow?.querySelector('[data-part="title-text"]')).toHaveClass(
+      "line-clamp-collection-row-title"
+    );
+    expect(previewRow?.querySelector('[data-part="description"]')).toHaveClass(
+      "line-clamp-collection-row-description"
+    );
+    expect(previewRow).toHaveClass(
+      "collection-row-surface:flex-col",
+      "collection-row-surface:items-stretch"
+    );
+    expect(previewRow?.querySelector('[data-part="action"]')).toHaveClass("justify-end", "pt-sm");
+  });
+
   it("gives date groups a visible heading and a labelled nested list", () => {
     render(CollectionFixture, {
       grouped: true,

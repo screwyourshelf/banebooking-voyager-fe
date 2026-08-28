@@ -1,9 +1,21 @@
-import type { AksepterVilkårForespørsel, BrukerRespons, KlubbRespons } from "$lib/contracts";
+import type {
+  AksepterVilkårForespørsel,
+  BrukerRespons,
+  FeedStatusRespons,
+  KlubbRespons,
+} from "$lib/contracts";
 import { AKTIV_VILKAAR } from "$lib/domain";
 import type { ApiClient } from "$lib/platform/api";
 
 export function getKlubb(api: ApiClient, slug: string, signal?: AbortSignal) {
   return api.request<KlubbRespons>(`klubb/${encodeURIComponent(slug)}`, { auth: "none", signal });
+}
+
+export function getFeedStatus(api: ApiClient, slug: string, signal?: AbortSignal) {
+  return api.request<FeedStatusRespons>(`klubb/${encodeURIComponent(slug)}/feed/status`, {
+    auth: "none",
+    signal,
+  });
 }
 
 /**

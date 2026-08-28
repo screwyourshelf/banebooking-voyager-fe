@@ -51,6 +51,20 @@ test("public terms — desktop, dark", async ({ page, e2e }) => {
   await expectStableScreenshot(page, diagnostics, "public-terms-desktop-dark.png");
 });
 
+test("public news preview and navigation count — mobile, light", async ({ page, e2e }) => {
+  const diagnostics = await prepareReferenceSurface(page, {
+    newsCount: 3,
+    theme: "light",
+    viewport: mobile,
+  });
+  await page.goto(e2e.tenantPath("nyheter"));
+
+  await expectProductSurface(page, "Nyheter");
+  await expect(page.getByRole("heading", { name: "3 nyheter" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Nyheter, 3 publiserte nyheter" })).toBeVisible();
+  await expectStableScreenshot(page, diagnostics, "public-news-preview-mobile-light.png");
+});
+
 test("member account — desktop, light", async ({ page, e2e }) => {
   const diagnostics = await prepareReferenceSurface(page, {
     profile: "medlem",
@@ -260,6 +274,7 @@ async function prepareReferenceSurface(
   page: Page,
   options: {
     capabilities?: readonly string[];
+    newsCount?: number;
     profile?: DevelopmentProfile;
     theme: Theme;
     viewport: Viewport;

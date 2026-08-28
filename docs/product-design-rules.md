@@ -246,6 +246,9 @@ Regler:
 - Rader fyller beholderens bredde. Avstand legges mellom rader, ikke som tilfeldig horisontal marg.
 - Radius, ramme, flate og skygge kommer fra felles tokens.
 - Listepresentasjonen kan skifte fra kort til kompakte rader ut fra beholderbredde.
+- Innholdsforhåndsvisninger kan bruke radens navngitte `preview`-presentasjon. Den reserverer inntil
+  to linjer til tittelen og tre til beskrivelsen og plasserer en eventuell handling under teksten,
+  slik at smale flater ikke ofrer lesebredde til en sidestilt knapp.
 
 ### Tidslister
 

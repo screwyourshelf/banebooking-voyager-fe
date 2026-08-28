@@ -13,6 +13,7 @@ export const STYLING_REFERENCE_TIME = "2026-08-23T12:00:00+02:00";
 
 type StylingReferenceFixtureOptions = {
   capabilities?: readonly string[];
+  newsCount?: number;
   profile?: DevelopmentProfile;
 };
 
@@ -113,6 +114,30 @@ const bookingSlots = [
     slotSluttTid: "18:00",
     kapabiliteter: ["booking:book"],
   }),
+];
+
+const newsFeed = [
+  {
+    tittel: "Kurs og trening høsten 2026",
+    innhold:
+      "Medlemmer i Ås Tennisklubb kan delta på kurs og trening hos naboklubben på samme vilkår som før.",
+    lenke: "https://example.test/nyheter/kurs-og-trening",
+    publisertDato: "2026-08-22T00:00:00Z",
+  },
+  {
+    tittel: "Meld deg på klubbmesterskap i tennis – helgen 14.–16. august",
+    innhold:
+      "Vi ønsker alle medlemmer hjertelig velkommen til hyggelige tennisdager i klubbmesterskapet.",
+    lenke: "https://example.test/nyheter/klubbmesterskap",
+    publisertDato: "2026-07-11T00:00:00Z",
+  },
+  {
+    tittel: "Ås Tennisklubb fyller 50 år – bli med på jubileumsfeiring!",
+    innhold:
+      "Klubben inviterer medlemmer, venner, naboer og alle nysgjerrige til en hyggelig jubileumsdag.",
+    lenke: "https://example.test/nyheter/jubileum",
+    publisertDato: "2026-06-04T00:00:00Z",
+  },
 ];
 
 const bookingBootstrap = createBootstrap({
@@ -219,6 +244,14 @@ async function fulfillClubRequest(route: Route, options: StylingReferenceFixture
   }
   if (resource === "/booking-bootstrap") {
     await route.fulfill({ json: bookingBootstrap });
+    return;
+  }
+  if (resource === "/feed/status") {
+    await route.fulfill({ json: { antallNyheter: options.newsCount ?? 0 } });
+    return;
+  }
+  if (resource === "/feed") {
+    await route.fulfill({ json: newsFeed });
     return;
   }
   if (resource === "/kalender") {

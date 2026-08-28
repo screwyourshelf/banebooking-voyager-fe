@@ -26,7 +26,7 @@ const axeOptions: axe.RunOptions = {
   rules: { "color-contrast": { enabled: false } },
 };
 
-function renderFixture(options: { authenticated?: boolean } = {}) {
+function renderFixture(options: { authenticated?: boolean; newsCount?: number } = {}) {
   const callbacks = { onSignOut: vi.fn(), onTheme: vi.fn() };
   return { callbacks, result: render(SessionNavigationFixture, { ...callbacks, ...options }) };
 }
@@ -106,6 +106,23 @@ describe("session navigation composition", () => {
     expect(
       Array.from(mobile.querySelectorAll("a, button")).map((item) => item.textContent?.trim())
     ).toEqual(["Book", "Arrangementer", "Mer"]);
+  });
+
+  it("viser samme nyhetstelling i desktop- og mobilnavigasjonen", () => {
+    renderFixture({ newsCount: 4 });
+    const desktop = screen.getByRole("navigation", { name: "Hovednavigasjon" });
+    const mobileTools = screen.getByRole("navigation", { name: "Mobilverktøy" });
+
+    expect(within(desktop).getByLabelText("4 publiserte nyheter")).toHaveTextContent("4");
+    const mobileNews = within(mobileTools).getByRole("link", {
+      name: "Nyheter, 4 publiserte nyheter",
+    });
+    expect(mobileNews).toHaveAttribute("href", "/fjordvik/nyheter");
+    expect(mobileNews.querySelector('[data-part="badge"]')).toHaveClass(
+      "absolute",
+      "top-navigation-bottom-badge-top",
+      "left-navigation-bottom-badge-left"
+    );
   });
 
   it("uses tenant logos with the legacy webp and default fallbacks", async () => {

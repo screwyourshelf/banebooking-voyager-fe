@@ -5,3 +5,7 @@ export type FeedItemRespons = {
   lenke: string;
   publisertDato: string | null;
 };
+
+export type FeedStatusRespons = {
+  antallNyheter: number;
+};

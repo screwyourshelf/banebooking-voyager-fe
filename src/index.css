@@ -942,6 +942,18 @@
   content: "";
 }
 
+@utility line-clamp-collection-row-title {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+@utility line-clamp-collection-row-description {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+
 @utility min-w-select-content {
   min-width: max(
     var(--app-control-min-width),

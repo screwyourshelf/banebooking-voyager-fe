@@ -10,6 +10,7 @@ describe("session query keys", () => {
     await invalidateSessionBruker(queryClient, "fjordvik");
 
     expect(invalidate).toHaveBeenCalledWith({ queryKey: sessionQueryKeys.bruker("fjordvik") });
+    expect(sessionQueryKeys.feedStatus("fjordvik")).toEqual(["feed-status", { slug: "fjordvik" }]);
     expect(sessionQueryKeys.bruker("fjordvik")).toEqual(["bruker", { slug: "fjordvik" }]);
   });
 });
