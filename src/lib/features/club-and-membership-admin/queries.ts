@@ -25,7 +25,7 @@ export function membershipStatusQueryOptions(api: ApiClient, slug: string) {
 export function updateClubMutationOptions(api: ApiClient, queryClient: QueryClient, slug: string) {
   return {
     mutationFn: (request: OppdaterKlubbForespørsel) => updateClub(api, slug, request),
-    onSuccess: () => invalidateTenantResources(queryClient, slug, ["club"]),
+    onSuccess: () => invalidateTenantResources(queryClient, slug, ["club", "news"]),
     retry: false,
   };
 }

@@ -22,6 +22,7 @@
 {/snippet}
 
 <CollectionRow
+  contentPresentation="preview"
   meta={publishedDate ?? "Fra klubben"}
   title={item.tittel}
   description={summary || undefined}

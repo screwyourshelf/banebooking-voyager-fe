@@ -175,14 +175,16 @@ Sentrale API-er: `GET /klubb/{slug}/bookinger/mine?inkluderHistoriske=`,
   session finnes. Listen kan vise historikk, filtrere på gren, åpne en detalj fra
   `?arrangement={id}` og paginerer lokalt i puljer på ti.
 - Avlysning vises bare med `arrangement:avlys` og oppdaterer arrangementlisten etter resultatet.
-- Nyheter er en offentlig, lokalt paginert feed. Eksterne lenker åpnes i ny fane med sikker
-  relasjon.
+- Nyheter er en offentlig, lokalt paginert feed. Appskallet henter en separat, cachet feedstatus
+  når klubben har konfigurert feed og viser antall synlige nyheter ved nyhetslenken. Statusfeil og
+  null nyheter gir ingen badge og blokkerer ikke ordinære appflater. Nyhetsrader bruker en
+  flerlinnet forhåndsvisning, og eksterne lenker åpnes i ny fane med sikker relasjon.
 - Begge flater har geometribevarende loading, retrybar feil, tomtilstand og bakgrunnsrefresh.
   Arrangementfilter har i tillegg en egen filtrert tomtilstand med nullstilling.
 
 Sentrale API-er: `GET /offentlig/klubb/{slug}/arrangementer/visning`,
 `GET /klubb/{slug}/arrangementer`, `DELETE /klubb/{slug}/arrangement/{id}` og
-`GET /klubb/{slug}/feed`.
+`GET /klubb/{slug}/feed`, samt `GET /klubb/{slug}/feed/status` for navigasjonstellingen.
 
 ### Baner og grener
 

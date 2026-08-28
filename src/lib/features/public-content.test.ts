@@ -116,6 +116,13 @@ describe("public news", () => {
     expect(link).toHaveAttribute("href", "https://example.no/sak");
     expect(link).toHaveAttribute("target", "_blank");
     expect(link).toHaveAttribute("rel", "noopener noreferrer");
+    const firstNewsRow = screen.getByText("Nyhet 1").closest('[data-ui="collection-row"]');
+    expect(firstNewsRow?.querySelector('[data-part="title-text"]')).toHaveClass(
+      "line-clamp-collection-row-title"
+    );
+    expect(firstNewsRow?.querySelector('[data-part="description"]')).toHaveClass(
+      "line-clamp-collection-row-description"
+    );
     expect(screen.queryByText("Nyhet 12")).not.toBeInTheDocument();
     await fireEvent.click(screen.getByRole("button", { name: "Vis flere (2 gjenstår)" }));
     expect(screen.getByText("Nyhet 12")).toBeVisible();

@@ -26,11 +26,18 @@ export type AppNavigationIcon =
 
 export type AppNavigationItem = {
   active: boolean;
+  badge?: AppNavigationBadge;
   href: AppPath;
   icon: AppNavigationIcon;
   id: string;
   label: string;
   mobileLabel?: string;
+};
+
+type AppNavigationBadge = {
+  accessibleLabel: string;
+  label: string;
+  tone: "accent";
 };
 
 type AppNavigationSection = {
@@ -56,6 +63,7 @@ export type ReadyAppNavigationState = {
   loginHref: AppPath;
   mobilePrimary: AppNavigationItem[];
   mobileSecondary: AppNavigationSection[];
+  newsBadge?: AppNavigationBadge;
   newsHref: AppPath;
   status: "ready";
 };
@@ -72,6 +80,7 @@ type BuildAppNavigationStateInput = {
   basePath?: string;
   bruker: QueryState<BrukerRespons | null | undefined>;
   klubb: QueryState<KlubbRespons | undefined>;
+  newsCount?: number;
   pathname: string;
   tenant: TenantContext;
 };
@@ -195,6 +204,7 @@ export function buildAppNavigationState({
   basePath = "",
   bruker,
   klubb,
+  newsCount = 0,
   pathname,
   tenant,
 }: BuildAppNavigationStateInput): AppNavigationState {
@@ -217,8 +227,15 @@ export function buildAppNavigationState({
     return hasAnyRequiredCapability(bruker.data, requiredCapabilities);
   });
 
+  const newsBadge = buildNewsBadge(newsCount);
   const items = visibleDestinations.map((destination) =>
-    buildNavigationItem(destination, pathname, tenant, basePath)
+    buildNavigationItem(
+      destination,
+      pathname,
+      tenant,
+      basePath,
+      destination.id === "nyheter" ? newsBadge : undefined
+    )
   );
   const desktopSections = buildSections(items);
   const primaryIds = new Set(
@@ -251,6 +268,7 @@ export function buildAppNavigationState({
     mobilePrimary,
     mobileSecondary: buildSections(secondaryItems),
     loginHref: buildTenantPath(tenant, "login", basePath),
+    newsBadge,
     newsHref: buildTenantPath(tenant, "nyheter", basePath),
   };
 }
@@ -274,7 +292,8 @@ function buildNavigationItem(
   destination: NavigationDestination,
   pathname: string,
   tenant: TenantContext,
-  basePath: string
+  basePath: string,
+  badge?: AppNavigationBadge
 ): AppNavigationItem {
   const activePaths = destination.activeRelativePaths ?? [destination.relativePath];
 
@@ -284,9 +303,21 @@ function buildNavigationItem(
     label: destination.label,
     mobileLabel: destination.mobileLabel,
     icon: destination.icon,
+    badge,
     active: activePaths.some((path) =>
       pathsEqual(pathname, buildTenantPath(tenant, path, basePath))
     ),
+  };
+}
+
+function buildNewsBadge(count: number): AppNavigationBadge | undefined {
+  const normalizedCount = Number.isFinite(count) ? Math.max(0, Math.floor(count)) : 0;
+  if (normalizedCount === 0) return undefined;
+
+  return {
+    label: String(normalizedCount),
+    accessibleLabel: `${normalizedCount} ${normalizedCount === 1 ? "publisert nyhet" : "publiserte nyheter"}`,
+    tone: "accent",
   };
 }
 

@@ -1391,6 +1391,8 @@
         "justify-self-stretch",
         "left-0",
         "left-1/2",
+        "line-clamp-collection-row-description",
+        "line-clamp-collection-row-title",
         "list-decimal",
         "list-disc",
         "list-none",

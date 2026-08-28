@@ -19,6 +19,7 @@ function buildReady(
   options: {
     auth?: AuthState;
     capabilities?: string[];
+    newsCount?: number;
     pathname?: string;
     tenant?: TenantContext;
     basePath?: string;
@@ -44,6 +45,7 @@ function buildReady(
       status: "success",
       data: { slug: "fjordvik", navn: "Fjordvik Tennisklubb", feedSynligAntallDager: 30 },
     },
+    newsCount: options.newsCount,
     pathname: options.pathname ?? "/fjordvik",
     tenant: options.tenant ?? routeTenant,
   });
@@ -99,6 +101,21 @@ describe("app navigation model", () => {
       state.desktopSections.flatMap((section) => section.items.map((item) => item.id))
     ).toEqual(["booking", "arrangementer", "nyheter"]);
     expect(state.account.authenticated).toBe(false);
+  });
+
+  it("viser antall publiserte nyheter på nyhetsdestinasjonen", () => {
+    const state = buildReady({ newsCount: 4 });
+    const news = state.desktopSections
+      .flatMap((section) => section.items)
+      .find((item) => item.id === "nyheter");
+
+    expect(news?.badge).toEqual({
+      accessibleLabel: "4 publiserte nyheter",
+      label: "4",
+      tone: "accent",
+    });
+    expect(state.newsBadge).toEqual(news?.badge);
+    expect(buildReady({ newsCount: 0 }).newsBadge).toBeUndefined();
   });
 
   it("uses backend capabilities to expose only permitted admin destinations", () => {

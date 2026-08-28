@@ -1,17 +1,20 @@
 # Aktivt arbeid
 
-> **Status:** Ingen aktiv leveranse
+> **Status:** Klar for review
 >
-> **Branch:** `main`
+> **Branch:** `feat/news-count-badge`
 
 ## Aktiv leveranse
 
-Ingen.
+Nyhetsindikasjon og rikere nyhetsforhåndsvisning:
+
+- appskallet henter en separat, tenant-cachet feedstatus og viser antall nyheter i navigasjonen
+- nyhetsrader viser flerlinnet tittel og ingress uten at handlingen tar lesebredde
+- frontendkontrakten er samkjørt med backendens `GET /klubb/{slug}/feed/status`
 
 ## Neste steg
 
-Ingen dokumenterte neste steg. Ikke utled nytt arbeid fra historiske analyser eller utsatte
-kandidater uten et nytt, eksplisitt mål.
+Følg CI og håndter eventuelle reviewkommentarer.
 
 ## Blokkeringer
 

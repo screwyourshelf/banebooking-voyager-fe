@@ -13,7 +13,7 @@
       "cssCustomPropertyDefinitionCount": 1424,
       "cssCustomPropertyReferenceCount": 910,
       "cssFileCount": 4,
-      "cssLineCount": 2063,
+      "cssLineCount": 2075,
       "cssRuleCount": 10,
       "featureClassOccurrenceCount": 0,
       "importantDeclarationCount": 4,
@@ -25,20 +25,20 @@
       "styleAttributeCount": 7,
       "styleBlockCount": 4,
       "styleDirectiveCount": 0,
-      "svelteTailwindUtilityOccurrenceCount": 1313,
-      "tailwindUtilityOccurrenceCount": 1313,
+      "svelteTailwindUtilityOccurrenceCount": 1288,
+      "tailwindUtilityOccurrenceCount": 1288,
       "unlayeredCssRuleCount": 0,
       "visualizationExceptionCount": 38
     },
     "css": {
       "files": [
         {
-          "atRuleCount": 157,
-          "declarationCount": 674,
+          "atRuleCount": 159,
+          "declarationCount": 680,
           "file": "src/index.css",
           "keyframeStepCount": 0,
           "layeredRuleCount": 0,
-          "lineCount": 964,
+          "lineCount": 976,
           "ruleCount": 0,
           "selectorCount": 0,
           "unlayeredRuleCount": 0
@@ -29160,7 +29160,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 946,
+            "line": 958,
             "name": "--app-control-min-width",
             "property": "min-width",
             "referenceIndex": 0,
@@ -29171,7 +29171,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 946,
+            "line": 958,
             "name": "--bits-select-anchor-width",
             "property": "min-width",
             "referenceIndex": 1,
@@ -29182,7 +29182,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 946,
+            "line": 958,
             "name": "--app-control-min-width",
             "property": "min-width",
             "referenceIndex": 2,
@@ -29193,7 +29193,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 953,
+            "line": 965,
             "name": "--app-select-content-max-height",
             "property": "max-height",
             "referenceIndex": 0,
@@ -29204,7 +29204,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 953,
+            "line": 965,
             "name": "--bits-select-content-available-height",
             "property": "max-height",
             "referenceIndex": 1,
@@ -29215,7 +29215,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 953,
+            "line": 965,
             "name": "--app-select-content-max-height",
             "property": "max-height",
             "referenceIndex": 2,
@@ -29226,7 +29226,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 960,
+            "line": 972,
             "name": "--app-select-viewport-max-height",
             "property": "max-height",
             "referenceIndex": 0,
@@ -29237,7 +29237,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 960,
+            "line": 972,
             "name": "--bits-select-content-available-height",
             "property": "max-height",
             "referenceIndex": 1,
@@ -29248,7 +29248,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 960,
+            "line": 972,
             "name": "--app-select-viewport-max-height",
             "property": "max-height",
             "referenceIndex": 2,
@@ -37994,214 +37994,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "flex",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "font-collection-row-title",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "gap-collection-control-detail",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "items-center",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "leading-collection-row-copy",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "min-w-0",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "overflow-hidden",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "text-body",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "text-ink",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "whitespace-nowrap",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 17,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 115,
-          "className": "min-w-0",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 17,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 115,
-          "className": "overflow-hidden",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 17,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 115,
-          "className": "text-ellipsis",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 17,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 115,
-          "className": "whitespace-nowrap",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 124,
-          "className": "font-collection-row-description",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 124,
-          "className": "leading-collection-row-copy",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 124,
-          "className": "min-w-0",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 124,
-          "className": "mt-collection-row-description",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 124,
-          "className": "overflow-hidden",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 124,
-          "className": "text-body-sm",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 124,
-          "className": "text-ellipsis",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 124,
-          "className": "text-ink-soft",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 124,
-          "className": "whitespace-nowrap",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 130,
+          "line": 145,
           "className": "font-collection-row-meta",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38210,7 +38003,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 130,
+          "line": 145,
           "className": "leading-collection-row-copy",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38219,7 +38012,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 130,
+          "line": 145,
           "className": "min-w-0",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38228,7 +38021,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 130,
+          "line": 145,
           "className": "mt-collection-row-meta",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38237,7 +38030,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 130,
+          "line": 145,
           "className": "overflow-hidden",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38246,7 +38039,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 130,
+          "line": 145,
           "className": "text-caption",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38255,7 +38048,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 130,
+          "line": 145,
           "className": "text-ellipsis",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38264,7 +38057,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 130,
+          "line": 145,
           "className": "text-ink-faint",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38273,7 +38066,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 130,
+          "line": 145,
           "className": "whitespace-nowrap",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38282,7 +38075,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 168,
+          "line": 187,
           "className": "collection-wide:px-xl",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38291,7 +38084,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 168,
+          "line": 187,
           "className": "collection-wide:py-lg",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38300,7 +38093,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 168,
+          "line": 187,
           "className": "gap-lg",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38309,7 +38102,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 168,
+          "line": 187,
           "className": "grid",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38318,7 +38111,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 168,
+          "line": 187,
           "className": "p-collection-row-details",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38327,7 +38120,7 @@
         {
           "column": 18,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 173,
+          "line": 192,
           "className": "flex",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38336,7 +38129,7 @@
         {
           "column": 18,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 173,
+          "line": 192,
           "className": "flex-wrap",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38345,7 +38138,7 @@
         {
           "column": 18,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 173,
+          "line": 192,
           "className": "gap-sm",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38354,7 +38147,7 @@
         {
           "column": 18,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 173,
+          "line": 192,
           "className": "justify-end",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38363,7 +38156,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "bg-transparent",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38372,7 +38165,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "border-0",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38381,7 +38174,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "collection-wide:min-h-collection-row-wide",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38390,7 +38183,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "collection-wide:px-xl",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38399,7 +38192,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "collection-wide:py-sm",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38408,7 +38201,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "disabled:cursor-not-allowed",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38417,7 +38210,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "disabled:opacity-collection-row-disabled",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38426,7 +38219,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "enabled:hover:bg-surface-subtle",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38435,7 +38228,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "flex",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38444,7 +38237,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "flex-1",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38453,7 +38246,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "focus-visible:outline-3",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38462,7 +38255,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "focus-visible:outline-focus-outline",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38471,7 +38264,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "focus-visible:outline-offset-collection-inset",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38480,7 +38273,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "focus-visible:z-10",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38489,7 +38282,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "gap-md",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38498,7 +38291,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "items-center",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38507,7 +38300,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "min-w-0",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38516,7 +38309,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "px-md",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38525,7 +38318,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "py-collection-row-block",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38534,7 +38327,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "text-ink",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38543,7 +38336,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "text-left",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38552,7 +38345,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 194,
+          "line": 213,
           "className": "border-l",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38561,7 +38354,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 194,
+          "line": 213,
           "className": "border-line",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38570,7 +38363,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 194,
+          "line": 213,
           "className": "collection-reorder-control:text-ink-soft",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38579,7 +38372,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 194,
+          "line": 213,
           "className": "content-center",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38588,7 +38381,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 194,
+          "line": 213,
           "className": "flex-none",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38597,7 +38390,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 194,
+          "line": 213,
           "className": "gap-2xs",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38606,7 +38399,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 194,
+          "line": 213,
           "className": "grid",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38615,7 +38408,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 194,
+          "line": 213,
           "className": "p-xs",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38624,7 +38417,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 231,
+          "line": 250,
           "className": "flex-none",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38633,7 +38426,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 231,
+          "line": 250,
           "className": "grid",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38642,7 +38435,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 231,
+          "line": 250,
           "className": "leading-collection-status",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38651,7 +38444,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 231,
+          "line": 250,
           "className": "place-items-center",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38660,7 +38453,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 231,
+          "line": 250,
           "className": "self-center",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38669,7 +38462,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 231,
+          "line": 250,
           "className": "text-collection-row-indicator",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -38678,44 +38471,8 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 231,
+          "line": 250,
           "className": "text-ink-faint",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 14,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 240,
-          "className": "collection-wide:pl-sm",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 14,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 240,
-          "className": "flex",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 14,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 240,
-          "className": "flex-none",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3"
-        },
-        {
-          "column": 14,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 240,
-          "className": "items-center",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
           "plannedRemovalCheckpoint": "SWP-3.3"
@@ -42053,7 +41810,7 @@
         {
           "column": 3,
           "file": "src/lib/ui/patterns/NavigationAction.svelte",
-          "line": 38,
+          "line": 45,
           "className": "min-w-0",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -42062,7 +41819,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationAction.svelte",
-          "line": 72,
+          "line": 79,
           "className": "flex-none",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -42071,7 +41828,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationAction.svelte",
-          "line": 72,
+          "line": 79,
           "className": "grid",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -42080,7 +41837,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationAction.svelte",
-          "line": 72,
+          "line": 79,
           "className": "navigation-icon-svg:size-full",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -42089,7 +41846,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationAction.svelte",
-          "line": 72,
+          "line": 79,
           "className": "place-items-center",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -42098,7 +41855,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationAction.svelte",
-          "line": 72,
+          "line": 79,
           "className": "size-navigation-icon",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -42260,7 +42017,7 @@
         {
           "column": 3,
           "file": "src/lib/ui/patterns/NavigationLink.svelte",
-          "line": 34,
+          "line": 41,
           "className": "min-w-0",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -42269,7 +42026,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationLink.svelte",
-          "line": 90,
+          "line": 97,
           "className": "flex-none",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -42278,7 +42035,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationLink.svelte",
-          "line": 90,
+          "line": 97,
           "className": "grid",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -42287,7 +42044,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationLink.svelte",
-          "line": 90,
+          "line": 97,
           "className": "navigation-icon-svg:size-full",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -42296,7 +42053,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationLink.svelte",
-          "line": 90,
+          "line": 97,
           "className": "place-items-center",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -42305,7 +42062,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationLink.svelte",
-          "line": 90,
+          "line": 97,
           "className": "size-navigation-icon",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -48295,7 +48052,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 72,
+          "line": 74,
           "expression": "class={[\n      \"grid min-w-0 flex-1 grid-cols-1 items-center gap-md\",\n      !(layout === \"schedule\" && leading) && \"collection-wide:gap-collection-row-summary-wide\",\n      leading && \"grid-cols-collection-row-leading\",\n      layout === \"schedule\" &&\n        leading &&\n        \"grid-cols-collection-row-schedule grid-rows-collection-row-schedule gap-x-md gap-y-collection-row-copy\",\n      layout === \"schedule\" &&\n        \"collection-row-schedule-status:row-start-1 collection-row-schedule-status:col-start-2 collection-row-schedule-status:justify-self-start\",\n    ]}",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -48304,7 +48061,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 89,
+          "line": 91,
           "expression": "class={[\n          \"flex min-w-0 items-center\",\n          layout === \"schedule\" && \"row-start-1 row-span-2 col-start-1 self-center\",\n          layout === \"schedule\" && !status && \"row-start-1\",\n        ]}",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -48313,8 +48070,35 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 100,
+          "line": 102,
           "expression": "class={[\n          \"flex min-w-0 flex-col\",\n          layout === \"schedule\" && \"row-start-2 col-start-2\",\n          layout === \"schedule\" && !status && \"row-start-1\",\n        ]}",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 111,
+          "expression": "class={[\n              \"flex overflow-hidden min-w-0 gap-collection-control-detail text-ink text-body font-collection-row-title leading-collection-row-copy\",\n              contentPresentation === \"compact\" ? \"items-center whitespace-nowrap\" : \"items-start\",\n            ]}",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 17,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 120,
+          "expression": "class={[\n                  \"overflow-hidden min-w-0\",\n                  contentPresentation === \"compact\"\n                    ? \"text-ellipsis whitespace-nowrap\"\n                    : \"line-clamp-collection-row-title\",\n                ]}",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 13,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 134,
+          "expression": "class={[\n              \"overflow-hidden min-w-0 mt-collection-row-description text-ink-soft text-body-sm font-collection-row-description leading-collection-row-copy\",\n              contentPresentation === \"compact\"\n                ? \"text-ellipsis whitespace-nowrap\"\n                : \"line-clamp-collection-row-description\",\n            ]}",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
           "plannedRemovalCheckpoint": "SWP-3.3"
@@ -48322,8 +48106,17 @@
         {
           "column": 3,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 142,
-          "expression": "class={[\n    \"min-w-0 collection-row-surface:w-full collection-row-surface:min-w-0 collection-row-surface:min-h-collection-row collection-row-surface:border collection-row-surface:border-line collection-row-surface:rounded-record collection-row-surface:bg-surface-raised collection-row-surface:text-ink collection-row-surface:shadow-record collection-row-surface:text-left collection-row-button-surface:cursor-pointer collection-row-button-surface:enabled:hover:border-line-strong collection-row-button-surface:enabled:hover:bg-surface-subtle collection-row-button-surface:focus-visible:outline-3 collection-row-button-surface:focus-visible:outline-focus-outline collection-row-button-surface:focus-visible:outline-offset-2 collection-row-button-surface:disabled:cursor-not-allowed collection-row-button-surface:disabled:opacity-collection-row-disabled collection-wide:collection-row-surface:min-h-collection-row-wide collection-wide:collection-row-surface:border-x-0 collection-wide:collection-row-surface:border-t-0 collection-wide:collection-row-surface:rounded-none collection-wide:collection-row-surface:shadow-none\",\n    !surfaceDelegatesSpacing &&\n      \"collection-row-surface:flex collection-row-surface:items-stretch collection-row-surface:gap-md collection-row-surface:px-md collection-row-surface:py-collection-row-block collection-wide:collection-row-surface:px-xl collection-wide:collection-row-surface:py-sm\",\n    muted &&\n      \"collection-row-surface:bg-collection-row-muted-surface collection-row-surface:shadow-none\",\n    interaction.type === \"expand\" &&\n      \"collection-row-surface:block collection-row-surface:overflow-hidden collection-row-surface:p-0 collection-row-summary-row:flex collection-row-summary-row:min-w-0 collection-row-summary-row:items-stretch collection-row-trigger-header:flex collection-row-trigger-header:min-w-0 collection-row-trigger-header:flex-1 collection-row-trigger:flex collection-row-trigger:w-full collection-row-trigger:min-w-0 collection-row-trigger:min-h-collection-row-trigger collection-row-trigger:items-center collection-row-trigger:gap-md collection-row-trigger:border-0 collection-row-trigger:bg-transparent collection-row-trigger:px-md collection-row-trigger:py-collection-row-block collection-row-trigger:text-ink collection-row-trigger:text-left collection-row-trigger:enabled:hover:bg-surface-subtle collection-row-trigger:focus-visible:z-10 collection-row-trigger:focus-visible:outline-3 collection-row-trigger:focus-visible:outline-focus-outline collection-row-trigger:focus-visible:outline-offset-collection-inset collection-row-trigger:disabled:cursor-not-allowed collection-row-trigger:disabled:opacity-collection-row-disabled collection-row-trigger-indicator:grid collection-row-trigger-indicator:size-collection-row-trigger-indicator collection-row-trigger-indicator:flex-none collection-row-trigger-indicator:place-items-center collection-row-trigger-indicator:text-ink-faint collection-row-trigger-indicator:transition-transform collection-row-trigger-indicator:duration-160 collection-row-trigger-indicator:ease-collection collection-row-summary-action:flex collection-row-summary-action:flex-none collection-row-summary-action:items-center collection-row-summary-action:pr-md collection-row-details:border-t collection-row-details:border-line collection-row-details:bg-surface-subtle collection-wide:collection-row-surface:p-0 collection-wide:collection-row-trigger:min-h-collection-row-wide collection-wide:collection-row-trigger:px-xl collection-wide:collection-row-trigger:py-sm collection-wide:collection-row-summary-action:pr-xl\",\n    interaction.type === \"reorder\" &&\n      \"collection-row-surface:flex collection-row-surface:items-stretch collection-row-surface:overflow-hidden collection-row-surface:gap-0 collection-row-surface:p-0 collection-wide:collection-row-surface:p-0\",\n  ]}",
+          "line": 157,
+          "expression": "class={[\n    \"min-w-0 collection-row-surface:w-full collection-row-surface:min-w-0 collection-row-surface:min-h-collection-row collection-row-surface:border collection-row-surface:border-line collection-row-surface:rounded-record collection-row-surface:bg-surface-raised collection-row-surface:text-ink collection-row-surface:shadow-record collection-row-surface:text-left collection-row-button-surface:cursor-pointer collection-row-button-surface:enabled:hover:border-line-strong collection-row-button-surface:enabled:hover:bg-surface-subtle collection-row-button-surface:focus-visible:outline-3 collection-row-button-surface:focus-visible:outline-focus-outline collection-row-button-surface:focus-visible:outline-offset-2 collection-row-button-surface:disabled:cursor-not-allowed collection-row-button-surface:disabled:opacity-collection-row-disabled collection-wide:collection-row-surface:min-h-collection-row-wide collection-wide:collection-row-surface:border-x-0 collection-wide:collection-row-surface:border-t-0 collection-wide:collection-row-surface:rounded-none collection-wide:collection-row-surface:shadow-none\",\n    !surfaceDelegatesSpacing &&\n      \"collection-row-surface:flex collection-row-surface:gap-md collection-row-surface:px-md collection-row-surface:py-collection-row-block collection-wide:collection-row-surface:px-xl collection-wide:collection-row-surface:py-sm\",\n    !surfaceDelegatesSpacing &&\n      (interaction.type === \"action\" && contentPresentation === \"preview\"\n        ? \"collection-row-surface:flex-col collection-row-surface:items-stretch\"\n        : \"collection-row-surface:items-stretch\"),\n    muted &&\n      \"collection-row-surface:bg-collection-row-muted-surface collection-row-surface:shadow-none\",\n    interaction.type === \"expand\" &&\n      \"collection-row-surface:block collection-row-surface:overflow-hidden collection-row-surface:p-0 collection-row-summary-row:flex collection-row-summary-row:min-w-0 collection-row-summary-row:items-stretch collection-row-trigger-header:flex collection-row-trigger-header:min-w-0 collection-row-trigger-header:flex-1 collection-row-trigger:flex collection-row-trigger:w-full collection-row-trigger:min-w-0 collection-row-trigger:min-h-collection-row-trigger collection-row-trigger:items-center collection-row-trigger:gap-md collection-row-trigger:border-0 collection-row-trigger:bg-transparent collection-row-trigger:px-md collection-row-trigger:py-collection-row-block collection-row-trigger:text-ink collection-row-trigger:text-left collection-row-trigger:enabled:hover:bg-surface-subtle collection-row-trigger:focus-visible:z-10 collection-row-trigger:focus-visible:outline-3 collection-row-trigger:focus-visible:outline-focus-outline collection-row-trigger:focus-visible:outline-offset-collection-inset collection-row-trigger:disabled:cursor-not-allowed collection-row-trigger:disabled:opacity-collection-row-disabled collection-row-trigger-indicator:grid collection-row-trigger-indicator:size-collection-row-trigger-indicator collection-row-trigger-indicator:flex-none collection-row-trigger-indicator:place-items-center collection-row-trigger-indicator:text-ink-faint collection-row-trigger-indicator:transition-transform collection-row-trigger-indicator:duration-160 collection-row-trigger-indicator:ease-collection collection-row-summary-action:flex collection-row-summary-action:flex-none collection-row-summary-action:items-center collection-row-summary-action:pr-md collection-row-details:border-t collection-row-details:border-line collection-row-details:bg-surface-subtle collection-wide:collection-row-surface:p-0 collection-wide:collection-row-trigger:min-h-collection-row-wide collection-wide:collection-row-trigger:px-xl collection-wide:collection-row-trigger:py-sm collection-wide:collection-row-summary-action:pr-xl\",\n    interaction.type === \"reorder\" &&\n      \"collection-row-surface:flex collection-row-surface:items-stretch collection-row-surface:overflow-hidden collection-row-surface:gap-0 collection-row-surface:p-0 collection-wide:collection-row-surface:p-0\",\n  ]}",
+          "ownerFamily": "collection",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3.3"
+        },
+        {
+          "column": 11,
+          "file": "src/lib/ui/patterns/CollectionRow.svelte",
+          "line": 260,
+          "expression": "class={[\n            \"flex flex-none items-center\",\n            contentPresentation === \"preview\" ? \"justify-end pt-sm\" : \"collection-wide:pl-sm\",\n          ]}",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
           "plannedRemovalCheckpoint": "SWP-3.3"
@@ -48511,7 +48304,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/patterns/NavigationAction.svelte",
-          "line": 46,
+          "line": 53,
           "expression": "class={[\n      \"relative flex min-w-0 items-center gap-navigation-item border-0 rounded-navigation-item bg-transparent text-body-sm font-navigation-item text-left transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50\",\n      navigation.layout === \"sidebar\" && navigation.surface !== \"overlay\"\n        ? \"text-control-text hover:bg-nav-active-surface hover:text-nav-active\"\n        : navigation.layout === \"sidebar\" && navigation.surface === \"overlay\"\n          ? \"text-ink hover:bg-nav-active-surface hover:text-nav-active\"\n          : navigation.layout === \"bottom\"\n            ? \"text-ink-soft hover:bg-nav-active-surface hover:text-nav-active\"\n            : \"text-menu-text hover:bg-nav-active-surface hover:text-nav-active\",\n      navigation.layout === \"bottom\" &&\n        \"min-h-navigation-bottom-item flex-col justify-center gap-xs rounded-none text-caption text-center\",\n      presentation === \"item\" &&\n        (navigation.layout === \"bottom\"\n          ? \"w-full px-xs py-sm\"\n          : \"w-full px-md py-navigation-item-block\"),\n      presentation === \"icon\" && \"size-navigation-action-icon min-h-0 justify-center p-0\",\n      presentation === \"back\" && \"w-auto px-md py-navigation-item-block\",\n    ]}",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -48520,7 +48313,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationAction.svelte",
-          "line": 79,
+          "line": 86,
           "expression": "class={[\n          \"min-w-0 overflow-hidden flex-1 text-ellipsis whitespace-nowrap\",\n          navigation.layout === \"bottom\" && \"flex-initial\",\n        ]}",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -48529,8 +48322,8 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationAction.svelte",
-          "line": 88,
-          "expression": "class={[\n          \"inline-flex min-w-navigation-badge min-h-navigation-badge flex-none items-center justify-center rounded-navigation-badge px-navigation-badge text-micro font-navigation-badge\",\n          badge.tone === \"accent\"\n            ? \"bg-status-warning-bg text-status-warning-text\"\n            : \"bg-surface-subtle text-ink-soft\",\n          navigation.layout === \"bottom\" &&\n            \"absolute top-navigation-bottom-badge-top left-navigation-bottom-badge-left\",\n        ]}",
+          "line": 95,
+          "expression": "class={[\n          \"inline-flex min-w-navigation-badge min-h-navigation-badge flex-none items-center justify-center rounded-navigation-badge px-navigation-badge text-micro font-navigation-badge\",\n          badge.tone === \"accent\"\n            ? \"bg-status-warning-bg text-status-warning-text\"\n            : \"bg-surface-subtle text-ink-soft\",\n          (navigation.layout === \"bottom\" || presentation === \"icon\") &&\n            \"absolute top-navigation-bottom-badge-top left-navigation-bottom-badge-left\",\n        ]}",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
           "plannedRemovalCheckpoint": "SWP-4.1"
@@ -48556,7 +48349,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/patterns/NavigationLink.svelte",
-          "line": 42,
+          "line": 49,
           "expression": "class={[\n      \"relative flex min-w-0 items-center gap-navigation-item border-0 rounded-navigation-item text-body-sm font-navigation-item text-left no-underline transition-colors duration-150 focus-visible:outline-2 focus-visible:outline-ring focus-visible:outline-offset-2\",\n      presentation === \"icon\"\n        ? \"size-navigation-action-icon min-h-0 justify-center p-0\"\n        : navigation.layout === \"bottom\"\n          ? \"w-full px-xs py-sm\"\n          : navigation.layout === \"section\"\n            ? \"w-full px-lg py-navigation-item-block\"\n            : \"w-full px-md py-navigation-item-block\",\n      !active &&\n        navigation.layout === \"sidebar\" &&\n        navigation.surface !== \"overlay\" &&\n        \"bg-transparent text-control-text hover:bg-nav-active-surface hover:text-nav-active\",\n      !active &&\n        navigation.layout === \"sidebar\" &&\n        navigation.surface === \"overlay\" &&\n        \"bg-transparent text-ink hover:bg-nav-active-surface hover:text-nav-active\",\n      !active &&\n        navigation.layout === \"bottom\" &&\n        \"bg-transparent text-ink-soft hover:bg-nav-active-surface hover:text-nav-active\",\n      !active &&\n        navigation.layout !== \"sidebar\" &&\n        navigation.layout !== \"bottom\" &&\n        \"bg-transparent text-menu-text hover:bg-nav-active-surface hover:text-nav-active\",\n      active &&\n        navigation.layout === \"sidebar\" &&\n        navigation.surface !== \"overlay\" &&\n        \"bg-navigation-sidebar-active-surface text-navigation-sidebar-active\",\n      active &&\n        navigation.layout === \"bottom\" &&\n        \"bg-transparent text-brand before:absolute before:top-0 before:right-md before:left-md before:h-navigation-bottom-indicator before:rounded-navigation-bottom-indicator before:bg-brand before:content-empty\",\n      active &&\n        navigation.layout !== \"bottom\" &&\n        !(navigation.layout === \"sidebar\" && navigation.surface !== \"overlay\") &&\n        \"bg-nav-active-surface text-nav-active\",\n      navigation.layout === \"bottom\" &&\n        \"min-h-navigation-bottom-item flex-col justify-center gap-xs rounded-none text-caption text-center\",\n      navigation.layout === \"section\" &&\n        \"min-h-navigation-section-item rounded-navigation-section-item\",\n      active &&\n        navigation.layout === \"section\" &&\n        \"after:absolute after:right-md after:-bottom-navigation-section-indicator-bottom after:left-md after:h-navigation-section-indicator after:rounded-navigation-section-indicator after:bg-nav-indicator after:content-empty\",\n    ]}",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -48565,7 +48358,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationLink.svelte",
-          "line": 97,
+          "line": 104,
           "expression": "class={[\n          \"min-w-0 overflow-hidden flex-1 text-ellipsis whitespace-nowrap\",\n          navigation.layout === \"bottom\" && \"flex-initial\",\n        ]}",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -48574,8 +48367,8 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationLink.svelte",
-          "line": 106,
-          "expression": "class={[\n          \"inline-flex min-w-navigation-badge min-h-navigation-badge flex-none items-center justify-center rounded-navigation-badge px-navigation-badge text-micro font-navigation-badge\",\n          badge.tone === \"accent\"\n            ? \"bg-status-warning-bg text-status-warning-text\"\n            : \"bg-surface-subtle text-ink-soft\",\n          navigation.layout === \"bottom\" &&\n            \"absolute top-navigation-bottom-badge-top left-navigation-bottom-badge-left\",\n        ]}",
+          "line": 113,
+          "expression": "class={[\n          \"inline-flex min-w-navigation-badge min-h-navigation-badge flex-none items-center justify-center rounded-navigation-badge px-navigation-badge text-micro font-navigation-badge\",\n          badge.tone === \"accent\"\n            ? \"bg-status-warning-bg text-status-warning-text\"\n            : \"bg-surface-subtle text-ink-soft\",\n          (navigation.layout === \"bottom\" || presentation === \"icon\") &&\n            \"absolute top-navigation-bottom-badge-top left-navigation-bottom-badge-left\",\n        ]}",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
           "plannedRemovalCheckpoint": "SWP-4.1"
@@ -49316,7 +49109,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/news/NewsRow.svelte",
-          "lineCount": 29,
+          "lineCount": 30,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -49406,7 +49199,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/session/MobileHeaderNavigation.svelte",
-          "lineCount": 56,
+          "lineCount": 57,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -49416,7 +49209,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/session/NavigationItems.svelte",
-          "lineCount": 62,
+          "lineCount": 63,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -49456,7 +49249,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/session/SessionNavigationShell.svelte",
-          "lineCount": 80,
+          "lineCount": 91,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -49772,11 +49565,11 @@
           "styleDirectiveCount": 0
         },
         {
-          "classTokenCount": 81,
+          "classTokenCount": 54,
           "cssImportCount": 0,
-          "dynamicClassAttributeCount": 4,
+          "dynamicClassAttributeCount": 8,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "lineCount": 246,
+          "lineCount": 271,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -50016,7 +49809,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 3,
           "file": "src/lib/ui/patterns/NavigationAction.svelte",
-          "lineCount": 102,
+          "lineCount": 110,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -50036,7 +49829,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 3,
           "file": "src/lib/ui/patterns/NavigationLink.svelte",
-          "lineCount": 120,
+          "lineCount": 128,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -54387,249 +54180,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "flex",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "flex"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "font-collection-row-title",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "font-collection-row-title"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "gap-collection-control-detail",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "gap-collection-control-detail"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "items-center",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "items-center"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "leading-collection-row-copy",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "leading-collection-row-copy"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "min-w-0",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "min-w-0"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "overflow-hidden",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "overflow-hidden"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "text-body",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "text-body"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "text-ink",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "text-ink"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 109,
-          "className": "whitespace-nowrap",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "whitespace-nowrap"
-        },
-        {
-          "column": 17,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 115,
-          "className": "min-w-0",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "min-w-0"
-        },
-        {
-          "column": 17,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 115,
-          "className": "overflow-hidden",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "overflow-hidden"
-        },
-        {
-          "column": 17,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 115,
-          "className": "text-ellipsis",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "text-ellipsis"
-        },
-        {
-          "column": 17,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 115,
-          "className": "whitespace-nowrap",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "whitespace-nowrap"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 124,
-          "className": "font-collection-row-description",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "font-collection-row-description"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 124,
-          "className": "leading-collection-row-copy",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "leading-collection-row-copy"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 124,
-          "className": "min-w-0",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "min-w-0"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 124,
-          "className": "overflow-hidden",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "overflow-hidden"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 124,
-          "className": "text-body-sm",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "text-body-sm"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 124,
-          "className": "text-ellipsis",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "text-ellipsis"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 124,
-          "className": "text-ink-soft",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "text-ink-soft"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 124,
-          "className": "whitespace-nowrap",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "whitespace-nowrap"
-        },
-        {
-          "column": 13,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 130,
+          "line": 145,
           "className": "font-collection-row-meta",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54640,7 +54191,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 130,
+          "line": 145,
           "className": "leading-collection-row-copy",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54651,7 +54202,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 130,
+          "line": 145,
           "className": "min-w-0",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54662,7 +54213,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 130,
+          "line": 145,
           "className": "overflow-hidden",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54673,7 +54224,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 130,
+          "line": 145,
           "className": "text-caption",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54684,7 +54235,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 130,
+          "line": 145,
           "className": "text-ellipsis",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54695,7 +54246,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 130,
+          "line": 145,
           "className": "text-ink-faint",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54706,7 +54257,7 @@
         {
           "column": 13,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 130,
+          "line": 145,
           "className": "whitespace-nowrap",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54717,7 +54268,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 168,
+          "line": 187,
           "className": "gap-lg",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54728,7 +54279,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 168,
+          "line": 187,
           "className": "grid",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54739,7 +54290,7 @@
         {
           "column": 11,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 168,
+          "line": 187,
           "className": "p-collection-row-details",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54750,7 +54301,7 @@
         {
           "column": 18,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 173,
+          "line": 192,
           "className": "flex",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54761,7 +54312,7 @@
         {
           "column": 18,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 173,
+          "line": 192,
           "className": "flex-wrap",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54772,7 +54323,7 @@
         {
           "column": 18,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 173,
+          "line": 192,
           "className": "gap-sm",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54783,7 +54334,7 @@
         {
           "column": 18,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 173,
+          "line": 192,
           "className": "justify-end",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54794,7 +54345,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "bg-transparent",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54805,7 +54356,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "border-0",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54816,7 +54367,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "collection-wide:min-h-collection-row-wide",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54827,7 +54378,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "disabled:cursor-not-allowed",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54838,7 +54389,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "disabled:opacity-collection-row-disabled",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54849,7 +54400,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "enabled:hover:bg-surface-subtle",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54860,7 +54411,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "flex",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54871,7 +54422,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "flex-1",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54882,7 +54433,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "focus-visible:outline-3",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54893,7 +54444,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "focus-visible:outline-focus-outline",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54904,7 +54455,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "focus-visible:outline-offset-collection-inset",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54915,7 +54466,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "focus-visible:z-10",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54926,7 +54477,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "gap-md",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54937,7 +54488,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "items-center",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54948,7 +54499,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "min-w-0",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54959,7 +54510,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "text-ink",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54970,7 +54521,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 183,
+          "line": 202,
           "className": "text-left",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54981,7 +54532,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 194,
+          "line": 213,
           "className": "border-l",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -54992,7 +54543,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 194,
+          "line": 213,
           "className": "border-line",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -55003,7 +54554,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 194,
+          "line": 213,
           "className": "collection-reorder-control:text-ink-soft",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -55014,7 +54565,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 194,
+          "line": 213,
           "className": "content-center",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -55025,7 +54576,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 194,
+          "line": 213,
           "className": "flex-none",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -55036,7 +54587,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 194,
+          "line": 213,
           "className": "gap-2xs",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -55047,7 +54598,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 194,
+          "line": 213,
           "className": "grid",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -55058,7 +54609,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 194,
+          "line": 213,
           "className": "p-xs",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -55069,7 +54620,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 231,
+          "line": 250,
           "className": "flex-none",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -55080,7 +54631,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 231,
+          "line": 250,
           "className": "grid",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -55091,7 +54642,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 231,
+          "line": 250,
           "className": "leading-collection-status",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -55102,7 +54653,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 231,
+          "line": 250,
           "className": "place-items-center",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -55113,7 +54664,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 231,
+          "line": 250,
           "className": "text-collection-row-indicator",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
@@ -55124,46 +54675,13 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 231,
+          "line": 250,
           "className": "text-ink-faint",
           "ownerFamily": "collection",
           "ownerPackage": "src/lib/ui/patterns",
           "plannedRemovalCheckpoint": "SWP-3.3",
           "origin": "class",
           "utility": "text-ink-faint"
-        },
-        {
-          "column": 14,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 240,
-          "className": "flex",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "flex"
-        },
-        {
-          "column": 14,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 240,
-          "className": "flex-none",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "flex-none"
-        },
-        {
-          "column": 14,
-          "file": "src/lib/ui/patterns/CollectionRow.svelte",
-          "line": 240,
-          "className": "items-center",
-          "ownerFamily": "collection",
-          "ownerPackage": "src/lib/ui/patterns",
-          "plannedRemovalCheckpoint": "SWP-3.3",
-          "origin": "class",
-          "utility": "items-center"
         },
         {
           "column": 3,
@@ -58677,7 +58195,7 @@
         {
           "column": 3,
           "file": "src/lib/ui/patterns/NavigationAction.svelte",
-          "line": 38,
+          "line": 45,
           "className": "min-w-0",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -58688,7 +58206,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationAction.svelte",
-          "line": 72,
+          "line": 79,
           "className": "flex-none",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -58699,7 +58217,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationAction.svelte",
-          "line": 72,
+          "line": 79,
           "className": "grid",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -58710,7 +58228,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationAction.svelte",
-          "line": 72,
+          "line": 79,
           "className": "navigation-icon-svg:size-full",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -58721,7 +58239,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationAction.svelte",
-          "line": 72,
+          "line": 79,
           "className": "place-items-center",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -58732,7 +58250,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationAction.svelte",
-          "line": 72,
+          "line": 79,
           "className": "size-navigation-icon",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -58930,7 +58448,7 @@
         {
           "column": 3,
           "file": "src/lib/ui/patterns/NavigationLink.svelte",
-          "line": 34,
+          "line": 41,
           "className": "min-w-0",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -58941,7 +58459,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationLink.svelte",
-          "line": 90,
+          "line": 97,
           "className": "flex-none",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -58952,7 +58470,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationLink.svelte",
-          "line": 90,
+          "line": 97,
           "className": "grid",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -58963,7 +58481,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationLink.svelte",
-          "line": 90,
+          "line": 97,
           "className": "navigation-icon-svg:size-full",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -58974,7 +58492,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationLink.svelte",
-          "line": 90,
+          "line": 97,
           "className": "place-items-center",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -58985,7 +58503,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/NavigationLink.svelte",
-          "line": 90,
+          "line": 97,
           "className": "size-navigation-icon",
           "ownerFamily": "navigation",
           "ownerPackage": "src/lib/ui/patterns",
@@ -68833,249 +68351,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 109,
-        "className": "flex",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "flex"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 109,
-        "className": "font-collection-row-title",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "font-collection-row-title"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 109,
-        "className": "gap-collection-control-detail",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "gap-collection-control-detail"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 109,
-        "className": "items-center",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "items-center"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 109,
-        "className": "leading-collection-row-copy",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "leading-collection-row-copy"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 109,
-        "className": "min-w-0",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "min-w-0"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 109,
-        "className": "overflow-hidden",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "overflow-hidden"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 109,
-        "className": "text-body",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "text-body"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 109,
-        "className": "text-ink",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "text-ink"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 109,
-        "className": "whitespace-nowrap",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "whitespace-nowrap"
-      },
-      {
-        "column": 17,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 115,
-        "className": "min-w-0",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "min-w-0"
-      },
-      {
-        "column": 17,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 115,
-        "className": "overflow-hidden",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "overflow-hidden"
-      },
-      {
-        "column": 17,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 115,
-        "className": "text-ellipsis",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "text-ellipsis"
-      },
-      {
-        "column": 17,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 115,
-        "className": "whitespace-nowrap",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "whitespace-nowrap"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 124,
-        "className": "font-collection-row-description",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "font-collection-row-description"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 124,
-        "className": "leading-collection-row-copy",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "leading-collection-row-copy"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 124,
-        "className": "min-w-0",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "min-w-0"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 124,
-        "className": "overflow-hidden",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "overflow-hidden"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 124,
-        "className": "text-body-sm",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "text-body-sm"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 124,
-        "className": "text-ellipsis",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "text-ellipsis"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 124,
-        "className": "text-ink-soft",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "text-ink-soft"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 124,
-        "className": "whitespace-nowrap",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "whitespace-nowrap"
-      },
-      {
-        "column": 13,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 130,
+        "line": 145,
         "className": "font-collection-row-meta",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69086,7 +68362,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 130,
+        "line": 145,
         "className": "leading-collection-row-copy",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69097,7 +68373,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 130,
+        "line": 145,
         "className": "min-w-0",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69108,7 +68384,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 130,
+        "line": 145,
         "className": "overflow-hidden",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69119,7 +68395,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 130,
+        "line": 145,
         "className": "text-caption",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69130,7 +68406,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 130,
+        "line": 145,
         "className": "text-ellipsis",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69141,7 +68417,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 130,
+        "line": 145,
         "className": "text-ink-faint",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69152,7 +68428,7 @@
       {
         "column": 13,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 130,
+        "line": 145,
         "className": "whitespace-nowrap",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69163,7 +68439,7 @@
       {
         "column": 11,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 168,
+        "line": 187,
         "className": "gap-lg",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69174,7 +68450,7 @@
       {
         "column": 11,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 168,
+        "line": 187,
         "className": "grid",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69185,7 +68461,7 @@
       {
         "column": 11,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 168,
+        "line": 187,
         "className": "p-collection-row-details",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69196,7 +68472,7 @@
       {
         "column": 18,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 173,
+        "line": 192,
         "className": "flex",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69207,7 +68483,7 @@
       {
         "column": 18,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 173,
+        "line": 192,
         "className": "flex-wrap",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69218,7 +68494,7 @@
       {
         "column": 18,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 173,
+        "line": 192,
         "className": "gap-sm",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69229,7 +68505,7 @@
       {
         "column": 18,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 173,
+        "line": 192,
         "className": "justify-end",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69240,7 +68516,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 183,
+        "line": 202,
         "className": "bg-transparent",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69251,7 +68527,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 183,
+        "line": 202,
         "className": "border-0",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69262,7 +68538,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 183,
+        "line": 202,
         "className": "collection-wide:min-h-collection-row-wide",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69273,7 +68549,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 183,
+        "line": 202,
         "className": "disabled:cursor-not-allowed",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69284,7 +68560,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 183,
+        "line": 202,
         "className": "disabled:opacity-collection-row-disabled",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69295,7 +68571,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 183,
+        "line": 202,
         "className": "enabled:hover:bg-surface-subtle",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69306,7 +68582,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 183,
+        "line": 202,
         "className": "flex",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69317,7 +68593,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 183,
+        "line": 202,
         "className": "flex-1",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69328,7 +68604,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 183,
+        "line": 202,
         "className": "focus-visible:outline-3",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69339,7 +68615,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 183,
+        "line": 202,
         "className": "focus-visible:outline-focus-outline",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69350,7 +68626,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 183,
+        "line": 202,
         "className": "focus-visible:outline-offset-collection-inset",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69361,7 +68637,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 183,
+        "line": 202,
         "className": "focus-visible:z-10",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69372,7 +68648,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 183,
+        "line": 202,
         "className": "gap-md",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69383,7 +68659,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 183,
+        "line": 202,
         "className": "items-center",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69394,7 +68670,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 183,
+        "line": 202,
         "className": "min-w-0",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69405,7 +68681,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 183,
+        "line": 202,
         "className": "text-ink",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69416,7 +68692,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 183,
+        "line": 202,
         "className": "text-left",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69427,7 +68703,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 194,
+        "line": 213,
         "className": "border-l",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69438,7 +68714,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 194,
+        "line": 213,
         "className": "border-line",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69449,7 +68725,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 194,
+        "line": 213,
         "className": "collection-reorder-control:text-ink-soft",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69460,7 +68736,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 194,
+        "line": 213,
         "className": "content-center",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69471,7 +68747,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 194,
+        "line": 213,
         "className": "flex-none",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69482,7 +68758,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 194,
+        "line": 213,
         "className": "gap-2xs",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69493,7 +68769,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 194,
+        "line": 213,
         "className": "grid",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69504,7 +68780,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 194,
+        "line": 213,
         "className": "p-xs",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69515,7 +68791,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 231,
+        "line": 250,
         "className": "flex-none",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69526,7 +68802,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 231,
+        "line": 250,
         "className": "grid",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69537,7 +68813,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 231,
+        "line": 250,
         "className": "leading-collection-status",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69548,7 +68824,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 231,
+        "line": 250,
         "className": "place-items-center",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69559,7 +68835,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 231,
+        "line": 250,
         "className": "text-collection-row-indicator",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
@@ -69570,46 +68846,13 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 231,
+        "line": 250,
         "className": "text-ink-faint",
         "ownerFamily": "collection",
         "ownerPackage": "src/lib/ui/patterns",
         "plannedRemovalCheckpoint": "SWP-3.3",
         "origin": "class",
         "utility": "text-ink-faint"
-      },
-      {
-        "column": 14,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 240,
-        "className": "flex",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "flex"
-      },
-      {
-        "column": 14,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 240,
-        "className": "flex-none",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "flex-none"
-      },
-      {
-        "column": 14,
-        "file": "src/lib/ui/patterns/CollectionRow.svelte",
-        "line": 240,
-        "className": "items-center",
-        "ownerFamily": "collection",
-        "ownerPackage": "src/lib/ui/patterns",
-        "plannedRemovalCheckpoint": "SWP-3.3",
-        "origin": "class",
-        "utility": "items-center"
       },
       {
         "column": 3,
@@ -73123,7 +72366,7 @@
       {
         "column": 3,
         "file": "src/lib/ui/patterns/NavigationAction.svelte",
-        "line": 38,
+        "line": 45,
         "className": "min-w-0",
         "ownerFamily": "navigation",
         "ownerPackage": "src/lib/ui/patterns",
@@ -73134,7 +72377,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/NavigationAction.svelte",
-        "line": 72,
+        "line": 79,
         "className": "flex-none",
         "ownerFamily": "navigation",
         "ownerPackage": "src/lib/ui/patterns",
@@ -73145,7 +72388,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/NavigationAction.svelte",
-        "line": 72,
+        "line": 79,
         "className": "grid",
         "ownerFamily": "navigation",
         "ownerPackage": "src/lib/ui/patterns",
@@ -73156,7 +72399,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/NavigationAction.svelte",
-        "line": 72,
+        "line": 79,
         "className": "navigation-icon-svg:size-full",
         "ownerFamily": "navigation",
         "ownerPackage": "src/lib/ui/patterns",
@@ -73167,7 +72410,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/NavigationAction.svelte",
-        "line": 72,
+        "line": 79,
         "className": "place-items-center",
         "ownerFamily": "navigation",
         "ownerPackage": "src/lib/ui/patterns",
@@ -73178,7 +72421,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/NavigationAction.svelte",
-        "line": 72,
+        "line": 79,
         "className": "size-navigation-icon",
         "ownerFamily": "navigation",
         "ownerPackage": "src/lib/ui/patterns",
@@ -73376,7 +72619,7 @@
       {
         "column": 3,
         "file": "src/lib/ui/patterns/NavigationLink.svelte",
-        "line": 34,
+        "line": 41,
         "className": "min-w-0",
         "ownerFamily": "navigation",
         "ownerPackage": "src/lib/ui/patterns",
@@ -73387,7 +72630,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/NavigationLink.svelte",
-        "line": 90,
+        "line": 97,
         "className": "flex-none",
         "ownerFamily": "navigation",
         "ownerPackage": "src/lib/ui/patterns",
@@ -73398,7 +72641,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/NavigationLink.svelte",
-        "line": 90,
+        "line": 97,
         "className": "grid",
         "ownerFamily": "navigation",
         "ownerPackage": "src/lib/ui/patterns",
@@ -73409,7 +72652,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/NavigationLink.svelte",
-        "line": 90,
+        "line": 97,
         "className": "navigation-icon-svg:size-full",
         "ownerFamily": "navigation",
         "ownerPackage": "src/lib/ui/patterns",
@@ -73420,7 +72663,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/NavigationLink.svelte",
-        "line": 90,
+        "line": 97,
         "className": "place-items-center",
         "ownerFamily": "navigation",
         "ownerPackage": "src/lib/ui/patterns",
@@ -73431,7 +72674,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/NavigationLink.svelte",
-        "line": 90,
+        "line": 97,
         "className": "size-navigation-icon",
         "ownerFamily": "navigation",
         "ownerPackage": "src/lib/ui/patterns",
@@ -80561,22 +79804,22 @@
       "basePath": "/",
       "host": "Cloudflare Pages",
       "initialCssAssets": [
-        { "asset": "_app/immutable/assets/0.C2iFw0G-.css", "gzipBytes": 28547, "rawBytes": 190103 }
+        { "asset": "_app/immutable/assets/0.DN5wOtM1.css", "gzipBytes": 28584, "rawBytes": 190389 }
       ],
-      "initialCssGzipBytes": 28547,
+      "initialCssGzipBytes": 28584,
       "initialJavaScriptAssets": [
-        { "asset": "_app/immutable/chunks/BHH4skMF.js", "gzipBytes": 11222, "rawBytes": 29269 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/CBx1S70x.js", "gzipBytes": 589, "rawBytes": 1034 },
         { "asset": "_app/immutable/chunks/Cwa3_RIE.js", "gzipBytes": 20710, "rawBytes": 55260 },
+        { "asset": "_app/immutable/chunks/DHLdKZ5G.js", "gzipBytes": 11221, "rawBytes": 29269 },
         { "asset": "_app/immutable/chunks/DRyF0Jvr.js", "gzipBytes": 532, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
         { "asset": "_app/immutable/chunks/wQ2rwi4O.js", "gzipBytes": 801, "rawBytes": 1551 },
-        { "asset": "_app/immutable/entry/app.Coy_fpJk.js", "gzipBytes": 2501, "rawBytes": 9110 },
-        { "asset": "_app/immutable/entry/start.CltLjasB.js", "gzipBytes": 92, "rawBytes": 82 },
-        { "asset": "_app/immutable/nodes/0.FXpmE8-g.js", "gzipBytes": 427, "rawBytes": 801 }
+        { "asset": "_app/immutable/entry/app.B2Z1Zxxd.js", "gzipBytes": 2499, "rawBytes": 9110 },
+        { "asset": "_app/immutable/entry/start.BAkB4lzz.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/nodes/0.CZy4kdpI.js", "gzipBytes": 427, "rawBytes": 801 }
       ],
-      "initialJavaScriptGzipBytes": 38313,
+      "initialJavaScriptGzipBytes": 38310,
       "javaScriptChunkCount": 61,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",
@@ -80612,22 +79855,22 @@
       "basePath": "/banebooking",
       "host": "GitHub Pages",
       "initialCssAssets": [
-        { "asset": "_app/immutable/assets/0.syBdUQPy.css", "gzipBytes": 28563, "rawBytes": 190163 }
+        { "asset": "_app/immutable/assets/0.DzxXiz4X.css", "gzipBytes": 28603, "rawBytes": 190449 }
       ],
-      "initialCssGzipBytes": 28563,
+      "initialCssGzipBytes": 28603,
       "initialJavaScriptAssets": [
+        { "asset": "_app/immutable/chunks/BXQpe8Iq.js", "gzipBytes": 11234, "rawBytes": 29281 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/CBx1S70x.js", "gzipBytes": 599, "rawBytes": 1070 },
-        { "asset": "_app/immutable/chunks/CRRtbK7K.js", "gzipBytes": 11231, "rawBytes": 29281 },
         { "asset": "_app/immutable/chunks/Cwa3_RIE.js", "gzipBytes": 20710, "rawBytes": 55260 },
         { "asset": "_app/immutable/chunks/DRyF0Jvr.js", "gzipBytes": 532, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
         { "asset": "_app/immutable/chunks/wQ2rwi4O.js", "gzipBytes": 801, "rawBytes": 1551 },
-        { "asset": "_app/immutable/entry/app.0EyWkNWl.js", "gzipBytes": 2511, "rawBytes": 9686 },
-        { "asset": "_app/immutable/entry/start.CAfcZuYJ.js", "gzipBytes": 92, "rawBytes": 82 },
-        { "asset": "_app/immutable/nodes/0.BfomLeN_.js", "gzipBytes": 437, "rawBytes": 861 }
+        { "asset": "_app/immutable/entry/app.C0SCVMSx.js", "gzipBytes": 2501, "rawBytes": 9686 },
+        { "asset": "_app/immutable/entry/start.CYzqb0FW.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/nodes/0.CxGIniqg.js", "gzipBytes": 437, "rawBytes": 861 }
       ],
-      "initialJavaScriptGzipBytes": 38352,
+      "initialJavaScriptGzipBytes": 38345,
       "javaScriptChunkCount": 61,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",

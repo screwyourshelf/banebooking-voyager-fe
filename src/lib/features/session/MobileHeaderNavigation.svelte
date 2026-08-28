@@ -47,6 +47,7 @@
       presentation="icon"
     />
     <NavigationLink
+      badge={navigation.newsBadge}
       href={navigation.newsHref}
       icon={newsIcon}
       label="Nyheter"

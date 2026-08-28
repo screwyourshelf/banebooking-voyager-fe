@@ -33,6 +33,7 @@
     ariaLabel?: string;
     busy?: boolean;
     category?: CollectionRowStatus;
+    contentPresentation?: "compact" | "preview";
     description?: string;
     disabled?: boolean;
     interaction?: CollectionRowInteraction;
@@ -48,6 +49,7 @@
     ariaLabel,
     busy = false,
     category,
+    contentPresentation = "compact",
     description,
     disabled = false,
     interaction = { type: "static" },
@@ -106,13 +108,21 @@
       >
         {#if title || category || titleStatus}
           <span
-            class="flex overflow-hidden min-w-0 items-center gap-collection-control-detail text-ink text-body font-collection-row-title leading-collection-row-copy whitespace-nowrap"
+            class={[
+              "flex overflow-hidden min-w-0 gap-collection-control-detail text-ink text-body font-collection-row-title leading-collection-row-copy",
+              contentPresentation === "compact" ? "items-center whitespace-nowrap" : "items-start",
+            ]}
             data-part="title"
           >
             {#if category}<CollectionStatus {...category} />{/if}
             {#if title}
               <span
-                class="overflow-hidden min-w-0 text-ellipsis whitespace-nowrap"
+                class={[
+                  "overflow-hidden min-w-0",
+                  contentPresentation === "compact"
+                    ? "text-ellipsis whitespace-nowrap"
+                    : "line-clamp-collection-row-title",
+                ]}
                 data-part="title-text">{title}</span
               >
             {/if}
@@ -121,7 +131,12 @@
         {/if}
         {#if description}
           <span
-            class="overflow-hidden min-w-0 mt-collection-row-description text-ink-soft text-body-sm font-collection-row-description leading-collection-row-copy text-ellipsis whitespace-nowrap"
+            class={[
+              "overflow-hidden min-w-0 mt-collection-row-description text-ink-soft text-body-sm font-collection-row-description leading-collection-row-copy",
+              contentPresentation === "compact"
+                ? "text-ellipsis whitespace-nowrap"
+                : "line-clamp-collection-row-description",
+            ]}
             data-part="description">{description}</span
           >
         {/if}
@@ -142,7 +157,11 @@
   class={[
     "min-w-0 collection-row-surface:w-full collection-row-surface:min-w-0 collection-row-surface:min-h-collection-row collection-row-surface:border collection-row-surface:border-line collection-row-surface:rounded-record collection-row-surface:bg-surface-raised collection-row-surface:text-ink collection-row-surface:shadow-record collection-row-surface:text-left collection-row-button-surface:cursor-pointer collection-row-button-surface:enabled:hover:border-line-strong collection-row-button-surface:enabled:hover:bg-surface-subtle collection-row-button-surface:focus-visible:outline-3 collection-row-button-surface:focus-visible:outline-focus-outline collection-row-button-surface:focus-visible:outline-offset-2 collection-row-button-surface:disabled:cursor-not-allowed collection-row-button-surface:disabled:opacity-collection-row-disabled collection-wide:collection-row-surface:min-h-collection-row-wide collection-wide:collection-row-surface:border-x-0 collection-wide:collection-row-surface:border-t-0 collection-wide:collection-row-surface:rounded-none collection-wide:collection-row-surface:shadow-none",
     !surfaceDelegatesSpacing &&
-      "collection-row-surface:flex collection-row-surface:items-stretch collection-row-surface:gap-md collection-row-surface:px-md collection-row-surface:py-collection-row-block collection-wide:collection-row-surface:px-xl collection-wide:collection-row-surface:py-sm",
+      "collection-row-surface:flex collection-row-surface:gap-md collection-row-surface:px-md collection-row-surface:py-collection-row-block collection-wide:collection-row-surface:px-xl collection-wide:collection-row-surface:py-sm",
+    !surfaceDelegatesSpacing &&
+      (interaction.type === "action" && contentPresentation === "preview"
+        ? "collection-row-surface:flex-col collection-row-surface:items-stretch"
+        : "collection-row-surface:items-stretch"),
     muted &&
       "collection-row-surface:bg-collection-row-muted-surface collection-row-surface:shadow-none",
     interaction.type === "expand" &&
@@ -237,7 +256,13 @@
     <article data-part="surface">
       {@render summary()}
       {#if interaction.type === "action"}
-        <div class="flex flex-none items-center collection-wide:pl-sm" data-part="action">
+        <div
+          class={[
+            "flex flex-none items-center",
+            contentPresentation === "preview" ? "justify-end pt-sm" : "collection-wide:pl-sm",
+          ]}
+          data-part="action"
+        >
           {@render interaction.action()}
         </div>
       {/if}

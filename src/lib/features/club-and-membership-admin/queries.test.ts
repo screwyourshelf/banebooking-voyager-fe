@@ -18,7 +18,7 @@ describe("club and membership admin queries", () => {
     ]);
   });
 
-  it("invaliderer bare klubb- og medlemskapsressurser", async () => {
+  it("invaliderer klubbens feedstatus sammen med klubbressursen", async () => {
     const request = vi.fn().mockResolvedValue(undefined);
     const api = { request } as unknown as ApiClient;
     const queryClient = new QueryClient();
@@ -42,7 +42,7 @@ describe("club and membership admin queries", () => {
         meta: tenantQueryMeta("fjordvik", "news"),
         queryKey: ["news", { slug: "fjordvik" }],
       } as never)
-    ).toBe(false);
+    ).toBe(true);
     expect(
       predicate!({
         meta: tenantQueryMeta("annen", "club"),

@@ -52,6 +52,7 @@
     {/snippet}
     <NavigationLink
       active={item.active}
+      badge={item.badge}
       href={item.href}
       icon={itemIcon}
       label={mobileLabels ? (item.mobileLabel ?? item.label) : item.label}

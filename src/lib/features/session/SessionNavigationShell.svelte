@@ -1,7 +1,9 @@
 <script lang="ts">
   import { base } from "$app/paths";
   import { page } from "$app/state";
+  import { createQuery } from "@tanstack/svelte-query";
   import type { Snippet } from "svelte";
+  import { getApiClient } from "$lib/platform/api";
   import { getAuthContext } from "$lib/platform/auth";
   import { getTenantContext } from "$lib/platform/tenant";
   import { getThemeContext } from "$lib/platform/theme";
@@ -12,9 +14,11 @@
   import NavigationOverlays from "./NavigationOverlays.svelte";
   import { getSessionDataContext } from "./context";
   import { buildAppNavigationState } from "./navigation-model";
+  import { feedStatusQueryOptions } from "./queries";
 
   let { children }: { children: Snippet } = $props();
 
+  const api = getApiClient();
   const auth = getAuthContext();
   const session = getSessionDataContext();
   const tenant = getTenantContext();
@@ -23,12 +27,19 @@
   let moreOpen = $state(false);
   let signingOut = $state(false);
 
+  const feedConfigured = $derived(Boolean(session.klubb?.feedUrl?.trim()));
+  const feedStatusQuery = createQuery(() => ({
+    ...feedStatusQueryOptions(api, tenant.slug),
+    enabled: session.klubbStatus === "success" && feedConfigured,
+  }));
+
   const navigation = $derived(
     buildAppNavigationState({
       auth: auth.state,
       basePath: base,
       bruker: { data: session.bruker, status: session.brukerStatus },
       klubb: { data: session.klubb, status: session.klubbStatus },
+      newsCount: feedConfigured ? (feedStatusQuery.data?.antallNyheter ?? 0) : 0,
       pathname: page.url.pathname,
       tenant,
     })

@@ -8,10 +8,12 @@
 
   let {
     authenticated = true,
+    newsCount = 0,
     onSignOut,
     onTheme,
   }: {
     authenticated?: boolean;
+    newsCount?: number;
     onSignOut: () => void;
     onTheme: () => void;
   } = $props();
@@ -45,6 +47,7 @@
         status: "success",
         data: { slug: "fjordvik", navn: "Fjordvik Tennisklubb", feedSynligAntallDager: 30 },
       },
+      newsCount,
       pathname: "/fjordvik/admin/grener",
       tenant: { slug: "fjordvik", source: "route" },
     });

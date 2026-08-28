@@ -72,6 +72,7 @@
         interaction={{ type: "open", onOpen }}
       />
       <CollectionRow
+        contentPresentation="preview"
         title="Ny banebooking"
         description="Nytt fra klubben"
         interaction={{ type: "action", action: rowAction }}
