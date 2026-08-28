@@ -29,21 +29,22 @@ rikteksteditor og statistikk.
 | VR-09 | Kunngjøringseditor        | `/admin/kunngjøringer`, tom rikteksteditor | Administrator | 390 × 844   | Lys   | `announcement-editor-mobile-light`              |
 | VR-10 | Statistikk for banebruk   | `/admin/statistikk`, banebrukfanen         | Administrator | 1440 × 1000 | Mørk  | `statistics-court-usage-desktop-dark`           |
 | VR-11 | Statistikk for medlemmer  | `/admin/statistikk`, medlemsfanen          | Administrator | 390 × 844   | Lys   | `statistics-members-mobile-light`               |
+| VR-12 | Anonym innlogging desktop | `/login`, fokusert e-postflate             | Anonym        | 1440 × 1000 | Mørk  | `anonymous-login-desktop-dark`                  |
 
 Routene i tabellen er relative til `/banebooking/aas-tennisklubb`. Snapshotfilene har Playwrights
 plattformendelse og ligger ved `e2e/visual-regressions.spec.ts`.
 
 ## Dekning per UI-familie
 
-| Familie                     | Primære referanser  | Hva som låses                                                                       |
-| --------------------------- | ------------------- | ----------------------------------------------------------------------------------- |
-| App-shell og navigation     | VR-01–VR-11         | Mobil topp/bunn, desktoprekkefølge og fast bunnområde, aktiv route, tenant og theme |
-| Page, Section og Document   | VR-02, VR-04, VR-10 | Sideintro, headings, leseinnhold, settingsseksjoner og statistikkseksjoner          |
-| Collection og rows          | VR-05, VR-08, VR-09 | Header, selection/filter, statuser, schedule- og ekspanderbar rad                   |
-| Form og Settings            | VR-01, VR-03, VR-04 | Felt, paneler, tabs, label/hjelpetekst og mobile handlinger                         |
-| Dialog, Select og Calendar  | VR-06, VR-07, VR-08 | Portal, overlay, standard-/editorgeometri, liste og kalender                        |
-| Rich-text-editor            | VR-09               | Mobil editorflate, toolbar, skriveflate, feltkobling og sticky submit               |
-| Statistikk og visualisering | VR-10, VR-11        | Filtre, nøkkeltall, grafer, medlemskort og responsivt skifte                        |
+| Familie                     | Primære referanser         | Hva som låses                                                                                |
+| --------------------------- | -------------------------- | -------------------------------------------------------------------------------------------- |
+| App-shell og navigation     | VR-01–VR-12                | Mobil topp/bunn, desktoprekkefølge og fast bunnområde, aktiv route, tenant og theme          |
+| Page, Section og Document   | VR-02, VR-04, VR-10, VR-12 | Sideintro, headings, fokuserte flater, leseinnhold, settingsseksjoner og statistikkseksjoner |
+| Collection og rows          | VR-05, VR-08, VR-09        | Header, selection/filter, statuser, schedule- og ekspanderbar rad                            |
+| Form og Settings            | VR-01, VR-03, VR-04, VR-12 | Felt, paneler, tabs, label/hjelpetekst og responsive handlinger                              |
+| Dialog, Select og Calendar  | VR-06, VR-07, VR-08        | Portal, overlay, standard-/editorgeometri, liste og kalender                                 |
+| Rich-text-editor            | VR-09                      | Mobil editorflate, toolbar, skriveflate, feltkobling og sticky submit                        |
+| Statistikk og visualisering | VR-10, VR-11               | Filtre, nøkkeltall, grafer, medlemskort og responsivt skifte                                 |
 
 ## Interaktiv kontrakt
 

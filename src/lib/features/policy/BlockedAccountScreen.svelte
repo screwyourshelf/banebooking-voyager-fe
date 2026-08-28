@@ -25,6 +25,7 @@
   title="Kontoen er sperret"
   description="Du kan ikke bruke Banebooking før klubben opphever sperren."
   actions={accountStatus}
+  layout="focused"
 >
   <Document label="Sperreinformasjon">
     <DocumentIntro>
