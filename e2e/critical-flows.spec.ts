@@ -1,3 +1,4 @@
+import type { Page } from "@playwright/test";
 import { expect, test } from "./harness";
 
 test("all development profiles load user data with tenant and base path", async ({ page, e2e }) => {
@@ -62,6 +63,7 @@ test("member books and cancels the same slot", async ({ page, e2e }) => {
   );
   await page.getByRole("button", { name: "I morgen", exact: true }).click();
   await tomorrowSlots;
+  await selectCourtWithFreeSlot(page);
 
   const selectedCourt = await page
     .getByRole("group", { name: "Bane" })
@@ -106,3 +108,28 @@ test("administrator changes and restores the club name", async ({ page, e2e }) =
   await expect(page.getByText("Klubbinnstillingene er lagret")).toBeVisible();
   await expect(clubName).toHaveValue(originalClub.navn);
 });
+
+// Local manual testing may reserve every slot on the initially selected court.
+// Choose an available court through the UI without deleting or changing existing bookings.
+async function selectCourtWithFreeSlot(page: Page) {
+  const bookButtons = page.getByRole("button", { name: /^Book tiden / });
+  const activities = page.getByRole("group", { name: "Gren", exact: true });
+  for (const activityName of await activities.getByRole("button").allTextContents()) {
+    const activity = activities.getByRole("button", { name: activityName.trim(), exact: true });
+    await activity.click();
+    await expect(activity).toHaveAttribute("aria-pressed", "true");
+    const courts = page.getByRole("group", { name: "Bane", exact: true });
+    for (const courtName of await courts.getByRole("button").allTextContents()) {
+      const court = courts.getByRole("button", { name: courtName.trim(), exact: true });
+      await court.click();
+      await expect(court).toHaveAttribute("aria-pressed", "true");
+      const slots = page.getByRole("list", { name: "Tilgjengelige tider" });
+      await expect(slots).toBeVisible();
+      await expect(slots).not.toHaveAttribute("aria-busy", "true");
+      if ((await bookButtons.count()) > 0) return;
+    }
+  }
+  throw new Error(
+    "Booking E2E requires an available slot within the member's quota in the local database."
+  );
+}

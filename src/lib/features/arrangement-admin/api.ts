@@ -57,18 +57,6 @@ export function previewArrangement(
   );
 }
 
-export function previewArrangementEdit(
-  api: ApiClient,
-  slug: string,
-  arrangementId: string,
-  request: OpprettArrangementForespørsel
-) {
-  return api.request<ArrangementForhåndsvisningRespons, OpprettArrangementForespørsel>(
-    clubPath(slug, `arrangement/${encodeURIComponent(arrangementId)}/forhandsvis`),
-    { auth: "required", method: "PUT", json: request }
-  );
-}
-
 export function createArrangement(
   api: ApiClient,
   slug: string,

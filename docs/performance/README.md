@@ -17,8 +17,8 @@ UI-chunksplitt-eksperimentet og den beholdte kontrastforbedringen.
 Iterasjonen ble levert med
 [backend-PR #12](https://github.com/screwyourshelf/banebooking-voyager-be/pull/12) først og deretter
 [frontend-PR #31](https://github.com/screwyourshelf/banebooking-voyager-fe/pull/31). Ingen ny
-API-kontrakt eller koordinert deploy var nødvendig. Begge repoenes aktive status er nullstilt;
-målingene under beholdes som historisk referansegrunnlag.
+API-kontrakt eller koordinert deploy var nødvendig. Aktiv status ble nullstilt da iterasjonen ble levert.
+Nåværende arbeid står i `docs/current-work.md`; målingene under er historisk referansegrunnlag.
 
 ## Tidligere mål og beslutning
 

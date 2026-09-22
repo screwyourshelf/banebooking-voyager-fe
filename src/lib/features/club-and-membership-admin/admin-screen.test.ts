@@ -3,10 +3,20 @@
 import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/svelte";
 import axe from "axe-core";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { MedlemskapStatusRespons } from "$lib/contracts";
 import type { ApiClient } from "$lib/platform/api";
 import AdminFixture from "./AdminFixture.test.svelte";
+
+// Keep the fixtures' calendar month deterministic without mocking async UI timers.
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date(2026, 7, 22, 12));
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+});
 
 const axeOptions: axe.RunOptions = {
   rules: { "color-contrast": { enabled: false }, region: { enabled: false } },

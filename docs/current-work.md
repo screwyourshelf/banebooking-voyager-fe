@@ -1,21 +1,28 @@
 # Aktivt arbeid
 
-> **Status:** Klar for review
+> **Status:** Ingen aktiv implementeringsoppgave
 >
-> **Branch:** `feat/news-count-badge`
+> **Hovedbranch:** `main`
 
-## Aktiv leveranse
+Den samlede SOLID-leveransen er ferdigstilt. Frontend forhåndsviser tillegg til arrangementer
+mot eksisterende bookinger, og datofølsomme tester bruker fast lokal klokke. Backendens punkt
+1–5 er levert i backend-repoet. Punkt 6 om turneringstrekking er utsatt.
 
-Nyhetsindikasjon og rikere nyhetsforhåndsvisning:
-
-- appskallet henter en separat, tenant-cachet feedstatus og viser antall nyheter i navigasjonen
-- nyhetsrader viser flerlinnet tittel og ingress uten at handlingen tar lesebredde
-- frontendkontrakten er samkjørt med backendens `GET /klubb/{slug}/feed/status`
+Gjeldende produktkontrakt står i [product-behavior.md](./product-behavior.md), og
+[driftsinstruksen](./development-and-operations.md) beskriver oppstart, tester og publisering.
+Arbeidshistorikken ligger i Git.
 
 ## Neste steg
 
-Følg CI og håndter eventuelle reviewkommentarer.
+Ingen ny implementeringsoppgave er avtalt. Avhengighetsoppfølgingen nedenfor bør behandles
+som egen oppgave; den inngår ikke i SOLID-refaktoreringen.
 
-## Blokkeringer
+## Kjent avhengighetsoppfølging
 
-Ingen.
+`npm audit` 2026-09-22 rapporterer 32 funn: 1 høy, 25 moderate og 6 lave. Avhengighetsfilene
+var uendret mot `origin/main` ved kontrollen, så dette er eksisterende funn.
+
+Det høye funnet gjelder `@tiptap/core` og Markdown-attributtparsing
+([GHSA-j95f-988m-3j2f](https://github.com/advisories/GHSA-j95f-988m-3j2f)).
+Audit oppgir en tilgjengelig oppdatering. Oppgrader Tiptap-pakkene samlet i en egen endring og
+verifiser rikteksteditoren; faktisk eksponering i appen er ikke vurdert her.

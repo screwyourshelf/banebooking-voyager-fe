@@ -32,6 +32,19 @@ må derfor aldri være hemmeligheter.
 | `VITE_STATIC_HOST`              | `cloudflare-pages` eller `github-pages`; velger statisk fallback       |
 | `BANEBOOKING_STATIC_OUTPUT_DIR` | Valgfri relativ artefaktmappe; standard er `dist`                      |
 
+### Testing fra en annen enhet på lokalnettet
+
+Start backend og PostgreSQL som beskrevet i backend-repoets README. Start deretter frontend:
+
+```bash
+VITE_API_BASE_URL= VITE_BASE_PATH= npm run dev -- --host 0.0.0.0 --port 5173 --strictPort
+```
+
+Åpne `http://<maskinens-lokale-IP>:5173/aas-tennisklubb` fra samme nettverk.
+Browseren bruker samme origin for `/api`; Vite videresender til backend på localhost:5015.
+Det er ikke nødvendig å eksponere database eller backendport på lokalnettet.
+De lokale utviklingsprofilene finnes under **Testinnlogging** på innloggingssiden.
+
 ## Kvalitetsporter
 
 Den vanlige lokale porten er:
@@ -106,3 +119,10 @@ Detaljer om testdata og prosesseierskap finnes i [`e2e-harness.md`](./e2e-harnes
 snapshotdekningen beskrives i [`visual-regression-matrix.md`](./visual-regression-matrix.md).
 Stylingguardene og deres maskinelle baseline eies av `scripts/styling-guards/`; gjeldende route-,
 fallback- og bundlekrav håndheves av produksjons-E2E og `scripts/verify-production-builds.mjs`.
+
+## Publisering fra hovedbranch
+
+Dette repoet har ingen innsjekket GitHub Actions-workflow. Produksjonsbuildene og
+hostkontraktene over beskriver artefaktene; eventuell automatisk hosting ved push styres utenfor
+repoet. Kontroller den tilknyttede hostingtjenestens byggestatus etter publisering, og ikke
+bruk vellykket Git-push som bekreftelse på at nettstedet er oppdatert.

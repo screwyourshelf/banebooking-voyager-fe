@@ -5,7 +5,7 @@ import {
   createArrangement,
   deleteArrangementBooking,
   getAdminArrangements,
-  previewArrangementEdit,
+  previewArrangement,
   updateArrangementBooking,
   updateArrangementMetadata,
 } from "./api";
@@ -25,7 +25,7 @@ describe("arrangement-admin endpoints", () => {
     };
 
     await getAdminArrangements(api, "fjord vik");
-    await previewArrangementEdit(api, "fjord vik", "event/1", arrangementRequest);
+    await previewArrangement(api, "fjord vik", arrangementRequest);
     await createArrangement(api, "fjord vik", arrangementRequest);
     await updateArrangementMetadata(api, "fjord vik", "event/1", {
       kategori: "Kurs",
@@ -46,8 +46,8 @@ describe("arrangement-admin endpoints", () => {
     expect(request.mock.calls).toEqual([
       ["klubb/fjord%20vik/arrangementer", { auth: "required", signal: undefined }],
       [
-        "klubb/fjord%20vik/arrangement/event%2F1/forhandsvis",
-        { auth: "required", method: "PUT", json: arrangementRequest },
+        "klubb/fjord%20vik/arrangement/forhandsvis",
+        { auth: "required", method: "POST", json: arrangementRequest },
       ],
       [
         "klubb/fjord%20vik/arrangement",

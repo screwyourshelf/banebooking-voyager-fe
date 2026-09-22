@@ -3,8 +3,18 @@
 import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/svelte";
 import axe from "axe-core";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import DatePickerFixture from "./DatePickerFixture.test.svelte";
+
+// Keep the fixtures' calendar month deterministic without mocking async UI timers.
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  vi.setSystemTime(new Date(2026, 7, 22, 12));
+});
+
+afterEach(() => {
+  vi.useRealTimers();
+});
 
 const axeOptions: axe.RunOptions = {
   // jsdom has no canvas or final app shell; contrast and portal landmarks are browser QA.
@@ -120,7 +130,12 @@ describe("DatePicker and MultiDatePicker", () => {
     ).toHaveAttribute("aria-disabled", "true");
   });
 
-  it("opens an empty picker on the current local month", async () => {
+  it.each([
+    [new Date(2026, 7, 22, 12), "august 2026"],
+    [new Date(2026, 8, 22, 12), "september 2026"],
+    [new Date(2027, 0, 1, 12), "januar 2027"],
+  ])("opens an empty picker in the local month at %s", async (now, month) => {
+    vi.setSystemTime(now);
     renderFixture();
     const trigger = screen.getByRole("button", { name: "Tom dato" });
     await fireEvent.click(trigger);
@@ -130,7 +145,7 @@ describe("DatePicker and MultiDatePicker", () => {
 
     const calendar = await screen.findByLabelText(/Velg tom dato/i);
     expect(
-      within(calendar).getByRole("heading", { name: /Velg tom dato august 2026/i })
+      within(calendar).getByRole("heading", { name: new RegExp(`Velg tom dato ${month}`, "i") })
     ).toBeVisible();
   });
 

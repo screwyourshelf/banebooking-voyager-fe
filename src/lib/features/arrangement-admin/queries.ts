@@ -20,7 +20,6 @@ import {
   getArrangementBookings,
   getArrangementCourts,
   previewArrangement,
-  previewArrangementEdit,
   updateArrangementBooking,
   updateArrangementMetadata,
 } from "./api";
@@ -76,16 +75,10 @@ export function arrangementBookingsQueryOptions(
   };
 }
 
-export function previewArrangementMutationOptions(
-  api: ApiClient,
-  slug: string,
-  arrangementId?: string
-) {
+export function previewArrangementMutationOptions(api: ApiClient, slug: string) {
   return {
-    mutationFn: (request: OpprettArrangementForespørsel) =>
-      arrangementId
-        ? previewArrangementEdit(api, slug, arrangementId, request)
-        : previewArrangement(api, slug, request),
+    // Både opprettelse og tillegg må sjekke mot alle eksisterende bookinger.
+    mutationFn: (request: OpprettArrangementForespørsel) => previewArrangement(api, slug, request),
     retry: false,
   };
 }

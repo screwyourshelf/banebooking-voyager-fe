@@ -23,7 +23,7 @@ registrerer bare test-eide booking-ID-er for avgrenset opprydding.
 
 ## Eide testdata og opprydding
 
-- Bookingtesten oppretter én booking for utviklingsprofilen `medlem`, avbestiller samme booking i
+- Bookingtesten velger en bane med en ledig, bookbar tid gjennom UI-et og oppretter én booking for utviklingsprofilen `medlem`, avbestiller samme booking i
   produktflyten og registrerer booking-ID-en ved API-grensen. Ettertesten sletter bare denne ID-en
   dersom flyten stopper før avbestillingen er fullført.
 - Admintesten leser hele den eksisterende klubbprofilen for `aas-tennisklubb`, endrer klubbnavnet
@@ -38,7 +38,8 @@ Kjør porten med:
 npm run test:e2e
 ```
 
-Denne porten inkluderer fire kritiske flyter og tolv fryste visuelle referanser. Authflyten logger
+Denne porten inkluderer fire kritiske flyter, arrangementkontrakten nedenfor og fjorten fryste
+visuelle referanser. Ytelsesbaseline kjøres bare når den aktiveres eksplisitt. Authflyten logger
 inn og ut med alle tre utviklingsprofiler og aksepterer den policyflaten backenddataene faktisk
 krever. En egen, responslokal kunngjøringsfixture verifiserer kappløpet mellom retur fra login og
 obligatorisk policyredirect uten å endre backenddata. De to øvrige kritiske flytene verifiserer
@@ -46,6 +47,31 @@ medlemmenes booking/avbestilling og administratorens klubbendring. De visuelle t
 stabile, test-eide svar og den samme authharnessen, men utfører ingen mutasjoner. Den navngitte
 route-, rolle-, state-, viewport-, theme- og interaksjonskontrakten ligger i
 [`visual-regression-matrix.md`](./visual-regression-matrix.md).
+
+De visuelle referansene kan også kjøres uten backend og database:
+
+```bash
+npm run test:e2e:visual
+```
+
+Denne konfigurasjonen bruker bare frontend og eide API-fixtures. De kritiske flytene og
+arrangementkontrakten bruker lokal PostgreSQL. Bookingtesten krever minst én bookbar tid
+innenfor utviklingsmedlemmets kvote; eksisterende manuelle bookinger ryddes ikke bort.
+
+## Arrangementkontrakt
+
+`e2e/arrangement-slot-contract.spec.ts` bruker frontendens faktiske API-klient og
+arrangementfunksjoner mot lokal backend og PostgreSQL. Den verifiserer eksplisitte slots,
+konflikt mot egne eksisterende tider, delvis batchsuksess og oppdatering av én booking. Den
+kontrollerer også backendens beholdte erstatningsendepunkt. Testen oppretter ett eget arrangement
+på ledige tider og sletter bare dette arrangementet i `finally`.
+
+```bash
+npx playwright test e2e/arrangement-slot-contract.spec.ts
+```
+
+Editorens valg av forhåndsvisningsendepunkt og visning av konflikt testes separat i
+`src/lib/features/arrangement-admin/admin-screen.test.ts`.
 
 ## Produksjonsartefakter og routes
 

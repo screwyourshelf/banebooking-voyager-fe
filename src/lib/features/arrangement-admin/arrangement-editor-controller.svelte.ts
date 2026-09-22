@@ -71,11 +71,7 @@ export function createArrangementEditorController(input: ArrangementEditorInput)
     arrangementBookingsQueryOptions(api, tenant.slug, input.mode === "edit" ? arrangementId : "")
   );
   const previewMutation = createSvelteMutation(() =>
-    previewArrangementMutationOptions(
-      api,
-      tenant.slug,
-      input.mode === "edit" ? arrangementId : undefined
-    )
+    previewArrangementMutationOptions(api, tenant.slug)
   );
   const createArrangementMutation = createSvelteMutation(() =>
     createArrangementMutationOptions(api, queryClient, tenant.slug)

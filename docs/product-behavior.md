@@ -2,7 +2,7 @@
 
 > **Status:** Bindende produktadferd
 >
-> **Sist oppdatert:** 2026-08-28
+> **Sist oppdatert:** 2026-09-22
 
 ## Formål og avgrensning
 
@@ -219,6 +219,9 @@ Sentrale API-er: `GET|PUT /klubb/{slug}`, `GET /klubb/{slug}/medlemskap/status` 
   informasjon/metadata fra banetider.
 - Banetider kan foreslås gjentakende eller manuelt. Backend forhåndsviser ledige tider og
   konflikter; klienten beholder et lokalt stagingutkast og sender bare gyldige forslag.
+- Nye forslag forhåndsvises med `POST arrangement/forhandsvis` også ved redigering. Egne
+  eksisterende bookinger skal gi konflikt når forslagene skal legges til. Editorflyten erstatter
+  ikke hele arrangementets bookingserie.
 - Eksisterende arrangement kan endre metadata, legge til enkelttider eller batch, oppdatere en
   booking atomisk, fjerne tider og avlyses. Delvis batchsuksess beholder feilede forslag og
   forklarer resultatet.
@@ -228,7 +231,7 @@ Sentrale API-er: `GET|PUT /klubb/{slug}`, `GET /klubb/{slug}/medlemskap/status` 
 
 Sentrale API-er: `GET /klubb/{slug}/arrangementer`,
 `POST /klubb/{slug}/arrangement/forhandsvis`, `POST /klubb/{slug}/arrangement`,
-`PUT /klubb/{slug}/arrangement/{id}/forhandsvis`, `PUT|DELETE /klubb/{slug}/arrangement/{id}`,
+`DELETE /klubb/{slug}/arrangement/{id}`,
 `PATCH /klubb/{slug}/arrangement/{id}/metadata` og
 `GET|POST|PUT|DELETE /klubb/{slug}/arrangement/{id}/bookinger[/{bookingId}]` med eget
 `POST .../bookinger/batch`.
