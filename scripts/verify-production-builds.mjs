@@ -72,6 +72,19 @@ function verifyBuild(build) {
     `${build.host}: llms.txt mangler offentlig Banebooking-lenke.`
   );
 
+  const aiCatalog = JSON.parse(
+    readFileSync(join(build.directory, ".well-known/ai-catalog.json"), "utf8")
+  );
+  assert(
+    aiCatalog.specVersion === "1.0",
+    `${build.host}: ai-catalog.json mangler støttet specVersion.`
+  );
+  assert(
+    aiCatalog.host?.displayName === "Ås tennisklubb",
+    `${build.host}: ai-catalog.json mangler forventet vert.`
+  );
+  assert(Array.isArray(aiCatalog.entries), `${build.host}: ai-catalog.json mangler entries-array.`);
+
   if (build.fallback === "index.html") {
     const redirects = readFileSync(join(build.directory, "_redirects"), "utf8").trim();
     assert(redirects === "/* /index.html 200", "Cloudflare Pages: _redirects er uventet.");
