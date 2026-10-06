@@ -40,6 +40,7 @@ export default defineConfig({
       env: {
         VITE_BASE_PATH: E2E_APP_BASE_PATH,
         VITE_DEFAULT_SLUG: E2E_TENANT_SLUG,
+        VITE_ENABLE_IDRETTENS_ID: "true",
       },
       url: `${E2E_APP_ORIGIN}${E2E_APP_BASE_PATH}/${E2E_TENANT_SLUG}`,
       reuseExistingServer: !process.env.CI,
