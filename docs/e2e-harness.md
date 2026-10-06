@@ -107,3 +107,6 @@ produksjonsworkflowen må passere kontraktjobben. Ved frontendendringer kjøres 
 CI manuelt med `frontend_ref` satt til kandidatens commit; dette starter ikke produksjonsdeploy.
 Oppdater den låste referansen når en ny frontendversjon skal være kontraktens baseline.
 Frontendpush utløser ikke automatisk en kjøring i det andre repoet.
+
+Visuelle referanser inkluderer Idrettens ID-knappen. Begge utviklingsharnessene setter
+`VITE_ENABLE_IDRETTENS_ID=true` eksplisitt, slik at lokal `.env` og CI gir samme innloggingsflate.
