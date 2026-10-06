@@ -44,7 +44,10 @@ describe("arrangement-admin endpoints", () => {
     await deleteArrangementBooking(api, "fjord vik", "event/1", "booking/1");
 
     expect(request.mock.calls).toEqual([
-      ["klubb/fjord%20vik/arrangementer", { auth: "required", signal: undefined }],
+      [
+        "klubb/fjord%20vik/arrangementer?inkluderHistoriske=true",
+        { auth: "required", signal: undefined },
+      ],
       [
         "klubb/fjord%20vik/arrangement/forhandsvis",
         { auth: "required", method: "POST", json: arrangementRequest },
