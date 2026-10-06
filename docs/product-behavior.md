@@ -159,6 +159,9 @@ Sentrale API-er: `GET /klubb/{slug}/booking-bootstrap?dato=`,
 
 - Mine tider viser kommende bookinger, kan inkludere historikk, grupperer/sorterer etter relevans
   og viser avbestilling bare når bookingen har `booking:fjern`.
+- Listen omfatter personlige reservasjoner. Arrangementsbookinger inngår ikke. Tidligere betyr
+  at reservasjonens sluttid er passert, ikke at oppmøte er registrert. Avbestilte bookinger slettes
+  og er derfor ikke tilgjengelige i historikken.
 - Min side har profil og persondata. Profilen kan bruke e-post eller validert visningsnavn, viser
   roller og medlemsstatus og kan slette egen konto.
 - Persondata viser vilkårssamtykke, laster ned en JSON-eksport og tilbyr kontosletting.
@@ -242,11 +245,19 @@ Sentrale API-er: `GET /klubb/{slug}/arrangementer`,
   visningsnavn; egen eller slettet bruker kan ikke redigeres.
 - Objektkapabiliteter styrer sletting, sperring, visning av sperrehistorikk og oppheving av aktiv
   sperre.
+- `bruker:seBookinger` åpner brukerens bookingliste. Bare administrator i aktuell klubb får
+  kapabiliteten og API-tilgang; utvidet bruker har ikke tilgang. Oppslaget avgrenser både bruker
+  og bookinger til klubben og hentes først når listen åpnes.
+- Bookinglisten deler rader, datogruppering, relevanssortering og grenfilter med Mine tider.
+  Tidligere bookinger er inkludert som standard, og listen viser ti om gangen med «Vis flere».
+  Den viser personlige reservasjoner, også på inaktive baner, uten avbestillingshandlinger eller
+  værdata. Arrangementsbookinger og slettede/avbestilte bookinger inngår ikke.
 - Kritiske states er tilgangskontroll, loading, tom/filtrert tom liste, retrybar feil, åpen editor
   eller destruktiv bekreftelse, felt-/serverfeil, pågående mutasjon og oppdatert liste.
 
 Sentrale API-er: `GET /klubb/{slug}/bruker/admin/bruker`,
 `PUT|DELETE /klubb/{slug}/bruker/admin/bruker/{id}`,
+`GET /klubb/{slug}/bruker/admin/bruker/{id}/bookinger`,
 `GET|POST /klubb/{slug}/bruker/admin/bruker/{id}/sperr` og
 `DELETE /klubb/{slug}/bruker/admin/bruker/{id}/sperr/{sperreId}`.
 

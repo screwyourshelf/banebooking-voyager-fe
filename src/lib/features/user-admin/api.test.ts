@@ -5,6 +5,7 @@ import {
   deleteAdminUser,
   getAdminUsers,
   getUserBlocks,
+  getUserBookings,
   revokeUserBlock,
   updateAdminUser,
 } from "./api";
@@ -60,4 +61,14 @@ describe("user admin API", () => {
       ],
     ]);
   });
+});
+
+it("henter bookinghistorikk med kodet klubb/bruker og videresender avbrudd", async () => {
+  const request = vi.fn().mockResolvedValue([]);
+  const signal = new AbortController().signal;
+  await getUserBookings({ request } as ApiClient, "fjord vik", "user/id", signal);
+  expect(request).toHaveBeenCalledWith(
+    "klubb/fjord%20vik/bruker/admin/bruker/user%2Fid/bookinger",
+    { auth: "required", signal }
+  );
 });

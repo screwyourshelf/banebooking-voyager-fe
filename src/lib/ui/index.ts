@@ -51,6 +51,7 @@ export {
   RichTextContent,
   RichTextEditor,
   ScheduleTime,
+  ScheduleRow,
   Section,
   SettingsChoiceGroup,
   SettingsPanel,

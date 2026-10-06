@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 
 import "@testing-library/jest-dom/vitest";
-import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
+import { fireEvent, render, screen, waitFor, within } from "@testing-library/svelte";
 import axe from "axe-core";
 import { describe, expect, it, vi } from "vitest";
 import type { BrukerRespons, BrukerSperreRespons, BrukerSperrerRespons } from "$lib/contracts";
@@ -19,6 +19,7 @@ const objectCapabilities = [
   "bruker:sperr",
   "bruker:opphevSperre",
   "bruker:seSperre",
+  "bruker:seBookinger",
 ];
 
 function createUsers(readOnly = false): BrukerRespons[] {
@@ -177,6 +178,7 @@ describe("UserAdminScreen", () => {
     expect(screen.queryByRole("button", { name: "Sperr" })).toBeNull();
     expect(screen.queryByRole("button", { name: "Slett" })).toBeNull();
     expect(screen.queryByRole("button", { name: "Vis historikk" })).toBeNull();
+    expect(screen.queryByRole("button", { name: "Vis bookinger" })).toBeNull();
   });
 
   it("validerer editoren, fokuserer første feil og lagrer typed rolle/navn", async () => {
@@ -247,5 +249,92 @@ describe("UserAdminScreen", () => {
       })
     );
     expect(screen.queryByText("Ola Medlem")).toBeNull();
+  });
+});
+
+describe("brukerens bookinger", () => {
+  it("henter først ved åpning og viser sorterte datogrupper, grenfilter og flere rader uten skrivehandlinger", async () => {
+    const usersRequest = createRequest();
+    const bookingRows = Array.from({ length: 12 }, (_, index) => ({
+      bookingId: `booking-${index}`,
+      grenId: index === 0 ? "padel" : "tennis",
+      grenNavn: index === 0 ? "Padel" : "Tennis",
+      baneId: `court-${index}`,
+      baneNavn: `Historisk bane ${index}`,
+      dato: `2026-08-${String(20 - index).padStart(2, "0")}`,
+      startTid: "08:00",
+      sluttTid: "09:00",
+      erPassert: true,
+      kapabiliteter: ["booking:fjern"],
+    }));
+    const request = vi.fn(async (path: string) =>
+      path.endsWith("/user-ola/bookinger") ? bookingRows : usersRequest(path)
+    );
+    render(UserAdminFixture, { request: request as ApiClient["request"] });
+    await expandOla();
+    expect(request.mock.calls.some(([path]) => path.endsWith("/bookinger"))).toBe(false);
+    await fireEvent.click(screen.getByRole("button", { name: "Vis bookinger" }));
+    const dialog = within(await screen.findByRole("dialog"));
+    expect(await dialog.findByRole("heading", { name: "12 bookinger" })).toBeVisible();
+    expect(dialog.getByText("Ola Medlem · ola@example.no")).toBeVisible();
+    expect(dialog.getByRole("switch", { name: "Vis tidligere" })).toBeChecked();
+    expect(dialog.getByText("Historisk bane 0")).toBeVisible();
+    expect(dialog.queryByText("Historisk bane 11")).toBeNull();
+    expect(dialog.queryByRole("button", { name: "Avbestill" })).toBeNull();
+    expect(dialog.queryByRole("link", { name: "Book en bane" })).toBeNull();
+    expect((await axe.run(screen.getByRole("dialog"), axeOptions)).violations).toEqual([]);
+    await fireEvent.click(dialog.getByRole("button", { name: "Vis flere (2 gjenstår)" }));
+    expect(dialog.getByText("Historisk bane 11")).toBeVisible();
+    await fireEvent.click(dialog.getByRole("button", { name: "Padel" }));
+    expect(dialog.getByRole("heading", { name: "1 booking" })).toBeVisible();
+    expect(dialog.queryByText("Historisk bane 1")).toBeNull();
+    await fireEvent.click(dialog.getByRole("switch", { name: "Vis tidligere" }));
+    expect(dialog.getByText("Ingen kommende bookinger")).toBeVisible();
+    await fireEvent.click(dialog.getByRole("button", { name: "Til brukeren" }));
+    expect(screen.getByRole("searchbox", { name: "Søk etter bruker" })).toBeVisible();
+  });
+
+  it("viser kommende og tidligere tider på samme dato også når andre datoer ligger mellom", async () => {
+    const usersRequest = createRequest();
+    const bookingRows = [
+      { bookingId: "past", dato: "2026-08-23", startTid: "08:00", erPassert: true },
+      { bookingId: "tomorrow", dato: "2026-08-24", startTid: "08:00", erPassert: false },
+      { bookingId: "today", dato: "2026-08-23", startTid: "18:00", erPassert: false },
+    ].map((booking) => ({
+      grenId: "tennis",
+      grenNavn: "Tennis",
+      baneId: "court",
+      baneNavn: booking.bookingId,
+      sluttTid: "19:00",
+      kapabiliteter: [],
+      ...booking,
+    }));
+    const request = vi.fn(async (path: string) =>
+      path.endsWith("/user-ola/bookinger") ? bookingRows : usersRequest(path)
+    );
+    render(UserAdminFixture, { request: request as ApiClient["request"] });
+    await expandOla();
+    await fireEvent.click(screen.getByRole("button", { name: "Vis bookinger" }));
+    const dialog = within(await screen.findByRole("dialog"));
+    expect(await dialog.findByText("past")).toBeVisible();
+    expect(dialog.getByText("today")).toBeVisible();
+    expect(dialog.getByText("tomorrow")).toBeVisible();
+  });
+
+  it("viser lesefeil med ny henting og en tom liste uten opprettelseshandling", async () => {
+    const usersRequest = createRequest();
+    let failed = true;
+    const request = vi.fn(async (path: string) => {
+      if (!path.endsWith("/user-ola/bookinger")) return usersRequest(path);
+      if (failed) throw new Error("Midlertidig nettverksfeil");
+      return [];
+    });
+    render(UserAdminFixture, { request: request as ApiClient["request"] });
+    await expandOla();
+    await fireEvent.click(screen.getByRole("button", { name: "Vis bookinger" }));
+    expect(await screen.findByText("Kunne ikke laste brukerens bookinger")).toBeVisible();
+    failed = false;
+    await fireEvent.click(screen.getByRole("button", { name: /Prøv igjen/ }));
+    expect(await screen.findByText("Ingen bookinger ennå")).toBeVisible();
   });
 });

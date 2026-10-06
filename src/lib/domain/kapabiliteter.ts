@@ -27,6 +27,7 @@ export const Kapabiliteter = {
     sperr: "bruker:sperr",
     opphevSperre: "bruker:opphevSperre",
     seSperre: "bruker:seSperre",
+    seBookinger: "bruker:seBookinger",
   },
   medlemskap: {
     aktiver: "medlemskap:aktiver",

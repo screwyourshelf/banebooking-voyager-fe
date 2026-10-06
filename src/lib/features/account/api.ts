@@ -1,4 +1,4 @@
-import type { MinBookingRespons, OppdaterProfilForespørsel } from "$lib/contracts";
+import type { BrukerBookingRespons, OppdaterProfilForespørsel } from "$lib/contracts";
 import type { ApiClient } from "$lib/platform/api";
 
 function accountPath(slug: string, suffix: string) {
@@ -12,7 +12,7 @@ export function getMyBookings(
   signal?: AbortSignal
 ) {
   const query = includeHistorical ? "?inkluderHistoriske=true" : "";
-  return api.request<MinBookingRespons[]>(accountPath(slug, `bookinger/mine${query}`), {
+  return api.request<BrukerBookingRespons[]>(accountPath(slug, `bookinger/mine${query}`), {
     auth: "required",
     signal,
   });

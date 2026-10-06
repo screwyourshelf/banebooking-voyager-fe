@@ -1,5 +1,6 @@
 import type {
   BrukerRespons,
+  BrukerBookingRespons,
   BrukerSperrerRespons,
   OppdaterBrukerForespørsel,
   OpphevSperreRespons,
@@ -64,4 +65,16 @@ export function revokeUserBlock(api: ApiClient, slug: string, userId: string, bl
     userPath(slug, userId, `sperr/${encodeURIComponent(blockId)}`),
     { auth: "required", method: "DELETE" }
   );
+}
+
+export function getUserBookings(
+  api: ApiClient,
+  slug: string,
+  userId: string,
+  signal?: AbortSignal
+) {
+  return api.request<BrukerBookingRespons[]>(userPath(slug, userId, "bookinger"), {
+    auth: "required",
+    signal,
+  });
 }

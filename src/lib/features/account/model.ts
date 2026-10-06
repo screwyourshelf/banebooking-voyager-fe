@@ -1,4 +1,4 @@
-import type { BrukerRespons, MinBookingRespons } from "$lib/contracts";
+import type { BrukerRespons } from "$lib/contracts";
 
 export type AccountTab = "profil" | "persondata";
 export type DisplayNameMode = "epost" | "navn";
@@ -32,53 +32,4 @@ export function validateDisplayName(rawValue: string): string | null {
 
 export function resolveDisplayName(user: BrukerRespons, mode: DisplayNameMode, value: string) {
   return mode === "epost" ? user.epost : value.trim();
-}
-
-export function sortBookingsByRelevance(bookings: readonly MinBookingRespons[]) {
-  return [...bookings].sort((left, right) => {
-    if (left.erPassert !== right.erPassert) return left.erPassert ? 1 : -1;
-    const direction = left.erPassert ? -1 : 1;
-    const dateDifference = left.dato.localeCompare(right.dato) * direction;
-    return dateDifference || left.startTid.localeCompare(right.startTid) * direction;
-  });
-}
-
-export type BookingDateGroup = {
-  date: string;
-  bookings: MinBookingRespons[];
-};
-
-export function groupBookingsByDate(bookings: readonly MinBookingRespons[]): BookingDateGroup[] {
-  return bookings.reduce<BookingDateGroup[]>((groups, booking) => {
-    const date = booking.dato.slice(0, 10);
-    const lastGroup = groups.at(-1);
-    if (lastGroup?.date === date) lastGroup.bookings.push(booking);
-    else groups.push({ date, bookings: [booking] });
-    return groups;
-  }, []);
-}
-
-export function buildBookingKey(booking: MinBookingRespons) {
-  return (
-    booking.bookingId || `${booking.baneId}-${booking.dato}-${booking.startTid}-${booking.sluttTid}`
-  );
-}
-
-export function getBookingActivityOptions(bookings: readonly MinBookingRespons[]) {
-  return [
-    ...new Map(
-      bookings.map((booking) => [
-        booking.grenId,
-        { value: booking.grenId, label: booking.grenNavn },
-      ])
-    ).values(),
-  ].sort((left, right) => left.label.localeCompare(right.label, "nb-NO"));
-}
-
-export function filterBookingsByActivity(
-  bookings: readonly MinBookingRespons[],
-  activityIds: readonly string[]
-) {
-  if (!activityIds.length) return [...bookings];
-  return bookings.filter((booking) => activityIds.includes(booking.grenId));
 }

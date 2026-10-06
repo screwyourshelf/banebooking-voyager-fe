@@ -1,7 +1,7 @@
 <script lang="ts">
   import { CalendarCheckIn01Icon } from "@hugeicons/core-free-icons";
   import { createMutation, createQuery, useQueryClient } from "@tanstack/svelte-query";
-  import type { MinBookingRespons } from "$lib/contracts";
+  import type { BrukerBookingRespons } from "$lib/contracts";
   import { formaterDatoGruppe } from "$lib/domain";
   import { getApiClient } from "$lib/platform/api";
   import { getTenantContext } from "$lib/platform/tenant";
@@ -25,7 +25,7 @@
     getBookingActivityOptions,
     groupBookingsByDate,
     sortBookingsByRelevance,
-  } from "./model";
+  } from "$lib/domain";
   import { cancelMyBookingMutationOptions, myBookingsQueryOptions } from "./queries";
 
   let { bookingHref }: { bookingHref: string } = $props();
@@ -76,7 +76,7 @@
     visibleCount = 10;
   }
 
-  function cancelBooking(booking: MinBookingRespons) {
+  function cancelBooking(booking: BrukerBookingRespons) {
     if (!booking.bookingId || cancelMutation.isPending) return;
     cancelMutation.mutate({
       bookingId: booking.bookingId,
@@ -127,7 +127,7 @@
 <Page
   eyebrow="Min konto"
   title="Mine bookinger"
-  description="Hold oversikt over kommende og gjennomførte tider."
+  description="Hold oversikt over kommende og tidligere tider."
 >
   <Collection
     icon={collectionIcon}
@@ -175,13 +175,13 @@
         description={hasFilteredEmptyState
           ? "Velg en annen gren eller nullstill filteret."
           : includeHistorical
-            ? "Når du booker en bane, vises kommende og gjennomførte tider her."
+            ? "Når du booker en bane, vises kommende og tidligere tider her."
             : "Finn en ledig tid som passer, så dukker den opp her med en gang."}
         action={emptyAction}
       />
     {:else}
       <CollectionList busy={bookingsQuery.isFetching || cancelMutation.isPending}>
-        {#each groups as group (group.date)}
+        {#each groups as group (group.bookings[0].bookingId)}
           {@const heading = formaterDatoGruppe(group.date)}
           <CollectionGroup
             date={group.date}

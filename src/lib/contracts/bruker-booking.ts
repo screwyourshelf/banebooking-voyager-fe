@@ -1,5 +1,5 @@
-// Transportkontrakt for Mine tider.
-export type MinBookingRespons = {
+// Transportkontrakt for personlige reservasjoner i Mine tider og brukeradministrasjon.
+export type BrukerBookingRespons = {
   bookingId: string;
   grenId: string;
   grenNavn: string;

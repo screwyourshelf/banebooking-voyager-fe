@@ -4,7 +4,7 @@ import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/svelte";
 import axe from "axe-core";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { MinBookingRespons } from "$lib/contracts";
+import type { BrukerBookingRespons } from "$lib/contracts";
 import type { ApiClient } from "$lib/platform/api";
 import AccountFixture from "./AccountFixture.test.svelte";
 
@@ -12,7 +12,7 @@ const axeOptions: axe.RunOptions = {
   rules: { "color-contrast": { enabled: false } },
 };
 
-const bookings: MinBookingRespons[] = [
+const bookings: BrukerBookingRespons[] = [
   {
     bookingId: "booking-1",
     grenId: "tennis",
@@ -189,8 +189,8 @@ describe("account screens", () => {
   });
 
   it("reserverer listegeometri under loading og viser kommende tomtilstand", async () => {
-    let resolveBookings!: (value: MinBookingRespons[]) => void;
-    const pending = new Promise<MinBookingRespons[]>((resolve) => {
+    let resolveBookings!: (value: BrukerBookingRespons[]) => void;
+    const pending = new Promise<BrukerBookingRespons[]>((resolve) => {
       resolveBookings = resolve;
     });
     const request = vi.fn(() => pending);

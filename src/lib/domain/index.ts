@@ -5,3 +5,4 @@ export * from "./dato";
 export * from "./handling";
 export * from "./kapabiliteter";
 export * from "./policy";
+export * from "./booking-list";

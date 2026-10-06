@@ -1,11 +1,11 @@
 import { QueryClient } from "@tanstack/svelte-query";
 import { describe, expect, it, vi } from "vitest";
-import type { MinBookingRespons } from "$lib/contracts";
+import type { BrukerBookingRespons } from "$lib/contracts";
 import type { ApiClient } from "$lib/platform/api";
 import { accountQueryKeys } from "./query-keys";
 import { cancelMyBookingMutationOptions } from "./queries";
 
-const booking: MinBookingRespons = {
+const booking: BrukerBookingRespons = {
   bookingId: "booking-1",
   grenId: "tennis",
   grenNavn: "Tennis",

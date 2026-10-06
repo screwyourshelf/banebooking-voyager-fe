@@ -63,3 +63,4 @@ export { default as Weather } from "./Weather.svelte";
 export { default as VisualizationLayout } from "./VisualizationLayout.svelte";
 export { default as VisualizationLegend } from "./VisualizationLegend.svelte";
 export { default as VisualizationLoading } from "./VisualizationLoading.svelte";
+export { default as ScheduleRow } from "./ScheduleRow.svelte";

@@ -17,6 +17,7 @@
     onDelete,
     onEdit,
     onOpenHistory,
+    onOpenBookings,
     user,
   }: {
     currentUserId: string;
@@ -25,6 +26,7 @@
     onDelete: () => void;
     onEdit: () => void;
     onOpenHistory: () => void;
+    onOpenBookings: () => void;
     user: BrukerRespons;
   } = $props();
 
@@ -44,6 +46,9 @@
     !isCurrentUser && !deleted && harHandling(user.kapabiliteter, Kapabiliteter.brukere.slett)
   );
   const canViewHistory = $derived(harHandling(user.kapabiliteter, Kapabiliteter.brukere.seSperre));
+  const canViewBookings = $derived(
+    harHandling(user.kapabiliteter, Kapabiliteter.brukere.seBookinger)
+  );
   const displayName = $derived(getUserDisplayName(user));
   const showEmail = $derived(displayName !== user.epost);
   const membershipDescription = $derived(
@@ -71,6 +76,12 @@
 
     {#if user.fulltNavn?.trim() && user.fulltNavn.trim() !== user.visningsnavn?.trim()}
       <SettingsRow title="Navn i medlemskapet" description={user.fulltNavn} />
+    {/if}
+
+    {#if canViewBookings}
+      <SettingsRow title="Bookinger" description="Kommende og tidligere reservasjoner">
+        <Button size="small" variant="ghost" onclick={onOpenBookings}>Vis bookinger</Button>
+      </SettingsRow>
     {/if}
 
     {#if user.antallAktiveSperrer !== undefined}

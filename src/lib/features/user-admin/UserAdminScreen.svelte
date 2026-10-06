@@ -29,6 +29,7 @@
   } from "./model";
   import { adminUsersQueryOptions } from "./queries";
   import UserBlockHistoryDialog from "./UserBlockHistoryDialog.svelte";
+  import UserBookingsDialog from "./UserBookingsDialog.svelte";
   import UserRow from "./UserRow.svelte";
 
   let { capabilities, currentUserId }: { capabilities: readonly string[]; currentUserId: string } =
@@ -45,6 +46,7 @@
   let blockingUser = $state<BrukerRespons | null>(null);
   let deletingUser = $state<BrukerRespons | null>(null);
   let historyUser = $state<BrukerRespons | null>(null);
+  let bookingsUser = $state<BrukerRespons | null>(null);
   const filteredUsers = $derived(filterAndSortUsers(usersQuery.data ?? [], filters));
   const visibleUsers = $derived(filteredUsers.slice(0, visibleLimit));
   const remainingCount = $derived(Math.max(0, filteredUsers.length - visibleUsers.length));
@@ -187,6 +189,7 @@
             onEdit={() => (editingUser = user)}
             onBlock={() => (blockingUser = user)}
             onDelete={() => (deletingUser = user)}
+            onOpenBookings={() => (bookingsUser = user)}
             onOpenHistory={() => (historyUser = user)}
           />
         {/each}
@@ -206,4 +209,8 @@
 {/if}
 {#if historyUser}
   <UserBlockHistoryDialog user={historyUser} onClose={() => (historyUser = null)} />
+{/if}
+
+{#if bookingsUser}
+  <UserBookingsDialog user={bookingsUser} onClose={() => (bookingsUser = null)} />
 {/if}

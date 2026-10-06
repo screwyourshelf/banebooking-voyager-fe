@@ -360,3 +360,83 @@ function captureBrowserDiagnostics(page: Page): BrowserDiagnostics {
 async function expectNoBrowserDiagnostics(diagnostics: BrowserDiagnostics) {
   await expect.poll(() => diagnostics.messages).toEqual([]);
 }
+
+for (const viewport of [mobile, desktop]) {
+  test(`admin user bookings share the schedule presentation — ${viewport.width}`, async ({
+    page,
+    e2e,
+  }, testInfo) => {
+    const diagnostics = await prepareReferenceSurface(page, {
+      capabilities: ["brukere:admin", "brukere:lese"],
+      profile: "admin",
+      theme: "light",
+      viewport,
+    });
+    const users = [
+      {
+        id: "school-user",
+        epost: "school@example.test",
+        visningsnavn: "Skolebruker",
+        roller: ["Medlem"],
+        kapabiliteter: ["bruker:seBookinger"],
+        opprettetTid: "2026-05-27T08:00:00Z",
+      },
+    ];
+    const bookings = [
+      {
+        bookingId: "past",
+        dato: "2026-06-01",
+        startTid: "08:00",
+        sluttTid: "09:00",
+        erPassert: true,
+      },
+      {
+        bookingId: "future",
+        dato: "2026-08-25",
+        startTid: "09:00",
+        sluttTid: "10:00",
+        erPassert: false,
+      },
+    ].map((booking) => ({
+      ...booking,
+      grenId: "tennis",
+      grenNavn: "Tennis",
+      baneId: "a",
+      baneNavn: "Bane A",
+      kapabiliteter: [],
+    }));
+    await page.route("**/api/klubb/*/bruker/admin/bruker", (route) =>
+      route.fulfill({ json: users })
+    );
+    await page.route("**/api/klubb/*/bruker/admin/bruker/school-user/bookinger", (route) =>
+      route.fulfill({ json: bookings })
+    );
+    await page.route("**/api/klubb/*/bookinger/mine*", (route) => {
+      const includeHistorical =
+        new URL(route.request().url()).searchParams.get("inkluderHistoriske") === "true";
+      return route.fulfill({
+        json: bookings.filter((booking) => includeHistorical || !booking.erPassert),
+      });
+    });
+    await signInAndOpen(page, e2e.signIn, "admin", e2e.tenantPath("admin/brukere"));
+    await page.getByText("Skolebruker", { exact: true }).click();
+    await page.getByRole("button", { name: "Vis bookinger" }).click();
+    const dialog = page.getByRole("dialog", { name: "Bookinger", exact: true });
+    await expect(dialog).toBeVisible();
+    await expect(dialog.getByRole("heading", { name: "2 bookinger" })).toBeVisible();
+    await expect(dialog.getByRole("switch", { name: "Vis tidligere" })).toBeChecked();
+    await expect(dialog.getByRole("button", { name: "Avbestill" })).toHaveCount(0);
+    await expect(dialog.locator('[data-ui="collection-row"]')).toHaveCount(2);
+    const adminRows = await dialog.locator('[data-ui="collection-row"]').allTextContents();
+    await page.screenshot({ path: testInfo.outputPath("admin-bookings.png"), fullPage: true });
+    await dialog.getByRole("button", { name: "Til brukeren" }).click();
+    await page.goto(e2e.tenantPath("bookinger"));
+    await expect(page.getByRole("heading", { name: "Mine bookinger", exact: true })).toBeVisible();
+    await expect(page.getByRole("heading", { name: "1 booking", exact: true })).toBeVisible();
+    await page.getByRole("switch", { name: "Vis tidligere" }).click();
+    await expect(page.getByRole("heading", { name: "2 bookinger" })).toBeVisible();
+    expect(await page.locator('[data-ui="collection-row"]').allTextContents()).toEqual(adminRows);
+    await page.screenshot({ path: testInfo.outputPath("my-bookings.png"), fullPage: true });
+    expect(diagnostics.messages).toEqual([]);
+  });
+}

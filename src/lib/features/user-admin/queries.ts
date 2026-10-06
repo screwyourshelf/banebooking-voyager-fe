@@ -7,6 +7,7 @@ import {
   deleteAdminUser,
   getAdminUsers,
   getUserBlocks,
+  getUserBookings,
   revokeUserBlock,
   updateAdminUser,
 } from "./api";
@@ -82,5 +83,20 @@ export function revokeBlockMutationOptions(api: ApiClient, queryClient: QueryCli
     onSuccess: (_response: unknown, input: { userId: string }) =>
       invalidateUserAdmin(queryClient, slug, input.userId),
     retry: false,
+  };
+}
+
+export function userBookingsQueryOptions(
+  api: ApiClient,
+  slug: string,
+  userId: string,
+  enabled: boolean
+) {
+  return {
+    meta: tenantQueryMeta(slug, "my-bookings"),
+    queryKey: userAdminQueryKeys.bookings(slug, userId),
+    queryFn: ({ signal }: { signal: AbortSignal }) => getUserBookings(api, slug, userId, signal),
+    enabled: enabled && Boolean(userId),
+    staleTime: 0,
   };
 }

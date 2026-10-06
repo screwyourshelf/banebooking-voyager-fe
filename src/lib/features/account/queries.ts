@@ -1,4 +1,4 @@
-import type { MinBookingRespons, OppdaterProfilForespørsel } from "$lib/contracts";
+import type { BrukerBookingRespons, OppdaterProfilForespørsel } from "$lib/contracts";
 import type { ApiClient } from "$lib/platform/api";
 import { tenantQueryMeta } from "$lib/platform/query";
 import type { QueryClient } from "@tanstack/svelte-query";
@@ -17,7 +17,9 @@ export type CancelMyBookingVariables = {
   date: string;
 };
 
-type BookingQueriesSnapshot = Array<readonly [readonly unknown[], MinBookingRespons[] | undefined]>;
+type BookingQueriesSnapshot = Array<
+  readonly [readonly unknown[], BrukerBookingRespons[] | undefined]
+>;
 
 export function myBookingsQueryOptions(api: ApiClient, slug: string, includeHistorical: boolean) {
   return {
@@ -39,8 +41,8 @@ export function cancelMyBookingMutationOptions(
     mutationFn: ({ bookingId }: CancelMyBookingVariables) => cancelMyBooking(api, slug, bookingId),
     onMutate: async ({ bookingId }: CancelMyBookingVariables) => {
       await queryClient.cancelQueries({ queryKey: mineKey });
-      const previous = queryClient.getQueriesData<MinBookingRespons[]>({ queryKey: mineKey });
-      queryClient.setQueriesData<MinBookingRespons[]>({ queryKey: mineKey }, (bookings = []) =>
+      const previous = queryClient.getQueriesData<BrukerBookingRespons[]>({ queryKey: mineKey });
+      queryClient.setQueriesData<BrukerBookingRespons[]>({ queryKey: mineKey }, (bookings = []) =>
         bookings.filter((booking) => booking.bookingId !== bookingId)
       );
       return { previous };
