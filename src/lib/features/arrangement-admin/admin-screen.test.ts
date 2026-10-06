@@ -14,7 +14,7 @@ const axeOptions: axe.RunOptions = {
 
 function createRequest() {
   return vi.fn(async (path: string, options?: { method?: string; json?: unknown }) => {
-    if (path.endsWith("arrangementer")) return [arrangement];
+    if (path.split("?")[0].endsWith("arrangementer")) return [arrangement];
     if (path.endsWith("grener")) return [activity];
     if (path.endsWith("baner")) return [court];
     if (path.endsWith("bookinger") && !options?.method) return [arrangementBooking];
@@ -39,6 +39,27 @@ function createRequest() {
 }
 
 describe("arrangement administration", () => {
+  it("henter historikken og viser tidligere arrangementer bare når bryteren er på", async () => {
+    const fallback = createRequest();
+    const request = vi.fn(async (path: string, options?: { method?: string; json?: unknown }) => {
+      if (path.split("?")[0].endsWith("arrangementer")) {
+        return new URL(path, "https://example.test").searchParams.get("inkluderHistoriske") ===
+          "true"
+          ? [{ ...arrangement, erPassert: true, tittel: "Tidligere sommercup" }]
+          : [];
+      }
+      return fallback(path, options);
+    });
+    render(AdminFixture, { request: request as ApiClient["request"] });
+    await screen.findByText("Ingen aktive arrangementer");
+    const toggle = screen.getByRole("switch", { name: "Vis tidligere" });
+    expect(screen.queryByText("Tidligere sommercup")).toBeNull();
+    await fireEvent.click(toggle);
+    expect(await screen.findByText("Tidligere sommercup")).toBeVisible();
+    await fireEvent.click(toggle);
+    expect(screen.queryByText("Tidligere sommercup")).toBeNull();
+  });
+
   it("viser kapabilitetsstyrt oversikt, editorsteg og har ingen oppdagede a11y-brudd", async () => {
     const request = createRequest();
     const result = render(AdminFixture, {

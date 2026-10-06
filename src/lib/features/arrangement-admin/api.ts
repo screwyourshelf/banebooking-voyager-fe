@@ -20,10 +20,13 @@ function clubPath(slug: string, resource: string) {
 }
 
 export function getAdminArrangements(api: ApiClient, slug: string, signal?: AbortSignal) {
-  return api.request<ArrangementRespons[]>(clubPath(slug, "arrangementer"), {
-    auth: "required",
-    signal,
-  });
+  return api.request<ArrangementRespons[]>(
+    clubPath(slug, "arrangementer?inkluderHistoriske=true"),
+    {
+      auth: "required",
+      signal,
+    }
+  );
 }
 
 export function getArrangementActivities(api: ApiClient, slug: string, signal?: AbortSignal) {
