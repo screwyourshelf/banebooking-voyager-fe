@@ -47,7 +47,7 @@ De lokale utviklingsprofilene finnes under **Testinnlogging** på innloggingssid
 
 ## Kvalitetsporter
 
-Den vanlige lokale porten er:
+De raske lokale kontrollene er:
 
 ```bash
 npm test
@@ -122,7 +122,25 @@ fallback- og bundlekrav håndheves av produksjons-E2E og `scripts/verify-product
 
 ## Publisering fra hovedbranch
 
-Dette repoet har ingen innsjekket GitHub Actions-workflow. Produksjonsbuildene og
-hostkontraktene over beskriver artefaktene; eventuell automatisk hosting ved push styres utenfor
-repoet. Kontroller den tilknyttede hostingtjenestens byggestatus etter publisering, og ikke
-bruk vellykket Git-push som bekreftelse på at nettstedet er oppdatert.
+`.github/workflows/ci.yml` kjører på pull requests og push til `main`, og kan startes manuelt.
+Jobben `Frontend quality gates` installerer den låste pakkegrafen og Chromium, og kjører
+samme komplette frontendport som lokalt:
+
+```bash
+npm run verify:frontend
+```
+
+Porten kjører enhetstester, `check`, visuelle E2E-tester og produksjons-E2E for begge
+hostvariantene. CI bruker Node.js 22 og macOS 15 fordi de innsjekkede skjermbildereferansene
+er Darwin-referanser. Den endrer ikke snapshots eller baselines. Ingen hemmeligheter eller
+backendtilgang er nødvendig, heller ikke for pull requests fra forks.
+
+Reelle API-kontraktflyter kjøres i det private backend-repoets CI mot PostgreSQL og en
+fast frontendcommit. `frontend_ref` ved manuell kjøring lar en frontendkandidat testes før
+publisering; se `docs/e2e-harness.md`. En grønn frontend-PR alene bekrefter ikke denne
+fullstackkontrakten. Frontendoppdateringer starter ikke automatisk backendworkflowen.
+
+Workflowen publiserer ikke nettstedet. Eventuell automatisk hosting ved push styres utenfor
+repoet. Kontroller hostingtjenestens byggestatus etter publisering. For å blokkere merge
+ved feil må `Frontend quality gates` settes som påkrevd statuskontroll i GitHub-regelsettet;
+workflowfilen endrer ikke repoets regelsett.

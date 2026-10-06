@@ -8,6 +8,7 @@ const PRODUCTION_STATIC_SERVER = JSON.stringify(
 );
 
 export default defineConfig({
+  forbidOnly: Boolean(process.env.CI),
   testDir: "./e2e",
   testMatch: "production-routes.spec.ts",
   fullyParallel: false,

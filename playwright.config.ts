@@ -8,6 +8,7 @@ import {
 } from "./e2e/environment";
 
 export default defineConfig({
+  forbidOnly: Boolean(process.env.CI),
   testDir: "./e2e",
   testIgnore: "production-routes.spec.ts",
   fullyParallel: false,
@@ -29,7 +30,7 @@ export default defineConfig({
       cwd: fileURLToPath(new URL("../backend", import.meta.url)),
       env: { ASPNETCORE_ENVIRONMENT: "Development" },
       url: `${E2E_BACKEND_ORIGIN}/api/health/db`,
-      reuseExistingServer: true,
+      reuseExistingServer: !process.env.CI,
       timeout: 120_000,
       gracefulShutdown: { signal: "SIGTERM", timeout: 5_000 },
     },
@@ -41,7 +42,7 @@ export default defineConfig({
         VITE_DEFAULT_SLUG: E2E_TENANT_SLUG,
       },
       url: `${E2E_APP_ORIGIN}${E2E_APP_BASE_PATH}/${E2E_TENANT_SLUG}`,
-      reuseExistingServer: true,
+      reuseExistingServer: !process.env.CI,
       timeout: 120_000,
       gracefulShutdown: { signal: "SIGTERM", timeout: 5_000 },
     },

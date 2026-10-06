@@ -86,3 +86,24 @@ npm run test:e2e:production
 Produksjonsporten bruker deterministiske nettverkssvar og trenger ikke backend eller database.
 Route-, viewport- og bundlekravene eies av produksjonsspesifikasjonen og
 `scripts/verify-production-builds.mjs`.
+
+## CI-fordeling mellom repoene
+
+Frontendworkflowen kjører `npm run verify:frontend`: lokale enhetstester og kvalitetsporter,
+visuelle referanser på macOS og begge produksjonsartefaktene med routetester.
+
+Det private backend-repoets `.github/workflows/ci.yml` eier jobben `Frontend and API contract`.
+Den sjekker ut backend under test i `backend/` og offentlig frontend i `frontend/`, starter
+egen PostgreSQL-service og lar denne Playwright-harnessen eie API- og frontendprosessene.
+Utviklingsauth og testdata bruker den isolerte databasen; produksjonshemmeligheter brukes ikke.
+Den kjører samme avgrensede kontraktport som kan kjøres lokalt:
+
+```bash
+npm exec playwright test e2e/critical-flows.spec.ts e2e/arrangement-slot-contract.spec.ts
+```
+
+Standard frontendref er låst til `24d25c30adf550ae4fb53e603d04faaac8b6376e`. Backend-PR-er og
+produksjonsworkflowen må passere kontraktjobben. Ved frontendendringer kjøres backendens
+CI manuelt med `frontend_ref` satt til kandidatens commit; dette starter ikke produksjonsdeploy.
+Oppdater den låste referansen når en ny frontendversjon skal være kontraktens baseline.
+Frontendpush utløser ikke automatisk en kjøring i det andre repoet.

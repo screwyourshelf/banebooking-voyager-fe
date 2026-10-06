@@ -4,6 +4,7 @@ import { E2E_APP_BASE_PATH, E2E_APP_ORIGIN, E2E_TENANT_SLUG } from "./e2e/enviro
 // Stylingreferansene eier alle API-svar, inkludert utviklingsinnlogging, og trenger derfor
 // bare en lokal frontend. Dette holder snapshots deterministiske og uavhengige av PostgreSQL.
 export default defineConfig({
+  forbidOnly: Boolean(process.env.CI),
   testDir: "./e2e",
   testMatch: "visual-regressions.spec.ts",
   fullyParallel: false,
@@ -25,7 +26,7 @@ export default defineConfig({
       VITE_DEFAULT_SLUG: E2E_TENANT_SLUG,
     },
     url: `${E2E_APP_ORIGIN}${E2E_APP_BASE_PATH}/${E2E_TENANT_SLUG}`,
-    reuseExistingServer: true,
+    reuseExistingServer: !process.env.CI,
     timeout: 120_000,
     gracefulShutdown: { signal: "SIGTERM", timeout: 5_000 },
   },

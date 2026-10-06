@@ -10,6 +10,7 @@
     "build:github-pages": "VITE_STATIC_HOST=github-pages VITE_BASE_PATH=/banebooking vite build",
     "preview": "vite preview",
     "test": "vitest run",
+    "verify:frontend": "npm test && npm run check && npm run test:e2e:visual && npm run test:e2e:production",
     "test:e2e": "playwright test",
     "test:e2e:visual": "playwright test --config playwright.visual.config.ts",
     "test:e2e:headed": "playwright test --headed",

@@ -1,0 +1,54 @@
+name: Frontend CI
+
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: frontend-ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: Frontend quality gates
+    # The committed visual references are Darwin snapshots. Do not generate new baselines in CI.
+    runs-on: macos-15
+    timeout-minutes: 20
+    env:
+      CI: "true"
+      TZ: Europe/Oslo
+    steps:
+      - name: Check out frontend
+        uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.0.0
+        with:
+          persist-credentials: false
+
+      - name: Set up Node.js
+        uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        run: npm exec playwright install --with-deps chromium
+
+      - name: Run frontend quality gates
+        run: npm run verify:frontend
+
+      - name: Preserve Playwright failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: frontend-test-results
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7
