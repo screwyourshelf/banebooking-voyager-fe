@@ -174,6 +174,8 @@ Den observerte konsumentkontrakten er:
   pågår, er alle tre lukkemåtene blokkert til mutasjonen er ferdig eller har feilet.
 - Dialoginnholdet skroller uten å flytte bakgrunnsflaten. Mobil editor tar hensyn til safe areas,
   og editorens handlinger kan være sticky når innholdet er lengre enn viewporten.
+- Editorens direkte innholdsblokker beholder sin naturlige høyde. Lange samlinger skal utvide
+  skrollområdet, ikke krympes og klippes av inne i en blokk med skjult overflow.
 - Features styrer åpen tilstand og reagerer på det semantiske `onClose`. Portal, overlay,
   fokusfelle, fokusretur, standardstørrelse og dismiss-atferd eies av dialogfamilien.
 - Dialoghandlinger følger de vanlige primær-, sekundær- og destruktivrollene. Pending state

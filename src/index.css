@@ -765,6 +765,7 @@
 @custom-variant editor-dialog-actions (& [data-ui="form-actions"][data-embedded="true"]);
 @custom-variant editor-dialog-back (& > [data-part="back"]);
 @custom-variant editor-dialog-back-hover (& > [data-part="back"]:hover);
+@custom-variant editor-dialog-content-child (& > *);
 @custom-variant editor-dialog-fill (
   & :is([data-ui="form"][data-variant="editor"], [data-ui="settings-stack"])
 );

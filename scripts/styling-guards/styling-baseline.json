@@ -13,7 +13,7 @@
       "cssCustomPropertyDefinitionCount": 1424,
       "cssCustomPropertyReferenceCount": 910,
       "cssFileCount": 4,
-      "cssLineCount": 2075,
+      "cssLineCount": 2076,
       "cssRuleCount": 10,
       "featureClassOccurrenceCount": 0,
       "importantDeclarationCount": 4,
@@ -25,20 +25,20 @@
       "styleAttributeCount": 7,
       "styleBlockCount": 4,
       "styleDirectiveCount": 0,
-      "svelteTailwindUtilityOccurrenceCount": 1288,
-      "tailwindUtilityOccurrenceCount": 1288,
+      "svelteTailwindUtilityOccurrenceCount": 1289,
+      "tailwindUtilityOccurrenceCount": 1289,
       "unlayeredCssRuleCount": 0,
       "visualizationExceptionCount": 38
     },
     "css": {
       "files": [
         {
-          "atRuleCount": 159,
+          "atRuleCount": 160,
           "declarationCount": 680,
           "file": "src/index.css",
           "keyframeStepCount": 0,
           "layeredRuleCount": 0,
-          "lineCount": 976,
+          "lineCount": 977,
           "ruleCount": 0,
           "selectorCount": 0,
           "unlayeredRuleCount": 0
@@ -29061,7 +29061,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 893,
+            "line": 894,
             "name": "--app-page-loading-sheen-background-size",
             "property": "background-size",
             "referenceIndex": 0,
@@ -29072,7 +29072,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 902,
+            "line": 903,
             "name": "--app-visualization-comparison-stroke-width",
             "property": "stroke-width",
             "referenceIndex": 0,
@@ -29083,7 +29083,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 906,
+            "line": 907,
             "name": "--app-visualization-comparison-stroke-dasharray",
             "property": "stroke-dasharray",
             "referenceIndex": 0,
@@ -29094,7 +29094,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 918,
+            "line": 919,
             "name": "--app-visualization-bar-transition-duration",
             "property": "transition",
             "referenceIndex": 0,
@@ -29105,7 +29105,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 922,
+            "line": 923,
             "name": "--app-shell-court-background",
             "property": "background",
             "referenceIndex": 0,
@@ -29116,7 +29116,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 926,
+            "line": 927,
             "name": "--app-shell-desktop-backdrop-background",
             "property": "background",
             "referenceIndex": 0,
@@ -29127,7 +29127,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 930,
+            "line": 931,
             "name": "--app-shell-sidebar-background",
             "property": "background",
             "referenceIndex": 0,
@@ -29138,7 +29138,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 934,
+            "line": 935,
             "name": "--app-shell-sidebar-desktop-background",
             "property": "background",
             "referenceIndex": 0,
@@ -29149,7 +29149,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 938,
+            "line": 939,
             "name": "--app-collection-loading-sheen-background-size",
             "property": "background-size",
             "referenceIndex": 0,
@@ -29160,7 +29160,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 958,
+            "line": 959,
             "name": "--app-control-min-width",
             "property": "min-width",
             "referenceIndex": 0,
@@ -29171,7 +29171,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 958,
+            "line": 959,
             "name": "--bits-select-anchor-width",
             "property": "min-width",
             "referenceIndex": 1,
@@ -29182,7 +29182,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 958,
+            "line": 959,
             "name": "--app-control-min-width",
             "property": "min-width",
             "referenceIndex": 2,
@@ -29193,7 +29193,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 965,
+            "line": 966,
             "name": "--app-select-content-max-height",
             "property": "max-height",
             "referenceIndex": 0,
@@ -29204,7 +29204,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 965,
+            "line": 966,
             "name": "--bits-select-content-available-height",
             "property": "max-height",
             "referenceIndex": 1,
@@ -29215,7 +29215,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 965,
+            "line": 966,
             "name": "--app-select-content-max-height",
             "property": "max-height",
             "referenceIndex": 2,
@@ -29226,7 +29226,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 972,
+            "line": 973,
             "name": "--app-select-viewport-max-height",
             "property": "max-height",
             "referenceIndex": 0,
@@ -29237,7 +29237,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 972,
+            "line": 973,
             "name": "--bits-select-content-available-height",
             "property": "max-height",
             "referenceIndex": 1,
@@ -29248,7 +29248,7 @@
           {
             "column": 3,
             "file": "src/index.css",
-            "line": 972,
+            "line": 973,
             "name": "--app-select-viewport-max-height",
             "property": "max-height",
             "referenceIndex": 2,
@@ -40335,6 +40335,15 @@
           "column": 9,
           "file": "src/lib/ui/patterns/EditorDialog.svelte",
           "line": 68,
+          "className": "editor-dialog-content-child:shrink-0",
+          "ownerFamily": "shared-product-patterns",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3"
+        },
+        {
+          "column": 9,
+          "file": "src/lib/ui/patterns/EditorDialog.svelte",
+          "line": 68,
           "className": "editor-dialog-fill:basis-auto",
           "ownerFamily": "shared-product-patterns",
           "ownerPackage": "src/lib/ui/patterns",
@@ -49695,7 +49704,7 @@
           "styleDirectiveCount": 0
         },
         {
-          "classTokenCount": 67,
+          "classTokenCount": 68,
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/ui/patterns/EditorDialog.svelte",
@@ -56561,6 +56570,17 @@
           "plannedRemovalCheckpoint": "SWP-3",
           "origin": "class",
           "utility": "editor-dialog-actions:z-2"
+        },
+        {
+          "column": 9,
+          "file": "src/lib/ui/patterns/EditorDialog.svelte",
+          "line": 68,
+          "className": "editor-dialog-content-child:shrink-0",
+          "ownerFamily": "shared-product-patterns",
+          "ownerPackage": "src/lib/ui/patterns",
+          "plannedRemovalCheckpoint": "SWP-3",
+          "origin": "class",
+          "utility": "editor-dialog-content-child:shrink-0"
         },
         {
           "column": 9,
@@ -70737,6 +70757,17 @@
         "column": 9,
         "file": "src/lib/ui/patterns/EditorDialog.svelte",
         "line": 68,
+        "className": "editor-dialog-content-child:shrink-0",
+        "ownerFamily": "shared-product-patterns",
+        "ownerPackage": "src/lib/ui/patterns",
+        "plannedRemovalCheckpoint": "SWP-3",
+        "origin": "class",
+        "utility": "editor-dialog-content-child:shrink-0"
+      },
+      {
+        "column": 9,
+        "file": "src/lib/ui/patterns/EditorDialog.svelte",
+        "line": 68,
         "className": "editor-dialog-fill:basis-auto",
         "ownerFamily": "shared-product-patterns",
         "ownerPackage": "src/lib/ui/patterns",
@@ -79824,22 +79855,22 @@
       "basePath": "/",
       "host": "Cloudflare Pages",
       "initialCssAssets": [
-        { "asset": "_app/immutable/assets/0.DN5wOtM1.css", "gzipBytes": 28584, "rawBytes": 190389 }
+        { "asset": "_app/immutable/assets/0.Py3jsDVv.css", "gzipBytes": 28593, "rawBytes": 190444 }
       ],
-      "initialCssGzipBytes": 28584,
+      "initialCssGzipBytes": 28593,
       "initialJavaScriptAssets": [
+        { "asset": "_app/immutable/chunks/Bm2WtkGl.js", "gzipBytes": 11221, "rawBytes": 29269 },
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/CBx1S70x.js", "gzipBytes": 589, "rawBytes": 1034 },
         { "asset": "_app/immutable/chunks/Cwa3_RIE.js", "gzipBytes": 20710, "rawBytes": 55260 },
         { "asset": "_app/immutable/chunks/DRyF0Jvr.js", "gzipBytes": 532, "rawBytes": 1334 },
-        { "asset": "_app/immutable/chunks/DWAs5Vc1.js", "gzipBytes": 11224, "rawBytes": 29273 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
         { "asset": "_app/immutable/chunks/wQ2rwi4O.js", "gzipBytes": 801, "rawBytes": 1551 },
-        { "asset": "_app/immutable/entry/app.BbfnBdpV.js", "gzipBytes": 2506, "rawBytes": 9156 },
-        { "asset": "_app/immutable/entry/start.By2VFcni.js", "gzipBytes": 92, "rawBytes": 82 },
-        { "asset": "_app/immutable/nodes/0.CZy4kdpI.js", "gzipBytes": 427, "rawBytes": 801 }
+        { "asset": "_app/immutable/entry/app.BR5dlM1Z.js", "gzipBytes": 2518, "rawBytes": 9156 },
+        { "asset": "_app/immutable/entry/start.BhHdJNBk.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/nodes/0.C8WrXCUs.js", "gzipBytes": 427, "rawBytes": 801 }
       ],
-      "initialJavaScriptGzipBytes": 38320,
+      "initialJavaScriptGzipBytes": 38329,
       "javaScriptChunkCount": 62,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",
@@ -79875,22 +79906,22 @@
       "basePath": "/banebooking",
       "host": "GitHub Pages",
       "initialCssAssets": [
-        { "asset": "_app/immutable/assets/0.DzxXiz4X.css", "gzipBytes": 28603, "rawBytes": 190449 }
+        { "asset": "_app/immutable/assets/0.CYQ975TK.css", "gzipBytes": 28612, "rawBytes": 190504 }
       ],
-      "initialCssGzipBytes": 28603,
+      "initialCssGzipBytes": 28612,
       "initialJavaScriptAssets": [
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/CBx1S70x.js", "gzipBytes": 599, "rawBytes": 1070 },
         { "asset": "_app/immutable/chunks/Cwa3_RIE.js", "gzipBytes": 20710, "rawBytes": 55260 },
+        { "asset": "_app/immutable/chunks/D8ovwWYX.js", "gzipBytes": 11233, "rawBytes": 29285 },
         { "asset": "_app/immutable/chunks/DRyF0Jvr.js", "gzipBytes": 532, "rawBytes": 1334 },
-        { "asset": "_app/immutable/chunks/Dt0UvkKX.js", "gzipBytes": 11232, "rawBytes": 29281 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
         { "asset": "_app/immutable/chunks/wQ2rwi4O.js", "gzipBytes": 801, "rawBytes": 1551 },
-        { "asset": "_app/immutable/entry/app.1qcuJ_gf.js", "gzipBytes": 2523, "rawBytes": 9744 },
-        { "asset": "_app/immutable/entry/start.Be8TJUJr.js", "gzipBytes": 92, "rawBytes": 82 },
-        { "asset": "_app/immutable/nodes/0.CxGIniqg.js", "gzipBytes": 437, "rawBytes": 861 }
+        { "asset": "_app/immutable/entry/app.INRAZau8.js", "gzipBytes": 2526, "rawBytes": 9744 },
+        { "asset": "_app/immutable/entry/start.Blv2I3U1.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/nodes/0.D07R68o2.js", "gzipBytes": 437, "rawBytes": 861 }
       ],
-      "initialJavaScriptGzipBytes": 38365,
+      "initialJavaScriptGzipBytes": 38369,
       "javaScriptChunkCount": 62,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",

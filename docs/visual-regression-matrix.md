@@ -65,6 +65,15 @@ De sammensatte kontrollene har i tillegg disse eksplisitte tastatur- og fokusfor
 | VR-09     | Editor starter på tilbakeknappen; riktekstgrensen må være `ready`; Escape returnerer til åpneren    |
 | VR-11     | Høyre-/venstrepil flytter fokus og aktiverer medlems-/banebrukfanen automatisk                      |
 
+## Lange historikklister
+
+Nettlesertestene `admin bookings history scrolls to the last row` og
+`admin blocks history scrolls to the last row` bruker 24 poster på mobil og desktop.
+De verifiserer scrolling med musehjul helt til siste rad, begge «Vis flere»-steg for bookinger,
+fast dialoghode, uendret bakgrunnsposisjon og lukking. De bruker atferdsasserts uten egne
+skjermbildereferanser. `admin user bookings share the schedule presentation` sammenligner
+bookingradenes innhold med Mine tider på de samme skjermstørrelsene.
+
 ## Determinisme og eierskap
 
 `e2e/styling-reference-fixtures.ts` eier bare referansedata for denne matrisen:

@@ -362,6 +362,117 @@ async function expectNoBrowserDiagnostics(diagnostics: BrowserDiagnostics) {
 }
 
 for (const viewport of [mobile, desktop]) {
+  for (const history of ["bookings", "blocks"] as const) {
+    test(`admin ${history} history scrolls to the last row — ${viewport.width}`, async ({
+      page,
+      e2e,
+    }) => {
+      const diagnostics = await prepareReferenceSurface(page, {
+        capabilities: ["brukere:admin", "brukere:lese"],
+        profile: "admin",
+        theme: "light",
+        viewport,
+      });
+      await page.route("**/api/klubb/*/bruker/admin/bruker", (route) =>
+        route.fulfill({
+          json: [
+            {
+              id: "history-user",
+              epost: "history@example.test",
+              visningsnavn: "Historikkbruker",
+              roller: ["Medlem"],
+              kapabiliteter: ["bruker:seBookinger", "bruker:seSperre"],
+              antallAktiveSperrer: 0,
+            },
+          ],
+        })
+      );
+      const bookings = Array.from({ length: 24 }, (_, index) => ({
+        bookingId: `booking-${index}`,
+        grenId: "tennis",
+        grenNavn: "Tennis",
+        baneId: `court-${index}`,
+        baneNavn: `Bane ${index + 1}`,
+        dato: "2026-06-01",
+        startTid: "08:00",
+        sluttTid: "09:00",
+        erPassert: true,
+        kapabiliteter: [],
+      }));
+      const blocks = Array.from({ length: 24 }, (_, index) => ({
+        id: `block-${index}`,
+        brukerId: "history-user",
+        klubbId: "club",
+        klubbNavn: "Ås tennisklubb",
+        type: "Booking",
+        årsak: `Sperre ${index + 1}`,
+        aktivFra: "2026-06-01T08:00:00Z",
+        aktivTil: "2026-06-02T08:00:00Z",
+        opprettetAv: "Administrator",
+        opprettetTidspunkt: "2026-06-01T08:00:00Z",
+        opphevtAv: null,
+        opphevtTidspunkt: null,
+        erAktiv: false,
+      }));
+      await page.route("**/api/klubb/*/bruker/admin/bruker/history-user/bookinger", (route) =>
+        route.fulfill({ json: bookings })
+      );
+      await page.route("**/api/klubb/*/bruker/admin/bruker/history-user/sperr", (route) =>
+        route.fulfill({ json: { brukerId: "history-user", antallAktive: 0, sperrer: blocks } })
+      );
+      await signInAndOpen(page, e2e.signIn, "admin", e2e.tenantPath("admin/brukere"));
+      await page.getByText("Historikkbruker", { exact: true }).click();
+      await page
+        .getByRole("button", {
+          name: history === "bookings" ? "Vis bookinger" : "Vis historikk",
+        })
+        .click();
+      const dialog = page.getByRole("dialog", {
+        name: history === "bookings" ? "Bookinger" : "Sperrehistorikk",
+        exact: true,
+      });
+      const content = dialog.locator('[data-ui="editor-dialog"] > [data-part="content"]');
+      await expect(
+        dialog.getByText(history === "bookings" ? "Bane 1" : "Sperre 1", {
+          exact: true,
+        })
+      ).toBeVisible();
+      const backgroundScroll = await page.evaluate(() => window.scrollY);
+      const header = dialog.locator('[data-ui="editor-dialog"] > [data-part="header"]');
+      const headerTop = await header.evaluate((element) => element.getBoundingClientRect().top);
+      async function scrollToBottom() {
+        const box = await content.boundingBox();
+        if (!box) throw new Error("Dialoginnholdet mangler");
+        await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+        await page.mouse.wheel(0, 10_000);
+        await expect
+          .poll(() => content.evaluate((element) => element.scrollTop))
+          .toBeGreaterThan(0);
+      }
+      await scrollToBottom();
+      if (history === "bookings") {
+        for (const remaining of [14, 4]) {
+          const more = dialog.getByRole("button", { name: `Vis flere (${remaining} gjenstår)` });
+          await expect(more).toBeInViewport();
+          await more.click();
+          await scrollToBottom();
+        }
+      }
+      await expect(
+        dialog.getByText(history === "bookings" ? "Bane 24" : "Sperre 24", {
+          exact: true,
+        })
+      ).toBeInViewport();
+      expect(await page.evaluate(() => window.scrollY)).toBe(backgroundScroll);
+      expect(await header.evaluate((element) => element.getBoundingClientRect().top)).toBe(
+        headerTop
+      );
+      await expectNoHorizontalOverflow(page);
+      await dialog.getByRole("button", { name: "Til brukeren" }).click();
+      await expect(dialog).toHaveCount(0);
+      await expectNoBrowserDiagnostics(diagnostics);
+    });
+  }
   test(`admin user bookings share the schedule presentation — ${viewport.width}`, async ({
     page,
     e2e,

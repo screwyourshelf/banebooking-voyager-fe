@@ -1194,6 +1194,7 @@
         "editor-dialog-actions",
         "editor-dialog-back",
         "editor-dialog-back-hover",
+        "editor-dialog-content-child",
         "editor-dialog-fill",
         "editor-dialog-form",
         "editor-dialog-settings",

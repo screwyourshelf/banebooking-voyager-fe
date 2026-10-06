@@ -65,7 +65,7 @@
       </div>
 
       <div
-        class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain editor-dialog-tabs:p-md md:editor-dialog-tabs:px-editor-dialog-wide-inline md:editor-dialog-tabs:pt-lg md:editor-dialog-tabs:pb-editor-dialog-wide-inline editor-dialog-fill:min-h-full editor-dialog-fill:grow editor-dialog-fill:shrink-0 editor-dialog-fill:basis-auto editor-dialog-form:flex editor-dialog-form:flex-col editor-dialog-settings:flex editor-dialog-settings:flex-col editor-dialog-settings-child:shrink-0 editor-dialog-actions:sticky editor-dialog-actions:z-2 editor-dialog-actions:bottom-0 editor-dialog-actions:mt-auto editor-dialog-actions:bg-editor-dialog-actions-surface editor-dialog-actions:pb-editor-dialog-actions editor-dialog-actions:backdrop-blur-editor-dialog-actions"
+        class="flex min-h-0 flex-1 flex-col overflow-y-auto overscroll-contain editor-dialog-content-child:shrink-0 editor-dialog-tabs:p-md md:editor-dialog-tabs:px-editor-dialog-wide-inline md:editor-dialog-tabs:pt-lg md:editor-dialog-tabs:pb-editor-dialog-wide-inline editor-dialog-fill:min-h-full editor-dialog-fill:grow editor-dialog-fill:shrink-0 editor-dialog-fill:basis-auto editor-dialog-form:flex editor-dialog-form:flex-col editor-dialog-settings:flex editor-dialog-settings:flex-col editor-dialog-settings-child:shrink-0 editor-dialog-actions:sticky editor-dialog-actions:z-2 editor-dialog-actions:bottom-0 editor-dialog-actions:mt-auto editor-dialog-actions:bg-editor-dialog-actions-surface editor-dialog-actions:pb-editor-dialog-actions editor-dialog-actions:backdrop-blur-editor-dialog-actions"
         data-part="content"
       >
         {@render content()}
