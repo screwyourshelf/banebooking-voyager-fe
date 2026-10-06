@@ -4,11 +4,11 @@ import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import axe from "axe-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { BookingBootstrapRespons } from "$lib/contracts";
+import type { BookingBootstrapRespons, KalenderRespons } from "$lib/contracts";
 import { Kapabiliteter } from "$lib/domain";
 import { ApiError, type ApiClient } from "$lib/platform/api";
 import BookingScreenFixture from "./BookingScreenFixture.test.svelte";
-import { createBookingStatus, createBootstrap, createSlot } from "./booking-test-data";
+import { createBookingStatus, createBootstrap, createCourt, createSlot } from "./booking-test-data";
 
 const axeOptions: axe.RunOptions = {
   rules: { "color-contrast": { enabled: false } },
@@ -230,6 +230,77 @@ describe("booking screen", () => {
           sluttTid: "11:00",
         },
       })
+    );
+  });
+
+  it.each([
+    ["bane", "book"],
+    ["dato", "book"],
+    ["bane", "cancel"],
+    ["dato", "cancel"],
+  ])("låser gamle rader ved %s-bytte og gjenåpner %s etter lasting", async (selection, action) => {
+    const slot = createSlot(
+      action === "book"
+        ? { kapabiliteter: [Kapabiliteter.booking.book] }
+        : {
+            bookingId: "old-booking",
+            erEier: true,
+            booketAv: "Ada",
+            bookingStartTid: "10:00",
+            bookingSluttTid: "11:00",
+            kapabiliteter: [Kapabiliteter.booking.fjern],
+          }
+    );
+    const bootstrap = createBootstrap({
+      baner: [createCourt(), createCourt({ id: "court-2", navn: "Bane 2" })],
+      kalender: { slots: [slot] },
+    });
+    const pending = Promise.withResolvers<KalenderRespons>();
+    const request = vi.fn(async (path: string, options?: { method?: string }) => {
+      if (path.includes("booking-bootstrap")) return bootstrap;
+      if (path.includes("/kalender?")) return pending.promise;
+      if (options?.method === "POST") return { bookingId: "new-booking", melding: "Booket" };
+      if (options?.method === "DELETE") return { melding: "Avbestilt" };
+      throw new Error(`Uventet kall: ${path}`);
+    });
+    render(BookingScreenFixture, { authenticated: true, request: request as ApiClient["request"] });
+    if (action === "cancel")
+      await fireEvent.click(await screen.findByRole("button", { name: /Din tid/ }));
+    const name = action === "book" ? "Book tiden 10:00 til 11:00" : "Avbestill";
+    expect(await screen.findByRole("button", { name })).toBeEnabled();
+    await fireEvent.click(
+      screen.getByRole("button", { name: selection === "bane" ? "Bane 2" : "I morgen" })
+    );
+    await waitFor(() =>
+      expect(request.mock.calls.some(([path]) => path.includes("/kalender?"))).toBe(true)
+    );
+    expect(screen.getByRole("button", { name })).toBeDisabled();
+    await fireEvent.click(screen.getByRole("button", { name }));
+    expect(request.mock.calls.some(([, options]) => options?.method)).toBe(false);
+
+    const baneId = selection === "bane" ? "court-2" : "court-1";
+    const dato = selection === "dato" ? "2026-08-24" : bootstrap.dato;
+    pending.resolve({
+      slots: [{ ...slot, baneId, dato, bookingId: action === "cancel" ? "current-booking" : null }],
+      bookingstatus: null,
+    });
+    if (action === "cancel") {
+      await waitFor(() => expect(screen.queryByRole("button", { name })).not.toBeInTheDocument());
+      await fireEvent.click(screen.getByRole("button", { name: /Din tid/ }));
+    }
+    await waitFor(() => expect(screen.getByRole("button", { name })).toBeEnabled());
+    await fireEvent.click(screen.getByRole("button", { name }));
+    await waitFor(() =>
+      expect(request).toHaveBeenCalledWith(
+        action === "book" ? "klubb/fjordvik/bookinger" : "klubb/fjordvik/bookinger/current-booking",
+        action === "book"
+          ? {
+              auth: "required",
+              method: "POST",
+              json: { baneId, dato, startTid: "10:00", sluttTid: "11:00" },
+            }
+          : { auth: "required", method: "DELETE" }
+      )
     );
   });
 

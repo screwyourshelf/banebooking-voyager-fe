@@ -101,7 +101,14 @@
     selectedDate = date;
   }
 
+  function isCurrentSlot(slot: KalenderSlotRespons) {
+    return (
+      !calendar.isPlaceholderData && slot.baneId === selection.courtId && slot.dato === selectedDate
+    );
+  }
+
   function bookSlot(slot: KalenderSlotRespons, arrangementId?: string) {
+    if (!isCurrentSlot(slot) || mutationBusy) return;
     cancelMutation.reset();
     const request: OpprettBookingForespørsel = {
       baneId: selection.courtId,
@@ -114,7 +121,7 @@
   }
 
   function cancelSlot(slot: KalenderSlotRespons) {
-    if (!slot.bookingId) return;
+    if (!slot.bookingId || !isCurrentSlot(slot) || mutationBusy) return;
     bookMutation.reset();
     cancelMutation.mutate({ bookingId: slot.bookingId });
   }
@@ -154,7 +161,7 @@
     slotsError={calendar.isError && calendar.error instanceof Error ? calendar.error.message : null}
     setupFetching={bootstrap.isFetching}
     authenticated={auth.state.status === "authenticated"}
-    {mutationBusy}
+    mutationBusy={mutationBusy || calendar.isPlaceholderData}
     {mutationError}
     onActivityChange={selectActivity}
     onCourtChange={selectCourt}

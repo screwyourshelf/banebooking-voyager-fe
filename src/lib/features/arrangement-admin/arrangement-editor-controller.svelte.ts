@@ -3,6 +3,7 @@ import {
   createQuery,
   useQueryClient,
 } from "@tanstack/svelte-query";
+import { SvelteSet } from "svelte/reactivity";
 import type { ArrangementRespons, BaneRespons, GrenRespons } from "$lib/contracts";
 import { formaterAntallBanetider } from "$lib/domain";
 import { getApiClient } from "$lib/platform/api";
@@ -265,8 +266,9 @@ export function createArrangementEditorController(input: ArrangementEditorInput)
         bookinger: snapshot.map(toBookingRequest),
       });
       const reconciled = reconcileBatchResult(snapshot, result);
+      const submittedIds = new SvelteSet(snapshot.map((booking) => booking.id));
       bookings = [
-        ...bookings.filter((booking) => booking.source === "existing"),
+        ...bookings.filter((booking) => !submittedIds.has(booking.id)),
         ...reconciled.failed,
       ];
       feedback = reconciled.failed.length

@@ -136,6 +136,8 @@ Sentrale API-er: `GET /klubb/{slug}`, `GET /klubb/{slug}/bruker`,
 - Offentlige brukere kan lese fysisk tilgjengelighet, arrangementinformasjon, vær og reglement.
   Innlogging endrer tilgjengelige handlinger, ikke statusordene `Ledig` og `Opptatt`.
 - Slotkapabiliteter styrer hurtigbooking, avbestilling og kobling til et aktivt arrangement.
+- Ved bane-/datobytte kan forrige kalender vises mens nye data lastes, men radhandlingene er
+  låst. Mutasjoner krever at slotens bane og dato tilhører gjeldende utvalg.
 - Dialogen `Grenser og tider` skiller gren-eide medlemskvoter fra den valgte banens tider.
   `maks per dag` og `maks kommende` gjelder ordinære bookinger på tvers av alle baner i grenen;
   arrangementsbookinger inngår ikke. Dagskvoten inkluderer passerte bookinger på valgt dato, mens
@@ -227,7 +229,7 @@ Sentrale API-er: `GET|PUT /klubb/{slug}`, `GET /klubb/{slug}/medlemskap/status` 
   ikke hele arrangementets bookingserie.
 - Eksisterende arrangement kan endre metadata, legge til enkelttider eller batch, oppdatere en
   booking atomisk, fjerne tider og avlyses. Delvis batchsuksess beholder feilede forslag og
-  forklarer resultatet.
+  forklarer resultatet. Konfliktforslag som ikke ble sendt, beholdes også for videre redigering.
 - Kritiske states er tilgangskontroll, tom arrangementliste, loading av oppsett/arrangement/tider,
   validering, ingen forslag, konflikter, staging, lagring, delvis suksess, full suksess,
   retrybar lesefeil og lokale mutasjonsfeil.

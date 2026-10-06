@@ -4,9 +4,10 @@
 >
 > **Hovedbranch:** `main`
 
-Den samlede SOLID-leveransen er ferdigstilt. Frontend forhåndsviser tillegg til arrangementer
-mot eksisterende bookinger, og datofølsomme tester bruker fast lokal klokke. Backendens punkt
-1–5 er levert i backend-repoet. Punkt 6 om turneringstrekking er utsatt.
+Doktorfunnene om sperret/inaktiv booking, samtidige kvoter, handlinger på gammel kalender
+og tap av konfliktforslag er rettet i frontend og backend. Frontend har regresjonstester
+for bane-/datobytte og blandede arrangementsforslag. Backend verifiserer kvotesamtidighet
+mot PostgreSQL, også i CI.
 
 Gjeldende produktkontrakt står i [product-behavior.md](./product-behavior.md), og
 [driftsinstruksen](./development-and-operations.md) beskriver oppstart, tester og publisering.

@@ -145,6 +145,52 @@ describe("arrangement administration", () => {
     expect(request.mock.calls.some(([path]) => path.endsWith("bookinger/batch"))).toBe(false);
   });
 
+  it("beholder konfliktforslag når et annet forslag lagres", async () => {
+    const fallback = createRequest();
+    const request = vi.fn(async (path: string, options?: { method?: string; json?: unknown }) => {
+      if (path === "klubb/fjordvik/arrangement/forhandsvis") {
+        const body = options?.json as { eksplisitteSlots: Array<Record<string, string>> };
+        return {
+          ledige: body.eksplisitteSlots.filter((slot) => slot.startTid === "09:00"),
+          konflikter: body.eksplisitteSlots.filter((slot) => slot.startTid === "08:00"),
+        };
+      }
+      if (path.endsWith("bookinger/batch")) {
+        const body = options?.json as { bookinger: Array<Record<string, string>> };
+        return {
+          feilet: [],
+          opprettet: body.bookinger.map((slot) => ({
+            ...slot,
+            bookingId: "saved-booking",
+            baneNavn: court.navn,
+          })),
+        };
+      }
+      return fallback(path, options);
+    });
+    render(AdminFixture, { request: request as ApiClient["request"] });
+    await fireEvent.click(await screen.findByRole("button", { name: /Rediger Høstcup/ }));
+    const dialog = screen.getByRole("dialog", { name: "Høstcup" });
+    await fireEvent.click(within(dialog).getByRole("button", { name: /Tider/ }));
+    await within(dialog).findByText("1 banetid");
+    await fireEvent.click(within(dialog).getByRole("switch", { name: "Alle ukedager i perioden" }));
+    await fireEvent.click(within(dialog).getByRole("button", { name: "Bane 1" }));
+    await fireEvent.click(within(dialog).getByRole("button", { name: "08:00" }));
+    await fireEvent.click(within(dialog).getByRole("button", { name: "09:00" }));
+    await fireEvent.click(within(dialog).getByRole("button", { name: "Legg forslag i listen" }));
+    expect(await within(dialog).findByText("Tidspunktet er allerede opptatt.")).toBeVisible();
+    await fireEvent.click(within(dialog).getByRole("button", { name: /Opprett 1 forslag/ }));
+    expect(await within(dialog).findByText("1 banetid ble opprettet")).toBeVisible();
+    expect(within(dialog).getByText("Tidspunktet er allerede opptatt.")).toBeVisible();
+    expect(within(dialog).getAllByRole("button", { name: /Rediger Bane 1/ })).toHaveLength(3);
+    expect(request).toHaveBeenCalledWith(
+      "klubb/fjordvik/arrangement/event-1/bookinger/batch",
+      expect.objectContaining({
+        json: { bookinger: [expect.objectContaining({ startTid: "09:00" })] },
+      })
+    );
+  });
+
   it("blokkerer arbeidsflaten lukket uten arrangement:se", () => {
     const result = render(AdminFixture, {
       capabilities: [],
