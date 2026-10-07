@@ -6,17 +6,16 @@
   import { getTenantContext } from "$lib/platform/tenant";
   import {
     Button,
+    Collection,
+    CollectionList,
+    CollectionRow,
     CollectionEmpty,
     CollectionError,
     CollectionLoading,
     EditorDialog,
     Feedback,
-    SettingsPanel,
-    SettingsRow,
-    SettingsSection,
-    SettingsStack,
-    SettingsText,
   } from "$lib/ui";
+  import { getUserDisplayName } from "./model";
   import { revokeBlockMutationOptions, userBlocksQueryOptions } from "./queries";
 
   let { onClose, user }: { onClose: () => void; user: BrukerRespons } = $props();
@@ -27,15 +26,16 @@
   const revokeMutation = createMutation(() =>
     revokeBlockMutationOptions(api, queryClient, tenant.slug)
   );
+  const displayName = $derived(getUserDisplayName(user));
   let open = $state(true);
   const canRevoke = $derived(user.kapabiliteter.includes("bruker:opphevSperre"));
 
   function statusFor(block: BrukerSperreRespons) {
     return block.erAktiv
-      ? { label: "Aktiv", description: "Sperren gjelder nå" }
+      ? { label: "Aktiv", tone: "danger" as const }
       : block.opphevtTidspunkt
-        ? { label: "Opphevet", description: "Sperren er manuelt opphevet" }
-        : { label: "Utløpt", description: "Sperreperioden er avsluttet" };
+        ? { label: "Opphevet", tone: "past" as const }
+        : { label: "Utløpt", tone: "past" as const };
   }
 
   async function revoke(blockId: string) {
@@ -52,60 +52,58 @@
   pending={revokeMutation.isPending}
   {onClose}
   backLabel="Til brukeren"
-  eyebrow="Tilgang"
+  eyebrow="Brukeradministrasjon"
   title="Sperrehistorikk"
-  description={user.epost}
+  description={displayName === user.epost ? user.epost : `${displayName} · ${user.epost}`}
 >
-  <SettingsStack embedded>
-    <SettingsSection
-      embedded
-      eyebrow="Historikk"
-      title="Registrerte sperrer"
-      description="Aktive, utløpte og opphevede sperrer for denne brukeren."
-    >
-      {#if historyQuery.isPending}
-        <CollectionLoading label="Henter sperrer" rows={3} />
-      {:else if historyQuery.isError}
-        <CollectionError
-          title="Kunne ikke hente sperrene"
-          description={historyQuery.error instanceof Error ? historyQuery.error.message : undefined}
-          isRetrying={historyQuery.isFetching}
-          onRetry={() => void historyQuery.refetch()}
-        />
-      {:else if historyQuery.data?.sperrer.length}
-        <SettingsPanel>
-          {#each historyQuery.data.sperrer as block (block.id)}
-            {@const status = statusFor(block)}
-            <SettingsRow
-              title={block.årsak}
-              description={`${status.label} · Sperret ${formatTidspunktKort(block.opprettetTidspunkt)} av ${block.opprettetAv}`}
+  <Collection
+    embedded
+    title={historyQuery.isPending
+      ? "Laster sperrer …"
+      : historyQuery.isError
+        ? "Sperrer"
+        : `${historyQuery.data?.sperrer.length ?? 0} ${historyQuery.data?.sperrer.length === 1 ? "sperre" : "sperrer"} · ${historyQuery.data?.antallAktive ?? 0} ${historyQuery.data?.antallAktive === 1 ? "aktiv" : "aktive"}`}
+    busy={historyQuery.isFetching}
+  >
+    {#if historyQuery.isPending}
+      <CollectionLoading label="Henter sperrer" rows={3} />
+    {:else if historyQuery.isError}
+      <CollectionError
+        title="Kunne ikke hente sperrene"
+        description={historyQuery.error instanceof Error ? historyQuery.error.message : undefined}
+        isRetrying={historyQuery.isFetching}
+        onRetry={() => void historyQuery.refetch()}
+      />
+    {:else if historyQuery.data?.sperrer.length}
+      <CollectionList busy={historyQuery.isFetching}>
+        {#each historyQuery.data.sperrer as block (block.id)}
+          {#snippet revokeAction()}
+            <Button
+              size="small"
+              variant="secondary"
+              disabled={revokeMutation.isPending}
+              onclick={() => void revoke(block.id)}
+              >{revokeMutation.isPending ? "Opphever …" : "Opphev sperre"}</Button
             >
-              <SettingsText>
-                {block.aktivTil ? `Utløper ${formatDatoKort(block.aktivTil)}` : "Ingen utløpsdato"}
-                {#if block.opphevtAv && block.opphevtTidspunkt}
-                  <br />Opphevet {formatTidspunktKort(block.opphevtTidspunkt)} av {block.opphevtAv}
-                {/if}
-              </SettingsText>
-              {#if block.erAktiv && canRevoke}
-                <Button
-                  size="small"
-                  variant="secondary"
-                  disabled={revokeMutation.isPending}
-                  onclick={() => void revoke(block.id)}
-                  >{revokeMutation.isPending ? "Opphever …" : "Opphev sperre"}</Button
-                >
-              {/if}
-            </SettingsRow>
-          {/each}
-        </SettingsPanel>
-      {:else}
-        <CollectionEmpty
-          title="Ingen sperrer"
-          description="Det er ikke registrert sperrer for denne brukeren."
-        />
-      {/if}
-    </SettingsSection>
-
+          {/snippet}
+          <CollectionRow
+            title={block.årsak}
+            status={statusFor(block)}
+            contentPresentation="preview"
+            description={`${block.aktivTil ? `${block.erAktiv ? "Utløper" : "Utløpsdato"} ${formatDatoKort(block.aktivTil)}` : "Ingen utløpsdato"}${block.opphevtAv && block.opphevtTidspunkt ? ` · Opphevet ${formatTidspunktKort(block.opphevtTidspunkt)} av ${block.opphevtAv}` : ""}`}
+            meta={`Sperret ${formatTidspunktKort(block.opprettetTidspunkt)} av ${block.opprettetAv}`}
+            interaction={block.erAktiv && canRevoke
+              ? { type: "action", action: revokeAction }
+              : { type: "static" }}
+          />
+        {/each}
+      </CollectionList>
+    {:else}
+      <CollectionEmpty
+        title="Ingen sperrer"
+        description="Det er ikke registrert sperrer for denne brukeren."
+      />
+    {/if}
     {#if revokeMutation.isError}
       <Feedback
         tone="danger"
@@ -115,5 +113,5 @@
           : undefined}
       />
     {/if}
-  </SettingsStack>
+  </Collection>
 </EditorDialog>

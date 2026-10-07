@@ -249,8 +249,14 @@ Regler:
 - Radius, ramme, flate og skygge kommer fra felles tokens.
 - Listepresentasjonen kan skifte fra kort til kompakte rader ut fra beholderbredde.
 - Innholdsforhåndsvisninger kan bruke radens navngitte `preview`-presentasjon. Den reserverer inntil
-  to linjer til tittelen og tre til beskrivelsen og plasserer en eventuell handling under teksten,
-  slik at smale flater ikke ofrer lesebredde til en sidestilt knapp.
+  to linjer til tittelen og tre til beskrivelsen. Metadata kan brytes over flere linjer. En eventuell
+  handling ligger under teksten på smale flater og ved høyrekanten når samlingen har bredde til det.
+
+`Collection` kan være `embedded` når en dialog allerede eier den ytre rammen. Da brukes en nøytral
+kontrollflate uten egen ramme, skygge eller hjørneavrunding. Typed context deler presentasjonen
+med samlingens filtre, brytere, datogrupper og rader; features velger ikke lokal styling.
+Desktopinnrykket følger editorens innholdsinnrykk. Frittstående samlinger beholder grønt hode.
+Editorens innholdsflate bruker samme grunnflate som skjemaet, også når innholdet er kort.
 
 ### Tidslister
 

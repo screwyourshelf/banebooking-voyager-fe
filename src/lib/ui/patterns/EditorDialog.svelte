@@ -35,7 +35,7 @@
   {#snippet children({ close })}
     <div
       {...attributes}
-      class="flex w-full h-full flex-col gap-0 overflow-hidden rounded-none bg-surface-subtle p-0 md:rounded-dialog"
+      class="flex w-full h-full flex-col gap-0 overflow-hidden rounded-none bg-surface p-0 md:rounded-dialog"
       data-ui="editor-dialog"
       data-state={pending ? "pending" : "ready"}
     >

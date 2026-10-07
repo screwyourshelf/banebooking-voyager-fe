@@ -1516,6 +1516,11 @@
     },
     "semanticVisualFamilies": [
       {
+        "utilityPrefixes": ["pr"],
+        "themeNamespace": "spacing",
+        "roles": ["editor-dialog-wide-inline"]
+      },
+      {
         "utilityPrefixes": ["font"],
         "themeNamespace": "fontWeight",
         "roles": ["schedule-time", "schedule-time-start"]

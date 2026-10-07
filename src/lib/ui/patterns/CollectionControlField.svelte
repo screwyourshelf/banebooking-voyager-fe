@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getCollectionContext } from "./collection-context";
   import DatePicker from "../primitives/DatePicker.svelte";
   import Select from "../primitives/Select.svelte";
   import Switch from "../primitives/Switch.svelte";
@@ -13,6 +14,8 @@
     field: CollectionControlField;
     generatedId: string;
   } = $props();
+  const collection = getCollectionContext();
+  const embedded = $derived(collection?.embedded ?? false);
 </script>
 
 <div
@@ -28,12 +31,19 @@
 >
   {#if field.type === "switch"}
     <label
-      class="flex min-h-collection-toggle items-center justify-between gap-md rounded-collection-control-item bg-collection-control-item-surface px-collection-control-item-inline py-sm font-collection-control-label"
+      class={[
+        "flex min-h-collection-toggle items-center justify-between gap-md rounded-collection-control-item px-collection-control-item-inline py-sm font-collection-control-label",
+        embedded ? "bg-surface" : "bg-collection-control-item-surface",
+      ]}
     >
       <span class="grid min-w-0" data-part="field-content">
-        <strong class="text-control-text text-label">{field.title}</strong>
+        <strong class={["text-label", embedded ? "text-ink" : "text-control-text"]}
+          >{field.title}</strong
+        >
         {#if field.description}
-          <small class="text-control-muted text-caption">{field.description}</small>
+          <small class={["text-caption", embedded ? "text-ink-soft" : "text-control-muted"]}
+            >{field.description}</small
+          >
         {/if}
       </span>
       <Switch
@@ -45,7 +55,10 @@
     </label>
   {:else}
     <label
-      class="text-control-muted text-caption font-collection-control-label"
+      class={[
+        "text-caption font-collection-control-label",
+        embedded ? "text-ink-soft" : "text-control-muted",
+      ]}
       for={`${generatedId}-${field.id}`}>{field.label}</label
     >
     {#if field.type === "date"}

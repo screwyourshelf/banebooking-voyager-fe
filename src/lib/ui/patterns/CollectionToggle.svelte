@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getCollectionContext } from "./collection-context";
   import Switch from "../primitives/Switch.svelte";
 
   type Props = {
@@ -21,11 +22,14 @@
 
   const descriptionId = $props.id();
   const isDisabled = $derived(disabled || pending);
+  const collection = getCollectionContext();
+  const embedded = $derived(collection?.embedded ?? false);
 </script>
 
 <label
   class={[
-    "flex min-w-0 min-h-collection-toggle items-center justify-between gap-collection-control-item rounded-collection-control-item bg-collection-control-item-surface px-collection-control-item-inline py-sm cursor-pointer collection-wide:min-w-collection-toggle-wide",
+    "flex min-w-0 min-h-collection-toggle items-center justify-between gap-collection-control-item rounded-collection-control-item px-collection-control-item-inline py-sm cursor-pointer collection-wide:min-w-collection-toggle-wide",
+    embedded ? "bg-surface" : "bg-collection-control-item-surface",
     isDisabled && "cursor-not-allowed opacity-collection-disabled",
   ]}
   data-ui="collection-toggle"
@@ -33,12 +37,17 @@
 >
   <span class="flex min-w-0 flex-col" data-part="content">
     <strong
-      class="text-control-text text-label font-collection-toggle whitespace-nowrap"
+      class={[
+        "text-label font-collection-toggle whitespace-nowrap",
+        embedded ? "text-ink" : "text-control-text",
+      ]}
       data-part="title">{title}</strong
     >
     {#if description}
-      <small class="text-control-muted text-caption" id={descriptionId} data-part="description"
-        >{description}</small
+      <small
+        class={["text-caption", embedded ? "text-ink-soft" : "text-control-muted"]}
+        id={descriptionId}
+        data-part="description">{description}</small
       >
     {/if}
   </span>

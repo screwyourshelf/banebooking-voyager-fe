@@ -13,12 +13,14 @@
   import type { Snippet } from "svelte";
   import type { HTMLAttributes } from "svelte/elements";
   import type { PublicHtmlAttributes } from "../public-html-attributes";
+  import { setCollectionContext } from "./collection-context";
   import CollectionToggle from "./CollectionToggle.svelte";
 
   type Props = Omit<PublicHtmlAttributes<HTMLAttributes<HTMLElement>>, "children" | "title"> & {
     busy?: boolean;
     children?: Snippet;
     contextAction?: Snippet;
+    embedded?: boolean;
     filters?: Snippet;
     filtersLabel?: string;
     footer?: Snippet;
@@ -33,6 +35,7 @@
     busy = false,
     children,
     contextAction,
+    embedded = false,
     filters,
     filtersLabel = "Filtre",
     footer,
@@ -44,18 +47,34 @@
     ...attributes
   }: Props = $props();
 
+  setCollectionContext({
+    get embedded() {
+      return embedded;
+    },
+  });
   const headingId = $props.id();
 </script>
 
 <section
   {...attributes}
-  class="@container overflow-hidden border border-line rounded-collection bg-surface-raised text-ink shadow-surface-md"
+  class={[
+    "@container overflow-hidden text-ink",
+    embedded
+      ? "border-0 rounded-none bg-surface shadow-none"
+      : "border border-line rounded-collection bg-surface-raised shadow-surface-md",
+  ]}
   data-ui="collection"
+  data-embedded={embedded || undefined}
   aria-labelledby={headingId}
   aria-busy={busy || undefined}
 >
   <header
-    class="flex min-h-collection-header items-center justify-between gap-md border-b border-collection-control-divider bg-collection-control px-collection-header-inline py-md text-control-text collection-wide:min-h-collection-header-wide collection-wide:px-xl collection-wide:py-collection-header-wide-block"
+    class={[
+      "flex min-h-collection-header items-center justify-between gap-md border-b px-collection-header-inline py-md collection-wide:min-h-collection-header-wide collection-wide:py-collection-header-wide-block",
+      embedded
+        ? "border-line bg-surface-subtle text-ink collection-wide:px-editor-dialog-wide-inline"
+        : "border-collection-control-divider bg-collection-control text-control-text collection-wide:px-xl",
+    ]}
     data-part="header"
     data-has-context-action={contextAction ? "true" : undefined}
   >
@@ -63,7 +82,8 @@
       {#if icon}
         <span
           class={[
-            "size-collection-header-icon flex-none place-items-center rounded-collection-control-item bg-collection-icon-surface text-activity-accent collection-icon-svg:size-collection-header-glyph",
+            "size-collection-header-icon flex-none place-items-center rounded-collection-control-item text-activity-accent collection-icon-svg:size-collection-header-glyph",
+            embedded ? "bg-surface" : "bg-collection-icon-surface",
             contextAction ? "hidden collection-wide:grid" : "grid",
           ]}
           data-part="icon"
@@ -72,7 +92,10 @@
       {/if}
       <div class="grid min-w-0 gap-2xs" data-part="intro">
         <h2
-          class="overflow-hidden text-control-text text-body-sm font-collection-title leading-collection-title text-ellipsis whitespace-nowrap"
+          class={[
+            "overflow-hidden text-body-sm font-collection-title leading-collection-title text-ellipsis whitespace-nowrap",
+            embedded ? "text-ink" : "text-control-text",
+          ]}
           id={headingId}
           data-part="title"
         >
@@ -80,7 +103,10 @@
         </h2>
         {#if scope}
           <p
-            class="m-0 overflow-hidden text-control-muted text-caption leading-collection-title text-ellipsis whitespace-nowrap"
+            class={[
+              "m-0 overflow-hidden text-caption leading-collection-title text-ellipsis whitespace-nowrap",
+              embedded ? "text-ink-soft" : "text-control-muted",
+            ]}
             data-part="scope"
           >
             {scope}
@@ -88,7 +114,10 @@
         {/if}
         {#if notice}
           <div
-            class="m-0 overflow-hidden text-control-muted text-caption leading-collection-title text-ellipsis whitespace-nowrap"
+            class={[
+              "m-0 overflow-hidden text-caption leading-collection-title text-ellipsis whitespace-nowrap",
+              embedded ? "text-ink-soft" : "text-control-muted",
+            ]}
             data-part="notice"
           >
             {@render notice()}
@@ -108,7 +137,12 @@
 
   {#if filters}
     <div
-      class="border-b border-collection-control-divider bg-control-surface text-control-text collection-wide:p-0"
+      class={[
+        "border-b collection-wide:p-0",
+        embedded
+          ? "border-line bg-surface-subtle text-ink"
+          : "border-collection-control-divider bg-control-surface text-control-text",
+      ]}
       data-part="filters"
       role="group"
       aria-label={filtersLabel}

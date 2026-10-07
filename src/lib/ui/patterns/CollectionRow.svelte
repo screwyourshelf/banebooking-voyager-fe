@@ -23,6 +23,7 @@
 </script>
 
 <script lang="ts">
+  import { getCollectionContext } from "./collection-context";
   import { ArrowDown02Icon, ArrowUp02Icon } from "@hugeicons/core-free-icons";
   import AccordionRowPrimitive from "../primitives/AccordionRowPrimitive.svelte";
   import Button from "../primitives/Button.svelte";
@@ -67,6 +68,8 @@
   const surfaceDelegatesSpacing = $derived(
     interaction.type === "expand" || interaction.type === "reorder"
   );
+  const collection = getCollectionContext();
+  const embedded = $derived(collection?.embedded ?? false);
 </script>
 
 {#snippet summary()}
@@ -142,7 +145,12 @@
         {/if}
         {#if meta}
           <span
-            class="overflow-hidden min-w-0 mt-collection-row-meta text-ink-faint text-caption font-collection-row-meta leading-collection-row-copy text-ellipsis whitespace-nowrap"
+            class={[
+              "min-w-0 mt-collection-row-meta text-ink-faint text-caption font-collection-row-meta leading-collection-row-copy",
+              contentPresentation === "compact"
+                ? "overflow-hidden text-ellipsis whitespace-nowrap"
+                : "whitespace-normal",
+            ]}
             data-part="meta">{meta}</span
           >
         {/if}
@@ -156,16 +164,25 @@
 <div
   class={[
     "min-w-0 collection-row-surface:w-full collection-row-surface:min-w-0 collection-row-surface:min-h-collection-row collection-row-surface:border collection-row-surface:border-line collection-row-surface:rounded-record collection-row-surface:bg-surface-raised collection-row-surface:text-ink collection-row-surface:shadow-record collection-row-surface:text-left collection-row-button-surface:cursor-pointer collection-row-button-surface:enabled:hover:border-line-strong collection-row-button-surface:enabled:hover:bg-surface-subtle collection-row-button-surface:focus-visible:outline-3 collection-row-button-surface:focus-visible:outline-focus-outline collection-row-button-surface:focus-visible:outline-offset-2 collection-row-button-surface:disabled:cursor-not-allowed collection-row-button-surface:disabled:opacity-collection-row-disabled collection-wide:collection-row-surface:min-h-collection-row-wide collection-wide:collection-row-surface:border-x-0 collection-wide:collection-row-surface:border-t-0 collection-wide:collection-row-surface:rounded-none collection-wide:collection-row-surface:shadow-none",
-    !surfaceDelegatesSpacing &&
-      "collection-row-surface:flex collection-row-surface:gap-md collection-row-surface:px-md collection-row-surface:py-collection-row-block collection-wide:collection-row-surface:px-xl collection-wide:collection-row-surface:py-sm",
+    !surfaceDelegatesSpacing && [
+      "collection-row-surface:flex collection-row-surface:gap-md collection-row-surface:px-md collection-row-surface:py-collection-row-block collection-wide:collection-row-surface:py-sm",
+      embedded
+        ? "collection-wide:collection-row-surface:px-editor-dialog-wide-inline"
+        : "collection-wide:collection-row-surface:px-xl",
+    ],
     !surfaceDelegatesSpacing &&
       (interaction.type === "action" && contentPresentation === "preview"
-        ? "collection-row-surface:flex-col collection-row-surface:items-stretch"
+        ? "collection-row-surface:flex-col collection-row-surface:items-stretch collection-wide:collection-row-surface:flex-row"
         : "collection-row-surface:items-stretch"),
+    embedded && !muted && "collection-wide:collection-row-surface:bg-surface",
     muted &&
       "collection-row-surface:bg-collection-row-muted-surface collection-row-surface:shadow-none",
-    interaction.type === "expand" &&
-      "collection-row-surface:block collection-row-surface:overflow-hidden collection-row-surface:p-0 collection-row-summary-row:flex collection-row-summary-row:min-w-0 collection-row-summary-row:items-stretch collection-row-trigger-header:flex collection-row-trigger-header:min-w-0 collection-row-trigger-header:flex-1 collection-row-trigger:flex collection-row-trigger:w-full collection-row-trigger:min-w-0 collection-row-trigger:min-h-collection-row-trigger collection-row-trigger:items-center collection-row-trigger:gap-md collection-row-trigger:border-0 collection-row-trigger:bg-transparent collection-row-trigger:px-md collection-row-trigger:py-collection-row-block collection-row-trigger:text-ink collection-row-trigger:text-left collection-row-trigger:enabled:hover:bg-surface-subtle collection-row-trigger:focus-visible:z-10 collection-row-trigger:focus-visible:outline-3 collection-row-trigger:focus-visible:outline-focus-outline collection-row-trigger:focus-visible:outline-offset-collection-inset collection-row-trigger:disabled:cursor-not-allowed collection-row-trigger:disabled:opacity-collection-row-disabled collection-row-trigger-indicator:grid collection-row-trigger-indicator:size-collection-row-trigger-indicator collection-row-trigger-indicator:flex-none collection-row-trigger-indicator:place-items-center collection-row-trigger-indicator:text-ink-faint collection-row-trigger-indicator:transition-transform collection-row-trigger-indicator:duration-160 collection-row-trigger-indicator:ease-collection collection-row-summary-action:flex collection-row-summary-action:flex-none collection-row-summary-action:items-center collection-row-summary-action:pr-md collection-row-details:border-t collection-row-details:border-line collection-row-details:bg-surface-subtle collection-wide:collection-row-surface:p-0 collection-wide:collection-row-trigger:min-h-collection-row-wide collection-wide:collection-row-trigger:px-xl collection-wide:collection-row-trigger:py-sm collection-wide:collection-row-summary-action:pr-xl",
+    interaction.type === "expand" && [
+      "collection-row-surface:block collection-row-surface:overflow-hidden collection-row-surface:p-0 collection-row-summary-row:flex collection-row-summary-row:min-w-0 collection-row-summary-row:items-stretch collection-row-trigger-header:flex collection-row-trigger-header:min-w-0 collection-row-trigger-header:flex-1 collection-row-trigger:flex collection-row-trigger:w-full collection-row-trigger:min-w-0 collection-row-trigger:min-h-collection-row-trigger collection-row-trigger:items-center collection-row-trigger:gap-md collection-row-trigger:border-0 collection-row-trigger:bg-transparent collection-row-trigger:px-md collection-row-trigger:py-collection-row-block collection-row-trigger:text-ink collection-row-trigger:text-left collection-row-trigger:enabled:hover:bg-surface-subtle collection-row-trigger:focus-visible:z-10 collection-row-trigger:focus-visible:outline-3 collection-row-trigger:focus-visible:outline-focus-outline collection-row-trigger:focus-visible:outline-offset-collection-inset collection-row-trigger:disabled:cursor-not-allowed collection-row-trigger:disabled:opacity-collection-row-disabled collection-row-trigger-indicator:grid collection-row-trigger-indicator:size-collection-row-trigger-indicator collection-row-trigger-indicator:flex-none collection-row-trigger-indicator:place-items-center collection-row-trigger-indicator:text-ink-faint collection-row-trigger-indicator:transition-transform collection-row-trigger-indicator:duration-160 collection-row-trigger-indicator:ease-collection collection-row-summary-action:flex collection-row-summary-action:flex-none collection-row-summary-action:items-center collection-row-summary-action:pr-md collection-row-details:border-t collection-row-details:border-line collection-row-details:bg-surface-subtle collection-wide:collection-row-surface:p-0 collection-wide:collection-row-trigger:min-h-collection-row-wide collection-wide:collection-row-trigger:py-sm",
+      embedded
+        ? "collection-wide:collection-row-trigger:px-editor-dialog-wide-inline collection-wide:collection-row-summary-action:pr-editor-dialog-wide-inline"
+        : "collection-wide:collection-row-trigger:px-xl collection-wide:collection-row-summary-action:pr-xl",
+    ],
     interaction.type === "reorder" &&
       "collection-row-surface:flex collection-row-surface:items-stretch collection-row-surface:overflow-hidden collection-row-surface:gap-0 collection-row-surface:p-0 collection-wide:collection-row-surface:p-0",
   ]}
@@ -184,7 +201,10 @@
       {@render summary()}
       {#snippet details()}
         <div
-          class="grid gap-lg p-collection-row-details collection-wide:px-xl collection-wide:py-lg"
+          class={[
+            "grid gap-lg p-collection-row-details collection-wide:py-lg",
+            embedded ? "collection-wide:px-editor-dialog-wide-inline" : "collection-wide:px-xl",
+          ]}
           data-part="details-content"
         >
           {#if interaction.details}{@render interaction.details()}{/if}
@@ -199,7 +219,10 @@
   {:else if interaction.type === "reorder"}
     <article data-part="surface">
       <button
-        class="flex min-w-0 flex-1 items-center gap-md border-0 bg-transparent px-md py-collection-row-block text-ink text-left enabled:hover:bg-surface-subtle focus-visible:z-10 focus-visible:outline-3 focus-visible:outline-focus-outline focus-visible:outline-offset-collection-inset disabled:cursor-not-allowed disabled:opacity-collection-row-disabled collection-wide:min-h-collection-row-wide collection-wide:px-xl collection-wide:py-sm"
+        class={[
+          "flex min-w-0 flex-1 items-center gap-md border-0 bg-transparent px-md py-collection-row-block text-ink text-left enabled:hover:bg-surface-subtle focus-visible:z-10 focus-visible:outline-3 focus-visible:outline-focus-outline focus-visible:outline-offset-collection-inset disabled:cursor-not-allowed disabled:opacity-collection-row-disabled collection-wide:min-h-collection-row-wide collection-wide:py-sm",
+          embedded ? "collection-wide:px-editor-dialog-wide-inline" : "collection-wide:px-xl",
+        ]}
         type="button"
         data-part="select"
         aria-label={ariaLabel ?? (title ? `Åpne ${title}` : "Åpne rad")}
@@ -259,7 +282,9 @@
         <div
           class={[
             "flex flex-none items-center",
-            contentPresentation === "preview" ? "justify-end pt-sm" : "collection-wide:pl-sm",
+            contentPresentation === "preview"
+              ? "justify-end pt-sm collection-wide:pt-0 collection-wide:pl-sm"
+              : "collection-wide:pl-sm",
           ]}
           data-part="action"
         >

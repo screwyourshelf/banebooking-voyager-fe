@@ -15,10 +15,10 @@
     FormSubmit,
     Input,
     Select,
-    SettingsSection,
     SettingsStack,
   } from "$lib/ui";
   import {
+    getUserDisplayName,
     ROLE_OPTIONS,
     toUserUpdateRequest,
     userToEditDraft,
@@ -32,6 +32,7 @@
   const tenant = getTenantContext();
   const queryClient = useQueryClient();
   const mutation = createMutation(() => updateUserMutationOptions(api, queryClient, tenant.slug));
+  const displayName = $derived(getUserDisplayName(user));
   let open = $state(true);
   let draft = $state(userToEditDraft(untrack(() => user)));
   let attempted = $state(false);
@@ -64,9 +65,9 @@
   pending={mutation.isPending}
   {onClose}
   backLabel="Alle brukere"
-  eyebrow="Bruker"
+  eyebrow="Brukeradministrasjon"
   title="Rediger bruker"
-  description={user.epost}
+  description={displayName === user.epost ? user.epost : `${displayName} · ${user.epost}`}
 >
   <Form
     variant="editor"
@@ -77,39 +78,32 @@
     }}
   >
     <SettingsStack embedded>
-      <SettingsSection
-        embedded
-        eyebrow="Profil og tilgang"
-        title={user.visningsnavn || "Bruker uten visningsnavn"}
-        description="Oppdater navnet som vises i klubben og hvilken tilgang brukeren har."
-      >
-        <FormFields>
-          <FormField
-            label="Visningsnavn"
-            description="Valgfritt, 2–100 tegn når det fylles ut."
-            error={errors.displayName}
-          >
-            <Input
-              value={draft.displayName}
-              maxlength={100}
-              disabled={mutation.isPending}
-              oninput={(event) => (draft = { ...draft, displayName: event.currentTarget.value })}
-            />
-          </FormField>
-          <FormField
-            label="Rolle"
-            description="Rollen styrer hvilke deler av administrasjonen brukeren kan åpne."
-            required
-          >
-            <Select
-              value={draft.role}
-              options={ROLE_OPTIONS}
-              disabled={mutation.isPending}
-              onValueChange={(role) => (draft = { ...draft, role: role as RolleType })}
-            />
-          </FormField>
-        </FormFields>
-      </SettingsSection>
+      <FormFields>
+        <FormField
+          label="Visningsnavn"
+          description="Valgfritt, 2–100 tegn når det fylles ut."
+          error={errors.displayName}
+        >
+          <Input
+            value={draft.displayName}
+            maxlength={100}
+            disabled={mutation.isPending}
+            oninput={(event) => (draft = { ...draft, displayName: event.currentTarget.value })}
+          />
+        </FormField>
+        <FormField
+          label="Rolle"
+          description="Rollen styrer hvilke deler av administrasjonen brukeren kan åpne."
+          required
+        >
+          <Select
+            value={draft.role}
+            options={ROLE_OPTIONS}
+            disabled={mutation.isPending}
+            onValueChange={(role) => (draft = { ...draft, role: role as RolleType })}
+          />
+        </FormField>
+      </FormFields>
 
       <FormActions>
         {#if mutation.isError}

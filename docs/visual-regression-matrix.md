@@ -34,6 +34,14 @@ rikteksteditor og statistikk.
 Routene i tabellen er relative til `/banebooking/aas-tennisklubb`. Snapshotfilene har Playwrights
 plattformendelse og ligger ved `e2e/visual-regressions.spec.ts`.
 
+## Brukerdialoger
+
+`user-dialog-{bookings,blocks,edit}-{390,1440}-{light,dark}` låser de tre brukerdialogene på
+mobil og desktop i begge temaer (tolv bilder). Bookingreferansen har et valgt grenfilter;
+sperrehistorikken har en aktiv, en opphevet og en utløpt sperre. Testen kontrollerer også
+fokusretur, filterresultat og at bare aktiv sperre har opphevingshandling. De eksisterende
+historikktestene verifiserer skroll til siste rad og samme bookinginnhold som Mine tider.
+
 ## Dekning per UI-familie
 
 | Familie                     | Primære referanser         | Hva som låses                                                                                |
