@@ -111,7 +111,7 @@ describe("public dialog contracts", () => {
     expect(editor.dialog.querySelector('[data-ui="editor-dialog"]')).toHaveClass(
       "h-full",
       "rounded-none",
-      "bg-surface-subtle",
+      "bg-surface",
       "md:rounded-dialog"
     );
     expect(editor.dialog.querySelector('[data-part="header"]')).toHaveClass(

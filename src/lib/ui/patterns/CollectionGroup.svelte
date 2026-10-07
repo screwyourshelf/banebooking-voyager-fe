@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getCollectionContext } from "./collection-context";
   import type { Snippet } from "svelte";
 
   type Props = {
@@ -10,6 +11,8 @@
 
   let { children, date, label, relativeLabel }: Props = $props();
   const headingId = $props.id();
+  const collection = getCollectionContext();
+  const embedded = $derived(collection?.embedded ?? false);
 </script>
 
 <div
@@ -18,7 +21,10 @@
   role="listitem"
 >
   <h3
-    class="px-lg pt-md pb-0 text-ink-soft text-label font-collection-group leading-collection-group collection-wide:px-xl"
+    class={[
+      "px-lg pt-md pb-0 text-ink-soft text-label font-collection-group leading-collection-group",
+      embedded ? "collection-wide:px-editor-dialog-wide-inline" : "collection-wide:px-xl",
+    ]}
     id={headingId}
     data-part="heading"
   >

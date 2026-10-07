@@ -551,3 +551,143 @@ for (const viewport of [mobile, desktop]) {
     expect(diagnostics.messages).toEqual([]);
   });
 }
+
+for (const viewport of [mobile, desktop]) {
+  for (const theme of ["light", "dark"] as const) {
+    test(`user dialogs share embedded surfaces — ${viewport.width}, ${theme}`, async ({
+      page,
+      e2e,
+    }) => {
+      const diagnostics = await prepareReferenceSurface(page, {
+        capabilities: ["brukere:admin", "brukere:lese"],
+        profile: "admin",
+        theme,
+        viewport,
+      });
+      await page.route("**/api/klubb/*/bruker/admin/bruker", (route) =>
+        route.fulfill({
+          json: [
+            {
+              id: "dialog-user",
+              epost: "ola@example.test",
+              visningsnavn: "Ola Medlem",
+              roller: ["Medlem"],
+              kapabiliteter: [
+                "bruker:endreRolle",
+                "bruker:endreVisningsnavn",
+                "bruker:seBookinger",
+                "bruker:seSperre",
+                "bruker:opphevSperre",
+              ],
+              antallAktiveSperrer: 1,
+            },
+          ],
+        })
+      );
+      await page.route("**/api/klubb/*/bruker/admin/bruker/dialog-user/bookinger", (route) =>
+        route.fulfill({
+          json: [
+            {
+              bookingId: "tennis",
+              grenId: "tennis",
+              grenNavn: "Tennis",
+              baneId: "a",
+              baneNavn: "Bane A",
+              dato: "2026-08-25",
+              startTid: "09:00",
+              sluttTid: "10:00",
+              erPassert: false,
+              kapabiliteter: [],
+            },
+            {
+              bookingId: "padel",
+              grenId: "padel",
+              grenNavn: "Padel",
+              baneId: "b",
+              baneNavn: "Padel B",
+              dato: "2026-08-20",
+              startTid: "18:00",
+              sluttTid: "19:00",
+              erPassert: true,
+              kapabiliteter: [],
+            },
+          ],
+        })
+      );
+      await page.route("**/api/klubb/*/bruker/admin/bruker/dialog-user/sperr", (route) =>
+        route.fulfill({
+          json: {
+            brukerId: "dialog-user",
+            antallAktive: 1,
+            sperrer: [
+              {
+                id: "active",
+                årsak: "Gjentatt manglende oppmøte",
+                erAktiv: true,
+                aktivTil: "2026-09-01T08:00:00Z",
+              },
+              {
+                id: "revoked",
+                årsak: "Sperre opphevet etter avklaring",
+                erAktiv: false,
+                aktivTil: null,
+                opphevtAv: "Ada Administrasjon",
+                opphevtTidspunkt: "2026-08-20T08:00:00Z",
+              },
+              {
+                id: "expired",
+                årsak: "Tidligere brudd på bookingreglene",
+                erAktiv: false,
+                aktivTil: "2026-08-15T08:00:00Z",
+              },
+            ].map((block) => ({
+              brukerId: "dialog-user",
+              klubbId: "club",
+              klubbNavn: "Ås tennisklubb",
+              type: "Booking",
+              aktivFra: "2026-08-01T08:00:00Z",
+              opprettetAv: "Ada Administrasjon",
+              opprettetTidspunkt: "2026-08-01T08:00:00Z",
+              opphevtAv: null,
+              opphevtTidspunkt: null,
+              ...block,
+            })),
+          },
+        })
+      );
+      await signInAndOpen(page, e2e.signIn, "admin", e2e.tenantPath("admin/brukere"));
+      await page.getByText("Ola Medlem", { exact: true }).click();
+      for (const [trigger, title, name] of [
+        ["Vis bookinger", "Bookinger", "bookings"],
+        ["Vis historikk", "Sperrehistorikk", "blocks"],
+        ["Rediger", "Rediger bruker", "edit"],
+      ]) {
+        const opener = page.getByRole("button", { name: trigger, exact: true });
+        await opener.click();
+        const dialog = page.getByRole("dialog", { name: title, exact: true });
+        await expect(
+          dialog.getByText("Ola Medlem · ola@example.test", { exact: true })
+        ).toBeVisible();
+        if (name === "bookings") {
+          await expect(dialog.getByRole("heading", { name: "2 bookinger" })).toBeVisible();
+          if (viewport === mobile)
+            await dialog.getByRole("button", { name: "Filtre", exact: true }).click();
+          await dialog.getByRole("button", { name: "Tennis", exact: true }).click();
+          await expect(dialog.getByRole("heading", { name: "1 booking" })).toBeVisible();
+        } else if (name === "blocks") {
+          await expect(dialog.getByRole("heading", { name: "3 sperrer · 1 aktiv" })).toBeVisible();
+          await expect(dialog.getByRole("button", { name: "Opphev sperre" })).toHaveCount(1);
+        }
+        await expectNoHorizontalOverflow(page);
+        await expectStableScreenshot(
+          page,
+          diagnostics,
+          `user-dialog-${name}-${viewport.width}-${theme}.png`
+        );
+        await page.keyboard.press("Escape");
+        await expect(dialog).toHaveCount(0);
+        await expect(opener).toBeFocused();
+      }
+    });
+  }
+}

@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getCollectionContext } from "./collection-context";
   import ChoiceButton from "../primitives/ChoiceButton.svelte";
   import type { CollectionControlGroup } from "./collection-controls";
 
@@ -13,6 +14,8 @@
     hasSearch: boolean;
     mode: "filter" | "selection";
   } = $props();
+  const collection = getCollectionContext();
+  const embedded = $derived(collection?.embedded ?? false);
 </script>
 
 <fieldset
@@ -26,8 +29,11 @@
   ]}
   data-part="group"
 >
-  <legend class="text-control-muted text-caption font-collection-control-label"
-    >{group.label}</legend
+  <legend
+    class={[
+      "text-caption font-collection-control-label",
+      embedded ? "text-ink-soft" : "text-control-muted",
+    ]}>{group.label}</legend
   >
   <div class="flex min-w-0 flex-wrap gap-collection-control-detail" data-part="choices">
     {#each group.options as option (option.value)}

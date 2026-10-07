@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getCollectionContext } from "./collection-context";
   import Button from "../primitives/Button.svelte";
   import Select from "../primitives/Select.svelte";
   import CollectionControlField from "./CollectionControlField.svelte";
@@ -60,11 +61,16 @@
     open = nextOpen;
     onOpenChange?.(nextOpen);
   }
+  const collection = getCollectionContext();
+  const embedded = $derived(collection?.embedded ?? false);
 </script>
 
 <section
   class={[
-    "bg-collection-control px-collection-controls-inline pt-collection-controls-top pb-collection-controls-bottom text-control-text collection-controls-following:border-t collection-controls-following:border-collection-control-divider collection-booking-choice:text-control-muted collection-booking-choice-selected:border-collection-choice-selected-border collection-booking-choice-selected:bg-collection-control-item-hover collection-booking-choice-selected:text-control-text collection-choice-control:border-collection-control-divider collection-choice-control:bg-collection-control-item-surface collection-choice-control:text-control-muted collection-choice-control:enabled:hover:bg-collection-control-item-hover collection-choice-control:enabled:hover:text-control-text collection-choice-selected:border-collection-choice-selected-border collection-choice-selected:bg-collection-control-item-hover collection-choice-selected:text-control-text collection-field-control:w-full collection-field-control:min-h-collection-field-control collection-field-control:border-collection-field-border collection-field-control:bg-collection-control-item-surface collection-field-control:text-control-text collection-field-control:text-body-sm collection-toggle-control:h-collection-toggle collection-toggle-control:border-collection-field-border collection-toggle-control:bg-collection-control-item-surface collection-toggle-control:text-control-muted collection-toggle-control:enabled:hover:bg-collection-control-item-surface collection-toggle-expanded:border-collection-toggle-expanded-border collection-toggle-expanded:bg-collection-control-item-hover collection-toggle-expanded:text-control-text collection-toggle-expanded:enabled:hover:bg-collection-control-item-hover collection-reset-control:text-control-text collection-wide:px-xl collection-wide:pt-md collection-wide:pb-collection-controls-wide-bottom collection-wide:collection-toggle-control:hidden collection-wide:collection-reset-control:self-center collection-wide:collection-reset-control:ml-auto",
+    "px-collection-controls-inline pt-collection-controls-top pb-collection-controls-bottom collection-controls-following:border-t collection-field-control:w-full collection-field-control:min-h-collection-field-control collection-field-control:text-body-sm collection-toggle-control:h-collection-toggle collection-wide:pt-md collection-wide:pb-collection-controls-wide-bottom collection-wide:collection-toggle-control:hidden collection-wide:collection-reset-control:self-center collection-wide:collection-reset-control:ml-auto",
+    embedded
+      ? "bg-surface-subtle text-ink collection-controls-following:border-line collection-booking-choice:text-ink-soft collection-booking-choice-selected:border-line-strong collection-booking-choice-selected:bg-surface-raised collection-booking-choice-selected:text-ink collection-choice-control:border-line collection-choice-control:bg-surface collection-choice-control:text-ink-soft collection-choice-control:enabled:hover:bg-surface-raised collection-choice-control:enabled:hover:text-ink collection-choice-selected:border-line-strong collection-choice-selected:bg-surface-raised collection-choice-selected:text-ink collection-field-control:border-line collection-field-control:bg-surface collection-field-control:text-ink collection-toggle-control:border-line collection-toggle-control:bg-surface collection-toggle-control:text-ink-soft collection-toggle-control:enabled:hover:bg-surface collection-toggle-expanded:border-line-strong collection-toggle-expanded:bg-surface-raised collection-toggle-expanded:text-ink collection-toggle-expanded:enabled:hover:bg-surface-raised collection-reset-control:text-ink collection-wide:px-editor-dialog-wide-inline"
+      : "bg-collection-control text-control-text collection-controls-following:border-collection-control-divider collection-booking-choice:text-control-muted collection-booking-choice-selected:border-collection-choice-selected-border collection-booking-choice-selected:bg-collection-control-item-hover collection-booking-choice-selected:text-control-text collection-choice-control:border-collection-control-divider collection-choice-control:bg-collection-control-item-surface collection-choice-control:text-control-muted collection-choice-control:enabled:hover:bg-collection-control-item-hover collection-choice-control:enabled:hover:text-control-text collection-choice-selected:border-collection-choice-selected-border collection-choice-selected:bg-collection-control-item-hover collection-choice-selected:text-control-text collection-field-control:border-collection-field-border collection-field-control:bg-collection-control-item-surface collection-field-control:text-control-text collection-toggle-control:border-collection-field-border collection-toggle-control:bg-collection-control-item-surface collection-toggle-control:text-control-muted collection-toggle-control:enabled:hover:bg-collection-control-item-surface collection-toggle-expanded:border-collection-toggle-expanded-border collection-toggle-expanded:bg-collection-control-item-hover collection-toggle-expanded:text-control-text collection-toggle-expanded:enabled:hover:bg-collection-control-item-hover collection-reset-control:text-control-text collection-wide:px-xl",
     indicator === "activity" && "collection-choice-selected-indicator:bg-activity-accent",
   ]}
   data-ui="collection-controls"
@@ -92,11 +98,18 @@
   <div
     class={[
       "grid min-w-0 gap-md collection-wide:flex collection-wide:flex-wrap collection-wide:items-end collection-wide:gap-lg",
-      isCollapsible &&
-        "mt-collection-controls-content border-t border-collection-control-divider pt-md",
+      isCollapsible && [
+        "mt-collection-controls-content border-t pt-md",
+        embedded ? "border-line" : "border-collection-control-divider",
+      ],
       !contentVisible && "hidden collection-wide:flex",
       search
-        ? "collection-wide:mt-md collection-wide:border-t collection-wide:border-collection-control-divider collection-wide:pt-md"
+        ? [
+            "collection-wide:mt-md collection-wide:border-t collection-wide:pt-md",
+            embedded
+              ? "collection-wide:border-line"
+              : "collection-wide:border-collection-control-divider",
+          ]
         : "collection-wide:mt-0 collection-wide:border-0 collection-wide:pt-0",
     ]}
     id={contentId}
@@ -116,7 +129,10 @@
         data-part="sort"
       >
         <label
-          class="text-control-muted text-caption font-collection-control-label"
+          class={[
+            "text-caption font-collection-control-label",
+            embedded ? "text-ink-soft" : "text-control-muted",
+          ]}
           for={`${generatedId}-sort`}>{sort.label}</label
         >
         <Select

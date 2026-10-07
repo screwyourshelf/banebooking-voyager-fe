@@ -105,6 +105,7 @@
 >
   {#if canView}
     <Collection
+      embedded
       title={bookingsQuery.isPending
         ? "Laster bookinger …"
         : `${filteredBookings.length} ${filteredBookings.length === 1 ? "booking" : "bookinger"}`}

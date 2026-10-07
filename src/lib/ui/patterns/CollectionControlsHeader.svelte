@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { getCollectionContext } from "./collection-context";
   import { Cancel01Icon, FilterHorizontalIcon, Search01Icon } from "@hugeicons/core-free-icons";
   import Button from "../primitives/Button.svelte";
   import Icon from "../primitives/Icon.svelte";
@@ -24,6 +25,8 @@
     searchId: string;
     selectedCount: number;
   } = $props();
+  const collection = getCollectionContext();
+  const embedded = $derived(collection?.embedded ?? false);
 </script>
 
 <div
@@ -68,7 +71,10 @@
     </div>
   {:else}
     <span
-      class="inline-flex items-center gap-collection-control-detail text-control-muted text-caption font-collection-control-label collection-icon:size-collection-control-icon"
+      class={[
+        "inline-flex items-center gap-collection-control-detail text-caption font-collection-control-label collection-icon:size-collection-control-icon",
+        embedded ? "text-ink-soft" : "text-control-muted",
+      ]}
       data-part="label"><Icon icon={FilterHorizontalIcon} /> {label}</span
     >
   {/if}
@@ -85,7 +91,10 @@
     Filtre
     {#if selectedCount > 0}
       <span
-        class="grid size-collection-control-count min-w-collection-control-count place-items-center rounded-control bg-control-text text-control-surface text-micro leading-collection-count"
+        class={[
+          "grid size-collection-control-count min-w-collection-control-count place-items-center rounded-control text-micro leading-collection-count",
+          embedded ? "bg-surface-subtle text-ink" : "bg-control-text text-control-surface",
+        ]}
         data-part="count">{selectedCount}</span
       >
     {/if}
