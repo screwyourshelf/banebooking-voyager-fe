@@ -16,20 +16,22 @@ rikteksteditor og statistikk.
 
 ## Skjermbilder
 
-| ID    | Referanse                 | Route/state                                | Rolle         | Viewport    | Theme | PNG                                             |
-| ----- | ------------------------- | ------------------------------------------ | ------------- | ----------- | ----- | ----------------------------------------------- |
-| VR-01 | Anonym innlogging         | `/login`, e-postflaten                     | Anonym        | 390 × 844   | Lys   | `anonymous-login-mobile-light`                  |
-| VR-02 | Offentlige vilkår         | `/vilkaar`, komplett dokument              | Offentlig     | 1440 × 1000 | Mørk  | `public-terms-desktop-dark`                     |
-| VR-03 | Min side                  | `/minside`, profilfanen                    | Medlem        | 1440 × 1000 | Lys   | `member-account-desktop-light`                  |
-| VR-04 | Klubbens medlemskap       | `/admin/klubb`, medlemskapsfanen           | Administrator | 390 × 844   | Mørk  | `club-administrator-mobile-dark`                |
-| VR-05 | Bookingliste              | `/`, fire representative slotstates        | Medlem        | 1440 × 1000 | Mørk  | `member-booking-collection-desktop-dark`        |
-| VR-06 | Bookingkalender           | `/`, åpen datopopover                      | Medlem        | 390 × 844   | Lys   | `member-booking-calendar-mobile-light`          |
-| VR-07 | Grenser og tider          | `/`, åpen status- og innstillingsdialog    | Medlem        | 1440 × 1000 | Lys   | `member-booking-limits-dialog-desktop-light`    |
-| VR-08 | Brukereditor og rollevalg | `/admin/brukere`, editor med åpen Select   | Administrator | 1440 × 1000 | Mørk  | `user-administrator-editor-select-desktop-dark` |
-| VR-09 | Kunngjøringseditor        | `/admin/kunngjøringer`, tom rikteksteditor | Administrator | 390 × 844   | Lys   | `announcement-editor-mobile-light`              |
-| VR-10 | Statistikk for banebruk   | `/admin/statistikk`, banebrukfanen         | Administrator | 1440 × 1000 | Mørk  | `statistics-court-usage-desktop-dark`           |
-| VR-11 | Statistikk for medlemmer  | `/admin/statistikk`, medlemsfanen          | Administrator | 390 × 844   | Lys   | `statistics-members-mobile-light`               |
-| VR-12 | Anonym innlogging desktop | `/login`, fokusert e-postflate             | Anonym        | 1440 × 1000 | Mørk  | `anonymous-login-desktop-dark`                  |
+| ID    | Referanse                 | Route/state                                  | Rolle         | Viewport    | Theme | PNG                                             |
+| ----- | ------------------------- | -------------------------------------------- | ------------- | ----------- | ----- | ----------------------------------------------- |
+| VR-01 | Anonym innlogging         | `/login`, e-postflaten                       | Anonym        | 390 × 844   | Lys   | `anonymous-login-mobile-light`                  |
+| VR-02 | Offentlige vilkår         | `/vilkaar`, komplett dokument                | Offentlig     | 1440 × 1000 | Mørk  | `public-terms-desktop-dark`                     |
+| VR-03 | Min side                  | `/minside`, profilfanen                      | Medlem        | 1440 × 1000 | Lys   | `member-account-desktop-light`                  |
+| VR-04 | Klubbens medlemskap       | `/admin/klubb`, medlemskapsfanen             | Administrator | 390 × 844   | Mørk  | `club-administrator-mobile-dark`                |
+| VR-05 | Bookingliste              | `/`, fire representative slotstates          | Medlem        | 1440 × 1000 | Mørk  | `member-booking-collection-desktop-dark`        |
+| VR-06 | Bookingkalender           | `/`, åpen datopopover                        | Medlem        | 390 × 844   | Lys   | `member-booking-calendar-mobile-light`          |
+| VR-07 | Grenser og tider          | `/`, åpen status- og innstillingsdialog      | Medlem        | 1440 × 1000 | Lys   | `member-booking-limits-dialog-desktop-light`    |
+| VR-08 | Brukereditor og rollevalg | `/admin/brukere`, editor med åpen Select     | Administrator | 1440 × 1000 | Mørk  | `user-administrator-editor-select-desktop-dark` |
+| VR-09 | Kunngjøringseditor        | `/admin/kunngjøringer`, tom rikteksteditor   | Administrator | 390 × 844   | Lys   | `announcement-editor-mobile-light`              |
+| VR-10 | Statistikk for banebruk   | `/admin/statistikk`, banebrukfanen           | Administrator | 1440 × 1000 | Mørk  | `statistics-court-usage-desktop-dark`           |
+| VR-11 | Statistikk for medlemmer  | `/admin/statistikk`, medlemsfanen            | Administrator | 390 × 844   | Lys   | `statistics-members-mobile-light`               |
+| VR-12 | Anonym innlogging desktop | `/login`, fokusert e-postflate               | Anonym        | 1440 × 1000 | Mørk  | `anonymous-login-desktop-dark`                  |
+| VR-13 | Nyhetsforhåndsvisning     | `/nyheter`, tre nyheter og navigasjonsteller | Offentlig     | 390 × 844   | Lys   | `public-news-preview-mobile-light`              |
+| VR-14 | Bookingliste mobil        | `/`, representative slotstates               | Medlem        | 390 × 844   | Mørk  | `member-booking-collection-mobile-dark`         |
 
 Routene i tabellen er relative til `/banebooking/aas-tennisklubb`. Snapshotfilene har Playwrights
 plattformendelse og ligger ved `e2e/visual-regressions.spec.ts`.
@@ -46,7 +48,7 @@ historikktestene verifiserer skroll til siste rad og samme bookinginnhold som Mi
 
 | Familie                     | Primære referanser         | Hva som låses                                                                                |
 | --------------------------- | -------------------------- | -------------------------------------------------------------------------------------------- |
-| App-shell og navigation     | VR-01–VR-12                | Mobil topp/bunn, desktoprekkefølge og fast bunnområde, aktiv route, tenant og theme          |
+| App-shell og navigation     | VR-01–VR-14                | Mobil topp/bunn, desktoprekkefølge og fast bunnområde, aktiv route, tenant og theme          |
 | Page, Section og Document   | VR-02, VR-04, VR-10, VR-12 | Sideintro, headings, fokuserte flater, leseinnhold, settingsseksjoner og statistikkseksjoner |
 | Collection og rows          | VR-05, VR-08, VR-09        | Header, selection/filter, statuser, schedule- og ekspanderbar rad                            |
 | Form og Settings            | VR-01, VR-03, VR-04, VR-12 | Felt, paneler, tabs, label/hjelpetekst og responsive handlinger                              |
@@ -90,7 +92,8 @@ bookingradenes innhold med Mine tider på de samme skjermstørrelsene.
 - bookingdato, slotstates, medlemskap, brukerliste og statistikk er faste
 - nettleserklokken fryses før første navigasjon
 - API-svar under den navngitte test-tenanten oppfylles ved Playwright-grensen
-- utviklingsinnlogging går gjennom authharnessen og lokale backenden
+- utviklingsinnlogging går gjennom samme authharness med test-eide innloggingssvar;
+  den visuelle konfigurasjonen trenger ingen backend
 - redusert bevegelse, skjult caret og skjult Query-devtools fjerner teststøy uten produktendring
 
 Et ukjent tenant-API-kall avvises i stedet for å falle gjennom til skiftende utviklingsdata. Vanlig

@@ -111,7 +111,7 @@ export function createArrangementEditorController(input: ArrangementEditorInput)
 
   const errors = $derived(validateMetadata(draft));
   const visibleErrors = $derived(
-    metadataSubmitted ? errors : { activityId: null, websiteTitle: null }
+    metadataSubmitted ? errors : { activityId: null, title: null, websiteTitle: null }
   );
   const filteredCourts = $derived(
     input.courts.filter((court) => court.grenId === draft.activityId)
@@ -180,7 +180,7 @@ export function createArrangementEditorController(input: ArrangementEditorInput)
     const candidates = nextBookings.filter((booking) =>
       input.mode === "edit" ? booking.source !== "existing" : true
     );
-    const request = previewRequest(candidates, draft.activityId, draft.category);
+    const request = previewRequest(candidates, draft);
     if (!request) return;
     try {
       const result = await previewMutation.mutateAsync(request);

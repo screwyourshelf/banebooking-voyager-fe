@@ -29,6 +29,9 @@ registrerer bare test-eide booking-ID-er for avgrenset opprydding.
 - Admintesten leser hele den eksisterende klubbprofilen for `aas-tennisklubb`, endrer klubbnavnet
   midlertidig og setter navnet tilbake i produktflyten. Ettertesten gjenoppretter hele det leste
   klubbobjektet med et separat admin-token dersom testen stopper underveis.
+- Profilkontrakten leser Utvidet-profilens eksisterende visningsnavn, verifiserer at et avvist
+  navn ikke lagres og oppdaterer navnet midlertidig. Bare profilens visningsnavn gjenopprettes og
+  kontrolleres i `finally`.
 - Harnessen seeder, nullstiller eller sletter ikke andre utviklingsdata. Backenden eier fortsatt
   databasemigrering og idempotent seed ved oppstart.
 
@@ -38,8 +41,8 @@ Kjør porten med:
 npm run test:e2e
 ```
 
-Denne porten inkluderer fire kritiske flyter, arrangementkontrakten nedenfor og fjorten fryste
-visuelle referanser. Ytelsesbaseline kjøres bare når den aktiveres eksplisitt. Authflyten logger
+Denne porten inkluderer de kritiske flytene, arrangements- og profilkontraktene nedenfor
+samt den visuelle testmatrisen. Ytelsesbaseline kjøres bare når den aktiveres eksplisitt. Authflyten logger
 inn og ut med alle tre utviklingsprofiler og aksepterer den policyflaten backenddataene faktisk
 krever. En egen, responslokal kunngjøringsfixture verifiserer kappløpet mellom retur fra login og
 obligatorisk policyredirect uten å endre backenddata. De to øvrige kritiske flytene verifiserer
@@ -70,8 +73,27 @@ på ledige tider og sletter bare dette arrangementet i `finally`.
 npx playwright test e2e/arrangement-slot-contract.spec.ts
 ```
 
+`e2e/quick-arrangement.spec.ts` bruker også reell backend og PostgreSQL. Den verifiserer
+Utvidet-brukerens hurtigoppretting med flere tider fra kalenderdialogen, kalenderoppdatering,
+tittelredigering i administrasjonen og delvis suksess når en valgt tid blir opptatt før lagring.
+Samme testfil dekker kobling av flere kalendertider til et eksisterende arrangement, bevarte
+metadata, kalenderoppdatering og delvis batchsuksess. Begge dialogene kontrolleres også på mobil.
+Bare testens egne arrangementer slettes i `finally`.
+
 Editorens valg av forhåndsvisningsendepunkt og visning av konflikt testes separat i
 `src/lib/features/arrangement-admin/admin-screen.test.ts`.
+
+## Profilkontrakt
+
+`e2e/profile-contract.spec.ts` bruker frontendens profilfunksjon og faktiske API-klient mot lokal
+backend og PostgreSQL. Den verifiserer at tjenestens valideringsavslag returneres som HTTP 400,
+at lagret profil bevares og at en gyldig oppdatering returnerer tomt svar og kan leses tilbake.
+Profil- og brukeradministrasjonens komponenttester verifiserer at serveravslag beholder utkastet
+uten å vise suksess, og at en lagret profil oppdateres fra sessiondata.
+
+```bash
+npx playwright test e2e/profile-contract.spec.ts
+```
 
 ## Produksjonsartefakter og routes
 
@@ -99,10 +121,13 @@ Utviklingsauth og testdata bruker den isolerte databasen; produksjonshemmelighet
 Den kjører samme avgrensede kontraktport som kan kjøres lokalt:
 
 ```bash
-npm exec playwright test e2e/critical-flows.spec.ts e2e/arrangement-slot-contract.spec.ts
+npm exec playwright test e2e/critical-flows.spec.ts e2e/arrangement-slot-contract.spec.ts e2e/quick-arrangement.spec.ts e2e/profile-contract.spec.ts
 ```
 
-Standard frontendref er låst til `24d25c30adf550ae4fb53e603d04faaac8b6376e`. Backend-PR-er og
+Standardreferansen eies av backendens `.github/workflows/ci.yml`. Den skal være en eksplisitt
+frontendcommit som inneholder alle kontrakttestene workflowen bestiller, inkludert hurtigoppretting,
+flervalg ved kobling og profilvalidering.
+Backend-PR-er og
 produksjonsworkflowen må passere kontraktjobben. Ved frontendendringer kjøres backendens
 CI manuelt med `frontend_ref` satt til kandidatens commit; dette starter ikke produksjonsdeploy.
 Oppdater den låste referansen når en ny frontendversjon skal være kontraktens baseline.

@@ -2,14 +2,19 @@ import { describe, expect, it } from "vitest";
 import type { ArrangementForhåndsvisningRespons, BaneRespons } from "$lib/contracts";
 import {
   addUniqueBookings,
+  arrangementToMetadataDraft,
   createArrangementRequest,
+  createMetadataDraft,
   generateManualBookings,
   generateRecurringBookings,
   groupCourtsBySlotLength,
   mergePreview,
+  metadataRequest,
   reconcileBatchResult,
+  validateMetadata,
   type LocalBooking,
 } from "./model";
+import { arrangement } from "./admin-test-data";
 
 function court(id: string, slotLengthMinutes: number): BaneRespons {
   return {
@@ -39,6 +44,7 @@ const draft = {
   category: "Kurs" as const,
   description: " Internt ",
   publishedOnWebsite: true,
+  title: " Sommerkurs for juniorer ",
   websiteDescription: '{"type":"doc"}',
   websiteTitle: "Sommerkurs",
 };
@@ -108,9 +114,32 @@ describe("arrangement-admin model", () => {
     expect(createArrangementRequest(draft, bookings)).toMatchObject({
       eksplisitteSlots: [{ baneId: "A", dato: "2026-08-24", sluttTid: "09:00", startTid: "08:00" }],
       grenId: "activity",
-      tittel: "Kurs",
+      tittel: "Sommerkurs for juniorer",
       ukedager: ["Monday"],
     });
+  });
+
+  it("bevarer arrangementets egen tittel i redigeringsutkastet og metadatarequesten", () => {
+    expect(createMetadataDraft("activity").title).toBe("");
+    expect(arrangementToMetadataDraft(arrangement, "activity").title).toBe("Høstcup");
+    expect(metadataRequest(draft)).toMatchObject({
+      tittel: "Sommerkurs for juniorer",
+      kategori: "Kurs",
+      beskrivelse: "Internt",
+    });
+  });
+
+  it.each(["", "  ", " ab ", "a".repeat(101)])(
+    "krever en tittel på 3 til 100 tegn etter trimming: %j",
+    (title) => {
+      expect(validateMetadata({ ...draft, title }).title).toBe(
+        "Tittelen må være mellom 3 og 100 tegn."
+      );
+    }
+  );
+
+  it.each([" abc ", "a".repeat(100)])("godtar tittelgrensene etter trimming", (title) => {
+    expect(validateMetadata({ ...draft, title }).title).toBeNull();
   });
 
   it("beholder bare feilede forslag etter delvis batchsuksess", () => {

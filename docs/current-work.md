@@ -1,29 +1,35 @@
 # Aktivt arbeid
 
-> **Status:** Ingen aktiv implementeringsoppgave
+> **Status:** Utvikling avsluttet og lokal verifikasjon bestått; publisering godkjent 2026-10-20
 >
-> **Hovedbranch:** `main`
+> **Hovedbranch:** `main` · **Arbeidsbranch:** `codex/quick-arrangement`
 
-Doktorfunnene om sperret/inaktiv booking, samtidige kvoter, handlinger på gammel kalender
-og tap av konfliktforslag er rettet i frontend og backend. Frontend har regresjonstester
-for bane-/datobytte og blandede arrangementsforslag. Backend verifiserer kvotesamtidighet
-mot PostgreSQL, også i CI.
+## Mål og omfang
 
-Gjeldende produktkontrakt står i [product-behavior.md](./product-behavior.md), og
-[driftsinstruksen](./development-and-operations.md) beskriver oppstart, tester og publisering.
-Arbeidshistorikken ligger i Git.
+Fullstackleveransen gir «Opprett nytt arrangement» ved siden av «Koble til arrangement» i
+bookingkalenderen. Dialogen bruker type som automatisk tittel, valgfri beskrivelse og flere tider
+på samme bane/dato. Delvis suksess vises uten en ny opprettelseshandling; tittel kan senere redigeres
+i administrasjonen. Se [produktkontrakten](./product-behavior.md).
 
-## Neste steg
+Kobling til eksisterende arrangement bruker den samme tidsvelgeren og eksisterende batchendepunkt,
+med samlet resultat for vellykkede og avviste tider. Backendkontrakten er uendret.
 
-Ingen ny implementeringsoppgave er avtalt. Avhengighetsoppfølgingen nedenfor bør behandles
-som egen oppgave; den inngår ikke i SOLID-refaktoreringen.
+Backend samler tjenesteflyter og viderefører profilvalideringsfeil. Frontend bruker eksisterende
+API-, query-, feil- og stylingmønstre; kontrakttester dekker samspillet.
 
-## Kjent avhengighetsoppfølging
+## Publisering og oppfølging
 
-`npm audit` 2026-09-22 rapporterer 32 funn: 1 høy, 25 moderate og 6 lave. Avhengighetsfilene
-var uendret mot `origin/main` ved kontrollen, så dette er eksisterende funn.
+- Test fra samme lokalnett på [192.168.68.64:5173/aas-tennisklubb](http://192.168.68.64:5173/aas-tennisklubb).
+  Bruk Testinnlogging som Utvidet eller administrator. Vite videresender `/api` til lokal
+  Development-backend på port 5015.
+- Brukeren har godkjent commit, merge og deploy av begge repoer. Frontend publiseres fra `main`
+  gjennom Cloudflare Pages; backend publiseres fra `master` gjennom GitHub Actions.
+- Backendens låste `frontend_ref` skal peke på denne leveransens verifiserte frontendcommit.
+  Backend publiseres før den nye frontenden. Gjeldende utrullingsstatus eies av GitHub Actions og
+  Cloudflare Pages, ikke av dette dokumentet.
+- Avhengighetskontrollen ved publisering er dokumentert i leveransenotatet og krever egen oppfølging.
+- Utskilling av backendens turneringstrekkingsalgoritmer er utsatt som egen oppgave.
 
-Det høye funnet gjelder `@tiptap/core` og Markdown-attributtparsing
-([GHSA-j95f-988m-3j2f](https://github.com/advisories/GHSA-j95f-988m-3j2f)).
-Audit oppgir en tilgjengelig oppdatering. Oppgrader Tiptap-pakkene samlet i en egen endring og
-verifiser rikteksteditoren; faktisk eksponering i appen er ikke vurdert her.
+Tidligere rapportert verifikasjon og datert avhengighetsobservasjon står i
+[leveransenotatet](./archive/hurtigoppretting-og-kontrakter-2026-10.md).
+Oppstart, kvalitetsporter og publisering eies av [driftsinstruksen](./development-and-operations.md).

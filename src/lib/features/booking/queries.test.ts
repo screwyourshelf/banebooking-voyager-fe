@@ -1,6 +1,7 @@
 import { QueryClient } from "@tanstack/svelte-query";
 import { describe, expect, it, vi } from "vitest";
 import { ApiError, type ApiClient } from "$lib/platform/api";
+import { tenantQueryMeta } from "$lib/platform/query";
 import { Kapabiliteter } from "$lib/domain";
 import { createBootstrap, createSlot } from "./booking-test-data";
 import { bookingQueryKeys } from "./query-keys";
@@ -8,6 +9,8 @@ import {
   cancelBookingMutationOptions,
   bookingCalendarQueryOptions,
   createBookingMutationOptions,
+  createQuickArrangementMutationOptions,
+  connectArrangementTimesMutationOptions,
   loadInitialBookingData,
   shouldUseBookingBootstrapFallback,
 } from "./queries";
@@ -206,5 +209,110 @@ describe("booking mutations", () => {
 
     expect(queryClient.getQueryData(queryKey)).toEqual({ slots: [slot], bookingstatus: null });
     expect(invalidate).not.toHaveBeenCalled();
+  });
+});
+
+describe("hurtigarrangement og cache", () => {
+  it("kobler tider samlet og oppdaterer arrangementets bookinger bare i aktuell klubb", async () => {
+    const queryClient = new QueryClient();
+    const entries = [
+      {
+        key: ["arrangement-admin", "bookings", "fjordvik"],
+        meta: tenantQueryMeta("fjordvik", "arrangement-bookings"),
+      },
+      { key: ["arrangement-admin", "fjordvik"], meta: tenantQueryMeta("fjordvik", "arrangements") },
+      {
+        key: bookingQueryKeys.calendar("fjordvik", "court-1", "2026-08-23"),
+        meta: tenantQueryMeta("fjordvik", "booking-slots"),
+      },
+      {
+        key: ["arrangement-admin", "bookings", "annen-klubb"],
+        meta: tenantQueryMeta("annen-klubb", "arrangement-bookings"),
+      },
+    ];
+    for (const entry of entries) {
+      await queryClient.fetchQuery({ ...entry, queryKey: entry.key, queryFn: async () => [] });
+    }
+    const request = vi.fn().mockResolvedValue({ opprettet: [], feilet: [] });
+    const options = connectArrangementTimesMutationOptions(
+      { request: request as ApiClient["request"] },
+      queryClient,
+      "fjordvik"
+    );
+    const body = {
+      bookinger: [{ baneId: "court-1", dato: "2026-08-23", startTid: "10:00", sluttTid: "11:00" }],
+    };
+    await options.mutationFn({ arrangementId: "arrangement/1", request: body });
+    await options.onSuccess();
+    expect(request).toHaveBeenCalledWith(
+      "klubb/fjordvik/arrangement/arrangement%2F1/bookinger/batch",
+      { auth: "required", method: "POST", json: body }
+    );
+    expect(options.retry).toBe(false);
+    expect(entries.map(({ key }) => queryClient.getQueryState(key)?.isInvalidated)).toEqual([
+      true,
+      true,
+      true,
+      false,
+    ]);
+  });
+
+  it("oppdaterer arrangementer, aktive valg og kalender bare for aktuell klubb", async () => {
+    const queryClient = new QueryClient();
+    const entries = [
+      {
+        key: ["arrangement-admin", { slug: "fjordvik" }],
+        meta: tenantQueryMeta("fjordvik", "arrangements"),
+      },
+      {
+        key: bookingQueryKeys.activeArrangements("fjordvik", "tennis"),
+        meta: tenantQueryMeta("fjordvik", "arrangements"),
+      },
+      {
+        key: bookingQueryKeys.calendar("fjordvik", "court-1", "2026-08-23"),
+        meta: tenantQueryMeta("fjordvik", "booking-slots"),
+      },
+      {
+        key: bookingQueryKeys.calendar("annen-klubb", "court-2", "2026-08-23"),
+        meta: tenantQueryMeta("annen-klubb", "booking-slots"),
+      },
+    ];
+    for (const { key, meta } of entries) {
+      await queryClient.fetchQuery({ queryKey: key, meta, queryFn: async () => [] });
+    }
+    const request = vi
+      .fn()
+      .mockResolvedValue({ arrangementId: "arrangement-1", antallOpprettet: 1, konflikter: [] });
+    const options = createQuickArrangementMutationOptions(
+      { request: request as ApiClient["request"] },
+      queryClient,
+      "fjordvik"
+    );
+    const body = {
+      grenId: "tennis",
+      tittel: "Trening",
+      kategori: "Trening" as const,
+      startDato: "2026-08-23",
+      sluttDato: "2026-08-23",
+      ukedager: ["Sunday" as const],
+      baneGrupper: [{ baneIder: ["court-1"], tidspunkter: ["10:00"] }],
+      eksplisitteSlots: [
+        { baneId: "court-1", dato: "2026-08-23", startTid: "10:00", sluttTid: "11:00" },
+      ],
+    };
+    await options.mutationFn(body);
+    await options.onSuccess();
+    expect(request).toHaveBeenCalledWith("klubb/fjordvik/arrangement", {
+      auth: "required",
+      method: "POST",
+      json: body,
+    });
+    expect(options.retry).toBe(false);
+    expect(entries.map(({ key }) => queryClient.getQueryState(key)?.isInvalidated)).toEqual([
+      true,
+      true,
+      true,
+      false,
+    ]);
   });
 });

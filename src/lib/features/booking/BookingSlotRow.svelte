@@ -1,24 +1,25 @@
 <script lang="ts">
   import type { BookingstatusRespons, KalenderSlotRespons } from "$lib/contracts";
   import { Button, CollectionRow, DocumentFacts, ScheduleTime, Weather } from "$lib/ui";
-  import ArrangementBookingDialog from "./ArrangementBookingDialog.svelte";
   import { getBookingSlotPresentation } from "./model";
 
   let {
-    activityId,
     authenticated,
     bookingstatus,
     busy = false,
     onBook,
     onCancel,
+    onCreateArrangement,
+    onConnectArrangement,
     slot,
   }: {
-    activityId: string;
     authenticated: boolean;
     bookingstatus: BookingstatusRespons | null;
     busy?: boolean;
-    onBook: (slot: KalenderSlotRespons, arrangementId?: string) => void;
+    onBook: (slot: KalenderSlotRespons) => void;
     onCancel: (slot: KalenderSlotRespons) => void;
+    onCreateArrangement: (slot: KalenderSlotRespons) => void;
+    onConnectArrangement: (slot: KalenderSlotRespons) => void;
     slot: KalenderSlotRespons;
   } = $props();
 
@@ -61,11 +62,22 @@
 
 {#snippet actions()}
   {#if presentation.canConnectToArrangement}
-    <ArrangementBookingDialog
-      {activityId}
+    <Button
+      variant="secondary"
+      size="small"
       disabled={busy}
-      onSelect={(arrangementId) => onBook(slot, arrangementId)}
-    />
+      onclick={() => onConnectArrangement(slot)}
+    >
+      Koble til arrangement
+    </Button>
+    <Button
+      variant="secondary"
+      size="small"
+      disabled={busy}
+      onclick={() => onCreateArrangement(slot)}
+    >
+      Opprett nytt arrangement
+    </Button>
   {/if}
   {#if presentation.canCancel}
     <Button variant="destructive" size="small" disabled={busy} onclick={() => onCancel(slot)}>

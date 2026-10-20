@@ -19,6 +19,7 @@ som er relevante for oppgaven; hele dokumentsettet skal ikke leses som standard.
 - Arkitektur, produktkontrakter og ADR-er beskriver varige regler.
 - Utviklings- og testdokumenter beskriver kjørbare arbeidsformer.
 - Detaljerte performancefunn er referansegrunnlag og leses bare for kandidaten som undersøkes.
-- Fullførte prosjektforløp og mellomtilstander ligger i git-historikken, ikke i aktiv dokumentasjon.
+- Fullførte prosjektforløp og mellomtilstander ligger i git-historikken. Avgrensede leveranse- og
+  verifikasjonsnotater ligger i [arkivet](./archive/README.md) og leses bare ved behov.
 
 Maskinelle baselines og guardkontrakter eies av `scripts/`; de er ikke dokumentkontekst.

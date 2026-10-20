@@ -7,6 +7,9 @@
   import { getTenantContext } from "$lib/platform/tenant";
   import { Collection, CollectionLoading, ErrorState, Page } from "$lib/ui";
   import BookingSchedule from "./BookingSchedule.svelte";
+  import ArrangementBookingDialog from "./ArrangementBookingDialog.svelte";
+  import QuickArrangementDialog from "./QuickArrangementDialog.svelte";
+  import { canSelectArrangementSlot } from "./arrangement-slots";
   import { addDaysToIsoDate, resolveBookingSelection } from "./model";
   import {
     bookingBootstrapQueryOptions,
@@ -24,6 +27,10 @@
   let preferredActivityId = $state<string | null>(null);
   let preferredCourtId = $state<string | null>(null);
   let selectedDate = $state(today);
+  let arrangementSelection = $state<{
+    mode: "create" | "connect";
+    slot: KalenderSlotRespons;
+  } | null>(null);
 
   const userIdentity = $derived(
     auth.state.status === "authenticated" ? auth.state.user.id : "anonymous"
@@ -89,15 +96,18 @@
   });
 
   function selectActivity(activityId: string) {
+    arrangementSelection = null;
     preferredActivityId = activityId;
     preferredCourtId = null;
   }
 
   function selectCourt(courtId: string) {
+    arrangementSelection = null;
     preferredCourtId = courtId;
   }
 
   function selectDate(date: string) {
+    arrangementSelection = null;
     selectedDate = date;
   }
 
@@ -107,7 +117,7 @@
     );
   }
 
-  function bookSlot(slot: KalenderSlotRespons, arrangementId?: string) {
+  function bookSlot(slot: KalenderSlotRespons) {
     if (!isCurrentSlot(slot) || mutationBusy) return;
     cancelMutation.reset();
     const request: OpprettBookingForespørsel = {
@@ -115,7 +125,6 @@
       dato: selectedDate,
       startTid: slot.slotStartTid,
       sluttTid: slot.slotSluttTid,
-      ...(arrangementId ? { arrangementId } : {}),
     };
     bookMutation.mutate(request);
   }
@@ -124,6 +133,12 @@
     if (!slot.bookingId || !isCurrentSlot(slot) || mutationBusy) return;
     bookMutation.reset();
     cancelMutation.mutate({ bookingId: slot.bookingId });
+  }
+
+  function openArrangementDialog(slot: KalenderSlotRespons, mode: "create" | "connect") {
+    if (!isCurrentSlot(slot) || calendar.isError || mutationBusy || !canSelectArrangementSlot(slot))
+      return;
+    arrangementSelection = { slot, mode };
   }
 </script>
 
@@ -168,6 +183,27 @@
     onDateChange={selectDate}
     onBook={bookSlot}
     onCancel={cancelSlot}
+    onCreateArrangement={(slot) => openArrangementDialog(slot, "create")}
+    onConnectArrangement={(slot) => openArrangementDialog(slot, "connect")}
     onSlotsRetry={() => void calendar.refetch()}
   />
+  {#if arrangementSelection && arrangementSelection.slot.baneId === selection.courtId && arrangementSelection.slot.dato === selectedDate && auth.state.status === "authenticated"}
+    {#if arrangementSelection.mode === "create"}
+      <QuickArrangementDialog
+        activityId={selection.activityId}
+        initialSlot={arrangementSelection.slot}
+        slots={calendar.data?.slots ?? []}
+        disabled={mutationBusy || calendar.isPlaceholderData || calendar.isError}
+        onClose={() => (arrangementSelection = null)}
+      />
+    {:else}
+      <ArrangementBookingDialog
+        activityId={selection.activityId}
+        initialSlot={arrangementSelection.slot}
+        slots={calendar.data?.slots ?? []}
+        disabled={mutationBusy || calendar.isPlaceholderData || calendar.isError}
+        onClose={() => (arrangementSelection = null)}
+      />
+    {/if}
+  {/if}
 {/if}

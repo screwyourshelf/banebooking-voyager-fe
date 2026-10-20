@@ -19,7 +19,7 @@
       "importantDeclarationCount": 4,
       "layeredCssRuleCount": 10,
       "legacyDebtCount": 0,
-      "markupFileCount": 185,
+      "markupFileCount": 187,
       "rawVisualDeclarationCount": 664,
       "selectorCount": 12,
       "styleAttributeCount": 7,
@@ -47844,7 +47844,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/arrangement-admin/ArrangementMetadataFields.svelte",
-          "lineCount": 119,
+          "lineCount": 131,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -47924,7 +47924,17 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/booking/ArrangementBookingDialog.svelte",
-          "lineCount": 90,
+          "lineCount": 195,
+          "styleAttributeCount": 0,
+          "styleBlockCount": 0,
+          "styleDirectiveCount": 0
+        },
+        {
+          "classTokenCount": 0,
+          "cssImportCount": 0,
+          "dynamicClassAttributeCount": 0,
+          "file": "src/lib/features/booking/ArrangementTimeSelection.svelte",
+          "lineCount": 34,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -47944,7 +47954,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/booking/BookingSchedule.svelte",
-          "lineCount": 237,
+          "lineCount": 242,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -47954,7 +47964,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/booking/BookingScreen.svelte",
-          "lineCount": 173,
+          "lineCount": 209,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -47964,7 +47974,17 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/booking/BookingSlotRow.svelte",
-          "lineCount": 115,
+          "lineCount": 127,
+          "styleAttributeCount": 0,
+          "styleBlockCount": 0,
+          "styleDirectiveCount": 0
+        },
+        {
+          "classTokenCount": 0,
+          "cssImportCount": 0,
+          "dynamicClassAttributeCount": 0,
+          "file": "src/lib/features/booking/QuickArrangementDialog.svelte",
+          "lineCount": 163,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -76221,16 +76241,16 @@
       "initialJavaScriptAssets": [
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/CBx1S70x.js", "gzipBytes": 589, "rawBytes": 1034 },
+        { "asset": "_app/immutable/chunks/Cw3TRuma.js", "gzipBytes": 11221, "rawBytes": 29269 },
         { "asset": "_app/immutable/chunks/Cwa3_RIE.js", "gzipBytes": 20710, "rawBytes": 55260 },
-        { "asset": "_app/immutable/chunks/D9KcBdTR.js", "gzipBytes": 11224, "rawBytes": 29273 },
         { "asset": "_app/immutable/chunks/DRyF0Jvr.js", "gzipBytes": 532, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
         { "asset": "_app/immutable/chunks/wQ2rwi4O.js", "gzipBytes": 801, "rawBytes": 1551 },
-        { "asset": "_app/immutable/entry/app.B88pV-cU.js", "gzipBytes": 2508, "rawBytes": 9156 },
-        { "asset": "_app/immutable/entry/start.NtGqyfUF.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/entry/app.DhxNMsXt.js", "gzipBytes": 2514, "rawBytes": 9159 },
+        { "asset": "_app/immutable/entry/start.D1EAx1xa.js", "gzipBytes": 92, "rawBytes": 82 },
         { "asset": "_app/immutable/nodes/0.DOVtP3l6.js", "gzipBytes": 427, "rawBytes": 801 }
       ],
-      "initialJavaScriptGzipBytes": 38322,
+      "initialJavaScriptGzipBytes": 38325,
       "javaScriptChunkCount": 62,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",
@@ -76272,16 +76292,16 @@
       "initialJavaScriptAssets": [
         { "asset": "_app/immutable/chunks/Bp7E6Sb0.js", "gzipBytes": 763, "rawBytes": 1422 },
         { "asset": "_app/immutable/chunks/CBx1S70x.js", "gzipBytes": 599, "rawBytes": 1070 },
-        { "asset": "_app/immutable/chunks/ChoY9xdC.js", "gzipBytes": 11232, "rawBytes": 29281 },
         { "asset": "_app/immutable/chunks/Cwa3_RIE.js", "gzipBytes": 20710, "rawBytes": 55260 },
         { "asset": "_app/immutable/chunks/DRyF0Jvr.js", "gzipBytes": 532, "rawBytes": 1334 },
         { "asset": "_app/immutable/chunks/kHkO0eLZ.js", "gzipBytes": 676, "rawBytes": 1160 },
+        { "asset": "_app/immutable/chunks/nhKlIT8a.js", "gzipBytes": 11233, "rawBytes": 29285 },
         { "asset": "_app/immutable/chunks/wQ2rwi4O.js", "gzipBytes": 801, "rawBytes": 1551 },
-        { "asset": "_app/immutable/entry/app.DqHmeC26.js", "gzipBytes": 2523, "rawBytes": 9744 },
-        { "asset": "_app/immutable/entry/start.B2NVAbLo.js", "gzipBytes": 92, "rawBytes": 82 },
+        { "asset": "_app/immutable/entry/app.CF9MfByK.js", "gzipBytes": 2527, "rawBytes": 9747 },
+        { "asset": "_app/immutable/entry/start.CVzMxsv5.js", "gzipBytes": 92, "rawBytes": 82 },
         { "asset": "_app/immutable/nodes/0.CTOgIDaq.js", "gzipBytes": 437, "rawBytes": 861 }
       ],
-      "initialJavaScriptGzipBytes": 38365,
+      "initialJavaScriptGzipBytes": 38370,
       "javaScriptChunkCount": 62,
       "largestLazyJavaScript": {
         "asset": "_app/immutable/chunks/DTCYpbte.js",

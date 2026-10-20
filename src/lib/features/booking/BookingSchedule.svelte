@@ -42,6 +42,8 @@
     onActivityChange,
     onBook,
     onCancel,
+    onConnectArrangement,
+    onCreateArrangement,
     onCourtChange,
     onDateChange,
     onSlotsRetry,
@@ -64,8 +66,10 @@
     bookingstatus: BookingstatusRespons | null;
     maxDate: string;
     onActivityChange: (activityId: string) => void;
-    onBook: (slot: KalenderSlotRespons, arrangementId?: string) => void;
+    onBook: (slot: KalenderSlotRespons) => void;
     onCancel: (slot: KalenderSlotRespons) => void;
+    onCreateArrangement: (slot: KalenderSlotRespons) => void;
+    onConnectArrangement: (slot: KalenderSlotRespons) => void;
     onCourtChange: (courtId: string) => void;
     onDateChange: (date: string) => void;
     onSlotsRetry: () => void;
@@ -222,13 +226,14 @@
       <CollectionList label="Tilgjengelige tider" busy={slotsFetching || mutationBusy}>
         {#each visibleSlots as slot (slot.bookingId ?? `${slot.dato}-${slot.slotStartTid}-${slot.baneId}`)}
           <BookingSlotRow
-            activityId={selectedActivityId}
             {authenticated}
             {bookingstatus}
             busy={mutationBusy}
             {slot}
             {onBook}
             {onCancel}
+            {onCreateArrangement}
+            {onConnectArrangement}
           />
         {/each}
       </CollectionList>

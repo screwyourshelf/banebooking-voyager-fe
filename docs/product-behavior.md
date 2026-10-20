@@ -2,7 +2,7 @@
 
 > **Status:** Bindende produktadferd
 >
-> **Sist oppdatert:** 2026-09-22
+> **Sist oppdatert:** 2026-10-20
 
 ## Formål og avgrensning
 
@@ -135,7 +135,28 @@ Sentrale API-er: `GET /klubb/{slug}`, `GET /klubb/{slug}/bruker`,
   av sessionens separate queries.
 - Offentlige brukere kan lese fysisk tilgjengelighet, arrangementinformasjon, vær og reglement.
   Innlogging endrer tilgjengelige handlinger, ikke statusordene `Ledig` og `Opptatt`.
-- Slotkapabiliteter styrer hurtigbooking, avbestilling og kobling til et aktivt arrangement.
+- Slotkapabiliteter styrer hurtigbooking, avbestilling og arrangementhandlinger. Den utvidede
+  raden viser «Koble til arrangement» og «Opprett nytt arrangement» ved siden av hverandre når
+  brukeren har arrangementkapabilitet.
+- Hurtigoppretting viser bane og dato og ber om type fra eksisterende arrangementskategorier,
+  deretter valgfri beskrivelse. Tittelen settes automatisk fra typens visningsnavn; dialogen har
+  ikke eget tittelfelt og kan sendes uten tekstinntasting. Den opprinnelige tiden er forhåndsvalgt;
+  flere ledige tider på samme bane og dato kan velges med felles flervalgskontroller.
+  Nettsidepublisering er avslått. Opprettelse bruker eksisterende `POST arrangement` med
+  eksplisitte slots. Egen tittel kan settes senere i arrangementsadministrasjonen.
+- Kobling til eksisterende arrangement viser aktive arrangementer for valgt gren, deretter bane,
+  dato og samme tidsvelger som hurtigoppretting. Den klikkede tiden er forhåndsvalgt; flere ledige
+  tider på samme bane og dato kan kobles samlet gjennom eksisterende
+  `POST arrangement/{id}/bookinger/batch`. Knappen viser antallet valgte tider. Arrangementets
+  metadata beholdes, og kalender-, arrangements- og bookingdetaljer i aktuell klubb oppdateres.
+- Koblingsdialogen låser valg og lukking under lagring. HTTP-feil eller null koblede tider beholder
+  arrangement og tidsvalg. Positivt resultat viser antallet koblede tider og eventuelle konflikter,
+  og erstatter koblingshandlingen med «Lukk» slik at vellykkede tider ikke sendes på nytt.
+- Hurtigdialogen låser lagring og lukking mens forespørselen pågår. Feil og null opprettede tider
+  beholder utkastet. Delvis suksess viser hvilke tider som feilet, og videre endringer gjøres på
+  det opprettede arrangementet i administrasjonen; dialogen tilbyr ikke ny opprettelse.
+- Kalender- og arrangementqueries i aktuell klubb oppdateres etter opprettelse. Tidsvalg på gammel
+  kalender kan ikke sendes ved bane-/datobytte eller etter at en valgt tid blir utilgjengelig.
 - Ved bane-/datobytte kan forrige kalender vises mens nye data lastes, men radhandlingene er
   låst. Mutasjoner krever at slotens bane og dato tilhører gjeldende utvalg.
 - Dialogen `Grenser og tider` skiller gren-eide medlemskvoter fra den valgte banens tider.
@@ -220,7 +241,9 @@ Sentrale API-er: `GET|PUT /klubb/{slug}`, `GET /klubb/{slug}/medlemskap/status` 
 
 ### Arrangementadministrasjon
 
-- Oversikten kan opprette, velge, redigere og slette arrangementer. Editorforløpet skiller
+- Oversikten kan opprette, velge, redigere og slette arrangementer. Tittelen er et eget felt
+  (3–100 tegn) og bevares ved kategoriendring. Metadataendringer oppdaterer også kalenderens
+  tittel og beskrivelse. Editorforløpet skiller
   informasjon/metadata fra banetider.
 - Banetider kan foreslås gjentakende eller manuelt. Backend forhåndsviser ledige tider og
   konflikter; klienten beholder et lokalt stagingutkast og sender bare gyldige forslag.

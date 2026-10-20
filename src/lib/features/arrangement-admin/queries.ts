@@ -112,6 +112,7 @@ export function updateArrangementMetadataMutationOptions(
             arrangement.id === metadata.arrangementId
               ? {
                   ...arrangement,
+                  tittel: metadata.tittel,
                   beskrivelse: metadata.beskrivelse,
                   kategori: metadata.kategori,
                   nettsideBeskrivelse: metadata.nettsideBeskrivelse,
@@ -242,7 +243,7 @@ function appendArrangementBookings(
 }
 
 function invalidateArrangementResourcesOutsideAdmin(queryClient: QueryClient, slug: string) {
-  return invalidateTenantResources(queryClient, slug, ["arrangements"], {
+  return invalidateTenantResources(queryClient, slug, ["arrangements", "booking-slots"], {
     excludeScopes: ["arrangement-admin"],
   });
 }

@@ -13,6 +13,7 @@ import {
 import { arrangementAdminQueryKeys } from "./query-keys";
 
 const arrangement = {
+  tittel: "Før",
   beskrivelse: "Før",
   id: "arrangement-1",
   kategori: "Annet",
@@ -41,7 +42,7 @@ function fakeApi() {
 }
 
 describe("arrangement admin cache updates", () => {
-  it("oppdaterer metadata lokalt og invaliderer bare andre arrangementsvisninger", async () => {
+  it("oppdaterer metadata lokalt og invaliderer kalender og andre arrangementsvisninger", async () => {
     const { invalidate, queryClient } = createClient();
     const key = arrangementAdminQueryKeys.arrangements("fjordvik");
     queryClient.setQueryData(key, [arrangement]);
@@ -54,6 +55,7 @@ describe("arrangement admin cache updates", () => {
 
     await options.onSuccess({
       arrangementId: arrangement.id,
+      tittel: "Ny intern tittel",
       beskrivelse: "Etter",
       kategori: "Trening",
       nettsideBeskrivelse: "Ny nettsidetekst",
@@ -62,6 +64,7 @@ describe("arrangement admin cache updates", () => {
     });
 
     expect(queryClient.getQueryData<ArrangementRespons[]>(key)?.[0]).toMatchObject({
+      tittel: "Ny intern tittel",
       beskrivelse: "Etter",
       kategori: "Trening",
       nettsideBeskrivelse: "Ny nettsidetekst",
@@ -81,6 +84,18 @@ describe("arrangement admin cache updates", () => {
         queryKey: ["arrangements", { slug: "fjordvik" }],
       } as never)
     ).toBe(true);
+    expect(
+      predicate!({
+        meta: tenantQueryMeta("fjordvik", "booking-slots"),
+        queryKey: ["booking-calendar", { slug: "fjordvik" }],
+      } as never)
+    ).toBe(true);
+    expect(
+      predicate!({
+        meta: tenantQueryMeta("annen-klubb", "booking-slots"),
+        queryKey: ["booking-calendar", { slug: "annen-klubb" }],
+      } as never)
+    ).toBe(false);
   });
 
   it("legger enkelt- og batchsvar direkte i bookingcachen", async () => {
