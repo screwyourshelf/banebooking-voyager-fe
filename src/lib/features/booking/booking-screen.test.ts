@@ -45,6 +45,8 @@ function renderBooking(
     if (path.includes("booking-bootstrap")) return bootstrap;
     if (path.includes("/kalender?")) return bootstrap.kalender;
     if (path.includes("/arrangement/aktive?")) return activeArrangements;
+    if (path.endsWith("/bookinger/batch") && options?.method === "POST")
+      return { opprettet: [], feilet: [] };
     if (options?.method === "POST") {
       if (postError) throw postError;
       return { bookingId: "booking-1", melding: "Booket" };
@@ -141,22 +143,27 @@ describe("booking screen", () => {
     );
   });
 
-  it("ruller tilbake en avvist optimistisk booking og viser vedvarende inline-feil", async () => {
-    const bootstrap = createBootstrap({
-      kalender: { slots: [createSlot({ kapabiliteter: [Kapabiliteter.booking.book] })] },
-    });
-    renderBooking(bootstrap, {
-      authenticated: true,
-      postError: new Error("Tiden ble nettopp tatt."),
-    });
+  it.each([400, 403, 409, 500])(
+    "ruller tilbake optimistisk booking og viser serverens feil ved HTTP %s",
+    async (status) => {
+      const bootstrap = createBootstrap({
+        kalender: { slots: [createSlot({ kapabiliteter: [Kapabiliteter.booking.book] })] },
+      });
+      renderBooking(bootstrap, {
+        authenticated: true,
+        postError: new ApiError("Serveren kunne ikke opprette bookingen.", status),
+      });
 
-    await fireEvent.click(
-      await screen.findByRole("button", { name: "Book tiden 10:00 til 11:00" })
-    );
+      await fireEvent.click(
+        await screen.findByRole("button", { name: "Book tiden 10:00 til 11:00" })
+      );
 
-    expect(await screen.findByRole("alert")).toHaveTextContent("Tiden ble nettopp tatt.");
-    expect(screen.getByRole("button", { name: "Book tiden 10:00 til 11:00" })).toBeEnabled();
-  });
+      expect(await screen.findByRole("alert")).toHaveTextContent(
+        "Serveren kunne ikke opprette bookingen."
+      );
+      expect(screen.getByRole("button", { name: "Book tiden 10:00 til 11:00" })).toBeEnabled();
+    }
+  );
 
   it("avbestiller egen tid fra den utvidede slotraden", async () => {
     const bootstrap = createBootstrap({
@@ -186,16 +193,11 @@ describe("booking screen", () => {
     );
   });
 
-  it("kobler en opptatt tid til et valgt aktivt arrangement", async () => {
+  it("kobler en ledig tid til et valgt aktivt arrangement med batchkontrakten", async () => {
     const bootstrap = createBootstrap({
       kalender: {
         slots: [
           createSlot({
-            bookingId: "booking-1",
-            bookingStartTid: "10:00",
-            bookingSluttTid: "11:00",
-            booketAv: "Ada",
-            erEier: true,
             kapabiliteter: [Kapabiliteter.booking.kobleTilArrangement],
           }),
         ],
@@ -213,23 +215,29 @@ describe("booking screen", () => {
       ],
     });
 
-    await fireEvent.click(await screen.findByRole("button", { name: /Din tid/ }));
+    await fireEvent.click(await screen.findByRole("button", { name: /Ledig/ }));
     await fireEvent.click(screen.getByRole("button", { name: "Koble til arrangement" }));
     await fireEvent.click(await screen.findByRole("radio", { name: /Klubbmesterskap/ }));
-    await fireEvent.click(screen.getByRole("button", { name: "Koble til valgt arrangement" }));
+    await fireEvent.click(screen.getByRole("button", { name: "Koble 1 tid til arrangement" }));
 
     await waitFor(() =>
-      expect(request).toHaveBeenCalledWith("klubb/fjordvik/bookinger", {
-        auth: "required",
-        method: "POST",
-        json: {
-          arrangementId: "arrangement-1",
-          baneId: "court-1",
-          dato: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/),
-          startTid: "10:00",
-          sluttTid: "11:00",
-        },
-      })
+      expect(request).toHaveBeenCalledWith(
+        "klubb/fjordvik/arrangement/arrangement-1/bookinger/batch",
+        {
+          auth: "required",
+          method: "POST",
+          json: {
+            bookinger: [
+              {
+                baneId: "court-1",
+                dato: expect.stringMatching(/^\d{4}-\d{2}-\d{2}$/),
+                startTid: "10:00",
+                sluttTid: "11:00",
+              },
+            ],
+          },
+        }
+      )
     );
   });
 

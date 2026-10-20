@@ -5,7 +5,7 @@ import { fireEvent, render, screen, waitFor, within } from "@testing-library/sve
 import axe from "axe-core";
 import { describe, expect, it, vi } from "vitest";
 import type { BrukerRespons, BrukerSperreRespons, BrukerSperrerRespons } from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
+import { ApiError, type ApiClient } from "$lib/platform/api";
 import UserAdminFixture from "./UserAdminFixture.test.svelte";
 
 const axeOptions: axe.RunOptions = {
@@ -209,6 +209,34 @@ describe("UserAdminScreen", () => {
       )
     );
     expect(await screen.findByText("Ola Oppdatert")).toBeVisible();
+  });
+
+  it("beholder editorutkast og lagrede brukerdata når administratortilgangen avvises", async () => {
+    const usersRequest = createRequest();
+    const request = vi.fn(async (path: string, options?: { method?: string }) => {
+      if (options?.method === "PUT") {
+        throw new ApiError("Du har ikke tilgang til å endre brukeren.", 403);
+      }
+      return usersRequest(path);
+    });
+    render(UserAdminFixture, { request: request as ApiClient["request"] });
+    await expandOla();
+    await fireEvent.click(screen.getByRole("button", { name: "Rediger" }));
+    const dialog = within(screen.getByRole("dialog"));
+    const displayName = dialog.getByRole("textbox", { name: "Visningsnavn" });
+    await fireEvent.input(displayName, { target: { value: "Ola Utkast" } });
+    await fireEvent.click(dialog.getByRole("button", { name: "Lagre" }));
+
+    expect(await dialog.findByRole("alert")).toHaveTextContent(
+      "Du har ikke tilgang til å endre brukeren."
+    );
+    expect(displayName).toHaveValue("Ola Utkast");
+    expect(dialog.getByRole("button", { name: "Lagre" })).toBeEnabled();
+    await fireEvent.click(dialog.getByRole("button", { name: "Avbryt" }));
+    expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    expect(screen.getByText("Ola Medlem")).toBeVisible();
+    expect(screen.queryByText("Ola Utkast")).not.toBeInTheDocument();
+    expect(usersRequest).toHaveBeenCalledOnce();
   });
 
   it("sperrer, viser historikk, opphever og sletter etter eksplisitt bekreftelse", async () => {

@@ -1,15 +1,19 @@
 import type { QueryClient } from "@tanstack/svelte-query";
 import type {
   BaneRespons,
+  BatchLeggTilArrangementBookingerForespørsel,
   GrenRespons,
   KalenderRespons,
   OpprettBookingForespørsel,
+  OpprettArrangementForespørsel,
 } from "$lib/contracts";
 import { ApiError, type ApiClient } from "$lib/platform/api";
-import { tenantQueryMeta } from "$lib/platform/query";
+import { invalidateTenantResources, tenantQueryMeta } from "$lib/platform/query";
 import {
   cancelBooking,
   createBooking,
+  createCalendarArrangement,
+  connectCalendarArrangementTimes,
   getActiveArrangements,
   getBookingActivities,
   getBookingBootstrap,
@@ -120,6 +124,43 @@ export function createBookingMutationOptions(
       context: OptimisticBookingContext | undefined
     ) => restorePreviousSlots(queryClient, queryKey, context),
     onSuccess: () => invalidateBookingData(queryClient, slug, courtId, date),
+    retry: false,
+  };
+}
+
+export function createQuickArrangementMutationOptions(
+  api: ApiClient,
+  queryClient: QueryClient,
+  slug: string
+) {
+  return {
+    mutationFn: (request: OpprettArrangementForespørsel) =>
+      createCalendarArrangement(api, slug, request),
+    onSuccess: () =>
+      invalidateTenantResources(queryClient, slug, ["arrangements", "booking-slots"]),
+    retry: false,
+  };
+}
+
+export function connectArrangementTimesMutationOptions(
+  api: ApiClient,
+  queryClient: QueryClient,
+  slug: string
+) {
+  return {
+    mutationFn: ({
+      arrangementId,
+      request,
+    }: {
+      arrangementId: string;
+      request: BatchLeggTilArrangementBookingerForespørsel;
+    }) => connectCalendarArrangementTimes(api, slug, arrangementId, request),
+    onSuccess: () =>
+      invalidateTenantResources(queryClient, slug, [
+        "arrangements",
+        "arrangement-bookings",
+        "booking-slots",
+      ]),
     retry: false,
   };
 }

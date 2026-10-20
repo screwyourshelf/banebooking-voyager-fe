@@ -28,6 +28,7 @@ describe("arrangement-admin endpoints", () => {
     await previewArrangement(api, "fjord vik", arrangementRequest);
     await createArrangement(api, "fjord vik", arrangementRequest);
     await updateArrangementMetadata(api, "fjord vik", "event/1", {
+      tittel: "Sommerkurs",
       kategori: "Kurs",
       publisertPåNettsiden: false,
     });
@@ -61,7 +62,7 @@ describe("arrangement-admin endpoints", () => {
         {
           auth: "required",
           method: "PATCH",
-          json: { kategori: "Kurs", publisertPåNettsiden: false },
+          json: { tittel: "Sommerkurs", kategori: "Kurs", publisertPåNettsiden: false },
         },
       ],
       [

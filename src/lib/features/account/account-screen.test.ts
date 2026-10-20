@@ -4,8 +4,8 @@ import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/svelte";
 import axe from "axe-core";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { BrukerBookingRespons } from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
+import type { BrukerBookingRespons, BrukerRespons } from "$lib/contracts";
+import { createApiClient, type ApiClient } from "$lib/platform/api";
 import AccountFixture from "./AccountFixture.test.svelte";
 
 const axeOptions: axe.RunOptions = {
@@ -83,6 +83,61 @@ describe("account screens", () => {
       })
     );
     expect(onUserUpdated).toHaveBeenCalledTimes(1);
+  });
+
+  it.each([400, 403])(
+    "beholder profilutkastet og sessiondata når serveren avviser med %s",
+    async (status) => {
+      const onUserUpdated = vi.fn(async () => undefined);
+      const api = createApiClient({
+        baseUrl: "/api",
+        fetch: vi.fn<typeof fetch>().mockResolvedValue(
+          new Response(JSON.stringify({ melding: "Profilendringen ble avvist." }), {
+            status,
+            headers: { "Content-Type": "application/json" },
+          })
+        ),
+        getAuthorization: async () => ({ scheme: "Bearer", token: "account-test" }),
+        onUnauthorized: async () => undefined,
+      });
+      renderAccount({ onUserUpdated, request: api.request });
+      const input = screen.getByRole("textbox", { name: "Eget navn" });
+      await fireEvent.input(input, { target: { value: "Ada Nytt navn" } });
+      await fireEvent.click(screen.getByRole("button", { name: "Lagre endringer" }));
+
+      expect(await screen.findByRole("alert")).toHaveTextContent("Profilendringen ble avvist.");
+      expect(input).toHaveValue("Ada Nytt navn");
+      expect(screen.getByRole("button", { name: "Lagre endringer" })).toBeEnabled();
+      expect(screen.queryByText("Visningsnavnet er lagret")).not.toBeInTheDocument();
+      expect(onUserUpdated).not.toHaveBeenCalled();
+    }
+  );
+
+  it("viser lagret profil fra sessiondata etter vellykket oppdatering", async () => {
+    const user: BrukerRespons = {
+      id: "user-1",
+      epost: "ada@example.no",
+      visningsnavn: "Ada",
+      roller: ["Medlem"],
+      kapabiliteter: [],
+    };
+    const request = vi.fn().mockResolvedValue(undefined);
+    const onUserUpdated = vi.fn(async () => {
+      await result.rerender({ user: { ...user, visningsnavn: "Ada Lovelace" } });
+    });
+    const result = render(AccountFixture, {
+      onUserUpdated,
+      request: request as ApiClient["request"],
+      user,
+    });
+    const input = screen.getByRole("textbox", { name: "Eget navn" });
+    await fireEvent.input(input, { target: { value: " Ada Lovelace " } });
+    await fireEvent.click(screen.getByRole("button", { name: "Lagre endringer" }));
+
+    expect(await screen.findByText("Visningsnavnet er lagret")).toBeVisible();
+    expect(input).toHaveValue("Ada Lovelace");
+    expect(screen.getByRole("button", { name: "Lagre endringer" })).toBeDisabled();
+    expect(onUserUpdated).toHaveBeenCalledOnce();
   });
 
   it("viser persondata og laster ned JSON gjennom den beskyttede eksportgrensen", async () => {

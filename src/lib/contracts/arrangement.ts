@@ -160,6 +160,7 @@ export type ArrangementBookingRespons = {
 };
 
 export type OppdaterArrangementMetadataForespørsel = {
+  tittel?: string;
   kategori: ArrangementKategori;
   beskrivelse?: string;
   nettsideTittel?: string;
@@ -202,6 +203,7 @@ export type BatchLeggTilArrangementBookingerRespons = {
 
 export type OppdaterArrangementMetadataRespons = {
   arrangementId: string;
+  tittel: string;
   kategori: ArrangementKategori;
   beskrivelse?: string;
   nettsideTittel?: string;

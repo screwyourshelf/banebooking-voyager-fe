@@ -1,11 +1,15 @@
 import type {
   AktivtArrangementRespons,
+  BatchLeggTilArrangementBookingerForespørsel,
+  BatchLeggTilArrangementBookingerRespons,
   BaneRespons,
   BookingBootstrapRespons,
   BookingSuksessRespons,
   GrenRespons,
   KalenderRespons,
   OpprettBookingForespørsel,
+  OpprettArrangementForespørsel,
+  OpprettArrangementRespons,
 } from "$lib/contracts";
 import type { ApiClient } from "$lib/platform/api";
 
@@ -61,6 +65,17 @@ export function cancelBooking(api: ApiClient, slug: string, bookingId: string) {
   );
 }
 
+export function createCalendarArrangement(
+  api: ApiClient,
+  slug: string,
+  request: OpprettArrangementForespørsel
+) {
+  return api.request<OpprettArrangementRespons, OpprettArrangementForespørsel>(
+    tenantPath(slug, "arrangement"),
+    { auth: "required", method: "POST", json: request }
+  );
+}
+
 export function getActiveArrangements(
   api: ApiClient,
   slug: string,
@@ -71,4 +86,20 @@ export function getActiveArrangements(
     tenantPath(slug, `arrangement/aktive?grenId=${encodeURIComponent(activityId)}`),
     { auth: "optional", signal }
   );
+}
+
+export function connectCalendarArrangementTimes(
+  api: ApiClient,
+  slug: string,
+  arrangementId: string,
+  request: BatchLeggTilArrangementBookingerForespørsel
+) {
+  return api.request<
+    BatchLeggTilArrangementBookingerRespons,
+    BatchLeggTilArrangementBookingerForespørsel
+  >(tenantPath(slug, `arrangement/${encodeURIComponent(arrangementId)}/bookinger/batch`), {
+    auth: "required",
+    method: "POST",
+    json: request,
+  });
 }

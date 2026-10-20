@@ -136,7 +136,8 @@ er Darwin-referanser. Den endrer ikke snapshots eller baselines. Ingen hemmeligh
 backendtilgang er nødvendig, heller ikke for pull requests fra forks.
 
 Reelle API-kontraktflyter kjøres i det private backend-repoets CI mot PostgreSQL og en
-fast frontendcommit. `frontend_ref` ved manuell kjøring lar en frontendkandidat testes før
+fast frontendcommit. Referansen må inneholde testene workflowen bestiller; oppdater backendens
+låste standardref ved en ny kontraktsbaseline. `frontend_ref` ved manuell kjøring lar en frontendkandidat testes før
 publisering; se `docs/e2e-harness.md`. En grønn frontend-PR alene bekrefter ikke denne
 fullstackkontrakten. Frontendoppdateringer starter ikke automatisk backendworkflowen.
 

@@ -2,7 +2,7 @@
 
 > **Status:** Bindende arkitektur
 >
-> **Sist oppdatert:** 2026-08-26
+> **Sist oppdatert:** 2026-10-20
 
 ## Formål
 
@@ -102,9 +102,9 @@ src/
     │   └── shell/
     └── features/
         ├── booking/
-        ├── arrangementer/
+        ├── arrangements/
         ├── arrangement-admin/
-        ├── brukere/
+        ├── user-admin/
         └── ...
 ```
 
@@ -210,11 +210,15 @@ features/booking/
 ├── query-keys.ts          stabil key factory
 ├── queries.ts             queries og mutations
 ├── model.ts               featuretyper og ren featurelogikk
-├── state.svelte.ts        reaktiv arbeidsflyt når den er delt av flere komponenter
-├── components/
-│   ├── BookingScreen.svelte
-│   ├── BookingSchedule.svelte
-│   └── BookingSlotRow.svelte
+├── quick-arrangement.ts   ren logikk for hurtigoppretting
+├── arrangement-slots.ts   felles slotidentitet og valgbarhet
+├── arrangement-time-selection.svelte.ts  lokal tidsvalgstate for begge dialoger
+├── BookingScreen.svelte
+├── BookingSchedule.svelte
+├── BookingSlotRow.svelte
+├── QuickArrangementDialog.svelte
+├── ArrangementBookingDialog.svelte
+├── ArrangementTimeSelection.svelte
 └── index.ts               eneste offentlige inngang
 ```
 
@@ -254,7 +258,7 @@ TanStack Query er den autoritative cache for serverdata. `load` kan prefetch ell
 
 ## API-klient
 
-Axios erstattes med en liten klient rundt native `fetch`:
+API-klienten i `platform/api` bruker native `fetch`:
 
 ```ts
 type ApiClientOptions = {
@@ -398,7 +402,9 @@ Følgende inngår i `npm run check`:
 - forbud mot direkte `fetch` i komponenter
 - eksakt, maskinell storage-grense for pre-module bootstrapen
 - eksakt, token-synkronisert presentasjonsgrense for pre-module oppstartsdokumentet
-- tester og `git diff --check`
+
+Enhetstestene kjøres med `npm test`. `npm run verify:frontend` samler enhetstestene,
+`check`, visuelle tester og produksjons-E2E. Kjør `git diff --check` separat.
 
 Arkitekturkontrollen skal bruke eksplisitte tillatte grenser. En voksende unntaksliste er teknisk
 gjeld og kan ikke utvides uten en dokumentert beslutning.

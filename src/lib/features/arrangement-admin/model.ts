@@ -36,12 +36,14 @@ export type ArrangementMetadataDraft = {
   category: ArrangementKategori;
   description: string;
   publishedOnWebsite: boolean;
+  title: string;
   websiteDescription: string;
   websiteTitle: string;
 };
 
 export type ArrangementMetadataErrors = {
   activityId: string | null;
+  title: string | null;
   websiteTitle: string | null;
 };
 
@@ -198,10 +200,9 @@ export function generateRecurringBookings(
 
 export function previewRequest(
   bookings: readonly LocalBooking[],
-  activityId: string,
-  category: ArrangementKategori
+  draft: Pick<ArrangementMetadataDraft, "activityId" | "category" | "title">
 ): OpprettArrangementForespørsel | null {
-  if (!activityId || bookings.length === 0) return null;
+  if (!draft.activityId || bookings.length === 0) return null;
   const dates = bookings.map((booking) => booking.date).sort();
   const weekdays = [
     ...new Set(
@@ -222,11 +223,11 @@ export function previewRequest(
       tidspunkter: [...times].sort(),
     })),
     eksplisitteSlots: bookings.map(toExplicitSlot),
-    grenId: activityId,
-    kategori: category,
+    grenId: draft.activityId,
+    kategori: draft.category,
     sluttDato: dates.at(-1)!,
     startDato: dates[0],
-    tittel: category,
+    tittel: draft.title.trim(),
     ukedager: weekdays,
   };
 }
@@ -300,6 +301,7 @@ export function createMetadataDraft(activityId = ""): ArrangementMetadataDraft {
     category: "Annet",
     description: "",
     publishedOnWebsite: false,
+    title: "",
     websiteDescription: "",
     websiteTitle: "",
   };
@@ -314,6 +316,7 @@ export function arrangementToMetadataDraft(
     category: arrangement.kategori,
     description: arrangement.beskrivelse ?? "",
     publishedOnWebsite: arrangement.publisertPåNettsiden,
+    title: arrangement.tittel,
     websiteDescription: arrangement.nettsideBeskrivelse ?? "",
     websiteTitle: arrangement.nettsideTittel ?? "",
   };
@@ -322,6 +325,10 @@ export function arrangementToMetadataDraft(
 export function validateMetadata(draft: ArrangementMetadataDraft): ArrangementMetadataErrors {
   return {
     activityId: draft.activityId ? null : "Velg en gren.",
+    title:
+      draft.title.trim().length < 3 || draft.title.trim().length > 100
+        ? "Tittelen må være mellom 3 og 100 tegn."
+        : null,
     websiteTitle:
       draft.publishedOnWebsite && draft.websiteTitle.trim().length > 100
         ? "Nettsidetittelen kan være maks 100 tegn."
@@ -333,6 +340,7 @@ export function metadataRequest(
   draft: ArrangementMetadataDraft
 ): OppdaterArrangementMetadataForespørsel {
   return {
+    tittel: draft.title.trim(),
     beskrivelse: draft.description.trim() || undefined,
     kategori: draft.category,
     nettsideBeskrivelse:
@@ -359,7 +367,7 @@ export function createArrangementRequest(
   bookings: readonly LocalBooking[]
 ): OpprettArrangementForespørsel | null {
   const available = bookings.filter((booking) => booking.status !== "conflict");
-  const preview = previewRequest(available, draft.activityId, draft.category);
+  const preview = previewRequest(available, draft);
   if (!preview) return null;
   return { ...preview, ...metadataRequest(draft) };
 }

@@ -36,9 +36,21 @@
   embedded
   eyebrow="Arrangement"
   title="Grunnlag"
-  description="Velg gren og kategori, og legg inn en intern beskrivelse."
+  description="Gi arrangementet en tittel, velg gren og kategori, og legg inn en intern beskrivelse."
 >
   <FormFields>
+    <FormField label="Tittel" error={errors.title} required>
+      <Input
+        name="tittel"
+        bind:value={draft.title}
+        placeholder="F.eks. Høstcup"
+        minlength={3}
+        maxlength={100}
+        {disabled}
+        oninput={changed}
+      />
+    </FormField>
+
     <FormField
       label="Gren"
       description="Styrer hvilke baner du kan velge."

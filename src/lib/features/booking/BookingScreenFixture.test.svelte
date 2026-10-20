@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { untrack } from "svelte";
   import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
   import type { ApiClient, ApiRequestOptions } from "$lib/platform/api";
   import { setApiClient } from "$lib/platform/api";
@@ -9,14 +10,17 @@
   let {
     authenticated = false,
     request,
+    onQueryClient,
   }: {
     authenticated?: boolean;
     request: ApiClient["request"];
+    onQueryClient?: (client: QueryClient) => void;
   } = $props();
 
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
   });
+  untrack(() => onQueryClient?.(queryClient));
   setApiClient({
     request: <TResponse, TBody = never>(path: string, options: ApiRequestOptions<TBody>) =>
       request<TResponse, TBody>(path, options),

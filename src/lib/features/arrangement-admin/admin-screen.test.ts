@@ -34,6 +34,9 @@ function createRequest() {
     if (path.endsWith("arrangement") && options?.method === "POST") {
       return { arrangementId: "event-2", antallOpprettet: 1, konflikter: [] };
     }
+    if (path.endsWith("metadata") && options?.method === "PATCH") {
+      return { arrangementId: arrangement.id, ...(options.json as Record<string, unknown>) };
+    }
     return undefined;
   });
 }
@@ -93,6 +96,9 @@ describe("arrangement administration", () => {
     await screen.findByText("Høstcup");
     await fireEvent.click(screen.getByRole("button", { name: "Nytt arrangement" }));
     const dialog = screen.getByRole("dialog", { name: "Opprett arrangement" });
+    await fireEvent.input(within(dialog).getByRole("textbox", { name: "Tittel" }), {
+      target: { value: " Sommerkurs for juniorer " },
+    });
     await fireEvent.click(within(dialog).getByRole("button", { name: "Neste: Tider" }));
     await fireEvent.click(within(dialog).getByRole("switch", { name: "Alle ukedager i perioden" }));
     await fireEvent.click(within(dialog).getByRole("button", { name: "Bane 1" }));
@@ -113,11 +119,52 @@ describe("arrangement administration", () => {
           method: "POST",
           json: expect.objectContaining({
             eksplisitteSlots: [expect.objectContaining({ baneId: "court-1" })],
+            tittel: "Sommerkurs for juniorer",
           }),
         })
       )
     );
     expect(await screen.findByText("Arrangementet er opprettet")).toBeVisible();
+  });
+
+  it("viser eksisterende tittel og oppdaterer den i arrangementsoversikten etter lagring", async () => {
+    const request = createRequest();
+    render(AdminFixture, { request: request as ApiClient["request"] });
+    await fireEvent.click(await screen.findByRole("button", { name: /Rediger Høstcup/ }));
+    const dialog = screen.getByRole("dialog", { name: "Høstcup" });
+    const title = within(dialog).getByRole("textbox", { name: "Tittel" });
+    expect(title).toHaveValue("Høstcup");
+    await fireEvent.input(title, { target: { value: " Høstcup for juniorer " } });
+    await fireEvent.click(within(dialog).getByRole("button", { name: "Lagre informasjon" }));
+
+    expect(await screen.findByText("Informasjonen er lagret")).toBeVisible();
+    expect(screen.getByRole("dialog", { name: "Høstcup for juniorer" })).toBeVisible();
+    expect(screen.getByRole("button", { name: /Rediger Høstcup for juniorer/ })).toBeVisible();
+    expect(request).toHaveBeenCalledWith(
+      "klubb/fjordvik/arrangement/event-1/metadata",
+      expect.objectContaining({
+        method: "PATCH",
+        json: expect.objectContaining({ tittel: "Høstcup for juniorer", kategori: "Turnering" }),
+      })
+    );
+  });
+
+  it("beholder informasjonsskjemaet når tittelen bare inneholder blanktegn", async () => {
+    const request = createRequest();
+    render(AdminFixture, { request: request as ApiClient["request"] });
+    await fireEvent.click(await screen.findByRole("button", { name: "Nytt arrangement" }));
+    const dialog = screen.getByRole("dialog", { name: "Opprett arrangement" });
+    await fireEvent.input(within(dialog).getByRole("textbox", { name: "Tittel" }), {
+      target: { value: "   " },
+    });
+    await fireEvent.click(within(dialog).getByRole("button", { name: "Neste: Tider" }));
+
+    expect(within(dialog).getByText("Tittelen må være mellom 3 og 100 tegn.")).toBeVisible();
+    expect(within(dialog).getByRole("button", { name: /Informasjon/ })).toHaveAttribute(
+      "aria-current",
+      "step"
+    );
+    expect(request.mock.calls.some(([path]) => path.endsWith("forhandsvis"))).toBe(false);
   });
 
   it("sjekker nye forslag mot egne eksisterende tider ved redigering", async () => {

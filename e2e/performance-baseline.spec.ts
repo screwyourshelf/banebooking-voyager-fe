@@ -643,6 +643,9 @@ async function createArrangementThroughUi(
   await expect(editor).toBeVisible();
   await editor.getByRole("combobox", { name: "Gren" }).click();
   await page.getByRole("option", { name: fixture.court.grenNavn, exact: true }).click();
+  await editor
+    .getByRole("textbox", { name: "Tittel", exact: true })
+    .fill("Performance UI-opprettelse");
   await editor.getByLabel("Intern beskrivelse").fill(`Performance UI-opprettelse ${Date.now()}`);
   await editor.getByRole("button", { name: "Neste: Tider", exact: true }).click();
   await selectScheduleDate(editor, fixture.daysAhead);
