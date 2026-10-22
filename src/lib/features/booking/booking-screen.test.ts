@@ -165,6 +165,51 @@ describe("booking screen", () => {
     }
   );
 
+  it.each([true, false, undefined])(
+    "bekrefter bare siste arrangementstid (siste: %s)",
+    async (siste) => {
+      const { request } = renderBooking(
+        createBootstrap({
+          kalender: {
+            slots: [
+              createSlot({
+                bookingId: "booking-1",
+                arrangementId: "event-1",
+                arrangementTittel: "Stigespill",
+                erSisteArrangementBooking: siste,
+                kapabiliteter: [Kapabiliteter.booking.fjern],
+              }),
+            ],
+          },
+        }),
+        { authenticated: true }
+      );
+      await fireEvent.click(await screen.findByRole("button", { name: /Stigespill/ }));
+      await fireEvent.click(screen.getByRole("button", { name: "Avbestill" }));
+      if (siste) {
+        expect(screen.getByRole("dialog", { name: "Avlys banetid" })).toHaveTextContent(
+          "Dette er arrangementets siste tid. Arrangementet slettes også."
+        );
+        expect(request.mock.calls.some(([, options]) => options?.method === "DELETE")).toBe(false);
+        await fireEvent.click(screen.getByRole("button", { name: "Behold tiden" }));
+        expect(request.mock.calls.some(([, options]) => options?.method === "DELETE")).toBe(false);
+        await fireEvent.click(screen.getByRole("button", { name: "Avbestill" }));
+        await fireEvent.click(screen.getByRole("button", { name: "Ja, avlys" }));
+      } else {
+        expect(screen.queryByRole("dialog", { name: "Avlys banetid" })).toBeNull();
+      }
+      await waitFor(() =>
+        expect(request).toHaveBeenCalledWith("klubb/fjordvik/bookinger/booking-1", {
+          auth: "required",
+          method: "DELETE",
+        })
+      );
+      await waitFor(() =>
+        expect(screen.queryByRole("dialog", { name: "Avlys banetid" })).toBeNull()
+      );
+    }
+  );
+
   it("avbestiller egen tid fra den utvidede slotraden", async () => {
     const bootstrap = createBootstrap({
       kalender: {

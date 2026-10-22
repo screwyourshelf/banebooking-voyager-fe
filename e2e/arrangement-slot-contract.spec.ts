@@ -9,11 +9,14 @@ import {
   addArrangementBookingsBatch,
   createArrangement,
   deleteArrangement,
+  deleteArrangementBooking,
+  getAdminArrangements,
   getArrangementBookings,
   getArrangementCourts,
   previewArrangement,
   updateArrangementBooking,
 } from "../src/lib/features/arrangement-admin/api";
+import { cancelBooking } from "../src/lib/features/booking/api";
 import { createApiClient } from "../src/lib/platform/api/client";
 import { E2E_BACKEND_ORIGIN, E2E_TENANT_SLUG } from "./environment";
 
@@ -125,6 +128,34 @@ test("arrangement preview, append and replacement share the persisted slot contr
     );
     expect(persisted).toHaveLength(1);
     expect(persisted[0]).toMatchObject(explicit[1]);
+
+    // Siste booking slettes sammen med arrangementet gjennom begge avlysningsendepunktene.
+    for (const fromCalendar of [false, true]) {
+      if (fromCalendar) {
+        const next = await createArrangement(api, slug, body);
+        arrangementId = next.arrangementId;
+      }
+      const [last] = await getArrangementBookings(api, slug, arrangementId);
+      const calendar = await api.request<KalenderRespons>(
+        `klubb/${slug}/kalender?baneId=${court.id}&dato=${date}`,
+        { auth: "required" }
+      );
+      expect(
+        calendar.slots.find((slot) => slot.bookingId === last.bookingId)?.erSisteArrangementBooking
+      ).toBe(true);
+      const result = fromCalendar
+        ? await cancelBooking(api, slug, last.bookingId)
+        : await deleteArrangementBooking(api, slug, arrangementId, last.bookingId);
+      const deletedId = arrangementId;
+      expect(result.slettetArrangementId).toBe(deletedId);
+      arrangementId = undefined;
+      expect((await getAdminArrangements(api, slug)).some((item) => item.id === deletedId)).toBe(
+        false
+      );
+      await expect(getArrangementBookings(api, slug, deletedId)).rejects.toMatchObject({
+        status: 404,
+      });
+    }
   } finally {
     if (arrangementId && arrangementId !== "00000000-0000-0000-0000-000000000000") {
       await deleteArrangement(api, slug, arrangementId);

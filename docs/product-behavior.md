@@ -201,6 +201,15 @@ Sentrale API-er: `GET /klubb/{slug}/bookinger/mine?inkluderHistoriske=`,
   session finnes. Listen kan vise historikk, filtrere på gren, åpne en detalj fra
   `?arrangement={id}` og paginerer lokalt i puljer på ti.
 - Avlysning vises bare med `arrangement:avlys` og oppdaterer arrangementlisten etter resultatet.
+- Siste lagrede booking og arrangementet slettes samlet ved avlysning, både fra kalender og
+  administrasjon. Bare siste tid krever bekreftelse på at arrangementet også slettes; andre tider
+  avlyses direkte. Tidligere bookinger teller med; et arrangement med bare tidligere tider
+  beholdes i historikken. Turneringssperre avviser hele operasjonen og beholder både booking
+  og arrangement.
+- Kalenderen bruker API-ets `erSisteArrangementBooking`; administrasjonen teller alle lagrede
+  tider, uten ulagrede forslag. `slettetArrangementId` i slettesvaret avgjør om editoren lukkes.
+  Avlysning oppdaterer også arrangements- og bookingdata i aktuell klubb.
+- Allerede tomme arrangementer utelates fra listene; de får ingen kunstig dato.
 - Nyheter er en offentlig, lokalt paginert feed. Appskallet henter en separat, cachet feedstatus
   når klubben har konfigurert feed og viser antall synlige nyheter ved nyhetslenken. Statusfeil og
   null nyheter gir ingen badge og blokkerer ikke ordinære appflater. Nyhetsrader bruker en

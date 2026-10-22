@@ -15,6 +15,7 @@ export type KalenderSlotRespons = {
   arrangementTittel?: string;
   arrangementBeskrivelse?: string;
   arrangementId?: string;
+  erSisteArrangementBooking?: boolean;
   erPassert: boolean;
   status?: SlotStatus;
   værSymbol?: string;

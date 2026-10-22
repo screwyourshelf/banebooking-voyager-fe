@@ -2,6 +2,7 @@
 export type BookingSuksessRespons = {
   bookingId?: string;
   melding: string;
+  slettetArrangementId?: string | null;
 };
 
 // Requests

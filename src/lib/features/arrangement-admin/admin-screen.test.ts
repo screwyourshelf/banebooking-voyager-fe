@@ -1,12 +1,18 @@
 // @vitest-environment jsdom
 
 import "@testing-library/jest-dom/vitest";
-import { fireEvent, render, screen, waitFor, within } from "@testing-library/svelte";
+import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/svelte";
 import axe from "axe-core";
-import { describe, expect, it, vi } from "vitest";
+import { afterEach, describe, expect, it, vi } from "vitest";
 import type { ApiClient } from "$lib/platform/api";
 import AdminFixture from "./AdminFixture.test.svelte";
 import { activity, arrangement, arrangementBooking, court } from "./admin-test-data";
+
+afterEach(async () => {
+  cleanup();
+  // La dialogens utsatte scroll-opplåsing fullføre før jsdom rives ned.
+  await waitFor(() => expect(document.body.style.overflow).not.toBe("hidden"));
+});
 
 const axeOptions: axe.RunOptions = {
   rules: { "color-contrast": { enabled: false }, region: { enabled: false } },
@@ -89,6 +95,99 @@ describe("arrangement administration", () => {
     expect(await within(dialog).findByText("1 banetid")).toBeVisible();
     expect(within(dialog).getByRole("button", { name: /Rediger Bane 1/ })).toBeVisible();
   });
+
+  it.each([false, true])(
+    "bekrefter siste banetid og håndterer slettesperre (avvist: %s)",
+    async (avvist) => {
+      const fallback = createRequest();
+      let deleted = false;
+      const request = vi.fn(async (path: string, options?: { method?: string; json?: unknown }) => {
+        if (path.split("?")[0].endsWith("arrangementer")) return deleted ? [] : [arrangement];
+        if (options?.method === "DELETE") {
+          if (avvist)
+            throw new Error(
+              "Arrangementet kan ikke slettes fordi det har en tilknyttet turnering."
+            );
+          deleted = true;
+          return {
+            melding: "Siste booking og arrangementet er slettet",
+            slettetArrangementId: arrangement.id,
+          };
+        }
+        return fallback(path, options);
+      });
+      render(AdminFixture, { request: request as ApiClient["request"] });
+      await fireEvent.click(await screen.findByRole("button", { name: /Rediger Høstcup/ }));
+      const editor = screen.getByRole("dialog", { name: "Høstcup" });
+      await fireEvent.click(within(editor).getByRole("button", { name: /Tider/ }));
+      await fireEvent.click(await within(editor).findByRole("button", { name: /Rediger Bane 1/ }));
+      await fireEvent.click(screen.getByRole("button", { name: "Avlys banetid" }));
+      const confirmation = screen.getByRole("dialog", { name: "Avlys banetid" });
+      expect(confirmation).toHaveTextContent(
+        "Dette er arrangementets siste tid. Arrangementet slettes også."
+      );
+      expect(deleted).toBe(false);
+      await fireEvent.click(within(confirmation).getByRole("button", { name: "Ja, avlys" }));
+      if (avvist) {
+        expect(
+          await within(confirmation).findByText(
+            "Arrangementet kan ikke slettes fordi det har en tilknyttet turnering."
+          )
+        ).toBeVisible();
+        expect(confirmation).toBeVisible();
+        expect(deleted).toBe(false);
+      } else {
+        await waitFor(() => expect(screen.queryByRole("dialog")).toBeNull());
+        expect(screen.queryByRole("button", { name: /Rediger Høstcup/ })).toBeNull();
+        expect(deleted).toBe(true);
+      }
+    }
+  );
+
+  it.each([false, true])(
+    "avlyser direkte når flere tider finnes og viser eventuell feil (avvist: %s)",
+    async (avvist) => {
+      const fallback = createRequest();
+      let deleted = false;
+      const secondBooking = {
+        ...arrangementBooking,
+        bookingId: "booking-2",
+        startTid: "09:00",
+        sluttTid: "10:00",
+      };
+      const request = vi.fn(async (path: string, options?: { method?: string; json?: unknown }) => {
+        if (path.endsWith("bookinger") && !options?.method)
+          return deleted ? [secondBooking] : [arrangementBooking, secondBooking];
+        if (options?.method === "DELETE") {
+          if (avvist) throw new Error("Tiden kunne ikke avlyses nå.");
+          deleted = true;
+          return { melding: "Bookingen er slettet" };
+        }
+        return fallback(path, options);
+      });
+      render(AdminFixture, { request: request as ApiClient["request"] });
+      await fireEvent.click(await screen.findByRole("button", { name: /Rediger Høstcup/ }));
+      const editor = screen.getByRole("dialog", { name: "Høstcup" });
+      await fireEvent.click(within(editor).getByRole("button", { name: /Tider/ }));
+      const bookings = await within(editor).findAllByRole("button", { name: /Rediger Bane 1/ });
+      await fireEvent.click(bookings[0]);
+      await fireEvent.click(screen.getByRole("button", { name: "Avlys banetid" }));
+      expect(screen.queryByRole("dialog", { name: "Avlys banetid" })).toBeNull();
+      if (avvist) {
+        const bookingEditor = screen.getByRole("dialog", { name: "Rediger banetid" });
+        expect(
+          await within(bookingEditor).findByText("Tiden kunne ikke avlyses nå.")
+        ).toBeVisible();
+        expect(deleted).toBe(false);
+      } else {
+        await waitFor(() =>
+          expect(screen.queryByRole("dialog", { name: "Rediger banetid" })).toBeNull()
+        );
+        expect(await within(editor).findByText("1 banetid")).toBeVisible();
+        expect(deleted).toBe(true);
+      }
+    }
+  );
 
   it("oppretter fra lokal staging etter backendforhåndsvisning", async () => {
     const request = createRequest();

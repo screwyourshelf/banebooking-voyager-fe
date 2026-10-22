@@ -3,6 +3,7 @@ import type {
   ArrangementForhåndsvisningRespons,
   ArrangementRespons,
   BaneRespons,
+  BookingSuksessRespons,
   BatchLeggTilArrangementBookingerForespørsel,
   BatchLeggTilArrangementBookingerRespons,
   GrenRespons,
@@ -144,7 +145,7 @@ export function deleteArrangementBooking(
   arrangementId: string,
   bookingId: string
 ) {
-  return api.request<void>(
+  return api.request<BookingSuksessRespons>(
     clubPath(
       slug,
       `arrangement/${encodeURIComponent(arrangementId)}/bookinger/${encodeURIComponent(bookingId)}`

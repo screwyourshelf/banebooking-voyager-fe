@@ -2,6 +2,7 @@ import type { QueryClient } from "@tanstack/svelte-query";
 import type {
   ArrangementBookingRespons,
   ArrangementRespons,
+  BookingSuksessRespons,
   BatchLeggTilArrangementBookingerForespørsel,
   LeggTilArrangementBookingForespørsel,
   OpprettArrangementForespørsel,
@@ -193,7 +194,17 @@ export function deleteArrangementBookingMutationOptions(
   return {
     mutationFn: (bookingId: string) =>
       deleteArrangementBooking(api, slug, arrangementId, bookingId),
-    onSuccess: (_result: void, bookingId: string) => {
+    onSuccess: (result: BookingSuksessRespons, bookingId: string) => {
+      if (result.slettetArrangementId) {
+        queryClient.setQueryData<ArrangementRespons[]>(
+          arrangementAdminQueryKeys.arrangements(slug),
+          (arrangements) => arrangements?.filter((item) => item.id !== result.slettetArrangementId)
+        );
+        queryClient.removeQueries({
+          queryKey: arrangementAdminQueryKeys.bookings(slug, result.slettetArrangementId),
+        });
+        return invalidateArrangementDerivedResources(queryClient, slug, true);
+      }
       queryClient.setQueryData<ArrangementBookingRespons[]>(
         arrangementAdminQueryKeys.bookings(slug, arrangementId),
         (bookings) => bookings?.filter((booking) => booking.bookingId !== bookingId)

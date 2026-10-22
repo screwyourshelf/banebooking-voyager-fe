@@ -4,6 +4,7 @@
     Button,
     DatePicker,
     Dialog,
+    Feedback,
     Form,
     FormField,
     FormFields,
@@ -18,6 +19,7 @@
   let {
     booking,
     busy = false,
+    isLastBooking = false,
     courts,
     onDelete,
     onSave,
@@ -25,11 +27,21 @@
   }: {
     booking: LocalBooking | null;
     busy?: boolean;
+    isLastBooking?: boolean;
     courts: readonly BaneRespons[];
     onDelete: (booking: LocalBooking) => void | Promise<void>;
     onSave: (original: LocalBooking, updated: LocalBooking) => void | Promise<void>;
     open?: boolean;
   } = $props();
+
+  let confirmingRemoval = $state(false);
+  let removalError = $state<string | null>(null);
+  $effect(() => {
+    if (!open) {
+      confirmingRemoval = false;
+      removalError = null;
+    }
+  });
 
   let synchronizedId = $state("");
   let date = $state("");
@@ -80,59 +92,92 @@
 
   async function remove() {
     if (!booking) return;
-    await onDelete(booking);
-    open = false;
+    try {
+      await onDelete(booking);
+      open = false;
+    } catch (error) {
+      removalError = error instanceof Error ? error.message : "Tiden kunne ikke avlyses.";
+    }
   }
 </script>
 
 {#snippet actions({ close }: { close: () => void })}
-  <Button variant="destructive" disabled={busy} onclick={() => void remove()}>
-    {booking?.source === "existing" ? "Avlys banetid" : "Fjern forslag"}
-  </Button>
-  <Button variant="secondary" disabled={busy} onclick={close}>Avbryt</Button>
-  <Button disabled={!valid || busy} onclick={() => void save()}>Lagre endring</Button>
+  {#if confirmingRemoval}
+    <Button variant="secondary" disabled={busy} onclick={() => (confirmingRemoval = false)}
+      >Behold tiden</Button
+    >
+    <Button variant="destructive" disabled={busy} onclick={() => void remove()}
+      >{busy ? "Avlyser …" : "Ja, avlys"}</Button
+    >
+  {:else}
+    <Button
+      variant="destructive"
+      disabled={busy}
+      onclick={() => {
+        if (booking?.source === "existing" && isLastBooking) confirmingRemoval = true;
+        else void remove();
+      }}
+    >
+      {booking?.source === "existing" ? "Avlys banetid" : "Fjern forslag"}
+    </Button>
+    <Button variant="secondary" disabled={busy} onclick={close}>Avbryt</Button>
+    <Button disabled={!valid || busy} onclick={() => void save()}>Lagre endring</Button>
+  {/if}
 {/snippet}
 
 <Dialog
   bind:open
-  title="Rediger banetid"
-  description="Endre dato, bane eller starttid."
+  title={confirmingRemoval ? "Avlys banetid" : "Rediger banetid"}
+  description={confirmingRemoval
+    ? "Vil du avlyse denne banetiden?"
+    : "Endre dato, bane eller starttid."}
   pending={busy}
   {actions}
 >
-  <Form pending={busy}>
-    <SettingsStack>
-      <SettingsSection
-        eyebrow="Booking"
-        title="Tid og bane"
-        description="Sluttiden beregnes ut fra banens varighet."
-      >
-        <FormFields>
-          <FormField label="Dato" required>
-            <DatePicker bind:value={date} disabled={busy} showDayNavigation />
-          </FormField>
-          <FormField label="Bane" required>
-            <Select
-              options={courts.map((court) => ({ value: court.id, label: court.navn }))}
-              value={courtId}
-              onValueChange={selectCourt}
-              disabled={busy}
-            />
-          </FormField>
-          <FormField label="Starttid" required>
-            <Select
-              options={startTimes.map((time) => ({ value: time, label: time }))}
-              bind:value={startTime}
-              disabled={busy || !courtId}
-              placeholder="Velg tidspunkt…"
-            />
-          </FormField>
-          {#if endTime}
-            {#snippet endValue()}<SettingsValue>{endTime}</SettingsValue>{/snippet}
-            <SettingsRow title="Sluttid" description={`${slotLength} minutter`} right={endValue} />
-          {/if}
-        </FormFields>
-      </SettingsSection>
-    </SettingsStack>
-  </Form>
+  {#if confirmingRemoval}
+    <p>Dette er arrangementets siste tid. Arrangementet slettes også.</p>
+  {:else}
+    <Form pending={busy}>
+      <SettingsStack>
+        <SettingsSection
+          eyebrow="Booking"
+          title="Tid og bane"
+          description="Sluttiden beregnes ut fra banens varighet."
+        >
+          <FormFields>
+            <FormField label="Dato" required>
+              <DatePicker bind:value={date} disabled={busy} showDayNavigation />
+            </FormField>
+            <FormField label="Bane" required>
+              <Select
+                options={courts.map((court) => ({ value: court.id, label: court.navn }))}
+                value={courtId}
+                onValueChange={selectCourt}
+                disabled={busy}
+              />
+            </FormField>
+            <FormField label="Starttid" required>
+              <Select
+                options={startTimes.map((time) => ({ value: time, label: time }))}
+                bind:value={startTime}
+                disabled={busy || !courtId}
+                placeholder="Velg tidspunkt…"
+              />
+            </FormField>
+            {#if endTime}
+              {#snippet endValue()}<SettingsValue>{endTime}</SettingsValue>{/snippet}
+              <SettingsRow
+                title="Sluttid"
+                description={`${slotLength} minutter`}
+                right={endValue}
+              />
+            {/if}
+          </FormFields>
+        </SettingsSection>
+      </SettingsStack>
+    </Form>
+  {/if}
+  {#if removalError}
+    <Feedback tone="danger" title="Tiden kunne ikke avlyses" description={removalError} />
+  {/if}
 </Dialog>
