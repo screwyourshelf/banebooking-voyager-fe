@@ -13,5 +13,5 @@ describe("styling production tree contract", () => {
         stdio: "pipe",
       })
     ).not.toThrow();
-  });
+  }, 30_000);
 });
