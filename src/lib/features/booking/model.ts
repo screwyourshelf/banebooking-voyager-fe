@@ -253,6 +253,10 @@ export function markSlotAsAvailable(slots: readonly KalenderSlotRespons[], booki
       ? {
           ...slot,
           bookingId: null,
+          arrangementId: undefined,
+          arrangementTittel: undefined,
+          arrangementBeskrivelse: undefined,
+          erSisteArrangementBooking: false,
           booketAv: null,
           erEier: false,
           bookingStartTid: null,

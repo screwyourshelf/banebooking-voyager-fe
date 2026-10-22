@@ -35,6 +35,7 @@ export type BookingInitialData = {
 
 export type CancelBookingVariables = {
   bookingId: string;
+  arrangementId?: string;
 };
 
 type OptimisticBookingContext = {
@@ -189,7 +190,23 @@ export function cancelBookingMutationOptions(
       _variables: CancelBookingVariables,
       context: OptimisticBookingContext | undefined
     ) => restorePreviousSlots(queryClient, queryKey, context),
-    onSuccess: () => invalidateBookingData(queryClient, slug, courtId, date),
+    onSuccess: async (
+      result: Awaited<ReturnType<typeof cancelBooking>>,
+      variables: CancelBookingVariables
+    ) => {
+      if (variables.arrangementId || result.slettetArrangementId) {
+        await Promise.all([
+          invalidateTenantResources(queryClient, slug, [
+            "arrangements",
+            "arrangement-bookings",
+            "booking-slots",
+          ]),
+          queryClient.invalidateQueries({ queryKey: bookingQueryKeys.mine(slug) }),
+        ]);
+      } else {
+        await invalidateBookingData(queryClient, slug, courtId, date);
+      }
+    },
     retry: false,
   };
 }

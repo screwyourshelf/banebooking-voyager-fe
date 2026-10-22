@@ -295,7 +295,12 @@ export function createArrangementEditorController(input: ArrangementEditorInput)
 
   async function deleteBooking(booking: LocalBooking) {
     if (booking.source === "existing" && booking.externalId) {
-      await deleteBookingMutation.mutateAsync(booking.externalId);
+      const result = await deleteBookingMutation.mutateAsync(booking.externalId);
+      if (result.slettetArrangementId) {
+        bookingDialogOpen = false;
+        input.onDeleted?.();
+        return;
+      }
     }
     bookings = bookings.filter((candidate) => candidate.id !== booking.id);
   }
@@ -390,6 +395,9 @@ export function createArrangementEditorController(input: ArrangementEditorInput)
       return visibleErrors;
     },
     createNewArrangement,
+    get isLastPersistedBooking() {
+      return selectedBooking?.source === "existing" && bookingsQuery.data?.length === 1;
+    },
     deleteBooking,
     deleteWholeArrangement,
     editBooking,

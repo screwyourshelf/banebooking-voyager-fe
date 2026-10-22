@@ -178,11 +178,39 @@ describe("booking mutations", () => {
       bookingId: null,
       booketAv: null,
     });
-    await options.onSuccess();
+    await options.onSuccess({ melding: "Booking fjernet" }, { bookingId: "booking-1" });
     expect(invalidate).toHaveBeenNthCalledWith(1, { queryKey });
     expect(invalidate).toHaveBeenNthCalledWith(2, {
       queryKey: bookingQueryKeys.mine("fjordvik"),
     });
+  });
+
+  it("oppdaterer alle arrangementsflater i samme klubb etter kalenderavlysning", async () => {
+    const client = new QueryClient();
+    const invalidate = vi.spyOn(client, "invalidateQueries").mockResolvedValue(undefined);
+    const options = cancelBookingMutationOptions(
+      { request: vi.fn() as ApiClient["request"] },
+      client,
+      "fjordvik",
+      "court-1",
+      "2026-08-23"
+    );
+    await options.onSuccess(
+      { melding: "Slettet", slettetArrangementId: "event-1" },
+      { bookingId: "booking-1", arrangementId: "event-1" }
+    );
+    const predicate = invalidate.mock.calls[0]?.[0]?.predicate;
+    for (const resource of ["arrangements", "arrangement-bookings", "booking-slots"] as const) {
+      expect(
+        predicate!({ meta: tenantQueryMeta("fjordvik", resource), queryKey: [resource] } as never)
+      ).toBe(true);
+      expect(
+        predicate!({
+          meta: tenantQueryMeta("annen-klubb", resource),
+          queryKey: [resource],
+        } as never)
+      ).toBe(false);
+    }
   });
 
   it("ruller avbestilling tilbake uten refetch når serveren avviser den", async () => {

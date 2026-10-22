@@ -6,6 +6,7 @@
   import { getAuthContext } from "$lib/platform/auth";
   import { getTenantContext } from "$lib/platform/tenant";
   import { Collection, CollectionLoading, ErrorState, Page } from "$lib/ui";
+  import BookingCancelDialog from "./BookingCancelDialog.svelte";
   import BookingSchedule from "./BookingSchedule.svelte";
   import ArrangementBookingDialog from "./ArrangementBookingDialog.svelte";
   import QuickArrangementDialog from "./QuickArrangementDialog.svelte";
@@ -27,6 +28,8 @@
   let preferredActivityId = $state<string | null>(null);
   let preferredCourtId = $state<string | null>(null);
   let selectedDate = $state(today);
+  let cancellationSlot = $state<KalenderSlotRespons | null>(null);
+  let cancellationOpen = $state(false);
   let arrangementSelection = $state<{
     mode: "create" | "connect";
     slot: KalenderSlotRespons;
@@ -132,7 +135,13 @@
   function cancelSlot(slot: KalenderSlotRespons) {
     if (!slot.bookingId || !isCurrentSlot(slot) || mutationBusy) return;
     bookMutation.reset();
-    cancelMutation.mutate({ bookingId: slot.bookingId });
+    cancelMutation.reset();
+    if (slot.arrangementId && slot.erSisteArrangementBooking) {
+      cancellationSlot = slot;
+      cancellationOpen = true;
+      return;
+    }
+    cancelMutation.mutate({ bookingId: slot.bookingId, arrangementId: slot.arrangementId });
   }
 
   function openArrangementDialog(slot: KalenderSlotRespons, mode: "create" | "connect") {
@@ -207,3 +216,17 @@
     {/if}
   {/if}
 {/if}
+
+<BookingCancelDialog
+  bind:open={cancellationOpen}
+  slot={cancellationSlot}
+  pending={cancelMutation.isPending}
+  error={cancelMutation.isError ? mutationError?.description : null}
+  onConfirm={async () => {
+    if (!cancellationSlot?.bookingId) return;
+    await cancelMutation.mutateAsync({
+      bookingId: cancellationSlot.bookingId,
+      arrangementId: cancellationSlot.arrangementId,
+    });
+  }}
+/>

@@ -164,6 +164,26 @@ describe("arrangement admin cache updates", () => {
     expect(options).not.toHaveProperty("onSettled");
   });
 
+  it("fjerner arrangementet og bookingcachen når serveren slettet siste tid", async () => {
+    const { queryClient } = createClient();
+    const eventsKey = arrangementAdminQueryKeys.arrangements("fjordvik");
+    const bookingsKey = arrangementAdminQueryKeys.bookings("fjordvik", arrangement.id);
+    queryClient.setQueryData(eventsKey, [arrangement]);
+    queryClient.setQueryData(bookingsKey, [booking]);
+    const options = deleteArrangementBookingMutationOptions(
+      fakeApi(),
+      queryClient,
+      "fjordvik",
+      arrangement.id
+    );
+    await options.onSuccess(
+      { melding: "Slettet", slettetArrangementId: arrangement.id },
+      booking.bookingId
+    );
+    expect(queryClient.getQueryData(eventsKey)).toEqual([]);
+    expect(queryClient.getQueryData(bookingsKey)).toBeUndefined();
+  });
+
   it("invaliderer avledede ressurser etter en vanlig sletting", async () => {
     const { invalidate, queryClient } = createClient();
     const key = arrangementAdminQueryKeys.bookings("fjordvik", arrangement.id);
@@ -175,7 +195,7 @@ describe("arrangement admin cache updates", () => {
       arrangement.id
     );
 
-    await options.onSuccess(undefined, booking.bookingId);
+    await options.onSuccess({ melding: "Booking fjernet" }, booking.bookingId);
 
     expect(queryClient.getQueryData(key)).toEqual([]);
     expect(invalidate).toHaveBeenCalledTimes(1);

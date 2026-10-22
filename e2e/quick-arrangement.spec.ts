@@ -190,6 +190,103 @@ test("extended user creates an arrangement with several calendar times and admin
     kategori: "Kurs",
     publisertPåNettsiden: false,
   });
+
+  // Avlys begge tidene i editoren. Bare siste tid skal slette arrangementet.
+  for (let remaining = 2; remaining > 0; remaining--) {
+    const eventEditor = page.getByRole("dialog", { name: editedTitle, exact: true });
+    await eventEditor.getByRole("button", { name: /Tider/ }).click();
+    await eventEditor
+      .getByRole("button", { name: /^Rediger / })
+      .first()
+      .click();
+    const removed = page.waitForResponse(
+      (response) =>
+        response.request().method() === "DELETE" &&
+        response.url().includes(`/arrangement/${created.arrangementId}/bookinger/`)
+    );
+    await page
+      .getByRole("dialog", { name: "Rediger banetid" })
+      .getByRole("button", { name: "Avlys banetid" })
+      .click();
+    const confirmation = page.getByRole("dialog", { name: "Avlys banetid" });
+    if (remaining === 1) {
+      await expect(confirmation).toContainText(
+        "Dette er arrangementets siste tid. Arrangementet slettes også."
+      );
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.screenshot({ path: testInfo.outputPath("last-arrangement-time-mobile.png") });
+      await confirmation.getByRole("button", { name: "Ja, avlys" }).click();
+    } else {
+      await expect(confirmation).not.toBeVisible();
+    }
+    const removal = await removed;
+    expect(removal.ok()).toBe(true);
+    if (remaining === 1) {
+      expect((await removal.json()).slettetArrangementId).toBe(created.arrangementId);
+      arrangements.ownedIds.delete(created.arrangementId);
+      await expect(page.getByRole("dialog")).toHaveCount(0);
+    } else {
+      await expect(confirmation).not.toBeVisible();
+      await expect(eventEditor.getByText("1 banetid", { exact: true })).toBeVisible();
+    }
+  }
+  expect(
+    (await getAdminArrangements(api, E2E_TENANT_SLUG)).some(
+      (item) => item.id === created.arrangementId
+    )
+  ).toBe(false);
+});
+
+test("last arrangement time is confirmed and removed from the calendar", async ({
+  page,
+  arrangements,
+  e2e,
+}, testInfo) => {
+  await e2e.signIn(page, "utvidet");
+  const { dialog, timeChoices } = await openQuickArrangementDialog(page, 1);
+  const selectedTime = await timeChoices.getByRole("button", { pressed: true }).innerText();
+  const [start, end] = selectedTime.trim().split("–");
+  const creation = page.waitForResponse(
+    (response) =>
+      response.request().method() === "POST" && new URL(response.url()).pathname === createPath
+  );
+  await dialog.getByRole("button", { name: "Opprett arrangement med 1 tid", exact: true }).click();
+  const created = (await (await creation).json()) as OpprettArrangementRespons;
+  expect(created.antallOpprettet).toBe(1);
+  await dialog.getByRole("button", { name: "Lukk", exact: true }).click();
+  const row = page
+    .getByRole("list", { name: "Tilgjengelige tider", exact: true })
+    .locator('[data-ui="collection-row"]')
+    .filter({ has: page.getByText(start, { exact: true }) });
+  await row.getByRole("button", { name: /Annet/ }).click();
+  await row.getByRole("button", { name: "Avbestill", exact: true }).click();
+  const confirmation = page.getByRole("dialog", { name: "Avlys banetid" });
+  await expect(confirmation).toContainText(
+    "Dette er arrangementets siste tid. Arrangementet slettes også."
+  );
+  await page.screenshot({ path: testInfo.outputPath("last-calendar-time-desktop.png") });
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect
+    .poll(() => confirmation.evaluate((element) => element.scrollWidth <= element.clientWidth))
+    .toBe(true);
+  await page.screenshot({ path: testInfo.outputPath("last-calendar-time-mobile.png") });
+  const deletion = page.waitForResponse(
+    (response) => response.request().method() === "DELETE" && response.url().includes("/bookinger/")
+  );
+  await confirmation.getByRole("button", { name: "Ja, avlys" }).click();
+  const response = await deletion;
+  expect(response.ok()).toBe(true);
+  expect((await response.json()).slettetArrangementId).toBe(created.arrangementId);
+  arrangements.ownedIds.delete(created.arrangementId);
+  await expect(confirmation).not.toBeVisible();
+  await expect(
+    row.getByRole("button", { name: `Book tiden ${start} til ${end}`, exact: true })
+  ).toBeVisible();
+  expect(
+    (await getAdminArrangements(arrangements.api, E2E_TENANT_SLUG)).some(
+      (item) => item.id === created.arrangementId
+    )
+  ).toBe(false);
 });
 
 test("a time taken after opening the dialog leaves a partial result without a second create action", async ({

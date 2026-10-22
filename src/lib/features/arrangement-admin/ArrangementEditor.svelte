@@ -246,6 +246,7 @@
   booking={controller.selectedBooking}
   courts={controller.filteredCourts}
   busy={controller.busy}
+  isLastBooking={controller.isLastPersistedBooking}
   onDelete={controller.deleteBooking}
   onSave={controller.saveBooking}
 />
