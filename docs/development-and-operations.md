@@ -123,6 +123,17 @@ npm run build:github-pages
   inkluderer `.nojekyll`.
 - `auth/callback` prerendres; tenant-rutene håndteres av hostfallbacken og klientrouteren.
 
+Cloudflare Pages bruker Node-versjonen fra `.nvmrc`. I både production- og previewmiljøet settes
+`SKIP_DEPENDENCY_INSTALL=1`, slik at Pages ikke installerer med sin egen npm-versjon. Byggkommandoen
+installerer og kontrollerer den låste grafen med prosjektets npm før det statiske artefaktet bygges:
+
+```bash
+npm exec --yes --package=npm@10.9.9 -- npm ci && npm exec --yes --package=npm@10.9.9 -- npm ls && npm run build:cloudflare-pages
+```
+
+`packageManager` alene velger ikke installasjonsversjonen i Pages. Kontroller faktisk npm-versjon,
+gyldig pakkegraf og deployresultat i byggloggen når hostingoppsettet endres.
+
 Før et artefakt publiseres, kjør minst `npm test`, `npm run check`, `npm run test:e2e` og
 `npm run test:e2e:production`, og kontroller `npm audit`. `npm run check` inkluderer den statiske
 analysen over. Selve opplastingen til Cloudflare Pages eller GitHub Pages er en ekstern endring og
