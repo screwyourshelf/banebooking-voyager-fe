@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formaterDatoGruppe } from "$lib/domain/dato";
+  import { formaterDatoGruppe } from "#lib/domain/dato.ts";
   import {
     Button,
     Collection,
@@ -9,7 +9,7 @@
     CollectionList,
     CollectionRow,
     ScheduleTime,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import { groupBookingsByDate, type LocalBooking } from "./model";
 
   let {

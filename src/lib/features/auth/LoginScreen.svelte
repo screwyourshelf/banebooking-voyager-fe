@@ -1,6 +1,6 @@
 <script lang="ts">
   import { resolve } from "$app/paths";
-  import { getAuthContext, type DevelopmentProfile } from "$lib/platform/auth";
+  import { getAuthContext, type DevelopmentProfile } from "#lib/platform/auth/index.ts";
   import {
     AuthenticationProviderIcon,
     Button,
@@ -14,7 +14,7 @@
     Page,
     Section,
     SettingsStack,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import {
     loginFailure,
     validateLoginEmail,

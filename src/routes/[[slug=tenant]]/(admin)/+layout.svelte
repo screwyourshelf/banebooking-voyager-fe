@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { AccessGuard } from "$lib/features/session";
+  import { AccessGuard } from "#lib/features/session/index.ts";
   import type { Snippet } from "svelte";
 
   let { children }: { children: Snippet } = $props();

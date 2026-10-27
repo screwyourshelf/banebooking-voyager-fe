@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { createBrowserStorageErrorReporter } from "$lib/platform/app/browser-startup.client";
-import type { Observability } from "$lib/platform/observability";
+import { createBrowserStorageErrorReporter } from "#lib/platform/app/browser-startup.client.ts";
+import type { Observability } from "#lib/platform/observability/index.ts";
 import {
   fjernFraLokalLagring,
   lesLokalLagring,

@@ -1,9 +1,10 @@
 <script lang="ts">
   import { page } from "$app/state";
-  import { base } from "$app/paths";
-  import { AccountScreen, resolveAccountTab } from "$lib/features/account";
-  import { getSessionDataContext } from "$lib/features/session";
-  import { buildTenantPath, getTenantContext } from "$lib/platform/tenant";
+  import { resolve } from "$app/paths";
+  const base = resolve("").replace(/\/$/, "");
+  import { AccountScreen, resolveAccountTab } from "#lib/features/account/index.ts";
+  import { getSessionDataContext } from "#lib/features/session/index.ts";
+  import { buildTenantPath, getTenantContext } from "#lib/platform/tenant/index.ts";
 
   const tenant = getTenantContext();
   const session = getSessionDataContext();

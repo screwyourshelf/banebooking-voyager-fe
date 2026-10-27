@@ -1,5 +1,5 @@
 <script>
-  import { Page } from "$lib/ui";
+  import { Page } from "#lib/ui/index.ts";
   let computedClass = "bg-red-500";
   let rawMarkup = '<div class="bg-red-500" style="color:red"></div>';
   let semanticProps = { title: "Baner" };

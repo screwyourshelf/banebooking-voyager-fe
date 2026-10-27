@@ -1,10 +1,11 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { base, resolve } from "$app/paths";
+  import { resolve } from "$app/paths";
+  const base = resolve("").replace(/\/$/, "");
   import { page } from "$app/state";
-  import { publicConfig } from "$lib/platform/config";
-  import { getCallbackDestination, stripBasePath } from "$lib/platform/tenant";
-  import { ErrorState, Page, PageLoading } from "$lib/ui";
+  import { publicConfig } from "#lib/platform/config/index.ts";
+  import { getCallbackDestination, stripBasePath } from "#lib/platform/tenant/index.ts";
+  import { ErrorState, Page, PageLoading } from "#lib/ui/index.ts";
   import { onMount } from "svelte";
 
   let status = $state<"error" | "loading">("loading");
@@ -14,8 +15,8 @@
     let alive = true;
 
     void Promise.all([
-      import("$lib/platform/auth/callback.client"),
-      import("$lib/platform/storage/browser-storage.client"),
+      import("#lib/platform/auth/callback.client.ts"),
+      import("#lib/platform/storage/browser-storage.client.ts"),
     ]).then(async ([{ completeAuthCallback }, storage]) => {
       if (!storage.lokalLagringErTilgjengelig()) {
         if (alive) {
@@ -35,7 +36,7 @@
           base,
           page.url.searchParams.get("returnTo")
         );
-        await goto(resolve(stripBasePath(destination, base)), { replaceState: true });
+        await goto(resolve(stripBasePath(destination, base).slice(1)), { replace: true });
       } catch (error) {
         if (!alive) return;
         status = "error";

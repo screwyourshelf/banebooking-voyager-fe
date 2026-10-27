@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { KlubbRespons } from "$lib/contracts";
-  import { AKTIV_VILKAAR } from "$lib/domain";
-  import { Document, DocumentIntro, DocumentSection, Page } from "$lib/ui";
+  import type { KlubbRespons } from "#lib/contracts/index.ts";
+  import { AKTIV_VILKAAR } from "#lib/domain/index.ts";
+  import { Document, DocumentIntro, DocumentSection, Page } from "#lib/ui/index.ts";
 
   let { klubb }: { klubb: KlubbRespons } = $props();
 </script>

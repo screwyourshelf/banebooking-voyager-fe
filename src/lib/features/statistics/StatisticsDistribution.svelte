@@ -8,7 +8,7 @@
 </script>
 
 <script lang="ts">
-  import { DataVisualization, Section } from "$lib/ui";
+  import { DataVisualization, Section } from "#lib/ui/index.ts";
   import { formatHours } from "./model";
 
   let {

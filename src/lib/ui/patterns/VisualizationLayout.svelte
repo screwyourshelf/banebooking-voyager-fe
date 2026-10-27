@@ -2,11 +2,7 @@
   import type { Snippet } from "svelte";
 
   export type VisualizationLayoutVariant =
-    | "dashboard"
-    | "distributions"
-    | "results"
-    | "status"
-    | "tab";
+    "dashboard" | "distributions" | "results" | "status" | "tab";
 
   let {
     children,

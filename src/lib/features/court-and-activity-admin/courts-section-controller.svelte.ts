@@ -1,7 +1,7 @@
 import { createMutation, createQuery, useQueryClient } from "@tanstack/svelte-query";
-import type { BaneRespons } from "$lib/contracts";
-import { getApiClient } from "$lib/platform/api";
-import { getTenantContext } from "$lib/platform/tenant";
+import type { BaneRespons } from "#lib/contracts/index.ts";
+import { getApiClient } from "#lib/platform/api/index.ts";
+import { getTenantContext } from "#lib/platform/tenant/index.ts";
 import {
   courtDraftIsDirty,
   courtToDraft,

@@ -6,15 +6,15 @@ import type {
   KalenderSlotRespons,
   OpprettBookingForespørsel,
   SlotStatus,
-} from "$lib/contracts";
-import { formatDatoKort } from "$lib/domain";
+} from "#lib/contracts/index.ts";
+import { formatDatoKort } from "#lib/domain/index.ts";
 import {
   erSlotBooket,
   grupperSlots,
   harHandling,
   Kapabiliteter,
   utledSlotStatus,
-} from "$lib/domain";
+} from "#lib/domain/index.ts";
 
 export type BookingSelection = {
   activityId: string;

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Form, FormField, FormFields, Select } from "$lib/ui";
+  import { Form, FormField, FormFields, Select } from "#lib/ui/index.ts";
   import type { SelectOption } from "./Select.svelte";
 
   let {

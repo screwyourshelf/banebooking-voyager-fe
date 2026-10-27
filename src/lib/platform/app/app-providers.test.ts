@@ -12,7 +12,7 @@ const observability = vi.hoisted(() => ({
   captureException: vi.fn(),
 }));
 
-vi.mock("$app/environment", () => ({
+vi.mock("$app/env", () => ({
   browser: true,
   building: false,
   dev: false,

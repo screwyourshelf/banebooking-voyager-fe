@@ -4,9 +4,9 @@
   import type {
     BatchLeggTilArrangementBookingerRespons,
     KalenderSlotRespons,
-  } from "$lib/contracts";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  } from "#lib/contracts/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Button,
     CollectionEmpty,
@@ -16,7 +16,7 @@
     DocumentFacts,
     Feedback,
     SettingsRadioGroup,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import ArrangementTimeSelection from "./ArrangementTimeSelection.svelte";
   import { createArrangementTimeSelection } from "./arrangement-time-selection.svelte";
   import {

@@ -6,8 +6,8 @@ import type {
   OppdaterBaneBookingInnstillingerForespørsel,
   OppdaterBaneForespørsel,
   OppdaterGrenForespørsel,
-} from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
+} from "#lib/contracts/index.ts";
+import type { ApiClient } from "#lib/platform/api/index.ts";
 
 function resourcePath(slug: string, resource: string) {
   return `klubb/${encodeURIComponent(slug)}/${resource}`;

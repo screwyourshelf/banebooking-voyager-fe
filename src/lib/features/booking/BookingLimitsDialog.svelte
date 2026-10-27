@@ -1,6 +1,13 @@
 <script lang="ts">
-  import type { BaneRespons, BookingstatusRespons, GrenRespons } from "$lib/contracts";
-  import { Button, Dialog, DocumentFacts, Section, SettingsStack, SettingsText } from "$lib/ui";
+  import type { BaneRespons, BookingstatusRespons, GrenRespons } from "#lib/contracts/index.ts";
+  import {
+    Button,
+    Dialog,
+    DocumentFacts,
+    Section,
+    SettingsStack,
+    SettingsText,
+  } from "#lib/ui/index.ts";
   import { getBookingLimitCopy, getBookingLimitFacts } from "./model";
 
   let {

@@ -1,10 +1,11 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { base, resolve } from "$app/paths";
+  import { resolve } from "$app/paths";
+  const base = resolve("").replace(/\/$/, "");
   import { page } from "$app/state";
-  import { getAuthContext } from "$lib/platform/auth";
-  import { buildLoginPath, getTenantContext, stripBasePath } from "$lib/platform/tenant";
-  import { ErrorState, Feedback, Page, PageLoading } from "$lib/ui";
+  import { getAuthContext } from "#lib/platform/auth/index.ts";
+  import { buildLoginPath, getTenantContext, stripBasePath } from "#lib/platform/tenant/index.ts";
+  import { ErrorState, Feedback, Page, PageLoading } from "#lib/ui/index.ts";
   import type { Snippet } from "svelte";
   import { getSessionDataContext } from "./context";
   import { hasAnyRequiredCapability, requiredCapabilitiesForPath } from "./guard-model";
@@ -31,7 +32,7 @@
   $effect(() => {
     if (!loginTarget || loginTarget === lastRedirect) return;
     lastRedirect = loginTarget;
-    void goto(resolve(stripBasePath(loginTarget, base)), { replaceState: true });
+    void goto(resolve(stripBasePath(loginTarget, base).slice(1)), { replace: true });
   });
 </script>
 

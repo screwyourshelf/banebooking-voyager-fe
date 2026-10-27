@@ -6,7 +6,7 @@
 >
 > **Resultat:** Frontend-hardening godkjent; tre smale fullstacktiltak valgt
 
-Ettermålingen fulgte samme [`baselineprotokoll`](./baseline-protocol.md), maskin, browser,
+Ettermålingen fulgte samme [`baselineprotokoll`](../../performance/baseline-protocol.md), maskin, browser,
 databasevolum og lokale tjenesteoppsett som [`førmålingen`](./baseline-2026-08-26.md).
 
 ## Før og etter

@@ -1,4 +1,4 @@
-import { createTenantQueryKey } from "$lib/platform/query";
+import { createTenantQueryKey } from "#lib/platform/query/index.ts";
 import type { QueryClient } from "@tanstack/svelte-query";
 
 export const sessionQueryKeys = {

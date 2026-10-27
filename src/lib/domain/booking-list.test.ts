@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { BrukerBookingRespons } from "$lib/contracts";
+import type { BrukerBookingRespons } from "#lib/contracts/index.ts";
 import {
   filterBookingsByActivity,
   getBookingActivityOptions,

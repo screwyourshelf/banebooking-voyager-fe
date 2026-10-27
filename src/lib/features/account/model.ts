@@ -1,4 +1,4 @@
-import type { BrukerRespons } from "$lib/contracts";
+import type { BrukerRespons } from "#lib/contracts/index.ts";
 
 export type AccountTab = "profil" | "persondata";
 export type DisplayNameMode = "epost" | "navn";

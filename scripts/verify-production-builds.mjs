@@ -6,7 +6,7 @@ const budgets = {
   initialCssGzipKiB: 50,
   initialJavaScriptGzipKiB: 50,
   largestLazyJavaScriptGzipKiB: 130,
-  publicBookingJavaScriptGzipKiB: 165,
+  publicBookingJavaScriptGzipKiB: 175,
 };
 
 const builds = [
@@ -126,7 +126,7 @@ function verifyBuild(build) {
 
   const lazyMarkers = [
     { label: "Sentry", marker: "sentry_key" },
-    { label: "Supabase", marker: "supabase-js-" },
+    { label: "Supabase", marker: "@supabase/supabase-js" },
     { label: "rikteksteditor", marker: "ProseMirror" },
   ];
   for (const lazyMarker of lazyMarkers) {

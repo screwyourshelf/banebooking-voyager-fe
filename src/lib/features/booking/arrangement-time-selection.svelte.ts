@@ -1,6 +1,6 @@
 import { untrack } from "svelte";
 import { SvelteMap, SvelteSet } from "svelte/reactivity";
-import type { KalenderSlotRespons } from "$lib/contracts";
+import type { KalenderSlotRespons } from "#lib/contracts/index.ts";
 import { arrangementSlotKey, canSelectArrangementSlot } from "./arrangement-slots";
 
 export type ArrangementTimeSelection = ReturnType<typeof createArrangementTimeSelection>;

@@ -2,8 +2,7 @@
   import type { Snippet } from "svelte";
 
   type CollectionRowExpandContent =
-    | { details: Snippet; actions?: Snippet }
-    | { details?: Snippet; actions: Snippet };
+    { details: Snippet; actions?: Snippet } | { details?: Snippet; actions: Snippet };
 
   export type CollectionRowInteraction =
     | { type: "static" }

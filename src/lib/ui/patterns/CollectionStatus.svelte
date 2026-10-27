@@ -1,12 +1,6 @@
 <script lang="ts" module>
   export type CollectionStatusTone =
-    | "available"
-    | "own"
-    | "event"
-    | "busy"
-    | "past"
-    | "warning"
-    | "danger";
+    "available" | "own" | "event" | "busy" | "past" | "warning" | "danger";
 
   export type CollectionRowStatus = {
     appearance?: "badge" | "plain";

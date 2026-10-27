@@ -2,8 +2,12 @@ import type {
   ArrangementKategori,
   KalenderSlotRespons,
   OpprettArrangementForespørsel,
-} from "$lib/contracts";
-import { dateTilUkedagIso, formaterArrangementKategori, isoTilDayOfWeek } from "$lib/domain";
+} from "#lib/contracts/index.ts";
+import {
+  dateTilUkedagIso,
+  formaterArrangementKategori,
+  isoTilDayOfWeek,
+} from "#lib/domain/index.ts";
 import { arrangementSlotKey, canSelectArrangementSlot } from "./arrangement-slots";
 
 export type QuickArrangementDraft = {

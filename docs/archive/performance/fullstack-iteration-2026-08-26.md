@@ -16,7 +16,7 @@
 
 ## Målekontrakt
 
-Førmålingen fulgte [`baselineprotokollen`](./baseline-protocol.md) mot lokal Chromium, Vite-proxy,
+Førmålingen fulgte [`baselineprotokollen`](../../performance/baseline-protocol.md) mot lokal Chromium, Vite-proxy,
 Development-backend og PostgreSQL-container. Ingen produksjonsdata eller eksterne tjenester ble
 brukt. `admin`, `utvidet` og `medlem` utførte de muterende scenariene mot test-eide data som ble
 gjenopprettet i `finally`.

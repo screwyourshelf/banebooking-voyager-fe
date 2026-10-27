@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { ArrangementAdminScreen } from "$lib/features/arrangement-admin";
-  import { getSessionDataContext } from "$lib/features/session";
+  import { ArrangementAdminScreen } from "#lib/features/arrangement-admin/index.ts";
+  import { getSessionDataContext } from "#lib/features/session/index.ts";
 
   const session = getSessionDataContext();
 </script>

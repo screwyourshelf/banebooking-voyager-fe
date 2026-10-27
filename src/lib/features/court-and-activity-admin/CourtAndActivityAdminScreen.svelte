@@ -1,6 +1,13 @@
 <script lang="ts">
-  import { harHandling, Kapabiliteter } from "$lib/domain";
-  import { Button, Feedback, Navigation, NavigationLink, NavigationList, Page } from "$lib/ui";
+  import { harHandling, Kapabiliteter } from "#lib/domain/index.ts";
+  import {
+    Button,
+    Feedback,
+    Navigation,
+    NavigationLink,
+    NavigationList,
+    Page,
+  } from "#lib/ui/index.ts";
   import ActivitiesSection from "./ActivitiesSection.svelte";
   import CourtsSection from "./CourtsSection.svelte";
   import type { CourtAndActivityAdminSection } from "./model";

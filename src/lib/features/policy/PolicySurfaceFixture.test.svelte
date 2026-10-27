@@ -1,9 +1,9 @@
 <script lang="ts">
-  import type { BrukerRespons } from "$lib/contracts";
-  import type { ApiClient, ApiRequestOptions } from "$lib/platform/api";
-  import { setApiClient } from "$lib/platform/api";
-  import { createAppQueryClient } from "$lib/platform/query";
-  import { setTenantContext } from "$lib/platform/tenant";
+  import type { BrukerRespons } from "#lib/contracts/index.ts";
+  import type { ApiClient, ApiRequestOptions } from "#lib/platform/api/index.ts";
+  import { setApiClient } from "#lib/platform/api/index.ts";
+  import { createAppQueryClient } from "#lib/platform/query/index.ts";
+  import { setTenantContext } from "#lib/platform/tenant/index.ts";
   import { QueryClientProvider } from "@tanstack/svelte-query";
   import BlockedAccountScreen from "./BlockedAccountScreen.svelte";
   import MembershipConfirmationScreen from "./MembershipConfirmationScreen.svelte";

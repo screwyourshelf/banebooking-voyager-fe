@@ -1,4 +1,7 @@
-import { lesLokalLagring, skrivLokalLagring } from "$lib/platform/storage/browser-storage.client";
+import {
+  lesLokalLagring,
+  skrivLokalLagring,
+} from "#lib/platform/storage/browser-storage.client.ts";
 import { DEFAULT_THEME, resolveTheme, THEME_STORAGE_KEY, type Theme } from "./theme";
 
 type ThemeRoot = {

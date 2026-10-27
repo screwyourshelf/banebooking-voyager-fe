@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { ArrangementForhåndsvisningRespons, BaneRespons } from "$lib/contracts";
+import type { ArrangementForhåndsvisningRespons, BaneRespons } from "#lib/contracts/index.ts";
 import {
   addUniqueBookings,
   arrangementToMetadataDraft,

@@ -1,14 +1,14 @@
 <script lang="ts">
   import { createQuery } from "@tanstack/svelte-query";
-  import type { ArrangementRespons } from "$lib/contracts";
+  import type { ArrangementRespons } from "#lib/contracts/index.ts";
   import {
     formaterArrangementMetadata,
     getArrangementLifecycleStatus,
     harHandling,
     Kapabiliteter,
-  } from "$lib/domain";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  } from "#lib/domain/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Button,
     Collection,
@@ -21,7 +21,7 @@
     EditorDialog,
     Feedback,
     Page,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import ArrangementEditor from "./ArrangementEditor.svelte";
   import { arrangementDateRange } from "./model";
   import {

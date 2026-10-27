@@ -4,8 +4,8 @@ import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/svelte";
 import axe from "axe-core";
 import { describe, expect, it, vi } from "vitest";
-import type { KunngjøringAdminRespons } from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
+import type { KunngjøringAdminRespons } from "#lib/contracts/index.ts";
+import type { ApiClient } from "#lib/platform/api/index.ts";
 import AnnouncementAdminFixture from "./AnnouncementAdminFixture.test.svelte";
 
 const axeOptions: axe.RunOptions = {

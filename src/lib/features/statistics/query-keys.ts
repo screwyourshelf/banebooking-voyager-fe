@@ -1,5 +1,5 @@
-import type { BookingstatistikkFiltre } from "$lib/contracts";
-import { createTenantQueryKey, tenantResourceQueryKeys } from "$lib/platform/query";
+import type { BookingstatistikkFiltre } from "#lib/contracts/index.ts";
+import { createTenantQueryKey, tenantResourceQueryKeys } from "#lib/platform/query/index.ts";
 
 export const statisticsQueryKeys = {
   all: (slug: string) => createTenantQueryKey("statistics", slug),

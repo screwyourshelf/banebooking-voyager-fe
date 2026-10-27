@@ -4,8 +4,8 @@ import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/svelte";
 import axe from "axe-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { MedlemskapStatusRespons } from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
+import type { MedlemskapStatusRespons } from "#lib/contracts/index.ts";
+import type { ApiClient } from "#lib/platform/api/index.ts";
 import AdminFixture from "./AdminFixture.test.svelte";
 
 // Keep the fixtures' calendar month deterministic without mocking async UI timers.

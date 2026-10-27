@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { BaneRespons, DayOfWeek } from "$lib/contracts";
-  import { dayOfWeekKortNorsk } from "$lib/domain/dato";
+  import type { BaneRespons, DayOfWeek } from "#lib/contracts/index.ts";
+  import { dayOfWeekKortNorsk } from "#lib/domain/dato.ts";
   import {
     Button,
     DatePicker,
@@ -14,7 +14,7 @@
     SettingsSection,
     SettingsSwitchRow,
     SettingsText,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import {
     addUniqueBookings,
     availableWeekdays,

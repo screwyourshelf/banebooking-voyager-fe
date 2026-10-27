@@ -1,7 +1,7 @@
 import { QueryClient } from "@tanstack/svelte-query";
 import { describe, expect, it, vi } from "vitest";
-import type { BrukerBookingRespons } from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
+import type { BrukerBookingRespons } from "#lib/contracts/index.ts";
+import type { ApiClient } from "#lib/platform/api/index.ts";
 import { accountQueryKeys } from "./query-keys";
 import { cancelMyBookingMutationOptions } from "./queries";
 

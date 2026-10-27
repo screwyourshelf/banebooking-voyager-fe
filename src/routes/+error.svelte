@@ -1,7 +1,7 @@
 <script lang="ts">
   import { resolve } from "$app/paths";
   import { page } from "$app/state";
-  import { ButtonLink, Feedback, Page } from "$lib/ui";
+  import { ButtonLink, Feedback, Page } from "#lib/ui/index.ts";
 
   const notFound = $derived(page.status === 404);
 </script>
@@ -11,7 +11,7 @@
 </svelte:head>
 
 {#snippet homeAction()}
-  <ButtonLink href={resolve("/")}>Gå til forsiden</ButtonLink>
+  <ButtonLink href={resolve("")}>Gå til forsiden</ButtonLink>
 {/snippet}
 
 <Page

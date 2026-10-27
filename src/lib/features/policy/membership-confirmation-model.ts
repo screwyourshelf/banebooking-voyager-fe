@@ -1,4 +1,4 @@
-import type { BekreftMedlemskapForespørsel } from "$lib/contracts";
+import type { BekreftMedlemskapForespørsel } from "#lib/contracts/index.ts";
 
 export type MembershipConfirmationDraft = {
   fullName: string;

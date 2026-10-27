@@ -1,7 +1,7 @@
 import type { QueryClient } from "@tanstack/svelte-query";
-import type { OpprettKunngjøringForespørsel } from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
-import { invalidateTenantResources, tenantQueryMeta } from "$lib/platform/query";
+import type { OpprettKunngjøringForespørsel } from "#lib/contracts/index.ts";
+import type { ApiClient } from "#lib/platform/api/index.ts";
+import { invalidateTenantResources, tenantQueryMeta } from "#lib/platform/query/index.ts";
 import { createAnnouncement, deactivateAnnouncement, getActiveAnnouncement } from "./api";
 import { announcementAdminQueryKeys } from "./query-keys";
 

@@ -4,8 +4,8 @@ import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/svelte";
 import axe from "axe-core";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { BrukerBookingRespons, BrukerRespons } from "$lib/contracts";
-import { createApiClient, type ApiClient } from "$lib/platform/api";
+import type { BrukerBookingRespons, BrukerRespons } from "#lib/contracts/index.ts";
+import { createApiClient, type ApiClient } from "#lib/platform/api/index.ts";
 import AccountFixture from "./AccountFixture.test.svelte";
 
 const axeOptions: axe.RunOptions = {
@@ -199,7 +199,9 @@ describe("account screens", () => {
     expect(within(dialog).getByRole("button", { name: "Avbryt" })).toBeDisabled();
     resolveDelete();
     await waitFor(() => expect(onSignOut).toHaveBeenCalledTimes(1));
-    expect(screen.queryByRole("dialog", { name: "Slett kontoen?" })).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.queryByRole("dialog", { name: "Slett kontoen?" })).not.toBeInTheDocument()
+    );
   });
 
   it("viser, filtrerer og avbestiller Mine tider med vedvarende rollback-feil", async () => {

@@ -1,4 +1,4 @@
-import type { KalenderSlotRespons, SlotStatus } from "$lib/contracts";
+import type { KalenderSlotRespons, SlotStatus } from "#lib/contracts/index.ts";
 import { harHandling } from "./handling";
 import { Kapabiliteter } from "./kapabiliteter";
 

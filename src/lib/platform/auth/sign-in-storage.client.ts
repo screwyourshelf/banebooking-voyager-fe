@@ -1,4 +1,4 @@
-import { lokalLagringErTilgjengelig } from "$lib/platform/storage/browser-storage.client";
+import { lokalLagringErTilgjengelig } from "#lib/platform/storage/browser-storage.client.ts";
 import { SIGN_IN_STORAGE_REQUIRED_MESSAGE } from "./types";
 
 export function requireSignInStorage() {

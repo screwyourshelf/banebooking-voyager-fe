@@ -1,7 +1,7 @@
 import { keepPreviousData } from "@tanstack/svelte-query";
-import type { BookingstatistikkFiltre } from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
-import { tenantQueryMeta } from "$lib/platform/query";
+import type { BookingstatistikkFiltre } from "#lib/contracts/index.ts";
+import type { ApiClient } from "#lib/platform/api/index.ts";
+import { tenantQueryMeta } from "#lib/platform/query/index.ts";
 import { getBookingStatistics, getStatisticsActivities, getStatisticsCourts } from "./api";
 import { statisticsQueryKeys } from "./query-keys";
 

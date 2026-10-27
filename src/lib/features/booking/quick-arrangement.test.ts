@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ARRANGEMENT_KATEGORI_VALG, Kapabiliteter } from "$lib/domain";
+import { ARRANGEMENT_KATEGORI_VALG, Kapabiliteter } from "#lib/domain/index.ts";
 import { createSlot } from "./booking-test-data";
 import { quickArrangementRequest, type QuickArrangementDraft } from "./quick-arrangement";
 

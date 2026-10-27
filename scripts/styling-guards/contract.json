@@ -80,7 +80,7 @@
   "ownership": {
     "bitsUiOwnerRoots": ["src/lib/ui/primitives/"],
     "featureAndRouteRoots": ["src/lib/features/", "src/routes/"],
-    "publicUiImportPrefixes": ["$lib/ui"],
+    "publicUiImportPrefixes": ["#lib/ui"],
     "publicUiOwnerRoots": ["src/lib/ui/primitives/", "src/lib/ui/patterns/"],
     "rootStylesheetImports": [
       {

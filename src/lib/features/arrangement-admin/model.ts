@@ -9,8 +9,8 @@ import type {
   LeggTilArrangementBookingForespørsel,
   OpprettArrangementForespørsel,
   OppdaterArrangementMetadataForespørsel,
-} from "$lib/contracts";
-import { dateTilUkedagIso, finnDayOfWeeksIPeriode, isoTilDayOfWeek } from "$lib/domain/dato";
+} from "#lib/contracts/index.ts";
+import { dateTilUkedagIso, finnDayOfWeeksIPeriode, isoTilDayOfWeek } from "#lib/domain/dato.ts";
 
 export type ArrangementEditorMode = "create" | "edit";
 export type ArrangementEditorStep = "information" | "times";
@@ -151,18 +151,16 @@ function generateBookings(
   return dates.flatMap((date) =>
     groups.flatMap((group) =>
       (timesBySlotLength[group.slotLengthMinutes] ?? []).flatMap((startTime) =>
-        group.courtIds.map(
-          (courtId, index): LocalBooking => ({
-            courtId,
-            courtName: group.courtNames[index],
-            date,
-            endTime: addMinutes(startTime, group.slotLengthMinutes),
-            id: localBookingId(),
-            source,
-            startTime,
-            status: "unknown",
-          })
-        )
+        group.courtIds.map((courtId, index): LocalBooking => ({
+          courtId,
+          courtName: group.courtNames[index],
+          date,
+          endTime: addMinutes(startTime, group.slotLengthMinutes),
+          id: localBookingId(),
+          source,
+          startTime,
+          status: "unknown",
+        }))
       )
     )
   );
@@ -263,19 +261,17 @@ export function mapExistingBookings(
     startTid: string;
   }[]
 ) {
-  return bookings.map(
-    (booking): LocalBooking => ({
-      courtId: booking.baneId,
-      courtName: booking.baneNavn,
-      date: booking.dato,
-      endTime: booking.sluttTid,
-      externalId: booking.bookingId,
-      id: `existing-${booking.bookingId}`,
-      source: "existing",
-      startTime: booking.startTid,
-      status: "active",
-    })
-  );
+  return bookings.map((booking): LocalBooking => ({
+    courtId: booking.baneId,
+    courtName: booking.baneNavn,
+    date: booking.dato,
+    endTime: booking.sluttTid,
+    externalId: booking.bookingId,
+    id: `existing-${booking.bookingId}`,
+    source: "existing",
+    startTime: booking.startTid,
+    status: "active",
+  }));
 }
 
 function sortBookings(bookings: readonly LocalBooking[]) {

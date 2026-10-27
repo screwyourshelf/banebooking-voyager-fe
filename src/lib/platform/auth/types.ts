@@ -1,4 +1,4 @@
-import type { ApiAuthorization } from "$lib/platform/api";
+import type { ApiAuthorization } from "#lib/platform/api/index.ts";
 
 export type DevelopmentProfile = "admin" | "utvidet" | "medlem";
 

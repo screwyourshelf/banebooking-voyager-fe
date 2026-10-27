@@ -1,10 +1,11 @@
 <script lang="ts">
   import { goto } from "$app/navigation";
-  import { base, resolve } from "$app/paths";
+  import { resolve } from "$app/paths";
+  const base = resolve("").replace(/\/$/, "");
   import { page } from "$app/state";
-  import { getAuthContext } from "$lib/platform/auth";
-  import { getTenantContext, stripBasePath } from "$lib/platform/tenant";
-  import { ErrorState, Page, PageLoading } from "$lib/ui";
+  import { getAuthContext } from "#lib/platform/auth/index.ts";
+  import { getTenantContext, stripBasePath } from "#lib/platform/tenant/index.ts";
+  import { ErrorState, Page, PageLoading } from "#lib/ui/index.ts";
   import type { Snippet } from "svelte";
   import { getSessionDataContext } from "./context";
   import { resolvePolicyRedirect } from "./guard-model";
@@ -29,7 +30,7 @@
 
   $effect(() => {
     if (session.klubbStatus !== "success") return;
-    void import("$lib/platform/storage/browser-storage.client").then(({ skrivLokalLagring }) => {
+    void import("#lib/platform/storage/browser-storage.client.ts").then(({ skrivLokalLagring }) => {
       skrivLokalLagring("slug", tenant.slug);
     });
   });
@@ -45,7 +46,7 @@
     const redirectAttempt = `${page.url.href}\n${redirectTarget}`;
     if (redirectAttempt === lastRedirectAttempt) return;
     lastRedirectAttempt = redirectAttempt;
-    void goto(resolve(stripBasePath(redirectTarget, base)), { replaceState: true });
+    void goto(resolve(stripBasePath(redirectTarget, base).slice(1)), { replace: true });
   });
 </script>
 

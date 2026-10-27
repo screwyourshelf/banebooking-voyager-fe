@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { BookingPerBane } from "$lib/contracts";
+  import type { BookingPerBane } from "#lib/contracts/index.ts";
   import {
     DataTable,
     Section,
     type DataTableColumn,
     type DataTableDirection,
     type DataTableRow,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import { formatCountWithUnit, formatHours, formatPercentage } from "./model";
 
   let { courts }: { courts: BookingPerBane[] } = $props();

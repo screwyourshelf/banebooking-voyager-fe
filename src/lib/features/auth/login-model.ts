@@ -1,4 +1,4 @@
-import type { FeedbackTone } from "$lib/ui";
+import type { FeedbackTone } from "#lib/ui/index.ts";
 
 export type LoginFeedback = {
   description: string;

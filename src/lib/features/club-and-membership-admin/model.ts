@@ -2,7 +2,7 @@ import type {
   AktiverMedlemskapBekreftelseForespørsel,
   KlubbRespons,
   OppdaterKlubbForespørsel,
-} from "$lib/contracts";
+} from "#lib/contracts/index.ts";
 
 export const MAX_CLUB_NAME_LENGTH = 60;
 export const MAX_MEMBERSHIP_PERIOD_LABEL_LENGTH = 100;

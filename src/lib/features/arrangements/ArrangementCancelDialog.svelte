@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button, Dialog, Feedback, type DialogActionContext } from "$lib/ui";
+  import { Button, Dialog, Feedback, type DialogActionContext } from "#lib/ui/index.ts";
 
   let {
     error,

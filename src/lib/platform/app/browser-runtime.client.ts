@@ -1,11 +1,12 @@
 import { goto } from "$app/navigation";
-import { base, resolve } from "$app/paths";
-import { createApiClient, type ApiClient } from "$lib/platform/api";
-import { createBrowserAuthController } from "$lib/platform/auth/browser-auth.client";
-import type { AuthController, AuthState } from "$lib/platform/auth";
-import { publicConfig } from "$lib/platform/config";
+import { resolve } from "$app/paths";
+const base = resolve("").replace(/\/$/, "");
+import { createApiClient, type ApiClient } from "#lib/platform/api/index.ts";
+import { createBrowserAuthController } from "#lib/platform/auth/browser-auth.client.ts";
+import type { AuthController, AuthState } from "#lib/platform/auth/index.ts";
+import { publicConfig } from "#lib/platform/config/index.ts";
 import type { QueryClient } from "@tanstack/svelte-query";
-import { buildLoginPath, stripBasePath, type TenantContext } from "$lib/platform/tenant";
+import { buildLoginPath, stripBasePath, type TenantContext } from "#lib/platform/tenant/index.ts";
 
 export type BrowserAppRuntime = {
   api: ApiClient;
@@ -43,7 +44,7 @@ export function createBrowserAppRuntime({
       const target = buildLoginPath(getTenant(), new URL(globalThis.location.href), base);
       const separator = target.includes("?") ? "&" : "?";
       const sessionExpiredTarget = `${target}${separator}sessionExpired=1` as const;
-      await goto(resolve(stripBasePath(sessionExpiredTarget, base)), { replaceState: true });
+      await goto(resolve(stripBasePath(sessionExpiredTarget, base).slice(1)), { replace: true });
     },
   });
 

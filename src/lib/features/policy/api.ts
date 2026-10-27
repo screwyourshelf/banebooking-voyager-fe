@@ -1,5 +1,5 @@
-import type { BekreftMedlemskapForespørsel } from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
+import type { BekreftMedlemskapForespørsel } from "#lib/contracts/index.ts";
+import type { ApiClient } from "#lib/platform/api/index.ts";
 
 export function confirmRequiredAnnouncement(api: ApiClient, slug: string, announcementId: string) {
   return api.request<void>(

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { KlubbRespons } from "$lib/contracts";
+import type { KlubbRespons } from "#lib/contracts/index.ts";
 import {
   createClubSettingsDraft,
   isClubSettingsDirty,

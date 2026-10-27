@@ -1,9 +1,9 @@
 <script lang="ts">
   import { createMutation, createQuery, useQueryClient } from "@tanstack/svelte-query";
-  import type { BrukerRespons, BrukerSperreRespons } from "$lib/contracts";
-  import { formatDatoKort, formatTidspunktKort } from "$lib/domain";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  import type { BrukerRespons, BrukerSperreRespons } from "#lib/contracts/index.ts";
+  import { formatDatoKort, formatTidspunktKort } from "#lib/domain/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Button,
     Collection,
@@ -14,7 +14,7 @@
     CollectionLoading,
     EditorDialog,
     Feedback,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import { getUserDisplayName } from "./model";
   import { revokeBlockMutationOptions, userBlocksQueryOptions } from "./queries";
 

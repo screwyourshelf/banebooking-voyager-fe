@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button, Dialog, EditorDialog, Input } from "$lib/ui";
+  import { Button, Dialog, EditorDialog, Input } from "#lib/ui/index.ts";
 
   let {
     onEditorClose,

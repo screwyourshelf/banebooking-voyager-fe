@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { GrenRespons } from "$lib/contracts";
-  import { ARRANGEMENT_KATEGORI_VALG } from "$lib/domain";
+  import type { GrenRespons } from "#lib/contracts/index.ts";
+  import { ARRANGEMENT_KATEGORI_VALG } from "#lib/domain/index.ts";
   import {
     FormField,
     FormFields,
@@ -10,7 +10,7 @@
     SettingsSection,
     SettingsSwitchRow,
     Textarea,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import type { ArrangementMetadataDraft, ArrangementMetadataErrors } from "./model";
 
   let {

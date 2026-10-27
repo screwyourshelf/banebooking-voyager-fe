@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { KlubbRespons } from "$lib/contracts";
-  import { harHandling, Kapabiliteter } from "$lib/domain";
-  import { Feedback, Page, Tabs } from "$lib/ui";
+  import type { KlubbRespons } from "#lib/contracts/index.ts";
+  import { harHandling, Kapabiliteter } from "#lib/domain/index.ts";
+  import { Feedback, Page, Tabs } from "#lib/ui/index.ts";
   import ClubSettings from "./ClubSettings.svelte";
   import MembershipSettings from "./MembershipSettings.svelte";
 

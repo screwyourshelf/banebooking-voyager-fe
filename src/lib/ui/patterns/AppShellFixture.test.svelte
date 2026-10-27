@@ -42,6 +42,6 @@
 
 <AppShell {desktopNavigation} {mobileHeader} {mobileNavigation}>
   <Page title="Klubboversikt" description="Velkommen til Fjordvik Tennisklubb.">
-    <a href={resolve("/fjordvik/nyheter")}>Siste nytt</a>
+    <a href={resolve("fjordvik/nyheter")}>Siste nytt</a>
   </Page>
 </AppShell>

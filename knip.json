@@ -1,7 +1,8 @@
 {
-  "$schema": "https://unpkg.com/knip@6.32.2/schema.json",
+  "$schema": "https://unpkg.com/knip@6.43.0/schema.json",
   "entry": [
     "scripts/styling-guards/fixtures/**/*.{css,svelte}",
-    "scripts/test-styling-production-tree-contract.mjs"
+    "scripts/test-styling-production-tree-contract.mjs",
+    "src/params.ts"
   ]
 }

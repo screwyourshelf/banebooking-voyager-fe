@@ -14,13 +14,7 @@ export type ArrangementKategori =
 
 /** .NET DayOfWeek som string */
 export type DayOfWeek =
-  | "Sunday"
-  | "Monday"
-  | "Tuesday"
-  | "Wednesday"
-  | "Thursday"
-  | "Friday"
-  | "Saturday";
+  "Sunday" | "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday" | "Saturday";
 
 // ─────────── Requests ───────────
 
@@ -55,10 +49,7 @@ export type EksplisittArrangementSlot = {
 // ─────────── Responses ───────────
 
 type ArrangementPresentasjonType =
-  | "EnkeltDato"
-  | "DatoIntervallAlleDager"
-  | "DatoIntervallUkedager"
-  | "Uregelmessig";
+  "EnkeltDato" | "DatoIntervallAlleDager" | "DatoIntervallUkedager" | "Uregelmessig";
 
 type ArrangementPresentasjon = {
   type: ArrangementPresentasjonType;

@@ -7,7 +7,7 @@ const storage = vi.hoisted(() => ({
   write: vi.fn<(key: string, value: string) => boolean>(),
 }));
 
-vi.mock("$lib/platform/storage/browser-storage.client", () => ({
+vi.mock("#lib/platform/storage/browser-storage.client.ts", () => ({
   lesLokalLagring: storage.read,
   skrivLokalLagring: storage.write,
 }));

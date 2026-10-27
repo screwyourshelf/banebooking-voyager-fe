@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { setAuthContext, type AuthContextValue } from "$lib/platform/auth";
+  import { setAuthContext, type AuthContextValue } from "#lib/platform/auth/index.ts";
   import LoginScreen from "./LoginScreen.svelte";
 
   let {

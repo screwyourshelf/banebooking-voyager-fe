@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { TermsScreen } from "$lib/features/policy";
-  import { getSessionDataContext } from "$lib/features/session";
+  import { TermsScreen } from "#lib/features/policy/index.ts";
+  import { getSessionDataContext } from "#lib/features/session/index.ts";
 
   const session = getSessionDataContext();
 </script>

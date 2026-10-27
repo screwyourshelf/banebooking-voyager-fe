@@ -1,4 +1,4 @@
-import type { DayOfWeek } from "$lib/contracts/arrangement";
+import type { DayOfWeek } from "#lib/contracts/arrangement.ts";
 
 export type UkedagIso = 1 | 2 | 3 | 4 | 5 | 6 | 7; // Man=1 ... Søn=7
 

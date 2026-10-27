@@ -153,7 +153,7 @@ mutasjoner skal ikke implementeres i routefilen.
 - multi-tenant: slug finnes i URL
 - dedikert tenant-build: slug mangler i URL og kommer fra offentlig build-konfigurasjon
 
-En param matcher avviser reserverte toppnivåsegmenter. `auth/callback` er en eksplisitt statisk
+`src/params.ts` deklarerer tenant-matcheren og avviser reserverte toppnivåsegmenter. `auth/callback` er en eksplisitt statisk
 route og ligger utenfor tenant-treet.
 
 ## Lagene

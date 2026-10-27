@@ -10,7 +10,7 @@
     CollectionRow,
     EditorDialog,
     Feedback,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import CourtForm from "./CourtForm.svelte";
   import { createCourtsSectionController } from "./courts-section-controller.svelte";
 

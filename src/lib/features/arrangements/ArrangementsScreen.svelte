@@ -1,9 +1,9 @@
 <script lang="ts">
   import { createMutation, createQuery, useQueryClient } from "@tanstack/svelte-query";
-  import type { ArrangementRespons } from "$lib/contracts";
-  import { getApiClient } from "$lib/platform/api";
-  import { getAuthContext } from "$lib/platform/auth";
-  import { getTenantContext } from "$lib/platform/tenant";
+  import type { ArrangementRespons } from "#lib/contracts/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getAuthContext } from "#lib/platform/auth/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Button,
     Collection,
@@ -13,7 +13,7 @@
     CollectionList,
     CollectionLoading,
     Page,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import ArrangementRow from "./ArrangementRow.svelte";
   import {
     ARRANGEMENT_PAGE_SIZE,

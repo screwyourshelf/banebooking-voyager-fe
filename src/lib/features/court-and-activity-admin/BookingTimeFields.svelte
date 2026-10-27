@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { BookingInnstillingRespons } from "$lib/contracts";
-  import { SettingsRange, SettingsRow, SettingsSwitchRow, SettingsValue } from "$lib/ui";
+  import type { BookingInnstillingRespons } from "#lib/contracts/index.ts";
+  import { SettingsRange, SettingsRow, SettingsSwitchRow, SettingsValue } from "#lib/ui/index.ts";
   import type { BookingOverrideDraft } from "./model";
   import { defaultOverrideValue, hourLabel } from "./model";
 

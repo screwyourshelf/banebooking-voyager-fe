@@ -1,4 +1,4 @@
-import type { RolleType } from "$lib/contracts";
+import type { RolleType } from "#lib/contracts/index.ts";
 
 const ROLLE_VALG: Array<{ value: RolleType; label: string }> = [
   { value: "Medlem", label: "Medlem" },

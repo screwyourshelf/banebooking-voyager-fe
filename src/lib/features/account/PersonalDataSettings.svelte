@@ -1,9 +1,9 @@
 <script lang="ts">
   import { createMutation } from "@tanstack/svelte-query";
-  import type { BrukerRespons } from "$lib/contracts";
-  import { formatDatoKort, tilDatoTekst } from "$lib/domain";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  import type { BrukerRespons } from "#lib/contracts/index.ts";
+  import { formatDatoKort, tilDatoTekst } from "#lib/domain/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Button,
     ButtonLink,
@@ -14,7 +14,7 @@
     SettingsSection,
     SettingsStack,
     SettingsValue,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import { myAccountDataMutationOptions } from "./queries";
 
   let { termsHref, user }: { termsHref: string; user: BrukerRespons } = $props();
@@ -28,7 +28,7 @@
     if (!browser || download.isPending) return;
     try {
       const data = await download.mutateAsync();
-      const { downloadJsonFile } = await import("$lib/platform/download/download-json.client");
+      const { downloadJsonFile } = await import("#lib/platform/download/download-json.client.ts");
       downloadJsonFile(data, `banebooking-data-${tilDatoTekst(new Date())}.json`);
     } catch {
       // Mutasjonen beholder nedlastingsfeilen ved den lokale handlingen.

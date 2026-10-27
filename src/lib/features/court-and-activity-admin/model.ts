@@ -7,7 +7,7 @@ import type {
   OppdaterBaneForespørsel,
   OpprettGrenForespørsel,
   OppdaterGrenForespørsel,
-} from "$lib/contracts";
+} from "#lib/contracts/index.ts";
 
 export type CourtAndActivityAdminSection = "courts" | "activities";
 

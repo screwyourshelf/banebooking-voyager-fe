@@ -1,5 +1,5 @@
 import { describe, expect, it, vi } from "vitest";
-import type { ApiClient } from "$lib/platform/api";
+import type { ApiClient } from "#lib/platform/api/index.ts";
 import { getBookingStatistics, getStatisticsActivities, getStatisticsCourts } from "./api";
 
 describe("statistics API", () => {

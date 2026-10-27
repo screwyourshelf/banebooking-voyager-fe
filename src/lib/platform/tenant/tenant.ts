@@ -1,4 +1,4 @@
-import { isTenantRouteSlug, type PublicConfig } from "$lib/platform/config";
+import { isTenantRouteSlug, type PublicConfig } from "#lib/platform/config/index.ts";
 
 export type AppPath = `/${string}`;
 

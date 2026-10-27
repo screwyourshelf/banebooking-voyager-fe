@@ -6,8 +6,8 @@ import type {
   OpphevSperreRespons,
   SperrBrukerForespørsel,
   SperrBrukerRespons,
-} from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
+} from "#lib/contracts/index.ts";
+import type { ApiClient } from "#lib/platform/api/index.ts";
 
 function usersPath(slug: string, suffix = "") {
   const root = `klubb/${encodeURIComponent(slug)}/bruker/admin/bruker`;

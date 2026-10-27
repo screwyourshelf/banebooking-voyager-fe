@@ -3,7 +3,7 @@ import type {
   ArrangementRespons,
   BaneRespons,
   GrenRespons,
-} from "$lib/contracts";
+} from "#lib/contracts/index.ts";
 
 export const activity: GrenRespons = {
   aktiv: true,

@@ -4,7 +4,7 @@ import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import axe from "axe-core";
 import { describe, expect, it, vi } from "vitest";
-import type { ApiClient } from "$lib/platform/api";
+import type { ApiClient } from "#lib/platform/api/index.ts";
 import PolicySurfaceFixture from "./PolicySurfaceFixture.test.svelte";
 
 const axeOptions: axe.RunOptions = {

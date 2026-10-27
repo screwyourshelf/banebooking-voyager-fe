@@ -3,8 +3,8 @@ import type {
   BookingstatistikkFiltre,
   BookingstatistikkRespons,
   GrenRespons,
-} from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
+} from "#lib/contracts/index.ts";
+import type { ApiClient } from "#lib/platform/api/index.ts";
 
 function clubPath(slug: string, resource: string) {
   return `klubb/${encodeURIComponent(slug)}/${resource}`;

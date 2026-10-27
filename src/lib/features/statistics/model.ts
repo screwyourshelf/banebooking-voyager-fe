@@ -5,8 +5,8 @@ import type {
   BookingstatistikkFiltre,
   BookingstatistikkRespons,
   DayOfWeek,
-} from "$lib/contracts";
-import { tilDatoTekst } from "$lib/domain";
+} from "#lib/contracts/index.ts";
+import { tilDatoTekst } from "#lib/domain/index.ts";
 
 export type StatistikkPeriodevalg = "året-så-langt" | "forrige-år" | "siste-12" | "egendefinert";
 export type Medlemsbookingtype = "alle" | "vanlige" | "arrangement";

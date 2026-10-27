@@ -1,12 +1,12 @@
 <script lang="ts">
-  import type { BookingstatistikkFiltre, BookingstatistikkRespons } from "$lib/contracts";
+  import type { BookingstatistikkFiltre, BookingstatistikkRespons } from "#lib/contracts/index.ts";
   import {
     CollectionEmpty,
     CollectionError,
     Section,
     VisualizationLayout,
     VisualizationLoading,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import type { Medlemsbookingtype, Statistikkfane } from "./model";
   import {
     formatGeneratedAt,

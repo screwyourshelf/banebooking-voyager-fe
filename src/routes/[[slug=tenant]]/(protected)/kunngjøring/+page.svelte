@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { RequiredAnnouncementScreen } from "$lib/features/policy";
-  import { getSessionDataContext } from "$lib/features/session";
+  import { RequiredAnnouncementScreen } from "#lib/features/policy/index.ts";
+  import { getSessionDataContext } from "#lib/features/session/index.ts";
 
   const session = getSessionDataContext();
 

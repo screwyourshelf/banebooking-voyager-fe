@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { FeedItemRespons } from "$lib/contracts";
-  import { ButtonLink, CollectionRow } from "$lib/ui";
+  import type { FeedItemRespons } from "#lib/contracts/index.ts";
+  import { ButtonLink, CollectionRow } from "#lib/ui/index.ts";
   import { formatNewsDate, safeExternalNewsUrl, textFromNewsContent } from "./model";
 
   let { item }: { item: FeedItemRespons } = $props();

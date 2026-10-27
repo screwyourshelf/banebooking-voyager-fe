@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createQuery } from "@tanstack/svelte-query";
-  import type { BrukerRespons } from "$lib/contracts";
+  import type { BrukerRespons } from "#lib/contracts/index.ts";
   import {
     filterBookingsByActivity,
     formaterDatoGruppe,
@@ -9,9 +9,9 @@
     harHandling,
     Kapabiliteter,
     sortBookingsByRelevance,
-  } from "$lib/domain";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  } from "#lib/domain/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Button,
     Collection,
@@ -23,7 +23,7 @@
     CollectionLoading,
     EditorDialog,
     ScheduleRow,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import { getUserDisplayName } from "./model";
   import { userBookingsQueryOptions } from "./queries";
 

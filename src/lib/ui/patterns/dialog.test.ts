@@ -231,7 +231,7 @@ describe("public dialog contracts", () => {
 
     await fireEvent.click(screen.getByRole("button", { name: "Avbryt" }));
     expect(callbacks.onStandardClose).toHaveBeenCalledOnce();
-    expect(screen.queryByRole("dialog", { name: "Bookingregler" })).toBeNull();
+    await waitFor(() => expect(screen.queryByRole("dialog", { name: "Bookingregler" })).toBeNull());
   });
 
   it("has no detectable accessibility violations in both variants", async () => {

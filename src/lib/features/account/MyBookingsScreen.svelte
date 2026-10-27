@@ -1,10 +1,10 @@
 <script lang="ts">
   import { CalendarCheckIn01Icon } from "@hugeicons/core-free-icons";
   import { createMutation, createQuery, useQueryClient } from "@tanstack/svelte-query";
-  import type { BrukerBookingRespons } from "$lib/contracts";
-  import { formaterDatoGruppe } from "$lib/domain";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  import type { BrukerBookingRespons } from "#lib/contracts/index.ts";
+  import { formaterDatoGruppe } from "#lib/domain/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Button,
     ButtonLink,
@@ -18,14 +18,14 @@
     Feedback,
     Icon,
     Page,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import MyBookingRow from "./MyBookingRow.svelte";
   import {
     filterBookingsByActivity,
     getBookingActivityOptions,
     groupBookingsByDate,
     sortBookingsByRelevance,
-  } from "$lib/domain";
+  } from "#lib/domain/index.ts";
   import { cancelMyBookingMutationOptions, myBookingsQueryOptions } from "./queries";
 
   let { bookingHref }: { bookingHref: string } = $props();

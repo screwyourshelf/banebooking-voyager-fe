@@ -1,6 +1,6 @@
 import type { QueryClient } from "@tanstack/svelte-query";
-import type { ApiClient } from "$lib/platform/api";
-import { tenantQueryMeta } from "$lib/platform/query";
+import type { ApiClient } from "#lib/platform/api/index.ts";
+import { tenantQueryMeta } from "#lib/platform/query/index.ts";
 import { cancelArrangement, getArrangements } from "./api";
 import { sortArrangements } from "./model";
 import { arrangementQueryKeys } from "./query-keys";

@@ -5,14 +5,27 @@ forutsetninger og statiske produksjonsartefakter, men utfører eller autoriserer
 
 ## Lokal utvikling
 
-Installer den låste pakkegrafen og start Vite fra frontend-repoet:
+Bruk Node 24 LTS (`fnm use` leser `.nvmrc`). Installer den låste pakkegrafen og start Vite fra frontend-repoet:
 
 ```bash
-npm ci
+npm exec --yes --package=npm@10.9.9 -- npm ci
 npm run dev
 ```
 
-Dev- og previewserveren videresender `/api` til `http://localhost:5015`. Start backenden fra det
+`packageManager` og `engines.npm` låser installasjonsverktøyet til npm 10.9.9. Bruk samme
+bootstrap ved endringer i pakkegrafen, for eksempel
+`npm exec --yes --package=npm@10.9.9 -- npm install`. CI velger samme versjon på den midlertidige
+runneren før `npm ci`; lokale kommandoer endrer ikke brukerens globale npm. Bakgrunn for valget
+og verifisert peer-graf finnes i [leveransenotatet](./archive/avhengighetsoppgradering-2026-10.md).
+
+SvelteKit 3-konfigurasjonen eies av `sveltekit(...)` i `vite.config.ts`. Bibliotekimporter bruker
+Node-subpaths fra `package.json` (`#lib/*`) med eksplisitte kildefilendelser. `src/params.ts`
+er frameworkinngang for tenant-matcheren. Typekontrollens omfang viderefører kildefiler og
+Vite-konfigurasjon; Knip registrerer den nye params-inngangen eksplisitt.
+
+Dev- og previewserveren videresender `/api` til `http://localhost:5015`.
+Den interne miljøvariabelen `BANEBOOKING_API_PROXY_TARGET` kan velge en isolert lokal backend;
+den bygges ikke inn som offentlig runtimekonfigurasjon. Start backenden fra det
 separate `backend/`-repoet når en arbeidsflate trenger reelle API-svar. Utviklingsauth er bare
 tilgjengelig i Vites development-modus og er aldri del av produksjonsbuilden.
 
@@ -71,7 +84,7 @@ Kjør den repoeide død-kode-, eksport-, import- og direkte avhengighetskontroll
 npm run static-analysis:check
 ```
 
-Knip 6.32.2 er eksakt pinnet i `devDependencies`. [`knip.json`](../knip.json) registrerer isolerte
+Knip 6.43.0 er eksakt pinnet i `devDependencies`. [`knip.json`](../knip.json) registrerer isolerte
 stylingfixtures og det dynamiske produksjonstretestscriptet som eksplisitte innganger. Den navngitte
 kontrollen avviser alle døde runtimefiler, typer og verdi-exports samt pakke-, binary-, ulistet- og
 uoppløst-importfunn; det finnes ingen allowlist.
@@ -110,6 +123,17 @@ npm run build:github-pages
   inkluderer `.nojekyll`.
 - `auth/callback` prerendres; tenant-rutene håndteres av hostfallbacken og klientrouteren.
 
+Cloudflare Pages bruker Node-versjonen fra `.nvmrc`. I både production- og previewmiljøet settes
+`SKIP_DEPENDENCY_INSTALL=1`, slik at Pages ikke installerer med sin egen npm-versjon. Byggkommandoen
+installerer og kontrollerer den låste grafen med prosjektets npm før det statiske artefaktet bygges:
+
+```bash
+npm exec --yes --package=npm@10.9.9 -- npm ci && npm exec --yes --package=npm@10.9.9 -- npm ls && npm run build:cloudflare-pages
+```
+
+`packageManager` alene velger ikke installasjonsversjonen i Pages. Kontroller faktisk npm-versjon,
+gyldig pakkegraf og deployresultat i byggloggen når hostingoppsettet endres.
+
 Før et artefakt publiseres, kjør minst `npm test`, `npm run check`, `npm run test:e2e` og
 `npm run test:e2e:production`, og kontroller `npm audit`. `npm run check` inkluderer den statiske
 analysen over. Selve opplastingen til Cloudflare Pages eller GitHub Pages er en ekstern endring og
@@ -127,11 +151,11 @@ Jobben `Frontend quality gates` installerer den låste pakkegrafen og Chromium, 
 samme komplette frontendport som lokalt:
 
 ```bash
-npm run verify:frontend
+npm exec --yes --package=npm@10.9.9 -- npm run verify:frontend
 ```
 
 Porten kjører enhetstester, `check`, visuelle E2E-tester og produksjons-E2E for begge
-hostvariantene. CI bruker Node.js 22 og macOS 15 fordi de innsjekkede skjermbildereferansene
+hostvariantene. CI bruker Node.js 24 og macOS 15 fordi de innsjekkede skjermbildereferansene
 er Darwin-referanser. Den endrer ikke snapshots eller baselines. Ingen hemmeligheter eller
 backendtilgang er nødvendig, heller ikke for pull requests fra forks.
 

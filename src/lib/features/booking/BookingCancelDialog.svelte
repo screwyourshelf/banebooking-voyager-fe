@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { KalenderSlotRespons } from "$lib/contracts";
-  import { Button, Dialog, Feedback } from "$lib/ui";
+  import type { KalenderSlotRespons } from "#lib/contracts/index.ts";
+  import { Button, Dialog, Feedback } from "#lib/ui/index.ts";
 
   let {
     open = $bindable(false),

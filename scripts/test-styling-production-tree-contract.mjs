@@ -292,7 +292,7 @@ function proveMarkupMutationChannelsCannotBypass() {
     {
       label: "public UI attribute spread",
       source:
-        '<script>import { Page } from "$lib/ui"; let props = { title: "Baner" };</script><Page {...props} />',
+        '<script>import { Page } from "#lib/ui/index.ts"; let props = { title: "Baner" };</script><Page {...props} />',
       sourcePath: featurePath,
       ruleId: contract.rules.publicUiOverride.id,
       message: /attributtspread/,
@@ -395,7 +395,7 @@ function proveMarkupMutationChannelsCannotBypass() {
       source: [
         '<script lang="ts">',
         'import type { HTMLAttributes } from "svelte/elements";',
-        'import type { PublicHtmlAttributes } from "$lib/ui/public-html-attributes";',
+        'import type { PublicHtmlAttributes } from "#lib/ui/public-html-attributes.ts";',
         "let { ...attributes }: PublicHtmlAttributes<HTMLAttributes<HTMLDivElement>> = $props();",
         "</script>",
         "{#snippet content()}",

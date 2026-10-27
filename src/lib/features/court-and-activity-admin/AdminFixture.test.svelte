@@ -1,7 +1,7 @@
 <script lang="ts">
   import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
-  import { setApiClient, type ApiClient, type ApiRequestOptions } from "$lib/platform/api";
-  import { setTenantContext } from "$lib/platform/tenant";
+  import { setApiClient, type ApiClient, type ApiRequestOptions } from "#lib/platform/api/index.ts";
+  import { setTenantContext } from "#lib/platform/tenant/index.ts";
   import CourtAndActivityAdminScreen from "./CourtAndActivityAdminScreen.svelte";
   import type { CourtAndActivityAdminSection } from "./model";
 

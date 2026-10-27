@@ -1,10 +1,10 @@
 <script lang="ts">
   import { createMutation, useQueryClient } from "@tanstack/svelte-query";
   import { tick } from "svelte";
-  import type { BrukerRespons } from "$lib/contracts";
-  import { tilDatoTekst } from "$lib/domain";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  import type { BrukerRespons } from "#lib/contracts/index.ts";
+  import { tilDatoTekst } from "#lib/domain/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Button,
     DatePicker,
@@ -18,7 +18,7 @@
     SettingsSection,
     SettingsStack,
     Textarea,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import { createUserBlockDraft, toUserBlockRequest, validateUserBlockDraft } from "./model";
   import { blockUserMutationOptions } from "./queries";
 

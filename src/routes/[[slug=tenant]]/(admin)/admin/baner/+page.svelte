@@ -1,8 +1,9 @@
 <script lang="ts">
-  import { base } from "$app/paths";
-  import { CourtAndActivityAdminScreen } from "$lib/features/court-and-activity-admin";
-  import { getSessionDataContext } from "$lib/features/session";
-  import { buildTenantPath, getTenantContext } from "$lib/platform/tenant";
+  import { resolve } from "$app/paths";
+  const base = resolve("").replace(/\/$/, "");
+  import { CourtAndActivityAdminScreen } from "#lib/features/court-and-activity-admin/index.ts";
+  import { getSessionDataContext } from "#lib/features/session/index.ts";
+  import { buildTenantPath, getTenantContext } from "#lib/platform/tenant/index.ts";
 
   const session = getSessionDataContext();
   const tenant = getTenantContext();

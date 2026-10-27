@@ -4,7 +4,7 @@ import "@testing-library/jest-dom/vitest";
 import { cleanup, fireEvent, render, screen, waitFor, within } from "@testing-library/svelte";
 import axe from "axe-core";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { ApiClient } from "$lib/platform/api";
+import type { ApiClient } from "#lib/platform/api/index.ts";
 import AdminFixture from "./AdminFixture.test.svelte";
 import { activity, arrangement, arrangementBooking, court } from "./admin-test-data";
 

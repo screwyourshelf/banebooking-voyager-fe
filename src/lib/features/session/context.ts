@@ -1,5 +1,5 @@
 import { createContext } from "svelte";
-import type { BrukerRespons, KlubbRespons } from "$lib/contracts";
+import type { BrukerRespons, KlubbRespons } from "#lib/contracts/index.ts";
 
 export type SessionQueryStatus = "error" | "pending" | "success";
 

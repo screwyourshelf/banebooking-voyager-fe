@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { AppShell } from "$lib/ui";
+  import { AppShell } from "#lib/ui/index.ts";
   import DesktopNavigation from "./DesktopNavigation.svelte";
   import MobileBottomNavigation from "./MobileBottomNavigation.svelte";
   import MobileHeaderNavigation from "./MobileHeaderNavigation.svelte";

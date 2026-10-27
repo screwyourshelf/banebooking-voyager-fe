@@ -1,5 +1,5 @@
-import type { ApiClient } from "$lib/platform/api";
-import { tenantQueryMeta } from "$lib/platform/query";
+import type { ApiClient } from "#lib/platform/api/index.ts";
+import { tenantQueryMeta } from "#lib/platform/query/index.ts";
 import { getFeedStatus } from "./api";
 import { sessionQueryKeys } from "./query-keys";
 

@@ -5,7 +5,7 @@ import type {
   GrenRespons,
   KalenderRespons,
   KalenderSlotRespons,
-} from "$lib/contracts";
+} from "#lib/contracts/index.ts";
 
 export const bookingSettings = {
   aapningstid: "08:00",

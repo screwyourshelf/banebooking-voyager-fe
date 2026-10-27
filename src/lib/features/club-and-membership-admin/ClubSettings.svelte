@@ -1,9 +1,9 @@
 <script lang="ts">
   import { createMutation, useQueryClient } from "@tanstack/svelte-query";
   import { untrack } from "svelte";
-  import type { KlubbRespons } from "$lib/contracts";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  import type { KlubbRespons } from "#lib/contracts/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Feedback,
     Form,
@@ -14,7 +14,7 @@
     Input,
     SettingsSection,
     SettingsStack,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import {
     createClubSettingsDraft,
     isClubSettingsDirty,

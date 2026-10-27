@@ -1,4 +1,4 @@
-import type { BaneRespons, BookingInnstillingRespons, GrenRespons } from "$lib/contracts";
+import type { BaneRespons, BookingInnstillingRespons, GrenRespons } from "#lib/contracts/index.ts";
 
 const bookingSettings: BookingInnstillingRespons = {
   aapningstid: "07:00",

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { BaneRespons, BookingstatistikkFiltre, GrenRespons } from "$lib/contracts";
-  import { CollectionControls, type CollectionControlField } from "$lib/ui";
+  import type { BaneRespons, BookingstatistikkFiltre, GrenRespons } from "#lib/contracts/index.ts";
+  import { CollectionControls, type CollectionControlField } from "#lib/ui/index.ts";
   import {
     MEMBER_BOOKING_TYPE_OPTIONS,
     STATISTICS_PERIOD_OPTIONS,

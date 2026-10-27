@@ -7,8 +7,8 @@
     NavigationIdentity,
     NavigationLink,
     NavigationList,
-  } from "$lib/ui";
-  import type { Theme } from "$lib/platform/theme";
+  } from "#lib/ui/index.ts";
+  import type { Theme } from "#lib/platform/theme/index.ts";
   import type { ReadyAppNavigationState } from "./navigation-model";
   import TenantLogo from "./TenantLogo.svelte";
 

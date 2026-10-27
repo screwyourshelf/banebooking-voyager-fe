@@ -1,6 +1,6 @@
 import { QueryClient } from "@tanstack/svelte-query";
 import { describe, expect, it, vi } from "vitest";
-import type { ApiClient } from "$lib/platform/api";
+import type { ApiClient } from "#lib/platform/api/index.ts";
 import { arrangementQueryKeys } from "./query-keys";
 import { cancelArrangementMutationOptions } from "./queries";
 

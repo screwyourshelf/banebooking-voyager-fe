@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { ApiError } from "$lib/platform/api";
+import { ApiError } from "#lib/platform/api/index.ts";
 import { shouldRetryQuery } from "./client";
 
 describe("query retry contract", () => {

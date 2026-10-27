@@ -8,8 +8,8 @@
     NavigationLink,
     NavigationList,
     NavigationSection,
-  } from "$lib/ui";
-  import type { Theme } from "$lib/platform/theme";
+  } from "#lib/ui/index.ts";
+  import type { Theme } from "#lib/platform/theme/index.ts";
   import NavigationItems from "./NavigationItems.svelte";
   import TenantLogo from "./TenantLogo.svelte";
   import type { ReadyAppNavigationState } from "./navigation-model";
