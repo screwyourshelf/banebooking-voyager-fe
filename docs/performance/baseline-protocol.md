@@ -20,7 +20,9 @@ rapportert DB-tid per endpoint.
 ## Forutsetninger
 
 - Docker Desktop kjører.
-- Låst frontendgraf er installert med `npm ci`.
+- Låst frontendgraf er installert med
+  `npm exec --yes --package=npm@10.9.9 -- npm ci`, som beskrevet i
+  [driftsinstruksen](../development-and-operations.md).
 - Playwright Chromium er installert med `npx playwright install chromium`.
 - Backendens ignorerte Development-konfigurasjon finnes som beskrevet i backendens `README.md`.
 - Port 5015 er ledig før den loggede backenden startes. Playwright kan selv starte Vite på 4174.
@@ -69,7 +71,7 @@ Kjøringen skriver ignorerte råartefakter til:
 - `test-results/performance-baseline.json`
 - `test-results/performance-backend-summary.json`
 
-En godkjent måling oppsummeres i et datert dokument under `docs/performance/`. Råloggen committes
+En fullført måling oppsummeres i et datert dokument under `docs/archive/performance/`. Råloggen committes
 ikke fordi den inneholder SQL-tekst og lokale requestdetaljer.
 
 ## Flyter og brukbar UI

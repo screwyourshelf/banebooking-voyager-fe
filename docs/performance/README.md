@@ -1,22 +1,22 @@
-# API- og fullstackytelse
+# Lokal ytelsesmåling og utsatte kandidater
 
-> **Status:** Historisk målegrunnlag; ingen aktiv ytelsesoppgave
->
-> **Sist målt:** 2026-08-26
+Det er ingen aktiv ytelsesoppgave. Bruk [måleprotokollen](./baseline-protocol.md) når en ny,
+avgrenset undersøkelse er bestilt. Dagens API-, cache- og dataeierskap står i
+[arkitekturen](../architecture.md), og kjørbare porter står i
+[driftsinstruksen](../development-and-operations.md) og [E2E-harnessen](../e2e-harness.md).
 
-Aktivt arbeid eies av [current-work.md](../current-work.md). Tall, planer og mergeforløp i
-rapportene under beskriver måletidspunktet, ikke gjeldende produksjonsstatus eller nye oppgaver.
+## Utsatte kandidater
 
-| Behov                                            | Dokument                                                   |
-| ------------------------------------------------ | ---------------------------------------------------------- |
-| Gjenta en lokal måling                           | [Måleprotokoll](./baseline-protocol.md)                    |
-| Siste samlede før-/ettermåling og leverte tiltak | [Fullstack-iterasjon](./fullstack-iteration-2026-08-26.md) |
-| Opprinnelig gjennomgang og hypoteser             | [Førstegjennomgang](./initial-review.md)                   |
-| Låst førmåling                                   | [Baseline](./baseline-2026-08-26.md)                       |
-| Frontendens ettermåling                          | [Frontend etter](./frontend-after-2026-08-26.md)           |
-| Kontrakter og tidligere fullstackharness         | [Fullstack etter](./fullstack-after-2026-08-26.md)         |
+Disse kandidatene er bevart fra den fullførte ytelsesgjennomgangen, uten bestilt implementering:
 
-Les bare rapporten som gjelder flyten som undersøkes. Arkitektur, cacheeierskap og dagens
-API-klient beskrives i [architecture.md](../architecture.md); gjeldende testprosesser og
-produksjonsporter i [driftsinstruksen](../development-and-operations.md) og
-[E2E-harnessen](../e2e-harness.md). Målerapportenes gamle kjørekommandoer overstyrer ikke disse.
+- **Kalenderpolling:** Videre reduksjon krever produksjonsmålinger som veier ressursbruk mot
+  konfliktferskhet.
+- **Smal arrangementsoppsummering:** En ny kontrakt må dokumentere gevinst som forsvarer risikoen
+  for feil avledede datoer, mønstre og cachedata.
+- **Rutesplittet CSS:** En prototype må vise lavere mobil-LCP uten FOUC, layoutskift eller duplisert
+  stylingeierskap.
+
+Begrunnelse og tidligere målinger finnes i den arkiverte
+[fullstack-iterasjonen](../archive/performance/fullstack-iteration-2026-08-26.md). De øvrige
+[historiske rapportene](../archive/performance/README.md) er referanser, ikke dagens kjøre- eller
+produktkontrakt. Nye tiltak krever et nytt eksplisitt mål og oppdatert evidens.

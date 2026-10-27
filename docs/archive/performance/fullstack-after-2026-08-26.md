@@ -7,7 +7,7 @@
 > **Resultat:** De tre valgte fullstackkontraktene er levert og godkjent
 
 Sluttkontrollen brukte samme lokale Chromium-, Vite-, Development-backend- og
-PostgreSQL-oppsett som [`baselineprotokollen`](./baseline-protocol.md). Kalenderintervallet var
+PostgreSQL-oppsett som [`baselineprotokollen`](../../performance/baseline-protocol.md). Kalenderintervallet var
 forkortet til to sekunder fordi 60-sekunderspollingen allerede var godkjent i den fulle
 [`frontend-ettermålingen`](./frontend-after-2026-08-26.md). Denne kjøringen er derfor en
 kontraktsharness, ikke en ny ti-minutters ettermåling.

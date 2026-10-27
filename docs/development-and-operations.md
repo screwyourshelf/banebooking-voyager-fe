@@ -14,11 +14,9 @@ npm run dev
 
 `packageManager` og `engines.npm` låser installasjonsverktøyet til npm 10.9.9. Bruk samme
 bootstrap ved endringer i pakkegrafen, for eksempel
-`npm exec --yes --package=npm@10.9.9 -- npm install`. Node 24/npm 11.19.1 og npm 12.2.1 ble testet
-på denne grafen: installasjonen opprettet runeds valgfrie Kit 2-peer, men `ci` fjernet den og ga
-ugyldige peers ved `npm ls`. npm 10.9.9 bevarer en gyldig graf ved både installasjon og `ci`.
-Ingen peer-ranges overstyres. Lokale kommandoer endrer ikke brukerens globale npm.
-CI velger eksplisitt npm 10.9.9 på den midlertidige runneren før `npm ci`.
+`npm exec --yes --package=npm@10.9.9 -- npm install`. CI velger samme versjon på den midlertidige
+runneren før `npm ci`; lokale kommandoer endrer ikke brukerens globale npm. Bakgrunn for valget
+og verifisert peer-graf finnes i [leveransenotatet](./archive/avhengighetsoppgradering-2026-10.md).
 
 SvelteKit 3-konfigurasjonen eies av `sveltekit(...)` i `vite.config.ts`. Bibliotekimporter bruker
 Node-subpaths fra `package.json` (`#lib/*`) med eksplisitte kildefilendelser. `src/params.ts`

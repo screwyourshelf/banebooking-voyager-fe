@@ -15,7 +15,7 @@ cachekorrektheten.
 
 Gjennomgangen var lesende. Tallene under er statiske estimater fra kontrollflyten og ble etterfulgt
 av målinger før implementering. Levert resultat ligger i [`README.md`](./README.md), mens eventuell
-ny aktiv status ligger i [`../current-work.md`](../current-work.md).
+ny aktiv status ligger i [`../current-work.md`](../../current-work.md).
 
 ## Beslutning om arbeidsdeling
 
@@ -367,6 +367,10 @@ gevinsten og gjøre API-et vanskeligere å følge.
 
 ## Separat funksjonell observasjon
 
+> **Avklart ved arkivering 2026-10-27:** Denne observasjonen er rettet. Arrangementadministrasjonens
+> API sender nå `inkluderHistoriske=true`, og API-/skjermtestene dekker valget. Teksten under
+> bevarer observasjonen fra førstegjennomgangen og er ikke en åpen oppgave.
+
 Arrangementadministrasjonens «Vis tidligere» filtrerer lokalt, mens
 `src/lib/features/arrangement-admin/api.ts` henter `/arrangementer` uten
 `inkluderHistoriske=true`. Backendens endepunkt har `false` som standard og kan derfor ha filtrert
@@ -379,16 +383,16 @@ separat før queryparametre, cacheidentitet eller UI endres.
 
 Frontend:
 
-- [`src/lib/platform/api/client.ts`](../../src/lib/platform/api/client.ts)
-- [`src/lib/platform/query/client.ts`](../../src/lib/platform/query/client.ts)
-- [`src/lib/platform/query/query-key.ts`](../../src/lib/platform/query/query-key.ts)
-- [`src/lib/features/session/SessionDataProvider.svelte`](../../src/lib/features/session/SessionDataProvider.svelte)
-- [`src/lib/features/session/SessionGate.svelte`](../../src/lib/features/session/SessionGate.svelte)
-- [`src/lib/features/session/api.ts`](../../src/lib/features/session/api.ts)
-- [`src/lib/features/booking/queries.ts`](../../src/lib/features/booking/queries.ts)
-- [`src/lib/features/arrangement-admin/queries.ts`](../../src/lib/features/arrangement-admin/queries.ts)
-- [`src/lib/features/arrangement-admin/arrangement-editor-controller.svelte.ts`](../../src/lib/features/arrangement-admin/arrangement-editor-controller.svelte.ts)
-- [`src/lib/features/court-and-activity-admin/queries.ts`](../../src/lib/features/court-and-activity-admin/queries.ts)
+- [`src/lib/platform/api/client.ts`](../../../src/lib/platform/api/client.ts)
+- [`src/lib/platform/query/client.ts`](../../../src/lib/platform/query/client.ts)
+- [`src/lib/platform/query/query-key.ts`](../../../src/lib/platform/query/query-key.ts)
+- [`src/lib/features/session/SessionDataProvider.svelte`](../../../src/lib/features/session/SessionDataProvider.svelte)
+- [`src/lib/features/session/SessionGate.svelte`](../../../src/lib/features/session/SessionGate.svelte)
+- [`src/lib/features/session/api.ts`](../../../src/lib/features/session/api.ts)
+- [`src/lib/features/booking/queries.ts`](../../../src/lib/features/booking/queries.ts)
+- [`src/lib/features/arrangement-admin/queries.ts`](../../../src/lib/features/arrangement-admin/queries.ts)
+- [`src/lib/features/arrangement-admin/arrangement-editor-controller.svelte.ts`](../../../src/lib/features/arrangement-admin/arrangement-editor-controller.svelte.ts)
+- [`src/lib/features/court-and-activity-admin/queries.ts`](../../../src/lib/features/court-and-activity-admin/queries.ts)
 
 Backend, med stier relativt til workspace-roten:
 

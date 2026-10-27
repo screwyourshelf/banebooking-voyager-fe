@@ -6,7 +6,8 @@ som er relevante for oppgaven; hele dokumentsettet skal ikke leses som standard.
 | Oppgave                                       | Les                                                                                                    |
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
 | Aktiv leveranse og neste steg                 | [`current-work.md`](./current-work.md)                                                                 |
-| API-, query- eller ytelsesarbeid              | [`performance/README.md`](./performance/README.md), deretter relevante funn                            |
+| API-, query- eller dataeierskap               | [`architecture.md`](./architecture.md) og [`ADR-002`](./adr/002-state-data-and-api.md)                 |
+| Lokal ytelsesmåling eller utsatte kandidater  | [`performance/README.md`](./performance/README.md)                                                     |
 | Arkitektur, lagdeling eller dataeierskap      | [`architecture.md`](./architecture.md) og relevante [`ADR-er`](./adr/README.md)                        |
 | Routes, roller eller produktadferd            | [`product-behavior.md`](./product-behavior.md)                                                         |
 | UI, responsivitet eller visuell kontrakt      | [`product-design-rules.md`](./product-design-rules.md)                                                 |
