@@ -6,6 +6,7 @@ Det er ingen aktiv implementeringsoppgave. Avhengighetsoppgraderingen og SvelteK
 er verifisert med den komplette frontendporten og reell API-kontrakt. Versjonsvalg, målinger og
 restfunn står i [leveransenotatet](./archive/avhengighetsoppgradering-2026-10.md).
 
-Commit og push til kandidatbranchen er godkjent. Merge og produksjonsdeploy krever en ny beslutning.
+Merge til hovedbranch og produksjonsdeploy er godkjent 2026-10-27.
+Faktisk publiseringsstatus dokumenteres av pull requests, CI og hostingtjenestens deployhistorikk.
 Ved nytt arbeid velges relevante kontrakter fra [dokumentrutingen](./README.md); tidligere
 leveranseplaner er ikke nye oppgaver.
