@@ -9,8 +9,7 @@ export type RichTextContentNode = {
 };
 
 export type ParsedRichTextContent =
-  | { kind: "document"; content: RichTextContentNode[] }
-  | { kind: "plain"; text: string };
+  { kind: "document"; content: RichTextContentNode[] } | { kind: "plain"; text: string };
 
 const supportedMarks = new Set<RichTextMark>(["bold", "italic", "strike"]);
 

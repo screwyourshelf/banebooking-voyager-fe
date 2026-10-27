@@ -35,12 +35,10 @@
   const visibleDays = $derived(item.programDays.slice(0, visibleDayCount));
   const programFacts = $derived(
     visibleDays.flatMap((day) =>
-      day.slots.map(
-        (slot): DocumentFact => ({
-          label: `${formatProgramDate(day.dato)}, ${slot.startTid.slice(0, 5)}–${slot.sluttTid.slice(0, 5)}`,
-          value: formatCourts(slot.baneNavn),
-        })
-      )
+      day.slots.map((slot): DocumentFact => ({
+        label: `${formatProgramDate(day.dato)}, ${slot.startTid.slice(0, 5)}–${slot.sluttTid.slice(0, 5)}`,
+        value: formatCourts(slot.baneNavn),
+      }))
     )
   );
   const hasMoreDays = $derived(item.programDays.length > visibleDayCount);

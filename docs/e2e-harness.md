@@ -12,6 +12,15 @@ utviklingsbackenden. Harnessen endrer ikke produksjonsauth eller backendkode.
   `/banebooking`. En allerede kjørende og frisk server på samme adresse kan gjenbrukes.
 - Chromium installeres én gang med `npx playwright install chromium`.
 
+For en separat, isolert backend kan porten overstyres uten å bruke prosessen på 5015:
+
+```bash
+E2E_BACKEND_ORIGIN=http://127.0.0.1:5016 npm run test:e2e
+```
+
+Harnessen bruker samme origin til API-prosess, helsesjekk og frontendens interne
+`BANEBOOKING_API_PROXY_TARGET`. Variabelen eksponeres ikke som offentlig runtimekonfigurasjon.
+
 ## Authkontrakt
 
 Utviklingsinnloggingen returnerer de eksisterende profilene `admin`, `utvidet` og `medlem`.

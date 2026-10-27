@@ -9,12 +9,7 @@ export type RichTextEditorToggle =
   | "table";
 
 export type RichTextEditorCommand =
-  | RichTextEditorToggle
-  | "add-column"
-  | "delete-column"
-  | "add-row"
-  | "delete-row"
-  | "delete-table";
+  RichTextEditorToggle | "add-column" | "delete-column" | "add-row" | "delete-row" | "delete-table";
 
 export type RichTextEditorAccessibility = {
   describedBy?: string;

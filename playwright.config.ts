@@ -25,8 +25,7 @@ export default defineConfig({
   webServer: [
     {
       name: "development backend",
-      command:
-        "dotnet run --no-launch-profile --project Banebooking.Api --urls http://127.0.0.1:5015",
+      command: `dotnet run --no-launch-profile --project Banebooking.Api --urls ${E2E_BACKEND_ORIGIN}`,
       cwd: fileURLToPath(new URL("../backend", import.meta.url)),
       env: { ASPNETCORE_ENVIRONMENT: "Development" },
       url: `${E2E_BACKEND_ORIGIN}/api/health/db`,
@@ -38,6 +37,7 @@ export default defineConfig({
       name: "SvelteKit frontend",
       command: "npm run dev -- --host 127.0.0.1 --port 4174 --strictPort",
       env: {
+        BANEBOOKING_API_PROXY_TARGET: E2E_BACKEND_ORIGIN,
         VITE_BASE_PATH: E2E_APP_BASE_PATH,
         VITE_DEFAULT_SLUG: E2E_TENANT_SLUG,
         VITE_ENABLE_IDRETTENS_ID: "true",

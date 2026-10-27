@@ -1,26 +1,23 @@
 # Aktivt arbeid
 
-> **Status:** Implementert og lokalt verifisert; produksjonsutrulling godkjent 2026-10-22
+> **Status:** Avhengighetsoppgradering implementert og lokalt verifisert
 >
-> **Arbeidsbranch:** `codex/delete-empty-arrangement`
+> **Arbeidsbranch:** `codex/dependency-upgrade-2026-10`
 
 ## Mål og omfang
 
-Fullstackretting: Når siste lagrede booking avlyses, slettes også arrangementet atomisk.
-Tidligere bookinger teller og bevarer arrangementet som historikk. Eksisterende slettesperrer
-for turneringer gjelder også ved siste booking. Begge avlysningsveier skal følge samme regel.
-Frontend bekrefter bare avlysning av siste tid; andre tider avlyses direkte. Kalender,
-arrangementlister og editor oppdateres etter avlysning.
-Tomme arrangementer fra tidligere feil utelates fra visningslistene uten automatisk datasletting.
+Eksplisitt fullstackoppgradering til stabile, kompatible avhengigheter med separate commits og
+verifikasjon per repo. Frontend bruker Node 24 LTS, Vitest 5 og Sentry 11. SvelteKit 3/adapter-static
+4 holdes tilbake av det uendrede produksjonsbudsjettet; TypeScript 7 mangler kompatibel peer-støtte,
+og Hugeicons 4.3 endrer fryst ikongeometri. Eksisterende adferd, snapshots og budsjetter er bevart.
 
 ## Neste steg
 
-Brukeren har godkjent commit, squash-merge, push og produksjonsdeploy av begge repoer.
-Backend publiseres fra `master` før frontend publiseres fra `main`. Backendens kontrakttest
-skal bruke den nye frontendcommiten. Kontroller GitHub Actions, Cloudflare Pages og
-produksjonshelsen før utrullingen regnes som fullført.
-
-Backend-, PostgreSQL-, frontend-, API-kontrakt-, visuelle og produksjonsroutetester er bestått.
-Frontendens kvalitetsporter og begge produksjonsbuildene er verifisert.
-Avhengighetskontrollen 2026-10-22 rapporterer 40 npm-funn (7 høye, 27 moderate, 6 lave)
-i den uendrede pakkegrafen. Oppgradering av avhengigheter er separat oppfølging.
+Avvent eksplisitt godkjenning av push, CI, merge og produksjonsdeploy av de separate lokale
+leveransene. Backendens kontraktbaseline skal peke på denne frontendleveransens commit før
+publisering. `npm ci`, 105 testfiler / 456 tester, hele `check`, 24 visuelle tester, åtte
+produksjonsroutetester og 11 reelle API-kontrakttester er grønne. Audit er redusert fra 41 funn til
+seks lave, uten moderate/høye/kritiske.
+Versjonsvalg, målinger og restfunn er dokumentert i
+[leveransenotatet](./archive/avhengighetsoppgradering-2026-10.md).
+Ingen push, deploy eller andre eksterne endringer er godkjent i denne oppgaven.

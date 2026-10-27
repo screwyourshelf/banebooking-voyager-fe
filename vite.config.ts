@@ -5,7 +5,7 @@ import { defineConfig } from "vitest/config";
 
 const apiProxy = {
   "/api": {
-    target: "http://localhost:5015",
+    target: process.env.BANEBOOKING_API_PROXY_TARGET ?? "http://localhost:5015",
     changeOrigin: true,
     secure: false,
   },
@@ -18,6 +18,13 @@ export default defineConfig({
     sourcemap: false,
     modulePreload: { polyfill: false },
     cssCodeSplit: true,
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          groups: [{ name: "rich-text-engine", test: /node_modules[\\/]prosemirror-/ }],
+        },
+      },
+    },
   },
   server: {
     open: false,

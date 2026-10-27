@@ -5,14 +5,16 @@ forutsetninger og statiske produksjonsartefakter, men utfører eller autoriserer
 
 ## Lokal utvikling
 
-Installer den låste pakkegrafen og start Vite fra frontend-repoet:
+Bruk Node 24 LTS (`fnm use` leser `.nvmrc`). Installer den låste pakkegrafen og start Vite fra frontend-repoet:
 
 ```bash
 npm ci
 npm run dev
 ```
 
-Dev- og previewserveren videresender `/api` til `http://localhost:5015`. Start backenden fra det
+Dev- og previewserveren videresender `/api` til `http://localhost:5015`.
+Den interne miljøvariabelen `BANEBOOKING_API_PROXY_TARGET` kan velge en isolert lokal backend;
+den bygges ikke inn som offentlig runtimekonfigurasjon. Start backenden fra det
 separate `backend/`-repoet når en arbeidsflate trenger reelle API-svar. Utviklingsauth er bare
 tilgjengelig i Vites development-modus og er aldri del av produksjonsbuilden.
 
@@ -71,7 +73,7 @@ Kjør den repoeide død-kode-, eksport-, import- og direkte avhengighetskontroll
 npm run static-analysis:check
 ```
 
-Knip 6.32.2 er eksakt pinnet i `devDependencies`. [`knip.json`](../knip.json) registrerer isolerte
+Knip 6.43.0 er eksakt pinnet i `devDependencies`. [`knip.json`](../knip.json) registrerer isolerte
 stylingfixtures og det dynamiske produksjonstretestscriptet som eksplisitte innganger. Den navngitte
 kontrollen avviser alle døde runtimefiler, typer og verdi-exports samt pakke-, binary-, ulistet- og
 uoppløst-importfunn; det finnes ingen allowlist.
@@ -131,7 +133,7 @@ npm run verify:frontend
 ```
 
 Porten kjører enhetstester, `check`, visuelle E2E-tester og produksjons-E2E for begge
-hostvariantene. CI bruker Node.js 22 og macOS 15 fordi de innsjekkede skjermbildereferansene
+hostvariantene. CI bruker Node.js 24 og macOS 15 fordi de innsjekkede skjermbildereferansene
 er Darwin-referanser. Den endrer ikke snapshots eller baselines. Ingen hemmeligheter eller
 backendtilgang er nødvendig, heller ikke for pull requests fra forks.
 

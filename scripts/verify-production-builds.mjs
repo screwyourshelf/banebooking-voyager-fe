@@ -126,7 +126,7 @@ function verifyBuild(build) {
 
   const lazyMarkers = [
     { label: "Sentry", marker: "sentry_key" },
-    { label: "Supabase", marker: "supabase-js-" },
+    { label: "Supabase", marker: "@supabase/supabase-js" },
     { label: "rikteksteditor", marker: "ProseMirror" },
   ];
   for (const lazyMarker of lazyMarkers) {

@@ -199,7 +199,9 @@ describe("account screens", () => {
     expect(within(dialog).getByRole("button", { name: "Avbryt" })).toBeDisabled();
     resolveDelete();
     await waitFor(() => expect(onSignOut).toHaveBeenCalledTimes(1));
-    expect(screen.queryByRole("dialog", { name: "Slett kontoen?" })).not.toBeInTheDocument();
+    await waitFor(() =>
+      expect(screen.queryByRole("dialog", { name: "Slett kontoen?" })).not.toBeInTheDocument()
+    );
   });
 
   it("viser, filtrerer og avbestiller Mine tider med vedvarende rollback-feil", async () => {
