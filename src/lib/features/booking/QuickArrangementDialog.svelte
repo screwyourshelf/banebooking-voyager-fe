@@ -1,10 +1,10 @@
 <script lang="ts">
   import { createMutation, useQueryClient } from "@tanstack/svelte-query";
   import { untrack } from "svelte";
-  import type { KalenderSlotRespons, OpprettArrangementRespons } from "$lib/contracts";
-  import { ARRANGEMENT_KATEGORI_VALG, formaterArrangementKategori } from "$lib/domain";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  import type { KalenderSlotRespons, OpprettArrangementRespons } from "#lib/contracts/index.ts";
+  import { ARRANGEMENT_KATEGORI_VALG, formaterArrangementKategori } from "#lib/domain/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Button,
     Dialog,
@@ -16,7 +16,7 @@
     FormSubmit,
     Select,
     Textarea,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import { createQuickArrangementMutationOptions } from "./queries";
   import { quickArrangementRequest, type QuickArrangementDraft } from "./quick-arrangement";
   import ArrangementTimeSelection from "./ArrangementTimeSelection.svelte";

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { BookingPerTime } from "$lib/contracts";
-  import { DataVisualization, Section, VisualizationLegend } from "$lib/ui";
+  import type { BookingPerTime } from "#lib/contracts/index.ts";
+  import { DataVisualization, Section, VisualizationLegend } from "#lib/ui/index.ts";
   import { formatHours } from "./model";
 
   let { points, showComparison }: { points: BookingPerTime[]; showComparison: boolean } = $props();

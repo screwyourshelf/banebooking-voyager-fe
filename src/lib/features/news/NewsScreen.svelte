@@ -1,8 +1,8 @@
 <script lang="ts">
   import { News01Icon } from "@hugeicons/core-free-icons";
   import { createQuery } from "@tanstack/svelte-query";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Button,
     Collection,
@@ -12,7 +12,7 @@
     CollectionLoading,
     Icon,
     Page,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import NewsRow from "./NewsRow.svelte";
   import { NEWS_PAGE_SIZE } from "./model";
   import { newsQueryOptions } from "./queries";

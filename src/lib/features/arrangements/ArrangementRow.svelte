@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { ArrangementRespons } from "$lib/contracts";
-  import { Button, CollectionRow, DocumentFacts, type DocumentFact } from "$lib/ui";
+  import type { ArrangementRespons } from "#lib/contracts/index.ts";
+  import { Button, CollectionRow, DocumentFacts, type DocumentFact } from "#lib/ui/index.ts";
   import ArrangementCancelDialog from "./ArrangementCancelDialog.svelte";
   import {
     INITIAL_PROGRAM_DAY_COUNT,

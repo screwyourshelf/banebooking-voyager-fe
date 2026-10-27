@@ -13,7 +13,7 @@
     UserCircleIcon,
     UserMultiple02Icon,
   } from "@hugeicons/core-free-icons";
-  import { Icon, NavigationLink, NavigationList, type IconData } from "$lib/ui";
+  import { Icon, NavigationLink, NavigationList, type IconData } from "#lib/ui/index.ts";
   import type { Snippet } from "svelte";
   import type { AppNavigationIcon, AppNavigationItem } from "./navigation-model";
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { BookingstatusRespons, KalenderSlotRespons } from "$lib/contracts";
-  import { Button, CollectionRow, DocumentFacts, ScheduleTime, Weather } from "$lib/ui";
+  import type { BookingstatusRespons, KalenderSlotRespons } from "#lib/contracts/index.ts";
+  import { Button, CollectionRow, DocumentFacts, ScheduleTime, Weather } from "#lib/ui/index.ts";
   import { getBookingSlotPresentation } from "./model";
 
   let {

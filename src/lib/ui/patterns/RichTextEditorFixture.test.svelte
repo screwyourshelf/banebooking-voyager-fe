@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Button, Form, FormField, FormFields, RichTextEditor } from "$lib/ui";
+  import { Button, Form, FormField, FormFields, RichTextEditor } from "#lib/ui/index.ts";
 
   let {
     disabled = false,

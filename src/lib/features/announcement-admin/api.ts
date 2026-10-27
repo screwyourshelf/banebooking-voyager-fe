@@ -1,5 +1,8 @@
-import type { KunngjøringAdminRespons, OpprettKunngjøringForespørsel } from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
+import type {
+  KunngjøringAdminRespons,
+  OpprettKunngjøringForespørsel,
+} from "#lib/contracts/index.ts";
+import type { ApiClient } from "#lib/platform/api/index.ts";
 
 function announcementsPath(slug: string, suffix = "") {
   const root = `klubb/${encodeURIComponent(slug)}/kunngjøringer`;

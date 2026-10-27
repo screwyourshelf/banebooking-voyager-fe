@@ -1,6 +1,6 @@
 import type { SupabaseClient } from "@supabase/supabase-js";
-import { publicConfig } from "$lib/platform/config";
-import { supabaseAuthStorage } from "$lib/platform/storage/browser-storage.client";
+import { publicConfig } from "#lib/platform/config/index.ts";
+import { supabaseAuthStorage } from "#lib/platform/storage/browser-storage.client.ts";
 
 let clientPromise: Promise<SupabaseClient> | null = null;
 

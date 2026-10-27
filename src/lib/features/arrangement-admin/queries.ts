@@ -7,9 +7,9 @@ import type {
   LeggTilArrangementBookingForespørsel,
   OpprettArrangementForespørsel,
   OppdaterArrangementMetadataForespørsel,
-} from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
-import { invalidateTenantResources, tenantQueryMeta } from "$lib/platform/query";
+} from "#lib/contracts/index.ts";
+import type { ApiClient } from "#lib/platform/api/index.ts";
+import { invalidateTenantResources, tenantQueryMeta } from "#lib/platform/query/index.ts";
 import {
   addArrangementBooking,
   addArrangementBookingsBatch,

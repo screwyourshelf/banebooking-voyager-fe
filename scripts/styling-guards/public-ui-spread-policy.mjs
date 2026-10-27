@@ -9,7 +9,8 @@ export function collectPublicUiSpreadProof(ast, importNodes, contract) {
   const typeAliases = new Map();
 
   for (const importNode of importNodes) {
-    if (!importNode.source.value.endsWith("/public-html-attributes")) continue;
+    if (!importNode.source.value.replace(/\.[cm]?[jt]s$/, "").endsWith("/public-html-attributes"))
+      continue;
     for (const specifier of importNode.specifiers) {
       if (
         specifier.type === "ImportSpecifier" &&

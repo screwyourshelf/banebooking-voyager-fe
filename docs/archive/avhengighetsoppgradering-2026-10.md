@@ -8,14 +8,15 @@ Vitest oppgraderes til 5.0.5 og Sentry browser til 11.9.0. Sentrys eksisterende 
 `dataCollection`-valg og sanitering bevarer personverngrensen. Tiptap-pakkene er samlet på 3.32.0;
 Tailwind/plugin og Query/devtools holdes parvis på samme versjon. Knip er eksakt pinnet på 6.43.0.
 
-Tre nyere versjonslinjer holdes tilbake av konkrete kontrakter:
+SvelteKit oppgraderes videre til 3.1.0 med adapter-static 4.0.0. Første lokale leveranse
+(`f62c309`) beholdt Kit 2 fordi den første Kit 3-kandidaten brukte 171,4 KiB gzip mot et budsjett
+på 165 KiB (opprinnelig baseline 163,2 KiB). Brukeren godkjente deretter eksplisitt Kit 3 og
+et budsjett på 175 KiB for offentlig booking. Bare dette budsjettet endres; initial JS/CSS,
+største lazy chunk, snapshots, ikoner og produktadferd beholder kontraktene sine. Ingen
+utsettelsesprototyper for kalender eller bookingdialoger inngår i leveransen.
 
-- **SvelteKit 3.1.0 og adapter-static 4.0.0:** Den fullstendige migreringskandidaten passerte
-  typekontroll, arkitektur-/stylingporter, 456 enhetstester og 11 reelle API-kontrakttester, men
-  overskred det uendrede offentlige bookingbudsjettet på 165 KiB gzip. Baseline var 163,2 KiB;
-  kandidaten var 171,4 KiB. Utsettelse av arrangementsdialoger til eksplisitt handling ga fortsatt
-  168,3 KiB. Den leverte kandidaten bruker derfor nyeste støttede 2.x/3.x-par, SvelteKit 2.70.3 og
-  adapter-static 3.0.10, og beholder opprinnelige import-, routing-, renderings- og fokuskontrakter.
+To nyere versjonslinjer holdes tilbake av konkrete kontrakter:
+
 - **TypeScript 7.0.2:** SvelteKit, svelte-check og typescript-eslint har ikke kompatible peer-ranges.
   TypeScript 6.0.3 beholdes. Ingen peer-avhengigheter overstyres eller ignoreres.
 - **Hugeicons 4.3.x:** Alle publiserte 4.3-versjoner endrer geometrien til `UserCircleIcon`, uten en
@@ -46,6 +47,8 @@ beholder låst versjon; kompatibilitetsholdene er beskrevet over.
 | `bits-ui`                         | 2.19.0     | 2.20.2       |
 | `date-fns`                        | 4.1.0      | 4.4.0        |
 | `tailwindcss`                     | 4.2.4      | 4.3.3        |
+| `@sveltejs/kit`                   | 2.70.3     | 3.1.0        |
+| `@sveltejs/adapter-static`        | 3.0.10     | 4.0.0        |
 | `@playwright/test`                | 1.62.1     | 1.64.1       |
 | `@sveltejs/vite-plugin-svelte`    | 7.3.0      | 7.3.1        |
 | `@tailwindcss/vite`               | 4.2.4      | 4.3.3        |
@@ -66,47 +69,63 @@ beholder låst versjon; kompatibilitetsholdene er beskrevet over.
 | `vite`                            | 8.2.2      | 8.3.5        |
 | `vitest`                          | 4.1.10     | 5.0.5        |
 
-## Verifikasjon
+## Endelig SvelteKit 3-leveranse
 
-Den opprinnelige pakkegrafen ble installert med `npm ci` og passerte 105 testfiler / 456 tester,
-hele `npm run check`, 24 visuelle tester og åtte produksjonsroutetester. Begge hostartefaktene og
-alle eksisterende budsjetter var grønne. Den reelle baselinekontrakten passerte 11 tester mot en
-separat backend og isolert PostgreSQL-database.
+Konfigurasjon er flyttet til Vite-pluginen. `#lib`-subpaths med filendelser erstatter `$lib`,
+params deklareres i `src/params.ts`, og hooks, URL-lesing og navigasjon følger Kit 3-API-ene.
+Eksisterende arkitektur- og stylinggrenser gjenkjenner både `.ts`- og `.js`-innganger og `/index`;
+en negativ fixture bruker `.js` for å sikre at denne skrivemåten fortsatt avvises ved UI-overstyring.
+De nye klienthooktestene bevarer at forventede app-/frameworkfeil ikke rapporteres som uventede.
+Automatisk versjonspolling holdes avskrudd eksplisitt som i Kit 2.
 
-Den leverte kandidaten er installert på nytt med `npm ci` under Node 24.22.1. `npm ls --all`
-avslutter med kode 0 uten ugyldige peer-avhengigheter. Samme endelige kandidat passerer alle delene
-av `verify:frontend`: 105 testfiler / 456 tester, hele `npm run check`, 24 visuelle tester og åtte
-produksjonsroutetester. Ingen snapshots er endret. Ny Prettier-versjon formaterer åtte eksisterende
-filer; stylingbaselinen oppdaterer bare 68 linjeposisjoner og fire fillengder. CSS, tokens,
-geometri, antall og lagstruktur samt historiske produksjonsmålinger er uendret.
-Den endelige reelle API-kontrakten passerer 11 tester mot isolert PostgreSQL og backend på 5016,
-med .NET-runtime 10.0.14. Den eksisterende brukerprosessen på 5015 gjenbrukes ikke av denne porten.
-Kontrakten bruker lokal DevelopmentBearer-auth. Levende Supabase OAuth/OTP og faktisk levering
-til Sentry er ikke kjørt; adaptere, callback og personvernsvalg er kontrollert lokalt.
+npm 10.9.9 er pinnet som kompatibelt installasjonsverktøy. Rene forsøk med npm 11.19.1 og 12.2.1
+opprettet Kit 2 som valgfrie peers ved installasjon, men fjernet dem ved `ci` og etterlot ugyldige
+peers. npm 10.9.9 gir gyldig `ci` og `npm ls --all` uten overrides eller legacy-flagg.
+Lokalt brukes `npm exec --yes --package=npm@10.9.9 -- npm ci`; CI velger samme versjon på runneren.
+Brukerens globale npm endres ikke.
 
-| Sluttartefakt    | Initial JS gzip | Offentlig booking JS gzip | Initial CSS gzip | Største lazy JS gzip |
-| ---------------- | --------------- | ------------------------- | ---------------- | -------------------- |
-| Cloudflare Pages | 38,2 KiB        | 164,3 KiB                 | 28,2 KiB         | 95,6 KiB             |
-| GitHub Pages     | 38,2 KiB        | 164,4 KiB                 | 28,3 KiB         | 95,6 KiB             |
-| Uendret budsjett | 50 KiB          | 165 KiB                   | 50 KiB           | 130 KiB              |
+Den gyldige Kit 3-grafen gir fem lave auditfunn og ingen moderate, høye eller kritiske.
+Restfunnene kommer fra Kit 2.70.3/cookie i runeds valgfrie peer-grafer under Bits UI og
+svelte-toolbelt. Applikasjonens egen Kit 3/adapter 4-inngang er oppgradert. Kildeinspeksjonen
+finner ingen import av `runed/kit` eller `use-search-params` fra appen, Bits UI eller svelte-toolbelt;
+runeds ordinære inngang eksporterer bare rammeverksuavhengige utilities. De installerte pakkene
+regnes fortsatt som auditfunn. Vurder dette på nytt hvis Kit-spesifikke runed-funksjoner tas i bruk.
 
-Begge bygg har 63 JavaScript-chunks. Fallback, base path, direkte load/refresh for offentlige,
-beskyttede, admin- og callbackroutes og lazy-grensene for Sentry, Supabase og editor er verifisert.
+Den endelige grafen er installert med Node 24.22.1 og npm 10.9.9 gjennom den dokumenterte
+bootstrapen. Både ren installasjon og etterfølgende `npm ls --all` avslutter med kode 0; Kit 2
+ligger som valgfrie peers med korrekte `peer`/`optional`-flagg. Kit genererer dessuten en lokal
+`$app`-pakke under sync. Den er en verktøyeid inngang og ingen ekstra prosjektavhengighet.
 
-`npm audit` går fra 41 funn (8 høye, 27 moderate, 6 lave) til 6 lave og ingen moderate, høye
-eller kritiske. Restfunnene gjelder SvelteKit/cookie og deres avhengighetskjeder via adapter-static,
-Bits UI, runed og svelte-toolbelt. De beholdes synlig i den installerte grafen; ingen overrides,
-`--force` eller `--legacy-peer-deps` brukes.
+Den komplette `npm exec --yes --package=npm@10.9.9 -- npm run verify:frontend` er bestått:
+105 testfiler / 458 tester, `check` med null typefeil/advarsler, alle arkitektur-/stylingporter,
+34 guard-fixtures, 24 visuelle tester og åtte produksjonsroutetester. Den reelle API-kontrakten
+passerer 11 tester mot isolert PostgreSQL og backend på 5016, med .NET-runtime 10.0.14.
+Snapshotfiler og pikselgrenser er uendret. Stylingbaselinen endrer bare syv linjeposisjoner og
+15 fillengder etter importmigreringen; CSS, tokens, geometri, antall og lagstruktur er uendret.
 
-De tre underliggende advisoryene gjelder
+| Sluttartefakt     | Initial JS gzip | Offentlig booking JS gzip | Initial CSS gzip | Største lazy JS gzip |
+| ----------------- | --------------- | ------------------------- | ---------------- | -------------------- |
+| Cloudflare Pages  | 43,7 KiB        | 171,4 KiB                 | 28,2 KiB         | 96,9 KiB             |
+| GitHub Pages      | 43,8 KiB        | 171,5 KiB                 | 28,3 KiB         | 96,9 KiB             |
+| Godkjent budsjett | 50 KiB          | 175 KiB                   | 50 KiB           | 130 KiB              |
+
+Begge bygg har 68 JavaScript-chunks. Fallback, base path, direkte load/refresh for offentlige,
+beskyttede, admin- og callbackroutes samt lazy-grensene for Sentry, Supabase og editor er verifisert.
+
+De fem lave restfunnene spores til
 [enhanced form-redirect](https://github.com/advisories/GHSA-pfhg-q3qv-9q6r),
-[ikke-klarert cache-control under prerendering](https://github.com/advisories/GHSA-27mw-82g8-phjj) og
-[cookie-navn/path/domain](https://github.com/advisories/GHSA-pxg6-pf52-xh8x).
-Kildeinspeksjonen finner ingen enhanced forms, server actions/endepunkter, `setHeaders` eller
-servercookie-serialisering i denne statiske appen. Tenant-rutene bruker `ssr=false` og
-`prerender=false`; callbacken prerendres uten load/fetch/headers. Det ble derfor ikke funnet en
-inngangsvei for de beskrevne forutsetningene i dagens app. Dette opphever ikke auditfunnene og må
-vurderes på nytt hvis server actions, prerender-headers eller servercookies innføres.
+[prerender-cache-control](https://github.com/advisories/GHSA-27mw-82g8-phjj) og
+[cookie-navn/path/domain](https://github.com/advisories/GHSA-pxg6-pf52-xh8x) i den installerte
+valgfrie Kit 2-grafen. Ingen Kit-spesifikke runed-hjelpere inngår i dagens importsti, og det ble
+ikke funnet markører fra dem i produksjonsartefaktene. Dette opphever ikke auditfunnene.
+
+## Historisk førsteleveranse
+
+Første lokale commit `f62c309` ble verifisert med Kit 2/adapter 3: 456 enhetstester, 24 visuelle,
+åtte produksjonsroutetester og 11 reelle API-kontrakttester. Offentlig booking var 164,3/164,4 KiB
+mot det tidligere 165 KiB-budsjettet, og audit ga seks lave funn. Opprinnelig pakkebaseline hadde
+41 funn: åtte høye, 27 moderate og seks lave. Den endelige Kit 3-leveransen over erstatter denne
+mellomtilstanden uten å endre de øvrige oppgraderingene eller brukerens visuelle kontrakt.
 
 ## Kilder og videre oppfølging
 
@@ -115,6 +134,5 @@ vurderes på nytt hvis server actions, prerender-headers eller servercookies inn
 - [Sentry 11-migrering](https://github.com/getsentry/sentry-javascript/blob/develop/MIGRATION.md)
 - [Rolldown code splitting](https://rolldown.rs/reference/OutputOptions.codeSplitting)
 
-En senere SvelteKit 3-oppgradering må først demonstrere offentlig booking innenfor gjeldende
-budsjett, eller inngå i en separat godkjent ytelses-/produktbeslutning. Nye ikoner krever en bevisst
-visuell beslutning før referansene oppdateres. Ingen push eller deploy inngår i denne leveransen.
+Nye ikoner krever en bevisst visuell beslutning før referansene oppdateres. Ingen push eller
+deploy inngår i denne leveransen.

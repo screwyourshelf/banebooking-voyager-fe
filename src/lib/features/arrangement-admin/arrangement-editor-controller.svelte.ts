@@ -4,10 +4,10 @@ import {
   useQueryClient,
 } from "@tanstack/svelte-query";
 import { SvelteSet } from "svelte/reactivity";
-import type { ArrangementRespons, BaneRespons, GrenRespons } from "$lib/contracts";
-import { formaterAntallBanetider } from "$lib/domain";
-import { getApiClient } from "$lib/platform/api";
-import { getTenantContext } from "$lib/platform/tenant";
+import type { ArrangementRespons, BaneRespons, GrenRespons } from "#lib/contracts/index.ts";
+import { formaterAntallBanetider } from "#lib/domain/index.ts";
+import { getApiClient } from "#lib/platform/api/index.ts";
+import { getTenantContext } from "#lib/platform/tenant/index.ts";
 import {
   addUniqueBookings,
   arrangementToMetadataDraft,

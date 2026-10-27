@@ -1,10 +1,10 @@
-import type { ArrangementRespons, DagMedSlotsRespons } from "$lib/contracts";
+import type { ArrangementRespons, DagMedSlotsRespons } from "#lib/contracts/index.ts";
 import {
   Kapabiliteter,
   formaterArrangementMetadata,
   getArrangementLifecycleStatus,
   harHandling,
-} from "$lib/domain";
+} from "#lib/domain/index.ts";
 
 export const ARRANGEMENT_PAGE_SIZE = 10;
 export const INITIAL_PROGRAM_DAY_COUNT = 3;

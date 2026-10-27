@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { DatePicker, Form, FormField, FormFields, MultiDatePicker } from "$lib/ui";
+  import { DatePicker, Form, FormField, FormFields, MultiDatePicker } from "#lib/ui/index.ts";
 
   let {
     disabled = false,

@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { MembershipConfirmationScreen } from "$lib/features/policy";
-  import { getSessionDataContext } from "$lib/features/session";
-  import { buildTenantPath, getTenantContext } from "$lib/platform/tenant";
+  import { MembershipConfirmationScreen } from "#lib/features/policy/index.ts";
+  import { getSessionDataContext } from "#lib/features/session/index.ts";
+  import { buildTenantPath, getTenantContext } from "#lib/platform/tenant/index.ts";
 
   const session = getSessionDataContext();
   const tenant = getTenantContext();

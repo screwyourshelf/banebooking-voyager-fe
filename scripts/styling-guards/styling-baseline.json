@@ -44195,7 +44195,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/Weather.svelte",
-          "line": 34,
+          "line": 35,
           "className": "select-none",
           "ownerFamily": "shared-data-patterns",
           "ownerPackage": "src/lib/ui/patterns",
@@ -44204,7 +44204,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/Weather.svelte",
-          "line": 34,
+          "line": 35,
           "className": "size-weather-icon",
           "ownerFamily": "shared-data-patterns",
           "ownerPackage": "src/lib/ui/patterns",
@@ -47539,7 +47539,7 @@
         {
           "column": 5,
           "file": "src/lib/ui/patterns/Weather.svelte",
-          "line": 25,
+          "line": 26,
           "expression": "class={[\n      \"inline-flex items-center gap-xs text-ink-soft\",\n      compact ? \"text-caption\" : \"text-body-sm\",\n    ]}",
           "ownerFamily": "shared-data-patterns",
           "ownerPackage": "src/lib/ui/patterns",
@@ -47954,7 +47954,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/booking/BookingLimitsDialog.svelte",
-          "lineCount": 58,
+          "lineCount": 65,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -48074,7 +48074,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/court-and-activity-admin/CourtAndActivityAdminScreen.svelte",
-          "lineCount": 63,
+          "lineCount": 70,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -48084,7 +48084,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/court-and-activity-admin/CourtForm.svelte",
-          "lineCount": 175,
+          "lineCount": 179,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -48164,7 +48164,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/session/AccessGuard.svelte",
-          "lineCount": 62,
+          "lineCount": 63,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -48234,7 +48234,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/session/SessionGate.svelte",
-          "lineCount": 80,
+          "lineCount": 81,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -48244,7 +48244,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/session/SessionNavigationShell.svelte",
-          "lineCount": 91,
+          "lineCount": 92,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -48424,7 +48424,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/lib/features/user-admin/UserRow.svelte",
-          "lineCount": 129,
+          "lineCount": 135,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -49144,7 +49144,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 1,
           "file": "src/lib/ui/patterns/Weather.svelte",
-          "lineCount": 47,
+          "lineCount": 48,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -49404,7 +49404,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/routes/[[slug=tenant]]/(admin)/admin/baner/+page.svelte",
-          "lineCount": 20,
+          "lineCount": 21,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -49424,7 +49424,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/routes/[[slug=tenant]]/(admin)/admin/grener/+page.svelte",
-          "lineCount": 20,
+          "lineCount": 21,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -49494,7 +49494,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/routes/[[slug=tenant]]/(protected)/bookinger/+page.svelte",
-          "lineCount": 10,
+          "lineCount": 11,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -49514,7 +49514,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/routes/[[slug=tenant]]/(protected)/minside/+page.svelte",
-          "lineCount": 27,
+          "lineCount": 28,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -49554,7 +49554,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/routes/[[slug=tenant]]/(public)/login/+page.svelte",
-          "lineCount": 40,
+          "lineCount": 41,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -49584,7 +49584,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/routes/[[slug=tenant]]/+layout.svelte",
-          "lineCount": 17,
+          "lineCount": 21,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -49594,7 +49594,7 @@
           "cssImportCount": 0,
           "dynamicClassAttributeCount": 0,
           "file": "src/routes/auth/callback/+page.svelte",
-          "lineCount": 59,
+          "lineCount": 60,
           "styleAttributeCount": 0,
           "styleBlockCount": 0,
           "styleDirectiveCount": 0
@@ -59927,7 +59927,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/Weather.svelte",
-          "line": 34,
+          "line": 35,
           "className": "select-none",
           "ownerFamily": "shared-data-patterns",
           "ownerPackage": "src/lib/ui/patterns",
@@ -59938,7 +59938,7 @@
         {
           "column": 9,
           "file": "src/lib/ui/patterns/Weather.svelte",
-          "line": 34,
+          "line": 35,
           "className": "size-weather-icon",
           "ownerFamily": "shared-data-patterns",
           "ownerPackage": "src/lib/ui/patterns",
@@ -72811,7 +72811,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/Weather.svelte",
-        "line": 34,
+        "line": 35,
         "className": "select-none",
         "ownerFamily": "shared-data-patterns",
         "ownerPackage": "src/lib/ui/patterns",
@@ -72822,7 +72822,7 @@
       {
         "column": 9,
         "file": "src/lib/ui/patterns/Weather.svelte",
-        "line": 34,
+        "line": 35,
         "className": "size-weather-icon",
         "ownerFamily": "shared-data-patterns",
         "ownerPackage": "src/lib/ui/patterns",

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { BookingPerMaaned } from "$lib/contracts";
-  import { DataVisualization, Section, VisualizationLegend } from "$lib/ui";
+  import type { BookingPerMaaned } from "#lib/contracts/index.ts";
+  import { DataVisualization, Section, VisualizationLegend } from "#lib/ui/index.ts";
   import { formatHours, formatMonth } from "./model";
 
   let { points, showComparison }: { points: BookingPerMaaned[]; showComparison: boolean } =

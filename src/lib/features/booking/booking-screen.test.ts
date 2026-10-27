@@ -4,9 +4,9 @@ import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor } from "@testing-library/svelte";
 import axe from "axe-core";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import type { BookingBootstrapRespons, KalenderRespons } from "$lib/contracts";
-import { Kapabiliteter } from "$lib/domain";
-import { ApiError, type ApiClient } from "$lib/platform/api";
+import type { BookingBootstrapRespons, KalenderRespons } from "#lib/contracts/index.ts";
+import { Kapabiliteter } from "#lib/domain/index.ts";
+import { ApiError, type ApiClient } from "#lib/platform/api/index.ts";
 import BookingScreenFixture from "./BookingScreenFixture.test.svelte";
 import { createBookingStatus, createBootstrap, createCourt, createSlot } from "./booking-test-data";
 

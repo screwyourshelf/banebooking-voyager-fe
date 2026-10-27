@@ -1,12 +1,12 @@
-import type { BrukerRespons, KlubbRespons } from "$lib/contracts";
-import { formaterRoller } from "$lib/domain";
-import type { AuthState } from "$lib/platform/auth";
+import type { BrukerRespons, KlubbRespons } from "#lib/contracts/index.ts";
+import { formaterRoller } from "#lib/domain/index.ts";
+import type { AuthState } from "#lib/platform/auth/index.ts";
 import {
   buildTenantPath,
   normalizeAppPathname,
   type AppPath,
   type TenantContext,
-} from "$lib/platform/tenant";
+} from "#lib/platform/tenant/index.ts";
 import { hasAnyRequiredCapability, requiredCapabilitiesForPath } from "./guard-model";
 import type { SessionQueryStatus } from "./context";
 

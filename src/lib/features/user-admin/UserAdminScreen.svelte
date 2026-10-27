@@ -1,9 +1,9 @@
 <script lang="ts">
   import { createQuery } from "@tanstack/svelte-query";
-  import type { BrukerRespons, RolleType } from "$lib/contracts";
-  import { harHandling, Kapabiliteter } from "$lib/domain";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  import type { BrukerRespons, RolleType } from "#lib/contracts/index.ts";
+  import { harHandling, Kapabiliteter } from "#lib/domain/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Button,
     Collection,
@@ -14,7 +14,7 @@
     CollectionLoading,
     Page,
     PageStatus,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import BlockUserDialog from "./BlockUserDialog.svelte";
   import DeleteUserDialog from "./DeleteUserDialog.svelte";
   import EditUserDialog from "./EditUserDialog.svelte";

@@ -1,16 +1,17 @@
 <script lang="ts">
-  import { dev } from "$app/environment";
+  import { dev } from "$app/env";
   import { goto } from "$app/navigation";
-  import { base, resolve } from "$app/paths";
+  import { resolve } from "$app/paths";
+  const base = resolve("").replace(/\/$/, "");
   import { page } from "$app/state";
-  import { LoginScreen } from "$lib/features/auth";
-  import { publicConfig } from "$lib/platform/config";
+  import { LoginScreen } from "#lib/features/auth/index.ts";
+  import { publicConfig } from "#lib/platform/config/index.ts";
   import {
     buildTenantPath,
     getTenantContext,
     readSafeReturnPath,
     stripBasePath,
-  } from "$lib/platform/tenant";
+  } from "#lib/platform/tenant/index.ts";
 
   const tenant = getTenantContext();
   const returnPath = $derived(
@@ -25,7 +26,7 @@
   });
 
   function returnAfterLogin() {
-    return goto(resolve(stripBasePath(returnPath, base)), { replaceState: true });
+    return goto(resolve(stripBasePath(returnPath, base).slice(1)), { replace: true });
   }
 </script>
 

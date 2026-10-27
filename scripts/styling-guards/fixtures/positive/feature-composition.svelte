@@ -1,5 +1,5 @@
 <script>
-  import { Page } from "$lib/ui";
+  import { Page } from "#lib/ui/index.ts";
 </script>
 
 <Page title="Baner" />

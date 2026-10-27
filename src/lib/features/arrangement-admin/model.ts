@@ -9,8 +9,8 @@ import type {
   LeggTilArrangementBookingForespørsel,
   OpprettArrangementForespørsel,
   OppdaterArrangementMetadataForespørsel,
-} from "$lib/contracts";
-import { dateTilUkedagIso, finnDayOfWeeksIPeriode, isoTilDayOfWeek } from "$lib/domain/dato";
+} from "#lib/contracts/index.ts";
+import { dateTilUkedagIso, finnDayOfWeeksIPeriode, isoTilDayOfWeek } from "#lib/domain/dato.ts";
 
 export type ArrangementEditorMode = "create" | "edit";
 export type ArrangementEditorStep = "information" | "times";

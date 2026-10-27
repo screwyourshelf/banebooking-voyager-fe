@@ -1,9 +1,9 @@
 <script lang="ts">
   import { createMutation, useQueryClient } from "@tanstack/svelte-query";
-  import type { KunngjøringAdminRespons } from "$lib/contracts";
-  import { formatDatoKort, formatTidspunktKort } from "$lib/domain";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  import type { KunngjøringAdminRespons } from "#lib/contracts/index.ts";
+  import { formatDatoKort, formatTidspunktKort } from "#lib/domain/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Button,
     Document,
@@ -18,7 +18,7 @@
     SettingsSection,
     SettingsStack,
     SettingsValue,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import { confirmationProgress } from "./model";
   import { deactivateAnnouncementMutationOptions } from "./queries";
 

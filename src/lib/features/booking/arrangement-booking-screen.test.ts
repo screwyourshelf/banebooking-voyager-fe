@@ -9,9 +9,9 @@ import type {
   BatchLeggTilArrangementBookingerRespons,
   KalenderRespons,
   KalenderSlotRespons,
-} from "$lib/contracts";
-import { Kapabiliteter } from "$lib/domain";
-import { ApiError, type ApiClient } from "$lib/platform/api";
+} from "#lib/contracts/index.ts";
+import { Kapabiliteter } from "#lib/domain/index.ts";
+import { ApiError, type ApiClient } from "#lib/platform/api/index.ts";
 import BookingScreenFixture from "./BookingScreenFixture.test.svelte";
 import { createBootstrap, createCourt, createSlot } from "./booking-test-data";
 

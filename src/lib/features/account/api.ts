@@ -1,5 +1,5 @@
-import type { BrukerBookingRespons, OppdaterProfilForespørsel } from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
+import type { BrukerBookingRespons, OppdaterProfilForespørsel } from "#lib/contracts/index.ts";
+import type { ApiClient } from "#lib/platform/api/index.ts";
 
 function accountPath(slug: string, suffix: string) {
   return `klubb/${encodeURIComponent(slug)}/${suffix}`;

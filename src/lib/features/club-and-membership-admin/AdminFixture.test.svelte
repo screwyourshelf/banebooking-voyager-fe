@@ -1,8 +1,8 @@
 <script lang="ts">
   import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
-  import type { KlubbRespons } from "$lib/contracts";
-  import { setApiClient, type ApiClient, type ApiRequestOptions } from "$lib/platform/api";
-  import { setTenantContext } from "$lib/platform/tenant";
+  import type { KlubbRespons } from "#lib/contracts/index.ts";
+  import { setApiClient, type ApiClient, type ApiRequestOptions } from "#lib/platform/api/index.ts";
+  import { setTenantContext } from "#lib/platform/tenant/index.ts";
   import ClubAndMembershipAdminScreen from "./ClubAndMembershipAdminScreen.svelte";
   import MembershipSettings from "./MembershipSettings.svelte";
 

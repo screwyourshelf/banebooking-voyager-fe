@@ -1,9 +1,9 @@
 <script lang="ts">
   import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
-  import type { BrukerRespons } from "$lib/contracts";
-  import { setApiClient, type ApiClient, type ApiRequestOptions } from "$lib/platform/api";
-  import { setAuthContext } from "$lib/platform/auth";
-  import { setTenantContext } from "$lib/platform/tenant";
+  import type { BrukerRespons } from "#lib/contracts/index.ts";
+  import { setApiClient, type ApiClient, type ApiRequestOptions } from "#lib/platform/api/index.ts";
+  import { setAuthContext } from "#lib/platform/auth/index.ts";
+  import { setTenantContext } from "#lib/platform/tenant/index.ts";
   import AccountScreen from "./AccountScreen.svelte";
   import type { AccountTab } from "./model";
   import MyBookingsScreen from "./MyBookingsScreen.svelte";

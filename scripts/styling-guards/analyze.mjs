@@ -828,6 +828,7 @@ function collectPublicUiComponents(importNodes, contract) {
 }
 
 function isPublicUiImport(specifier, contract) {
+  specifier = specifier.replace(/\.[cm]?[jt]s$/, "").replace(/\/index$/, "");
   return contract.ownership.publicUiImportPrefixes.some(
     (prefix) => specifier === prefix || specifier.startsWith(`${prefix}/`)
   );

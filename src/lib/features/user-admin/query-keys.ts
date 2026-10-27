@@ -1,4 +1,4 @@
-import { createTenantQueryKey } from "$lib/platform/query";
+import { createTenantQueryKey } from "#lib/platform/query/index.ts";
 
 export const userAdminQueryKeys = {
   all: (slug: string) => createTenantQueryKey("user-admin", slug),

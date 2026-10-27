@@ -3,7 +3,7 @@ import type {
   OppdaterBrukerForespørsel,
   RolleType,
   SperrBrukerForespørsel,
-} from "$lib/contracts";
+} from "#lib/contracts/index.ts";
 
 export type MembershipFilter = "confirmed" | "unconfirmed";
 export type UserSort = "newest" | "oldest" | "name";

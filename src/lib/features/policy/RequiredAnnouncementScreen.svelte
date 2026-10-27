@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { UlestKunngjøringRespons } from "$lib/contracts";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  import type { UlestKunngjøringRespons } from "#lib/contracts/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Document,
     DocumentIntro,
@@ -12,7 +12,7 @@
     Page,
     PageStatus,
     RichTextContent,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import { createMutation } from "@tanstack/svelte-query";
   import { confirmRequiredAnnouncement } from "./api";
 

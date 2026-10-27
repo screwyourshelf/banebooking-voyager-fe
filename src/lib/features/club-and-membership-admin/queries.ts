@@ -2,9 +2,9 @@ import type { QueryClient } from "@tanstack/svelte-query";
 import type {
   AktiverMedlemskapBekreftelseForespørsel,
   OppdaterKlubbForespørsel,
-} from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
-import { invalidateTenantResources, tenantQueryMeta } from "$lib/platform/query";
+} from "#lib/contracts/index.ts";
+import type { ApiClient } from "#lib/platform/api/index.ts";
+import { invalidateTenantResources, tenantQueryMeta } from "#lib/platform/query/index.ts";
 import {
   activateMembershipConfirmation,
   deactivateMembershipConfirmation,

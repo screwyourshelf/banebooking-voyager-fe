@@ -1,5 +1,5 @@
 <script>
-  import { Button as Action } from "$lib/ui";
+  import { Button as Action } from "#lib/ui/index.js";
   const override = { style: "color: red" };
 </script>
 

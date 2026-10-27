@@ -1,7 +1,7 @@
 import { QueryClient } from "@tanstack/svelte-query";
 import { describe, expect, it, vi } from "vitest";
-import type { ApiClient } from "$lib/platform/api";
-import { tenantQueryMeta } from "$lib/platform/query";
+import type { ApiClient } from "#lib/platform/api/index.ts";
+import { tenantQueryMeta } from "#lib/platform/query/index.ts";
 import {
   activateMembershipMutationOptions,
   membershipStatusQueryOptions,

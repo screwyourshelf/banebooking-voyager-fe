@@ -12,7 +12,7 @@
     SettingsStack,
     SettingsSwitchRow,
     Textarea,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import BookingQuotaFields from "./BookingQuotaFields.svelte";
   import BookingTimeFields from "./BookingTimeFields.svelte";
   import type { ActivityDraft, BookingOverrideDraft } from "./model";

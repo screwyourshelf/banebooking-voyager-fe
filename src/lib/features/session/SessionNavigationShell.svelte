@@ -1,13 +1,14 @@
 <script lang="ts">
-  import { base } from "$app/paths";
+  import { resolve } from "$app/paths";
+  const base = resolve("").replace(/\/$/, "");
   import { page } from "$app/state";
   import { createQuery } from "@tanstack/svelte-query";
   import type { Snippet } from "svelte";
-  import { getApiClient } from "$lib/platform/api";
-  import { getAuthContext } from "$lib/platform/auth";
-  import { getTenantContext } from "$lib/platform/tenant";
-  import { getThemeContext } from "$lib/platform/theme";
-  import { AppShell } from "$lib/ui";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getAuthContext } from "#lib/platform/auth/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
+  import { getThemeContext } from "#lib/platform/theme/index.ts";
+  import { AppShell } from "#lib/ui/index.ts";
   import DesktopNavigation from "./DesktopNavigation.svelte";
   import MobileBottomNavigation from "./MobileBottomNavigation.svelte";
   import MobileHeaderNavigation from "./MobileHeaderNavigation.svelte";

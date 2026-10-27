@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { Kapabiliteter } from "$lib/domain";
+import { Kapabiliteter } from "#lib/domain/index.ts";
 import {
   bookingSettings,
   createActivity,

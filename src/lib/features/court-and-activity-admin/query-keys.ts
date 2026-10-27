@@ -1,4 +1,4 @@
-import { tenantResourceQueryKeys } from "$lib/platform/query";
+import { tenantResourceQueryKeys } from "#lib/platform/query/index.ts";
 
 export const courtAndActivityAdminQueryKeys = {
   courts: (slug: string) => tenantResourceQueryKeys.courts(slug, true, "required"),

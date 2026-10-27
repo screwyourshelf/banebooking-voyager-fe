@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { BookingNøkkeltall } from "$lib/contracts";
-  import { DataVisualization, Section } from "$lib/ui";
+  import type { BookingNøkkeltall } from "#lib/contracts/index.ts";
+  import { DataVisualization, Section } from "#lib/ui/index.ts";
   import { formatCountWithUnit } from "./model";
 
   let { metrics }: { metrics: BookingNøkkeltall } = $props();

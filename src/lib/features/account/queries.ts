@@ -1,6 +1,6 @@
-import type { BrukerBookingRespons, OppdaterProfilForespørsel } from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
-import { tenantQueryMeta } from "$lib/platform/query";
+import type { BrukerBookingRespons, OppdaterProfilForespørsel } from "#lib/contracts/index.ts";
+import type { ApiClient } from "#lib/platform/api/index.ts";
+import { tenantQueryMeta } from "#lib/platform/query/index.ts";
 import type { QueryClient } from "@tanstack/svelte-query";
 import {
   cancelMyBooking,

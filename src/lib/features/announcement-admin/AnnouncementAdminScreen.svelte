@@ -1,8 +1,8 @@
 <script lang="ts">
   import { createQuery } from "@tanstack/svelte-query";
-  import { formatDatoKort } from "$lib/domain";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  import { formatDatoKort } from "#lib/domain/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Button,
     Collection,
@@ -12,7 +12,7 @@
     CollectionLoading,
     CollectionRow,
     Page,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import AnnouncementDetailsDialog from "./AnnouncementDetailsDialog.svelte";
   import AnnouncementEditorDialog from "./AnnouncementEditorDialog.svelte";
   import { confirmationProgress } from "./model";

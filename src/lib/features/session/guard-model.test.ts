@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { BrukerRespons } from "$lib/contracts";
+import type { BrukerRespons } from "#lib/contracts/index.ts";
 import {
   hasAnyRequiredCapability,
   requiredCapabilitiesForPath,

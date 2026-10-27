@@ -8,7 +8,7 @@
     NavigationList,
     NavigationOverlay,
     NavigationSection,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import NavigationItems from "./NavigationItems.svelte";
   import type { ReadyAppNavigationState } from "./navigation-model";
 

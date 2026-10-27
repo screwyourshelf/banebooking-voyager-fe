@@ -4,7 +4,7 @@
     CalendarSetting01Icon,
     UserMultiple02Icon,
   } from "@hugeicons/core-free-icons";
-  import type { BookingMedlemsstatistikk } from "$lib/contracts";
+  import type { BookingMedlemsstatistikk } from "#lib/contracts/index.ts";
   import {
     CollectionEmpty,
     DataTable,
@@ -15,7 +15,7 @@
     VisualizationLayout,
     type DataTableColumn,
     type DataTableRow,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import type { Medlemsbookingtype } from "./model";
   import { formatCount, formatCountWithUnit, formatDecimal, formatHours } from "./model";
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ArrangementRespons, BaneRespons, GrenRespons } from "$lib/contracts";
+  import type { ArrangementRespons, BaneRespons, GrenRespons } from "#lib/contracts/index.ts";
   import {
     Button,
     Dialog,
@@ -12,7 +12,7 @@
     SettingsRow,
     SettingsSection,
     SettingsStack,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import ArrangementMetadataFields from "./ArrangementMetadataFields.svelte";
   import BookingCollection from "./BookingCollection.svelte";
   import BookingEditorDialog from "./BookingEditorDialog.svelte";

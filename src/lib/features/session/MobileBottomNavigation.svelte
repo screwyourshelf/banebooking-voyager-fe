@@ -1,6 +1,6 @@
 <script lang="ts">
   import { MoreHorizontalIcon } from "@hugeicons/core-free-icons";
-  import { Icon, Navigation, NavigationAction } from "$lib/ui";
+  import { Icon, Navigation, NavigationAction } from "#lib/ui/index.ts";
   import NavigationItems from "./NavigationItems.svelte";
   import type { ReadyAppNavigationState } from "./navigation-model";
 

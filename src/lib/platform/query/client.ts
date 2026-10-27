@@ -1,5 +1,5 @@
-import { browser } from "$app/environment";
-import { ApiError } from "$lib/platform/api";
+import { browser } from "$app/env";
+import { ApiError } from "#lib/platform/api/index.ts";
 import { QueryClient } from "@tanstack/svelte-query";
 
 export function createAppQueryClient() {

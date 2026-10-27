@@ -5,7 +5,7 @@
     BookingstatusRespons,
     GrenRespons,
     KalenderSlotRespons,
-  } from "$lib/contracts";
+  } from "#lib/contracts/index.ts";
   import {
     Button,
     Collection,
@@ -20,7 +20,7 @@
     Page,
     type CollectionChoiceContext,
     type CollectionControlGroup,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import BookingLimitsDialog from "./BookingLimitsDialog.svelte";
   import BookingSlotRow from "./BookingSlotRow.svelte";
   import {

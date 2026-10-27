@@ -1,9 +1,9 @@
 <script lang="ts">
   import { createMutation, useQueryClient } from "@tanstack/svelte-query";
-  import type { BrukerRespons } from "$lib/contracts";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
-  import { Button, Dialog, Feedback } from "$lib/ui";
+  import type { BrukerRespons } from "#lib/contracts/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
+  import { Button, Dialog, Feedback } from "#lib/ui/index.ts";
   import { deleteUserMutationOptions } from "./queries";
 
   let { onClose, user }: { onClose: () => void; user: BrukerRespons } = $props();

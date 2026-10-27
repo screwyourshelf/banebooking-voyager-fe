@@ -1,5 +1,9 @@
 <script lang="ts">
-  import type { BaneRespons, BookingInnstillingRespons, GrenRespons } from "$lib/contracts";
+  import type {
+    BaneRespons,
+    BookingInnstillingRespons,
+    GrenRespons,
+  } from "#lib/contracts/index.ts";
   import {
     Feedback,
     Form,
@@ -13,7 +17,7 @@
     SettingsSection,
     SettingsStack,
     SettingsSwitchRow,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import BookingTimeFields from "./BookingTimeFields.svelte";
   import { EMPTY_BOOKING_OVERRIDE, type CourtDraft } from "./model";
 

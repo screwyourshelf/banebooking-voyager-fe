@@ -1,9 +1,9 @@
 <script lang="ts">
   import { resolve } from "$app/paths";
-  import type { BrukerRespons, KlubbRespons } from "$lib/contracts";
-  import { MEDLEMSKAP_TYPE_VALG } from "$lib/domain";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  import type { BrukerRespons, KlubbRespons } from "#lib/contracts/index.ts";
+  import { MEDLEMSKAP_TYPE_VALG } from "#lib/domain/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Document,
     DocumentIntro,
@@ -18,7 +18,7 @@
     PageStatus,
     SettingsRadioGroup,
     SettingsSection,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import { createMutation } from "@tanstack/svelte-query";
   import { confirmMembership } from "./api";
   import {

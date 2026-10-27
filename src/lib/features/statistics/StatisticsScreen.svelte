@@ -1,8 +1,8 @@
 <script lang="ts">
   import { createQuery } from "@tanstack/svelte-query";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
-  import { Page, Tabs, VisualizationLayout } from "$lib/ui";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
+  import { Page, Tabs, VisualizationLayout } from "#lib/ui/index.ts";
   import {
     applyActivityFilter,
     applyPeriodSelection,

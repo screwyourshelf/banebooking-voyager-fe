@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import type { AuthState } from "$lib/platform/auth";
-import type { TenantContext } from "$lib/platform/tenant";
+import type { AuthState } from "#lib/platform/auth/index.ts";
+import type { TenantContext } from "#lib/platform/tenant/index.ts";
 import { buildAppNavigationState } from "./navigation-model";
 
 const routeTenant: TenantContext = { slug: "fjordvik", source: "route" };

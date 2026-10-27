@@ -1,4 +1,4 @@
-import type { ArrangementRespons } from "$lib/contracts";
+import type { ArrangementRespons } from "#lib/contracts/index.ts";
 
 export function createArrangement(overrides: Partial<ArrangementRespons> = {}): ArrangementRespons {
   return {

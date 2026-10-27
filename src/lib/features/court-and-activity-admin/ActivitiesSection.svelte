@@ -1,8 +1,8 @@
 <script lang="ts">
   import { createMutation, createQuery, useQueryClient } from "@tanstack/svelte-query";
-  import type { GrenRespons } from "$lib/contracts";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  import type { GrenRespons } from "#lib/contracts/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Collection,
     CollectionEmpty,
@@ -11,7 +11,7 @@
     CollectionLoading,
     CollectionRow,
     EditorDialog,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import ActivityForm from "./ActivityForm.svelte";
   import {
     activityDraftIsDirty,

@@ -3,7 +3,7 @@ import {
   fjernFraLokalLagring,
   lesLokalLagring,
   skrivLokalLagring,
-} from "$lib/platform/storage/browser-storage.client";
+} from "#lib/platform/storage/browser-storage.client.ts";
 
 const STORAGE_KEY = "banebooking_development_session";
 

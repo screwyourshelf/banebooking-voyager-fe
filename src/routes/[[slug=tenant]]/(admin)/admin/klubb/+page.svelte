@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { ClubAndMembershipAdminScreen } from "$lib/features/club-and-membership-admin";
-  import { getSessionDataContext } from "$lib/features/session";
+  import { ClubAndMembershipAdminScreen } from "#lib/features/club-and-membership-admin/index.ts";
+  import { getSessionDataContext } from "#lib/features/session/index.ts";
 
   const session = getSessionDataContext();
 </script>

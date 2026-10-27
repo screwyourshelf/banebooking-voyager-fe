@@ -1,4 +1,4 @@
-import type { ArrangementKategori, ArrangementRespons } from "$lib/contracts";
+import type { ArrangementKategori, ArrangementRespons } from "#lib/contracts/index.ts";
 
 export const ARRANGEMENT_KATEGORI_VALG: Array<{
   value: ArrangementKategori;

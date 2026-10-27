@@ -1,10 +1,10 @@
 <script lang="ts">
   import { untrack } from "svelte";
   import { QueryClient, QueryClientProvider } from "@tanstack/svelte-query";
-  import type { ApiClient, ApiRequestOptions } from "$lib/platform/api";
-  import { setApiClient } from "$lib/platform/api";
-  import { setAuthContext, type AuthContextValue } from "$lib/platform/auth";
-  import { setTenantContext } from "$lib/platform/tenant";
+  import type { ApiClient, ApiRequestOptions } from "#lib/platform/api/index.ts";
+  import { setApiClient } from "#lib/platform/api/index.ts";
+  import { setAuthContext, type AuthContextValue } from "#lib/platform/auth/index.ts";
+  import { setTenantContext } from "#lib/platform/tenant/index.ts";
   import BookingScreen from "./BookingScreen.svelte";
 
   let {

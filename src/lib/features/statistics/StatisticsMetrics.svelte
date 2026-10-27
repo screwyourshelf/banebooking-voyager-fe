@@ -5,8 +5,8 @@
     CalendarSetting01Icon,
     UserMultiple02Icon,
   } from "@hugeicons/core-free-icons";
-  import type { BookingstatistikkRespons } from "$lib/contracts";
-  import { Icon, Metric, MetricGrid } from "$lib/ui";
+  import type { BookingstatistikkRespons } from "#lib/contracts/index.ts";
+  import { Icon, Metric, MetricGrid } from "#lib/ui/index.ts";
   import { formatCount, formatHours, formatPercentage } from "./model";
 
   let { statistics }: { statistics: BookingstatistikkRespons } = $props();

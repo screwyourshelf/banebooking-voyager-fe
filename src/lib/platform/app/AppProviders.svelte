@@ -1,12 +1,12 @@
 <script lang="ts">
-  import { dev } from "$app/environment";
-  import { setApiClient, type ApiClient, type ApiRequestOptions } from "$lib/platform/api";
-  import { setAuthContext, type AuthContextValue } from "$lib/platform/auth";
-  import { createAppQueryClient } from "$lib/platform/query";
-  import { setTenantContext, type TenantContext } from "$lib/platform/tenant";
+  import { dev } from "$app/env";
+  import { setApiClient, type ApiClient, type ApiRequestOptions } from "#lib/platform/api/index.ts";
+  import { setAuthContext, type AuthContextValue } from "#lib/platform/auth/index.ts";
+  import { createAppQueryClient } from "#lib/platform/query/index.ts";
+  import { setTenantContext, type TenantContext } from "#lib/platform/tenant/index.ts";
   import { QueryClientProvider } from "@tanstack/svelte-query";
   import { onMount, type Component, type Snippet } from "svelte";
-  import type { AuthController, AuthState } from "$lib/platform/auth";
+  import type { AuthController, AuthState } from "#lib/platform/auth/index.ts";
 
   type AppRuntime = {
     api: ApiClient;

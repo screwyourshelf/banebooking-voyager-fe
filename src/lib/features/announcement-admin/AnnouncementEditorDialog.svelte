@@ -1,8 +1,8 @@
 <script lang="ts">
   import { createMutation, useQueryClient } from "@tanstack/svelte-query";
   import { tick } from "svelte";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     DatePicker,
     EditorDialog,
@@ -16,7 +16,7 @@
     RichTextEditor,
     SettingsSection,
     SettingsStack,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import {
     createAnnouncementDraft,
     MAX_ANNOUNCEMENT_TITLE_LENGTH,

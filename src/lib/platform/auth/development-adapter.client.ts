@@ -1,4 +1,4 @@
-import { pickApiErrorMessage } from "$lib/platform/api";
+import { pickApiErrorMessage } from "#lib/platform/api/index.ts";
 import {
   erGyldigUtviklingssession,
   fjernUtviklingssession,

@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { UserAdminScreen } from "$lib/features/user-admin";
-  import { getSessionDataContext } from "$lib/features/session";
+  import { UserAdminScreen } from "#lib/features/user-admin/index.ts";
+  import { getSessionDataContext } from "#lib/features/session/index.ts";
 
   const session = getSessionDataContext();
 </script>

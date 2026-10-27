@@ -1,7 +1,7 @@
 <script lang="ts">
-  import type { BrukerBookingRespons } from "$lib/contracts";
-  import { Kapabiliteter, harHandling, buildBookingKey } from "$lib/domain";
-  import { Button, ScheduleRow } from "$lib/ui";
+  import type { BrukerBookingRespons } from "#lib/contracts/index.ts";
+  import { Kapabiliteter, harHandling, buildBookingKey } from "#lib/domain/index.ts";
+  import { Button, ScheduleRow } from "#lib/ui/index.ts";
 
   let {
     booking,

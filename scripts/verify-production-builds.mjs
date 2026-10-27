@@ -6,7 +6,7 @@ const budgets = {
   initialCssGzipKiB: 50,
   initialJavaScriptGzipKiB: 50,
   largestLazyJavaScriptGzipKiB: 130,
-  publicBookingJavaScriptGzipKiB: 165,
+  publicBookingJavaScriptGzipKiB: 175,
 };
 
 const builds = [

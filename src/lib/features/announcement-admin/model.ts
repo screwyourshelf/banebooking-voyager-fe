@@ -1,4 +1,4 @@
-import type { OpprettKunngjøringForespørsel } from "$lib/contracts";
+import type { OpprettKunngjøringForespørsel } from "#lib/contracts/index.ts";
 
 export const MAX_ANNOUNCEMENT_TITLE_LENGTH = 200;
 const MAX_ANNOUNCEMENT_CONTENT_LENGTH = 5000;

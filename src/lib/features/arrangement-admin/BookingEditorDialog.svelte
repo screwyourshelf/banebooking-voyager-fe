@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { BaneRespons } from "$lib/contracts";
+  import type { BaneRespons } from "#lib/contracts/index.ts";
   import {
     Button,
     DatePicker,
@@ -13,7 +13,7 @@
     SettingsSection,
     SettingsStack,
     SettingsValue,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import { addMinutes, generateStartTimes, getCourtSlotLength, type LocalBooking } from "./model";
 
   let {

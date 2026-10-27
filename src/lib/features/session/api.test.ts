@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from "vitest";
-import type { BrukerRespons, KlubbRespons } from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
+import type { BrukerRespons, KlubbRespons } from "#lib/contracts/index.ts";
+import type { ApiClient } from "#lib/platform/api/index.ts";
 import { getBrukerWithCurrentTermsAcceptance, getFeedStatus, getKlubb } from "./api";
 
 describe("session endpoints", () => {

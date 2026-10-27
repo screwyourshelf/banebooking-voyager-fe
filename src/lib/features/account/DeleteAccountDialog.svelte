@@ -1,9 +1,9 @@
 <script lang="ts">
   import { createMutation } from "@tanstack/svelte-query";
-  import { getApiClient } from "$lib/platform/api";
-  import { getAuthContext } from "$lib/platform/auth";
-  import { getTenantContext } from "$lib/platform/tenant";
-  import { Button, Dialog, Feedback, type DialogActionContext } from "$lib/ui";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getAuthContext } from "#lib/platform/auth/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
+  import { Button, Dialog, Feedback, type DialogActionContext } from "#lib/ui/index.ts";
   import { deleteMyAccountMutationOptions } from "./queries";
 
   let { disabled = false }: { disabled?: boolean } = $props();

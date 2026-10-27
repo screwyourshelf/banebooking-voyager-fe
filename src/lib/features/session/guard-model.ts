@@ -1,11 +1,15 @@
-import type { BrukerRespons } from "$lib/contracts";
-import { harHandling } from "$lib/domain";
-import type { AppPath, TenantContext } from "$lib/platform/tenant";
-import { buildTenantPath, normalizeAppPathname, readSafeReturnPath } from "$lib/platform/tenant";
+import type { BrukerRespons } from "#lib/contracts/index.ts";
+import { harHandling } from "#lib/domain/index.ts";
+import type { AppPath, TenantContext } from "#lib/platform/tenant/index.ts";
+import {
+  buildTenantPath,
+  normalizeAppPathname,
+  readSafeReturnPath,
+} from "#lib/platform/tenant/index.ts";
 
 export type GuardRedirectInput = {
   bruker: BrukerRespons;
-  currentUrl: Pick<URL, "pathname" | "searchParams">;
+  currentUrl: { readonly pathname: string; readonly searchParams: Pick<URLSearchParams, "get"> };
   tenant: TenantContext;
   basePath?: string;
 };

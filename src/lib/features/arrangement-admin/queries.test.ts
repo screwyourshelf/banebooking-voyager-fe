@@ -1,8 +1,8 @@
 import { QueryClient } from "@tanstack/svelte-query";
 import { describe, expect, it, vi } from "vitest";
-import type { ArrangementBookingRespons, ArrangementRespons } from "$lib/contracts";
-import type { ApiClient } from "$lib/platform/api";
-import { tenantQueryMeta } from "$lib/platform/query";
+import type { ArrangementBookingRespons, ArrangementRespons } from "#lib/contracts/index.ts";
+import type { ApiClient } from "#lib/platform/api/index.ts";
+import { tenantQueryMeta } from "#lib/platform/query/index.ts";
 import {
   addArrangementBookingMutationOptions,
   addArrangementBookingsBatchMutationOptions,

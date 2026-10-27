@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { Feedback, SettingsChoiceGroup } from "$lib/ui";
+  import { Feedback, SettingsChoiceGroup } from "#lib/ui/index.ts";
   import { arrangementSlotKey } from "./arrangement-slots";
   import type { ArrangementTimeSelection } from "./arrangement-time-selection.svelte";
 

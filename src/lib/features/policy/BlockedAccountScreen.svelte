@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { KlubbRespons } from "$lib/contracts";
+  import type { KlubbRespons } from "#lib/contracts/index.ts";
   import {
     ButtonLink,
     Document,
@@ -11,7 +11,7 @@
     SettingsRow,
     SettingsSection,
     SettingsText,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
 
   let { klubb }: { klubb: KlubbRespons } = $props();
 </script>

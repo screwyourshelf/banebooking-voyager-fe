@@ -8,9 +8,22 @@ forutsetninger og statiske produksjonsartefakter, men utfører eller autoriserer
 Bruk Node 24 LTS (`fnm use` leser `.nvmrc`). Installer den låste pakkegrafen og start Vite fra frontend-repoet:
 
 ```bash
-npm ci
+npm exec --yes --package=npm@10.9.9 -- npm ci
 npm run dev
 ```
+
+`packageManager` og `engines.npm` låser installasjonsverktøyet til npm 10.9.9. Bruk samme
+bootstrap ved endringer i pakkegrafen, for eksempel
+`npm exec --yes --package=npm@10.9.9 -- npm install`. Node 24/npm 11.19.1 og npm 12.2.1 ble testet
+på denne grafen: installasjonen opprettet runeds valgfrie Kit 2-peer, men `ci` fjernet den og ga
+ugyldige peers ved `npm ls`. npm 10.9.9 bevarer en gyldig graf ved både installasjon og `ci`.
+Ingen peer-ranges overstyres. Lokale kommandoer endrer ikke brukerens globale npm.
+CI velger eksplisitt npm 10.9.9 på den midlertidige runneren før `npm ci`.
+
+SvelteKit 3-konfigurasjonen eies av `sveltekit(...)` i `vite.config.ts`. Bibliotekimporter bruker
+Node-subpaths fra `package.json` (`#lib/*`) med eksplisitte kildefilendelser. `src/params.ts`
+er frameworkinngang for tenant-matcheren. Typekontrollens omfang viderefører kildefiler og
+Vite-konfigurasjon; Knip registrerer den nye params-inngangen eksplisitt.
 
 Dev- og previewserveren videresender `/api` til `http://localhost:5015`.
 Den interne miljøvariabelen `BANEBOOKING_API_PROXY_TARGET` kan velge en isolert lokal backend;
@@ -129,7 +142,7 @@ Jobben `Frontend quality gates` installerer den låste pakkegrafen og Chromium, 
 samme komplette frontendport som lokalt:
 
 ```bash
-npm run verify:frontend
+npm exec --yes --package=npm@10.9.9 -- npm run verify:frontend
 ```
 
 Porten kjører enhetstester, `check`, visuelle E2E-tester og produksjons-E2E for begge

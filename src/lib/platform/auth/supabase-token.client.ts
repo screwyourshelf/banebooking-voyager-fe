@@ -2,7 +2,7 @@ import {
   fjernFraLokalLagring,
   lesLokalLagring,
   skrivLokalLagring,
-} from "$lib/platform/storage/browser-storage.client";
+} from "#lib/platform/storage/browser-storage.client.ts";
 const SUPABASE_TOKEN_KEY = "supabase_token";
 
 function hentSupabaseToken() {

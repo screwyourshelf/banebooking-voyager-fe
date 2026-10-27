@@ -1,4 +1,4 @@
-import type { BrukerBookingRespons } from "$lib/contracts";
+import type { BrukerBookingRespons } from "#lib/contracts/index.ts";
 
 export function sortBookingsByRelevance(bookings: readonly BrukerBookingRespons[]) {
   return [...bookings].sort((left, right) => {

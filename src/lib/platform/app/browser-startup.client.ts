@@ -1,9 +1,9 @@
-import { publicConfig } from "$lib/platform/config";
-import { noopObservability, type Observability } from "$lib/platform/observability";
+import { publicConfig } from "#lib/platform/config/index.ts";
+import { noopObservability, type Observability } from "#lib/platform/observability/index.ts";
 import {
   settLagringsfeilReporter,
   type Lagringsfeil,
-} from "$lib/platform/storage/browser-storage.client";
+} from "#lib/platform/storage/browser-storage.client.ts";
 
 const APP_STARTED_EVENT = "banebooking:app-started";
 const ASSET_RECOVERY_ATTRIBUTE = "data-banebooking-asset-recovery";
@@ -20,7 +20,7 @@ async function initializeObservability() {
   if (import.meta.env.PROD && publicConfig.sentryDsn) {
     try {
       const { createSentryBrowserObservability } =
-        await import("$lib/platform/observability/sentry-browser.client");
+        await import("#lib/platform/observability/sentry-browser.client.ts");
       observability = createSentryBrowserObservability({
         dsn: publicConfig.sentryDsn,
         enabled: true,

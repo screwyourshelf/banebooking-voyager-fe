@@ -1,4 +1,4 @@
-import type { BookingstatistikkRespons } from "$lib/contracts";
+import type { BookingstatistikkRespons } from "#lib/contracts/index.ts";
 
 const comparison = {
   antallBookinger: 28,

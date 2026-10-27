@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import type { KalenderSlotRespons } from "$lib/contracts";
+import type { KalenderSlotRespons } from "#lib/contracts/index.ts";
 import { grupperSlots, utledSlotStatus } from "./booking";
 
 function slot(overrides: Partial<KalenderSlotRespons> = {}): KalenderSlotRespons {

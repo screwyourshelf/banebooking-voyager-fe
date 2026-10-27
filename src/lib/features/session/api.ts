@@ -3,9 +3,9 @@ import type {
   BrukerRespons,
   FeedStatusRespons,
   KlubbRespons,
-} from "$lib/contracts";
-import { AKTIV_VILKAAR } from "$lib/domain";
-import type { ApiClient } from "$lib/platform/api";
+} from "#lib/contracts/index.ts";
+import { AKTIV_VILKAAR } from "#lib/domain/index.ts";
+import type { ApiClient } from "#lib/platform/api/index.ts";
 
 export function getKlubb(api: ApiClient, slug: string, signal?: AbortSignal) {
   return api.request<KlubbRespons>(`klubb/${encodeURIComponent(slug)}`, { auth: "none", signal });

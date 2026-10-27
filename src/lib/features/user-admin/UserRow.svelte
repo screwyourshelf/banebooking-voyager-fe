@@ -1,13 +1,19 @@
 <script lang="ts">
-  import type { BrukerRespons } from "$lib/contracts";
+  import type { BrukerRespons } from "#lib/contracts/index.ts";
   import {
     formaterMedlemskapType,
     formaterRolle,
     formatDatoKort,
     harHandling,
     Kapabiliteter,
-  } from "$lib/domain";
-  import { Button, CollectionRow, SettingsPanel, SettingsRow, SettingsText } from "$lib/ui";
+  } from "#lib/domain/index.ts";
+  import {
+    Button,
+    CollectionRow,
+    SettingsPanel,
+    SettingsRow,
+    SettingsText,
+  } from "#lib/ui/index.ts";
   import { getPrimaryRole, getUserDisplayName, isDeletedUser } from "./model";
 
   let {

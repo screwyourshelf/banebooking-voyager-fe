@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { BrukerRespons } from "$lib/contracts";
+  import type { BrukerRespons } from "#lib/contracts/index.ts";
   import {
     ErrorState,
     Navigation,
@@ -7,7 +7,7 @@
     NavigationList,
     Page,
     PageLoading,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import type { AccountTab } from "./model";
   import PersonalDataSettings from "./PersonalDataSettings.svelte";
   import ProfileSettings from "./ProfileSettings.svelte";

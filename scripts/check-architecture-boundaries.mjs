@@ -5,6 +5,7 @@ import process from "node:process";
 const root = process.cwd();
 const sourceRoot = path.join(root, "src");
 const targetRoots = [
+  path.join(sourceRoot, "params.ts"),
   path.join(sourceRoot, "routes"),
   path.join(sourceRoot, "params"),
   path.join(sourceRoot, "lib", "contracts"),
@@ -32,7 +33,9 @@ for (const targetRoot of targetRoots) {
     );
 
     for (const specifier of imports) {
-      const target = resolveInternalTarget(normalizedPath, specifier);
+      const target = resolveInternalTarget(normalizedPath, specifier)
+        ?.replace(/\.[cm]?[jt]s$/, "")
+        .replace(/\/index$/, "");
 
       if (specifier === "@" || specifier.startsWith("@/")) {
         report(
@@ -208,7 +211,7 @@ function checkInternalLayerBoundary(relativePath, importer, source, specifier, t
         relativePath,
         source,
         specifier,
-        "features må bruke det offentlige UI-API-et fra $lib/ui"
+        "features må bruke det offentlige UI-API-et fra #lib/ui/index.ts"
       );
     }
     if (target.startsWith("src/routes/")) {
@@ -251,8 +254,9 @@ function checkInternalLayerBoundary(relativePath, importer, source, specifier, t
 }
 
 function resolveInternalTarget(importer, specifier) {
-  if (specifier === "$lib") return "src/lib";
-  if (specifier.startsWith("$lib/")) return `src/lib/${specifier.slice("$lib/".length)}`;
+  if (specifier === "#lib" || specifier === "$lib") return "src/lib";
+  if (specifier.startsWith("#lib/") || specifier.startsWith("$lib/"))
+    return `src/lib/${specifier.slice("$lib/".length)}`;
   if (specifier === "@") return "src";
   if (specifier.startsWith("@/")) return `src/${specifier.slice(2)}`;
   if (specifier.startsWith("./") || specifier.startsWith("../")) {
@@ -331,6 +335,7 @@ async function collectSourceFiles(directory) {
     entries = await readdir(directory, { withFileTypes: true });
   } catch (error) {
     if (error?.code === "ENOENT") return [];
+    if (error?.code === "ENOTDIR" && /\.(?:svelte|ts|js)$/.test(directory)) return [directory];
     throw error;
   }
 

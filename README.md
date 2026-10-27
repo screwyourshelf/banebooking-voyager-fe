@@ -5,8 +5,11 @@ Svelte 5/SvelteKit-klient for Banebooking. Backend ligger i det separate
 
 ## Start lokalt
 
+Bruk Node 24 LTS (`fnm use`) og prosjektets npm 10.9.9 til installasjonen. Bootstrapen endrer
+ikke global npm:
+
 ```bash
-npm ci
+npm exec --yes --package=npm@10.9.9 -- npm ci
 npm run dev
 ```
 

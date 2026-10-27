@@ -1,6 +1,7 @@
-import { base } from "$app/paths";
-import { publicConfig } from "$lib/platform/config";
-import { resolveTenant } from "$lib/platform/tenant";
+import { resolve } from "$app/paths";
+const base = resolve("").replace(/\/$/, "");
+import { publicConfig } from "#lib/platform/config/index.ts";
+import { resolveTenant } from "#lib/platform/tenant/index.ts";
 import { redirect } from "@sveltejs/kit";
 
 import type { LayoutLoad } from "./$types";

@@ -1,9 +1,9 @@
 <script lang="ts">
   import { createMutation } from "@tanstack/svelte-query";
-  import type { BrukerRespons } from "$lib/contracts";
-  import { formaterMedlemskapType, formaterRoller } from "$lib/domain";
-  import { getApiClient } from "$lib/platform/api";
-  import { getTenantContext } from "$lib/platform/tenant";
+  import type { BrukerRespons } from "#lib/contracts/index.ts";
+  import { formaterMedlemskapType, formaterRoller } from "#lib/domain/index.ts";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import {
     Feedback,
     Form,
@@ -18,7 +18,7 @@
     SettingsSection,
     SettingsStack,
     SettingsValue,
-  } from "$lib/ui";
+  } from "#lib/ui/index.ts";
   import DeleteAccountDialog from "./DeleteAccountDialog.svelte";
   import {
     createDisplayNameDraft,

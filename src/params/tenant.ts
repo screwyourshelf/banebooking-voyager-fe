@@ -1,4 +1,3 @@
-import type { ParamMatcher } from "@sveltejs/kit";
-import { isTenantRouteSlug } from "$lib/platform/config";
+import { isTenantRouteSlug } from "#lib/platform/config/tenant-slug.ts";
 
-export const match: ParamMatcher = (param) => isTenantRouteSlug(param);
+export const match = (param: string) => isTenantRouteSlug(param);

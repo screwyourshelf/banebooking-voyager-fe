@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { SettingsRange, SettingsRow, SettingsValue } from "$lib/ui";
+  import { SettingsRange, SettingsRow, SettingsValue } from "#lib/ui/index.ts";
 
   let {
     disabled = false,

@@ -4,8 +4,8 @@ import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/svelte";
 import axe from "axe-core";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import type { BrukerBookingRespons, BrukerRespons } from "$lib/contracts";
-import { createApiClient, type ApiClient } from "$lib/platform/api";
+import type { BrukerBookingRespons, BrukerRespons } from "#lib/contracts/index.ts";
+import { createApiClient, type ApiClient } from "#lib/platform/api/index.ts";
 import AccountFixture from "./AccountFixture.test.svelte";
 
 const axeOptions: axe.RunOptions = {

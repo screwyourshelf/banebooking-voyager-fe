@@ -4,8 +4,12 @@ import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/svelte";
 import axe from "axe-core";
 import { describe, expect, it, vi } from "vitest";
-import type { BrukerRespons, BrukerSperreRespons, BrukerSperrerRespons } from "$lib/contracts";
-import { ApiError, type ApiClient } from "$lib/platform/api";
+import type {
+  BrukerRespons,
+  BrukerSperreRespons,
+  BrukerSperrerRespons,
+} from "#lib/contracts/index.ts";
+import { ApiError, type ApiClient } from "#lib/platform/api/index.ts";
 import UserAdminFixture from "./UserAdminFixture.test.svelte";
 
 const axeOptions: axe.RunOptions = {

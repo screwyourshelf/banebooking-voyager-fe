@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { BlockedAccountScreen } from "$lib/features/policy";
-  import { getSessionDataContext } from "$lib/features/session";
+  import { BlockedAccountScreen } from "#lib/features/policy/index.ts";
+  import { getSessionDataContext } from "#lib/features/session/index.ts";
 
   const session = getSessionDataContext();
 </script>

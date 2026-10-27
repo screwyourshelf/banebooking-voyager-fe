@@ -1,10 +1,10 @@
 <script lang="ts">
   import { createQuery, useQueryClient } from "@tanstack/svelte-query";
   import type { Snippet } from "svelte";
-  import { getApiClient } from "$lib/platform/api";
-  import { getAuthContext } from "$lib/platform/auth";
-  import { tenantQueryMeta } from "$lib/platform/query";
-  import { getTenantContext } from "$lib/platform/tenant";
+  import { getApiClient } from "#lib/platform/api/index.ts";
+  import { getAuthContext } from "#lib/platform/auth/index.ts";
+  import { tenantQueryMeta } from "#lib/platform/query/index.ts";
+  import { getTenantContext } from "#lib/platform/tenant/index.ts";
   import { getBrukerWithCurrentTermsAcceptance, getKlubb } from "./api";
   import { setSessionDataContext, type SessionDataContext } from "./context";
   import { invalidateSessionBruker, sessionQueryKeys } from "./query-keys";
