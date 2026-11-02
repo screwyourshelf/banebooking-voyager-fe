@@ -72,7 +72,7 @@
   backLabel="Alle kunngjøringer"
   eyebrow="Ny kunngjøring"
   title="Opprett kunngjøring"
-  description="Publiser viktig informasjon som brukerne må lese."
+  description="Del viktig informasjon med brukerne."
 >
   <Form
     variant="editor"
@@ -87,7 +87,7 @@
         embedded
         eyebrow="Innhold"
         title="Budskap til medlemmene"
-        description="Brukerne må trykke «Jeg har lest kunngjøringen» før de kan bruke appen videre."
+        description="Brukerne ser kunngjøringen før de går videre i appen."
       >
         <FormFields>
           <FormField

@@ -10,7 +10,6 @@
     FormActions,
     FormSubmit,
     Page,
-    PageStatus,
     RichTextContent,
   } from "#lib/ui/index.ts";
   import { createMutation } from "@tanstack/svelte-query";
@@ -45,17 +44,8 @@
   }
 </script>
 
-{#snippet confirmationStatus()}
-  <PageStatus label="Må leses" tone="warning" />
-{/snippet}
-
-<Page
-  eyebrow="Fra klubben"
-  title={announcement.tittel}
-  description="Les kunngjøringen og marker den som lest før du går videre."
-  actions={confirmationStatus}
->
-  <Document label="Obligatorisk kunngjøring">
+<Page eyebrow="Fra klubben" title={announcement.tittel}>
+  <Document label="Kunngjøring">
     <DocumentIntro><RichTextContent value={announcement.tekst} /></DocumentIntro>
 
     <Form onsubmit={submit} pending={confirmation.isPending}>
@@ -68,7 +58,7 @@
           />
         {/if}
         <FormSubmit pending={confirmation.isPending} pendingLabel="Registrerer …">
-          Jeg har lest kunngjøringen
+          Ok, fått det med meg
         </FormSubmit>
       </FormActions>
     </Form>

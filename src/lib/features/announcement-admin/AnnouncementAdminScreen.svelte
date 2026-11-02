@@ -39,7 +39,7 @@
 <Page
   eyebrow="Administrasjon"
   title="Kunngjøringer"
-  description="Styr viktig informasjon som brukerne må lese før de går videre."
+  description="Del viktig informasjon fra klubben."
   actions={!activeAnnouncement ? createAction : undefined}
 >
   <Collection
@@ -48,7 +48,6 @@
       : activeAnnouncement
         ? "1 kunngjøring"
         : "Ingen kunngjøring"}
-    scope="Må leses"
     busy={announcementQuery.isFetching}
   >
     {#if announcementQuery.isPending}

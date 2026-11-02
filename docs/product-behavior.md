@@ -114,8 +114,9 @@ tillatt.
   aksept poster aktiv vilkårsversjon og bruker den oppdaterte brukerprofilen fra mutasjonssvaret.
 - Sperret konto kan bare lese sperreinformasjon og kontakte klubben; booking og arrangementhandlinger
   er utilgjengelige.
-- Obligatorisk kunngjøring må markeres som lest med «Jeg har lest kunngjøringen» før ordinære
-  appflater åpnes. Handlingen registrerer at brukeren har lest informasjonen.
+- Obligatorisk kunngjøring vises med tittel, innhold og knappen «Ok, fått det med meg», uten
+  ekstra instruksjonstekst eller kravstatus. Knappen markerer kunngjøringen som lest og åpner
+  ordinære appflater.
 - Obligatorisk medlemsbekreftelse er en egenerklæring, ikke en automatisk kontroll mot klubbens
   medlemsregister. Flaten krever brukerens eget fulle navn og medlemskapstypen brukeren er omfattet
   av, forklarer at familiemedlemmer bekrefter fra hver sin konto, og lenker til vilkår og klubbens

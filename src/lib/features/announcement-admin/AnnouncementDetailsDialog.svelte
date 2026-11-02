@@ -92,7 +92,7 @@
         <Feedback
           tone="info"
           title="Ingen har markert som lest ennå"
-          description="Brukere vises her når de trykker «Jeg har lest kunngjøringen»."
+          description="Brukere vises her når de trykker «Ok, fått det med meg»."
         />
       {:else}
         <SettingsPanel>

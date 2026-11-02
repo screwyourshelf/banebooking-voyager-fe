@@ -19,7 +19,7 @@ const builds = [
 
 const relevantLazyChunkMarkers = [
   { label: "Sentry", marker: "sentry_key" },
-  { label: "Supabase", marker: "supabase-js-" },
+  { label: "Supabase", marker: "@supabase/supabase-js" },
   { label: "Rich text editor", marker: "ProseMirror" },
 ];
 

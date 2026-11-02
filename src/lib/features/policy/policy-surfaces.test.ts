@@ -42,12 +42,12 @@ describe("protected policy surfaces", () => {
   it("markerer den eksakte obligatoriske kunngjøringen som lest og oppfrisker guarddata", async () => {
     const { onConfirmed, requestMock } = renderFixture("announcement");
 
-    expect(screen.getByText("Må leses")).toHaveAttribute("data-ui", "page-status");
-    expect(screen.getByRole("article", { name: "Obligatorisk kunngjøring" })).toHaveTextContent(
+    expect(screen.queryByText("Må leses")).not.toBeInTheDocument();
+    expect(screen.getByRole("article", { name: "Kunngjøring" })).toHaveTextContent(
       "Les dette nøye."
     );
 
-    await fireEvent.click(screen.getByRole("button", { name: "Jeg har lest kunngjøringen" }));
+    await fireEvent.click(screen.getByRole("button", { name: "Ok, fått det med meg" }));
 
     await waitFor(() =>
       expect(requestMock).toHaveBeenCalledWith("klubb/fjordvik/kunngjøringer/news-1/bekreft", {
@@ -62,11 +62,11 @@ describe("protected policy surfaces", () => {
     const requestMock = vi.fn().mockRejectedValue(new Error("Klubben avviste bekreftelsen."));
     const { onConfirmed } = renderFixture("announcement", requestMock);
 
-    await fireEvent.click(screen.getByRole("button", { name: "Jeg har lest kunngjøringen" }));
+    await fireEvent.click(screen.getByRole("button", { name: "Ok, fått det med meg" }));
 
     expect(await screen.findByRole("alert")).toHaveTextContent("Klubben avviste bekreftelsen.");
     expect(onConfirmed).not.toHaveBeenCalled();
-    expect(screen.getByRole("button", { name: "Jeg har lest kunngjøringen" })).toBeEnabled();
+    expect(screen.getByRole("button", { name: "Ok, fått det med meg" })).toBeEnabled();
   });
 
   it("validerer medlemskapsutkastet og invaliderer guarddata etter gyldig bekreftelse", async () => {
