@@ -72,7 +72,7 @@
   backLabel="Alle kunngjøringer"
   eyebrow="Ny kunngjøring"
   title="Opprett kunngjøring"
-  description="Publiser informasjon som brukerne må lese og bekrefte."
+  description="Publiser viktig informasjon som brukerne må lese."
 >
   <Form
     variant="editor"
@@ -87,7 +87,7 @@
         embedded
         eyebrow="Innhold"
         title="Budskap til medlemmene"
-        description="Kunngjøringen sperrer videre bruk av appen til den er bekreftet."
+        description="Brukerne må trykke «Jeg har lest kunngjøringen» før de kan bruke appen videre."
       >
         <FormFields>
           <FormField
@@ -108,7 +108,7 @@
 
           <FormField
             label="Budskap"
-            description="Formater innholdet brukerne må bekrefte."
+            description="Skriv informasjonen brukerne skal lese."
             error={errors.content}
             required
           >

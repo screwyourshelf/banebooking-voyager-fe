@@ -114,7 +114,8 @@ tillatt.
   aksept poster aktiv vilkårsversjon og bruker den oppdaterte brukerprofilen fra mutasjonssvaret.
 - Sperret konto kan bare lese sperreinformasjon og kontakte klubben; booking og arrangementhandlinger
   er utilgjengelige.
-- Obligatorisk kunngjøring må leses og bekreftes før ordinære appflater åpnes.
+- Obligatorisk kunngjøring må markeres som lest med «Jeg har lest kunngjøringen» før ordinære
+  appflater åpnes. Handlingen registrerer at brukeren har lest informasjonen.
 - Obligatorisk medlemsbekreftelse er en egenerklæring, ikke en automatisk kontroll mot klubbens
   medlemsregister. Flaten krever brukerens eget fulle navn og medlemskapstypen brukeren er omfattet
   av, forklarer at familiemedlemmer bekrefter fra hver sin konto, og lenker til vilkår og klubbens
@@ -299,6 +300,8 @@ Sentrale API-er: `GET /klubb/{slug}/bruker/admin/bruker`,
 
 - Flaten viser aktiv obligatorisk kunngjøring, oppretter en ny med tittel, riktekst og
   utløpstidspunkt og kan deaktivere den aktive.
+- Oversikt og detaljer viser hvor mange og hvem som har markert kunngjøringen som lest.
+  API-ets eksisterende bekreftelsesfelt og `/bekreft`-endpoint brukes til leseregistreringen.
 - Kritiske states er tilgangskontroll, loading, ingen aktiv kunngjøring, aktiv kunngjøring,
   editorvalidering, pågående mutasjon, suksess, retrybar lesefeil og mutasjonsfeil.
 
