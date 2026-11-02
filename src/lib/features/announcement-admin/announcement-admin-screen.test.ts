@@ -75,7 +75,7 @@ describe("AnnouncementAdminScreen", () => {
     expect((await axe.run(document.body, axeOptions)).violations).toEqual([]);
   });
 
-  it("viser formatert aktiv kunngjøring, bekreftelser og deaktiverer gjennom typed mutation", async () => {
+  it("viser formatert aktiv kunngjøring, hvem som har lest og deaktiverer gjennom typed mutation", async () => {
     const request = createRequest(announcement());
     render(AnnouncementAdminFixture, { request: request as ApiClient["request"] });
 

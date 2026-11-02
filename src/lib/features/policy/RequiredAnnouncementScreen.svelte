@@ -35,7 +35,7 @@
   const errorMessage = $derived(
     confirmation.error instanceof Error
       ? confirmation.error.message
-      : "Kunngjøringen kunne ikke bekreftes."
+      : "Kunngjøringen kunne ikke markeres som lest."
   );
 
   function submit(event: SubmitEvent) {
@@ -46,13 +46,13 @@
 </script>
 
 {#snippet confirmationStatus()}
-  <PageStatus label="Må bekreftes" tone="warning" />
+  <PageStatus label="Må leses" tone="warning" />
 {/snippet}
 
 <Page
   eyebrow="Fra klubben"
   title={announcement.tittel}
-  description="Les og bekreft før du går videre."
+  description="Les kunngjøringen og marker den som lest før du går videre."
   actions={confirmationStatus}
 >
   <Document label="Obligatorisk kunngjøring">
@@ -63,11 +63,11 @@
         {#if confirmation.isError}
           <Feedback
             tone="danger"
-            title="Kunne ikke bekrefte kunngjøringen"
+            title="Kunne ikke markere kunngjøringen som lest"
             description={errorMessage}
           />
         {/if}
-        <FormSubmit pending={confirmation.isPending} pendingLabel="Bekrefter …">
+        <FormSubmit pending={confirmation.isPending} pendingLabel="Registrerer …">
           Jeg har lest kunngjøringen
         </FormSubmit>
       </FormActions>

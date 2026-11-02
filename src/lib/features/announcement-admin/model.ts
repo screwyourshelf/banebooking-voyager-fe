@@ -79,5 +79,5 @@ export function toCreateAnnouncementRequest(
 
 export function confirmationProgress(confirmed: number, audience: number) {
   if (audience === 0) return "Ingen brukere i målgruppen";
-  return `${confirmed} av ${audience} bekreftet`;
+  return `${confirmed} av ${audience} har lest`;
 }

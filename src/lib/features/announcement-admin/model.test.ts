@@ -37,7 +37,7 @@ describe("announcement admin model", () => {
     });
   });
 
-  it("avviser dagens dato og beskriver bekreftelsesfremdrift deterministisk", () => {
+  it("avviser dagens dato og beskriver hvor mange som har lest deterministisk", () => {
     expect(nextLocalIsoDate(referenceDate)).toBe("2026-08-24");
     expect(
       validateAnnouncementDraft(
@@ -46,6 +46,6 @@ describe("announcement admin model", () => {
       ).expiresOn
     ).toMatch("i morgen");
     expect(confirmationProgress(0, 0)).toBe("Ingen brukere i målgruppen");
-    expect(confirmationProgress(3, 8)).toBe("3 av 8 bekreftet");
+    expect(confirmationProgress(3, 8)).toBe("3 av 8 har lest");
   });
 });

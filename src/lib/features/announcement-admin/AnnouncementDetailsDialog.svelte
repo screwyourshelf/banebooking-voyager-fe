@@ -71,7 +71,7 @@
             { label: "Status", value: "Aktiv" },
             { label: "Utløper", value: formatDatoKort(announcement.utløperTidspunkt) },
             {
-              label: "Bekreftet",
+              label: "Lest",
               value: confirmationProgress(
                 announcement.antallBekreftelser,
                 announcement.antallMålgruppe
@@ -85,14 +85,14 @@
     <SettingsSection
       embedded
       eyebrow="Målgruppe"
-      title="Bekreftelser"
-      description="Brukere som har lest og bekreftet kunngjøringen."
+      title="Lest av"
+      description="Brukere som har markert kunngjøringen som lest."
     >
       {#if announcement.bekreftelser.length === 0}
         <Feedback
           tone="info"
-          title="Ingen bekreftelser ennå"
-          description="Bekreftelser vises her etter hvert som brukerne leser kunngjøringen."
+          title="Ingen har markert som lest ennå"
+          description="Brukere vises her når de trykker «Jeg har lest kunngjøringen»."
         />
       {:else}
         <SettingsPanel>
@@ -109,7 +109,7 @@
       embedded
       eyebrow="Fareområde"
       title="Deaktiver kunngjøring"
-      description="Brukere som ikke har bekreftet, blir ikke lenger blokkert."
+      description="Brukere som ikke har markert kunngjøringen som lest, kan bruke appen videre."
       tone="danger"
     >
       <FormActions align="start">

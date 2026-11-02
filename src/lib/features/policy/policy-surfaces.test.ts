@@ -39,10 +39,10 @@ describe("protected policy surfaces", () => {
     );
   });
 
-  it("bekrefter den eksakte obligatoriske kunngjøringen og oppfrisker guarddata", async () => {
+  it("markerer den eksakte obligatoriske kunngjøringen som lest og oppfrisker guarddata", async () => {
     const { onConfirmed, requestMock } = renderFixture("announcement");
 
-    expect(screen.getByText("Må bekreftes")).toHaveAttribute("data-ui", "page-status");
+    expect(screen.getByText("Må leses")).toHaveAttribute("data-ui", "page-status");
     expect(screen.getByRole("article", { name: "Obligatorisk kunngjøring" })).toHaveTextContent(
       "Les dette nøye."
     );
