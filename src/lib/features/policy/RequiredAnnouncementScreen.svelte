@@ -61,7 +61,11 @@
     <Form onsubmit={submit} pending={confirmation.isPending}>
       <FormActions>
         {#if confirmation.isError}
-          <Feedback tone="danger" title="Kunne ikke markere som lest" description={errorMessage} />
+          <Feedback
+            tone="danger"
+            title="Kunne ikke markere kunngjøringen som lest"
+            description={errorMessage}
+          />
         {/if}
         <FormSubmit pending={confirmation.isPending} pendingLabel="Registrerer …">
           Jeg har lest kunngjøringen
