@@ -53,7 +53,7 @@ test("mandatory announcement redirect survives the login return navigation", asy
 
   expect(signedIn.landingPath).toBe("kunngjøring");
   await expect(page.getByRole("heading", { level: 1, name: "E2E-kunngjøring" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Jeg har lest kunngjøringen" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Ok, fått det med meg" })).toBeVisible();
 });
 
 test("member books and cancels the same slot", async ({ page, e2e }) => {
