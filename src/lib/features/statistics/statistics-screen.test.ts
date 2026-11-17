@@ -3,10 +3,18 @@
 import "@testing-library/jest-dom/vitest";
 import { fireEvent, render, screen, waitFor, within } from "@testing-library/svelte";
 import axe from "axe-core";
-import { describe, expect, it, vi } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { tilDatoTekst } from "#lib/domain/index.ts";
 import type { ApiClient } from "#lib/platform/api/index.ts";
+import { downloadJsonFile } from "#lib/platform/download/download-json.client.ts";
 import StatisticsFixture from "./StatisticsFixture.test.svelte";
 import { createStatisticsData } from "./statistics-test-data";
+
+vi.mock("#lib/platform/download/download-json.client.ts", () => ({
+  downloadJsonFile: vi.fn(),
+}));
+
+beforeEach(() => vi.mocked(downloadJsonFile).mockReset());
 
 const axeOptions: axe.RunOptions = {
   rules: { "color-contrast": { enabled: false }, region: { enabled: false } },
@@ -28,6 +36,16 @@ const activities = [
     slug: "tennis",
     aktiv: true,
     sortering: 1,
+    banereglement: "",
+    bookingInnstillinger: {},
+    kapabiliteter: [],
+  },
+  {
+    id: "activity-padel",
+    navn: "Padel",
+    slug: "padel",
+    aktiv: true,
+    sortering: 2,
     banereglement: "",
     bookingInnstillinger: {},
     kapabiliteter: [],
@@ -59,6 +77,57 @@ function createRequest(statistics = createStatisticsData()) {
 }
 
 describe("StatisticsScreen", () => {
+  it("eksporterer hele API-resultatet for padel i året så langt uten et nytt API-kall", async () => {
+    const statistics = createStatisticsData();
+    const padel = createStatisticsData({
+      perGren: statistics.perGren.filter((activity) => activity.grenId === "activity-padel"),
+    });
+    const defaultRequest = createRequest(statistics);
+    const request = vi.fn(async (path: string) =>
+      path.includes("grenId=activity-padel") ? padel : defaultRequest(path)
+    );
+    render(StatisticsFixture, { request: request as ApiClient["request"] });
+
+    expect(screen.getByRole("button", { name: "Eksporter JSON" })).toBeDisabled();
+    await screen.findByText("44,5 t");
+    await fireEvent.click(screen.getByRole("button", { name: "Padel" }));
+    await waitFor(() =>
+      expect(screen.getByRole("button", { name: "Eksporter JSON" })).toBeEnabled()
+    );
+    const filteredPath = request.mock.calls.find(([path]) =>
+      path.includes("grenId=activity-padel")
+    )?.[0];
+    const params = new URLSearchParams(filteredPath?.split("?")[1]);
+    expect(params.get("fra")).toBe(`${new Date().getFullYear()}-01-01`);
+    expect(params.get("til")).toBe(tilDatoTekst(new Date()));
+    const requestCount = request.mock.calls.length;
+
+    await fireEvent.click(screen.getByRole("button", { name: "Eksporter JSON" }));
+    await waitFor(() =>
+      expect(downloadJsonFile).toHaveBeenCalledWith(
+        padel,
+        "statistikk-fjordvik-padel-2026-01-01-2026-08-23.json"
+      )
+    );
+    expect(request).toHaveBeenCalledTimes(requestCount);
+  });
+
+  it("viser eksportfeil og lar brukeren prøve igjen", async () => {
+    vi.mocked(downloadJsonFile).mockImplementationOnce(() => {
+      throw new Error("Nedlasting feilet");
+    });
+    render(StatisticsFixture, { request: createRequest() as ApiClient["request"] });
+    await screen.findByText("44,5 t");
+
+    await fireEvent.click(screen.getByRole("button", { name: "Eksporter JSON" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent(
+      "Statistikken kunne ikke eksporteres"
+    );
+    await fireEvent.click(screen.getByRole("button", { name: "Eksporter JSON" }));
+    await waitFor(() => expect(downloadJsonFile).toHaveBeenCalledTimes(2));
+    expect(screen.queryByRole("alert")).not.toBeInTheDocument();
+  });
+
   it("viser full banebruk med tilgjengelige filtre og visualiseringer", async () => {
     const { container } = render(StatisticsFixture, {
       request: createRequest() as ApiClient["request"],
@@ -100,6 +169,7 @@ describe("StatisticsScreen", () => {
     await fireEvent.click(screen.getByRole("button", { name: "Tennis" }));
     expect(screen.getByText("44,5 t")).toBeVisible();
     expect(within(screen.getByRole("tabpanel")).getByText("Oppdaterer…")).toBeVisible();
+    expect(screen.getByRole("button", { name: "Eksporter JSON" })).toBeDisabled();
 
     resolveFiltered(
       createStatisticsData({
@@ -112,6 +182,7 @@ describe("StatisticsScreen", () => {
       })
     );
     expect(await screen.findByText("12 t")).toBeVisible();
+    expect(screen.getByRole("button", { name: "Eksporter JSON" })).toBeEnabled();
     expect(screen.getByRole("heading", { name: "Baner" })).toBeVisible();
   });
 
@@ -160,6 +231,7 @@ describe("StatisticsScreen", () => {
 
     const alert = await screen.findByRole("alert");
     expect(alert).toHaveTextContent("Statistikktjenesten svarer ikke");
+    expect(screen.getByRole("button", { name: "Eksporter JSON" })).toBeDisabled();
     await fireEvent.click(within(alert).getByRole("button", { name: "Prøv igjen" }));
     await waitFor(() => expect(screen.getByText("44,5 t")).toBeVisible());
     expect(attempts).toBe(2);
